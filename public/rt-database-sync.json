@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:11:54.431Z",
+  "syncedAt": "2026-10-05T15:12:10.587Z",
   "reports": [
     {
       "status": "draft",
@@ -3948,7 +3948,7 @@
     {
       "id": "rep-inc-1791124532954",
       "createdAt": "2026-10-04T14:35:32.954Z",
-      "updatedAt": "2026-10-05T15:11:47.570Z",
+      "updatedAt": "2026-10-05T15:12:04.207Z",
       "patient": {
         "reportingDate": "2026-10-04T14:35",
         "loyaltyCardIssued": true,
@@ -4134,8 +4134,8 @@
               "method": "Automated SLS-Hb",
               "textReference": "M: 13.0 - 17.5 | F: 12.0 - 15.5 g/dL",
               "id": "param-0-1791212993857-hxw",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "11.59",
+              "flag": "LOW"
             },
             {
               "name": "R.B.Cs Count",
@@ -4153,11 +4153,11 @@
               "unit": "%",
               "minNormal": 36,
               "maxNormal": 48,
-              "notes": "Auto-calculated: Hb × 3",
+              "notes": "Calculated (HGB × 3)",
               "textReference": "M: 40 - 52% | F: 36 - 48%",
               "id": "param-2-1791212993857-r42",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "3",
+              "flag": "LOW"
             },
             {
               "name": "M.C.V",
@@ -4186,11 +4186,11 @@
               "unit": "g/dL",
               "minNormal": 32,
               "maxNormal": 36,
-              "notes": "Auto-calculated: (Hb × 100) / PCV",
+              "notes": "Calculated: (HGB × 100) / HCT",
               "textReference": "32.0 - 36.0 g/dL",
               "id": "param-5-1791212993857-3jw",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "386.3",
+              "flag": "HIGH"
             },
             {
               "name": "R.D.W-CV",
