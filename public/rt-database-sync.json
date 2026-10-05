@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:13:09.297Z",
+  "syncedAt": "2026-10-05T15:13:24.239Z",
   "reports": [
     {
       "status": "draft",
@@ -3948,7 +3948,7 @@
     {
       "id": "rep-inc-1791124532954",
       "createdAt": "2026-10-04T14:35:32.954Z",
-      "updatedAt": "2026-10-05T15:13:03.277Z",
+      "updatedAt": "2026-10-05T15:13:16.991Z",
       "patient": {
         "reportingDate": "2026-10-04T14:35",
         "loyaltyCardIssued": true,
@@ -4159,17 +4159,6 @@
           "sampleType": "Serum",
           "interpretation": "All complementary package tests evaluated according to certified reference ranges.",
           "parameters": [
-            {
-              "id": "p-pkg-1-1791212993857",
-              "name": "سكر الدم الصائم (FBS) (Fasting Blood Sugar)",
-              "result": "",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 100,
-              "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
-              "flag": "NORMAL",
-              "method": "Hexokinase / GOD-PAP"
-            },
             {
               "id": "p-pkg-2-1791212993857",
               "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
