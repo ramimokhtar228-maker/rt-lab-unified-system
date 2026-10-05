@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:14:04.806Z",
+  "syncedAt": "2026-10-05T15:14:20.091Z",
   "reports": [
     {
       "status": "draft",
@@ -3948,7 +3948,7 @@
     {
       "id": "rep-inc-1791124532954",
       "createdAt": "2026-10-04T14:35:32.954Z",
-      "updatedAt": "2026-10-05T15:13:58.536Z",
+      "updatedAt": "2026-10-05T15:14:11.764Z",
       "patient": {
         "reportingDate": "2026-10-04T14:35",
         "loyaltyCardIssued": true,
@@ -4212,8 +4212,8 @@
               "panicHigh": 400,
               "method": "Hexokinase",
               "id": "param-1791213238535-0",
-              "result": "",
-              "flag": ""
+              "result": "129",
+              "flag": "HIGH"
             },
             {
               "name": "2 Hours Post-Prandial Glucose",
