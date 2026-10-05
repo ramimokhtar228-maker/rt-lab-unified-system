@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:06:13.570Z",
+  "syncedAt": "2026-10-05T18:06:32.645Z",
   "reports": [
     {
       "status": "released",
@@ -4897,8 +4897,8 @@
               "method": "CHOD-PAP",
               "textReference": "",
               "id": "param-0-1791223515986-qvs",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "244",
+              "flag": "HIGH"
             },
             {
               "name": "Serum Triglycerides",
@@ -5117,7 +5117,7 @@
         "sampleDate": "2026-10-04T14:59"
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-9820 - تم التسميع آلياً من منظومة الفواتير",
-      "updatedAt": "2026-10-05T18:06:07.349Z",
+      "updatedAt": "2026-10-05T18:06:26.629Z",
       "packageApplied": {
         "code": "PKG-ANNUAL-WELLNESS",
         "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
