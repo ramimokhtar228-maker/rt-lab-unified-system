@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:22:33.507Z",
+  "syncedAt": "2026-10-05T15:22:39.527Z",
   "reports": [
     {
       "status": "released",
@@ -2197,17 +2197,6 @@
               "flag": "LOW"
             },
             {
-              "name": "R.B.Cs Count",
-              "unit": "x10^6/µL",
-              "minNormal": 4,
-              "maxNormal": 5.8,
-              "method": "Electrical Impedance",
-              "textReference": "M: 4.5 - 5.9 | F: 4.0 - 5.2",
-              "id": "param-1-1791213622129-0nl",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
               "name": "Hematocrit (PCV)",
               "unit": "%",
               "minNormal": 36,
@@ -2639,7 +2628,7 @@
         }
       ],
       "status": "in_progress",
-      "updatedAt": "2026-10-05T15:22:30.452Z",
+      "updatedAt": "2026-10-05T15:22:34.177Z",
       "createdAt": "2026-10-04T14:38:22.671Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-4276 - تم التسميع آلياً من منظومة الفواتير",
       "reportNumber": "RT-BK-4276",
