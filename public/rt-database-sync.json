@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T14:00:34.568Z",
+  "syncedAt": "2026-10-05T14:00:38.157Z",
   "reports": [
     {
       "status": "draft",
@@ -1817,17 +1817,6 @@
               "flag": "NORMAL"
             },
             {
-              "name": "R.B.Cs Count",
-              "unit": "x10^6/µL",
-              "minNormal": 4,
-              "maxNormal": 5.8,
-              "method": "Electrical Impedance",
-              "textReference": "M: 4.5 - 5.9 | F: 4.0 - 5.2",
-              "id": "param-1-1791208736252-ljr",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
               "name": "Hematocrit (PCV)",
               "unit": "%",
               "minNormal": 36,
@@ -2277,7 +2266,7 @@
         "phone": "01095920078",
         "age": 36
       },
-      "updatedAt": "2026-10-05T14:00:31.754Z",
+      "updatedAt": "2026-10-05T14:00:33.846Z",
       "reportNumber": "RT-BK-7317",
       "id": "rep-inc-1791125273776",
       "status": "in_progress",
