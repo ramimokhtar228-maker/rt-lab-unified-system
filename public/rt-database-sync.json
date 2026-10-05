@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:20:37.316Z",
+  "syncedAt": "2026-10-05T18:21:14.848Z",
   "reports": [
     {
       "status": "released",
@@ -856,7 +856,7 @@
         "barcode": "26795204",
         "referringDoctorName": "زيارة منزلية - منى احمد (أخصائي كيمياء طبية)",
         "fullName": "رجاء حسن ابراهيم",
-        "phone": "01013242777",
+        "phone": " ",
         "referringDoctorTitle": "Prof. Dr.",
         "loyaltyCardNumber": "RT-2026-0001",
         "reportingDate": "2026-10-04T15:16",
@@ -868,7 +868,7 @@
         "totalCost": 230,
         "bloodGroup": "O+"
       },
-      "updatedAt": "2026-10-05T18:20:33.429Z",
+      "updatedAt": "2026-10-05T18:21:11.681Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-8226 - تم التسميع آلياً من منظومة الفواتير",
       "id": "rep-inc-1791127003337",
       "staff": {
