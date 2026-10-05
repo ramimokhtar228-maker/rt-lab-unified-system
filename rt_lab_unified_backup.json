@@ -1,626 +1,229 @@
 {
-  "timestamp": "2026-10-05T11:03:18.940Z",
-  "reportsCount": 2,
-  "incomeCount": 1,
+  "timestamp": "2026-10-05T11:21:02.587Z",
+  "reportsCount": 0,
+  "incomeCount": 0,
   "loyaltyProfilesCount": 10,
-  "reports": [
-    {
-      "id": "rep-001",
-      "reportNumber": "RT-2026-001",
-      "patient": {
-        "id": "pat-001",
-        "labNumber": "RT-2026-001",
-        "barcode": "RT-10029",
-        "fullName": "أحمد محمود إبراهيم",
-        "age": 34,
-        "ageUnit": "years",
-        "gender": "male",
-        "phone": "01012345678",
-        "referringDoctorTitle": "Dr.",
-        "referringDoctorName": "د. طارق المنشاوي",
-        "sampleDate": "2026-10-05",
-        "reportingDate": "2026-10-05",
-        "clinicalHistory": "إرهاق عام وشحوب مستمر وصداع عند المجهود",
-        "fastingHours": 0,
-        "nationalId": "29005120101993",
-        "bloodGroup": "A+",
-        "loyaltyPoints": 120,
-        "loyaltyCardIssued": true,
-        "loyaltyCardNumber": "RT-SILVER-10029",
-        "testsSubtotal": 280,
-        "totalCost": 280,
-        "discountApplied": 28,
-        "paymentMethod": "cash"
-      },
-      "profiles": [
-        {
-          "id": "prof-cbc-1",
-          "profileCode": "CBC",
-          "titleEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
-          "titleAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
-          "category": "Hematology",
-          "sampleType": "EDTA Whole Blood",
-          "interpretation": "Microcytic hypochromic anemia picture. Morphological findings and low MCV/MCH strongly suggest Iron Deficiency Anemia (IDA). Serum Ferritin and Iron studies are recommended.",
-          "comment": "تم فحص الشريحة ميكروسكوبياً بواسطة استشاري الباثولوجيا الإكلينيكية.",
-          "attachedIllustration": {
-            "id": "hem-normal",
-            "code": "HEM_NORMAL",
-            "category": "hematology",
-            "imageUrl": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2270%22%20fill%3D%22%230f172a%22%20stroke%3D%22%23881337%22%20stroke-width%3D%222%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%23f43f5e%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3ENORMAL%20BLOOD%20SMEAR%20%281000X%29%3C/text%3E%20%3C%21--%20Normal%20RBCs%20with%201/3%20central%20pallor%20--%3E%20%3Cg%20fill%3D%22%23e11d48%22%3E%20%3Ccircle%20cx%3D%22105%22%20cy%3D%2265%22%20r%3D%2216%22/%3E%3Ccircle%20cx%3D%22105%22%20cy%3D%2265%22%20r%3D%225.5%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22145%22%20cy%3D%2255%22%20r%3D%2215%22/%3E%3Ccircle%20cx%3D%22145%22%20cy%3D%2255%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22170%22%20cy%3D%2280%22%20r%3D%2216%22/%3E%3Ccircle%20cx%3D%22170%22%20cy%3D%2280%22%20r%3D%225.5%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22130%22%20cy%3D%22105%22%20r%3D%2216%22/%3E%3Ccircle%20cx%3D%22130%22%20cy%3D%22105%22%20r%3D%225.5%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%2295%22%20cy%3D%2298%22%20r%3D%2215%22/%3E%3Ccircle%20cx%3D%2295%22%20cy%3D%2298%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3C/g%3E%20%3C%21--%20Neutrophil%20--%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2217%22%20fill%3D%22%23fbcfe8%22%20opacity%3D%220.4%22/%3E%20%3Cellipse%20cx%3D%22135%22%20cy%3D%2276%22%20rx%3D%224%22%20ry%3D%225%22%20fill%3D%22%236b21a8%22/%3E%20%3Cellipse%20cx%3D%22145%22%20cy%3D%2277%22%20rx%3D%224%22%20ry%3D%224%22%20fill%3D%22%236b21a8%22/%3E%20%3Cellipse%20cx%3D%22139%22%20cy%3D%2286%22%20rx%3D%224.5%22%20ry%3D%223.5%22%20fill%3D%22%236b21a8%22/%3E%20%3C%21--%20Platelets%20--%3E%20%3Ccircle%20cx%3D%22120%22%20cy%3D%2260%22%20r%3D%222.5%22%20fill%3D%22%2338bdf8%22/%3E%20%3Ccircle%20cx%3D%22160%22%20cy%3D%22100%22%20r%3D%222.5%22%20fill%3D%22%2338bdf8%22/%3E%20%3Ccircle%20cx%3D%22163%22%20cy%3D%2297%22%20r%3D%222%22%20fill%3D%22%2338bdf8%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%22148%22%20text-anchor%3D%22middle%22%20fill%3D%22%2394a3b8%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3ENormocytic%20Normochromic%20Erythrocytes%3C/text%3E%20%3C/svg%3E",
-            "titleAr": "شريحة دم محيطي طبيعية (Normal Peripheral Blood Smear)",
-            "titleEn": "Normal Peripheral Blood Smear",
-            "pathologySummaryAr": "كرات دم حمراء طبيعية الحجم ومتساوية الصبغ (Normocytic Normochromic) مع مساحة شحوب مركزي طبيعية تعادل ثلث قطر الخلية، مع توزيع طبيعي لكرات الدم البيضاء والصفائح الدموية.",
-            "pathologySummaryEn": "Normocytic, normochromic erythrocytes with normal central pallor (~1/3 diameter). Adequate platelets and normal differential leucocytic morphology.",
-            "keyDiagnosticPoints": [
-              "MCV: 80 - 98 fL | MCH: 27 - 33 pg | MCHC: 32 - 36 g/dL",
-              "RBCs: uniform size and biconcave disc shape",
-              "WBC differential within normal reference intervals",
-              "Platelets: 150 - 450 x10^3/µL with normal granular appearance"
-            ],
-            "associatedConditions": [
-              "Physiological Baseline",
-              "Healthy Reference",
-              "Routine Wellness"
-            ],
-            "differentialDiagnosis": "No cytopenias or dysplastic features identified.",
-            "descriptionAr": "كرات دم حمراء طبيعية الحجم ومتساوية الصبغ (Normocytic Normochromic) مع مساحة شحوب مركزي طبيعية تعادل ثلث قطر الخلية، مع توزيع طبيعي لكرات الدم البيضاء والصفائح الدموية.",
-            "descriptionEn": "Normocytic, normochromic erythrocytes with normal central pallor (~1/3 diameter). Adequate platelets and normal differential leucocytic morphology.",
-            "diagnosticCriteria": [
-              "MCV: 80 - 98 fL | MCH: 27 - 33 pg | MCHC: 32 - 36 g/dL",
-              "RBCs: uniform size and biconcave disc shape",
-              "WBC differential within normal reference intervals",
-              "Platelets: 150 - 450 x10^3/µL with normal granular appearance"
-            ]
-          },
-          "bloodFilmFindings": {
-            "rbcMorphology": "Moderate anisopoikilocytosis, microcytes, hypochromic cells with prominent central pallor, occasional pencil / cigar-shaped cells.",
-            "wbcMorphology": "Normal leucocyte count with normal differential distribution. No immature myeloid precursors or toxic granulations.",
-            "plateletMorphology": "Mild reactive thrombocytosis. Adequate granular morphology, no platelet clumps seen.",
-            "differentialSummary": "Neutrophils: 62% | Lymphocytes: 29% | Monocytes: 6% | Eosinophils: 2% | Basophils: 1%"
-          },
-          "parameters": [
-            {
-              "id": "p-1",
-              "name": "Hemoglobin (Hb)",
-              "result": "8.6",
-              "unit": "g/dL",
-              "minNormal": 13,
-              "maxNormal": 17,
-              "panicLow": 7,
-              "panicHigh": 20,
-              "flag": "LOW",
-              "method": "SLS Hemoglobin Method"
-            },
-            {
-              "id": "p-2",
-              "name": "RBC Count",
-              "result": "3.80",
-              "unit": "x10^6/µL",
-              "minNormal": 4.5,
-              "maxNormal": 5.9,
-              "flag": "LOW",
-              "method": "Electrical Impedance"
-            },
-            {
-              "id": "p-3",
-              "name": "Hematocrit (Hct / PCV)",
-              "result": "27.2",
-              "unit": "%",
-              "minNormal": 40,
-              "maxNormal": 52,
-              "flag": "LOW",
-              "method": "Calculated"
-            },
-            {
-              "id": "p-4",
-              "name": "MCV",
-              "result": "71.5",
-              "unit": "fL",
-              "minNormal": 80,
-              "maxNormal": 98,
-              "flag": "LOW",
-              "method": "Direct Measurement"
-            },
-            {
-              "id": "p-5",
-              "name": "MCH",
-              "result": "22.6",
-              "unit": "pg",
-              "minNormal": 27,
-              "maxNormal": 33,
-              "flag": "LOW",
-              "method": "Calculated"
-            },
-            {
-              "id": "p-6",
-              "name": "MCHC",
-              "result": "31.6",
-              "unit": "g/dL",
-              "minNormal": 32,
-              "maxNormal": 36,
-              "flag": "LOW",
-              "method": "Calculated"
-            },
-            {
-              "id": "p-7",
-              "name": "RDW-CV",
-              "result": "17.8",
-              "unit": "%",
-              "minNormal": 11.5,
-              "maxNormal": 14.5,
-              "flag": "HIGH",
-              "method": "Calculated"
-            },
-            {
-              "id": "p-8",
-              "name": "Total Leucocytic Count (TLC / WBC)",
-              "result": "6.8",
-              "unit": "x10^3/µL",
-              "minNormal": 4,
-              "maxNormal": 11,
-              "flag": "NORMAL",
-              "method": "Electrical Impedance / Flow Cytometry"
-            },
-            {
-              "id": "p-9",
-              "name": "Platelet Count",
-              "result": "410",
-              "unit": "x10^3/µL",
-              "minNormal": 150,
-              "maxNormal": 450,
-              "flag": "NORMAL",
-              "method": "Electrical Impedance"
-            },
-            {
-              "id": "p-10",
-              "name": "Neutrophils %",
-              "result": "62",
-              "unit": "%",
-              "minNormal": 40,
-              "maxNormal": 75,
-              "flag": "NORMAL"
-            },
-            {
-              "id": "p-11",
-              "name": "Lymphocytes %",
-              "result": "29",
-              "unit": "%",
-              "minNormal": 20,
-              "maxNormal": 45,
-              "flag": "NORMAL"
-            },
-            {
-              "id": "p-12",
-              "name": "Monocytes %",
-              "result": "6",
-              "unit": "%",
-              "minNormal": 2,
-              "maxNormal": 10,
-              "flag": "NORMAL"
-            },
-            {
-              "id": "p-13",
-              "name": "Eosinophils %",
-              "result": "2",
-              "unit": "%",
-              "minNormal": 1,
-              "maxNormal": 6,
-              "flag": "NORMAL"
-            },
-            {
-              "id": "p-14",
-              "name": "Basophils %",
-              "result": "1",
-              "unit": "%",
-              "minNormal": 0,
-              "maxNormal": 2,
-              "flag": "NORMAL"
-            }
-          ]
-        }
-      ],
-      "staff": {
-        "labChemist": "د. هبة الشناوي - كيميائية تحاليل",
-        "verifiedBy": "د. مصطفى العوضي - استشاري التحاليل",
-        "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
-        "chemistTitle": "كيميائية طبية أولى",
-        "verifierTitle": "أخصائي باثولوجيا إكلينيكية",
-        "pathologistTitle": "استشاري الباثولوجيا الإكلينيكية - قصر العيني"
-      },
-      "generalComment": "الحالة تتماشى مع فقر الدم بعوز الحديد. يرجى المتابعة بطلب مخزون الحديد (Serum Ferritin).",
-      "status": "verified",
-      "createdAt": "2026-10-05T11:02:53.788Z",
-      "updatedAt": "2026-10-05T11:02:53.788Z",
-      "invoiceId": "inv-001"
-    },
-    {
-      "id": "rep-002",
-      "reportNumber": "RT-2026-002",
-      "patient": {
-        "id": "pat-002",
-        "labNumber": "RT-2026-002",
-        "barcode": "RT-10030",
-        "fullName": "منى عادل عبد الرحمن",
-        "age": 48,
-        "ageUnit": "years",
-        "gender": "female",
-        "phone": "01198765432",
-        "referringDoctorTitle": "Prof. Dr.",
-        "referringDoctorName": "أ.د. خالد الببلاوي - استشاري السكر والغدد",
-        "sampleDate": "2026-10-05",
-        "reportingDate": "2026-10-05",
-        "clinicalHistory": "متابعة دورية لمرض السكري من النوع الثاني وارتفاع ضغط الدم",
-        "fastingHours": 12,
-        "nationalId": "27608140102844",
-        "bloodGroup": "O+",
-        "loyaltyPoints": 340,
-        "loyaltyCardIssued": true,
-        "loyaltyCardNumber": "RT-GOLD-10030",
-        "testsSubtotal": 380,
-        "totalCost": 380,
-        "discountApplied": 38,
-        "paymentMethod": "visa"
-      },
-      "profiles": [
-        {
-          "id": "prof-gly-2",
-          "profileCode": "GLYCEMIC",
-          "titleEn": "Comprehensive Diabetes & Glycemic Profile",
-          "titleAr": "الملف الشامل للسكر والمؤشرات الأيضية",
-          "category": "Biochemistry",
-          "sampleType": "Fluoride Plasma & EDTA",
-          "interpretation": "Suboptimal glycemic control. Fasting glucose and HbA1c are elevated above standard ADA targets for non-pregnant adults.",
-          "parameters": [
-            {
-              "id": "p-g1",
-              "name": "Fasting Blood Glucose",
-              "result": "148",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 105,
-              "panicLow": 50,
-              "panicHigh": 400,
-              "flag": "HIGH",
-              "method": "Hexokinase"
-            },
-            {
-              "id": "p-g2",
-              "name": "Glycated Hemoglobin (HbA1c)",
-              "result": "7.9",
-              "unit": "%",
-              "minNormal": 4,
-              "maxNormal": 5.6,
-              "panicLow": 3.5,
-              "panicHigh": 14,
-              "flag": "HIGH",
-              "method": "HPLC NGSP Certified"
-            },
-            {
-              "id": "p-g3",
-              "name": "Estimated Average Glucose (eAG)",
-              "result": "180",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 126,
-              "flag": "HIGH",
-              "method": "Calculated from HbA1c"
-            }
-          ]
-        },
-        {
-          "id": "prof-kft-2",
-          "profileCode": "KFT",
-          "titleEn": "Kidney Function Tests (Renal Profile)",
-          "titleAr": "وظائف الكلى والأملاح ومؤشرات الفلترة",
-          "category": "Biochemistry",
-          "sampleType": "Serum",
-          "interpretation": "Kidney function biomarkers are within normal acceptable physiological limits. No evidence of azotemia.",
-          "parameters": [
-            {
-              "id": "p-k1",
-              "name": "Serum Creatinine",
-              "result": "0.82",
-              "unit": "mg/dL",
-              "minNormal": 0.5,
-              "maxNormal": 1.1,
-              "flag": "NORMAL",
-              "method": "Enzymatic Spectrophotometry"
-            },
-            {
-              "id": "p-k2",
-              "name": "Blood Urea",
-              "result": "28",
-              "unit": "mg/dL",
-              "minNormal": 15,
-              "maxNormal": 45,
-              "flag": "NORMAL",
-              "method": "GLDH Coupled"
-            },
-            {
-              "id": "p-k3",
-              "name": "Serum Uric Acid",
-              "result": "4.9",
-              "unit": "mg/dL",
-              "minNormal": 2.6,
-              "maxNormal": 6,
-              "flag": "NORMAL",
-              "method": "Uricase Colorimetric"
-            }
-          ]
-        }
-      ],
-      "staff": {
-        "labChemist": "د. هبة الشناوي - كيميائية تحاليل",
-        "verifiedBy": "د. مصطفى العوضي - استشاري التحاليل",
-        "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
-      },
-      "generalComment": "يرجى مراجعة الطبيب المعالج لتعديل جرعات العلاج الغذائي والدوائي.",
-      "status": "verified",
-      "createdAt": "2026-10-05T11:02:53.788Z",
-      "updatedAt": "2026-10-05T11:02:53.788Z",
-      "invoiceId": "inv-002"
-    }
-  ],
-  "incomeRecords": [
-    {
-      "cashierName": "المحاسب المالي",
-      "barcode": "RT-10030",
-      "branch": "فرع القصر العيني - الرئيسي",
-      "discount": 38,
-      "testsSubtotal": 380,
-      "loyaltyPointsRedeemed": 0,
-      "paymentStatus": "paid",
-      "loyaltyDiscountEGP": 38,
-      "subtotal": 380,
-      "remainingAmount": 0,
-      "patientGender": "female",
-      "referringDoctor": "أ.د. خالد الببلاوي",
-      "paymentMethod": "visa",
-      "syncStatus": "synced",
-      "notes": "خصم كارت الولاء الذهبي 10%",
-      "loyaltyPointsEarned": 342,
-      "updatedAt": "2026-10-05T08:52:02.898Z",
-      "invoiceNumber": "INV-2026-002",
-      "createdAt": "2026-10-05T08:52:02.898Z",
-      "tests": [
-        {
-          "nameAr": "السكر التراكمي (HbA1c HPLC)",
-          "nameEn": "Glycated Hemoglobin HbA1c",
-          "price": 160,
-          "code": "HBA1C",
-          "id": "t-hba1c",
-          "cost": 35,
-          "category": "Diabetes"
-        },
-        {
-          "code": "KFT",
-          "category": "Biochemistry",
-          "cost": 30,
-          "price": 220,
-          "nameEn": "Renal Function Panel",
-          "id": "t-kft",
-          "nameAr": "وظائف كلى كاملة (KFT)"
-        }
-      ],
-      "id": "inv-002",
-      "patientPhone": "01198765432",
-      "patientName": "منى عادل عبد الرحمن",
-      "netAmount": 342,
-      "paidAmount": 342,
-      "labNumber": "RT-2026-002",
-      "patientAge": 48
-    }
-  ],
+  "reports": [],
+  "incomeRecords": [],
   "loyaltyProfiles": [
     {
+      "transactions": [
+        {
+          "description": "تفعيل تلقائي لنقاط فحص سابق #RT-BK-8226",
+          "type": "earn",
+          "date": "2026-10-04",
+          "points": 150,
+          "id": "tx-init-rep-inc-1791127003337"
+        }
+      ],
+      "barcode": "RT-2026-0001",
+      "phone": "01013242777",
+      "totalPoints": 150,
+      "issueDate": "2026-10-04",
+      "patientId": "pat-1791136199947-803",
+      "cardNumber": "RT-2026-0001",
+      "tier": "Silver",
+      "patientName": "رجاء حسن ابراهيم",
       "bloodGroup": "O+",
+      "lifetimeSpent": 150
+    },
+    {
+      "tier": "Silver",
+      "totalPoints": 150,
+      "phone": "01148879943",
+      "patientName": "حبيبة مجدى احمد",
+      "cardNumber": "RT-2026-0002",
+      "lifetimeSpent": 150,
+      "issueDate": "2026-10-04",
+      "barcode": "RT-2026-0002",
+      "bloodGroup": "O+",
+      "patientId": "pat-1791136199948-302",
       "transactions": [
         {
           "points": 150,
-          "type": "earn",
-          "id": "tx-init-rep-inc-1791127003337",
-          "description": "تفعيل تلقائي لنقاط فحص سابق #RT-BK-8226",
-          "date": "2026-10-04"
-        }
-      ],
-      "totalPoints": 150,
-      "tier": "Silver",
-      "barcode": "RT-2026-0001",
-      "lifetimeSpent": 150,
-      "patientName": "رجاء حسن ابراهيم",
-      "cardNumber": "RT-2026-0001",
-      "phone": "01013242777",
-      "issueDate": "2026-10-04",
-      "patientId": "pat-1791136199947-803"
-    },
-    {
-      "transactions": [
-        {
           "description": "تفعيل تلقائي لنقاط فحص سابق #RT-BK-5104",
           "date": "2026-10-04",
           "type": "earn",
-          "points": 150,
           "id": "tx-init-rep-inc-1791126867915"
         }
-      ],
-      "totalPoints": 150,
-      "tier": "Silver",
-      "cardNumber": "RT-2026-0002",
-      "lifetimeSpent": 150,
-      "phone": "01148879943",
-      "patientName": "حبيبة مجدى احمد",
-      "barcode": "RT-2026-0002",
-      "issueDate": "2026-10-04",
-      "patientId": "pat-1791136199948-302",
-      "bloodGroup": "O+"
+      ]
     },
     {
-      "tier": "Silver",
-      "patientId": "pat-1791136199948-422",
-      "issueDate": "2026-10-04",
-      "bloodGroup": "O+",
-      "totalPoints": 150,
-      "phone": "01277489467",
-      "barcode": "RT-2026-0003",
-      "patientName": "أمال محمد حسب الدائم",
-      "cardNumber": "RT-2026-0003",
       "transactions": [
         {
-          "date": "2026-10-04",
-          "points": 150,
           "id": "tx-init-rep-inc-1791125575336",
-          "type": "earn",
-          "description": "تفعيل تلقائي لنقاط فحص سابق #RT-BK-8594"
+          "points": 150,
+          "description": "تفعيل تلقائي لنقاط فحص سابق #RT-BK-8594",
+          "date": "2026-10-04",
+          "type": "earn"
         }
       ],
+      "cardNumber": "RT-2026-0003",
+      "bloodGroup": "O+",
+      "barcode": "RT-2026-0003",
+      "tier": "Silver",
+      "phone": "01277489467",
+      "totalPoints": 150,
+      "issueDate": "2026-10-04",
+      "patientName": "أمال محمد حسب الدائم",
+      "patientId": "pat-1791136199948-422",
       "lifetimeSpent": 150
     },
     {
-      "cardNumber": "RT-2026-0004",
-      "issueDate": "2026-10-04",
-      "patientName": "كوثر ابراهيم",
-      "patientId": "pat-1791136199949-991",
       "phone": "01095920078",
-      "totalPoints": 150,
+      "bloodGroup": "O+",
+      "cardNumber": "RT-2026-0004",
+      "patientId": "pat-1791136199949-991",
+      "issueDate": "2026-10-04",
       "transactions": [
         {
-          "date": "2026-10-04",
           "description": "تفعيل تلقائي لنقاط فحص سابق #RT-BK-9599",
-          "type": "earn",
           "id": "tx-init-rep-inc-1791125455998",
+          "date": "2026-10-04",
+          "type": "earn",
           "points": 150
         }
       ],
-      "bloodGroup": "O+",
+      "patientName": "كوثر ابراهيم",
       "barcode": "RT-2026-0004",
+      "tier": "Silver",
       "lifetimeSpent": 150,
-      "tier": "Silver"
+      "totalPoints": 150
     },
     {
       "bloodGroup": "O+",
-      "transactions": [
-        {
-          "type": "earn",
-          "points": 150,
-          "id": "tx-init-rep-inc-1791124918128",
-          "date": "2026-10-04",
-          "description": "تفعيل تلقائي لنقاط فحص سابق #RT-BK-1432"
-        }
-      ],
-      "phone": "01228439288",
-      "patientId": "pat-1791136199949-656",
+      "totalPoints": 150,
+      "tier": "Silver",
+      "lifetimeSpent": 150,
+      "cardNumber": "RT-2026-0006",
+      "barcode": "RT-2026-0006",
       "issueDate": "2026-10-04",
       "patientName": "نورا سعيد حلمى",
-      "cardNumber": "RT-2026-0006",
-      "totalPoints": 150,
-      "tier": "Silver",
-      "lifetimeSpent": 150,
-      "barcode": "RT-2026-0006"
-    },
-    {
-      "patientName": "زينب محمد حسن محمد",
-      "barcode": "RT-2026-0007",
-      "cardNumber": "RT-2026-0007",
-      "issueDate": "2026-10-04",
-      "patientId": "pat-1791136199950-467",
-      "bloodGroup": "O+",
-      "phone": "01004359187",
-      "totalPoints": 150,
+      "phone": "01228439288",
+      "patientId": "pat-1791136199949-656",
       "transactions": [
         {
-          "points": 150,
+          "description": "تفعيل تلقائي لنقاط فحص سابق #RT-BK-1432",
           "type": "earn",
-          "id": "tx-init-rep-inc-1791124702671",
           "date": "2026-10-04",
-          "description": "تفعيل تلقائي لنقاط فحص سابق #RT-BK-4276"
+          "points": 150,
+          "id": "tx-init-rep-inc-1791124918128"
+        }
+      ]
+    },
+    {
+      "barcode": "RT-2026-0007",
+      "tier": "Silver",
+      "totalPoints": 351,
+      "phone": "01004359187",
+      "transactions": [
+        {
+          "id": "tx-1791198572877",
+          "date": "2026-10-05",
+          "type": "earn",
+          "points": 201,
+          "description": "اكتساب نقاط عن فاتورة رقم RT-2026-001",
+          "invoiceNumber": "RT-2026-001",
+          "amountEGP": 201
+        },
+        {
+          "points": 150,
+          "id": "tx-init-rep-inc-1791124702671",
+          "description": "تفعيل تلقائي لنقاط فحص سابق #RT-BK-4276",
+          "type": "earn",
+          "date": "2026-10-04"
         }
       ],
-      "tier": "Silver",
-      "lifetimeSpent": 150
+      "issueDate": "2026-10-04",
+      "lifetimeSpent": 351,
+      "bloodGroup": "O+",
+      "patientId": "pat-1791136199950-467",
+      "cardNumber": "RT-2026-0007",
+      "patientName": "زينب محمد حسن محمد"
     },
     {
       "patientId": "pat-1791136199950-779",
+      "totalPoints": 150,
+      "lifetimeSpent": 150,
       "issueDate": "2026-10-04",
       "phone": "01127452964",
-      "totalPoints": 150,
-      "bloodGroup": "O+",
       "tier": "Silver",
+      "bloodGroup": "O+",
       "patientName": "منال محمود بكر",
+      "cardNumber": "RT-2026-0009",
       "transactions": [
         {
-          "date": "2026-10-04",
-          "description": "تفعيل تلقائي لنقاط فحص سابق #RT-BK-5873",
           "id": "tx-init-rep-inc-1791123722634",
+          "date": "2026-10-04",
           "type": "earn",
-          "points": 150
+          "points": 150,
+          "description": "تفعيل تلقائي لنقاط فحص سابق #RT-BK-5873"
         }
       ],
-      "lifetimeSpent": 150,
-      "cardNumber": "RT-2026-0009",
       "barcode": "RT-2026-0009"
     },
     {
       "phone": "01277634220",
+      "issueDate": "2026-10-04",
+      "patientName": "امانى محمد ابراهيم",
+      "cardNumber": "RT-2026-0010",
+      "patientId": "pat-1791136199952-414",
+      "barcode": "RT-2026-0010",
+      "bloodGroup": "O+",
       "transactions": [
         {
-          "id": "tx-init-rep-inc-1791123384421",
-          "type": "earn",
           "points": 150,
+          "id": "tx-init-rep-inc-1791123384421",
           "date": "2026-10-04",
+          "type": "earn",
           "description": "تفعيل تلقائي لنقاط فحص سابق #RT-BK-8097"
         }
       ],
-      "tier": "Silver",
-      "bloodGroup": "O+",
       "lifetimeSpent": 150,
       "totalPoints": 150,
-      "patientName": "امانى محمد ابراهيم",
-      "issueDate": "2026-10-04",
-      "patientId": "pat-1791136199952-414",
-      "cardNumber": "RT-2026-0010",
-      "barcode": "RT-2026-0010"
-    },
-    {
-      "patientId": "pat-1791095397668",
-      "issueDate": "2026-10-04",
-      "cardNumber": "RT-2026-0011",
-      "transactions": [
-        {
-          "points": 150,
-          "description": "تفعيل تلقائي لنقاط فحص سابق #RT-2026-4888",
-          "id": "tx-init-rep-1791095397668",
-          "type": "earn",
-          "date": "2026-10-04"
-        }
-      ],
-      "phone": "01",
-      "totalPoints": 150,
-      "barcode": "RT-2026-0011",
-      "lifetimeSpent": 150,
-      "patientName": "",
-      "bloodGroup": "O+",
       "tier": "Silver"
     },
     {
-      "tier": "Silver",
-      "cardNumber": "RT-2026-0002",
-      "barcode": "RT-2026-0002",
       "totalPoints": 150,
-      "patientId": "pat-1791152176534-415",
-      "issueDate": "2026-10-04",
+      "tier": "Silver",
       "transactions": [
         {
-          "type": "earn",
-          "id": "tx-init-rep-inc-1791145124663",
           "points": 150,
+          "id": "tx-init-rep-1791095397668",
+          "type": "earn",
           "date": "2026-10-04",
-          "description": "تفعيل تلقائي لنقاط فحص سابق #RT-BK-6113"
+          "description": "تفعيل تلقائي لنقاط فحص سابق #RT-2026-4888"
         }
       ],
+      "phone": "01",
+      "cardNumber": "RT-2026-0011",
+      "bloodGroup": "O+",
+      "patientId": "pat-1791095397668",
+      "patientName": "",
+      "barcode": "RT-2026-0011",
       "lifetimeSpent": 150,
-      "phone": "01060116368",
+      "issueDate": "2026-10-04"
+    },
+    {
+      "lifetimeSpent": 150,
       "patientName": "ماري مكرم",
-      "bloodGroup": "O+"
+      "phone": "01060116368",
+      "tier": "Silver",
+      "issueDate": "2026-10-04",
+      "cardNumber": "RT-2026-0002",
+      "bloodGroup": "O+",
+      "barcode": "RT-2026-0002",
+      "transactions": [
+        {
+          "id": "tx-init-rep-inc-1791145124663",
+          "date": "2026-10-04",
+          "type": "earn",
+          "description": "تفعيل تلقائي لنقاط فحص سابق #RT-BK-6113",
+          "points": 150
+        }
+      ],
+      "totalPoints": 150,
+      "patientId": "pat-1791152176534-415"
     }
   ],
   "inventory": [
@@ -779,18 +382,8 @@
   "dailyCloseouts": [],
   "auditLogs": [
     {
-      "id": "log-1791198118619-s7pfm",
-      "timestamp": "٥‏/١٠‏/٢٠٢٦ ٢:٠١:٥٨ م",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "SYNC",
-      "module": "SECURITY",
-      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
-    },
-    {
-      "id": "log-1791194275923-s2gwb",
-      "timestamp": "٥‏/١٠‏/٢٠٢٦ ١٢:٥٧:٥٥ م",
+      "id": "log-1791199241986-slfuz",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:٢٠:٤١ م",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
@@ -799,24 +392,494 @@
       "description": "تحديث بيانات المعمل والاعتماد الطبي ووسائل التواصل"
     },
     {
-      "id": "log-1791194238754-qdx2p",
-      "timestamp": "٥‏/١٠‏/٢٠٢٦ ١٢:٥٧:١٨ م",
+      "id": "log-1791199089682-j40z1",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:١٨:٠٩ م",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
-      "action": "SYNC",
-      "module": "SECURITY",
-      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
+      "action": "DELETE",
+      "module": "INCOME",
+      "description": "حذف الفاتورة رقم INV-2026-001 للمريض محمد صلاح الدين عبدة"
     },
     {
-      "id": "log-1791194154634-1fm2f",
-      "timestamp": "٥‏/١٠‏/٢٠٢٦ ١٢:٥٥:٥٤ م",
+      "id": "log-1791199089680-f2e50",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:١٨:٠٩ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض محمد صلاح الدين عبدة"
+    },
+    {
+      "id": "log-1791198769770-e4y5f",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:١٢:٤٩ م",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
-      "module": "SETTINGS",
-      "description": "تحديث بيانات المعمل والاعتماد الطبي ووسائل التواصل"
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1791198572864"
+    },
+    {
+      "id": "log-1791198764380-dh1bo",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:١٢:٤٤ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1791198572864"
+    },
+    {
+      "id": "log-1791198748384-emqw7",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:١٢:٢٨ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1791198572864"
+    },
+    {
+      "id": "log-1791198743320-7v6od",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:١٢:٢٣ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1791198572864"
+    },
+    {
+      "id": "log-1791198737441-osxda",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:١٢:١٧ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1791198572864"
+    },
+    {
+      "id": "log-1791198732763-ihbfp",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:١٢:١٢ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1791198572864"
+    },
+    {
+      "id": "log-1791198718186-3wrvb",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:١١:٥٨ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1791198572864"
+    },
+    {
+      "id": "log-1791198718098-5aord",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:١١:٥٨ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1791198572864"
+    },
+    {
+      "id": "log-1791198667905-x6d3i",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:١١:٠٧ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1791198572864"
+    },
+    {
+      "id": "log-1791198646573-yf8s9",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:١٠:٤٦ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1791198572864"
+    },
+    {
+      "id": "log-1791198645752-sisi5",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:١٠:٤٥ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1791198572864"
+    },
+    {
+      "id": "log-1791198645173-lhnsf",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:١٠:٤٥ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1791198572864"
+    },
+    {
+      "id": "log-1791198627712-kr5lz",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:١٠:٢٧ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1791198572864"
+    },
+    {
+      "id": "log-1791198625186-jwjow",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:١٠:٢٥ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1791198572864"
+    },
+    {
+      "id": "log-1791198621533-xda4x",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:١٠:٢١ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1791198572864"
+    },
+    {
+      "id": "log-1791198621190-n2dki",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:١٠:٢١ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1791198572864"
+    },
+    {
+      "id": "log-1791198620972-e87dn",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:١٠:٢٠ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1791198572864"
+    },
+    {
+      "id": "log-1791198614955-hwdgc",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:١٠:١٤ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1791198572864"
+    },
+    {
+      "id": "log-1791198606727-0ck2j",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:١٠:٠٦ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1791198572864"
+    },
+    {
+      "id": "log-1791198587802-of4n0",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:٠٩:٤٧ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1791198572864"
+    },
+    {
+      "id": "log-1791198584395-k7t3o",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:٠٩:٤٤ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1791198572864"
+    },
+    {
+      "id": "log-1791198572875-awdtg",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:٠٩:٣٢ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 201 نقطة ولاء للمريض محمد صلاح الدين عبدة برقم هاتف 01004359187"
+    },
+    {
+      "id": "log-1791198572872-xjtd8",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٢:٠٩:٣٢ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "CREATE",
+      "module": "DIAGNOSTIC",
+      "description": "تسجيل مريض جديد محمد صلاح الدين عبدة وحجز تحاليل وربط التقرير بالفاتورة المالية"
+    },
+    {
+      "id": "log-1791197720691-d24j5",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ١:٥٥:٢٠ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض rep-1791095397668"
+    },
+    {
+      "id": "log-1791197719016-3vu6v",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ١:٥٥:١٩ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "INCOME",
+      "description": "حذف الفاتورة رقم INV-2026-002 للمريض منى عادل عبد الرحمن"
+    },
+    {
+      "id": "log-1791197719015-rrfju",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ١:٥٥:١٩ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض منى عادل عبد الرحمن"
+    },
+    {
+      "id": "log-1791197718010-kvz47",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ١:٥٥:١٨ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "INCOME",
+      "description": "حذف الفاتورة رقم INV-2026-001 للمريض أحمد محمود إبراهيم"
+    },
+    {
+      "id": "log-1791197718009-frkp6",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ١:٥٥:١٨ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض أحمد محمود إبراهيم"
+    },
+    {
+      "id": "log-1791197717163-cjano",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ١:٥٥:١٧ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض rep-1791068659876"
+    },
+    {
+      "id": "log-1791197713512-5tv50",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ١:٥٥:١٣ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض امانى محمد ابراهيم"
+    },
+    {
+      "id": "log-1791197712331-pfbpt",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ١:٥٥:١٢ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض منال محمود بكر"
+    },
+    {
+      "id": "log-1791197711536-avkri",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ١:٥٥:١١ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض محمد صلاح الدين عبدة"
+    },
+    {
+      "id": "log-1791197709980-t32e0",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ١:٥٥:٠٩ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض كريمة حامد قورة"
+    },
+    {
+      "id": "log-1791197709199-x9vyr",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ١:٥٥:٠٩ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض زينب محمد حسن محمد"
+    },
+    {
+      "id": "log-1791197708523-4fg7l",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ١:٥٥:٠٨ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض نورا سعيد حلمى"
+    },
+    {
+      "id": "log-1791197707743-e8mxj",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ١:٥٥:٠٧ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض شريف عادل"
+    },
+    {
+      "id": "log-1791197706141-sypkk",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ١:٥٥:٠٦ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض كوثر ابراهيم"
+    },
+    {
+      "id": "log-1791197705424-7dtkw",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ١:٥٥:٠٥ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض أمال محمد حسب الدائم"
+    },
+    {
+      "id": "log-1791197704839-21cd6",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ١:٥٥:٠٤ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض هويدا الهادي يحي"
+    },
+    {
+      "id": "log-1791197704163-wp9pm",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ١:٥٥:٠٤ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض مريم عوض الكريم علي"
+    },
+    {
+      "id": "log-1791197703400-01y43",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ١:٥٥:٠٣ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض حبيبة مجدى احمد"
+    },
+    {
+      "id": "log-1791197701949-b3osm",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ١:٥٥:٠١ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض رجاء حسن ابراهيم"
+    },
+    {
+      "id": "log-1791197700478-jsef8",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ١:٥٥:٠٠ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض ماري مكرم"
+    },
+    {
+      "id": "log-1791197699678-20tky",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ١:٥٤:٥٩ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض أمانى محمد ابراهيم"
+    },
+    {
+      "id": "log-1791197621659-jnei8",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ١:٥٣:٤١ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-inc-1791124084105"
+    },
+    {
+      "id": "log-1791197593012-aw1sv",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ١:٥٣:١٣ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-inc-1791124084105"
+    },
+    {
+      "id": "log-1791197574175-m4wke",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦، ١:٥٢:٥٤ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-inc-1791124084105"
     }
   ]
 }
