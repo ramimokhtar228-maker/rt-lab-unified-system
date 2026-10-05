@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:20:42.762Z",
+  "syncedAt": "2026-10-05T15:20:47.630Z",
   "reports": [
     {
       "status": "released",
@@ -2063,16 +2063,6 @@
               "flag": "NORMAL"
             },
             {
-              "name": "Blood Urea Nitrogen (BUN)",
-              "unit": "mg/dL",
-              "minNormal": 7,
-              "maxNormal": 20,
-              "textReference": "",
-              "id": "param-2-1791213622129-jo7",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
               "name": "BUN / Creatinine Ratio",
               "unit": "Ratio",
               "minNormal": 10,
@@ -2671,7 +2661,7 @@
         }
       ],
       "status": "in_progress",
-      "updatedAt": "2026-10-05T15:20:39.029Z",
+      "updatedAt": "2026-10-05T15:20:41.531Z",
       "createdAt": "2026-10-04T14:38:22.671Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-4276 - تم التسميع آلياً من منظومة الفواتير",
       "reportNumber": "RT-BK-4276",
