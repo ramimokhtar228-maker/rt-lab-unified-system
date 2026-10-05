@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:21:57.064Z",
+  "syncedAt": "2026-10-05T15:22:17.192Z",
   "reports": [
     {
       "status": "released",
@@ -2193,7 +2193,7 @@
               "method": "Automated SLS-Hb",
               "textReference": "M: 13.0 - 17.5 | F: 12.0 - 15.5 g/dL",
               "id": "param-0-1791213622129-ege",
-              "result": "",
+              "result": "12.30",
               "flag": "NORMAL"
             },
             {
@@ -2212,11 +2212,11 @@
               "unit": "%",
               "minNormal": 36,
               "maxNormal": 48,
-              "notes": "Auto-calculated: Hb × 3",
+              "notes": "Calculated (HGB × 3)",
               "textReference": "M: 40 - 52% | F: 36 - 48%",
               "id": "param-2-1791213622129-kpv",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "3",
+              "flag": "LOW"
             },
             {
               "name": "M.C.V",
@@ -2245,11 +2245,11 @@
               "unit": "g/dL",
               "minNormal": 32,
               "maxNormal": 36,
-              "notes": "Auto-calculated: (Hb × 100) / PCV",
+              "notes": "Calculated: (HGB × 100) / HCT",
               "textReference": "32.0 - 36.0 g/dL",
               "id": "param-5-1791213622129-lp5",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "410",
+              "flag": "HIGH"
             },
             {
               "name": "R.D.W-CV",
@@ -2639,7 +2639,7 @@
         }
       ],
       "status": "in_progress",
-      "updatedAt": "2026-10-05T15:21:53.424Z",
+      "updatedAt": "2026-10-05T15:22:14.095Z",
       "createdAt": "2026-10-04T14:38:22.671Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-4276 - تم التسميع آلياً من منظومة الفواتير",
       "reportNumber": "RT-BK-4276",
