@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:44:10.157Z",
+  "syncedAt": "2026-10-05T17:44:14.752Z",
   "reports": [
     {
       "status": "released",
@@ -1547,35 +1547,1046 @@
     {
       "profiles": [
         {
-          "profileCode": "PKG_VIP_RT",
-          "sampleType": "Full Set (Blood & Urine)",
-          "id": "prof-inc-1791125455998-1",
-          "titleAr": "باقة الفحص الشامل الملكية VIP د. رامي مختار (32 فحص)",
-          "titleEn": "RT Lab Royal Executive VIP Package",
-          "category": "Packages",
-          "parameters": []
-        },
-        {
-          "titleEn": "Thyroid Stimulating Hormone",
-          "titleAr": "هرمون الغدة الدرقية الحساس (TSH 3rd Gen)",
-          "profileCode": "TSH",
-          "sampleType": "Serum",
-          "category": "Endocrinology",
+          "id": "prof-1791222251477-r75y",
+          "profileCode": "CBC",
+          "titleEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+          "titleAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
+          "category": "Hematology",
+          "sampleType": "EDTA Whole Blood",
+          "interpretation": "Microscopic evaluation and complete differential indices assessed according to international hematology criteria.",
           "parameters": [
             {
-              "id": "p-1791127150857",
-              "name": "هرمون الغدة الدرقية الحساس (TSH 3rd Gen) (Thyroid Stimulating Hormone)",
+              "name": "Hemoglobin (Hb)",
+              "unit": "g/dL",
+              "minNormal": 12,
+              "maxNormal": 16.5,
+              "panicLow": 7,
+              "panicHigh": 20,
+              "method": "Automated SLS-Hb",
+              "textReference": "M: 13.0 - 17.5 | F: 12.0 - 15.5 g/dL",
+              "id": "param-0-1791222251477-7iy",
               "result": "",
-              "flag": "",
-              "unit": "",
-              "textReference": "قيد الفحص المخبري"
+              "flag": "NORMAL"
+            },
+            {
+              "name": "R.B.Cs Count",
+              "unit": "x10^6/µL",
+              "minNormal": 4,
+              "maxNormal": 5.8,
+              "method": "Electrical Impedance",
+              "textReference": "M: 4.5 - 5.9 | F: 4.0 - 5.2",
+              "id": "param-1-1791222251477-u2d",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Hematocrit (PCV)",
+              "unit": "%",
+              "minNormal": 36,
+              "maxNormal": 48,
+              "notes": "Auto-calculated: Hb × 3",
+              "textReference": "M: 40 - 52% | F: 36 - 48%",
+              "id": "param-2-1791222251477-iu4",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "M.C.V",
+              "unit": "fL",
+              "minNormal": 80,
+              "maxNormal": 98,
+              "notes": "Auto-calculated: (PCV × 10) / RBC",
+              "textReference": "80.0 - 98.0 fL",
+              "id": "param-3-1791222251477-0za",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "M.C.H",
+              "unit": "pg",
+              "minNormal": 27,
+              "maxNormal": 33,
+              "notes": "Auto-calculated: (Hb × 10) / RBC",
+              "textReference": "27.0 - 33.0 pg",
+              "id": "param-4-1791222251477-9fk",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "M.C.H.C",
+              "unit": "g/dL",
+              "minNormal": 32,
+              "maxNormal": 36,
+              "notes": "Auto-calculated: (Hb × 100) / PCV",
+              "textReference": "32.0 - 36.0 g/dL",
+              "id": "param-5-1791222251477-3r5",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "R.D.W-CV",
+              "unit": "%",
+              "minNormal": 11.5,
+              "maxNormal": 14.5,
+              "textReference": "11.5 - 14.5 %",
+              "id": "param-6-1791222251477-j9k",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "R.D.W-SD",
+              "unit": "fL",
+              "minNormal": 39,
+              "maxNormal": 46,
+              "textReference": "39.0 - 46.0 fL",
+              "id": "param-7-1791222251477-qvo",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Mentzer Index (MCV/RBC)",
+              "unit": "Ratio",
+              "notes": "<13 Thalassemia Trait | >13 Iron Deficiency",
+              "textReference": "> 13 Iron Def. | < 13 Thalassemia",
+              "id": "param-8-1791222251477-lgn",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Green & King Index",
+              "unit": "Index",
+              "notes": "(MCV² × RDW) / (Hb × 100)",
+              "textReference": "< 72 Thalassemia | > 72 Iron Def.",
+              "id": "param-9-1791222251477-rd6",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Platelets Count",
+              "unit": "x10^3/µL",
+              "minNormal": 150,
+              "maxNormal": 450,
+              "panicLow": 50,
+              "panicHigh": 1000,
+              "textReference": "150 - 450 x10^3/µL",
+              "id": "param-10-1791222251477-ue5",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "MPV (Mean Platelet Volume)",
+              "unit": "fL",
+              "minNormal": 7.5,
+              "maxNormal": 11.5,
+              "textReference": "7.5 - 11.5 fL",
+              "id": "param-11-1791222251477-ab2",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "PDW (Platelet Dist. Width)",
+              "unit": "%",
+              "minNormal": 9,
+              "maxNormal": 17,
+              "textReference": "9.0 - 17.0 %",
+              "id": "param-12-1791222251477-axs",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "PCT (Plateletcrit)",
+              "unit": "%",
+              "minNormal": 0.17,
+              "maxNormal": 0.35,
+              "notes": "Auto-calculated: (PLT × MPV) / 10,000",
+              "textReference": "0.17 - 0.35 %",
+              "id": "param-13-1791222251478-fov",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Total Leucocytic Count (TLC)",
+              "unit": "x10^3/µL",
+              "minNormal": 4,
+              "maxNormal": 11,
+              "panicLow": 2,
+              "panicHigh": 30,
+              "textReference": "4.0 - 11.0 x10^3/µL",
+              "id": "param-14-1791222251478-66l",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Segmented Neutrophils %",
+              "unit": "%",
+              "minNormal": 40,
+              "maxNormal": 65,
+              "textReference": "40 - 65 %",
+              "id": "param-15-1791222251478-i9r",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Band Forms (Stab) %",
+              "unit": "%",
+              "minNormal": 0,
+              "maxNormal": 5,
+              "textReference": "0 - 5 % (Left Shift if > 6%)",
+              "id": "param-16-1791222251478-geq",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Total Neutrophils %",
+              "unit": "%",
+              "minNormal": 40,
+              "maxNormal": 70,
+              "notes": "Auto-calculated: Segmented% + Band%",
+              "textReference": "40 - 70 %",
+              "id": "param-17-1791222251478-8ft",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Lymphocytes %",
+              "unit": "%",
+              "minNormal": 20,
+              "maxNormal": 45,
+              "textReference": "20 - 45 %",
+              "id": "param-18-1791222251478-lhj",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Monocytes %",
+              "unit": "%",
+              "minNormal": 2,
+              "maxNormal": 8,
+              "textReference": "2 - 8 %",
+              "id": "param-19-1791222251478-jfl",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Eosinophils %",
+              "unit": "%",
+              "minNormal": 1,
+              "maxNormal": 6,
+              "textReference": "1 - 6 %",
+              "id": "param-20-1791222251478-0f6",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Basophils %",
+              "unit": "%",
+              "minNormal": 0,
+              "maxNormal": 1,
+              "textReference": "0 - 1 %",
+              "id": "param-21-1791222251478-n07",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Metamyelocytes %",
+              "unit": "%",
+              "minNormal": 0,
+              "maxNormal": 0,
+              "textReference": "0 % (Absent in normal blood)",
+              "id": "param-22-1791222251478-812",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Myelocytes %",
+              "unit": "%",
+              "minNormal": 0,
+              "maxNormal": 0,
+              "textReference": "0 % (Absent in normal blood)",
+              "id": "param-23-1791222251478-eb2",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Blast Cells %",
+              "unit": "%",
+              "minNormal": 0,
+              "maxNormal": 0,
+              "textReference": "0 % (Absent in normal blood)",
+              "id": "param-24-1791222251478-7xc",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Absolute Neutrophils (ANC)",
+              "unit": "x10^3/µL",
+              "minNormal": 1.5,
+              "maxNormal": 7.5,
+              "notes": "Auto-calculated: (WBC × Neut%) / 100",
+              "textReference": "1.5 - 7.5 x10^3/µL",
+              "id": "param-25-1791222251478-8tr",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Absolute Lymphocytes (ALC)",
+              "unit": "x10^3/µL",
+              "minNormal": 1,
+              "maxNormal": 4,
+              "notes": "Auto-calculated: (WBC × Lymph%) / 100",
+              "textReference": "1.0 - 4.0 x10^3/µL",
+              "id": "param-26-1791222251478-b6i",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Absolute Monocytes (AMC)",
+              "unit": "x10^3/µL",
+              "minNormal": 0.2,
+              "maxNormal": 0.8,
+              "notes": "Auto-calculated: (WBC × Mono%) / 100",
+              "textReference": "0.2 - 0.8 x10^3/µL",
+              "id": "param-27-1791222251478-yhb",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Absolute Eosinophils (AEC)",
+              "unit": "x10^3/µL",
+              "minNormal": 0.04,
+              "maxNormal": 0.44,
+              "notes": "Auto-calculated: (WBC × Eos%) / 100",
+              "textReference": "0.04 - 0.44 x10^3/µL",
+              "id": "param-28-1791222251478-lrg",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Absolute Basophils (ABC)",
+              "unit": "x10^3/µL",
+              "minNormal": 0.01,
+              "maxNormal": 0.1,
+              "notes": "Auto-calculated: (WBC × Baso%) / 100",
+              "textReference": "0.01 - 0.1 x10^3/µL",
+              "id": "param-29-1791222251478-nfw",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "NLR (Neutrophil/Lymphocyte)",
+              "unit": "Ratio",
+              "minNormal": 0.8,
+              "maxNormal": 2.5,
+              "notes": "Auto-calculated: Neut% / Lymph%",
+              "textReference": "0.8 - 2.5 (Inflammatory Index)",
+              "id": "param-30-1791222251478-tl1",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "PLR (Platelet/Lymphocyte)",
+              "unit": "Ratio",
+              "minNormal": 100,
+              "maxNormal": 150,
+              "notes": "Auto-calculated: PLT / ALC",
+              "textReference": "100 - 150",
+              "id": "param-31-1791222251478-k89",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Reticulocyte Count %",
+              "unit": "%",
+              "minNormal": 0.5,
+              "maxNormal": 2.5,
+              "textReference": "0.5 - 2.5 %",
+              "id": "param-32-1791222251478-4lb",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "RPI (Reticulocyte Production Index)",
+              "unit": "Index",
+              "minNormal": 1,
+              "maxNormal": 3,
+              "textReference": "> 2.0 indicates adequate marrow response",
+              "id": "param-33-1791222251478-1g8",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "RBC Morphology",
+              "unit": "/HPF",
+              "textReference": "Normocytic normochromic, no anisopoikilocytosis",
+              "method": "Leishman Stain Microscopy",
+              "id": "param-34-1791222251478-fhv",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "WBC Morphology",
+              "unit": "pH Units",
+              "textReference": "Mature differential, no toxic granules, vacuoles, or blasts",
+              "method": "Leishman Stain Microscopy",
+              "id": "param-35-1791222251478-m19",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Platelet Morphology",
+              "unit": "pH Units",
+              "textReference": "Adequate on smear, normal aggregation, no giant forms",
+              "method": "Leishman Stain Microscopy",
+              "id": "param-36-1791222251478-1c9",
+              "result": "",
+              "flag": "NORMAL"
             }
-          ],
-          "id": "prof-inc-1791125455998-2"
+          ]
+        },
+        {
+          "id": "prof-1791222251478-nm5j",
+          "profileCode": "GLYCEMIC",
+          "titleEn": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "titleAr": "تقييم السكر التراكمي والجلوكوز ومتوسط السكر التقديري",
+          "category": "Clinical Chemistry",
+          "sampleType": "Fluoride Plasma & EDTA Blood",
+          "interpretation": "Glycemic parameters evaluated according to ADA guidelines.",
+          "parameters": [
+            {
+              "name": "Fasting Blood Glucose",
+              "unit": "mg/dL",
+              "minNormal": 70,
+              "maxNormal": 99,
+              "panicLow": 50,
+              "panicHigh": 400,
+              "method": "Hexokinase",
+              "textReference": "",
+              "id": "param-0-1791222251478-sce",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "2 Hours Post-Prandial Glucose",
+              "unit": "mg/dL",
+              "minNormal": 70,
+              "maxNormal": 140,
+              "panicHigh": 450,
+              "method": "Hexokinase",
+              "textReference": "",
+              "id": "param-1-1791222251478-mec",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Random Blood Glucose",
+              "unit": "mg/dL",
+              "minNormal": 70,
+              "maxNormal": 140,
+              "textReference": "",
+              "id": "param-2-1791222251478-y6j",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "HbA1c (Glycated Hemoglobin)",
+              "unit": "%",
+              "minNormal": 4,
+              "maxNormal": 5.6,
+              "textReference": "< 5.7% Normal, 5.7 - 6.4% Pre-Diabetes, ≥ 6.5% Diabetes",
+              "method": "HPLC / Turbidimetric",
+              "id": "param-3-1791222251478-rls",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Estimated Average Glucose (eAG)",
+              "unit": "mg/dL",
+              "minNormal": 68,
+              "maxNormal": 114,
+              "textReference": "80 - 120 mg/dL",
+              "notes": "Auto-calculated: (28.7 × HbA1c) - 46.7",
+              "id": "param-4-1791222251478-nou",
+              "result": "",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-1791222251478-69f8",
+          "profileCode": "LIPID",
+          "titleEn": "Lipid Profile",
+          "titleAr": "دهون الدم الشاملة مع المؤشرات الحسابية",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum (12h Fasting)",
+          "interpretation": "Lipid ratios demonstrate favorable cardiovascular risk stratification.",
+          "parameters": [
+            {
+              "name": "Total Serum Cholesterol",
+              "unit": "mg/dL",
+              "minNormal": 120,
+              "maxNormal": 200,
+              "method": "CHOD-PAP",
+              "textReference": "",
+              "id": "param-0-1791222251478-kro",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Serum Triglycerides",
+              "unit": "mg/dL",
+              "minNormal": 40,
+              "maxNormal": 150,
+              "panicHigh": 500,
+              "method": "GPO-PAP",
+              "textReference": "",
+              "id": "param-1-1791222251478-krw",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "HDL - Cholesterol (Good)",
+              "unit": "mg/dL",
+              "minNormal": 40,
+              "maxNormal": 65,
+              "method": "Direct Accelerator",
+              "textReference": "",
+              "id": "param-2-1791222251478-csg",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "LDL - Cholesterol (Calculated)",
+              "unit": "mg/dL",
+              "minNormal": 0,
+              "maxNormal": 100,
+              "notes": "Friedewald Formula: Total Chol - HDL - (TG / 5)",
+              "textReference": "",
+              "id": "param-3-1791222251478-o12",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "VLDL - Cholesterol",
+              "unit": "mg/dL",
+              "minNormal": 5,
+              "maxNormal": 30,
+              "notes": "Auto-calculated: Triglycerides / 5",
+              "textReference": "",
+              "id": "param-4-1791222251478-oa1",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Non-HDL Cholesterol",
+              "unit": "mg/dL",
+              "minNormal": 0,
+              "maxNormal": 130,
+              "notes": "Auto-calculated: Total Chol - HDL",
+              "textReference": "",
+              "id": "param-5-1791222251478-45u",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Total Chol / HDL Ratio",
+              "unit": "Ratio",
+              "minNormal": 0,
+              "maxNormal": 4.5,
+              "textReference": "< 4.5 Desirable",
+              "notes": "Auto-calculated: Total Chol / HDL",
+              "id": "param-6-1791222251478-0gy",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "LDL / HDL Ratio",
+              "unit": "Ratio",
+              "minNormal": 0,
+              "maxNormal": 3,
+              "textReference": "< 3.0 Desirable",
+              "id": "param-7-1791222251478-ufk",
+              "result": "",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-1791222251478-ucce",
+          "profileCode": "LFT",
+          "titleEn": "Liver Function Tests (LFT)",
+          "titleAr": "وظائف كبد متكاملة ومؤشرات الصفراء والبروتين",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum",
+          "interpretation": "Enzyme activities and synthetic hepatic markers are within normal limits.",
+          "parameters": [
+            {
+              "name": "ALT (SGPT)",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 45,
+              "method": "IFCC UV with P5P",
+              "textReference": "",
+              "id": "param-0-1791222251478-fzg",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "AST (SGOT)",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 40,
+              "method": "IFCC UV with P5P",
+              "textReference": "",
+              "id": "param-1-1791222251478-ggw",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Alkaline Phosphatase (ALP)",
+              "unit": "U/L",
+              "minNormal": 40,
+              "maxNormal": 130,
+              "textReference": "",
+              "id": "param-2-1791222251478-pbz",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Total Bilirubin",
+              "unit": "mg/dL",
+              "minNormal": 0.2,
+              "maxNormal": 1.2,
+              "panicHigh": 5,
+              "method": "Jendrassik-Grof",
+              "textReference": "",
+              "id": "param-3-1791222251478-tg3",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Direct Bilirubin",
+              "unit": "mg/dL",
+              "minNormal": 0,
+              "maxNormal": 0.3,
+              "textReference": "",
+              "id": "param-4-1791222251478-t31",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Indirect Bilirubin",
+              "unit": "mg/dL",
+              "minNormal": 0.1,
+              "maxNormal": 0.9,
+              "notes": "Auto-calculated: Total - Direct",
+              "textReference": "",
+              "id": "param-5-1791222251478-ibm",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Total Serum Proteins",
+              "unit": "g/dL",
+              "minNormal": 6.4,
+              "maxNormal": 8.3,
+              "method": "Biuret",
+              "textReference": "",
+              "id": "param-6-1791222251478-z3e",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Serum Albumin",
+              "unit": "g/dL",
+              "minNormal": 3.5,
+              "maxNormal": 5.2,
+              "method": "Bromocresol Green (BCG)",
+              "textReference": "",
+              "id": "param-7-1791222251478-j6r",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Serum Globulin",
+              "unit": "g/dL",
+              "minNormal": 2.3,
+              "maxNormal": 3.5,
+              "notes": "Auto-calculated: Total Protein - Albumin",
+              "textReference": "",
+              "id": "param-8-1791222251478-idt",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "A/G Ratio",
+              "unit": "Ratio",
+              "minNormal": 1.2,
+              "maxNormal": 2.2,
+              "notes": "Auto-calculated: Albumin / Globulin",
+              "textReference": "",
+              "id": "param-9-1791222251478-wlt",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "G.G.T",
+              "unit": "U/L",
+              "minNormal": 9,
+              "maxNormal": 48,
+              "textReference": "",
+              "id": "param-10-1791222251478-tgm",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "AST/ALT Ratio (De Ritis)",
+              "unit": "Ratio",
+              "minNormal": 0.6,
+              "maxNormal": 1.1,
+              "notes": "Auto-calculated: AST / ALT",
+              "textReference": "",
+              "id": "param-11-1791222251478-c0r",
+              "result": "",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-1791222251478-4can",
+          "profileCode": "KFT",
+          "titleEn": "Kidney Function Profile",
+          "titleAr": "وظائف الكلى واليوريا ومعدل الفلترة eGFR",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum",
+          "interpretation": "Renal biomarkers indicate adequate glomerular filtration and nitrogenous clearance.",
+          "parameters": [
+            {
+              "name": "Serum Creatinine",
+              "unit": "mg/dL",
+              "minNormal": 0.6,
+              "maxNormal": 1.2,
+              "panicHigh": 4,
+              "method": "Enzymatic / Jaffe Kinetic",
+              "textReference": "",
+              "id": "param-0-1791222251478-tsh",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Blood Urea",
+              "unit": "mg/dL",
+              "minNormal": 15,
+              "maxNormal": 45,
+              "panicHigh": 120,
+              "method": "Urease-GLDH",
+              "textReference": "",
+              "id": "param-1-1791222251478-hth",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Blood Urea Nitrogen (BUN)",
+              "unit": "mg/dL",
+              "minNormal": 7,
+              "maxNormal": 20,
+              "textReference": "",
+              "id": "param-2-1791222251478-x9a",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "BUN / Creatinine Ratio",
+              "unit": "Ratio",
+              "minNormal": 10,
+              "maxNormal": 20,
+              "notes": "Auto-calculated: BUN / Creatinine",
+              "textReference": "",
+              "id": "param-3-1791222251478-s89",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Serum Uric Acid",
+              "unit": "mg/dL",
+              "minNormal": 3.5,
+              "maxNormal": 7.2,
+              "method": "Uricase-PAP",
+              "textReference": "",
+              "id": "param-4-1791222251478-62w",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "eGFR (CKD-EPI)",
+              "unit": "mL/min/1.73m²",
+              "minNormal": 90,
+              "maxNormal": 120,
+              "notes": "Auto-calculated: CKD-EPI Formula",
+              "textReference": "",
+              "id": "param-5-1791222251478-n9c",
+              "result": "",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-1791222251478-7izd",
+          "profileCode": "URINE",
+          "titleEn": "Complete Urine Analysis",
+          "titleAr": "تحليل البول الكامل (فحص فيزيائي، كيميائي، ومجهري)",
+          "category": "Clinical Microscopy",
+          "sampleType": "Clean Catch Midstream Urine",
+          "interpretation": "Routine urinalysis shows clear appearance with no significant cellular or crystalline elements.",
+          "parameters": [
+            {
+              "name": "Color",
+              "unit": "Physical / Visual",
+              "textReference": "Amber Yellow",
+              "method": "Visual Inspection",
+              "id": "param-0-1791222251478-ym1",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Aspect / Transparency",
+              "unit": "Physical / Visual",
+              "textReference": "Clear",
+              "method": "Visual Inspection",
+              "id": "param-1-1791222251478-aky",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Specific Gravity (Sp. Gr.)",
+              "unit": "Sp.Gr. (Ratio)",
+              "minNormal": 1.01,
+              "maxNormal": 1.025,
+              "textReference": "1.010 - 1.025",
+              "method": "Refractometry",
+              "id": "param-2-1791222251478-xkn",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Reaction (pH)",
+              "unit": "pH Units",
+              "minNormal": 5,
+              "maxNormal": 7.5,
+              "textReference": "5.0 - 7.5",
+              "method": "Dipstick",
+              "id": "param-3-1791222251478-c3z",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Odour",
+              "unit": "Physical / Visual",
+              "textReference": "Normal Aromatic",
+              "id": "param-4-1791222251478-rxd",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Protein (Albumin)",
+              "unit": "Dipstick / Qualitative",
+              "textReference": "Nil (Negative)",
+              "method": "Protein Error of Indicator",
+              "id": "param-5-1791222251478-c28",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Glucose (Sugar)",
+              "unit": "Dipstick / Qualitative",
+              "textReference": "Nil (Negative)",
+              "method": "Glucose Oxidase",
+              "id": "param-6-1791222251478-nkv",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Ketone Bodies (Acetone)",
+              "unit": "Dipstick / Qualitative",
+              "textReference": "Nil (Negative)",
+              "method": "Sodium Nitroprusside",
+              "id": "param-7-1791222251478-3ve",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Bilirubin",
+              "unit": "Score / Units",
+              "textReference": "Nil (Negative)",
+              "id": "param-8-1791222251478-a5q",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Urobilinogen",
+              "unit": "mg/dL",
+              "textReference": "Normal (0.2 - 1.0 mg/dL)",
+              "id": "param-9-1791222251478-ocg",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Nitrite",
+              "unit": "Dipstick / Qualitative",
+              "textReference": "Negative",
+              "id": "param-10-1791222251478-t37",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Leukocyte Esterase",
+              "unit": "Dipstick / Qualitative",
+              "textReference": "Negative",
+              "id": "param-11-1791222251478-lhr",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Blood / Hemoglobin",
+              "unit": "Physical / Visual",
+              "textReference": "Nil (Negative)",
+              "id": "param-12-1791222251478-3ez",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Pus Cells (WBCs)",
+              "unit": "/ HPF",
+              "minNormal": 0,
+              "maxNormal": 5,
+              "textReference": "0 - 5 / HPF",
+              "notes": "Significant pyuria if > 10 / HPF",
+              "id": "param-13-1791222251478-dq2",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Red Blood Cells (RBCs)",
+              "unit": "/ HPF",
+              "minNormal": 0,
+              "maxNormal": 3,
+              "textReference": "0 - 3 / HPF",
+              "id": "param-14-1791222251478-os7",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Epithelial Cells",
+              "unit": "/HPF",
+              "textReference": "Few / Nil",
+              "id": "param-15-1791222251478-5qy",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Crystals",
+              "unit": "/HPF",
+              "textReference": "Nil seen",
+              "id": "param-16-1791222251479-js1",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Casts",
+              "unit": "/LPF",
+              "textReference": "Nil seen",
+              "id": "param-17-1791222251479-fio",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Amorphous Deposits",
+              "unit": "pH Units",
+              "textReference": "Nil seen",
+              "id": "param-18-1791222251479-mv1",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Bacteria",
+              "unit": "/HPF",
+              "textReference": "Nil seen",
+              "id": "param-19-1791222251479-mmi",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Yeast Cells (Candida)",
+              "unit": "/HPF",
+              "textReference": "Nil seen",
+              "id": "param-20-1791222251479-dd7",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Trichomonas vaginalis",
+              "unit": "/HPF",
+              "textReference": "Nil seen",
+              "id": "param-21-1791222251479-xp3",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Mucus Threads",
+              "unit": "Physical / Visual",
+              "textReference": "Nil seen",
+              "id": "param-22-1791222251479-4vr",
+              "result": "",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-extra-1791222251479",
+          "profileCode": "PKG_EXTRA",
+          "titleAr": "فحوصات وفيتامينات باقة: باقة الفحص الدوري الشامل (Wellness Plus)",
+          "titleEn": "Package Tests (Comprehensive Annual Wellness Package)",
+          "category": "Package Tests",
+          "sampleType": "Serum",
+          "interpretation": "All complementary package tests evaluated according to certified reference ranges.",
+          "parameters": [
+            {
+              "id": "p-pkg-0-1791222251479",
+              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
+              "result": "",
+              "unit": "ng/mL",
+              "minNormal": 30,
+              "maxNormal": 100,
+              "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+              "flag": "NORMAL",
+              "method": "CLIA (Chemiluminescence Immunoassay)"
+            },
+            {
+              "id": "p-pkg-1-1791222251479",
+              "name": "الهرمون المنشط للغدة الدرقية (TSH Ultrasensitive) (Thyroid Stimulating Hormone (TSH))",
+              "result": "",
+              "unit": "uIU/mL",
+              "minNormal": 0.35,
+              "maxNormal": 4.94,
+              "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+              "flag": "NORMAL",
+              "method": "CLIA (3rd Generation Chemiluminescence)"
+            },
+            {
+              "id": "p-pkg-2-1791222251479",
+              "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 3.5,
+              "maxNormal": 7.2,
+              "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
+              "flag": "NORMAL",
+              "method": "Uricase / POD Enzymatic Colorimetric"
+            }
+          ]
         }
       ],
       "id": "rep-inc-1791125455998",
-      "updatedAt": "2026-10-05T17:44:06.067Z",
+      "updatedAt": "2026-10-05T17:44:11.479Z",
       "createdAt": "2026-10-04T14:50:55.998Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-9599 - تم التسميع آلياً من منظومة الفواتير",
       "patient": {
@@ -1603,7 +2614,13 @@
         "labChemist": "",
         "verifiedBy": ""
       },
-      "status": "draft"
+      "status": "in_progress",
+      "packageApplied": {
+        "code": "PKG-ANNUAL-WELLNESS",
+        "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
+        "packagePrice": 950,
+        "originalPrice": 1650
+      }
     },
     {
       "generalComment": "طلب فحص مالي رقم RT-BK-7317 - تم التسميع آلياً من منظومة الفواتير",
