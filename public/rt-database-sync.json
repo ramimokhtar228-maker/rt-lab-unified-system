@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:12:17.842Z",
+  "syncedAt": "2026-10-05T18:14:16.887Z",
   "reports": [
     {
       "status": "released",
@@ -5079,13 +5079,13 @@
             {
               "id": "param-1791223757705",
               "name": "الهرمون المنشط للغدة الدرقية (TSH Ultrasensitive) (Thyroid Stimulating Hormone (TSH))",
-              "result": "",
+              "result": "1.11",
               "unit": "uIU/mL",
               "minNormal": 0.35,
               "maxNormal": 4.94,
               "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
               "method": "CLIA (3rd Generation Chemiluminescence)",
-              "flag": ""
+              "flag": "NORMAL"
             }
           ]
         }
@@ -5117,7 +5117,7 @@
         "sampleDate": "2026-10-04T14:59"
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-9820 - تم التسميع آلياً من منظومة الفواتير",
-      "updatedAt": "2026-10-05T18:12:13.092Z",
+      "updatedAt": "2026-10-05T18:14:12.848Z",
       "packageApplied": {
         "code": "PKG-ANNUAL-WELLNESS",
         "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
