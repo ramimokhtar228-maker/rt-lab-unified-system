@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:33:35.849Z",
+  "syncedAt": "2026-10-05T15:33:47.500Z",
   "reports": [
     {
       "status": "released",
@@ -1933,7 +1933,7 @@
       }
     },
     {
-      "updatedAt": "2026-10-05T15:33:32.970Z",
+      "updatedAt": "2026-10-05T15:33:44.888Z",
       "patient": {
         "loyaltyCardNumber": "RT-2026-0008",
         "id": "pat-inc-1791124918128",
@@ -2144,17 +2144,6 @@
           "sampleType": "Serum",
           "interpretation": "All complementary package tests evaluated according to certified reference ranges.",
           "parameters": [
-            {
-              "id": "p-pkg-0-1791214314721",
-              "name": "الهرمون المنشط للغدة الدرقية (TSH Ultrasensitive) (Thyroid Stimulating Hormone (TSH))",
-              "result": "",
-              "unit": "uIU/mL",
-              "minNormal": 0.35,
-              "maxNormal": 4.94,
-              "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
-              "flag": "NORMAL",
-              "method": "CLIA (3rd Generation Chemiluminescence)"
-            },
             {
               "id": "p-pkg-1-1791214314721",
               "name": "سكر الدم الصائم (FBS) (Fasting Blood Sugar)",
