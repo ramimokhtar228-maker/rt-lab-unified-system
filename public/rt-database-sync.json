@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:19:06.902Z",
+  "syncedAt": "2026-10-05T18:19:19.438Z",
   "reports": [
     {
       "status": "released",
@@ -808,33 +808,6 @@
               "id": "p-mig-30-1791157348011",
               "name": "NLR (Neutrophil/Lymphocyte)",
               "result": "2.3"
-            },
-            {
-              "id": "p-mig-34-1791157348011",
-              "method": "Leishman Stain Microscopy",
-              "flag": "",
-              "unit": "",
-              "textReference": "Normocytic normochromic, no anisopoikilocytosis",
-              "result": "",
-              "name": "RBC Morphology"
-            },
-            {
-              "flag": "",
-              "unit": "",
-              "method": "Leishman Stain Microscopy",
-              "id": "p-mig-35-1791157348011",
-              "textReference": "Mature differential, no toxic granules, vacuoles, or blasts",
-              "name": "WBC Morphology",
-              "result": ""
-            },
-            {
-              "id": "p-mig-36-1791157348011",
-              "method": "Leishman Stain Microscopy",
-              "textReference": "Adequate on smear, normal aggregation, no giant forms",
-              "name": "Platelet Morphology",
-              "flag": "",
-              "unit": "",
-              "result": ""
             }
           ],
           "profileCode": "CBC",
@@ -894,7 +867,7 @@
         "totalCost": 230,
         "bloodGroup": "O+"
       },
-      "updatedAt": "2026-10-05T18:19:03.683Z",
+      "updatedAt": "2026-10-05T18:19:16.130Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-8226 - تم التسميع آلياً من منظومة الفواتير",
       "id": "rep-inc-1791127003337",
       "staff": {
