@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:08:45.976Z",
+  "syncedAt": "2026-10-05T18:09:20.651Z",
   "reports": [
     {
       "status": "released",
@@ -5077,6 +5077,27 @@
               "method": "IFCC Kinetic UV without Pyridoxal Phosphate"
             }
           ]
+        },
+        {
+          "id": "prof-indiv-1791223757705",
+          "profileCode": "INDIVIDUAL",
+          "titleEn": "Individual Diagnostic Investigations",
+          "titleAr": "تحاليل منفردة ومحددة",
+          "category": "Thyroid",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "param-1791223757705",
+              "name": "الهرمون المنشط للغدة الدرقية (TSH Ultrasensitive) (Thyroid Stimulating Hormone (TSH))",
+              "result": "",
+              "unit": "uIU/mL",
+              "minNormal": 0.35,
+              "maxNormal": 4.94,
+              "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+              "method": "CLIA (3rd Generation Chemiluminescence)",
+              "flag": ""
+            }
+          ]
         }
       ],
       "id": "rep-inc-1791125977220",
@@ -5106,7 +5127,7 @@
         "sampleDate": "2026-10-04T14:59"
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-9820 - تم التسميع آلياً من منظومة الفواتير",
-      "updatedAt": "2026-10-05T18:08:40.034Z",
+      "updatedAt": "2026-10-05T18:09:17.705Z",
       "packageApplied": {
         "code": "PKG-ANNUAL-WELLNESS",
         "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
