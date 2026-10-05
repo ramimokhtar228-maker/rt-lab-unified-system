@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:24:29.419Z",
+  "syncedAt": "2026-10-05T18:24:43.434Z",
   "reports": [
     {
       "status": "released",
@@ -3960,7 +3960,7 @@
     },
     {
       "createdAt": "2026-10-04T14:16:24.421Z",
-      "updatedAt": "2026-10-05T00:06:10.706Z",
+      "updatedAt": "2026-10-05T18:24:39.145Z",
       "reportNumber": "RT-BK-8097",
       "generalComment": "طلب فحص مالي رقم RT-BK-8097 - تم التسميع آلياً من منظومة الفواتير",
       "patient": {
@@ -4256,7 +4256,7 @@
         }
       ],
       "id": "rep-inc-1791123384421",
-      "status": "draft",
+      "status": "released",
       "staff": {
         "verifiedBy": "",
         "labChemist": "",
