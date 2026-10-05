@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:16:20.138Z",
+  "syncedAt": "2026-10-05T18:16:29.232Z",
   "reports": [
     {
       "status": "released",
@@ -588,10 +588,10 @@
               "result": "20.6"
             },
             {
-              "result": "",
+              "result": "225",
               "minNormal": 150,
               "id": "p-mig-10-1791157348011",
-              "flag": "",
+              "flag": "NORMAL",
               "textReference": "150 - 450 x10^3/µL",
               "maxNormal": 450,
               "name": "Platelets Count",
@@ -925,7 +925,7 @@
         "totalCost": 230,
         "bloodGroup": "O+"
       },
-      "updatedAt": "2026-10-05T18:16:16.876Z",
+      "updatedAt": "2026-10-05T18:16:25.801Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-8226 - تم التسميع آلياً من منظومة الفواتير",
       "id": "rep-inc-1791127003337",
       "staff": {
