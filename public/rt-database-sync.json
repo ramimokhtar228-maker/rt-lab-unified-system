@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:26:30.996Z",
+  "syncedAt": "2026-10-05T15:27:36.004Z",
   "reports": [
     {
       "status": "released",
@@ -2299,9 +2299,9 @@
         }
       ],
       "status": "in_progress",
-      "updatedAt": "2026-10-05T15:26:27.651Z",
+      "updatedAt": "2026-10-05T15:27:32.059Z",
       "createdAt": "2026-10-04T14:38:22.671Z",
-      "generalComment": "طلب فحص مالي رقم RT-BK-4276 - تم التسميع آلياً من منظومة الفواتير",
+      "generalComment": "طلب فحص مالي رقم RT-BK-4276 - تم التسميع آلياً من منظومة الفواتير\nكافة الفحوصات المخبرية للمريض (زينب محمد حسن محمد) تقع في النطاقات الآمنة بشكل عام مع انتظام مؤشرات الأعضاء الحيوية ونشاط فسيولوجي متوازن.",
       "reportNumber": "RT-BK-4276",
       "packageApplied": {
         "code": "PKG-ANNUAL-WELLNESS",
