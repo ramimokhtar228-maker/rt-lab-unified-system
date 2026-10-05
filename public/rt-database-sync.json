@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T14:02:55.289Z",
+  "syncedAt": "2026-10-05T14:02:59.569Z",
   "reports": [
     {
       "status": "draft",
@@ -2080,7 +2080,7 @@
         "verifiedBy": ""
       },
       "reportNumber": "RT-BK-5752",
-      "updatedAt": "2026-10-05T14:02:52.665Z",
+      "updatedAt": "2026-10-05T14:02:56.754Z",
       "createdAt": "2026-10-04T14:28:04.105Z",
       "id": "rep-inc-1791124084105",
       "profiles": [
@@ -2118,17 +2118,6 @@
               "flag": "NORMAL"
             },
             {
-              "name": "BUN / Creatinine Ratio",
-              "unit": "Ratio",
-              "minNormal": 10,
-              "maxNormal": 20,
-              "notes": "Normal: 10 - 20",
-              "textReference": "",
-              "id": "param-3-1791208922778-j24",
-              "result": "1.4",
-              "flag": "LOW"
-            },
-            {
               "name": "Serum Uric Acid",
               "unit": "mg/dL",
               "minNormal": 3.5,
@@ -2137,17 +2126,6 @@
               "textReference": "",
               "id": "param-4-1791208922778-mba",
               "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "eGFR (CKD-EPI)",
-              "unit": "mL/min/1.73m²",
-              "minNormal": 90,
-              "maxNormal": 120,
-              "notes": "CKD-EPI: Stage 1 (Normal > 90)",
-              "textReference": "",
-              "id": "param-5-1791208922778-r2r",
-              "result": "97",
               "flag": "NORMAL"
             }
           ]
