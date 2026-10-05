@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:16:39.475Z",
+  "syncedAt": "2026-10-05T18:16:48.442Z",
   "reports": [
     {
       "status": "released",
@@ -614,9 +614,9 @@
               "minNormal": 9,
               "id": "p-mig-12-1791157348011",
               "unit": "%",
-              "flag": "",
+              "flag": "NORMAL",
               "maxNormal": 17,
-              "result": "",
+              "result": "12.66",
               "textReference": "9.0 - 17.0 %"
             },
             {
@@ -925,7 +925,7 @@
         "totalCost": 230,
         "bloodGroup": "O+"
       },
-      "updatedAt": "2026-10-05T18:16:36.033Z",
+      "updatedAt": "2026-10-05T18:16:44.289Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-8226 - تم التسميع آلياً من منظومة الفواتير",
       "id": "rep-inc-1791127003337",
       "staff": {
