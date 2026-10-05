@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:52:31.025Z",
+  "syncedAt": "2026-10-05T17:55:54.771Z",
   "reports": [
     {
       "status": "released",
@@ -8492,20 +8492,22 @@
       "targetAudience": "للرجال والنساء فوق 25 عاماً للتقييم الصحي السنوي الدوري",
       "includedProfiles": [
         "CBC",
-        "GLYCEMIC",
-        "LIPID",
-        "LFT",
-        "KFT",
-        "URINE"
+        "LIPID"
       ],
       "includedIndividualTestCodes": [
         "VIT_D",
-        "TSH",
-        "URIC"
+        "GLU_F",
+        "CBC",
+        "CREAT",
+        "UREA",
+        "URIC",
+        "CALCIUM_TOTAL",
+        "AST",
+        "ALT"
       ],
       "originalPrice": 1650,
-      "packagePrice": 950,
-      "discountPercentage": 42,
+      "packagePrice": 199,
+      "discountPercentage": 88,
       "fastingRequired": "صيام من 10 إلى 12 ساعة (يُسمح بشرب الماء فقط)",
       "sampleTypes": [
         "Serum",
