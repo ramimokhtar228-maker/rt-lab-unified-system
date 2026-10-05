@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:16:16.626Z",
+  "syncedAt": "2026-10-05T15:18:19.874Z",
   "reports": [
     {
       "status": "draft",
@@ -3948,7 +3948,7 @@
     {
       "id": "rep-inc-1791124532954",
       "createdAt": "2026-10-04T14:35:32.954Z",
-      "updatedAt": "2026-10-05T15:15:36.092Z",
+      "updatedAt": "2026-10-05T15:18:15.212Z",
       "patient": {
         "reportingDate": "2026-10-04T14:35",
         "loyaltyCardIssued": true,
@@ -4257,7 +4257,7 @@
         "verifiedBy": "",
         "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
       },
-      "status": "in_progress",
+      "status": "released",
       "reportNumber": "RT-BK-9242",
       "packageApplied": {
         "code": "PKG-ANNUAL-WELLNESS",
