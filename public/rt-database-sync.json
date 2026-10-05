@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T11:49:48.462Z",
+  "syncedAt": "2026-10-05T12:13:40.138Z",
   "reports": [
     {
       "id": "rep-001",
@@ -227,8 +227,8 @@
       },
       "generalComment": "الحالة تتماشى مع فقر الدم بعوز الحديد. يرجى المتابعة بطلب مخزون الحديد (Serum Ferritin).",
       "status": "verified",
-      "createdAt": "2026-10-05T11:49:40.169Z",
-      "updatedAt": "2026-10-05T11:49:40.169Z",
+      "createdAt": "2026-10-05T12:13:25.118Z",
+      "updatedAt": "2026-10-05T12:13:25.118Z",
       "invoiceId": "inv-001"
     },
     {
@@ -354,8 +354,8 @@
       },
       "generalComment": "يرجى مراجعة الطبيب المعالج لتعديل جرعات العلاج الغذائي والدوائي.",
       "status": "verified",
-      "createdAt": "2026-10-05T11:49:40.170Z",
-      "updatedAt": "2026-10-05T11:49:40.170Z",
+      "createdAt": "2026-10-05T12:13:25.118Z",
+      "updatedAt": "2026-10-05T12:13:25.118Z",
       "invoiceId": "inv-002"
     }
   ],
@@ -397,8 +397,8 @@
       "branch": "فرع القصر العيني - الرئيسي",
       "notes": "خصم كارت الولاء الفضي 10%",
       "syncStatus": "synced",
-      "createdAt": "2026-10-05T11:49:40.170Z",
-      "updatedAt": "2026-10-05T11:49:40.170Z"
+      "createdAt": "2026-10-05T12:13:25.119Z",
+      "updatedAt": "2026-10-05T12:13:25.119Z"
     },
     {
       "id": "inv-002",
@@ -445,8 +445,8 @@
       "branch": "فرع القصر العيني - الرئيسي",
       "notes": "خصم كارت الولاء الذهبي 10%",
       "syncStatus": "synced",
-      "createdAt": "2026-10-05T11:49:40.170Z",
-      "updatedAt": "2026-10-05T11:49:40.170Z"
+      "createdAt": "2026-10-05T12:13:25.119Z",
+      "updatedAt": "2026-10-05T12:13:25.119Z"
     }
   ],
   "expenses": [],
