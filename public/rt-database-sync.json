@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:07:57.770Z",
+  "syncedAt": "2026-10-05T18:08:03.813Z",
   "reports": [
     {
       "status": "released",
@@ -5002,7 +5002,7 @@
             {
               "id": "p-pkg-1-1791223515986",
               "name": "سكر الدم الصائم (FBS) (Fasting Blood Sugar)",
-              "result": "",
+              "result": "97",
               "unit": "mg/dL",
               "minNormal": 70,
               "maxNormal": 100,
@@ -5117,7 +5117,7 @@
         "sampleDate": "2026-10-04T14:59"
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-9820 - تم التسميع آلياً من منظومة الفواتير",
-      "updatedAt": "2026-10-05T18:07:51.674Z",
+      "updatedAt": "2026-10-05T18:07:58.129Z",
       "packageApplied": {
         "code": "PKG-ANNUAL-WELLNESS",
         "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
