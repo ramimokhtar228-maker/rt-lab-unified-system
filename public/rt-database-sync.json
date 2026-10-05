@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:46:55.116Z",
+  "syncedAt": "2026-10-05T17:47:05.581Z",
   "reports": [
     {
       "status": "released",
@@ -1589,53 +1589,7 @@
           "category": "Clinical Chemistry",
           "sampleType": "Fluoride Plasma & EDTA Blood",
           "interpretation": "Glycemic parameters evaluated according to ADA guidelines.",
-          "parameters": [
-            {
-              "name": "Fasting Blood Glucose",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 99,
-              "panicLow": 50,
-              "panicHigh": 400,
-              "method": "Hexokinase",
-              "textReference": "",
-              "id": "param-0-1791222251478-sce",
-              "result": "88",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Random Blood Glucose",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 140,
-              "textReference": "",
-              "id": "param-2-1791222251478-y6j",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "HbA1c (Glycated Hemoglobin)",
-              "unit": "%",
-              "minNormal": 4,
-              "maxNormal": 5.6,
-              "textReference": "< 5.7% Normal, 5.7 - 6.4% Pre-Diabetes, ≥ 6.5% Diabetes",
-              "method": "HPLC / Turbidimetric",
-              "id": "param-3-1791222251478-rls",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Estimated Average Glucose (eAG)",
-              "unit": "mg/dL",
-              "minNormal": 68,
-              "maxNormal": 114,
-              "textReference": "80 - 120 mg/dL",
-              "notes": "Auto-calculated: (28.7 × HbA1c) - 46.7",
-              "id": "param-4-1791222251478-nou",
-              "result": "",
-              "flag": "NORMAL"
-            }
-          ]
+          "parameters": []
         },
         {
           "id": "prof-1791222251478-69f8",
@@ -2233,7 +2187,7 @@
         }
       ],
       "id": "rep-inc-1791125455998",
-      "updatedAt": "2026-10-05T17:46:52.019Z",
+      "updatedAt": "2026-10-05T17:47:02.651Z",
       "createdAt": "2026-10-04T14:50:55.998Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-9599 - تم التسميع آلياً من منظومة الفواتير",
       "patient": {
