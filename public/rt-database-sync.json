@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:59:44.413Z",
+  "syncedAt": "2026-10-05T17:59:49.349Z",
   "reports": [
     {
       "status": "released",
@@ -1677,7 +1677,7 @@
             {
               "id": "p-pkg-6-1791223080772",
               "name": "الكالسيوم الكلي (Total Serum Calcium) (Total Serum Calcium)",
-              "result": "",
+              "result": "9.30",
               "unit": "mg/dL",
               "minNormal": 8.6,
               "maxNormal": 10.3,
@@ -1735,7 +1735,7 @@
         "sampleDate": "2026-10-04T14:52",
         "clinicalHistory": "طلب صادر من الفاتورة المالية RT-BK-8594 - السداد: مسدد بالكامل"
       },
-      "updatedAt": "2026-10-05T17:59:39.788Z",
+      "updatedAt": "2026-10-05T17:59:45.355Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-8594 - تم التسميع آلياً من منظومة الفواتير",
       "reportNumber": "RT-BK-8594",
       "createdAt": "2026-10-04T14:52:55.336Z",
