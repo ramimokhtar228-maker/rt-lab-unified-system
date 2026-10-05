@@ -27,6 +27,7 @@ export const Header: React.FC = () => {
     setActiveTab,
     setIsPatientFormOpen,
     setIsBarcodeScannerOpen,
+    setIsLabInfoModalOpen,
     notifications,
     markNotificationRead,
     clearNotifications,
@@ -109,6 +110,16 @@ export const Header: React.FC = () => {
               <span>تسجيل مريض وحجز</span>
             </button>
 
+            {/* Quick Action: Lab Info & Branches Edit */}
+            <button
+              onClick={() => setIsLabInfoModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-blue-900/80 hover:bg-blue-800 text-blue-200 border border-blue-700/60 font-bold text-xs shadow-sm transition-all cursor-pointer active:scale-95"
+              title="تعديل بيانات المعمل، الفروع، التوقيعات، الهواتف، والاعتماد"
+            >
+              <Building2 className="w-4 h-4 text-blue-300" />
+              <span>بيانات المعمل والفروع</span>
+            </button>
+
             {/* Quick Action: Barcode Scanner */}
             <button
               onClick={() => setIsBarcodeScannerOpen(true)}
@@ -118,23 +129,23 @@ export const Header: React.FC = () => {
               <Barcode className="w-4 h-4" />
             </button>
 
-            {/* GitHub Cloud Backup Button */}
+            {/* Multi-Device Live Sync Status Button */}
             <div className="relative">
               <button
                 onClick={handleCloudSync}
                 disabled={isSyncing}
-                title="مزامنة سحابية مع GitHub"
-                className="inline-flex items-center gap-1.5 px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-semibold transition-colors cursor-pointer"
+                title="تسميع ومزامنة حية فورية بين الموبايل واللاب توب وجميع الأجهزة"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700 text-xs font-bold transition-all cursor-pointer active:scale-95 shadow-xs"
               >
                 {isSyncing ? (
                   <RefreshCw className="w-3.5 h-3.5 animate-spin text-rose-400" />
                 ) : (
-                  <Cloud className="w-3.5 h-3.5 text-blue-400" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-xs shadow-emerald-500 animate-pulse" />
                 )}
-                <span className="hidden sm:inline">سحابي</span>
+                <span>مزامنة الأجهزة</span>
               </button>
               {syncStatusMsg && (
-                <div className="absolute left-0 top-full mt-2 w-48 bg-slate-800 text-emerald-400 border border-slate-700 text-[11px] p-2 rounded-xl shadow-xl z-50">
+                <div className="absolute left-0 top-full mt-2 w-64 bg-slate-800 text-emerald-400 border border-slate-700 text-[11px] p-2.5 rounded-xl shadow-2xl z-50">
                   {syncStatusMsg}
                 </div>
               )}

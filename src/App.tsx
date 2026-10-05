@@ -5,7 +5,6 @@ import { Navigation } from './components/Navigation';
 import { DashboardModule } from './components/DashboardModule';
 import { AdmissionModule } from './components/AdmissionModule';
 import { WorklistModule } from './components/WorklistModule';
-import { InstrumentsModule } from './components/InstrumentsModule';
 import { ReportEditor } from './components/ReportEditor';
 import { ReportViewerPrint } from './components/ReportViewerPrint';
 import { ArchiveTable } from './components/ArchiveTable';
@@ -54,6 +53,8 @@ const AppContent: React.FC = () => {
     importBackup,
     isPatientFormOpen,
     setIsPatientFormOpen,
+    isLabInfoModalOpen,
+    setIsLabInfoModalOpen,
     labInfo,
     updateLabInfo
   } = useApp();
@@ -63,7 +64,6 @@ const AppContent: React.FC = () => {
   const [activeSmartReport, setActiveSmartReport] = useState<LabReport | null>(null);
   const [illustrationsModalOpen, setIllustrationsModalOpen] = useState(false);
   const [activeProfileIdForIllustration, setActiveProfileIdForIllustration] = useState<string | null>(null);
-  const [labInfoModalOpen, setLabInfoModalOpen] = useState(false);
   const [patientInvoiceModalReport, setPatientInvoiceModalReport] = useState<LabReport | null>(null);
   const [catalogModalOpen, setCatalogModalOpen] = useState(false);
   const [manualTestModalOpen, setManualTestModalOpen] = useState(false);
@@ -168,7 +168,7 @@ const AppContent: React.FC = () => {
               report={currentReport}
               onBackToEdit={() => setIsPrintPreviewActive(false)}
               onOpenInvoice={() => setPatientInvoiceModalReport(currentReport)}
-              onOpenLabInfoModal={() => setLabInfoModalOpen(true)}
+              onOpenLabInfoModal={() => setIsLabInfoModalOpen(true)}
               onOpenIllustrationsModal={(pId) => handleOpenIllustrations(pId)}
               onOpenSmartReport={() => {
                 setActiveSmartReport(currentReport);
@@ -181,7 +181,6 @@ const AppContent: React.FC = () => {
             {activeTab === 'dashboard' && <DashboardModule />}
             {activeTab === 'admission' && <AdmissionModule />}
             {activeTab === 'worklist' && <WorklistModule />}
-            {activeTab === 'instruments' && <InstrumentsModule />}
 
             {/* Diagnostic Report Editor */}
             {activeTab === 'diagnostic_editor' && (
@@ -342,10 +341,10 @@ const AppContent: React.FC = () => {
       )}
 
       {/* 6. Lab Info & Branches Edit Modal */}
-      {labInfoModalOpen && (
+      {isLabInfoModalOpen && (
         <LabInfoEditModal
-          isOpen={labInfoModalOpen}
-          onClose={() => setLabInfoModalOpen(false)}
+          isOpen={isLabInfoModalOpen}
+          onClose={() => setIsLabInfoModalOpen(false)}
           labInfo={labInfo}
           onUpdateLabInfo={updateLabInfo}
           staffSignatures={staffSignatures}

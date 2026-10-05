@@ -39,7 +39,7 @@ export const getDefaultSyncToken = (): string => {
 };
 
 const DEFAULT_REPO_OWNER = 'ramimokhtar228-maker';
-const DEFAULT_REPO_NAME = 'rt-lab-diagnostic-system';
+const DEFAULT_REPO_NAME = 'rt-lab-unified-system';
 
 // Resolve config or individual parameters
 function resolveCredentials(
@@ -676,6 +676,105 @@ async function pushSingleCaseToGitHub(
     },
     body: JSON.stringify(body)
   });
+}
+
+// Push full unified database store to GitHub
+export async function pushFullStoreToGitHub(
+  arg1: string | GitHubSyncConfig,
+  storePayload: Record<string, any>
+): Promise<{ success: boolean; message: string }> {
+  try {
+    const creds = resolveCredentials(arg1);
+    if (!creds.token) {
+      return { success: false, message: 'لا يوجد رمز GitHub صالح' };
+    }
+
+    const filePath = 'public/rt-database-sync.json';
+    const apiUrl = `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/${filePath}`;
+
+    let existingSha: string | undefined;
+    try {
+      const checkRes = await fetch(apiUrl, {
+        headers: {
+          Authorization: `token ${creds.token}`,
+          Accept: 'application/vnd.github.v3+json'
+        }
+      });
+      if (checkRes.ok) {
+        const checkData = await checkRes.json();
+        existingSha = checkData.sha;
+      }
+    } catch {
+      // file might not exist yet
+    }
+
+    const fullData = {
+      system: 'RT Lab Unified Medical & Financial ERP',
+      syncedAt: new Date().toISOString(),
+      ...storePayload
+    };
+
+    const contentBase64 = encodeBase64Utf8(JSON.stringify(fullData, null, 2));
+    const putRes = await fetch(apiUrl, {
+      method: 'PUT',
+      headers: {
+        Authorization: `token ${creds.token}`,
+        Accept: 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: `مزامنة سحابية شاملة لقاعدة بيانات المعمل: ${new Date().toLocaleTimeString('ar-EG')}`,
+        content: contentBase64,
+        branch: 'main',
+        ...(existingSha ? { sha: existingSha } : {})
+      })
+    });
+
+    if (!putRes.ok) {
+      return { success: false, message: `فشل الحفظ السحابي: ${putRes.statusText}` };
+    }
+
+    return { success: true, message: 'تم حفظ ومزامنة قاعدة البيانات سحابياً بنجاح!' };
+  } catch (err) {
+    return { success: false, message: `خطأ: ${(err as Error).message}` };
+  }
+}
+
+// Pull full unified database store from GitHub
+export async function pullFullStoreFromGitHub(
+  arg1: string | GitHubSyncConfig
+): Promise<{ success: boolean; data?: any; message: string }> {
+  try {
+    const creds = resolveCredentials(arg1);
+    const filePath = 'public/rt-database-sync.json';
+    const apiUrl = `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/${filePath}`;
+
+    const res = await fetch(apiUrl, {
+      headers: creds.token ? {
+        Authorization: `token ${creds.token}`,
+        Accept: 'application/vnd.github.v3+json'
+      } : {
+        Accept: 'application/vnd.github.v3+json'
+      }
+    });
+
+    if (!res.ok) {
+      // Also try fetching raw from gh-pages or public path
+      const publicRes = await fetch(`./rt-database-sync.json?t=${Date.now()}`);
+      if (publicRes.ok) {
+        const json = await publicRes.json();
+        return { success: true, data: json, message: 'تم استرداد البيانات من السحابة بنجاح' };
+      }
+      return { success: false, message: 'لم يتم العثور على نسخة سحابية بعد' };
+    }
+
+    const data = await res.json();
+    const content = decodeBase64Utf8(data.content);
+    const parsed = JSON.parse(content);
+    return { success: true, data: parsed, message: 'تم استرداد وتحديث البيانات سحابياً بنجاح!' };
+  } catch (err) {
+    return { success: false, message: `خطأ أثناء الجلب: ${(err as Error).message}` };
+  }
 }
 
 // Helpers for UTF-8 Base64 handling

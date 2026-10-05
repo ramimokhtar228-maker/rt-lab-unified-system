@@ -4,7 +4,7 @@ import {
   LayoutDashboard,
   UserPlus,
   FlaskConical,
-  Cpu,
+  Building2,
   FileCheck2,
   FolderArchive,
   Wallet,
@@ -34,7 +34,7 @@ export const Navigation: React.FC = () => {
     reports,
     incomeRecords,
     inventory,
-    instruments
+    setIsLabInfoModalOpen
   } = useApp();
 
   const pendingReportsCount = reports.filter(r => r.status === 'draft' || r.status === 'in_progress').length;
@@ -60,14 +60,6 @@ export const Navigation: React.FC = () => {
       icon: FlaskConical,
       badge: pendingReportsCount > 0 ? pendingReportsCount : undefined,
       badgeColor: 'bg-rose-600',
-      group: 'medical'
-    },
-    {
-      id: 'instruments',
-      labelAr: 'الربط مع الأجهزة (LIS)',
-      icon: Cpu,
-      badge: instruments.filter(i => i.status === 'online').length + ' متصل',
-      badgeColor: 'bg-emerald-600',
       group: 'medical'
     },
     {
@@ -131,6 +123,12 @@ export const Navigation: React.FC = () => {
       group: 'admin'
     },
     {
+      id: 'lab_info',
+      labelAr: 'بيانات المعمل والفروع',
+      icon: Building2,
+      group: 'admin'
+    },
+    {
       id: 'audit_settings',
       labelAr: 'الأمان والتدقيق والإعدادات',
       icon: ShieldCheck,
@@ -151,7 +149,13 @@ export const Navigation: React.FC = () => {
             return (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => {
+                  if (item.id === 'lab_info') {
+                    setIsLabInfoModalOpen(true);
+                  } else {
+                    setActiveTab(item.id);
+                  }
+                }}
                 className={`relative px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer select-none ${
                   isActive
                     ? 'bg-rose-900 text-white shadow-md shadow-rose-900/20 ring-1 ring-rose-800'

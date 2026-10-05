@@ -51,6 +51,8 @@ import {
 } from '../data/initialData';
 import { LAB_CATALOG } from '../data/labCatalog';
 import { INITIAL_INSTRUMENTS, SAMPLE_INSTRUMENT_TRANSMISSIONS } from '../data/instrumentsData';
+import { realtimeSyncManager } from '../utils/realtimeMultiDeviceSync';
+import { pushFullStoreToGitHub, pullFullStoreFromGitHub } from '../utils/githubSync';
 
 // Storage Keys
 const STORAGE_PREFIX = 'rt_lab_unified_';
@@ -217,6 +219,8 @@ interface AppContextType {
   setIsPatientFormOpen: (open: boolean) => void;
   isBarcodeScannerOpen: boolean;
   setIsBarcodeScannerOpen: (open: boolean) => void;
+  isLabInfoModalOpen: boolean;
+  setIsLabInfoModalOpen: (open: boolean) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -234,6 +238,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // 3. Quick Action Modals
   const [isPatientFormOpen, setIsPatientFormOpen] = useState(false);
   const [isBarcodeScannerOpen, setIsBarcodeScannerOpen] = useState(false);
+  const [isLabInfoModalOpen, setIsLabInfoModalOpen] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState<IncomeRecord | null>(null);
 
   // 4. Reports (Unified Diagnostic Worklist)
@@ -418,6 +423,136 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useEffect(() => { try { localStorage.setItem(LAB_INFO_KEY, JSON.stringify(labInfo)); } catch (e) { console.error(e); } }, [labInfo]);
   useEffect(() => { try { localStorage.setItem(CATALOG_KEY, JSON.stringify(testCatalog)); } catch (e) { console.error(e); } }, [testCatalog]);
 
+  // Real-Time Multi-Device Synchronization (WebRTC Mesh + GitHub Cloud Store)
+  useEffect(() => {
+    // 1. Subscribe to real-time events from other devices (peer-to-peer / broadcast)
+    const unsubscribe = realtimeSyncManager.subscribe((msg) => {
+      if (!msg || !msg.action) return;
+      if (msg.action === 'UPDATE_REPORT' && msg.payload) {
+        setReports(prev => {
+          const reportPayload = msg.payload as LabReport;
+          const idx = prev.findIndex(r => r.id === reportPayload.id);
+          if (idx >= 0) {
+            const next = [...prev];
+            next[idx] = { ...next[idx], ...reportPayload };
+            return next;
+          }
+          return [reportPayload, ...prev];
+        });
+      } else if (msg.action === 'DELETE_REPORT' && msg.payload) {
+        setReports(prev => prev.filter(r => r.id !== msg.payload));
+      } else if (msg.action === 'UPDATE_INVOICE' && msg.payload) {
+        setIncomeRecords(prev => {
+          const invPayload = msg.payload as IncomeRecord;
+          const idx = prev.findIndex(i => i.id === invPayload.id);
+          if (idx >= 0) {
+            const next = [...prev];
+            next[idx] = { ...next[idx], ...invPayload };
+            return next;
+          }
+          return [invPayload, ...prev];
+        });
+      } else if (msg.action === 'DELETE_INVOICE' && msg.payload) {
+        setIncomeRecords(prev => prev.filter(i => i.id !== msg.payload));
+      } else if (msg.action === 'UPDATE_LAB_INFO' && msg.payload) {
+        setLabInfo(msg.payload);
+      } else if (msg.action === 'FULL_SYNC' && msg.payload) {
+        if (Array.isArray(msg.payload.reports)) {
+          setReports(prev => {
+            const map = new Map(prev.map(r => [r.id, r]));
+            msg.payload.reports.forEach((r: LabReport) => map.set(r.id, r));
+            return Array.from(map.values());
+          });
+        }
+        if (Array.isArray(msg.payload.incomeRecords)) {
+          setIncomeRecords(prev => {
+            const map = new Map(prev.map(i => [i.id, i]));
+            msg.payload.incomeRecords.forEach((i: IncomeRecord) => map.set(i.id, i));
+            return Array.from(map.values());
+          });
+        }
+      }
+    });
+
+    // 2. Initial cloud store pull on mount
+    pullFullStoreFromGitHub(githubConfig).then(res => {
+      if (res.success && res.data) {
+        if (Array.isArray(res.data.reports) && res.data.reports.length > 0) {
+          setReports(prev => {
+            const map = new Map(prev.map(r => [r.id, r]));
+            res.data.reports.forEach((r: LabReport) => map.set(r.id, r));
+            return Array.from(map.values());
+          });
+        }
+        if (Array.isArray(res.data.incomeRecords) && res.data.incomeRecords.length > 0) {
+          setIncomeRecords(prev => {
+            const map = new Map(prev.map(i => [i.id, i]));
+            res.data.incomeRecords.forEach((i: IncomeRecord) => map.set(i.id, i));
+            return Array.from(map.values());
+          });
+        }
+      }
+    }).catch(err => console.warn('Initial cloud pull:', err));
+
+    // 3. Periodic cloud polling (every 6 seconds) to catch changes made on other devices
+    const pollInterval = setInterval(() => {
+      pullFullStoreFromGitHub(githubConfig).then(res => {
+        if (res.success && res.data) {
+          if (Array.isArray(res.data.reports) && res.data.reports.length > 0) {
+            setReports(prev => {
+              const currentIds = new Set(prev.map(r => r.id));
+              const hasNew = res.data.reports.some((r: LabReport) => !currentIds.has(r.id));
+              if (hasNew) {
+                const map = new Map(prev.map(r => [r.id, r]));
+                res.data.reports.forEach((r: LabReport) => map.set(r.id, r));
+                return Array.from(map.values());
+              }
+              return prev;
+            });
+          }
+          if (Array.isArray(res.data.incomeRecords) && res.data.incomeRecords.length > 0) {
+            setIncomeRecords(prev => {
+              const currentIds = new Set(prev.map(i => i.id));
+              const hasNew = res.data.incomeRecords.some((i: IncomeRecord) => !currentIds.has(i.id));
+              if (hasNew) {
+                const map = new Map(prev.map(i => [i.id, i]));
+                res.data.incomeRecords.forEach((i: IncomeRecord) => map.set(i.id, i));
+                return Array.from(map.values());
+              }
+              return prev;
+            });
+          }
+        }
+      }).catch(() => {});
+    }, 6000);
+
+    return () => {
+      unsubscribe();
+      clearInterval(pollInterval);
+    };
+  }, [githubConfig]);
+
+  // Debounced cloud save whenever reports or incomeRecords change
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (reports.length > 0 || incomeRecords.length > 0) {
+        realtimeSyncManager.setSyncing(true);
+        pushFullStoreToGitHub(githubConfig, {
+          reports,
+          incomeRecords,
+          expenses,
+          loyaltyProfiles,
+          labInfo
+        }).then(() => {
+          realtimeSyncManager.setSyncing(false);
+        }).catch(() => {
+          realtimeSyncManager.setSyncing(false);
+        });
+      }
+    }, 3500);
+    return () => clearTimeout(timer);
+  }, [reports, incomeRecords, expenses, loyaltyProfiles, labInfo, githubConfig]);
+
   // Audit Logging helper
   const logAction = useCallback((action: AuditLog['action'], module: AuditLog['module'], description: string) => {
     const newLog: AuditLog = {
@@ -502,17 +637,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const addReport = useCallback((report: LabReport) => {
     setReports(prev => [report, ...prev]);
     setSelectedReportId(report.id);
+    realtimeSyncManager.broadcastAction('UPDATE_REPORT', report);
     logAction('CREATE', 'DIAGNOSTIC', `إنشاء تقرير طبي جديد للمريض ${report.patient.fullName} برقم ${report.reportNumber}`);
   }, [logAction]);
 
   const updateReport = useCallback((id: string, updates: Partial<LabReport>) => {
-    setReports(prev => prev.map(r => r.id === id ? { ...r, ...updates, updatedAt: new Date().toISOString() } : r));
+    setReports(prev => {
+      const updatedList = prev.map(r => r.id === id ? { ...r, ...updates, updatedAt: new Date().toISOString() } : r);
+      const target = updatedList.find(r => r.id === id);
+      if (target) {
+        realtimeSyncManager.broadcastAction('UPDATE_REPORT', target);
+      }
+      return updatedList;
+    });
     logAction('UPDATE', 'DIAGNOSTIC', `تحديث التقرير الطبي رقم ${id}`);
   }, [logAction]);
 
   const deleteReport = useCallback((id: string) => {
     const reportToDelete = reports.find(r => r.id === id);
     setReports(prev => prev.filter(r => r.id !== id));
+    realtimeSyncManager.broadcastAction('DELETE_REPORT', id);
     if (selectedReportId === id) {
       setSelectedReportId(null);
     }
@@ -553,18 +697,27 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       syncStatus: 'synced'
     };
     setIncomeRecords(prev => [newRecord, ...prev]);
+    realtimeSyncManager.broadcastAction('UPDATE_INVOICE', newRecord);
     logAction('CREATE', 'INCOME', `إصدار فاتورة جديدة رقم ${newRecord.invoiceNumber} للمريض ${newRecord.patientName} بقيمة صافية ${newRecord.netAmount} ج.م`);
     return newRecord;
   }, [logAction]);
 
   const updateIncomeRecord = useCallback((id: string, updates: Partial<IncomeRecord>) => {
-    setIncomeRecords(prev => prev.map(inv => inv.id === id ? { ...inv, ...updates, updatedAt: new Date().toISOString() } : inv));
+    setIncomeRecords(prev => {
+      const updatedList = prev.map(inv => inv.id === id ? { ...inv, ...updates, updatedAt: new Date().toISOString() } : inv);
+      const target = updatedList.find(i => i.id === id);
+      if (target) {
+        realtimeSyncManager.broadcastAction('UPDATE_INVOICE', target);
+      }
+      return updatedList;
+    });
     logAction('UPDATE', 'INCOME', `تعديل الفاتورة رقم ${id}`);
   }, [logAction]);
 
   const deleteIncomeRecord = useCallback((id: string) => {
     const inv = incomeRecords.find(i => i.id === id);
     setIncomeRecords(prev => prev.filter(i => i.id !== id));
+    realtimeSyncManager.broadcastAction('DELETE_INVOICE', id);
     logAction('DELETE', 'INCOME', `حذف الفاتورة رقم ${inv?.invoiceNumber || id} للمريض ${inv?.patientName}`);
   }, [incomeRecords, logAction]);
 
@@ -706,6 +859,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     setIncomeRecords(prev => [newInvoice, ...prev]);
     newReport.invoiceId = newInvoice.id;
+
+    realtimeSyncManager.broadcastAction('UPDATE_REPORT', newReport);
+    realtimeSyncManager.broadcastAction('UPDATE_INVOICE', newInvoice);
 
     logAction('CREATE', 'DIAGNOSTIC', `تسجيل مريض جديد ${patient.fullName} وحجز تحاليل وربط التقرير بالفاتورة المالية`);
     addNotification({
@@ -1295,6 +1451,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Lab Info Update
   const updateLabInfo = useCallback((info: LabInfo) => {
     setLabInfo(info);
+    realtimeSyncManager.broadcastAction('UPDATE_LAB_INFO', info);
     logAction('UPDATE', 'SETTINGS', 'تحديث بيانات المعمل والاعتماد الطبي ووسائل التواصل');
   }, [logAction]);
 
@@ -1554,7 +1711,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     isPatientFormOpen,
     setIsPatientFormOpen,
     isBarcodeScannerOpen,
-    setIsBarcodeScannerOpen
+    setIsBarcodeScannerOpen,
+    isLabInfoModalOpen,
+    setIsLabInfoModalOpen
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
