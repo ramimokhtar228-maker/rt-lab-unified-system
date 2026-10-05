@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:14:16.887Z",
+  "syncedAt": "2026-10-05T18:14:58.651Z",
   "reports": [
     {
       "status": "released",
@@ -499,9 +499,9 @@
               "minNormal": 12,
               "textReference": "M: 13.0 - 17.5 | F: 12.0 - 15.5 g/dL",
               "name": "Hemoglobin (Hb)",
-              "result": "",
+              "result": "11.36",
               "maxNormal": 16.5,
-              "flag": ""
+              "flag": "LOW"
             },
             {
               "id": "p-mig-1-1791157348010",
@@ -515,14 +515,14 @@
               "name": "R.B.Cs Count"
             },
             {
-              "flag": "",
-              "result": "",
+              "flag": "LOW",
+              "result": "3",
               "name": "Hematocrit (PCV)",
               "textReference": "M: 40 - 52% | F: 36 - 48%",
               "unit": "%",
               "minNormal": 36,
               "id": "p-mig-2-1791157348010",
-              "notes": "Auto-calculated: Hb × 3",
+              "notes": "Calculated (HGB × 3)",
               "maxNormal": 48
             },
             {
@@ -549,11 +549,11 @@
             },
             {
               "unit": "g/dL",
-              "result": "",
+              "result": "378.7",
               "textReference": "32.0 - 36.0 g/dL",
               "id": "p-mig-5-1791157348010",
-              "flag": "",
-              "notes": "Auto-calculated: (Hb × 100) / PCV",
+              "flag": "HIGH",
+              "notes": "Calculated: (HGB × 100) / HCT",
               "maxNormal": 36,
               "name": "M.C.H.C",
               "minNormal": 32
@@ -934,7 +934,7 @@
         "totalCost": 230,
         "bloodGroup": "O+"
       },
-      "updatedAt": "2026-10-04T23:47:32.242Z",
+      "updatedAt": "2026-10-05T18:14:55.442Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-8226 - تم التسميع آلياً من منظومة الفواتير",
       "id": "rep-inc-1791127003337",
       "staff": {
