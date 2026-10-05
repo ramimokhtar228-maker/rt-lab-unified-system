@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:48:33.955Z",
+  "syncedAt": "2026-10-05T17:48:47.131Z",
   "reports": [
     {
       "status": "released",
@@ -1700,114 +1700,6 @@
               "id": "param-1-1791222251478-ggw",
               "result": "27",
               "flag": "NORMAL"
-            },
-            {
-              "name": "Alkaline Phosphatase (ALP)",
-              "unit": "U/L",
-              "minNormal": 40,
-              "maxNormal": 130,
-              "textReference": "",
-              "id": "param-2-1791222251478-pbz",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Total Bilirubin",
-              "unit": "mg/dL",
-              "minNormal": 0.2,
-              "maxNormal": 1.2,
-              "panicHigh": 5,
-              "method": "Jendrassik-Grof",
-              "textReference": "",
-              "id": "param-3-1791222251478-tg3",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Direct Bilirubin",
-              "unit": "mg/dL",
-              "minNormal": 0,
-              "maxNormal": 0.3,
-              "textReference": "",
-              "id": "param-4-1791222251478-t31",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Indirect Bilirubin",
-              "unit": "mg/dL",
-              "minNormal": 0.1,
-              "maxNormal": 0.9,
-              "notes": "Auto-calculated: Total - Direct",
-              "textReference": "",
-              "id": "param-5-1791222251478-ibm",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Total Serum Proteins",
-              "unit": "g/dL",
-              "minNormal": 6.4,
-              "maxNormal": 8.3,
-              "method": "Biuret",
-              "textReference": "",
-              "id": "param-6-1791222251478-z3e",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Serum Albumin",
-              "unit": "g/dL",
-              "minNormal": 3.5,
-              "maxNormal": 5.2,
-              "method": "Bromocresol Green (BCG)",
-              "textReference": "",
-              "id": "param-7-1791222251478-j6r",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Serum Globulin",
-              "unit": "g/dL",
-              "minNormal": 2.3,
-              "maxNormal": 3.5,
-              "notes": "Auto-calculated: Total Protein - Albumin",
-              "textReference": "",
-              "id": "param-8-1791222251478-idt",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "A/G Ratio",
-              "unit": "Ratio",
-              "minNormal": 1.2,
-              "maxNormal": 2.2,
-              "notes": "Auto-calculated: Albumin / Globulin",
-              "textReference": "",
-              "id": "param-9-1791222251478-wlt",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "G.G.T",
-              "unit": "U/L",
-              "minNormal": 9,
-              "maxNormal": 48,
-              "textReference": "",
-              "id": "param-10-1791222251478-tgm",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "AST/ALT Ratio (De Ritis)",
-              "unit": "Ratio",
-              "minNormal": 0.6,
-              "maxNormal": 1.1,
-              "notes": "Normal < 1.0 (Elevated > 2.0 in alcoholic liver disease/cirrhosis)",
-              "textReference": "",
-              "id": "param-11-1791222251478-c0r",
-              "result": "1.9",
-              "flag": "HIGH"
             }
           ]
         },
@@ -2167,7 +2059,7 @@
         }
       ],
       "id": "rep-inc-1791125455998",
-      "updatedAt": "2026-10-05T17:48:30.652Z",
+      "updatedAt": "2026-10-05T17:48:43.914Z",
       "createdAt": "2026-10-04T14:50:55.998Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-9599 - تم التسميع آلياً من منظومة الفواتير",
       "patient": {
