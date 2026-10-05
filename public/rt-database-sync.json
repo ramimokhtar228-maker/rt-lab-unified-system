@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:21:28.290Z",
+  "syncedAt": "2026-10-05T15:21:32.255Z",
   "reports": [
     {
       "status": "released",
@@ -2104,8 +2104,8 @@
               "method": "GPO-PAP",
               "textReference": "",
               "id": "param-1-1791213622129-ywc",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "189",
+              "flag": "HIGH"
             },
             {
               "name": "HDL - Cholesterol (Good)",
@@ -2134,11 +2134,11 @@
               "unit": "mg/dL",
               "minNormal": 5,
               "maxNormal": 30,
-              "notes": "Auto-calculated: Triglycerides / 5",
+              "notes": "Calculated: Triglycerides / 5",
               "textReference": "",
               "id": "param-4-1791213622129-i63",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "38",
+              "flag": "HIGH"
             },
             {
               "name": "Non-HDL Cholesterol",
@@ -2639,7 +2639,7 @@
         }
       ],
       "status": "in_progress",
-      "updatedAt": "2026-10-05T15:21:25.234Z",
+      "updatedAt": "2026-10-05T15:21:29.069Z",
       "createdAt": "2026-10-04T14:38:22.671Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-4276 - تم التسميع آلياً من منظومة الفواتير",
       "reportNumber": "RT-BK-4276",
