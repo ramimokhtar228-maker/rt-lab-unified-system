@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:32:23.933Z",
+  "syncedAt": "2026-10-05T15:32:33.156Z",
   "reports": [
     {
       "status": "released",
@@ -1933,7 +1933,7 @@
       }
     },
     {
-      "updatedAt": "2026-10-05T15:32:16.811Z",
+      "updatedAt": "2026-10-05T15:32:25.338Z",
       "patient": {
         "loyaltyCardNumber": "RT-2026-0008",
         "id": "pat-inc-1791124918128",
@@ -1989,17 +1989,6 @@
               "flag": "NORMAL"
             },
             {
-              "name": "BUN / Creatinine Ratio",
-              "unit": "Ratio",
-              "minNormal": 10,
-              "maxNormal": 20,
-              "notes": "Normal: 10 - 20",
-              "textReference": "",
-              "id": "param-3-1791214314721-8ab",
-              "result": "0.7",
-              "flag": "LOW"
-            },
-            {
               "name": "Serum Uric Acid",
               "unit": "mg/dL",
               "minNormal": 3.5,
@@ -2007,7 +1996,7 @@
               "method": "Uricase-PAP",
               "textReference": "",
               "id": "param-4-1791214314721-9za",
-              "result": "",
+              "result": "5.33",
               "flag": "NORMAL"
             },
             {
