@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:11:22.695Z",
+  "syncedAt": "2026-10-05T15:11:30.791Z",
   "reports": [
     {
       "status": "draft",
@@ -3948,7 +3948,7 @@
     {
       "id": "rep-inc-1791124532954",
       "createdAt": "2026-10-04T14:35:32.954Z",
-      "updatedAt": "2026-10-05T15:11:18.061Z",
+      "updatedAt": "2026-10-05T15:11:21.581Z",
       "patient": {
         "reportingDate": "2026-10-04T14:35",
         "loyaltyCardIssued": true,
@@ -4045,7 +4045,7 @@
               "method": "GPO-PAP",
               "textReference": "",
               "id": "param-1-1791212993857-b7e",
-              "result": "",
+              "result": "133",
               "flag": "NORMAL"
             },
             {
@@ -4075,10 +4075,10 @@
               "unit": "mg/dL",
               "minNormal": 5,
               "maxNormal": 30,
-              "notes": "Auto-calculated: Triglycerides / 5",
+              "notes": "Calculated: Triglycerides / 5",
               "textReference": "",
               "id": "param-4-1791212993857-td1",
-              "result": "",
+              "result": "27",
               "flag": "NORMAL"
             },
             {
