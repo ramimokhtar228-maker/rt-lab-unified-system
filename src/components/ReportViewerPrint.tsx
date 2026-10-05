@@ -331,6 +331,22 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
                   </div>
                 </div>
 
+                {/* Official Package Banner if applied */}
+                {report.packageApplied && (
+                  <div className="bg-amber-50/90 border border-amber-300 rounded-lg px-3.5 py-1.5 mb-3 text-xs flex items-center justify-between text-amber-950 font-medium">
+                    <div className="flex items-center gap-2">
+                      <span className="font-black bg-amber-600 text-white text-[10px] px-2 py-0.5 rounded">
+                        باقة معتمدة
+                      </span>
+                      <strong className="font-extrabold text-slate-900">{report.packageApplied.titleAr}</strong>
+                      <span className="font-mono text-slate-600 text-[11px]">({report.packageApplied.code})</span>
+                    </div>
+                    <span className="text-[11px] text-slate-600">
+                      معامل د. رامي مختار - باقات الفحص الطبي الشامل
+                    </span>
+                  </div>
+                )}
+
                 {/* Profile Title Banner */}
                 <div className="bg-gradient-to-r from-red-950 via-slate-900 to-slate-900 text-white px-4 py-2 rounded-lg flex items-center justify-between mb-3 shadow-xs">
                   <div className="flex items-center gap-2">

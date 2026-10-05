@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LabReport, TestProfile, TestParameter, LabStaffSignatures, ReportStatus } from '../types/lab';
+import { LabReport, TestProfile, TestParameter, LabStaffSignatures, ReportStatus, ComprehensivePackage } from '../types/lab';
 import { calculateFlag, formatReferenceDisplay, runAutomaticCalculations } from '../utils/calculator';
 import { COMMON_INTERPRETATIONS, STAFF_OPTIONS } from '../data/labCatalog';
 import { suggestHematologicalIllustration } from '../data/diseaseIllustrations';
@@ -8,6 +8,7 @@ import { FlagBadge } from './FlagBadge';
 import { QuickResultPicker } from './QuickResultPicker';
 import { ParameterEditModal } from './ParameterEditModal';
 import { AddParameterModal } from './AddParameterModal';
+import { useApp } from '../context/AppContext';
 import { 
   Plus, 
   Trash2, 
@@ -30,7 +31,14 @@ import {
   Receipt,
   Microscope,
   User,
-  X
+  X,
+  Package,
+  Check,
+  CheckCheck,
+  Clock,
+  Search,
+  Eye,
+  ListFilter
 } from 'lucide-react';
 
 interface ReportEditorProps {
@@ -60,11 +68,58 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
   onOpenIllustrationsModal,
   onOpenSmartReport
 }) => {
+  const { packages, applyPackageToReport } = useApp();
   const [activeProfileTab, setActiveProfileTab] = useState<string>(report.profiles[0]?.id || '');
   const [modalParamToEdit, setModalParamToEdit] = useState<TestParameter | null>(null);
   const [isAddParamModalOpen, setIsAddParamModalOpen] = useState(false);
   const [lastCalculatedInfo, setLastCalculatedInfo] = useState<string[]>([]);
   const [isPatientEditOpen, setIsPatientEditOpen] = useState(false);
+  const [isPackageSelectModalOpen, setIsPackageSelectModalOpen] = useState(false);
+  const [packageSearchTerm, setPackageSearchTerm] = useState('');
+  const [viewMode, setViewMode] = useState<'tabs' | 'all'>('tabs');
+  const [activationSuccessAlert, setActivationSuccessAlert] = useState<string | null>(null);
+
+  // Activate & Verify Report
+  const handleActivateReport = () => {
+    onUpdateReport({
+      ...report,
+      status: 'verified',
+      updatedAt: new Date().toISOString()
+    });
+    setActivationSuccessAlert('✅ تم تفعيل واعتماد التقرير بنجاح! كافة الجداول والنتائج معتمدة وجاهزة للطباعة والتسليم.');
+    setTimeout(() => setActivationSuccessAlert(null), 6000);
+  };
+
+  // Apply Package Directly to Report
+  const handleApplyPackageDirectly = (pkg: ComprehensivePackage) => {
+    applyPackageToReport(report.id, pkg);
+    setIsPackageSelectModalOpen(false);
+    setActivationSuccessAlert(`تم تطبيق باقة "${pkg.titleAr}" وتفريغ كافة جداولها وفحوصاتها بالتقرير بنجاح!`);
+    setTimeout(() => setActivationSuccessAlert(null), 6000);
+  };
+
+  // Run Auto Calculations across all profiles in report
+  const handleRunAllAutoCalc = () => {
+    let allApplied: string[] = [];
+    const updatedProfiles = report.profiles.map(prof => {
+      const res = runAutomaticCalculations(prof.parameters, {
+        age: report.patient.age,
+        gender: report.patient.gender
+      });
+      if (res.calculationsApplied.length > 0) {
+        allApplied = [...allApplied, ...res.calculationsApplied];
+        return { ...prof, parameters: res.updatedParams };
+      }
+      return prof;
+    });
+
+    if (allApplied.length > 0) {
+      onUpdateReport({ ...report, profiles: updatedProfiles, updatedAt: new Date().toISOString() });
+      setLastCalculatedInfo(Array.from(new Set(allApplied)));
+    } else {
+      alert('لم يتم العثور على قيم كافية لحساب المعادلات (مثل نتائج CBC، السكر والأنسولين، أو الدهون)');
+    }
+  };
 
   // Update patient field directly
   const handleUpdatePatient = (updates: Partial<typeof report.patient>) => {
@@ -293,12 +348,13 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
 
   const currentProfile = report.profiles.find(p => p.id === activeProfileTab) || report.profiles[0];
   const currentProfileIdx = report.profiles.findIndex(p => p.id === (currentProfile?.id || ''));
+  const profilesToRender = viewMode === 'all' ? report.profiles : (currentProfile ? [currentProfile] : []);
 
   return (
     <div className="space-y-6">
       {/* Top Action Ribbon */}
       <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-xs flex flex-wrap items-center justify-between gap-3 sticky top-28 z-30">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-wrap">
           <span className="text-xs font-bold text-slate-500">حالة التقرير:</span>
           <select
             value={report.status}
@@ -317,7 +373,53 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
             <option value="released">تم الإصدار النهائي للمريض (Released)</option>
           </select>
 
-          <span className="text-slate-300">|</span>
+          {/* Quick Activate & Verify Button */}
+          <button
+            type="button"
+            onClick={handleActivateReport}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-emerald-700 to-teal-700 hover:from-emerald-600 hover:to-teal-600 text-white rounded-lg text-xs font-black shadow-xs transition-all active:scale-95 cursor-pointer"
+            title="تفعيل واعتماد التقرير ونقل حالته إلى معتمد وجاهز للطباعة والتسليم"
+          >
+            <CheckCheck className="w-4 h-4 text-emerald-200" />
+            <span>تفعيل واعتماد التقرير</span>
+          </button>
+
+          {/* Direct Package Selector Button */}
+          <button
+            type="button"
+            onClick={() => setIsPackageSelectModalOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 rounded-lg text-xs font-bold transition-all cursor-pointer"
+            title="اختيار وتطبيق باقة فحص شامل على هذا التقرير وسرد كافة جداولها"
+          >
+            <Package className="w-3.5 h-3.5 text-amber-700" />
+            <span>{report.packageApplied ? `باقة: ${report.packageApplied.code}` : 'تطبيق باقة شاملة'}</span>
+          </button>
+
+          {/* View Mode Toggle: Tabs vs All Tables */}
+          <div className="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200 text-xs">
+            <button
+              type="button"
+              onClick={() => setViewMode('tabs')}
+              className={`px-2.5 py-1 rounded-md font-bold transition-all cursor-pointer ${
+                viewMode === 'tabs' ? 'bg-white text-rose-950 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+              }`}
+              title="عرض كل بروفايل في تبويب مستقل"
+            >
+              عرض بالتبويب
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('all')}
+              className={`px-2.5 py-1 rounded-md font-bold transition-all cursor-pointer ${
+                viewMode === 'all' ? 'bg-white text-rose-950 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+              }`}
+              title="سرد كافة جداول وفحوصات الباقة معاً في شاشة واحدة"
+            >
+              سرد كامل للجداول
+            </button>
+          </div>
+
+          <span className="text-slate-300 hidden sm:inline">|</span>
 
           <button
             type="button"
@@ -630,6 +732,119 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
         )}
       </div>
 
+      {/* Activation Success Alert */}
+      {activationSuccessAlert && (
+        <div className="bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-4 rounded-2xl shadow-md flex items-center justify-between gap-3 animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="flex items-center gap-2.5">
+            <CheckCircle2 className="w-5 h-5 text-emerald-200 shrink-0" />
+            <span className="font-extrabold text-sm">{activationSuccessAlert}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setActivationSuccessAlert(null)}
+            className="p-1 text-emerald-200 hover:text-white rounded-lg cursor-pointer"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
+      {/* Package Applied Banner / Package Quick Selector */}
+      {report.packageApplied ? (
+        <div className="bg-gradient-to-r from-amber-500/15 via-rose-500/10 to-amber-500/10 border-2 border-amber-300 rounded-2xl p-4 sm:p-5 shadow-xs space-y-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-start sm:items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-xs">
+                <Package className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-200 text-amber-900 border border-amber-300">
+                    باقة الفحص الطبي المطبقة
+                  </span>
+                  <span className="font-mono font-bold text-xs bg-white text-slate-800 px-2 py-0.5 rounded border border-slate-200">
+                    {report.packageApplied.code}
+                  </span>
+                  <span className="text-xs font-mono font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">
+                    {report.packageApplied.packagePrice} ج.م (بدلاً من {report.packageApplied.originalPrice} ج.م)
+                  </span>
+                </div>
+                <h3 className="text-base font-black text-slate-900 mt-1">
+                  {report.packageApplied.titleAr}
+                </h3>
+                <p className="text-xs text-slate-600 mt-0.5">
+                  تم تفريغ كافة جداول وفحوصات هذه الباقة أدناه. يمكنك إدخال النتائج مباشرة أو حساب المعادلات آلياً ثم تفعيل التقرير.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap shrink-0">
+              <button
+                type="button"
+                onClick={handleRunAllAutoCalc}
+                className="flex items-center gap-1.5 px-3 py-2 bg-blue-700 hover:bg-blue-600 text-white rounded-xl text-xs font-bold shadow-xs transition-all active:scale-95 cursor-pointer"
+                title="حساب كافة معادلات فحوصات الباقة تلقائياً"
+              >
+                <Calculator className="w-3.5 h-3.5 text-blue-200" />
+                <span>⚡ حساب معادلات الباقة</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsPackageSelectModalOpen(true)}
+                className="flex items-center gap-1.5 px-3 py-2 bg-white hover:bg-amber-50 text-amber-900 border border-amber-300 rounded-xl text-xs font-bold shadow-2xs transition-all cursor-pointer"
+                title="تغيير أو اختيار باقة أخرى"
+              >
+                <Package className="w-3.5 h-3.5 text-amber-700" />
+                <span>تغيير الباقة</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleActivateReport}
+                className="flex items-center gap-1.5 px-3.5 py-2 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl text-xs font-black shadow-xs transition-all active:scale-95 cursor-pointer"
+                title="تفعيل واعتماد التقرير وجداول النتائج"
+              >
+                <CheckCheck className="w-4 h-4 text-emerald-200" />
+                <span>تفعيل واعتماد التقرير</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between text-xs text-slate-600 pt-2 border-t border-amber-200/60 flex-wrap gap-2">
+            <span>
+              عدد الجداول المفرغة: <strong className="text-slate-900 font-bold">{report.profiles.length} بروفايل</strong> • 
+              إجمالي النتائج: <strong className="text-slate-900 font-bold">{report.profiles.reduce((sum, p) => sum + p.parameters.length, 0)} فحص معملي</strong>
+            </span>
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] text-slate-500 font-medium">نمط عرض الجداول:</span>
+              <button
+                type="button"
+                onClick={() => setViewMode(viewMode === 'tabs' ? 'all' : 'tabs')}
+                className="text-[11px] font-bold text-rose-800 hover:text-rose-950 underline cursor-pointer"
+              >
+                {viewMode === 'tabs' ? 'تبديل إلى سرد كافة جداول الباقة معاً' : 'تبديل إلى عرض التبويبات الفردية'}
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+          <div className="flex items-center gap-2.5">
+            <Package className="w-4 h-4 text-amber-600 shrink-0" />
+            <span className="text-slate-700">
+              يمكنك تطبيق إحدى <strong>باقات الفحص الشامل الـ 15 الجاهزة</strong> على هذا التقرير لتفريغ كافة جداول التحاليل والفحوصات المطلوبة تلقائياً مع النورمال والوحدات.
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setIsPackageSelectModalOpen(true)}
+            className="flex items-center gap-1.5 px-3.5 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded-xl font-bold transition-all shrink-0 cursor-pointer shadow-xs"
+          >
+            <Package className="w-3.5 h-3.5 text-amber-200" />
+            <span>اختيار وتطبيق باقة شاملة</span>
+          </button>
+        </div>
+      )}
+
       {/* Profiles Tabs & Switcher */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="bg-slate-50 border-b border-slate-200 p-2 flex items-center justify-between gap-2 overflow-x-auto">
@@ -674,9 +889,9 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
           </div>
         </div>
 
-        {/* Current Active Profile Editor */}
-        {currentProfile && (
-          <div className="p-5 space-y-5">
+        {/* Current Active Profile Editor or All Profiles Editor */}
+        {profilesToRender.map((currentProfile, currentProfileIdx) => (
+          <div key={currentProfile.id} className="p-5 space-y-5 border-b border-slate-200 last:border-b-0">
             {/* Profile Header Controls: Title, category, auto-calculate & delete */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-slate-100">
               <div className="space-y-1">
@@ -1203,7 +1418,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
               )}
             </div>
           </div>
-        )}
+        ))}
       </div>
 
       {/* General Overall Report Comment */}
@@ -1303,6 +1518,135 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
         onClose={() => setIsAddParamModalOpen(false)}
         onAdd={handleAddParameterToCurrentProfile}
       />
+
+      {/* Package Selection Modal */}
+      {isPackageSelectModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 space-y-4 my-8 animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center shadow-xs">
+                  <Package className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-black text-slate-900">
+                    اختيار وتطبيق باقة فحص شامل على التقرير
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    عند اختيار الباقة، سيتم تفريغ كافة بروفايلاتها وفحوصاتها في جدول نتائج جاهز للتعبئة والتفعيل
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsPackageSelectModalOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-600 rounded-xl cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Search Input */}
+            <div className="relative">
+              <Search className="w-4 h-4 text-slate-400 absolute right-3 top-3" />
+              <input
+                type="text"
+                value={packageSearchTerm}
+                onChange={(e) => setPackageSearchTerm(e.target.value)}
+                placeholder="ابحث في أسماء الباقات الـ 15 أو الكود..."
+                className="w-full text-xs pr-9 pl-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 font-medium"
+              />
+            </div>
+
+            {/* Packages List */}
+            <div className="max-h-96 overflow-y-auto divide-y divide-slate-100 space-y-2 pr-1">
+              {packages
+                .filter(p => 
+                  p.titleAr.includes(packageSearchTerm) || 
+                  p.titleEn.toLowerCase().includes(packageSearchTerm.toLowerCase()) ||
+                  p.code.toLowerCase().includes(packageSearchTerm.toLowerCase())
+                )
+                .map(pkg => {
+                  const isCurrent = report.packageApplied?.code.toUpperCase() === pkg.code.toUpperCase();
+                  return (
+                    <div
+                      key={pkg.id}
+                      className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+                        isCurrent
+                          ? 'bg-amber-50/70 border-amber-300 ring-2 ring-amber-400/50'
+                          : 'bg-white hover:bg-slate-50 border-slate-200'
+                      }`}
+                    >
+                      <div className="space-y-1 flex-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-mono font-bold text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded">
+                            {pkg.code}
+                          </span>
+                          <span className="font-bold text-xs text-slate-900">
+                            {pkg.titleAr}
+                          </span>
+                          <span className="text-[10px] text-slate-400">
+                            ({pkg.titleEn})
+                          </span>
+                          {pkg.isPopular && (
+                            <span className="text-[9px] font-black bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded">
+                              الأكثر طلباً
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-[11px] text-slate-600 line-clamp-2">
+                          {pkg.descriptionAr}
+                        </p>
+                        <div className="flex items-center gap-3 text-[10px] text-slate-500 font-medium pt-1">
+                          <span>البروفايلات: <strong>{pkg.includedProfiles.length}</strong></span>
+                          <span>•</span>
+                          <span>فحوصات إضافية: <strong>{pkg.includedIndividualTestCodes.length}</strong></span>
+                          <span>•</span>
+                          <span>{pkg.fastingRequired}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
+                        <div className="text-right sm:text-left">
+                          <div className="font-mono font-black text-sm text-emerald-700">
+                            {pkg.packagePrice} ج.م
+                          </div>
+                          <div className="font-mono text-[10px] text-slate-400 line-through">
+                            {pkg.originalPrice} ج.م
+                          </div>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => handleApplyPackageDirectly(pkg)}
+                          className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer flex items-center gap-1.5 ${
+                            isCurrent
+                              ? 'bg-amber-600 hover:bg-amber-700 text-white'
+                              : 'bg-rose-900 hover:bg-rose-800 text-white'
+                          }`}
+                        >
+                          <Check className="w-3.5 h-3.5" />
+                          <span>{isCurrent ? 'إعادة تفريغ الباقة' : 'تطبيق وسرد الجداول'}</span>
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
+
+            <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-slate-500">
+              <span>متاح {packages.length} باقة فحص شامل معتمدة</span>
+              <button
+                type="button"
+                onClick={() => setIsPackageSelectModalOpen(false)}
+                className="px-4 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold"
+              >
+                إغلاق
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

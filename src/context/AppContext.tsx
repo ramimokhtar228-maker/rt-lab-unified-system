@@ -27,7 +27,8 @@ import {
   TestParameter,
   LabInstrument,
   InstrumentTransmission,
-  UserRole
+  UserRole,
+  ComprehensivePackage
 } from '../types';
 import {
   INITIAL_USERS,
@@ -50,6 +51,8 @@ import {
   INITIAL_LOYALTY_DATA
 } from '../data/initialData';
 import { LAB_CATALOG } from '../data/labCatalog';
+import { INITIAL_PACKAGES } from '../data/packagesData';
+import { INITIAL_INDIVIDUAL_TESTS } from '../data/individualTestsData';
 import { INITIAL_INSTRUMENTS, SAMPLE_INSTRUMENT_TRANSMISSIONS } from '../data/instrumentsData';
 import { realtimeSyncManager } from '../utils/realtimeMultiDeviceSync';
 import { pushFullStoreToGitHub, pullFullStoreFromGitHub } from '../utils/githubSync';
@@ -69,6 +72,7 @@ const INSTRUMENTS_KEY = `${STORAGE_PREFIX}instruments_v3`;
 const TRANSMISSIONS_KEY = `${STORAGE_PREFIX}transmissions_v3`;
 const LAB_INFO_KEY = `${STORAGE_PREFIX}lab_info_v3`;
 const CATALOG_KEY = `${STORAGE_PREFIX}test_catalog_v3`;
+const PACKAGES_KEY = `${STORAGE_PREFIX}packages_v3`;
 
 interface AppContextType {
   // Localization & Auth
@@ -125,6 +129,15 @@ interface AppContextType {
   updateCatalogTest: (code: string, updates: Partial<InvoiceTestItem>) => void;
   deleteCatalogTest: (code: string) => void;
   resetCatalog: () => void;
+
+  // Comprehensive Packages
+  packages: ComprehensivePackage[];
+  updatePackages: (pkgs: ComprehensivePackage[]) => void;
+  addPackage: (pkg: ComprehensivePackage) => void;
+  updateSinglePackage: (id: string, updates: Partial<ComprehensivePackage>) => void;
+  deletePackage: (id: string) => void;
+  resetPackages: () => void;
+  applyPackageToReport: (reportId: string, pkg: ComprehensivePackage) => void;
 
   // Laboratory Instruments & Hardware Interfacing
   instruments: LabInstrument[];
@@ -283,6 +296,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   });
 
+  // 6b. Comprehensive Packages
+  const [packages, setPackages] = useState<ComprehensivePackage[]>(() => {
+    try {
+      const saved = localStorage.getItem(PACKAGES_KEY);
+      return saved ? JSON.parse(saved) : INITIAL_PACKAGES;
+    } catch {
+      return INITIAL_PACKAGES;
+    }
+  });
+
   // 7. Loyalty Profiles
   const [loyaltyProfiles, setLoyaltyProfiles] = useState<PatientLoyaltyProfile[]>(() => {
     try {
@@ -422,6 +445,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useEffect(() => { try { localStorage.setItem(AUDIT_KEY, JSON.stringify(auditLogs)); } catch (e) { console.error(e); } }, [auditLogs]);
   useEffect(() => { try { localStorage.setItem(LAB_INFO_KEY, JSON.stringify(labInfo)); } catch (e) { console.error(e); } }, [labInfo]);
   useEffect(() => { try { localStorage.setItem(CATALOG_KEY, JSON.stringify(testCatalog)); } catch (e) { console.error(e); } }, [testCatalog]);
+  useEffect(() => { try { localStorage.setItem(PACKAGES_KEY, JSON.stringify(packages)); } catch (e) { console.error(e); } }, [packages]);
 
   // Real-Time Multi-Device Cloud Synchronization (Firebase Firestore + GitHub Cloud Backup)
   useEffect(() => {
@@ -785,13 +809,184 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     logAction('CATALOG_UPDATE', 'CATALOG', `حذف التحليل ${code} من الكتالوج`);
   }, [logAction]);
 
+  // Packages Management CRUD
+  const updatePackages = useCallback((pkgs: ComprehensivePackage[]) => {
+    setPackages(pkgs);
+    logAction('UPDATE', 'CATALOG', 'تحديث قائمة باقات الفحص الشامل المتاحة');
+  }, [logAction]);
+
+  const addPackage = useCallback((pkg: ComprehensivePackage) => {
+    setPackages(prev => [pkg, ...prev]);
+    logAction('CREATE', 'CATALOG', `إضافة باقة فحص جديدة: ${pkg.titleAr} (${pkg.code})`);
+  }, [logAction]);
+
+  const updateSinglePackage = useCallback((id: string, updates: Partial<ComprehensivePackage>) => {
+    setPackages(prev => prev.map(p => p.id === id ? { ...p, ...updates } : p));
+    logAction('UPDATE', 'CATALOG', `تعديل بيانات الباقة: ${id}`);
+  }, [logAction]);
+
+  const deletePackage = useCallback((id: string) => {
+    setPackages(prev => prev.filter(p => p.id !== id));
+    logAction('DELETE', 'CATALOG', `حذف الباقة: ${id}`);
+  }, [logAction]);
+
+  const resetPackages = useCallback(() => {
+    setPackages(INITIAL_PACKAGES);
+    logAction('UPDATE', 'CATALOG', 'استعادة الباقات الافتراضية الـ 15 المتكاملة');
+  }, [logAction]);
+
+  // Apply Package Directly to Any Report (Unpacks all profile tables & test results)
+  const applyPackageToReport = useCallback((reportId: string, pkg: ComprehensivePackage) => {
+    setReports(prev => prev.map(rep => {
+      if (rep.id !== reportId) return rep;
+      
+      const newProfiles: TestProfile[] = [];
+
+      // 1. Unpack all included profiles from LAB_CATALOG
+      (pkg.includedProfiles || []).forEach(pCode => {
+        const template = LAB_CATALOG.find(c => c.code.toUpperCase() === pCode.toUpperCase());
+        if (template && !newProfiles.some(p => p.profileCode.toUpperCase() === template.code.toUpperCase())) {
+          newProfiles.push({
+            id: `prof-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+            profileCode: template.code,
+            titleEn: template.titleEn,
+            titleAr: template.titleAr,
+            category: template.category,
+            sampleType: template.sampleType,
+            interpretation: template.defaultInterpretation || '',
+            parameters: template.parameters.map((p, idx) => ({
+              ...p,
+              id: `param-${idx}-${Date.now()}-${Math.random().toString(36).substr(2, 3)}`,
+              result: '',
+              flag: 'NORMAL'
+            }))
+          });
+        }
+      });
+
+      // 2. Unpack all included individual tests
+      const extraParams: TestParameter[] = [];
+      (pkg.includedIndividualTestCodes || []).forEach((tCode, idx) => {
+        const indTest = INITIAL_INDIVIDUAL_TESTS.find(t => t.code.toUpperCase() === tCode.toUpperCase())
+                     || testCatalog.find(t => t.code.toUpperCase() === tCode.toUpperCase());
+        if (indTest) {
+          extraParams.push({
+            id: `p-pkg-${idx}-${Date.now()}`,
+            name: `${indTest.nameAr} (${indTest.nameEn})`,
+            result: '',
+            unit: indTest.unit || 'Score / Units',
+            minNormal: indTest.minNormal,
+            maxNormal: indTest.maxNormal,
+            textReference: indTest.textReference || 'Normal',
+            flag: 'NORMAL',
+            method: indTest.method || 'Automated Clinical Assay'
+          });
+        }
+      });
+
+      if (extraParams.length > 0) {
+        newProfiles.push({
+          id: `prof-extra-${Date.now()}`,
+          profileCode: 'PKG_EXTRA',
+          titleAr: `فحوصات وفيتامينات باقة: ${pkg.titleAr}`,
+          titleEn: `Package Tests (${pkg.titleEn})`,
+          category: 'Package Tests',
+          sampleType: pkg.sampleTypes?.[0] || 'Serum',
+          interpretation: 'All complementary package tests evaluated according to certified reference ranges.',
+          parameters: extraParams
+        });
+      }
+
+      return {
+        ...rep,
+        packageApplied: {
+          code: pkg.code,
+          titleAr: pkg.titleAr,
+          packagePrice: pkg.packagePrice,
+          originalPrice: pkg.originalPrice
+        } as any,
+        profiles: newProfiles.length > 0 ? newProfiles : rep.profiles,
+        status: rep.status === 'draft' ? 'in_progress' : rep.status,
+        updatedAt: new Date().toISOString()
+      };
+    }));
+    logAction('UPDATE', 'DIAGNOSTIC', `تطبيق باقة "${pkg.titleAr}" على التقرير وتفعيل جداول النتائج`);
+  }, [testCatalog, logAction]);
+
   // Unified Admission: Register patient -> Create Lab Report -> Create Income Invoice -> Update Loyalty
   const createReportFromAdmission = useCallback((patient: Patient, selectedTests: InvoiceTestItem[], packageApplied?: any): LabReport => {
     const today = new Date().toISOString().split('T')[0];
     const generatedProfiles: TestProfile[] = [];
 
+    // 1. If a Package was applied, completely unpack all its profiles and all individual tests
+    if (packageApplied) {
+      // A) Unpack all included profiles from LAB_CATALOG
+      (packageApplied.includedProfiles || []).forEach((pCode: string) => {
+        const template = LAB_CATALOG.find(c => c.code.toUpperCase() === pCode.toUpperCase());
+        if (template && !generatedProfiles.some(gp => gp.profileCode.toUpperCase() === template.code.toUpperCase())) {
+          generatedProfiles.push({
+            id: `prof-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+            profileCode: template.code,
+            titleEn: template.titleEn,
+            titleAr: template.titleAr,
+            category: template.category,
+            sampleType: template.sampleType,
+            interpretation: template.defaultInterpretation || '',
+            parameters: template.parameters.map((p, idx) => ({
+              ...p,
+              id: `param-${idx}-${Date.now()}-${Math.random().toString(36).substr(2, 3)}`,
+              result: '',
+              flag: 'NORMAL'
+            }))
+          });
+        }
+      });
+
+      // B) Unpack all included complementary individual tests
+      const extraParams: TestParameter[] = [];
+      (packageApplied.includedIndividualTestCodes || []).forEach((tCode: string, idx: number) => {
+        const indTest = INITIAL_INDIVIDUAL_TESTS.find(t => t.code.toUpperCase() === tCode.toUpperCase())
+                     || testCatalog.find(t => t.code.toUpperCase() === tCode.toUpperCase());
+        if (indTest) {
+          extraParams.push({
+            id: `p-pkg-${idx}-${Date.now()}`,
+            name: `${indTest.nameAr} (${indTest.nameEn})`,
+            result: '',
+            unit: indTest.unit || 'Score / Units',
+            minNormal: indTest.minNormal,
+            maxNormal: indTest.maxNormal,
+            textReference: indTest.textReference || 'Normal',
+            flag: 'NORMAL',
+            method: indTest.method || 'Automated Clinical Assay'
+          });
+        }
+      });
+
+      if (extraParams.length > 0) {
+        generatedProfiles.push({
+          id: `prof-extra-${Date.now()}`,
+          profileCode: 'PKG_EXTRA',
+          titleAr: `فحوصات وفيتامينات باقة: ${packageApplied.titleAr}`,
+          titleEn: `Package Tests (${packageApplied.titleEn})`,
+          category: 'Package Tests',
+          sampleType: packageApplied.sampleTypes?.[0] || 'Serum',
+          interpretation: 'All complementary package tests evaluated according to certified reference ranges.',
+          parameters: extraParams
+        });
+      }
+    }
+
+    // 2. Unpack any extra selected individual tests or profiles chosen by user
     selectedTests.forEach(test => {
-      const catalogTemplate = LAB_CATALOG.find(c => c.code.toLowerCase() === test.code.toLowerCase() || c.titleEn.toLowerCase().includes(test.code.toLowerCase()));
+      const testCode = test.code.toUpperCase();
+      // If already added by package, skip duplicate
+      if (generatedProfiles.some(gp => gp.profileCode.toUpperCase() === testCode)) return;
+
+      const catalogTemplate = LAB_CATALOG.find(c => 
+        c.code.toUpperCase() === testCode || 
+        c.titleEn.toLowerCase().includes(test.code.toLowerCase())
+      );
+
       if (catalogTemplate) {
         generatedProfiles.push({
           id: `prof-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
@@ -803,35 +998,56 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           interpretation: catalogTemplate.defaultInterpretation || '',
           parameters: catalogTemplate.parameters.map((p, idx) => ({
             ...p,
-            id: `param-${idx}-${Date.now()}`,
+            id: `param-${idx}-${Date.now()}-${Math.random().toString(36).substr(2, 3)}`,
             result: '',
             flag: 'NORMAL'
           }))
         });
       } else {
+        // Detailed individual test
+        const richTest = INITIAL_INDIVIDUAL_TESTS.find(t => t.code.toUpperCase() === testCode) || test;
         generatedProfiles.push({
           id: `prof-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
-          profileCode: test.code,
-          titleEn: test.nameEn,
-          titleAr: test.nameAr,
-          category: test.category || 'General',
-          sampleType: test.sampleType || 'Serum',
+          profileCode: richTest.code,
+          titleEn: richTest.nameEn,
+          titleAr: richTest.nameAr,
+          category: richTest.category || 'General Diagnostic',
+          sampleType: richTest.sampleType || 'Serum',
           parameters: [
             {
-              id: `p-${Date.now()}`,
-              name: test.nameEn,
+              id: `p-${Date.now()}-${Math.random().toString(36).substr(2, 3)}`,
+              name: `${richTest.nameAr} (${richTest.nameEn})`,
               result: '',
-              unit: test.unit || '',
-              minNormal: test.minNormal,
-              maxNormal: test.maxNormal,
-              textReference: test.textReference || '',
+              unit: richTest.unit || 'Score / Units',
+              minNormal: richTest.minNormal,
+              maxNormal: richTest.maxNormal,
+              textReference: richTest.textReference || 'Normal',
               flag: 'NORMAL',
-              method: test.method || 'Automated Clinical Assay'
+              method: richTest.method || 'Automated Clinical Assay'
             }
           ]
         });
       }
     });
+
+    // Fallback if empty
+    if (generatedProfiles.length === 0) {
+      const defaultTpl = LAB_CATALOG[0]; // CBC
+      generatedProfiles.push({
+        id: `prof-def-${Date.now()}`,
+        profileCode: defaultTpl.code,
+        titleEn: defaultTpl.titleEn,
+        titleAr: defaultTpl.titleAr,
+        category: defaultTpl.category,
+        sampleType: defaultTpl.sampleType,
+        parameters: defaultTpl.parameters.map((p, idx) => ({
+          ...p,
+          id: `p-${idx}-${Date.now()}`,
+          result: '',
+          flag: 'NORMAL'
+        }))
+      });
+    }
 
     const newReport: LabReport = {
       id: `rep-${Date.now()}`,
@@ -839,35 +1055,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       patient: {
         ...patient,
         sampleDate: patient.sampleDate || today,
-        reportingDate: patient.reportingDate || today
+        reportingDate: patient.reportingDate || today,
+        assignedPackageId: packageApplied ? packageApplied.id : patient.assignedPackageId
       },
-      profiles: generatedProfiles.length > 0 ? generatedProfiles : [
-        {
-          id: `prof-def-${Date.now()}`,
-          profileCode: 'CBC',
-          titleEn: 'Complete Blood Count (CBC)',
-          titleAr: 'صورة الدم الكاملة',
-          category: 'Hematology',
-          sampleType: 'EDTA Whole Blood',
-          parameters: LAB_CATALOG[0].parameters.map((p, idx) => ({
-            ...p,
-            id: `p-${idx}-${Date.now()}`,
-            result: '',
-            flag: 'NORMAL'
-          }))
-        }
-      ],
+      packageApplied: packageApplied ? {
+        code: packageApplied.code,
+        titleAr: packageApplied.titleAr,
+        packagePrice: packageApplied.packagePrice,
+        originalPrice: packageApplied.originalPrice
+      } as any : undefined,
+      profiles: generatedProfiles,
       staff: {
         labChemist: "د. هبة الشناوي - كيميائية تحاليل",
         verifiedBy: "د. مصطفى العوضي - استشاري التحاليل",
         pathologist: "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
       },
       status: 'draft',
-      packageApplied: packageApplied ? {
-        code: packageApplied.code,
-        titleAr: packageApplied.titleAr,
-        packagePrice: packageApplied.packagePrice
-      } : undefined,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
@@ -1516,6 +1719,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       employees,
       labToLabOrders,
       testCatalog,
+      packages,
       auditLogs: auditLogs.slice(0, 100)
     };
     const jsonStr = JSON.stringify(payload, null, 2);
@@ -1528,7 +1732,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     URL.revokeObjectURL(url);
     logAction('BACKUP', 'SETTINGS', 'تصدير نسخة احتياطية موحدة شاملة لبيانات المعمل');
     return jsonStr;
-  }, [reports, incomeRecords, loyaltyProfiles, inventory, expenses, dailyCloseouts, employees, labToLabOrders, testCatalog, auditLogs, logAction]);
+  }, [reports, incomeRecords, loyaltyProfiles, inventory, expenses, dailyCloseouts, employees, labToLabOrders, testCatalog, packages, auditLogs, logAction]);
 
   const importBackup = useCallback(async (backupJson: string): Promise<{ success: boolean; message: string }> => {
     try {
@@ -1541,6 +1745,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (data.employees) setEmployees(data.employees);
       if (data.labToLabOrders) setLabToLabOrders(data.labToLabOrders);
       if (data.testCatalog) setTestCatalog(data.testCatalog);
+      if (data.packages) setPackages(data.packages);
       logAction('BACKUP', 'SETTINGS', 'استعادة قاعدة البيانات الموحدة من نسخة احتياطية');
       return { success: true, message: 'تم استعادة البيانات بنجاح!' };
     } catch {
@@ -1689,6 +1894,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     updateCatalogTest,
     deleteCatalogTest,
     resetCatalog,
+
+    packages,
+    updatePackages,
+    addPackage,
+    updateSinglePackage,
+    deletePackage,
+    resetPackages,
+    applyPackageToReport,
 
     instruments,
     transmissions,

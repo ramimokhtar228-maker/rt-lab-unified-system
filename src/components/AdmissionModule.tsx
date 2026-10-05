@@ -21,11 +21,16 @@ import {
   Package,
   Layers,
   FlaskConical,
-  MessageCircle
+  MessageCircle,
+  ChevronDown,
+  ChevronUp,
+  FileText
 } from 'lucide-react';
-import { Patient, InvoiceTestItem, PaymentMethod } from '../types';
+import { Patient, InvoiceTestItem, PaymentMethod, ComprehensivePackage } from '../types';
 import { TEST_CATALOG } from '../data/catalog';
-import { INITIAL_PACKAGES } from '../data/packagesData';
+import { LAB_CATALOG } from '../data/labCatalog';
+import { INITIAL_INDIVIDUAL_TESTS } from '../data/individualTestsData';
+import { SmartTestSearch } from './SmartTestSearch';
 import { formatBookingConfirmationWhatsAppMessage, openWhatsApp } from '../utils/whatsapp';
 
 interface AdmissionModuleProps {
@@ -45,7 +50,9 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
     reports,
     setActiveTab,
     setSelectedReportId,
-    setIsPatientFormOpen
+    setIsPatientFormOpen,
+    packages,
+    testCatalog
   } = useApp();
 
   const today = new Date().toISOString().split('T')[0];
@@ -68,14 +75,17 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
 
   // Selected Tests & Packages
   const [selectedTests, setSelectedTests] = useState<InvoiceTestItem[]>([
-    TEST_CATALOG.find(t => t.code === 'CBC') || {
+    INITIAL_INDIVIDUAL_TESTS.find(t => t.code === 'CBC') || {
       id: 't-cbc',
       code: 'CBC',
       nameAr: 'صورة الدم الكاملة (CBC 5-Diff)',
       nameEn: 'Complete Blood Count',
-      price: 280,
+      price: 180,
       category: 'Hematology',
-      cost: 45
+      cost: 30,
+      sampleType: 'EDTA Whole Blood',
+      unit: 'Multi-parameter',
+      textReference: 'Hb: Male 13.0-17.5 g/dL, Female 12.0-15.5 | WBC: 4.0-11.0 10^3/uL'
     }
   ]);
   const [selectedPackageId, setSelectedPackageId] = useState<string>('');
@@ -85,8 +95,6 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
   const [paidAmount, setPaidAmount] = useState<number>(0);
   const [discountPercent, setDiscountPercent] = useState<number>(0);
   const [redeemPoints, setRedeemPoints] = useState<boolean>(false);
-  const [testSearch, setTestSearch] = useState('');
-  const [showCatalogPicker, setShowCatalogPicker] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [createdLabNum, setCreatedLabNum] = useState<string>('');
 
@@ -95,19 +103,59 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
     return getLoyaltyByPhone(phone);
   }, [phone, getLoyaltyByPhone]);
 
-  // Auto apply loyalty discount if profile found
+  // Selected Package Object
+  const selectedPackage = useMemo(() => {
+    if (!selectedPackageId) return null;
+    return packages.find(p => p.id === selectedPackageId) || null;
+  }, [selectedPackageId, packages]);
+
+  // Auto apply loyalty discount if profile found (and no package)
   useEffect(() => {
-    if (loyaltyProfile && discountPercent === 0) {
+    if (loyaltyProfile && discountPercent === 0 && !selectedPackage) {
       const tierDiscount = loyaltyConfig.tiers[loyaltyProfile.tier].discountRate;
       setDiscountPercent(tierDiscount);
     }
-  }, [loyaltyProfile, loyaltyConfig, discountPercent]);
+  }, [loyaltyProfile, loyaltyConfig, discountPercent, selectedPackage]);
 
-  // Calculations
-  const testsSubtotal = selectedTests.reduce((sum, t) => sum + t.price, 0);
+  // Financial Calculations
+  const getTestDetails = (code: string) => {
+    return INITIAL_INDIVIDUAL_TESTS.find(t => t.code.toUpperCase() === code.toUpperCase())
+        || testCatalog.find(t => t.code.toUpperCase() === code.toUpperCase());
+  };
+
+  const { packageItems, extraItems } = useMemo(() => {
+    if (!selectedPackage) {
+      return { packageItems: [], extraItems: selectedTests };
+    }
+    const packageCodes = new Set([
+      ...selectedPackage.includedProfiles.map(c => c.toUpperCase()),
+      ...selectedPackage.includedIndividualTestCodes.map(c => c.toUpperCase())
+    ]);
+    const pkg = selectedTests.filter(t => packageCodes.has(t.code.toUpperCase()));
+    const extra = selectedTests.filter(t => !packageCodes.has(t.code.toUpperCase()));
+    return { packageItems: pkg, extraItems: extra };
+  }, [selectedPackage, selectedTests]);
+
+  const testsSubtotal = useMemo(() => {
+    if (selectedPackage) {
+      const packageCodes = new Set([
+        ...selectedPackage.includedProfiles.map(c => c.toUpperCase()),
+        ...selectedPackage.includedIndividualTestCodes.map(c => c.toUpperCase())
+      ]);
+
+      const extraTestsCost = selectedTests
+        .filter(t => !packageCodes.has(t.code.toUpperCase()))
+        .reduce((sum, t) => sum + t.price, 0);
+
+      return selectedPackage.packagePrice + extraTestsCost;
+    }
+
+    return selectedTests.reduce((sum, t) => sum + t.price, 0);
+  }, [selectedPackage, selectedTests]);
+
   const effectiveVisitFee = bookingType === 'home_visit' ? homeVisitFee : 0;
   const grossSubtotal = testsSubtotal + effectiveVisitFee;
-  const percentageDiscountAmount = Math.round((testsSubtotal * discountPercent) / 100);
+  const percentageDiscountAmount = selectedPackage ? 0 : Math.round((testsSubtotal * discountPercent) / 100);
 
   // Points redemption value
   const pointsRedeemValue = useMemo(() => {
@@ -128,34 +176,84 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
 
   // Add/Remove Tests
   const handleAddTest = (test: InvoiceTestItem) => {
-    if (!selectedTests.some(t => t.code === test.code)) {
+    if (!selectedTests.some(t => t.code.toUpperCase() === test.code.toUpperCase())) {
       setSelectedTests(prev => [...prev, test]);
     }
   };
 
-  const handleRemoveTest = (code: string) => {
-    setSelectedTests(prev => prev.filter(t => t.code !== code));
+  const handleToggleTest = (test: InvoiceTestItem) => {
+    if (selectedTests.some(t => t.code.toUpperCase() === test.code.toUpperCase())) {
+      setSelectedTests(prev => prev.filter(t => t.code.toUpperCase() !== test.code.toUpperCase()));
+    } else {
+      setSelectedTests(prev => [...prev, test]);
+    }
   };
 
-  // Add Package
+  const handleToggleProfile = (profile: any) => {
+    if (selectedTests.some(t => t.code.toUpperCase() === profile.code.toUpperCase())) {
+      setSelectedTests(prev => prev.filter(t => t.code.toUpperCase() !== profile.code.toUpperCase()));
+    } else {
+      setSelectedTests(prev => [
+        ...prev,
+        {
+          id: `prof-${profile.code}`,
+          code: profile.code,
+          nameAr: profile.titleAr,
+          nameEn: profile.titleEn,
+          category: profile.category,
+          price: profile.profilePrice || 250,
+          sampleType: profile.sampleType
+        }
+      ]);
+    }
+  };
+
+  const handleRemoveTest = (code: string) => {
+    setSelectedTests(prev => prev.filter(t => t.code.toUpperCase() !== code.toUpperCase()));
+  };
+
+  // Add / Switch Package
   const handleSelectPackage = (pkgId: string) => {
-    setSelectedPackageId(pkgId);
-    const pkg = INITIAL_PACKAGES.find(p => p.id === pkgId);
+    if (selectedPackageId === pkgId) {
+      // Deselect
+      setSelectedPackageId('');
+      setSelectedTests([]);
+      setDiscountPercent(0);
+      return;
+    }
+
+    const pkg = packages.find(p => p.id === pkgId);
     if (!pkg) return;
 
-    // Map package tests
+    setSelectedPackageId(pkg.id);
+
+    // Map all package profiles & individual tests
     const pkgTests: InvoiceTestItem[] = [];
+
     pkg.includedProfiles.forEach(code => {
-      const found = TEST_CATALOG.find(t => t.code.toLowerCase() === code.toLowerCase());
-      if (found && !pkgTests.some(t => t.code === found.code)) {
+      const foundProfile = LAB_CATALOG.find(p => p.code.toUpperCase() === code.toUpperCase());
+      if (foundProfile) {
+        pkgTests.push({
+          id: `prof-${foundProfile.code}`,
+          code: foundProfile.code,
+          nameAr: foundProfile.titleAr,
+          nameEn: foundProfile.titleEn,
+          category: foundProfile.category,
+          price: foundProfile.profilePrice || 250,
+          sampleType: foundProfile.sampleType
+        });
+      }
+    });
+
+    pkg.includedIndividualTestCodes.forEach(code => {
+      const found = INITIAL_INDIVIDUAL_TESTS.find(t => t.code.toUpperCase() === code.toUpperCase())
+                 || testCatalog.find(t => t.code.toUpperCase() === code.toUpperCase());
+      if (found && !pkgTests.some(t => t.code.toUpperCase() === found.code.toUpperCase())) {
         pkgTests.push(found);
       }
     });
 
-    if (pkgTests.length > 0) {
-      setSelectedTests(pkgTests);
-      setDiscountPercent(pkg.discountPercentage);
-    }
+    setSelectedTests(pkgTests);
   };
 
   // Submit Admission
@@ -199,7 +297,7 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
     const createdReport = createReportFromAdmission(
       patientRecord,
       selectedTests,
-      selectedPackageId ? INITIAL_PACKAGES.find(p => p.id === selectedPackageId) : undefined
+      selectedPackage || undefined
     );
 
     // Apply loyalty points redemption or earning
@@ -485,126 +583,365 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
           </div>
 
           {/* Card 2: Tests & Packages Selection */}
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2">
                 <FlaskConical className="w-5 h-5 text-rose-700" />
-                <h2 className="font-black text-slate-800 text-base">التحاليل والباقات المطلوبة</h2>
+                <h2 className="font-black text-slate-800 text-base">التحاليل والباقات المطلوبة للحجز</h2>
               </div>
 
-              <button
-                type="button"
-                onClick={() => setShowCatalogPicker(prev => !prev)}
-                className="text-xs font-bold text-rose-900 bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-xl border border-rose-200 transition-colors cursor-pointer"
-              >
-                {showCatalogPicker ? 'إخفاء دليل التحاليل' : '+ إضافة تحليل من الكتالوج'}
-              </button>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold px-2.5 py-1 rounded-xl bg-rose-50 text-rose-900 border border-rose-200">
+                  {selectedTests.length} فحص مختار
+                </span>
+                {selectedTests.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedPackageId('');
+                      setSelectedTests([]);
+                    }}
+                    className="text-[11px] font-bold text-red-600 hover:text-red-800 p-1 cursor-pointer"
+                  >
+                    تفريغ الكل
+                  </button>
+                )}
+              </div>
             </div>
 
             {/* Quick Packages Shortcuts */}
             <div className="space-y-1.5">
-              <span className="text-[11px] font-bold text-slate-500 block">اختيار باقة فحص شاملة سريعة:</span>
-              <div className="flex flex-wrap gap-2">
-                {INITIAL_PACKAGES.slice(0, 5).map(pkg => (
-                  <button
-                    key={pkg.id}
-                    type="button"
-                    onClick={() => handleSelectPackage(pkg.id)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                      selectedPackageId === pkg.id
-                        ? 'bg-rose-900 text-white shadow-sm'
-                        : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-                    }`}
-                  >
-                    <span>{pkg.titleAr}</span>
-                    <span className="font-mono text-[10px] mr-1 opacity-80">({pkg.packagePrice} ج.م)</span>
-                  </button>
-                ))}
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold text-slate-500">اختيار باقة فحص شاملة سريعة:</span>
+                <span className="text-[10px] text-slate-400">({packages.length} باقة متاحة)</span>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {packages.slice(0, 6).map(pkg => {
+                  const isActive = selectedPackageId === pkg.id;
+                  return (
+                    <button
+                      key={pkg.id}
+                      type="button"
+                      onClick={() => handleSelectPackage(pkg.id)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                        isActive
+                          ? 'bg-gradient-to-r from-rose-900 to-rose-800 text-white shadow-md ring-2 ring-rose-400'
+                          : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200/80'
+                      }`}
+                    >
+                      <Package className={`w-3.5 h-3.5 ${isActive ? 'text-amber-300' : 'text-slate-500'}`} />
+                      <span>{pkg.titleAr}</span>
+                      <span className="font-mono text-[10px] opacity-90">({pkg.packagePrice} ج.م)</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
-            {/* Test Catalog Search & Picker Dropdown */}
-            {showCatalogPicker && (
-              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
-                <div className="relative">
-                  <Search className="w-4 h-4 text-slate-400 absolute right-3 top-3" />
-                  <input
-                    type="text"
-                    value={testSearch}
-                    onChange={(e) => setTestSearch(e.target.value)}
-                    placeholder="ابحث بالاسم العربي، الإنجليزي أو كود التحليل (مثال: CBC, سكر, ALT)..."
-                    className="w-full text-xs pr-9 pl-3 py-2 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500"
-                  />
+            {/* Active Selected Package Alert Card */}
+            {selectedPackage && (
+              <div className="bg-gradient-to-br from-amber-50 via-rose-50 to-amber-50/50 p-4 rounded-2xl border-2 border-amber-300/80 shadow-sm space-y-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded bg-amber-500 text-white font-black text-[10px]">
+                        باقة الحجز المعتمدة
+                      </span>
+                      <span className="font-mono font-bold text-xs text-slate-600 bg-white/80 px-2 py-0.5 rounded border border-amber-200">
+                        {selectedPackage.code}
+                      </span>
+                      <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">
+                        خصم {selectedPackage.discountPercentage}%
+                      </span>
+                    </div>
+
+                    <h3 className="font-black text-slate-900 text-sm sm:text-base">
+                      {selectedPackage.titleAr}
+                    </h3>
+                    <p className="text-xs text-slate-600">
+                      {selectedPackage.descriptionAr}
+                    </p>
+                  </div>
+
+                  <div className="text-left flex-shrink-0">
+                    <div className="font-mono font-black text-lg text-emerald-700">
+                      {selectedPackage.packagePrice} <span className="text-xs font-sans">ج.م</span>
+                    </div>
+                    <div className="text-[11px] line-through text-slate-400 font-mono">
+                      {selectedPackage.originalPrice} ج.م
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleSelectPackage(selectedPackage.id)}
+                      className="text-[11px] font-bold text-red-600 hover:text-red-800 mt-1 cursor-pointer block text-left"
+                    >
+                      إلغاء الباقة ✕
+                    </button>
+                  </div>
                 </div>
 
-                <div className="max-h-48 overflow-y-auto divide-y divide-slate-100 bg-white rounded-xl border border-slate-200">
-                  {filteredCatalog.slice(0, 15).map(test => {
-                    const isSelected = selectedTests.some(t => t.code === test.code);
-                    return (
-                      <div
-                        key={test.id}
-                        onClick={() => handleAddTest(test)}
-                        className={`p-2.5 flex items-center justify-between text-xs cursor-pointer hover:bg-rose-50 transition-colors ${
-                          isSelected ? 'bg-rose-50/60 font-bold text-rose-900' : 'text-slate-800'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono font-bold text-slate-500">{test.code}</span>
-                          <span>{test.nameAr}</span>
-                          <span className="text-[10px] text-slate-400">({test.nameEn})</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <span className="font-mono font-bold text-emerald-700">{test.price} ج.م</span>
-                          {isSelected ? (
-                            <Check className="w-4 h-4 text-rose-700" />
-                          ) : (
-                            <Plus className="w-4 h-4 text-slate-400" />
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
+                {/* Package details: Fasting & Samples */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-amber-200/60 text-xs">
+                  <div className="flex items-center gap-1.5 text-amber-900 font-medium bg-amber-100/60 p-2 rounded-xl">
+                    <Clock className="w-3.5 h-3.5 text-amber-700 flex-shrink-0" />
+                    <span><strong>التحضير:</strong> {selectedPackage.fastingRequired}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-slate-800 font-medium bg-white/70 p-2 rounded-xl border border-amber-200/50">
+                    <FlaskConical className="w-3.5 h-3.5 text-rose-700 flex-shrink-0" />
+                    <span><strong>العينات:</strong> {selectedPackage.sampleTypes.join(' + ')}</span>
+                  </div>
+                </div>
+
+                {/* Profiles & Tests Included in Package */}
+                <div className="space-y-1.5 pt-1">
+                  <span className="text-[11px] font-bold text-slate-700 block">
+                    الفحوصات المشمولة التي سيتم تفريغها بجداول التقرير الطبي:
+                  </span>
+                  <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto pr-1">
+                    {selectedPackage.includedProfiles.map(pCode => (
+                      <span key={pCode} className="px-2 py-0.5 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-900 text-[11px] font-bold">
+                        ✓ بروفايل {pCode}
+                      </span>
+                    ))}
+                    {selectedPackage.includedIndividualTestCodes.map(tCode => (
+                      <span key={tCode} className="px-2 py-0.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-900 text-[11px] font-bold">
+                        ✓ {tCode}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}
 
+            {/* Smart Test Search & Explorer */}
+            <div className="space-y-2 pt-1">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                  <Sparkles className="w-4 h-4 text-rose-600" />
+                  البحث الذكي المباشر عن التحاليل والباقات:
+                </span>
+                <span className="text-[11px] text-slate-400">ابحث بالعربي أو الإنجليزي أو كود التحليل</span>
+              </div>
+
+              <SmartTestSearch
+                packages={packages}
+                profiles={LAB_CATALOG}
+                individualTests={INITIAL_INDIVIDUAL_TESTS}
+                selectedItemCodes={selectedTests.map(t => t.code)}
+                onToggleTest={handleToggleTest}
+                onSelectPackage={(pkg) => handleSelectPackage(pkg.id)}
+                onToggleProfile={handleToggleProfile}
+                compact={true}
+              />
+            </div>
+
             {/* Selected Tests List */}
-            <div className="space-y-2">
-              <span className="text-[11px] font-bold text-slate-500 block">
-                التحاليل المختارة حالياً ({selectedTests.length}):
-              </span>
+            <div className="space-y-3 pt-2 border-t border-slate-100">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-black text-slate-800">
+                  قائمة الفحوصات المختارة للحجز ({selectedTests.length} فحص):
+                </span>
+                <span className="text-xs font-mono font-black text-rose-900">
+                  الإجمالي: {testsSubtotal} ج.م
+                </span>
+              </div>
 
               {selectedTests.length === 0 ? (
-                <div className="text-center py-6 text-xs text-slate-400 border border-dashed border-slate-200 rounded-xl">
-                  لم يتم اختيار أي تحاليل بعد. اضغط على الباقات أو زر الكتالوج لإضافة تحاليل.
+                <div className="text-center py-6 text-xs text-slate-400 border border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                  لم يتم اختيار أي تحاليل بعد. استخدم شريط البحث الذكي أعلاه أو اختر باقة شاملة.
                 </div>
-              ) : (
-                <div className="space-y-1.5 max-h-56 overflow-y-auto pr-1">
-                  {selectedTests.map(test => (
-                    <div
-                      key={test.code}
-                      className="p-2.5 rounded-xl border border-slate-200 bg-slate-50/80 flex items-center justify-between text-xs"
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono font-bold px-1.5 py-0.5 rounded bg-slate-200 text-slate-800 text-[10px]">
-                          {test.code}
+              ) : selectedPackage ? (
+                <div className="space-y-3">
+                  {/* Group 1: Tests included in the approved package */}
+                  <div className="bg-amber-50/50 border border-amber-200/80 rounded-2xl p-3 space-y-2">
+                    <div className="flex items-center justify-between pb-1.5 border-b border-amber-200/60">
+                      <span className="text-xs font-bold text-amber-950 flex items-center gap-1.5">
+                        <Package className="w-3.5 h-3.5 text-amber-700" />
+                        <span>فحوصات الباقة المعتمدة ({packageItems.length} فحص):</span>
+                      </span>
+                      <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">
+                        مشمولة ضمن سعر الباقة ({selectedPackage.packagePrice} ج.م)
+                      </span>
+                    </div>
+
+                    <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
+                      {packageItems.map(test => {
+                        const details = getTestDetails(test.code);
+                        const normalDisplay = details?.textReference 
+                          || (details?.minNormal !== undefined && details?.maxNormal !== undefined 
+                              ? `${details.minNormal} - ${details.maxNormal} ${details.unit || ''}`.trim()
+                              : 'معتمد طبياً');
+                        const unitDisplay = details?.unit || test.unit || 'Score / Units';
+                        const sampleDisplay = details?.sampleType || test.sampleType || 'Serum';
+
+                        return (
+                          <div
+                            key={test.code}
+                            className="p-2 rounded-xl bg-white border border-amber-100 text-xs flex items-center justify-between hover:border-amber-300 transition-colors"
+                          >
+                            <div className="flex-1 min-w-0 pr-1">
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <span className="font-mono font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 text-[10px]">
+                                  {test.code}
+                                </span>
+                                <span className="font-bold text-slate-900">{test.nameAr}</span>
+                                <span className="text-[10px] text-slate-500">({test.nameEn})</span>
+                                <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">
+                                  {test.category}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-3 text-[10px] text-slate-600 mt-1 flex-wrap">
+                                <span className="text-rose-900 font-semibold">
+                                  النورمال: <strong className="font-mono text-slate-900">{normalDisplay}</strong>
+                                </span>
+                                <span>•</span>
+                                <span className="text-indigo-900 font-semibold">
+                                  الوحدة: <strong className="font-mono text-slate-900">{unitDisplay}</strong>
+                                </span>
+                                <span>•</span>
+                                <span className="text-slate-500">
+                                  العينة: {sampleDisplay}
+                                </span>
+                              </div>
+                            </div>
+                            <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-md shrink-0">
+                              ✓ مشمول
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Group 2: Additional individual tests on top of package if any */}
+                  {extraItems.length > 0 && (
+                    <div className="bg-slate-50 border border-slate-200 rounded-2xl p-3 space-y-2">
+                      <div className="flex items-center justify-between pb-1.5 border-b border-slate-200">
+                        <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                          <FlaskConical className="w-3.5 h-3.5 text-rose-700" />
+                          <span>تحاليل إضافية منفردة مطلوبة ({extraItems.length}):</span>
                         </span>
-                        <span className="font-bold text-slate-800">{test.nameAr}</span>
-                        <span className="text-[10px] text-slate-500">({test.nameEn})</span>
+                        <span className="text-xs font-mono font-bold text-rose-900">
+                          +{extraItems.reduce((sum, t) => sum + t.price, 0)} ج.م
+                        </span>
                       </div>
 
-                      <div className="flex items-center gap-3">
-                        <span className="font-mono font-bold text-slate-900">{test.price} ج.م</span>
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveTest(test.code)}
-                          className="text-slate-400 hover:text-red-600 transition-colors p-1"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
+                      <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
+                        {extraItems.map(test => {
+                          const details = getTestDetails(test.code);
+                          const normalDisplay = details?.textReference 
+                            || (details?.minNormal !== undefined && details?.maxNormal !== undefined 
+                                ? `${details.minNormal} - ${details.maxNormal} ${details.unit || ''}`.trim()
+                                : 'معتمد طبياً');
+                          const unitDisplay = details?.unit || test.unit || 'Score / Units';
+                          const sampleDisplay = details?.sampleType || test.sampleType || 'Serum';
+
+                          return (
+                            <div
+                              key={test.code}
+                              className="p-2.5 rounded-xl bg-white border border-slate-200 text-xs flex items-center justify-between hover:border-slate-300 transition-colors"
+                            >
+                              <div className="flex-1 min-w-0 pr-1">
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                  <span className="font-mono font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 text-[10px]">
+                                    {test.code}
+                                  </span>
+                                  <span className="font-bold text-slate-900">{test.nameAr}</span>
+                                  <span className="text-[10px] text-slate-500">({test.nameEn})</span>
+                                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">
+                                    {test.category}
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-3 text-[10px] text-slate-600 mt-1 flex-wrap">
+                                  <span className="text-rose-900 font-semibold">
+                                    النورمال: <strong className="font-mono text-slate-900">{normalDisplay}</strong>
+                                  </span>
+                                  <span>•</span>
+                                  <span className="text-indigo-900 font-semibold">
+                                    الوحدة: <strong className="font-mono text-slate-900">{unitDisplay}</strong>
+                                  </span>
+                                  <span>•</span>
+                                  <span className="text-slate-500">
+                                    العينة: {sampleDisplay}
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div className="flex items-center gap-2 shrink-0 mr-2">
+                                <span className="font-mono font-bold text-slate-900">{test.price} ج.م</span>
+                                <button
+                                  type="button"
+                                  onClick={() => handleRemoveTest(test.code)}
+                                  className="text-slate-400 hover:text-red-600 p-1 cursor-pointer"
+                                  title="حذف هذا التحليل"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
-                  ))}
+                  )}
+                </div>
+              ) : (
+                /* Pure individual tests list */
+                <div className="space-y-1.5 max-h-64 overflow-y-auto pr-1">
+                  {selectedTests.map(test => {
+                    const details = getTestDetails(test.code);
+                    const normalDisplay = details?.textReference 
+                      || (details?.minNormal !== undefined && details?.maxNormal !== undefined 
+                          ? `${details.minNormal} - ${details.maxNormal} ${details.unit || ''}`.trim()
+                          : 'معتمد طبياً');
+                    const unitDisplay = details?.unit || test.unit || 'Score / Units';
+                    const sampleDisplay = details?.sampleType || test.sampleType || 'Serum';
+
+                    return (
+                      <div
+                        key={test.code}
+                        className="p-2.5 rounded-xl border border-slate-200 bg-white text-xs flex items-center justify-between hover:border-slate-300 transition-colors shadow-2xs"
+                      >
+                        <div className="flex-1 min-w-0 pr-1">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span className="font-mono font-bold px-1.5 py-0.5 rounded bg-rose-50 text-rose-900 border border-rose-200 text-[10px]">
+                              {test.code}
+                            </span>
+                            <span className="font-bold text-slate-900">{test.nameAr}</span>
+                            <span className="text-[10px] text-slate-500">({test.nameEn})</span>
+                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">
+                              {test.category}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-3 text-[10px] text-slate-600 mt-1 flex-wrap">
+                            <span className="text-rose-900 font-semibold">
+                              المعدل الطبيعي: <strong className="font-mono text-slate-900">{normalDisplay}</strong>
+                            </span>
+                            <span>•</span>
+                            <span className="text-indigo-900 font-semibold">
+                              الوحدة: <strong className="font-mono text-slate-900">{unitDisplay}</strong>
+                            </span>
+                            <span>•</span>
+                            <span className="text-slate-500">
+                              العينة: {sampleDisplay}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-3 shrink-0 mr-2">
+                          <span className="font-mono font-bold text-slate-900">{test.price} ج.م</span>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveTest(test.code)}
+                            className="text-slate-400 hover:text-red-600 transition-colors p-1 cursor-pointer"
+                            title="حذف هذا التحليل"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </div>
