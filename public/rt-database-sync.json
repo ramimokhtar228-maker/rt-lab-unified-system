@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T13:58:59.649Z",
+  "syncedAt": "2026-10-05T14:00:24.151Z",
   "reports": [
     {
       "status": "draft",
@@ -1813,7 +1813,7 @@
               "method": "Automated SLS-Hb",
               "textReference": "M: 13.0 - 17.5 | F: 12.0 - 15.5 g/dL",
               "id": "param-0-1791208736252-ixb",
-              "result": "",
+              "result": "12.74",
               "flag": "NORMAL"
             },
             {
@@ -1832,11 +1832,11 @@
               "unit": "%",
               "minNormal": 36,
               "maxNormal": 48,
-              "notes": "Auto-calculated: Hb × 3",
+              "notes": "Calculated (HGB × 3)",
               "textReference": "M: 40 - 52% | F: 36 - 48%",
               "id": "param-2-1791208736252-av4",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "3",
+              "flag": "LOW"
             },
             {
               "name": "M.C.V",
@@ -1865,11 +1865,11 @@
               "unit": "g/dL",
               "minNormal": 32,
               "maxNormal": 36,
-              "notes": "Auto-calculated: (Hb × 100) / PCV",
+              "notes": "Calculated: (HGB × 100) / HCT",
               "textReference": "32.0 - 36.0 g/dL",
               "id": "param-5-1791208736252-mvc",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "424.7",
+              "flag": "HIGH"
             },
             {
               "name": "R.D.W-CV",
@@ -2277,7 +2277,7 @@
         "phone": "01095920078",
         "age": 36
       },
-      "updatedAt": "2026-10-05T13:58:56.254Z",
+      "updatedAt": "2026-10-05T14:00:20.707Z",
       "reportNumber": "RT-BK-7317",
       "id": "rep-inc-1791125273776",
       "status": "in_progress",
