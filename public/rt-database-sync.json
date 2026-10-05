@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:08:10.546Z",
+  "syncedAt": "2026-10-05T18:08:20.065Z",
   "reports": [
     {
       "status": "released",
@@ -5013,7 +5013,7 @@
             {
               "id": "p-pkg-3-1791223515986",
               "name": "كرياتينين بالدم (Serum Creatinine) (Serum Creatinine)",
-              "result": "",
+              "result": "0.77",
               "unit": "mg/dL",
               "minNormal": 0.6,
               "maxNormal": 1.2,
@@ -5024,7 +5024,7 @@
             {
               "id": "p-pkg-4-1791223515986",
               "name": "بولينا بالدم (Blood Urea) (Blood Urea)",
-              "result": "",
+              "result": "26",
               "unit": "mg/dL",
               "minNormal": 15,
               "maxNormal": 45,
@@ -5106,7 +5106,7 @@
         "sampleDate": "2026-10-04T14:59"
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-9820 - تم التسميع آلياً من منظومة الفواتير",
-      "updatedAt": "2026-10-05T18:08:03.360Z",
+      "updatedAt": "2026-10-05T18:08:12.861Z",
       "packageApplied": {
         "code": "PKG-ANNUAL-WELLNESS",
         "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
