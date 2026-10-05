@@ -27,7 +27,6 @@ import {
   FileText
 } from 'lucide-react';
 import { Patient, InvoiceTestItem, PaymentMethod, ComprehensivePackage } from '../types';
-import { TEST_CATALOG } from '../data/catalog';
 import { LAB_CATALOG } from '../data/labCatalog';
 import { INITIAL_INDIVIDUAL_TESTS } from '../data/individualTestsData';
 import { SmartTestSearch } from './SmartTestSearch';
@@ -335,13 +334,6 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
     });
     openWhatsApp(phone, text);
   };
-
-  const filteredCatalog = TEST_CATALOG.filter(t =>
-    t.nameAr.toLowerCase().includes(testSearch.toLowerCase()) ||
-    t.nameEn.toLowerCase().includes(testSearch.toLowerCase()) ||
-    t.code.toLowerCase().includes(testSearch.toLowerCase()) ||
-    t.category.toLowerCase().includes(testSearch.toLowerCase())
-  );
 
   if (isSubmitted) {
     return (

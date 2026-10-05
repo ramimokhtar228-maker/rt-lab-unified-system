@@ -3,7 +3,7 @@ import { LAB_CATALOG, DEFAULT_STAFF, INITIAL_INDIVIDUAL_TESTS, INITIAL_LAB_INFO,
 import { DISEASE_ILLUSTRATIONS, suggestHematologicalIllustration } from '../data/diseaseIllustrations';
 import { runAutomaticCalculations } from './calculator';
 
-export const MIGRATION_VERSION_KEY = 'rt_lab_migration_v8_catalog_unified_142';
+export const MIGRATION_VERSION_KEY = 'rt_lab_migration_v9_booking_sync_fix_2026';
 
 /**
  * Merges any existing test catalog with the full default catalog (142 tests)
@@ -343,7 +343,7 @@ export function runGlobalDataUpgrade(): { upgradedReportsCount: number; success:
 
     // 3. Scan and Upgrade ALL Saved Patient Reports
     let reportCount = 0;
-    const reportKeys = ['rt_lab_reports_v2', 'rt_lab_reports_v3', 'rt_lab_reports_v1'];
+    const reportKeys = ['rt_lab_unified_reports_v3', 'rt_lab_reports_v2', 'rt_lab_reports_v3', 'rt_lab_reports_v1'];
 
     reportKeys.forEach(key => {
       const savedStr = localStorage.getItem(key);

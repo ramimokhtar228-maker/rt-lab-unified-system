@@ -41,6 +41,23 @@ export interface SyncStatus {
   activeDeviceName: string;
 }
 
+
+/** Recursively remove undefined values so Firestore setDoc never fails */
+function sanitizeForFirestore(value: any): any {
+  if (value === undefined) return null;
+  if (value === null || typeof value !== 'object') return value;
+  if (Array.isArray(value)) {
+    return value.map(sanitizeForFirestore).filter(v => v !== undefined);
+  }
+  if (value instanceof Date) return value.toISOString();
+  const out: Record<string, any> = {};
+  for (const [k, v] of Object.entries(value)) {
+    if (v === undefined) continue;
+    out[k] = sanitizeForFirestore(v);
+  }
+  return out;
+}
+
 const STORAGE_DEVICE_KEY = 'rt_lab_device_uuid_v4';
 
 export const getDeviceId = (): string => {
@@ -226,7 +243,7 @@ class RealtimeMultiDeviceSyncEngine {
       senderDeviceId: this.deviceId,
       senderDeviceName: this.deviceName,
       timestamp: Date.now(),
-      payload,
+      payload: sanitizeForFirestore(payload),
     };
 
     this.lastProcessedTimestamp = msg.timestamp;
@@ -263,13 +280,14 @@ class RealtimeMultiDeviceSyncEngine {
     try {
       this.setSyncing(true);
       const snapshotRef = doc(db, 'lab_sync', 'master_snapshot');
-      await setDoc(snapshotRef, {
+      const cleanPayload = sanitizeForFirestore({
         system: 'RT Lab Unified Medical ERP',
         lastSyncedAt: new Date().toISOString(),
         updatedByDevice: this.deviceId,
         updatedByDeviceName: this.deviceName,
         ...fullData,
       });
+      await setDoc(snapshotRef, cleanPayload);
       this.lastSyncedAt = new Date();
       this.notifyStatus();
       return true;
