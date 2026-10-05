@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T11:11:10.286Z",
+  "syncedAt": "2026-10-05T11:12:00.832Z",
   "reports": [
     {
       "id": "rep-1791198572864",
@@ -478,7 +478,7 @@
             {
               "id": "p-1791198572863",
               "name": "Aspartate Aminotransferase SGOT",
-              "result": "",
+              "result": "31",
               "unit": "",
               "textReference": "",
               "flag": "NORMAL",
@@ -589,7 +589,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-05T11:09:32.864Z",
-      "updatedAt": "2026-10-05T11:11:07.906Z",
+      "updatedAt": "2026-10-05T11:11:58.187Z",
       "invoiceId": "inv-1791198572864"
     }
   ],
