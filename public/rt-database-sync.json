@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:05:39.467Z",
+  "syncedAt": "2026-10-05T18:05:44.721Z",
   "reports": [
     {
       "status": "released",
@@ -4868,17 +4868,6 @@
               "flag": "LOW"
             },
             {
-              "name": "R.B.Cs Count",
-              "unit": "x10^6/µL",
-              "minNormal": 4,
-              "maxNormal": 5.8,
-              "method": "Electrical Impedance",
-              "textReference": "M: 4.5 - 5.9 | F: 4.0 - 5.2",
-              "id": "param-1-1791223515986-7b3",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
               "name": "Hematocrit (PCV)",
               "unit": "%",
               "minNormal": 36,
@@ -5479,7 +5468,7 @@
         "sampleDate": "2026-10-04T14:59"
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-9820 - تم التسميع آلياً من منظومة الفواتير",
-      "updatedAt": "2026-10-05T18:05:35.391Z",
+      "updatedAt": "2026-10-05T18:05:38.859Z",
       "packageApplied": {
         "code": "PKG-ANNUAL-WELLNESS",
         "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
