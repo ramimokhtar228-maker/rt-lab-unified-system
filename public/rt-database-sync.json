@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:19:50.595Z",
+  "syncedAt": "2026-10-05T18:20:37.316Z",
   "reports": [
     {
       "status": "released",
@@ -846,7 +846,7 @@
             "titleAr": "إنفوجرام دلالات جلطة القلب ونخر عضلة القلب (Cardiac Biomarkers Infogram)",
             "titleEn": "Myocardial Infarction Biomarker Kinetic Curves Infogram"
           },
-          "interpretation": "Mild  hypochromic anemia, iron deficiency picture is suggested. Serum Ferritin is recommended.\n"
+          "interpretation": "Mild  hypochromic anemia, iron deficiency picture is suggested. Serum Ferritin is recommended.\nLeukocytosis for follow up"
         }
       ],
       "patient": {
@@ -868,7 +868,7 @@
         "totalCost": 230,
         "bloodGroup": "O+"
       },
-      "updatedAt": "2026-10-05T18:19:46.676Z",
+      "updatedAt": "2026-10-05T18:20:33.429Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-8226 - تم التسميع آلياً من منظومة الفواتير",
       "id": "rep-inc-1791127003337",
       "staff": {
