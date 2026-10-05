@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:15:28.133Z",
+  "syncedAt": "2026-10-05T18:15:36.805Z",
   "reports": [
     {
       "status": "released",
@@ -507,10 +507,10 @@
               "id": "p-mig-1-1791157348010",
               "method": "Electrical Impedance",
               "unit": "x10^6/µL",
-              "flag": "LOW",
+              "flag": "NORMAL",
               "minNormal": 4,
               "textReference": "M: 4.5 - 5.9 | F: 4.0 - 5.2",
-              "result": "3.789",
+              "result": "4.123",
               "maxNormal": 5.8,
               "name": "R.B.Cs Count"
             },
@@ -527,9 +527,9 @@
             },
             {
               "name": "M.C.V",
-              "result": "100.3",
+              "result": "92.2",
               "maxNormal": 98,
-              "flag": "HIGH",
+              "flag": "NORMAL",
               "minNormal": 80,
               "notes": "Calculated: (HCT × 10) / RBC",
               "id": "p-mig-3-1791157348010",
@@ -541,7 +541,7 @@
               "textReference": "27.0 - 33.0 pg",
               "minNormal": 27,
               "flag": "NORMAL",
-              "result": "30",
+              "result": "27.6",
               "maxNormal": 33,
               "id": "p-mig-4-1791157348010",
               "unit": "pg",
@@ -585,7 +585,7 @@
               "unit": "Ratio",
               "id": "p-mig-8-1791157348010",
               "flag": "NORMAL",
-              "result": "26.5"
+              "result": "22.4"
             },
             {
               "notes": "(MCV² × RDW) / (Hb × 100)",
@@ -934,7 +934,7 @@
         "totalCost": 230,
         "bloodGroup": "O+"
       },
-      "updatedAt": "2026-10-05T18:15:25.053Z",
+      "updatedAt": "2026-10-05T18:15:33.987Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-8226 - تم التسميع آلياً من منظومة الفواتير",
       "id": "rep-inc-1791127003337",
       "staff": {
