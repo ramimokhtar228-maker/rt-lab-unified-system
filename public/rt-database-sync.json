@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:59:30.240Z",
+  "syncedAt": "2026-10-05T17:59:44.413Z",
   "reports": [
     {
       "status": "released",
@@ -1655,7 +1655,7 @@
             {
               "id": "p-pkg-4-1791223080772",
               "name": "بولينا بالدم (Blood Urea) (Blood Urea)",
-              "result": "",
+              "result": "30",
               "unit": "mg/dL",
               "minNormal": 15,
               "maxNormal": 45,
@@ -1666,7 +1666,7 @@
             {
               "id": "p-pkg-5-1791223080772",
               "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
-              "result": "",
+              "result": "4.22",
               "unit": "mg/dL",
               "minNormal": 3.5,
               "maxNormal": 7.2,
@@ -1735,7 +1735,7 @@
         "sampleDate": "2026-10-04T14:52",
         "clinicalHistory": "طلب صادر من الفاتورة المالية RT-BK-8594 - السداد: مسدد بالكامل"
       },
-      "updatedAt": "2026-10-05T17:59:22.010Z",
+      "updatedAt": "2026-10-05T17:59:39.788Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-8594 - تم التسميع آلياً من منظومة الفواتير",
       "reportNumber": "RT-BK-8594",
       "createdAt": "2026-10-04T14:52:55.336Z",
