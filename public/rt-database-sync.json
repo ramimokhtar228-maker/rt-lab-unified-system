@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:06:59.398Z",
+  "syncedAt": "2026-10-05T18:07:23.166Z",
   "reports": [
     {
       "status": "released",
@@ -4974,8 +4974,8 @@
               "maxNormal": 3,
               "textReference": "< 3.0 Desirable",
               "id": "param-7-1791223515986-qk4",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "4.41",
+              "flag": "HIGH"
             }
           ]
         },
@@ -5117,7 +5117,7 @@
         "sampleDate": "2026-10-04T14:59"
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-9820 - تم التسميع آلياً من منظومة الفواتير",
-      "updatedAt": "2026-10-05T18:06:55.141Z",
+      "updatedAt": "2026-10-05T18:07:19.873Z",
       "packageApplied": {
         "code": "PKG-ANNUAL-WELLNESS",
         "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
