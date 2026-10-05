@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T11:09:50.327Z",
+  "syncedAt": "2026-10-05T11:10:09.171Z",
   "reports": [
     {
       "id": "rep-1791198572864",
@@ -411,17 +411,7 @@
           "titleAr": "سكر الدم الصائم (FBS)",
           "category": "Diabetes",
           "sampleType": "Fluoride Plasma",
-          "parameters": [
-            {
-              "id": "p-1791198572863",
-              "name": "Fasting Blood Sugar",
-              "result": "",
-              "unit": "",
-              "textReference": "",
-              "flag": "NORMAL",
-              "method": "Automated Clinical Assay"
-            }
-          ]
+          "parameters": []
         },
         {
           "id": "prof-1791198572863-fpjo",
@@ -629,7 +619,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-05T11:09:32.864Z",
-      "updatedAt": "2026-10-05T11:09:47.802Z",
+      "updatedAt": "2026-10-05T11:10:06.725Z",
       "invoiceId": "inv-1791198572864"
     }
   ],
