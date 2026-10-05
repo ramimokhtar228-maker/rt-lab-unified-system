@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:22:39.527Z",
+  "syncedAt": "2026-10-05T15:22:45.034Z",
   "reports": [
     {
       "status": "released",
@@ -2204,8 +2204,8 @@
               "notes": "Calculated (HGB × 3)",
               "textReference": "M: 40 - 52% | F: 36 - 48%",
               "id": "param-2-1791213622129-kpv",
-              "result": "3",
-              "flag": "LOW"
+              "result": "37.10",
+              "flag": "NORMAL"
             },
             {
               "name": "M.C.V",
@@ -2237,8 +2237,8 @@
               "notes": "Calculated: (HGB × 100) / HCT",
               "textReference": "32.0 - 36.0 g/dL",
               "id": "param-5-1791213622129-lp5",
-              "result": "410",
-              "flag": "HIGH"
+              "result": "33.2",
+              "flag": "NORMAL"
             },
             {
               "name": "R.D.W-CV",
@@ -2628,7 +2628,7 @@
         }
       ],
       "status": "in_progress",
-      "updatedAt": "2026-10-05T15:22:34.177Z",
+      "updatedAt": "2026-10-05T15:22:41.101Z",
       "createdAt": "2026-10-04T14:38:22.671Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-4276 - تم التسميع آلياً من منظومة الفواتير",
       "reportNumber": "RT-BK-4276",
