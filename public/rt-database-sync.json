@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:59:22.151Z",
+  "syncedAt": "2026-10-05T17:59:30.240Z",
   "reports": [
     {
       "status": "released",
@@ -1644,7 +1644,7 @@
             {
               "id": "p-pkg-3-1791223080772",
               "name": "كرياتينين بالدم (Serum Creatinine) (Serum Creatinine)",
-              "result": "",
+              "result": "0.84",
               "unit": "mg/dL",
               "minNormal": 0.6,
               "maxNormal": 1.2,
@@ -1735,7 +1735,7 @@
         "sampleDate": "2026-10-04T14:52",
         "clinicalHistory": "طلب صادر من الفاتورة المالية RT-BK-8594 - السداد: مسدد بالكامل"
       },
-      "updatedAt": "2026-10-05T17:59:15.837Z",
+      "updatedAt": "2026-10-05T17:59:22.010Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-8594 - تم التسميع آلياً من منظومة الفواتير",
       "reportNumber": "RT-BK-8594",
       "createdAt": "2026-10-04T14:52:55.336Z",
