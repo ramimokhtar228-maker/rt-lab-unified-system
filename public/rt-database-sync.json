@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:26:26.321Z",
+  "syncedAt": "2026-10-05T15:26:30.996Z",
   "reports": [
     {
       "status": "released",
@@ -2013,7 +2013,7 @@
         "bloodGroup": "O+",
         "ageUnit": "years",
         "barcode": "26511184",
-        "clinicalHistory": "طلب صادر من الفاتورة المالية RT-BK-4276 - السداد: مسدد بالكامل",
+        "clinicalHistory": " ",
         "loyaltyCardIssued": true,
         "phone": "01004359187",
         "referringDoctorName": "فحص بفرع (معامل RT للتحاليل التشخيصية)",
@@ -2299,7 +2299,7 @@
         }
       ],
       "status": "in_progress",
-      "updatedAt": "2026-10-05T15:26:23.383Z",
+      "updatedAt": "2026-10-05T15:26:27.651Z",
       "createdAt": "2026-10-04T14:38:22.671Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-4276 - تم التسميع آلياً من منظومة الفواتير",
       "reportNumber": "RT-BK-4276",
