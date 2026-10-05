@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:50:39.319Z",
+  "syncedAt": "2026-10-05T17:50:45.181Z",
   "reports": [
     {
       "status": "released",
@@ -1781,19 +1781,10 @@
               "method": "CLIA (3rd Generation Chemiluminescence)"
             }
           ]
-        },
-        {
-          "id": "prof-indiv-1791222284730",
-          "profileCode": "INDIVIDUAL",
-          "titleEn": "Individual Diagnostic Investigations",
-          "titleAr": "تحاليل منفردة ومحددة",
-          "category": "Thyroid",
-          "sampleType": "Serum",
-          "parameters": []
         }
       ],
       "id": "rep-inc-1791125455998",
-      "updatedAt": "2026-10-05T17:50:36.172Z",
+      "updatedAt": "2026-10-05T17:50:42.250Z",
       "createdAt": "2026-10-04T14:50:55.998Z",
       "generalComment": " ",
       "patient": {
