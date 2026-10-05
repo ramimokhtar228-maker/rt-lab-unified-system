@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:20:59.890Z",
+  "syncedAt": "2026-10-05T15:21:16.895Z",
   "reports": [
     {
       "status": "released",
@@ -2066,12 +2066,12 @@
               "name": "Serum Uric Acid",
               "unit": "mg/dL",
               "minNormal": 3.5,
-              "maxNormal": 7.2,
+              "maxNormal": 6.2,
               "method": "Uricase-PAP",
-              "textReference": "",
+              "textReference": "3.5-6.2",
               "id": "param-4-1791213622129-pg5",
               "result": "6.44",
-              "flag": "NORMAL"
+              "flag": "HIGH"
             },
             {
               "name": "eGFR (CKD-EPI)",
@@ -2650,7 +2650,7 @@
         }
       ],
       "status": "in_progress",
-      "updatedAt": "2026-10-05T15:20:56.353Z",
+      "updatedAt": "2026-10-05T15:21:13.877Z",
       "createdAt": "2026-10-04T14:38:22.671Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-4276 - تم التسميع آلياً من منظومة الفواتير",
       "reportNumber": "RT-BK-4276",
