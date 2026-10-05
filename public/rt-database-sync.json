@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:17:11.689Z",
+  "syncedAt": "2026-10-05T18:18:03.986Z",
   "reports": [
     {
       "status": "released",
@@ -632,13 +632,13 @@
             },
             {
               "minNormal": 4,
-              "result": "",
+              "result": "11.2",
               "unit": "x10^3/µL",
               "id": "p-mig-14-1791157348011",
               "maxNormal": 11,
               "panicHigh": 30,
               "textReference": "4.0 - 11.0 x10^3/µL",
-              "flag": "",
+              "flag": "HIGH",
               "panicLow": 2,
               "name": "Total Leucocytic Count (TLC)"
             },
@@ -925,7 +925,7 @@
         "totalCost": 230,
         "bloodGroup": "O+"
       },
-      "updatedAt": "2026-10-05T18:17:08.609Z",
+      "updatedAt": "2026-10-05T18:18:00.583Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-8226 - تم التسميع آلياً من منظومة الفواتير",
       "id": "rep-inc-1791127003337",
       "staff": {
