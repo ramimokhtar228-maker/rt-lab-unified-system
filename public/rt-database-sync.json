@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:10:44.258Z",
+  "syncedAt": "2026-10-05T15:11:22.695Z",
   "reports": [
     {
       "status": "draft",
@@ -3948,7 +3948,7 @@
     {
       "id": "rep-inc-1791124532954",
       "createdAt": "2026-10-04T14:35:32.954Z",
-      "updatedAt": "2026-10-05T15:10:34.450Z",
+      "updatedAt": "2026-10-05T15:11:18.061Z",
       "patient": {
         "reportingDate": "2026-10-04T14:35",
         "loyaltyCardIssued": true,
@@ -4011,7 +4011,7 @@
               "method": "Uricase-PAP",
               "textReference": "",
               "id": "param-4-1791212993856-zkq",
-              "result": "",
+              "result": "4.88",
               "flag": "NORMAL"
             }
           ]
@@ -4033,7 +4033,7 @@
               "method": "CHOD-PAP",
               "textReference": "",
               "id": "param-0-1791212993857-gd0",
-              "result": "",
+              "result": "188",
               "flag": "NORMAL"
             },
             {
