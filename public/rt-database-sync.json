@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:15:30.432Z",
+  "syncedAt": "2026-10-05T15:15:34.536Z",
   "reports": [
     {
       "status": "draft",
@@ -3948,7 +3948,7 @@
     {
       "id": "rep-inc-1791124532954",
       "createdAt": "2026-10-04T14:35:32.954Z",
-      "updatedAt": "2026-10-05T15:15:27.400Z",
+      "updatedAt": "2026-10-05T15:15:31.461Z",
       "patient": {
         "reportingDate": "2026-10-04T14:35",
         "loyaltyCardIssued": true,
@@ -3960,7 +3960,7 @@
         "totalCost": 198,
         "ageUnit": "years",
         "bloodGroup": "O+",
-        "clinicalHistory": "طلب صادر من الفاتورة المالية RT-BK-9242 - السداد: مسدد بالكامل",
+        "clinicalHistory": " ",
         "loyaltyCardNumber": "RT-2026-0010",
         "gender": "female",
         "referringDoctorTitle": "Prof. Dr.",
