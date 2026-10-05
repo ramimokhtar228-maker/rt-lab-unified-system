@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T14:10:45.674Z",
+  "syncedAt": "2026-10-05T14:11:10.259Z",
   "reports": [
     {
       "status": "draft",
@@ -2080,7 +2080,7 @@
         "verifiedBy": ""
       },
       "reportNumber": "RT-BK-5752",
-      "updatedAt": "2026-10-05T14:10:41.960Z",
+      "updatedAt": "2026-10-05T14:11:04.362Z",
       "createdAt": "2026-10-04T14:28:04.105Z",
       "id": "rep-inc-1791124084105",
       "profiles": [
@@ -2367,7 +2367,7 @@
         "clinicalHistory": " ",
         "bloodGroup": "O+",
         "loyaltyCardIssued": true,
-        "sampleDate": "2026-10-04T14:28",
+        "sampleDate": "2026-09-30T11:28:00.000Z",
         "id": "pat-inc-1791124084105",
         "phone": "01004359187",
         "referringDoctorTitle": "Prof. Dr.",
