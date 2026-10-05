@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:49:15.034Z",
+  "syncedAt": "2026-10-05T17:49:22.386Z",
   "reports": [
     {
       "status": "released",
@@ -2027,9 +2027,9 @@
         }
       ],
       "id": "rep-inc-1791125455998",
-      "updatedAt": "2026-10-05T17:49:12.043Z",
+      "updatedAt": "2026-10-05T17:49:19.319Z",
       "createdAt": "2026-10-04T14:50:55.998Z",
-      "generalComment": "طلب فحص مالي رقم RT-BK-9599 - تم التسميع آلياً من منظومة الفواتير",
+      "generalComment": " ",
       "patient": {
         "reportingDate": "2026-10-04T14:50",
         "fullName": "كوثر ابراهيم",
