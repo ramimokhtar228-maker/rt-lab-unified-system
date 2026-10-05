@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T11:35:19.133Z",
+  "syncedAt": "2026-10-05T11:35:45.661Z",
   "reports": [
     {
       "id": "rep-inc-1791151837342",
@@ -2884,49 +2884,6 @@
       },
       "reportNumber": "RT-BK-8097",
       "id": "rep-inc-1791123384421"
-    },
-    {
-      "profiles": [
-        {
-          "titleEn": "Individual Diagnostic Test",
-          "titleAr": "منحنى السكر بالدم (OGTT 3 Samples)",
-          "profileCode": "INDIVIDUAL",
-          "category": "Diabetes",
-          "id": "prof-1791095397668",
-          "parameters": [],
-          "sampleType": "Fluoride Plasma"
-        }
-      ],
-      "createdAt": "2026-10-04T06:29:57.660Z",
-      "status": "in_progress",
-      "generalComment": "",
-      "reportNumber": "RT-2026-4888",
-      "staff": {
-        "verifiedBy": "",
-        "labChemist": "",
-        "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
-      },
-      "updatedAt": "2026-10-04T06:30:12.430Z",
-      "id": "rep-1791095397668",
-      "patient": {
-        "sampleDate": "2026-10-04T06:29",
-        "reportingDate": "2026-10-04T06:29",
-        "fullName": "",
-        "barcode": "8641143203",
-        "bloodGroup": "O+",
-        "clinicalHistory": "",
-        "labNumber": "RT-2026-4888",
-        "loyaltyCardNumber": "RT-2026-0011",
-        "phone": "01",
-        "loyaltyCardIssued": true,
-        "referringDoctorName": "",
-        "gender": "male",
-        "id": "pat-1791095397668",
-        "age": 30,
-        "totalCost": 500,
-        "referringDoctorTitle": "Prof. Dr.",
-        "ageUnit": "years"
-      }
     },
     {
       "profiles": [
