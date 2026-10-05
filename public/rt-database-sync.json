@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:07:34.788Z",
+  "syncedAt": "2026-10-05T18:07:50.961Z",
   "reports": [
     {
       "status": "released",
@@ -4991,12 +4991,12 @@
             {
               "id": "p-pkg-0-1791223515986",
               "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
-              "result": "",
+              "result": "26.00",
               "unit": "ng/mL",
               "minNormal": 30,
               "maxNormal": 100,
               "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
-              "flag": "NORMAL",
+              "flag": "LOW",
               "method": "CLIA (Chemiluminescence Immunoassay)"
             },
             {
@@ -5117,7 +5117,7 @@
         "sampleDate": "2026-10-04T14:59"
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-9820 - تم التسميع آلياً من منظومة الفواتير",
-      "updatedAt": "2026-10-05T18:07:29.366Z",
+      "updatedAt": "2026-10-05T18:07:45.629Z",
       "packageApplied": {
         "code": "PKG-ANNUAL-WELLNESS",
         "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
