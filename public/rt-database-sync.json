@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:30:29.891Z",
+  "syncedAt": "2026-10-05T15:31:54.032Z",
   "reports": [
     {
       "status": "released",
@@ -1933,7 +1933,7 @@
       }
     },
     {
-      "updatedAt": "2026-10-04T14:41:58.128Z",
+      "updatedAt": "2026-10-05T15:31:50.424Z",
       "patient": {
         "loyaltyCardNumber": "RT-2026-0008",
         "id": "pat-inc-1791124918128",
@@ -1955,24 +1955,6 @@
       },
       "createdAt": "2026-10-04T14:41:58.128Z",
       "profiles": [
-        {
-          "titleEn": "RT Lab Royal Executive VIP Package",
-          "titleAr": "باقة الفحص الشامل الملكية VIP د. رامي مختار (32 فحص)",
-          "parameters": [
-            {
-              "name": "باقة الفحص الشامل الملكية VIP د. رامي مختار (32 فحص) (RT Lab Royal Executive VIP Package)",
-              "textReference": "قيد الفحص المخبري",
-              "unit": "",
-              "result": "",
-              "flag": "",
-              "id": "p-1791127225583"
-            }
-          ],
-          "category": "Packages",
-          "sampleType": "Full Set (Blood & Urine)",
-          "id": "prof-inc-1791124918128-1",
-          "profileCode": "PKG_VIP_RT"
-        },
         {
           "profileCode": "HBA1C",
           "titleAr": "السكر التراكمي (HbA1c HPLC)",
