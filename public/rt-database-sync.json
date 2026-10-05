@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T13:57:28.490Z",
+  "syncedAt": "2026-10-05T13:57:57.827Z",
   "reports": [
     {
       "status": "draft",
@@ -1624,16 +1624,7 @@
           "category": "Packages",
           "titleAr": "باقة الفحص الشامل الملكية VIP د. رامي مختار (32 فحص)",
           "titleEn": "RT Lab Royal Executive VIP Package",
-          "parameters": [
-            {
-              "name": "باقة الفحص الشامل الملكية VIP د. رامي مختار (32 فحص) (RT Lab Royal Executive VIP Package)",
-              "id": "p-1791127169543",
-              "result": "",
-              "flag": "",
-              "unit": "",
-              "textReference": "قيد الفحص المخبري"
-            }
-          ]
+          "parameters": []
         },
         {
           "profileCode": "TSH",
@@ -1673,7 +1664,7 @@
         "phone": "01095920078",
         "age": 36
       },
-      "updatedAt": "2026-10-04T14:47:53.777Z",
+      "updatedAt": "2026-10-05T13:57:55.100Z",
       "reportNumber": "RT-BK-7317",
       "id": "rep-inc-1791125273776",
       "status": "draft",
