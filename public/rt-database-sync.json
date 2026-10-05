@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:32:15.315Z",
+  "syncedAt": "2026-10-05T15:32:23.933Z",
   "reports": [
     {
       "status": "released",
@@ -1933,7 +1933,7 @@
       }
     },
     {
-      "updatedAt": "2026-10-05T15:32:08.516Z",
+      "updatedAt": "2026-10-05T15:32:16.811Z",
       "patient": {
         "loyaltyCardNumber": "RT-2026-0008",
         "id": "pat-inc-1791124918128",
@@ -1985,17 +1985,7 @@
               "method": "Urease-GLDH",
               "textReference": "",
               "id": "param-1-1791214314721-qdt",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Blood Urea Nitrogen (BUN)",
-              "unit": "mg/dL",
-              "minNormal": 7,
-              "maxNormal": 20,
-              "textReference": "",
-              "id": "param-2-1791214314721-fb4",
-              "result": "",
+              "result": "28",
               "flag": "NORMAL"
             },
             {
@@ -2003,11 +1993,11 @@
               "unit": "Ratio",
               "minNormal": 10,
               "maxNormal": 20,
-              "notes": "Auto-calculated: BUN / Creatinine",
+              "notes": "Normal: 10 - 20",
               "textReference": "",
               "id": "param-3-1791214314721-8ab",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "0.7",
+              "flag": "LOW"
             },
             {
               "name": "Serum Uric Acid",
