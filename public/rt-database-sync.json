@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:13:24.239Z",
+  "syncedAt": "2026-10-05T15:13:31.645Z",
   "reports": [
     {
       "status": "draft",
@@ -3948,7 +3948,7 @@
     {
       "id": "rep-inc-1791124532954",
       "createdAt": "2026-10-04T14:35:32.954Z",
-      "updatedAt": "2026-10-05T15:13:16.991Z",
+      "updatedAt": "2026-10-05T15:13:23.804Z",
       "patient": {
         "reportingDate": "2026-10-04T14:35",
         "loyaltyCardIssued": true,
@@ -4162,12 +4162,12 @@
             {
               "id": "p-pkg-2-1791212993857",
               "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
-              "result": "",
+              "result": "43",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 41,
               "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
-              "flag": "NORMAL",
+              "flag": "HIGH",
               "method": "IFCC Kinetic UV without Pyridoxal Phosphate"
             },
             {
