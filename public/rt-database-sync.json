@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:49:02.803Z",
+  "syncedAt": "2026-10-05T17:49:08.924Z",
   "reports": [
     {
       "status": "released",
@@ -1737,27 +1737,6 @@
               "flag": "NORMAL"
             },
             {
-              "name": "Blood Urea Nitrogen (BUN)",
-              "unit": "mg/dL",
-              "minNormal": 7,
-              "maxNormal": 20,
-              "textReference": "",
-              "id": "param-2-1791222251478-x9a",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "BUN / Creatinine Ratio",
-              "unit": "Ratio",
-              "minNormal": 10,
-              "maxNormal": 20,
-              "notes": "Normal: 10 - 20",
-              "textReference": "",
-              "id": "param-3-1791222251478-s89",
-              "result": "0.8",
-              "flag": "LOW"
-            },
-            {
               "name": "Serum Uric Acid",
               "unit": "mg/dL",
               "minNormal": 3.5,
@@ -1766,17 +1745,6 @@
               "textReference": "",
               "id": "param-4-1791222251478-62w",
               "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "eGFR (CKD-EPI)",
-              "unit": "mL/min/1.73m²",
-              "minNormal": 90,
-              "maxNormal": 120,
-              "notes": "CKD-EPI: Stage 1 (Normal > 90)",
-              "textReference": "",
-              "id": "param-5-1791222251478-n9c",
-              "result": "103",
               "flag": "NORMAL"
             }
           ]
@@ -2059,7 +2027,7 @@
         }
       ],
       "id": "rep-inc-1791125455998",
-      "updatedAt": "2026-10-05T17:48:59.890Z",
+      "updatedAt": "2026-10-05T17:49:05.946Z",
       "createdAt": "2026-10-04T14:50:55.998Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-9599 - تم التسميع آلياً من منظومة الفواتير",
       "patient": {
