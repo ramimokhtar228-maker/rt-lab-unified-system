@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:21:21.694Z",
+  "syncedAt": "2026-10-05T15:21:28.290Z",
   "reports": [
     {
       "status": "released",
@@ -2092,8 +2092,8 @@
               "method": "CHOD-PAP",
               "textReference": "",
               "id": "param-0-1791213622129-zay",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "254",
+              "flag": "HIGH"
             },
             {
               "name": "Serum Triglycerides",
@@ -2639,7 +2639,7 @@
         }
       ],
       "status": "in_progress",
-      "updatedAt": "2026-10-05T15:21:17.306Z",
+      "updatedAt": "2026-10-05T15:21:25.234Z",
       "createdAt": "2026-10-04T14:38:22.671Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-4276 - تم التسميع آلياً من منظومة الفواتير",
       "reportNumber": "RT-BK-4276",
