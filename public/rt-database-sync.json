@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:48:47.131Z",
+  "syncedAt": "2026-10-05T17:48:59.480Z",
   "reports": [
     {
       "status": "released",
@@ -1721,7 +1721,7 @@
               "method": "Enzymatic / Jaffe Kinetic",
               "textReference": "",
               "id": "param-0-1791222251478-tsh",
-              "result": "",
+              "result": "0.78",
               "flag": "NORMAL"
             },
             {
@@ -1773,10 +1773,10 @@
               "unit": "mL/min/1.73m²",
               "minNormal": 90,
               "maxNormal": 120,
-              "notes": "Auto-calculated: CKD-EPI Formula",
+              "notes": "CKD-EPI: Stage 1 (Normal > 90)",
               "textReference": "",
               "id": "param-5-1791222251478-n9c",
-              "result": "",
+              "result": "103",
               "flag": "NORMAL"
             }
           ]
@@ -2059,7 +2059,7 @@
         }
       ],
       "id": "rep-inc-1791125455998",
-      "updatedAt": "2026-10-05T17:48:43.914Z",
+      "updatedAt": "2026-10-05T17:48:56.189Z",
       "createdAt": "2026-10-04T14:50:55.998Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-9599 - تم التسميع آلياً من منظومة الفواتير",
       "patient": {
