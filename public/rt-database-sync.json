@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:59:49.349Z",
+  "syncedAt": "2026-10-05T17:59:58.043Z",
   "reports": [
     {
       "status": "released",
@@ -1688,7 +1688,7 @@
             {
               "id": "p-pkg-7-1791223080772",
               "name": "إنزيم كبد AST / SGOT (Aspartate Aminotransferase (AST / SGOT))",
-              "result": "",
+              "result": "16",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 40,
@@ -1735,7 +1735,7 @@
         "sampleDate": "2026-10-04T14:52",
         "clinicalHistory": "طلب صادر من الفاتورة المالية RT-BK-8594 - السداد: مسدد بالكامل"
       },
-      "updatedAt": "2026-10-05T17:59:45.355Z",
+      "updatedAt": "2026-10-05T17:59:52.619Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-8594 - تم التسميع آلياً من منظومة الفواتير",
       "reportNumber": "RT-BK-8594",
       "createdAt": "2026-10-04T14:52:55.336Z",
