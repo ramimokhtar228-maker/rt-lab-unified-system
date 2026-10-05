@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T14:02:28.968Z",
+  "syncedAt": "2026-10-05T14:02:35.309Z",
   "reports": [
     {
       "status": "draft",
@@ -2080,7 +2080,7 @@
         "verifiedBy": ""
       },
       "reportNumber": "RT-BK-5752",
-      "updatedAt": "2026-10-05T14:02:26.102Z",
+      "updatedAt": "2026-10-05T14:02:32.406Z",
       "createdAt": "2026-10-04T14:28:04.105Z",
       "id": "rep-inc-1791124084105",
       "profiles": [
@@ -2114,7 +2114,7 @@
               "method": "Urease-GLDH",
               "textReference": "",
               "id": "param-1-1791208922778-b03",
-              "result": "",
+              "result": "33",
               "flag": "NORMAL"
             },
             {
@@ -2132,11 +2132,11 @@
               "unit": "Ratio",
               "minNormal": 10,
               "maxNormal": 20,
-              "notes": "Auto-calculated: BUN / Creatinine",
+              "notes": "Normal: 10 - 20",
               "textReference": "",
               "id": "param-3-1791208922778-j24",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "1.4",
+              "flag": "LOW"
             },
             {
               "name": "Serum Uric Acid",
