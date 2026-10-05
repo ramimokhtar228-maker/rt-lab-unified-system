@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T11:12:00.832Z",
+  "syncedAt": "2026-10-05T11:12:15.429Z",
   "reports": [
     {
       "id": "rep-1791198572864",
@@ -474,17 +474,7 @@
           "titleAr": "إنزيم كبد AST / SGOT",
           "category": "Liver Function",
           "sampleType": "Serum",
-          "parameters": [
-            {
-              "id": "p-1791198572863",
-              "name": "Aspartate Aminotransferase SGOT",
-              "result": "31",
-              "unit": "",
-              "textReference": "",
-              "flag": "NORMAL",
-              "method": "Automated Clinical Assay"
-            }
-          ]
+          "parameters": []
         },
         {
           "id": "prof-1791198572863-frti",
@@ -589,7 +579,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-05T11:09:32.864Z",
-      "updatedAt": "2026-10-05T11:11:58.187Z",
+      "updatedAt": "2026-10-05T11:12:12.760Z",
       "invoiceId": "inv-1791198572864"
     }
   ],
