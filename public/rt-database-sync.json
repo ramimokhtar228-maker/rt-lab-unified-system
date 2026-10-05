@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:14:20.091Z",
+  "syncedAt": "2026-10-05T15:14:29.363Z",
   "reports": [
     {
       "status": "draft",
@@ -3948,7 +3948,7 @@
     {
       "id": "rep-inc-1791124532954",
       "createdAt": "2026-10-04T14:35:32.954Z",
-      "updatedAt": "2026-10-05T15:14:11.764Z",
+      "updatedAt": "2026-10-05T15:14:19.367Z",
       "patient": {
         "reportingDate": "2026-10-04T14:35",
         "loyaltyCardIssued": true,
@@ -4223,17 +4223,8 @@
               "panicHigh": 450,
               "method": "Hexokinase",
               "id": "param-1791213238536-1",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "Random Blood Glucose",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 140,
-              "id": "param-1791213238536-2",
-              "result": "",
-              "flag": ""
+              "result": "157",
+              "flag": "HIGH"
             },
             {
               "name": "HbA1c (Glycated Hemoglobin)",
