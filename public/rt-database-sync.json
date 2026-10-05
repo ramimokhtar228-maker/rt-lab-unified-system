@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:33:12.643Z",
+  "syncedAt": "2026-10-05T15:33:16.469Z",
   "reports": [
     {
       "status": "released",
@@ -1933,7 +1933,7 @@
       }
     },
     {
-      "updatedAt": "2026-10-05T15:33:09.124Z",
+      "updatedAt": "2026-10-05T15:33:13.303Z",
       "patient": {
         "loyaltyCardNumber": "RT-2026-0008",
         "id": "pat-inc-1791124918128",
@@ -2121,17 +2121,6 @@
               "id": "param-0-1791214314721-4xq",
               "result": "10.70",
               "flag": "LOW"
-            },
-            {
-              "name": "R.B.Cs Count",
-              "unit": "x10^6/µL",
-              "minNormal": 4,
-              "maxNormal": 5.8,
-              "method": "Electrical Impedance",
-              "textReference": "M: 4.5 - 5.9 | F: 4.0 - 5.2",
-              "id": "param-1-1791214314721-m2n",
-              "result": "",
-              "flag": "NORMAL"
             },
             {
               "name": "Hematocrit (PCV)",
