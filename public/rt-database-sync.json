@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:09:20.651Z",
+  "syncedAt": "2026-10-05T18:11:57.428Z",
   "reports": [
     {
       "status": "released",
@@ -4897,7 +4897,7 @@
               "method": "CHOD-PAP",
               "textReference": "",
               "id": "param-0-1791223515986-qvs",
-              "result": "244",
+              "result": "211",
               "flag": "HIGH"
             },
             {
@@ -4931,7 +4931,7 @@
               "notes": "Friedewald Formula: TC - HDL - (TG/5)",
               "textReference": "",
               "id": "param-3-1791223515986-54h",
-              "result": "172",
+              "result": "139",
               "flag": "HIGH"
             },
             {
@@ -4953,7 +4953,7 @@
               "notes": "Calculated: Total Cholesterol - HDL",
               "textReference": "",
               "id": "param-5-1791223515986-4pv",
-              "result": "205",
+              "result": "172",
               "flag": "HIGH"
             },
             {
@@ -4964,7 +4964,7 @@
               "textReference": "< 4.5 Desirable",
               "notes": "Desirable < 4.5",
               "id": "param-6-1791223515986-k1w",
-              "result": "6.3",
+              "result": "5.4",
               "flag": "HIGH"
             },
             {
@@ -5127,7 +5127,7 @@
         "sampleDate": "2026-10-04T14:59"
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-9820 - تم التسميع آلياً من منظومة الفواتير",
-      "updatedAt": "2026-10-05T18:09:17.705Z",
+      "updatedAt": "2026-10-05T18:11:53.480Z",
       "packageApplied": {
         "code": "PKG-ANNUAL-WELLNESS",
         "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
