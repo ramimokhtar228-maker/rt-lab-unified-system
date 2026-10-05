@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:40:38.844Z",
+  "syncedAt": "2026-10-05T17:44:10.157Z",
   "reports": [
     {
       "status": "released",
@@ -1553,16 +1553,7 @@
           "titleAr": "باقة الفحص الشامل الملكية VIP د. رامي مختار (32 فحص)",
           "titleEn": "RT Lab Royal Executive VIP Package",
           "category": "Packages",
-          "parameters": [
-            {
-              "unit": "",
-              "flag": "",
-              "result": "",
-              "textReference": "قيد الفحص المخبري",
-              "name": "باقة الفحص الشامل الملكية VIP د. رامي مختار (32 فحص) (RT Lab Royal Executive VIP Package)",
-              "id": "p-1791127150857"
-            }
-          ]
+          "parameters": []
         },
         {
           "titleEn": "Thyroid Stimulating Hormone",
@@ -1584,7 +1575,7 @@
         }
       ],
       "id": "rep-inc-1791125455998",
-      "updatedAt": "2026-10-04T14:50:55.998Z",
+      "updatedAt": "2026-10-05T17:44:06.067Z",
       "createdAt": "2026-10-04T14:50:55.998Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-9599 - تم التسميع آلياً من منظومة الفواتير",
       "patient": {
