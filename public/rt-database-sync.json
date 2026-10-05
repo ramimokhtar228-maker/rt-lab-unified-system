@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:18:28.242Z",
+  "syncedAt": "2026-10-05T18:18:34.633Z",
   "reports": [
     {
       "status": "released",
@@ -678,9 +678,9 @@
               "textReference": "20 - 45 %",
               "minNormal": 20,
               "unit": "%",
-              "result": "",
+              "result": "27",
               "id": "p-mig-18-1791157348011",
-              "flag": "",
+              "flag": "NORMAL",
               "maxNormal": 45
             },
             {
@@ -758,11 +758,11 @@
               "minNormal": 1,
               "unit": "x10^3/µL",
               "maxNormal": 4,
-              "result": "",
+              "result": "3",
               "name": "Absolute Lymphocytes (ALC)",
-              "notes": "Auto-calculated: (WBC × Lymph%) / 100",
+              "notes": "Calculated: (WBC × Lymph%) / 100",
               "textReference": "1.0 - 4.0 x10^3/µL",
-              "flag": "",
+              "flag": "NORMAL",
               "id": "p-mig-26-1791157348011"
             },
             {
@@ -803,11 +803,11 @@
               "unit": "Ratio",
               "textReference": "0.8 - 2.5 (Inflammatory Index)",
               "maxNormal": 2.5,
-              "flag": "",
-              "notes": "Auto-calculated: Neut% / Lymph%",
+              "flag": "NORMAL",
+              "notes": "Normal target < 2.5",
               "id": "p-mig-30-1791157348011",
               "name": "NLR (Neutrophil/Lymphocyte)",
-              "result": ""
+              "result": "2.3"
             },
             {
               "result": "",
@@ -925,7 +925,7 @@
         "totalCost": 230,
         "bloodGroup": "O+"
       },
-      "updatedAt": "2026-10-05T18:18:25.324Z",
+      "updatedAt": "2026-10-05T18:18:30.560Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-8226 - تم التسميع آلياً من منظومة الفواتير",
       "id": "rep-inc-1791127003337",
       "staff": {
