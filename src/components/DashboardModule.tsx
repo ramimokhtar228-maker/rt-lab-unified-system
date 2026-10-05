@@ -161,6 +161,34 @@ export const DashboardModule: React.FC = () => {
     }
   };
 
+  const handleSendTestPing = async () => {
+    try {
+      await realtimeSyncManager.broadcastAction('PING_TEST', {
+        time: new Date().toLocaleTimeString('ar-EG'),
+      });
+      setSyncFeedback(`تم إرسال إشارة التسميع اللحظي بنجاح من (${syncStatus.activeDeviceName})! ستظهر فوراً على اللابتوب والموبايل.`);
+      setTimeout(() => setSyncFeedback(null), 6000);
+    } catch {
+      setSyncFeedback('تعذر إرسال الإشارة');
+    }
+  };
+
+  const handleForceClearCacheAndReload = async () => {
+    try {
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map(k => caches.delete(k)));
+      }
+      if ('serviceWorker' in navigator) {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(regs.map(r => r.update()));
+      }
+      window.location.reload();
+    } catch {
+      window.location.reload();
+    }
+  };
+
   const handleDeleteCase = (reportId: string, invoiceId?: string) => {
     if (window.confirm('هل أنت متأكد من رغبتك في حذف هذا المريض والتقرير نهائياً؟')) {
       deleteReport(reportId);
@@ -210,12 +238,29 @@ export const DashboardModule: React.FC = () => {
             </div>
 
             <button
+              onClick={handleSendTestPing}
+              title="إرسال إشارة تجريبية للتأكد من التسميع اللحظي على اللابتوب والموبايل"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-emerald-700 to-teal-700 hover:from-emerald-600 hover:to-teal-600 text-white font-bold text-xs shadow-md transition-all cursor-pointer active:scale-95 border border-emerald-500/40"
+            >
+              <Activity className="w-3.5 h-3.5 text-emerald-200" />
+              <span>اختبار التسميع اللحظي (Ping)</span>
+            </button>
+
+            <button
               onClick={handleManualSyncNow}
               disabled={manualSyncing || syncStatus.isSyncing}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs border border-slate-700 shadow-md transition-all cursor-pointer active:scale-95"
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs border border-slate-700 shadow-md transition-all cursor-pointer active:scale-95"
             >
               <RefreshCw className={`w-3.5 h-3.5 text-emerald-400 ${(manualSyncing || syncStatus.isSyncing) ? 'animate-spin' : ''}`} />
-              <span>{manualSyncing ? 'جاري التسميع...' : 'مزامنة سحابية يدوية الآن'}</span>
+              <span>{manualSyncing ? 'جاري التسميع...' : 'مزامنة سحابية يدوية'}</span>
+            </button>
+
+            <button
+              onClick={handleForceClearCacheAndReload}
+              title="تفريغ ذاكرة التخزين المؤقت وتحميل أحدث إصدار من البرنامج"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 font-bold text-xs border border-slate-700/70 transition-all cursor-pointer active:scale-95"
+            >
+              <span>تحديث النسخة وتفريغ الكاش</span>
             </button>
           </div>
         </div>

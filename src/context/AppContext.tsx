@@ -489,6 +489,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (Array.isArray(msg.payload)) {
           setInventory(msg.payload);
         }
+      } else if (msg.action === 'PING_TEST') {
+        addNotification({
+          title: '⚡ تسميع لحظي متزامن فوري',
+          message: `تم استلام إشارة اتصال وتسميع فوري بنجاح من جهاز: ${msg.senderDeviceName}`,
+          type: 'success'
+        });
       } else if (msg.action === 'FULL_SYNC' && msg.payload) {
         if (Array.isArray(msg.payload.reports)) {
           setReports(prev => {

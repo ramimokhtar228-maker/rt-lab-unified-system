@@ -18,6 +18,7 @@ export type SyncActionType =
   | 'UPDATE_LOYALTY'
   | 'UPDATE_EXPENSES'
   | 'UPDATE_INVENTORY'
+  | 'PING_TEST'
   | 'FULL_SYNC';
 
 export interface SyncMessage {
