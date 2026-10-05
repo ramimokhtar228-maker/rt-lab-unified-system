@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:21:14.848Z",
+  "syncedAt": "2026-10-05T18:21:28.296Z",
   "reports": [
     {
       "status": "released",
@@ -859,7 +859,7 @@
         "phone": " ",
         "referringDoctorTitle": "Prof. Dr.",
         "loyaltyCardNumber": "RT-2026-0001",
-        "reportingDate": "2026-10-04T15:16",
+        "reportingDate": "2026-10-05T12:16:00.000Z",
         "id": "pat-inc-1791127003337",
         "gender": "female",
         "labNumber": "RT-BK-8226",
@@ -868,7 +868,7 @@
         "totalCost": 230,
         "bloodGroup": "O+"
       },
-      "updatedAt": "2026-10-05T18:21:11.681Z",
+      "updatedAt": "2026-10-05T18:21:25.081Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-8226 - تم التسميع آلياً من منظومة الفواتير",
       "id": "rep-inc-1791127003337",
       "staff": {
