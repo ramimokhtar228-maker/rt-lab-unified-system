@@ -1,0 +1,455 @@
+{
+  "timestamp": "2026-10-05T11:01:55.321Z",
+  "reportsCount": 0,
+  "incomeCount": 1,
+  "loyaltyProfilesCount": 10,
+  "reports": [],
+  "incomeRecords": [
+    {
+      "cashierName": "المحاسب المالي",
+      "barcode": "RT-10030",
+      "branch": "فرع القصر العيني - الرئيسي",
+      "discount": 38,
+      "testsSubtotal": 380,
+      "loyaltyPointsRedeemed": 0,
+      "paymentStatus": "paid",
+      "loyaltyDiscountEGP": 38,
+      "subtotal": 380,
+      "remainingAmount": 0,
+      "patientGender": "female",
+      "referringDoctor": "أ.د. خالد الببلاوي",
+      "paymentMethod": "visa",
+      "syncStatus": "synced",
+      "notes": "خصم كارت الولاء الذهبي 10%",
+      "loyaltyPointsEarned": 342,
+      "updatedAt": "2026-10-05T08:52:02.898Z",
+      "invoiceNumber": "INV-2026-002",
+      "createdAt": "2026-10-05T08:52:02.898Z",
+      "tests": [
+        {
+          "nameAr": "السكر التراكمي (HbA1c HPLC)",
+          "nameEn": "Glycated Hemoglobin HbA1c",
+          "price": 160,
+          "code": "HBA1C",
+          "id": "t-hba1c",
+          "cost": 35,
+          "category": "Diabetes"
+        },
+        {
+          "code": "KFT",
+          "category": "Biochemistry",
+          "cost": 30,
+          "price": 220,
+          "nameEn": "Renal Function Panel",
+          "id": "t-kft",
+          "nameAr": "وظائف كلى كاملة (KFT)"
+        }
+      ],
+      "id": "inv-002",
+      "patientPhone": "01198765432",
+      "patientName": "منى عادل عبد الرحمن",
+      "netAmount": 342,
+      "paidAmount": 342,
+      "labNumber": "RT-2026-002",
+      "patientAge": 48
+    }
+  ],
+  "loyaltyProfiles": [
+    {
+      "bloodGroup": "O+",
+      "transactions": [
+        {
+          "points": 150,
+          "type": "earn",
+          "id": "tx-init-rep-inc-1791127003337",
+          "description": "تفعيل تلقائي لنقاط فحص سابق #RT-BK-8226",
+          "date": "2026-10-04"
+        }
+      ],
+      "totalPoints": 150,
+      "tier": "Silver",
+      "barcode": "RT-2026-0001",
+      "lifetimeSpent": 150,
+      "patientName": "رجاء حسن ابراهيم",
+      "cardNumber": "RT-2026-0001",
+      "phone": "01013242777",
+      "issueDate": "2026-10-04",
+      "patientId": "pat-1791136199947-803"
+    },
+    {
+      "transactions": [
+        {
+          "description": "تفعيل تلقائي لنقاط فحص سابق #RT-BK-5104",
+          "date": "2026-10-04",
+          "type": "earn",
+          "points": 150,
+          "id": "tx-init-rep-inc-1791126867915"
+        }
+      ],
+      "totalPoints": 150,
+      "tier": "Silver",
+      "cardNumber": "RT-2026-0002",
+      "lifetimeSpent": 150,
+      "phone": "01148879943",
+      "patientName": "حبيبة مجدى احمد",
+      "barcode": "RT-2026-0002",
+      "issueDate": "2026-10-04",
+      "patientId": "pat-1791136199948-302",
+      "bloodGroup": "O+"
+    },
+    {
+      "tier": "Silver",
+      "patientId": "pat-1791136199948-422",
+      "issueDate": "2026-10-04",
+      "bloodGroup": "O+",
+      "totalPoints": 150,
+      "phone": "01277489467",
+      "barcode": "RT-2026-0003",
+      "patientName": "أمال محمد حسب الدائم",
+      "cardNumber": "RT-2026-0003",
+      "transactions": [
+        {
+          "date": "2026-10-04",
+          "points": 150,
+          "id": "tx-init-rep-inc-1791125575336",
+          "type": "earn",
+          "description": "تفعيل تلقائي لنقاط فحص سابق #RT-BK-8594"
+        }
+      ],
+      "lifetimeSpent": 150
+    },
+    {
+      "cardNumber": "RT-2026-0004",
+      "issueDate": "2026-10-04",
+      "patientName": "كوثر ابراهيم",
+      "patientId": "pat-1791136199949-991",
+      "phone": "01095920078",
+      "totalPoints": 150,
+      "transactions": [
+        {
+          "date": "2026-10-04",
+          "description": "تفعيل تلقائي لنقاط فحص سابق #RT-BK-9599",
+          "type": "earn",
+          "id": "tx-init-rep-inc-1791125455998",
+          "points": 150
+        }
+      ],
+      "bloodGroup": "O+",
+      "barcode": "RT-2026-0004",
+      "lifetimeSpent": 150,
+      "tier": "Silver"
+    },
+    {
+      "bloodGroup": "O+",
+      "transactions": [
+        {
+          "type": "earn",
+          "points": 150,
+          "id": "tx-init-rep-inc-1791124918128",
+          "date": "2026-10-04",
+          "description": "تفعيل تلقائي لنقاط فحص سابق #RT-BK-1432"
+        }
+      ],
+      "phone": "01228439288",
+      "patientId": "pat-1791136199949-656",
+      "issueDate": "2026-10-04",
+      "patientName": "نورا سعيد حلمى",
+      "cardNumber": "RT-2026-0006",
+      "totalPoints": 150,
+      "tier": "Silver",
+      "lifetimeSpent": 150,
+      "barcode": "RT-2026-0006"
+    },
+    {
+      "patientName": "زينب محمد حسن محمد",
+      "barcode": "RT-2026-0007",
+      "cardNumber": "RT-2026-0007",
+      "issueDate": "2026-10-04",
+      "patientId": "pat-1791136199950-467",
+      "bloodGroup": "O+",
+      "phone": "01004359187",
+      "totalPoints": 150,
+      "transactions": [
+        {
+          "points": 150,
+          "type": "earn",
+          "id": "tx-init-rep-inc-1791124702671",
+          "date": "2026-10-04",
+          "description": "تفعيل تلقائي لنقاط فحص سابق #RT-BK-4276"
+        }
+      ],
+      "tier": "Silver",
+      "lifetimeSpent": 150
+    },
+    {
+      "patientId": "pat-1791136199950-779",
+      "issueDate": "2026-10-04",
+      "phone": "01127452964",
+      "totalPoints": 150,
+      "bloodGroup": "O+",
+      "tier": "Silver",
+      "patientName": "منال محمود بكر",
+      "transactions": [
+        {
+          "date": "2026-10-04",
+          "description": "تفعيل تلقائي لنقاط فحص سابق #RT-BK-5873",
+          "id": "tx-init-rep-inc-1791123722634",
+          "type": "earn",
+          "points": 150
+        }
+      ],
+      "lifetimeSpent": 150,
+      "cardNumber": "RT-2026-0009",
+      "barcode": "RT-2026-0009"
+    },
+    {
+      "phone": "01277634220",
+      "transactions": [
+        {
+          "id": "tx-init-rep-inc-1791123384421",
+          "type": "earn",
+          "points": 150,
+          "date": "2026-10-04",
+          "description": "تفعيل تلقائي لنقاط فحص سابق #RT-BK-8097"
+        }
+      ],
+      "tier": "Silver",
+      "bloodGroup": "O+",
+      "lifetimeSpent": 150,
+      "totalPoints": 150,
+      "patientName": "امانى محمد ابراهيم",
+      "issueDate": "2026-10-04",
+      "patientId": "pat-1791136199952-414",
+      "cardNumber": "RT-2026-0010",
+      "barcode": "RT-2026-0010"
+    },
+    {
+      "patientId": "pat-1791095397668",
+      "issueDate": "2026-10-04",
+      "cardNumber": "RT-2026-0011",
+      "transactions": [
+        {
+          "points": 150,
+          "description": "تفعيل تلقائي لنقاط فحص سابق #RT-2026-4888",
+          "id": "tx-init-rep-1791095397668",
+          "type": "earn",
+          "date": "2026-10-04"
+        }
+      ],
+      "phone": "01",
+      "totalPoints": 150,
+      "barcode": "RT-2026-0011",
+      "lifetimeSpent": 150,
+      "patientName": "",
+      "bloodGroup": "O+",
+      "tier": "Silver"
+    },
+    {
+      "tier": "Silver",
+      "cardNumber": "RT-2026-0002",
+      "barcode": "RT-2026-0002",
+      "totalPoints": 150,
+      "patientId": "pat-1791152176534-415",
+      "issueDate": "2026-10-04",
+      "transactions": [
+        {
+          "type": "earn",
+          "id": "tx-init-rep-inc-1791145124663",
+          "points": 150,
+          "date": "2026-10-04",
+          "description": "تفعيل تلقائي لنقاط فحص سابق #RT-BK-6113"
+        }
+      ],
+      "lifetimeSpent": 150,
+      "phone": "01060116368",
+      "patientName": "ماري مكرم",
+      "bloodGroup": "O+"
+    }
+  ],
+  "inventory": [
+    {
+      "id": "inv-01",
+      "itemCode": "REAG-GLU-01",
+      "barcode": "622300188201",
+      "nameAr": "كيت جلوكوز سكر كيميائي (GOD-PAP Enzymatic)",
+      "nameEn": "Glucose GOD-PAP Reagent Kit 5x100ml",
+      "category": "chemistry_reagents",
+      "currentQuantity": 3,
+      "unit": "Kit",
+      "minThreshold": 4,
+      "unitCost": 480,
+      "supplierName": "شركة النيل للكيماويات الحيوية",
+      "supplierPhone": "01023456789",
+      "lotNumber": "LOT-GLU-2026A",
+      "expiryDate": "2026-11-15",
+      "storageTemp": "2-8°C",
+      "testsPerKit": 500,
+      "lastRestockedDate": "2026-09-10",
+      "notes": "الكمية أوشكت على النفاد - يحتاج طلب عاجل"
+    },
+    {
+      "id": "inv-02",
+      "itemCode": "REAG-CREAT-02",
+      "barcode": "622300188202",
+      "nameAr": "محلول كاشف كرياتينين معدل (Jaffe Kinetic)",
+      "nameEn": "Creatinine Kinetic Jaffe Kit",
+      "category": "chemistry_reagents",
+      "currentQuantity": 8,
+      "unit": "Kit",
+      "minThreshold": 3,
+      "unitCost": 520,
+      "supplierName": "شركة النيل للكيماويات الحيوية",
+      "supplierPhone": "01023456789",
+      "lotNumber": "LOT-CRT-8812",
+      "expiryDate": "2027-04-30",
+      "storageTemp": "15-25°C",
+      "testsPerKit": 400,
+      "lastRestockedDate": "2026-09-22"
+    },
+    {
+      "id": "inv-03",
+      "itemCode": "REAG-HBA1C-03",
+      "barcode": "622300188203",
+      "nameAr": "كيت سكر تراكمي أوتوماتيكي سريع (HbA1c HPLC/Latex)",
+      "nameEn": "HbA1c Direct Latex Turbidimetric Kit",
+      "category": "chemistry_reagents",
+      "currentQuantity": 2,
+      "unit": "Kit",
+      "minThreshold": 5,
+      "unitCost": 1450,
+      "supplierName": "المركز العلمي للأجهزة التشخيصية",
+      "supplierPhone": "01123344556",
+      "lotNumber": "LOT-A1C-9901",
+      "expiryDate": "2026-10-25",
+      "storageTemp": "2-8°C",
+      "testsPerKit": 100,
+      "lastRestockedDate": "2026-08-15",
+      "notes": "تنبيه: الصلاحية تنتهي هذا الشهر (أكتوبر 2026) والكمية منخفضة!"
+    },
+    {
+      "id": "inv-04",
+      "itemCode": "REAG-CBC-DIL-04",
+      "barcode": "622300188204",
+      "nameAr": "محلول مخفف صورة دم (Sysmex Cellpack Diluent 20L)",
+      "nameEn": "Sysmex Cellpack DCL Diluent 20L",
+      "category": "hematology_diluents",
+      "currentQuantity": 6,
+      "unit": "Box",
+      "minThreshold": 2,
+      "unitCost": 1200,
+      "supplierName": "توكيل سيسماكس المعتمد",
+      "supplierPhone": "01299887766",
+      "lotNumber": "LOT-SYS-4411",
+      "expiryDate": "2027-08-31",
+      "storageTemp": "15-25°C",
+      "lastRestockedDate": "2026-09-05"
+    },
+    {
+      "id": "inv-05",
+      "itemCode": "TUBES-EDTA-K3",
+      "barcode": "622300188205",
+      "nameAr": "أنابيب سحب عينات دم بنفسجي (EDTA K3 Tubes 3ml)",
+      "nameEn": "Vacutainer EDTA K3 3ml Purple Top (100 pcs)",
+      "category": "tubes_vacutainers",
+      "currentQuantity": 14,
+      "unit": "Pack",
+      "minThreshold": 5,
+      "unitCost": 280,
+      "supplierName": "المؤسسة المتحدة للوازم المعامل",
+      "supplierPhone": "01055443322",
+      "lotNumber": "LOT-TUB-7822",
+      "expiryDate": "2028-01-15",
+      "storageTemp": "15-25°C",
+      "lastRestockedDate": "2026-09-28"
+    },
+    {
+      "id": "inv-06",
+      "itemCode": "TUBES-GEL-CLOT",
+      "barcode": "622300188206",
+      "nameAr": "أنابيب سحب سيروم مع جل وفصل أحمر وأصفر (Gel & Clot Activator 5ml)",
+      "nameEn": "SST Gel & Clot Activator Tubes 5ml (100 pcs)",
+      "category": "tubes_vacutainers",
+      "currentQuantity": 18,
+      "unit": "Pack",
+      "minThreshold": 6,
+      "unitCost": 310,
+      "supplierName": "المؤسسة المتحدة للوازم المعامل",
+      "supplierPhone": "01055443322",
+      "lotNumber": "LOT-GEL-9031",
+      "expiryDate": "2027-12-31",
+      "storageTemp": "15-25°C",
+      "lastRestockedDate": "2026-09-28"
+    },
+    {
+      "id": "inv-07",
+      "itemCode": "REAG-TSH-CLIA",
+      "barcode": "622300188207",
+      "nameAr": "خرطوشة تحليل هرمون الغدة النخامية (CLIA TSH Cartridge 100T)",
+      "nameEn": "Chemiluminescence Immunoassay TSH Kit 100 Tests",
+      "category": "elisa_clia_kits",
+      "currentQuantity": 4,
+      "unit": "Kit",
+      "minThreshold": 3,
+      "unitCost": 2900,
+      "supplierName": "بيوتكنولوجي إيجيبت",
+      "supplierPhone": "01188776655",
+      "lotNumber": "LOT-TSH-5521",
+      "expiryDate": "2027-02-28",
+      "storageTemp": "2-8°C",
+      "testsPerKit": 100,
+      "lastRestockedDate": "2026-09-18"
+    },
+    {
+      "id": "inv-08",
+      "itemCode": "RAPID-HCV-STRIP",
+      "barcode": "622300188208",
+      "nameAr": "أشرطة كاشف فيروس سي الكبدي السريعة (HCV Cassette 50T)",
+      "nameEn": "Rapid HCV Antibody Test Cassettes (50 Tests)",
+      "category": "rapid_tests",
+      "currentQuantity": 5,
+      "unit": "Box",
+      "minThreshold": 2,
+      "unitCost": 650,
+      "supplierName": "شركة الدواء للتشخيص السريع",
+      "supplierPhone": "01033221100",
+      "lotNumber": "LOT-HCV-321",
+      "expiryDate": "2027-06-30",
+      "storageTemp": "15-25°C",
+      "testsPerKit": 50,
+      "lastRestockedDate": "2026-08-20"
+    }
+  ],
+  "dailyCloseouts": [],
+  "auditLogs": [
+    {
+      "id": "log-1791194275923-s2gwb",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦ ١٢:٥٧:٥٥ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "SETTINGS",
+      "description": "تحديث بيانات المعمل والاعتماد الطبي ووسائل التواصل"
+    },
+    {
+      "id": "log-1791194238754-qdx2p",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦ ١٢:٥٧:١٨ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "SYNC",
+      "module": "SECURITY",
+      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
+    },
+    {
+      "id": "log-1791194154634-1fm2f",
+      "timestamp": "٥‏/١٠‏/٢٠٢٦ ١٢:٥٥:٥٤ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "SETTINGS",
+      "description": "تحديث بيانات المعمل والاعتماد الطبي ووسائل التواصل"
+    }
+  ]
+}
