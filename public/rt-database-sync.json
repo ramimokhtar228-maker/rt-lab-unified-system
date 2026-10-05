@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:14:58.651Z",
+  "syncedAt": "2026-10-05T18:15:12.783Z",
   "reports": [
     {
       "status": "released",
@@ -507,10 +507,10 @@
               "id": "p-mig-1-1791157348010",
               "method": "Electrical Impedance",
               "unit": "x10^6/µL",
-              "flag": "",
+              "flag": "LOW",
               "minNormal": 4,
               "textReference": "M: 4.5 - 5.9 | F: 4.0 - 5.2",
-              "result": "",
+              "result": "3.789",
               "maxNormal": 5.8,
               "name": "R.B.Cs Count"
             },
@@ -527,11 +527,11 @@
             },
             {
               "name": "M.C.V",
-              "result": "",
+              "result": "7.9",
               "maxNormal": 98,
-              "flag": "",
+              "flag": "LOW",
               "minNormal": 80,
-              "notes": "Auto-calculated: (PCV × 10) / RBC",
+              "notes": "Calculated: (HCT × 10) / RBC",
               "id": "p-mig-3-1791157348010",
               "unit": "fL",
               "textReference": "80.0 - 98.0 fL"
@@ -540,12 +540,12 @@
               "name": "M.C.H",
               "textReference": "27.0 - 33.0 pg",
               "minNormal": 27,
-              "flag": "",
-              "result": "",
+              "flag": "NORMAL",
+              "result": "30",
               "maxNormal": 33,
               "id": "p-mig-4-1791157348010",
               "unit": "pg",
-              "notes": "Auto-calculated: (Hb × 10) / RBC"
+              "notes": "Calculated: (HGB × 10) / RBC"
             },
             {
               "unit": "g/dL",
@@ -580,12 +580,12 @@
             },
             {
               "name": "Mentzer Index (MCV/RBC)",
-              "notes": "<13 Thalassemia Trait | >13 Iron Deficiency",
+              "notes": "Mentzer < 13: Suggestive of Beta Thalassemia Trait",
               "textReference": "> 13 Iron Def. | < 13 Thalassemia",
               "unit": "Ratio",
               "id": "p-mig-8-1791157348010",
-              "flag": "",
-              "result": ""
+              "flag": "NORMAL",
+              "result": "2.1"
             },
             {
               "notes": "(MCV² × RDW) / (Hb × 100)",
@@ -934,7 +934,7 @@
         "totalCost": 230,
         "bloodGroup": "O+"
       },
-      "updatedAt": "2026-10-05T18:14:55.442Z",
+      "updatedAt": "2026-10-05T18:15:09.964Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-8226 - تم التسميع آلياً من منظومة الفواتير",
       "id": "rep-inc-1791127003337",
       "staff": {
