@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T13:52:56.426Z",
+  "syncedAt": "2026-10-05T13:57:09.413Z",
   "reports": [
     {
       "status": "draft",
@@ -7449,21 +7449,20 @@
       "descriptionAr": "الفحص الأكثر طلباً للاطمئنان على الصحة العامة، وظائف الأعضاء الحيوية، مستويات السكر والدهون وصورة الدم الكاملة.",
       "targetAudience": "للرجال والنساء فوق 25 عاماً للتقييم الصحي السنوي الدوري",
       "includedProfiles": [
-        "CBC",
-        "GLYCEMIC",
-        "LIPID",
-        "LFT",
         "KFT",
-        "URINE"
+        "LIPID",
+        "CBC"
       ],
       "includedIndividualTestCodes": [
-        "VIT_D",
         "TSH",
-        "URIC"
+        "GLU_F",
+        "ALT",
+        "AST",
+        "VIT_D"
       ],
-      "originalPrice": 1650,
-      "packagePrice": 950,
-      "discountPercentage": 42,
+      "originalPrice": 2900,
+      "packagePrice": 199,
+      "discountPercentage": 93,
       "fastingRequired": "صيام من 10 إلى 12 ساعة (يُسمح بشرب الماء فقط)",
       "sampleTypes": [
         "Serum",
