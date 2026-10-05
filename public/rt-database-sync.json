@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:47:47.274Z",
+  "syncedAt": "2026-10-05T17:47:51.425Z",
   "reports": [
     {
       "status": "released",
@@ -1621,7 +1621,7 @@
               "method": "Direct Accelerator",
               "textReference": "",
               "id": "param-2-1791222251478-csg",
-              "result": "",
+              "result": "47",
               "flag": "NORMAL"
             },
             {
@@ -1629,11 +1629,11 @@
               "unit": "mg/dL",
               "minNormal": 0,
               "maxNormal": 100,
-              "notes": "Friedewald Formula: Total Chol - HDL - (TG / 5)",
+              "notes": "Friedewald Formula: TC - HDL - (TG/5)",
               "textReference": "",
               "id": "param-3-1791222251478-o12",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "116",
+              "flag": "HIGH"
             },
             {
               "name": "VLDL - Cholesterol",
@@ -1651,11 +1651,11 @@
               "unit": "mg/dL",
               "minNormal": 0,
               "maxNormal": 130,
-              "notes": "Auto-calculated: Total Chol - HDL",
+              "notes": "Calculated: Total Cholesterol - HDL",
               "textReference": "",
               "id": "param-5-1791222251478-45u",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "142",
+              "flag": "HIGH"
             },
             {
               "name": "Total Chol / HDL Ratio",
@@ -1663,9 +1663,9 @@
               "minNormal": 0,
               "maxNormal": 4.5,
               "textReference": "< 4.5 Desirable",
-              "notes": "Auto-calculated: Total Chol / HDL",
+              "notes": "Desirable < 4.5",
               "id": "param-6-1791222251478-0gy",
-              "result": "",
+              "result": "4",
               "flag": "NORMAL"
             },
             {
@@ -2177,7 +2177,7 @@
         }
       ],
       "id": "rep-inc-1791125455998",
-      "updatedAt": "2026-10-05T17:47:43.759Z",
+      "updatedAt": "2026-10-05T17:47:47.826Z",
       "createdAt": "2026-10-04T14:50:55.998Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-9599 - تم التسميع آلياً من منظومة الفواتير",
       "patient": {
