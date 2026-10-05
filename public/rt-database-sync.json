@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:44:48.057Z",
+  "syncedAt": "2026-10-05T17:45:02.500Z",
   "reports": [
     {
       "status": "released",
@@ -1565,8 +1565,8 @@
               "method": "Automated SLS-Hb",
               "textReference": "M: 13.0 - 17.5 | F: 12.0 - 15.5 g/dL",
               "id": "param-0-1791222251477-7iy",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "9.00",
+              "flag": "LOW"
             },
             {
               "name": "R.B.Cs Count",
@@ -1584,11 +1584,11 @@
               "unit": "%",
               "minNormal": 36,
               "maxNormal": 48,
-              "notes": "Auto-calculated: Hb × 3",
+              "notes": "Calculated (HGB × 3)",
               "textReference": "M: 40 - 52% | F: 36 - 48%",
               "id": "param-2-1791222251477-iu4",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "27",
+              "flag": "LOW"
             },
             {
               "name": "M.C.V",
@@ -1617,10 +1617,10 @@
               "unit": "g/dL",
               "minNormal": 32,
               "maxNormal": 36,
-              "notes": "Auto-calculated: (Hb × 100) / PCV",
+              "notes": "Calculated: (HGB × 100) / HCT",
               "textReference": "32.0 - 36.0 g/dL",
               "id": "param-5-1791222251477-3r5",
-              "result": "",
+              "result": "33.3",
               "flag": "NORMAL"
             },
             {
@@ -2607,7 +2607,7 @@
         }
       ],
       "id": "rep-inc-1791125455998",
-      "updatedAt": "2026-10-05T17:44:44.731Z",
+      "updatedAt": "2026-10-05T17:44:59.370Z",
       "createdAt": "2026-10-04T14:50:55.998Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-9599 - تم التسميع آلياً من منظومة الفواتير",
       "patient": {
