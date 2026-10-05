@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:20:47.630Z",
+  "syncedAt": "2026-10-05T15:20:54.754Z",
   "reports": [
     {
       "status": "released",
@@ -2063,17 +2063,6 @@
               "flag": "NORMAL"
             },
             {
-              "name": "BUN / Creatinine Ratio",
-              "unit": "Ratio",
-              "minNormal": 10,
-              "maxNormal": 20,
-              "notes": "Normal: 10 - 20",
-              "textReference": "",
-              "id": "param-3-1791213622129-zsr",
-              "result": "0.9",
-              "flag": "LOW"
-            },
-            {
               "name": "Serum Uric Acid",
               "unit": "mg/dL",
               "minNormal": 3.5,
@@ -2081,7 +2070,7 @@
               "method": "Uricase-PAP",
               "textReference": "",
               "id": "param-4-1791213622129-pg5",
-              "result": "",
+              "result": "6",
               "flag": "NORMAL"
             },
             {
@@ -2661,7 +2650,7 @@
         }
       ],
       "status": "in_progress",
-      "updatedAt": "2026-10-05T15:20:41.531Z",
+      "updatedAt": "2026-10-05T15:20:51.774Z",
       "createdAt": "2026-10-04T14:38:22.671Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-4276 - تم التسميع آلياً من منظومة الفواتير",
       "reportNumber": "RT-BK-4276",
