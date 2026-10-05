@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:18:34.633Z",
+  "syncedAt": "2026-10-05T18:18:38.389Z",
   "reports": [
     {
       "status": "released",
@@ -688,9 +688,9 @@
               "name": "Monocytes %",
               "id": "p-mig-19-1791157348011",
               "minNormal": 2,
-              "flag": "",
+              "flag": "NORMAL",
               "textReference": "2 - 8 %",
-              "result": "",
+              "result": "03",
               "unit": "%"
             },
             {
@@ -768,10 +768,10 @@
             {
               "notes": "Auto-calculated: (WBC × Mono%) / 100",
               "unit": "x10^3/µL",
-              "result": "",
+              "result": "0.3",
               "minNormal": 0.2,
               "maxNormal": 0.8,
-              "flag": "",
+              "flag": "NORMAL",
               "textReference": "0.2 - 0.8 x10^3/µL",
               "name": "Absolute Monocytes (AMC)",
               "id": "p-mig-27-1791157348011"
@@ -925,7 +925,7 @@
         "totalCost": 230,
         "bloodGroup": "O+"
       },
-      "updatedAt": "2026-10-05T18:18:30.560Z",
+      "updatedAt": "2026-10-05T18:18:34.061Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-8226 - تم التسميع آلياً من منظومة الفواتير",
       "id": "rep-inc-1791127003337",
       "staff": {
