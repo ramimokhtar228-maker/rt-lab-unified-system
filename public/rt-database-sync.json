@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:11:57.428Z",
+  "syncedAt": "2026-10-05T18:12:02.299Z",
   "reports": [
     {
       "status": "released",
@@ -4909,8 +4909,8 @@
               "method": "GPO-PAP",
               "textReference": "",
               "id": "param-1-1791223515986-duk",
-              "result": "166",
-              "flag": "HIGH"
+              "result": "110",
+              "flag": "NORMAL"
             },
             {
               "name": "HDL - Cholesterol (Good)",
@@ -4931,7 +4931,7 @@
               "notes": "Friedewald Formula: TC - HDL - (TG/5)",
               "textReference": "",
               "id": "param-3-1791223515986-54h",
-              "result": "139",
+              "result": "150",
               "flag": "HIGH"
             },
             {
@@ -4942,8 +4942,8 @@
               "notes": "Calculated: Triglycerides / 5",
               "textReference": "",
               "id": "param-4-1791223515986-vs1",
-              "result": "33",
-              "flag": "HIGH"
+              "result": "22",
+              "flag": "NORMAL"
             },
             {
               "name": "Non-HDL Cholesterol",
@@ -5127,7 +5127,7 @@
         "sampleDate": "2026-10-04T14:59"
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-9820 - تم التسميع آلياً من منظومة الفواتير",
-      "updatedAt": "2026-10-05T18:11:53.480Z",
+      "updatedAt": "2026-10-05T18:11:58.161Z",
       "packageApplied": {
         "code": "PKG-ANNUAL-WELLNESS",
         "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
