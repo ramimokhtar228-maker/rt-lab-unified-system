@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:48:59.480Z",
+  "syncedAt": "2026-10-05T17:49:02.803Z",
   "reports": [
     {
       "status": "released",
@@ -1733,7 +1733,7 @@
               "method": "Urease-GLDH",
               "textReference": "",
               "id": "param-1-1791222251478-hth",
-              "result": "",
+              "result": "19",
               "flag": "NORMAL"
             },
             {
@@ -1751,11 +1751,11 @@
               "unit": "Ratio",
               "minNormal": 10,
               "maxNormal": 20,
-              "notes": "Auto-calculated: BUN / Creatinine",
+              "notes": "Normal: 10 - 20",
               "textReference": "",
               "id": "param-3-1791222251478-s89",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "0.8",
+              "flag": "LOW"
             },
             {
               "name": "Serum Uric Acid",
@@ -2059,7 +2059,7 @@
         }
       ],
       "id": "rep-inc-1791125455998",
-      "updatedAt": "2026-10-05T17:48:56.189Z",
+      "updatedAt": "2026-10-05T17:48:59.890Z",
       "createdAt": "2026-10-04T14:50:55.998Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-9599 - تم التسميع آلياً من منظومة الفواتير",
       "patient": {
