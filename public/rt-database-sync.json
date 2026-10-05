@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:23:24.179Z",
+  "syncedAt": "2026-10-05T15:23:57.474Z",
   "reports": [
     {
       "status": "released",
@@ -2223,9 +2223,9 @@
               "name": "الهرمون المنشط للغدة الدرقية (TSH Ultrasensitive) (Thyroid Stimulating Hormone (TSH))",
               "result": "4.33",
               "unit": "uIU/mL",
-              "minNormal": 0.35,
-              "maxNormal": 4.94,
-              "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+              "minNormal": 0.55,
+              "maxNormal": 4.87,
+              "textReference": "Adults: 0.55- 4.87   uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
               "flag": "NORMAL",
               "method": "CLIA (3rd Generation Chemiluminescence)"
             },
@@ -2277,7 +2277,7 @@
         }
       ],
       "status": "in_progress",
-      "updatedAt": "2026-10-05T15:23:21.324Z",
+      "updatedAt": "2026-10-05T15:23:54.611Z",
       "createdAt": "2026-10-04T14:38:22.671Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-4276 - تم التسميع آلياً من منظومة الفواتير",
       "reportNumber": "RT-BK-4276",
