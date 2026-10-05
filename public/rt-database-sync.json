@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T11:10:48.946Z",
+  "syncedAt": "2026-10-05T11:11:10.286Z",
   "reports": [
     {
       "id": "rep-1791198572864",
@@ -429,7 +429,7 @@
           "titleAr": "تقييم السكر التراكمي والجلوكوز ومتوسط السكر التقديري",
           "category": "Clinical Chemistry",
           "sampleType": "Fluoride Plasma & EDTA Blood",
-          "interpretation": "Glycemic parameters evaluated according to ADA guidelines.",
+          "interpretation": "Impaired fasting glucose (IFG), pre-diabetes pattern. Lifestyle modification and 3-month HbA1c follow-up advised.",
           "parameters": [
             {
               "name": "Fasting Blood Glucose",
@@ -589,7 +589,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-05T11:09:32.864Z",
-      "updatedAt": "2026-10-05T11:10:46.573Z",
+      "updatedAt": "2026-10-05T11:11:07.906Z",
       "invoiceId": "inv-1791198572864"
     }
   ],
