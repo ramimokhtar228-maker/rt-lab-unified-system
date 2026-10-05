@@ -1,0 +1,6 @@
+{
+  "name": "RT Lab Medical & Financial ERP | منظومة معامل RT الطبية والمالية الموحدة",
+  "description": "المنظومة الموحدة الشاملة لمعامل RT للتحاليل الطبية والتشخيصية - معامل رامي مختار (أطباء كلية طب قصر العيني): إدارة المرضى والفوترة، الربط مع أجهزة المعمل، التقارير الطبية، كروت ونقاط الولاء، والمحاسبة والمخزون.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
