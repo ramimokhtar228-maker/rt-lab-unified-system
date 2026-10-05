@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T11:10:30.214Z",
+  "syncedAt": "2026-10-05T11:10:48.946Z",
   "reports": [
     {
       "id": "rep-1791198572864",
@@ -451,8 +451,8 @@
               "textReference": "< 5.7% Normal, 5.7 - 6.4% Pre-Diabetes, ≥ 6.5% Diabetes",
               "method": "HPLC / Turbidimetric",
               "id": "param-3-1791198572863",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "7.2",
+              "flag": "HIGH"
             },
             {
               "name": "Estimated Average Glucose (eAG)",
@@ -460,10 +460,10 @@
               "minNormal": 68,
               "maxNormal": 114,
               "textReference": "80 - 120 mg/dL",
-              "notes": "Auto-calculated: (28.7 × HbA1c) - 46.7",
+              "notes": "Calculated: (28.7 × HbA1c) - 46.7",
               "id": "param-4-1791198572863",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "160",
+              "flag": "HIGH"
             }
           ]
         },
@@ -589,7 +589,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-05T11:09:32.864Z",
-      "updatedAt": "2026-10-05T11:10:27.713Z",
+      "updatedAt": "2026-10-05T11:10:46.573Z",
       "invoiceId": "inv-1791198572864"
     }
   ],
