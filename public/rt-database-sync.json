@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:18:11.432Z",
+  "syncedAt": "2026-10-05T18:18:15.275Z",
   "reports": [
     {
       "status": "released",
@@ -654,12 +654,12 @@
             },
             {
               "minNormal": 0,
-              "flag": "",
+              "flag": "HIGH",
               "id": "p-mig-16-1791157348011",
               "unit": "%",
               "textReference": "0 - 5 % (Left Shift if > 6%)",
               "maxNormal": 5,
-              "result": "",
+              "result": "07",
               "name": "Band Forms (Stab) %"
             },
             {
@@ -925,7 +925,7 @@
         "totalCost": 230,
         "bloodGroup": "O+"
       },
-      "updatedAt": "2026-10-05T18:18:07.662Z",
+      "updatedAt": "2026-10-05T18:18:11.789Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-8226 - تم التسميع آلياً من منظومة الفواتير",
       "id": "rep-inc-1791127003337",
       "staff": {
