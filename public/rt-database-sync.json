@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:08:37.058Z",
+  "syncedAt": "2026-10-05T18:08:45.976Z",
   "reports": [
     {
       "status": "released",
@@ -5057,7 +5057,7 @@
             {
               "id": "p-pkg-7-1791223515986",
               "name": "إنزيم كبد AST / SGOT (Aspartate Aminotransferase (AST / SGOT))",
-              "result": "",
+              "result": "32",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 40,
@@ -5068,7 +5068,7 @@
             {
               "id": "p-pkg-8-1791223515987",
               "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
-              "result": "",
+              "result": "18",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 41,
@@ -5106,7 +5106,7 @@
         "sampleDate": "2026-10-04T14:59"
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-9820 - تم التسميع آلياً من منظومة الفواتير",
-      "updatedAt": "2026-10-05T18:08:27.626Z",
+      "updatedAt": "2026-10-05T18:08:40.034Z",
       "packageApplied": {
         "code": "PKG-ANNUAL-WELLNESS",
         "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
