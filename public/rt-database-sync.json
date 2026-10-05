@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T14:06:21.460Z",
+  "syncedAt": "2026-10-05T14:07:07.022Z",
   "reports": [
     {
       "status": "draft",
@@ -2080,7 +2080,7 @@
         "verifiedBy": ""
       },
       "reportNumber": "RT-BK-5752",
-      "updatedAt": "2026-10-05T14:06:17.715Z",
+      "updatedAt": "2026-10-05T14:07:03.919Z",
       "createdAt": "2026-10-04T14:28:04.105Z",
       "id": "rep-inc-1791124084105",
       "profiles": [
@@ -2271,7 +2271,7 @@
           "titleEn": "Package Tests (Comprehensive Annual Wellness Package)",
           "category": "Package Tests",
           "sampleType": "Serum",
-          "interpretation": "All complementary package tests evaluated according to certified reference ranges.",
+          "interpretation": " ",
           "parameters": [
             {
               "id": "p-pkg-1-1791208922778",
@@ -2341,7 +2341,7 @@
           ]
         }
       ],
-      "generalComment": "طلب فحص مالي رقم RT-BK-5752 - تم التسميع آلياً من منظومة الفواتير",
+      "generalComment": " ",
       "patient": {
         "clinicalHistory": "طلب صادر من الفاتورة المالية RT-BK-5752 - السداد: مسدد بالكامل",
         "bloodGroup": "O+",
