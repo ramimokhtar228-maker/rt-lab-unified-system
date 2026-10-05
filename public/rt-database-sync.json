@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:06:38.342Z",
+  "syncedAt": "2026-10-05T18:06:47.416Z",
   "reports": [
     {
       "status": "released",
@@ -4920,19 +4920,19 @@
               "method": "Direct Accelerator",
               "textReference": "",
               "id": "param-2-1791223515986-1nr",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "39",
+              "flag": "LOW"
             },
             {
               "name": "LDL - Cholesterol (Calculated)",
               "unit": "mg/dL",
               "minNormal": 0,
               "maxNormal": 100,
-              "notes": "Friedewald Formula: Total Chol - HDL - (TG / 5)",
+              "notes": "Friedewald Formula: TC - HDL - (TG/5)",
               "textReference": "",
               "id": "param-3-1791223515986-54h",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "172",
+              "flag": "HIGH"
             },
             {
               "name": "VLDL - Cholesterol",
@@ -4950,11 +4950,11 @@
               "unit": "mg/dL",
               "minNormal": 0,
               "maxNormal": 130,
-              "notes": "Auto-calculated: Total Chol - HDL",
+              "notes": "Calculated: Total Cholesterol - HDL",
               "textReference": "",
               "id": "param-5-1791223515986-4pv",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "205",
+              "flag": "HIGH"
             },
             {
               "name": "Total Chol / HDL Ratio",
@@ -4962,10 +4962,10 @@
               "minNormal": 0,
               "maxNormal": 4.5,
               "textReference": "< 4.5 Desirable",
-              "notes": "Auto-calculated: Total Chol / HDL",
+              "notes": "Desirable < 4.5",
               "id": "param-6-1791223515986-k1w",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "6.3",
+              "flag": "HIGH"
             },
             {
               "name": "LDL / HDL Ratio",
@@ -5117,7 +5117,7 @@
         "sampleDate": "2026-10-04T14:59"
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-9820 - تم التسميع آلياً من منظومة الفواتير",
-      "updatedAt": "2026-10-05T18:06:31.853Z",
+      "updatedAt": "2026-10-05T18:06:42.384Z",
       "packageApplied": {
         "code": "PKG-ANNUAL-WELLNESS",
         "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
