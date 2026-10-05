@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:58:04.390Z",
+  "syncedAt": "2026-10-05T17:58:18.128Z",
   "reports": [
     {
       "status": "released",
@@ -1495,8 +1495,8 @@
               "method": "Automated SLS-Hb",
               "textReference": "M: 13.0 - 17.5 | F: 12.0 - 15.5 g/dL",
               "id": "param-0-1791223080771-s2w",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "11.15",
+              "flag": "LOW"
             },
             {
               "name": "R.B.Cs Count",
@@ -1514,11 +1514,11 @@
               "unit": "%",
               "minNormal": 36,
               "maxNormal": 48,
-              "notes": "Auto-calculated: Hb × 3",
+              "notes": "Calculated (HGB × 3)",
               "textReference": "M: 40 - 52% | F: 36 - 48%",
               "id": "param-2-1791223080771-ffl",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "3",
+              "flag": "LOW"
             },
             {
               "name": "M.C.V",
@@ -1547,11 +1547,11 @@
               "unit": "g/dL",
               "minNormal": 32,
               "maxNormal": 36,
-              "notes": "Auto-calculated: (Hb × 100) / PCV",
+              "notes": "Calculated: (HGB × 100) / HCT",
               "textReference": "32.0 - 36.0 g/dL",
               "id": "param-5-1791223080771-bga",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "371.7",
+              "flag": "HIGH"
             },
             {
               "name": "R.D.W-CV",
@@ -2108,7 +2108,7 @@
         "sampleDate": "2026-10-04T14:52",
         "clinicalHistory": "طلب صادر من الفاتورة المالية RT-BK-8594 - السداد: مسدد بالكامل"
       },
-      "updatedAt": "2026-10-05T17:58:00.773Z",
+      "updatedAt": "2026-10-05T17:58:12.284Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-8594 - تم التسميع آلياً من منظومة الفواتير",
       "reportNumber": "RT-BK-8594",
       "createdAt": "2026-10-04T14:52:55.336Z",
