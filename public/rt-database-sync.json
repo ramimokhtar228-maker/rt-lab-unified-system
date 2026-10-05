@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:59:14.893Z",
+  "syncedAt": "2026-10-05T17:59:22.151Z",
   "reports": [
     {
       "status": "released",
@@ -1633,24 +1633,13 @@
             {
               "id": "p-pkg-1-1791223080772",
               "name": "سكر الدم الصائم (FBS) (Fasting Blood Sugar)",
-              "result": "",
+              "result": "98",
               "unit": "mg/dL",
               "minNormal": 70,
               "maxNormal": 100,
               "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
               "flag": "NORMAL",
               "method": "Hexokinase / GOD-PAP"
-            },
-            {
-              "id": "p-pkg-2-1791223080772",
-              "name": "صورة دم كاملة تفصيلية (CBC with Diff) (Complete Blood Count with Differential)",
-              "result": "",
-              "unit": "Multi-parameter",
-              "minNormal": 0,
-              "maxNormal": 0,
-              "textReference": "Hb: Male 13.0-17.5 g/dL, Female 12.0-15.5 | WBC: 4.0-11.0 10^3/uL | PLT: 150-450 10^3/uL",
-              "flag": "NORMAL",
-              "method": "5-Part Automated Flow Cytometry / Laser Impedance"
             },
             {
               "id": "p-pkg-3-1791223080772",
@@ -1746,7 +1735,7 @@
         "sampleDate": "2026-10-04T14:52",
         "clinicalHistory": "طلب صادر من الفاتورة المالية RT-BK-8594 - السداد: مسدد بالكامل"
       },
-      "updatedAt": "2026-10-05T17:59:06.889Z",
+      "updatedAt": "2026-10-05T17:59:15.837Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-8594 - تم التسميع آلياً من منظومة الفواتير",
       "reportNumber": "RT-BK-8594",
       "createdAt": "2026-10-04T14:52:55.336Z",
