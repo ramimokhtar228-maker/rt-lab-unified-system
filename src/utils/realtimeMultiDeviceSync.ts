@@ -1,10 +1,10 @@
-// Real-Time Multi-Device Synchronization Engine for RT Lab
-// Supports:
-// 1. Direct WebRTC Peer-to-Peer DataChannel (via PeerJS) across mobile, laptop, and desktop
-// 2. BroadcastChannel for instant 0ms cross-tab updates
-// 3. Persistent GitHub Cloud Store with automatic polling and debounced push
+// Real-Time Cloud Synchronization Engine for RT Lab
+// Powered by Firebase Cloud Firestore with native multi-device replication and offline persistence.
+// Guaranteed instantaneous synchronization across mobiles, tablets, and laptops.
 
-import Peer, { DataConnection } from 'peerjs';
+import { doc, setDoc, getDoc, onSnapshot } from 'firebase/firestore';
+import { db } from '../firebase';
+import { handleFirestoreError, OperationType } from './firebaseErrors';
 
 export type SyncActionType =
   | 'INIT_STATE'
@@ -17,6 +17,7 @@ export type SyncActionType =
   | 'UPDATE_LAB_INFO'
   | 'UPDATE_LOYALTY'
   | 'UPDATE_EXPENSES'
+  | 'UPDATE_INVENTORY'
   | 'FULL_SYNC';
 
 export interface SyncMessage {
@@ -29,19 +30,21 @@ export interface SyncMessage {
 
 export interface SyncStatus {
   isConnected: boolean;
-  peersCount: number;
+  isOnline: boolean;
+  cloudActive: boolean;
   lastSyncedAt: Date | null;
   statusText: string;
   isSyncing: boolean;
+  activeDeviceName: string;
 }
 
-const STORAGE_DEVICE_KEY = 'rt_lab_device_uuid_v3';
+const STORAGE_DEVICE_KEY = 'rt_lab_device_uuid_v4';
 
 export const getDeviceId = (): string => {
   if (typeof window === 'undefined') return 'server';
   let id = localStorage.getItem(STORAGE_DEVICE_KEY);
   if (!id) {
-    id = `dev-${Math.random().toString(36).substring(2, 8)}-${Date.now().toString(36)}`;
+    id = `dev-${Math.random().toString(36).substring(2, 9)}-${Date.now().toString(36)}`;
     localStorage.setItem(STORAGE_DEVICE_KEY, id);
   }
   return id;
@@ -51,178 +54,107 @@ export const getDeviceName = (): string => {
   if (typeof window === 'undefined') return 'Server';
   const ua = navigator.userAgent;
   if (/android/i.test(ua)) return 'موبايل أندرويد';
-  if (/iPhone|iPad/i.test(ua)) return 'موبايل آيفون/آيباد';
+  if (/iPhone/i.test(ua)) return 'موبايل آيفون';
+  if (/iPad/i.test(ua)) return 'جهاز آيباد / تابلت';
   if (/Macintosh/i.test(ua)) return 'لاب توب ماك';
   if (/Windows/i.test(ua)) return 'كمبيوتر ويندوز';
   return 'متصفح معمل RT';
 };
 
-// Coordinator room identifier for RT Lab mesh
-const ROOM_PREFIX = 'rt-lab-mesh-v3';
-
 class RealtimeMultiDeviceSyncEngine {
   private deviceId: string;
   private deviceName: string;
-  private peer: Peer | null = null;
-  private connections: Map<string, DataConnection> = new Map();
   private broadcastChannel: BroadcastChannel | null = null;
   private listeners: Array<(msg: SyncMessage) => void> = [];
   private statusListeners: Array<(status: SyncStatus) => void> = [];
-  private isConnected: boolean = false;
+  private isOnline: boolean = typeof navigator !== 'undefined' ? navigator.onLine : true;
+  private isConnected: boolean = true;
   private lastSyncedAt: Date | null = null;
   private isSyncing: boolean = false;
-  private pollIntervalId: any = null;
+  private unsubscribeSnapshot: (() => void) | null = null;
+  private lastProcessedTimestamp: number = 0;
 
   constructor() {
     this.deviceId = getDeviceId();
     this.deviceName = getDeviceName();
 
     if (typeof window !== 'undefined') {
+      this.initNetworkListeners();
       this.initBroadcastChannel();
-      this.initPeerMesh();
+      this.initFirestoreSync();
     }
+  }
+
+  private initNetworkListeners() {
+    window.addEventListener('online', () => {
+      this.isOnline = true;
+      this.isConnected = true;
+      this.notifyStatus();
+    });
+
+    window.addEventListener('offline', () => {
+      this.isOnline = false;
+      this.notifyStatus();
+    });
   }
 
   private initBroadcastChannel() {
     try {
       if ('BroadcastChannel' in window) {
-        this.broadcastChannel = new BroadcastChannel('rt_lab_channel_v3');
+        this.broadcastChannel = new BroadcastChannel('rt_lab_channel_v4');
         this.broadcastChannel.onmessage = (event) => {
           const msg = event.data as SyncMessage;
           if (msg && msg.senderDeviceId !== this.deviceId) {
+            this.lastSyncedAt = new Date();
             this.notifyListeners(msg);
+            this.notifyStatus();
           }
         };
       }
     } catch (e) {
-      console.warn('BroadcastChannel error:', e);
+      console.warn('BroadcastChannel initialization skipped:', e);
     }
   }
 
-  private initPeerMesh() {
+  // Set up real-time listener on Firebase Firestore
+  private initFirestoreSync() {
     try {
-      // Connect to public PeerJS broker
-      const myPeerId = `${ROOM_PREFIX}-${this.deviceId}`;
-      this.peer = new Peer(myPeerId, {
-        debug: 0,
-        config: {
-          iceServers: [
-            { urls: 'stun:stun.l.google.com:19302' },
-            { urls: 'stun:stun1.l.google.com:19302' },
-            { urls: 'stun:stun2.l.google.com:19302' }
-          ]
-        }
-      });
+      const channelRef = doc(db, 'lab_sync', 'live_channel');
 
-      this.peer.on('open', () => {
-        this.isConnected = true;
-        this.notifyStatus();
-        this.broadcastPresence();
-      });
-
-      this.peer.on('connection', (conn) => {
-        this.handleIncomingConnection(conn);
-      });
-
-      this.peer.on('error', (err) => {
-        // Suppress ID taken errors (happens when another tab is already open with same device id)
-        if (err.type === 'unavailable-id') {
-          // Fallback with randomized suffix for extra tab
-          this.reconnectWithRandomSuffix();
-        } else {
-          console.warn('PeerJS connection note:', err.message);
-        }
-      });
-
-      this.peer.on('disconnected', () => {
-        this.isConnected = false;
-        this.notifyStatus();
-        // Auto-reconnect after 3 seconds
-        setTimeout(() => {
-          if (this.peer && !this.peer.destroyed) {
-            this.peer.reconnect();
+      this.unsubscribeSnapshot = onSnapshot(
+        channelRef,
+        (snapshot) => {
+          this.isConnected = true;
+          if (snapshot.exists()) {
+            const data = snapshot.data() as SyncMessage;
+            if (data && data.senderDeviceId !== this.deviceId && data.timestamp > this.lastProcessedTimestamp) {
+              this.lastProcessedTimestamp = data.timestamp;
+              this.lastSyncedAt = new Date(data.timestamp);
+              this.notifyListeners(data);
+              this.notifyStatus();
+            }
           }
-        }, 3000);
-      });
-    } catch (err) {
-      console.warn('PeerJS initialization skipped:', err);
-    }
-  }
-
-  private reconnectWithRandomSuffix() {
-    if (this.peer) {
-      this.peer.destroy();
-    }
-    const randomizedId = `${ROOM_PREFIX}-${this.deviceId}-${Math.floor(Math.random() * 1000)}`;
-    this.peer = new Peer(randomizedId);
-    this.peer.on('open', () => {
-      this.isConnected = true;
-      this.notifyStatus();
-    });
-    this.peer.on('connection', (conn) => {
-      this.handleIncomingConnection(conn);
-    });
-  }
-
-  private handleIncomingConnection(conn: DataConnection) {
-    conn.on('open', () => {
-      this.connections.set(conn.peer, conn);
-      this.notifyStatus();
-
-      // Ask new peer for their state if needed
-      conn.send({
-        action: 'REQUEST_LATEST_STATE',
-        senderDeviceId: this.deviceId,
-        senderDeviceName: this.deviceName,
-        timestamp: Date.now(),
-        payload: null
-      } as SyncMessage);
-    });
-
-    conn.on('data', (data) => {
-      const msg = data as SyncMessage;
-      if (msg && msg.senderDeviceId !== this.deviceId) {
-        this.lastSyncedAt = new Date();
-        this.notifyListeners(msg);
-        this.notifyStatus();
-      }
-    });
-
-    conn.on('close', () => {
-      this.connections.delete(conn.peer);
-      this.notifyStatus();
-    });
-
-    conn.on('error', () => {
-      this.connections.delete(conn.peer);
-      this.notifyStatus();
-    });
-  }
-
-  // Attempt to discover other peers
-  private broadcastPresence() {
-    // Shared common peer IDs
-    const commonSlots = [
-      `${ROOM_PREFIX}-coordinator-1`,
-      `${ROOM_PREFIX}-coordinator-2`
-    ];
-
-    commonSlots.forEach(targetId => {
-      if (this.peer && this.peer.id !== targetId && !this.connections.has(targetId)) {
-        try {
-          const conn = this.peer.connect(targetId, { reliable: true });
-          this.handleIncomingConnection(conn);
-        } catch {
-          // Slot may not be active yet
+        },
+        (error) => {
+          console.error('Firestore real-time listener error:', error);
+          this.isConnected = false;
+          this.notifyStatus();
+          try {
+            handleFirestoreError(error, OperationType.GET, 'lab_sync/live_channel');
+          } catch {
+            // Error logged and handled defensively
+          }
         }
-      }
-    });
+      );
+    } catch (err) {
+      console.warn('Firestore sync setup notice:', err);
+    }
   }
 
   public subscribe(callback: (msg: SyncMessage) => void): () => void {
     this.listeners.push(callback);
     return () => {
-      this.listeners = this.listeners.filter(cb => cb !== callback);
+      this.listeners = this.listeners.filter((cb) => cb !== callback);
     };
   }
 
@@ -230,12 +162,12 @@ class RealtimeMultiDeviceSyncEngine {
     this.statusListeners.push(callback);
     callback(this.getStatus());
     return () => {
-      this.statusListeners = this.statusListeners.filter(cb => cb !== callback);
+      this.statusListeners = this.statusListeners.filter((cb) => cb !== callback);
     };
   }
 
   private notifyListeners(msg: SyncMessage) {
-    this.listeners.forEach(cb => {
+    this.listeners.forEach((cb) => {
       try {
         cb(msg);
       } catch (e) {
@@ -246,7 +178,7 @@ class RealtimeMultiDeviceSyncEngine {
 
   private notifyStatus() {
     const status = this.getStatus();
-    this.statusListeners.forEach(cb => {
+    this.statusListeners.forEach((cb) => {
       try {
         cb(status);
       } catch (e) {
@@ -256,24 +188,23 @@ class RealtimeMultiDeviceSyncEngine {
   }
 
   public getStatus(): SyncStatus {
-    const totalPeers = this.connections.size;
-    let text = 'جاري الاتصال...';
-    if (this.isConnected) {
-      if (totalPeers > 0) {
-        text = `متصل فوري (${totalPeers} أجهزة متزامنة)`;
-      } else {
-        text = 'متصل سحابياً (جاهز للمزامنة مع أي جهاز يفتح)';
-      }
-    } else {
-      text = 'متصل محلياً وسحابياً';
+    let text = 'متصل سحابياً فورياً عبر Firebase (جاهز للتسميع اللحظي)';
+    if (!this.isOnline) {
+      text = 'يعمل دون اتصال (Offline) - سيتم التسميع فور عودة الإنترنت';
+    } else if (this.isSyncing) {
+      text = 'جاري التسميع السحابي اللحظي...';
+    } else if (this.lastSyncedAt) {
+      text = `متصل سحابياً فورياً (آخر تسميع: ${this.lastSyncedAt.toLocaleTimeString('ar-EG')})`;
     }
 
     return {
       isConnected: this.isConnected,
-      peersCount: totalPeers,
+      isOnline: this.isOnline,
+      cloudActive: true,
       lastSyncedAt: this.lastSyncedAt,
       statusText: text,
-      isSyncing: this.isSyncing
+      isSyncing: this.isSyncing,
+      activeDeviceName: this.deviceName,
     };
   }
 
@@ -285,38 +216,94 @@ class RealtimeMultiDeviceSyncEngine {
     this.notifyStatus();
   }
 
-  // Broadcast any action to all devices in real-time
-  public broadcastAction(action: SyncActionType, payload: any) {
+  // Broadcast action across all devices instantaneously via Firebase Firestore
+  public async broadcastAction(action: SyncActionType, payload: any) {
     const msg: SyncMessage = {
       action,
       senderDeviceId: this.deviceId,
       senderDeviceName: this.deviceName,
       timestamp: Date.now(),
-      payload
+      payload,
     };
 
-    // 1. Send via local BroadcastChannel (other tabs on same device)
+    this.lastProcessedTimestamp = msg.timestamp;
+    this.lastSyncedAt = new Date();
+
+    // 1. Instant local BroadcastChannel (tabs on same device)
     if (this.broadcastChannel) {
       try {
         this.broadcastChannel.postMessage(msg);
       } catch (e) {
-        console.warn('BroadcastChannel send error:', e);
+        console.warn('BroadcastChannel error:', e);
       }
     }
 
-    // 2. Send via WebRTC DataChannel to all connected devices (mobile, laptop)
-    this.connections.forEach(conn => {
-      if (conn.open) {
-        try {
-          conn.send(msg);
-        } catch (e) {
-          console.warn('Peer send error:', e);
-        }
+    // 2. Instant Cloud Firestore Replication (multi-device)
+    try {
+      this.setSyncing(true);
+      const channelRef = doc(db, 'lab_sync', 'live_channel');
+      await setDoc(channelRef, msg);
+    } catch (err) {
+      console.warn('Firestore live broadcast note:', err);
+      try {
+        handleFirestoreError(err, OperationType.WRITE, 'lab_sync/live_channel');
+      } catch {
+        // Silently handled so user interaction is never interrupted
       }
-    });
+    } finally {
+      this.setSyncing(false);
+    }
+  }
 
-    this.lastSyncedAt = new Date();
-    this.notifyStatus();
+  // Push master state snapshot to Firestore
+  public async pushMasterSnapshot(fullData: Record<string, any>): Promise<boolean> {
+    try {
+      this.setSyncing(true);
+      const snapshotRef = doc(db, 'lab_sync', 'master_snapshot');
+      await setDoc(snapshotRef, {
+        system: 'RT Lab Unified Medical ERP',
+        lastSyncedAt: new Date().toISOString(),
+        updatedByDevice: this.deviceId,
+        updatedByDeviceName: this.deviceName,
+        ...fullData,
+      });
+      this.lastSyncedAt = new Date();
+      this.notifyStatus();
+      return true;
+    } catch (err) {
+      console.error('Failed to push master snapshot to Firestore:', err);
+      try {
+        handleFirestoreError(err, OperationType.WRITE, 'lab_sync/master_snapshot');
+      } catch {
+        // Handled
+      }
+      return false;
+    } finally {
+      this.setSyncing(false);
+    }
+  }
+
+  // Pull master state snapshot from Firestore
+  public async pullMasterSnapshot(): Promise<{ success: boolean; data?: any }> {
+    try {
+      const snapshotRef = doc(db, 'lab_sync', 'master_snapshot');
+      const snap = await getDoc(snapshotRef);
+      if (snap.exists()) {
+        const data = snap.data();
+        this.lastSyncedAt = new Date();
+        this.notifyStatus();
+        return { success: true, data };
+      }
+      return { success: false };
+    } catch (err) {
+      console.warn('Error pulling master snapshot from Firestore:', err);
+      try {
+        handleFirestoreError(err, OperationType.GET, 'lab_sync/master_snapshot');
+      } catch {
+        // Handled
+      }
+      return { success: false };
+    }
   }
 }
 

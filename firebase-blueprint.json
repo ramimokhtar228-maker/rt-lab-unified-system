@@ -1,0 +1,218 @@
+{
+  "entities": {
+    "LabReport": {
+      "title": "LabReport",
+      "description": "Medical laboratory diagnostic report and patient test results",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique report identifier"
+        },
+        "reportNumber": {
+          "type": "string",
+          "description": "Sequential report number"
+        },
+        "patient": {
+          "type": "object",
+          "description": "Patient demographic and clinical data"
+        },
+        "profiles": {
+          "type": "array",
+          "description": "Diagnostic test profiles and parameter results"
+        },
+        "staff": {
+          "type": "object",
+          "description": "Staff signature names and licenses"
+        },
+        "status": {
+          "type": "string",
+          "description": "Current status of the report (draft, in_progress, verified, released)"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp of report admission"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp of last update"
+        }
+      },
+      "required": ["id", "reportNumber", "status"]
+    },
+    "IncomeRecord": {
+      "title": "IncomeRecord",
+      "description": "Financial invoice and revenue record for laboratory admission",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique invoice record identifier"
+        },
+        "invoiceNumber": {
+          "type": "string",
+          "description": "Sequential invoice number"
+        },
+        "patientName": {
+          "type": "string",
+          "description": "Full name of the patient"
+        },
+        "patientPhone": {
+          "type": "string",
+          "description": "Contact phone number"
+        },
+        "netAmount": {
+          "type": "number",
+          "description": "Net payable amount after discounts"
+        },
+        "paidAmount": {
+          "type": "number",
+          "description": "Amount paid by patient"
+        },
+        "paymentStatus": {
+          "type": "string",
+          "description": "Payment status (paid, partial, unpaid)"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp of invoice creation"
+        }
+      },
+      "required": ["id", "invoiceNumber", "netAmount", "paidAmount"]
+    },
+    "ExpenseRecord": {
+      "title": "ExpenseRecord",
+      "description": "Operational expense or treasury disbursement record",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique expense identifier"
+        },
+        "title": {
+          "type": "string",
+          "description": "Description of the expense"
+        },
+        "amount": {
+          "type": "number",
+          "description": "Disbursed amount"
+        },
+        "category": {
+          "type": "string",
+          "description": "Expense classification category"
+        },
+        "date": {
+          "type": "string",
+          "description": "Date of expense"
+        }
+      },
+      "required": ["id", "title", "amount", "category"]
+    },
+    "InventoryItem": {
+      "title": "InventoryItem",
+      "description": "Laboratory reagent, kit, or consumable stock item",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique item identifier"
+        },
+        "nameAr": {
+          "type": "string",
+          "description": "Item name in Arabic"
+        },
+        "currentQuantity": {
+          "type": "number",
+          "description": "Stock count currently available"
+        },
+        "unit": {
+          "type": "string",
+          "description": "Unit of measurement"
+        },
+        "minThreshold": {
+          "type": "number",
+          "description": "Reorder alert threshold"
+        }
+      },
+      "required": ["id", "nameAr", "currentQuantity"]
+    },
+    "LoyaltyProfile": {
+      "title": "LoyaltyProfile",
+      "description": "Patient loyalty rewards profile and points ledger",
+      "type": "object",
+      "properties": {
+        "patientId": {
+          "type": "string",
+          "description": "Identifier matching patient record"
+        },
+        "patientName": {
+          "type": "string",
+          "description": "Patient full name"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Patient phone number"
+        },
+        "totalPoints": {
+          "type": "number",
+          "description": "Current active reward points balance"
+        },
+        "tier": {
+          "type": "string",
+          "description": "Loyalty tier badge"
+        }
+      },
+      "required": ["patientId", "phone", "totalPoints"]
+    },
+    "LabMasterSync": {
+      "title": "LabMasterSync",
+      "description": "Consolidated state synchronization document for seamless multi-device replication",
+      "type": "object",
+      "properties": {
+        "system": {
+          "type": "string",
+          "description": "System identifier"
+        },
+        "lastSyncedAt": {
+          "type": "string",
+          "description": "ISO timestamp of latest synchronization"
+        },
+        "updatedBy": {
+          "type": "string",
+          "description": "Device ID that performed the latest update"
+        },
+        "data": {
+          "type": "object",
+          "description": "Master JSON snapshot payload"
+        }
+      },
+      "required": ["system", "lastSyncedAt"]
+    }
+  },
+  "firestore": {
+    "/reports/{reportId}": {
+      "schema": "LabReport",
+      "description": "Diagnostic medical reports and patient test results"
+    },
+    "/income_records/{recordId}": {
+      "schema": "IncomeRecord",
+      "description": "Financial invoices and payments"
+    },
+    "/expenses/{expenseId}": {
+      "schema": "ExpenseRecord",
+      "description": "Disbursements and operating costs"
+    },
+    "/inventory/{itemId}": {
+      "schema": "InventoryItem",
+      "description": "Chemical reagents and stock items"
+    },
+    "/loyalty_profiles/{profileId}": {
+      "schema": "LoyaltyProfile",
+      "description": "Loyalty rewards and points ledger"
+    },
+    "/lab_sync/{syncDocId}": {
+      "schema": "LabMasterSync",
+      "description": "Fast multi-device synchronization documents"
+    }
+  }
+}

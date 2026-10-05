@@ -16,6 +16,7 @@ import {
   X
 } from 'lucide-react';
 import { RTLogo } from './RTLogo';
+import { PWAInstallButton } from './PWAInstallButton';
 
 export const Header: React.FC = () => {
   const {
@@ -100,6 +101,9 @@ export const Header: React.FC = () => {
                 <span className="font-mono font-bold text-rose-300">{todaySamples}</span>
               </div>
             </div>
+
+            {/* PWA Install Button */}
+            <PWAInstallButton variant="header" />
 
             {/* Quick Action: New Patient Admission */}
             <button

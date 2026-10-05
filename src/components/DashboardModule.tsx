@@ -37,6 +37,7 @@ import {
 import { RTLogo } from './RTLogo';
 import { realtimeSyncManager, SyncStatus } from '../utils/realtimeMultiDeviceSync';
 import { formatWhatsAppMessage, openWhatsApp } from '../utils/whatsapp';
+import { PWAInstallButton } from './PWAInstallButton';
 
 export const DashboardModule: React.FC = () => {
   const {
@@ -171,6 +172,9 @@ export const DashboardModule: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      {/* 0. PWA Install Quick Action Banner */}
+      <PWAInstallButton variant="banner" />
+
       {/* 1. Real-time Multi-Device Sync Hero Banner */}
       <div className="bg-gradient-to-r from-slate-900 via-rose-950 to-slate-900 border border-rose-800/40 rounded-3xl p-5 shadow-xl text-white relative overflow-hidden">
         <div className="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-emerald-500 via-rose-500 to-emerald-500 animate-pulse" />

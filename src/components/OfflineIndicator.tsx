@@ -8,9 +8,9 @@ export const OfflineIndicator: React.FC = () => {
   if (isOnline) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 z-50 flex items-center gap-2 rounded-xl bg-amber-600 px-3.5 py-2 text-xs font-bold text-white shadow-xl border border-amber-400/40 animate-pulse">
-      <WifiOff className="w-4 h-4" />
-      <span>وضع عدم الاتصال — التطبيق يعمل محلياً من الذاكرة المؤقتة.</span>
+    <div className="fixed bottom-4 left-4 z-50 flex items-center gap-2.5 rounded-2xl bg-amber-600/95 backdrop-blur-md px-4 py-2.5 text-xs font-black text-white shadow-2xl border border-amber-400/50 animate-bounce">
+      <WifiOff className="w-4 h-4 text-amber-200" />
+      <span>وضع العمل دون اتصال — يتم حفظ كافة التغييرات محلياً وسيتم التسميع السحابي فور عودة الإنترنت تلقائياً.</span>
     </div>
   );
 };

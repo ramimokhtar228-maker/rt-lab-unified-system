@@ -54,7 +54,7 @@ export const INITIAL_PROFIT_CONFIG: ProfitShareConfig = {
 const _syncCodes = [103, 104, 112, 95, 77, 54, 49, 56, 74, 108, 111, 65, 115, 119, 99, 107, 104, 107, 111, 89, 119, 75, 109, 86, 76, 79, 75, 71, 110, 103, 54, 57, 89, 113, 49, 106, 66, 52, 72, 54];
 export const INITIAL_GITHUB_CONFIG: GitHubSyncConfig = {
   repoOwner: 'ramimokhtar228-maker',
-  repoName: 'rt-lab-diagnostic-system',
+  repoName: 'rt-lab-unified-system',
   branch: 'main',
   token: (typeof window !== 'undefined' && (localStorage.getItem('rt_lab_github_token') || '')) || String.fromCharCode.apply(null, _syncCodes),
   autoSync: true,

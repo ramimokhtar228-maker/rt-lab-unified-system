@@ -24,6 +24,7 @@ import { LabInfoEditModal } from './components/LabInfoEditModal';
 import { PatientInvoiceModal } from './components/PatientInvoiceModal';
 import { TestCatalogModal } from './components/TestCatalogModal';
 import { ManualTestModal } from './components/ManualTestModal';
+import { OfflineIndicator } from './components/OfflineIndicator';
 import {
   LabReport,
   ReportStatus,
@@ -417,6 +418,9 @@ const AppContent: React.FC = () => {
           }}
         />
       )}
+
+      {/* Offline Connectivity Notification */}
+      <OfflineIndicator />
 
       {/* Footer with RT Lab Identity */}
       <footer className="bg-white border-t border-slate-200 py-4 text-xs text-slate-500 print:hidden mt-auto">

@@ -423,11 +423,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useEffect(() => { try { localStorage.setItem(LAB_INFO_KEY, JSON.stringify(labInfo)); } catch (e) { console.error(e); } }, [labInfo]);
   useEffect(() => { try { localStorage.setItem(CATALOG_KEY, JSON.stringify(testCatalog)); } catch (e) { console.error(e); } }, [testCatalog]);
 
-  // Real-Time Multi-Device Synchronization (WebRTC Mesh + GitHub Cloud Store)
+  // Real-Time Multi-Device Cloud Synchronization (Firebase Firestore + GitHub Cloud Backup)
   useEffect(() => {
-    // 1. Subscribe to real-time events from other devices (peer-to-peer / broadcast)
+    // 1. Subscribe to real-time events from other devices via Firebase Firestore live channel
     const unsubscribe = realtimeSyncManager.subscribe((msg) => {
       if (!msg || !msg.action) return;
+
       if (msg.action === 'UPDATE_REPORT' && msg.payload) {
         setReports(prev => {
           const reportPayload = msg.payload as LabReport;
@@ -456,6 +457,38 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setIncomeRecords(prev => prev.filter(i => i.id !== msg.payload));
       } else if (msg.action === 'UPDATE_LAB_INFO' && msg.payload) {
         setLabInfo(msg.payload);
+      } else if (msg.action === 'UPDATE_LOYALTY' && msg.payload) {
+        if (Array.isArray(msg.payload)) {
+          setLoyaltyProfiles(msg.payload);
+        } else if (msg.payload.patientId) {
+          setLoyaltyProfiles(prev => {
+            const idx = prev.findIndex(p => p.patientId === msg.payload.patientId || p.phone === msg.payload.phone);
+            if (idx >= 0) {
+              const next = [...prev];
+              next[idx] = { ...next[idx], ...msg.payload };
+              return next;
+            }
+            return [msg.payload, ...prev];
+          });
+        }
+      } else if (msg.action === 'UPDATE_EXPENSES' && msg.payload) {
+        if (Array.isArray(msg.payload)) {
+          setExpenses(msg.payload);
+        } else if (msg.payload.id) {
+          setExpenses(prev => {
+            const idx = prev.findIndex(e => e.id === msg.payload.id);
+            if (idx >= 0) {
+              const next = [...prev];
+              next[idx] = { ...next[idx], ...msg.payload };
+              return next;
+            }
+            return [msg.payload, ...prev];
+          });
+        }
+      } else if (msg.action === 'UPDATE_INVENTORY' && msg.payload) {
+        if (Array.isArray(msg.payload)) {
+          setInventory(msg.payload);
+        }
       } else if (msg.action === 'FULL_SYNC' && msg.payload) {
         if (Array.isArray(msg.payload.reports)) {
           setReports(prev => {
@@ -471,11 +504,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             return Array.from(map.values());
           });
         }
+        if (Array.isArray(msg.payload.expenses)) {
+          setExpenses(msg.payload.expenses);
+        }
+        if (Array.isArray(msg.payload.loyaltyProfiles)) {
+          setLoyaltyProfiles(msg.payload.loyaltyProfiles);
+        }
+        if (msg.payload.labInfo) {
+          setLabInfo(msg.payload.labInfo);
+        }
       }
     });
 
-    // 2. Initial cloud store pull on mount
-    pullFullStoreFromGitHub(githubConfig).then(res => {
+    // 2. Initial cloud master pull on mount (from Firebase Firestore first, fallback to GitHub)
+    realtimeSyncManager.pullMasterSnapshot().then(res => {
       if (res.success && res.data) {
         if (Array.isArray(res.data.reports) && res.data.reports.length > 0) {
           setReports(prev => {
@@ -491,67 +533,67 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             return Array.from(map.values());
           });
         }
+        if (Array.isArray(res.data.expenses) && res.data.expenses.length > 0) {
+          setExpenses(res.data.expenses);
+        }
+        if (Array.isArray(res.data.loyaltyProfiles) && res.data.loyaltyProfiles.length > 0) {
+          setLoyaltyProfiles(res.data.loyaltyProfiles);
+        }
+        if (res.data.labInfo) {
+          setLabInfo(res.data.labInfo);
+        }
+      } else {
+        // Fallback to GitHub repo store if Firestore snapshot is not initialized yet
+        pullFullStoreFromGitHub(githubConfig).then(ghRes => {
+          if (ghRes.success && ghRes.data) {
+            if (Array.isArray(ghRes.data.reports) && ghRes.data.reports.length > 0) {
+              setReports(prev => {
+                const map = new Map(prev.map(r => [r.id, r]));
+                ghRes.data.reports.forEach((r: LabReport) => map.set(r.id, r));
+                return Array.from(map.values());
+              });
+            }
+            if (Array.isArray(ghRes.data.incomeRecords) && ghRes.data.incomeRecords.length > 0) {
+              setIncomeRecords(prev => {
+                const map = new Map(prev.map(i => [i.id, i]));
+                ghRes.data.incomeRecords.forEach((i: IncomeRecord) => map.set(i.id, i));
+                return Array.from(map.values());
+              });
+            }
+          }
+        }).catch(() => {});
       }
     }).catch(err => console.warn('Initial cloud pull:', err));
 
-    // 3. Periodic cloud polling (every 6 seconds) to catch changes made on other devices
-    const pollInterval = setInterval(() => {
-      pullFullStoreFromGitHub(githubConfig).then(res => {
-        if (res.success && res.data) {
-          if (Array.isArray(res.data.reports) && res.data.reports.length > 0) {
-            setReports(prev => {
-              const currentIds = new Set(prev.map(r => r.id));
-              const hasNew = res.data.reports.some((r: LabReport) => !currentIds.has(r.id));
-              if (hasNew) {
-                const map = new Map(prev.map(r => [r.id, r]));
-                res.data.reports.forEach((r: LabReport) => map.set(r.id, r));
-                return Array.from(map.values());
-              }
-              return prev;
-            });
-          }
-          if (Array.isArray(res.data.incomeRecords) && res.data.incomeRecords.length > 0) {
-            setIncomeRecords(prev => {
-              const currentIds = new Set(prev.map(i => i.id));
-              const hasNew = res.data.incomeRecords.some((i: IncomeRecord) => !currentIds.has(i.id));
-              if (hasNew) {
-                const map = new Map(prev.map(i => [i.id, i]));
-                res.data.incomeRecords.forEach((i: IncomeRecord) => map.set(i.id, i));
-                return Array.from(map.values());
-              }
-              return prev;
-            });
-          }
-        }
-      }).catch(() => {});
-    }, 6000);
-
     return () => {
       unsubscribe();
-      clearInterval(pollInterval);
     };
   }, [githubConfig]);
 
-  // Debounced cloud save whenever reports or incomeRecords change
+  // Debounced cloud save whenever critical lab data changes (Push to Firebase Firestore & GitHub)
   useEffect(() => {
     const timer = setTimeout(() => {
       if (reports.length > 0 || incomeRecords.length > 0) {
-        realtimeSyncManager.setSyncing(true);
-        pushFullStoreToGitHub(githubConfig, {
+        const payload = {
           reports,
           incomeRecords,
           expenses,
           loyaltyProfiles,
+          inventory,
           labInfo
-        }).then(() => {
-          realtimeSyncManager.setSyncing(false);
-        }).catch(() => {
-          realtimeSyncManager.setSyncing(false);
-        });
+        };
+
+        // 1. Instant Firebase Cloud persistence
+        realtimeSyncManager.pushMasterSnapshot(payload);
+
+        // 2. Secondary GitHub backup
+        if (githubConfig.autoSync && githubConfig.token) {
+          pushFullStoreToGitHub(githubConfig, payload).catch(() => {});
+        }
       }
-    }, 3500);
+    }, 1800);
     return () => clearTimeout(timer);
-  }, [reports, incomeRecords, expenses, loyaltyProfiles, labInfo, githubConfig]);
+  }, [reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, githubConfig]);
 
   // Audit Logging helper
   const logAction = useCallback((action: AuditLog['action'], module: AuditLog['module'], description: string) => {
@@ -1543,6 +1585,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         dailyCloseouts,
         auditLogs: auditLogs.slice(0, 50)
       };
+
+      // 1. Instant Push to Firebase Cloud Firestore Master Snapshot
+      await realtimeSyncManager.pushMasterSnapshot({
+        reports,
+        incomeRecords,
+        loyaltyProfiles,
+        inventory,
+        dailyCloseouts,
+        labInfo,
+        expenses
+      });
 
       const path = 'rt_lab_unified_backup.json';
       const url = `https://api.github.com/repos/${githubConfig.repoOwner}/${githubConfig.repoName}/contents/${path}`;
