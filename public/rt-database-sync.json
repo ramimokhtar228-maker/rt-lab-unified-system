@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:11:30.791Z",
+  "syncedAt": "2026-10-05T15:11:54.431Z",
   "reports": [
     {
       "status": "draft",
@@ -3948,7 +3948,7 @@
     {
       "id": "rep-inc-1791124532954",
       "createdAt": "2026-10-04T14:35:32.954Z",
-      "updatedAt": "2026-10-05T15:11:21.581Z",
+      "updatedAt": "2026-10-05T15:11:47.570Z",
       "patient": {
         "reportingDate": "2026-10-04T14:35",
         "loyaltyCardIssued": true,
@@ -4056,19 +4056,19 @@
               "method": "Direct Accelerator",
               "textReference": "",
               "id": "param-2-1791212993857-qds",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "34",
+              "flag": "LOW"
             },
             {
               "name": "LDL - Cholesterol (Calculated)",
               "unit": "mg/dL",
               "minNormal": 0,
               "maxNormal": 100,
-              "notes": "Friedewald Formula: Total Chol - HDL - (TG / 5)",
+              "notes": "Friedewald Formula: TC - HDL - (TG/5)",
               "textReference": "",
               "id": "param-3-1791212993857-pf0",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "127",
+              "flag": "HIGH"
             },
             {
               "name": "VLDL - Cholesterol",
@@ -4086,11 +4086,11 @@
               "unit": "mg/dL",
               "minNormal": 0,
               "maxNormal": 130,
-              "notes": "Auto-calculated: Total Chol - HDL",
+              "notes": "Calculated: Total Cholesterol - HDL",
               "textReference": "",
               "id": "param-5-1791212993857-orh",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "154",
+              "flag": "HIGH"
             },
             {
               "name": "Total Chol / HDL Ratio",
@@ -4098,10 +4098,10 @@
               "minNormal": 0,
               "maxNormal": 4.5,
               "textReference": "< 4.5 Desirable",
-              "notes": "Auto-calculated: Total Chol / HDL",
+              "notes": "Desirable < 4.5",
               "id": "param-6-1791212993857-rxu",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "5.5",
+              "flag": "HIGH"
             },
             {
               "name": "LDL / HDL Ratio",
@@ -4110,8 +4110,8 @@
               "maxNormal": 3,
               "textReference": "< 3.0 Desirable",
               "id": "param-7-1791212993857-6zx",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "3.73",
+              "flag": "HIGH"
             }
           ]
         },
