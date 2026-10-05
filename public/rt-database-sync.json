@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:18:52.034Z",
+  "syncedAt": "2026-10-05T18:19:06.902Z",
   "reports": [
     {
       "status": "released",
@@ -736,8 +736,8 @@
             {
               "minNormal": 0,
               "unit": "%",
-              "result": "",
-              "flag": "",
+              "result": "00",
+              "flag": "NORMAL",
               "textReference": "0 % (Absent in normal blood)",
               "maxNormal": 0,
               "id": "p-mig-24-1791157348011",
@@ -808,37 +808,6 @@
               "id": "p-mig-30-1791157348011",
               "name": "NLR (Neutrophil/Lymphocyte)",
               "result": "2.3"
-            },
-            {
-              "result": "",
-              "maxNormal": 150,
-              "name": "PLR (Platelet/Lymphocyte)",
-              "minNormal": 100,
-              "textReference": "100 - 150",
-              "id": "p-mig-31-1791157348011",
-              "notes": "Auto-calculated: PLT / ALC",
-              "flag": "",
-              "unit": "Ratio"
-            },
-            {
-              "name": "Reticulocyte Count %",
-              "minNormal": 0.5,
-              "result": "",
-              "unit": "%",
-              "id": "p-mig-32-1791157348011",
-              "flag": "",
-              "textReference": "0.5 - 2.5 %",
-              "maxNormal": 2.5
-            },
-            {
-              "name": "RPI (Reticulocyte Production Index)",
-              "textReference": "> 2.0 indicates adequate marrow response",
-              "minNormal": 1,
-              "result": "",
-              "maxNormal": 3,
-              "unit": "Index",
-              "id": "p-mig-33-1791157348011",
-              "flag": ""
             },
             {
               "id": "p-mig-34-1791157348011",
@@ -925,7 +894,7 @@
         "totalCost": 230,
         "bloodGroup": "O+"
       },
-      "updatedAt": "2026-10-05T18:18:47.210Z",
+      "updatedAt": "2026-10-05T18:19:03.683Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-8226 - تم التسميع آلياً من منظومة الفواتير",
       "id": "rep-inc-1791127003337",
       "staff": {
