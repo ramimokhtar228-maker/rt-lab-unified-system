@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T13:57:57.827Z",
+  "syncedAt": "2026-10-05T13:58:07.670Z",
   "reports": [
     {
       "status": "draft",
@@ -1618,15 +1618,6 @@
       "generalComment": "طلب فحص مالي رقم RT-BK-7317 - تم التسميع آلياً من منظومة الفواتير",
       "profiles": [
         {
-          "profileCode": "PKG_VIP_RT",
-          "sampleType": "Full Set (Blood & Urine)",
-          "id": "prof-inc-1791125273776-1",
-          "category": "Packages",
-          "titleAr": "باقة الفحص الشامل الملكية VIP د. رامي مختار (32 فحص)",
-          "titleEn": "RT Lab Royal Executive VIP Package",
-          "parameters": []
-        },
-        {
           "profileCode": "TSH",
           "sampleType": "Serum",
           "category": "Endocrinology",
@@ -1664,7 +1655,7 @@
         "phone": "01095920078",
         "age": 36
       },
-      "updatedAt": "2026-10-05T13:57:55.100Z",
+      "updatedAt": "2026-10-05T13:58:04.173Z",
       "reportNumber": "RT-BK-7317",
       "id": "rep-inc-1791125273776",
       "status": "draft",
