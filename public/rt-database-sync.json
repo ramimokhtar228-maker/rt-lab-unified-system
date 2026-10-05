@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:34:03.348Z",
+  "syncedAt": "2026-10-05T15:34:08.058Z",
   "reports": [
     {
       "status": "released",
@@ -1933,7 +1933,7 @@
       }
     },
     {
-      "updatedAt": "2026-10-05T15:34:00.822Z",
+      "updatedAt": "2026-10-05T15:34:03.739Z",
       "patient": {
         "loyaltyCardNumber": "RT-2026-0008",
         "id": "pat-inc-1791124918128",
@@ -2158,7 +2158,7 @@
             {
               "id": "p-pkg-3-1791214314721",
               "name": "إنزيم كبد AST / SGOT (Aspartate Aminotransferase (AST / SGOT))",
-              "result": "",
+              "result": "30",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 40,
