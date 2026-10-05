@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:21:32.255Z",
+  "syncedAt": "2026-10-05T15:21:36.279Z",
   "reports": [
     {
       "status": "released",
@@ -2115,7 +2115,7 @@
               "method": "Direct Accelerator",
               "textReference": "",
               "id": "param-2-1791213622129-5o7",
-              "result": "",
+              "result": "52",
               "flag": "NORMAL"
             },
             {
@@ -2123,11 +2123,11 @@
               "unit": "mg/dL",
               "minNormal": 0,
               "maxNormal": 100,
-              "notes": "Friedewald Formula: Total Chol - HDL - (TG / 5)",
+              "notes": "Friedewald Formula: TC - HDL - (TG/5)",
               "textReference": "",
               "id": "param-3-1791213622129-1hu",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "164",
+              "flag": "HIGH"
             },
             {
               "name": "VLDL - Cholesterol",
@@ -2145,11 +2145,11 @@
               "unit": "mg/dL",
               "minNormal": 0,
               "maxNormal": 130,
-              "notes": "Auto-calculated: Total Chol - HDL",
+              "notes": "Calculated: Total Cholesterol - HDL",
               "textReference": "",
               "id": "param-5-1791213622129-ejq",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "202",
+              "flag": "HIGH"
             },
             {
               "name": "Total Chol / HDL Ratio",
@@ -2157,10 +2157,10 @@
               "minNormal": 0,
               "maxNormal": 4.5,
               "textReference": "< 4.5 Desirable",
-              "notes": "Auto-calculated: Total Chol / HDL",
+              "notes": "Desirable < 4.5",
               "id": "param-6-1791213622129-ptj",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "4.9",
+              "flag": "HIGH"
             },
             {
               "name": "LDL / HDL Ratio",
@@ -2639,7 +2639,7 @@
         }
       ],
       "status": "in_progress",
-      "updatedAt": "2026-10-05T15:21:29.069Z",
+      "updatedAt": "2026-10-05T15:21:33.263Z",
       "createdAt": "2026-10-04T14:38:22.671Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-4276 - تم التسميع آلياً من منظومة الفواتير",
       "reportNumber": "RT-BK-4276",
