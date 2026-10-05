@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:45:40.991Z",
+  "syncedAt": "2026-10-05T17:45:56.259Z",
   "reports": [
     {
       "status": "released",
@@ -1553,7 +1553,7 @@
           "titleAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
           "category": "Hematology",
           "sampleType": "EDTA Whole Blood",
-          "interpretation": "CBC ",
+          "interpretation": "CBC WITH DIFFERENTIAL FILM, IRON PR",
           "parameters": [
             {
               "name": "Hemoglobin (Hb)",
@@ -2245,7 +2245,7 @@
         }
       ],
       "id": "rep-inc-1791125455998",
-      "updatedAt": "2026-10-05T17:45:37.753Z",
+      "updatedAt": "2026-10-05T17:45:52.805Z",
       "createdAt": "2026-10-04T14:50:55.998Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-9599 - تم التسميع آلياً من منظومة الفواتير",
       "patient": {
