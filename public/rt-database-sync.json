@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:08:20.065Z",
+  "syncedAt": "2026-10-05T18:08:29.486Z",
   "reports": [
     {
       "status": "released",
@@ -5035,7 +5035,7 @@
             {
               "id": "p-pkg-5-1791223515986",
               "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
-              "result": "",
+              "result": "5.0",
               "unit": "mg/dL",
               "minNormal": 3.5,
               "maxNormal": 7.2,
@@ -5106,7 +5106,7 @@
         "sampleDate": "2026-10-04T14:59"
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-9820 - تم التسميع آلياً من منظومة الفواتير",
-      "updatedAt": "2026-10-05T18:08:12.861Z",
+      "updatedAt": "2026-10-05T18:08:22.415Z",
       "packageApplied": {
         "code": "PKG-ANNUAL-WELLNESS",
         "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
