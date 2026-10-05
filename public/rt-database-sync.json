@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T11:34:00.572Z",
+  "syncedAt": "2026-10-05T11:35:19.133Z",
   "reports": [
     {
       "id": "rep-inc-1791151837342",
@@ -4023,7 +4023,96 @@
       "createdAt": "2026-10-03T23:04:19.875Z"
     }
   ],
-  "incomeRecords": [],
+  "incomeRecords": [
+    {
+      "id": "inv-001",
+      "invoiceNumber": "INV-2026-001",
+      "patientName": "أحمد محمود إبراهيم",
+      "patientPhone": "01012345678",
+      "patientAge": 34,
+      "patientGender": "male",
+      "barcode": "RT-10029",
+      "labNumber": "RT-2026-001",
+      "referringDoctor": "د. طارق المنشاوي",
+      "tests": [
+        {
+          "id": "t-cbc",
+          "code": "CBC",
+          "nameAr": "صورة الدم الكاملة (CBC 5-Diff)",
+          "nameEn": "Complete Blood Count",
+          "price": 280,
+          "category": "Hematology",
+          "cost": 45,
+          "sampleType": "EDTA Whole Blood"
+        }
+      ],
+      "subtotal": 280,
+      "testsSubtotal": 280,
+      "discount": 28,
+      "loyaltyDiscountEGP": 28,
+      "loyaltyPointsRedeemed": 0,
+      "loyaltyPointsEarned": 252,
+      "netAmount": 252,
+      "paidAmount": 252,
+      "remainingAmount": 0,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "cashierName": "المحاسب المالي",
+      "branch": "فرع القصر العيني - الرئيسي",
+      "notes": "خصم كارت الولاء الفضي 10%",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-05T11:35:13.976Z",
+      "updatedAt": "2026-10-05T11:35:13.976Z"
+    },
+    {
+      "id": "inv-002",
+      "invoiceNumber": "INV-2026-002",
+      "patientName": "منى عادل عبد الرحمن",
+      "patientPhone": "01198765432",
+      "patientAge": 48,
+      "patientGender": "female",
+      "barcode": "RT-10030",
+      "labNumber": "RT-2026-002",
+      "referringDoctor": "أ.د. خالد الببلاوي",
+      "tests": [
+        {
+          "id": "t-hba1c",
+          "code": "HBA1C",
+          "nameAr": "السكر التراكمي (HbA1c HPLC)",
+          "nameEn": "Glycated Hemoglobin HbA1c",
+          "price": 160,
+          "category": "Diabetes",
+          "cost": 35
+        },
+        {
+          "id": "t-kft",
+          "code": "KFT",
+          "nameAr": "وظائف كلى كاملة (KFT)",
+          "nameEn": "Renal Function Panel",
+          "price": 220,
+          "category": "Biochemistry",
+          "cost": 30
+        }
+      ],
+      "subtotal": 380,
+      "testsSubtotal": 380,
+      "discount": 38,
+      "loyaltyDiscountEGP": 38,
+      "loyaltyPointsRedeemed": 0,
+      "loyaltyPointsEarned": 342,
+      "netAmount": 342,
+      "paidAmount": 342,
+      "remainingAmount": 0,
+      "paymentMethod": "visa",
+      "paymentStatus": "paid",
+      "cashierName": "المحاسب المالي",
+      "branch": "فرع القصر العيني - الرئيسي",
+      "notes": "خصم كارت الولاء الذهبي 10%",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-05T11:35:13.976Z",
+      "updatedAt": "2026-10-05T11:35:13.977Z"
+    }
+  ],
   "expenses": [],
   "loyaltyProfiles": [
     {
