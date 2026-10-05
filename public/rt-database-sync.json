@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T11:12:31.066Z",
+  "syncedAt": "2026-10-05T11:12:47.081Z",
   "reports": [
     {
       "id": "rep-1791198572864",
@@ -468,25 +468,6 @@
           ]
         },
         {
-          "id": "prof-1791198572863-3602",
-          "profileCode": "KIDNEY_PROFILE",
-          "titleEn": "Full Kidney Function Profile",
-          "titleAr": "وظائف الكلى كاملة (Creatinine + Urea + Uric)",
-          "category": "Kidney Function",
-          "sampleType": "Serum",
-          "parameters": [
-            {
-              "id": "p-1791198572863",
-              "name": "Full Kidney Function Profile",
-              "result": "",
-              "unit": "",
-              "textReference": "",
-              "flag": "NORMAL",
-              "method": "Automated Clinical Assay"
-            }
-          ]
-        },
-        {
           "id": "prof-1791198572863-e5va",
           "profileCode": "LIPID_PROFILE",
           "titleEn": "Complete Lipid Profile",
@@ -551,7 +532,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-05T11:09:32.864Z",
-      "updatedAt": "2026-10-05T11:12:28.383Z",
+      "updatedAt": "2026-10-05T11:12:44.379Z",
       "invoiceId": "inv-1791198572864"
     }
   ],
