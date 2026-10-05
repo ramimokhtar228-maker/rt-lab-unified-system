@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:24:07.395Z",
+  "syncedAt": "2026-10-05T15:24:13.586Z",
   "reports": [
     {
       "status": "released",
@@ -2243,7 +2243,7 @@
             {
               "id": "p-pkg-2-1791213622129",
               "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
-              "result": "",
+              "result": "34",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 41,
@@ -2277,7 +2277,7 @@
         }
       ],
       "status": "in_progress",
-      "updatedAt": "2026-10-05T15:24:03.749Z",
+      "updatedAt": "2026-10-05T15:24:10.653Z",
       "createdAt": "2026-10-04T14:38:22.671Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-4276 - تم التسميع آلياً من منظومة الفواتير",
       "reportNumber": "RT-BK-4276",
