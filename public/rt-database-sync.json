@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:05:20.066Z",
+  "syncedAt": "2026-10-05T18:05:39.467Z",
   "reports": [
     {
       "status": "released",
@@ -4864,8 +4864,8 @@
               "method": "Automated SLS-Hb",
               "textReference": "M: 13.0 - 17.5 | F: 12.0 - 15.5 g/dL",
               "id": "param-0-1791223515986-csi",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "11.75",
+              "flag": "LOW"
             },
             {
               "name": "R.B.Cs Count",
@@ -4883,11 +4883,11 @@
               "unit": "%",
               "minNormal": 36,
               "maxNormal": 48,
-              "notes": "Auto-calculated: Hb × 3",
+              "notes": "Calculated (HGB × 3)",
               "textReference": "M: 40 - 52% | F: 36 - 48%",
               "id": "param-2-1791223515986-4sn",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "3",
+              "flag": "LOW"
             },
             {
               "name": "M.C.V",
@@ -4916,11 +4916,11 @@
               "unit": "g/dL",
               "minNormal": 32,
               "maxNormal": 36,
-              "notes": "Auto-calculated: (Hb × 100) / PCV",
+              "notes": "Calculated: (HGB × 100) / HCT",
               "textReference": "32.0 - 36.0 g/dL",
               "id": "param-5-1791223515986-96b",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "391.7",
+              "flag": "HIGH"
             },
             {
               "name": "R.D.W-CV",
@@ -5479,7 +5479,7 @@
         "sampleDate": "2026-10-04T14:59"
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-9820 - تم التسميع آلياً من منظومة الفواتير",
-      "updatedAt": "2026-10-05T18:05:15.987Z",
+      "updatedAt": "2026-10-05T18:05:35.391Z",
       "packageApplied": {
         "code": "PKG-ANNUAL-WELLNESS",
         "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
