@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:18:43.660Z",
+  "syncedAt": "2026-10-05T18:18:52.034Z",
   "reports": [
     {
       "status": "released",
@@ -716,19 +716,19 @@
             {
               "textReference": "0 % (Absent in normal blood)",
               "name": "Metamyelocytes %",
-              "result": "",
+              "result": "00",
               "maxNormal": 0,
               "id": "p-mig-22-1791157348011",
               "unit": "%",
               "minNormal": 0,
-              "flag": ""
+              "flag": "NORMAL"
             },
             {
               "name": "Myelocytes %",
-              "result": "",
+              "result": "00",
               "minNormal": 0,
               "unit": "%",
-              "flag": "",
+              "flag": "NORMAL",
               "id": "p-mig-23-1791157348011",
               "maxNormal": 0,
               "textReference": "0 % (Absent in normal blood)"
@@ -925,7 +925,7 @@
         "totalCost": 230,
         "bloodGroup": "O+"
       },
-      "updatedAt": "2026-10-05T18:18:40.267Z",
+      "updatedAt": "2026-10-05T18:18:47.210Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-8226 - تم التسميع آلياً من منظومة الفواتير",
       "id": "rep-inc-1791127003337",
       "staff": {
