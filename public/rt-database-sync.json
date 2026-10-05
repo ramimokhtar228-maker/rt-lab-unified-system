@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:47:13.440Z",
+  "syncedAt": "2026-10-05T17:47:43.288Z",
   "reports": [
     {
       "status": "released",
@@ -1598,7 +1598,7 @@
               "method": "CHOD-PAP",
               "textReference": "",
               "id": "param-0-1791222251478-kro",
-              "result": "",
+              "result": "189",
               "flag": "NORMAL"
             },
             {
@@ -2177,7 +2177,7 @@
         }
       ],
       "id": "rep-inc-1791125455998",
-      "updatedAt": "2026-10-05T17:47:09.301Z",
+      "updatedAt": "2026-10-05T17:47:39.989Z",
       "createdAt": "2026-10-04T14:50:55.998Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-9599 - تم التسميع آلياً من منظومة الفواتير",
       "patient": {
