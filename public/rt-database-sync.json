@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:55:54.771Z",
+  "syncedAt": "2026-10-05T17:57:53.876Z",
   "reports": [
     {
       "status": "released",
@@ -1478,16 +1478,7 @@
       "profiles": [
         {
           "sampleType": "Full Set (Blood & Urine)",
-          "parameters": [
-            {
-              "name": "باقة الفحص الشامل الملكية VIP د. رامي مختار (32 فحص) (RT Lab Royal Executive VIP Package)",
-              "textReference": "قيد الفحص المخبري",
-              "result": "",
-              "unit": "",
-              "id": "p-1791127114170",
-              "flag": ""
-            }
-          ],
+          "parameters": [],
           "profileCode": "PKG_VIP_RT",
           "titleAr": "باقة الفحص الشامل الملكية VIP د. رامي مختار (32 فحص)",
           "titleEn": "RT Lab Royal Executive VIP Package",
@@ -1538,7 +1529,7 @@
         "sampleDate": "2026-10-04T14:52",
         "clinicalHistory": "طلب صادر من الفاتورة المالية RT-BK-8594 - السداد: مسدد بالكامل"
       },
-      "updatedAt": "2026-10-04T14:52:55.336Z",
+      "updatedAt": "2026-10-05T17:57:50.827Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-8594 - تم التسميع آلياً من منظومة الفواتير",
       "reportNumber": "RT-BK-8594",
       "createdAt": "2026-10-04T14:52:55.336Z",
