@@ -56,6 +56,14 @@ import { INITIAL_INDIVIDUAL_TESTS } from '../data/individualTestsData';
 import { INITIAL_INSTRUMENTS, SAMPLE_INSTRUMENT_TRANSMISSIONS } from '../data/instrumentsData';
 import { realtimeSyncManager } from '../utils/realtimeMultiDeviceSync';
 import { pushFullStoreToGitHub, pullFullStoreFromGitHub } from '../utils/githubSync';
+import {
+  mergeCatalogWithDefaults,
+  mergePackagesWithDefaults,
+  mergeProfilesWithDefaults,
+  runGlobalDataUpgrade,
+  MIGRATION_VERSION_KEY
+} from '../utils/upgradeSavedData';
+import { CatalogProfileTemplate } from '../types/lab';
 
 // Storage Keys
 const STORAGE_PREFIX = 'rt_lab_unified_';
@@ -73,6 +81,7 @@ const TRANSMISSIONS_KEY = `${STORAGE_PREFIX}transmissions_v3`;
 const LAB_INFO_KEY = `${STORAGE_PREFIX}lab_info_v3`;
 const CATALOG_KEY = `${STORAGE_PREFIX}test_catalog_v3`;
 const PACKAGES_KEY = `${STORAGE_PREFIX}packages_v3`;
+const DIAGNOSTIC_PROFILES_KEY = `${STORAGE_PREFIX}diagnostic_profiles_v3`;
 
 interface AppContextType {
   // Localization & Auth
@@ -129,6 +138,7 @@ interface AppContextType {
   updateCatalogTest: (code: string, updates: Partial<InvoiceTestItem>) => void;
   deleteCatalogTest: (code: string) => void;
   resetCatalog: () => void;
+  forceSyncCatalog: () => { testsCount: number; packagesCount: number; profilesCount: number };
 
   // Comprehensive Packages
   packages: ComprehensivePackage[];
@@ -138,6 +148,11 @@ interface AppContextType {
   deletePackage: (id: string) => void;
   resetPackages: () => void;
   applyPackageToReport: (reportId: string, pkg: ComprehensivePackage) => void;
+
+  // Diagnostic Profile Templates
+  diagnosticProfiles: CatalogProfileTemplate[];
+  updateDiagnosticProfiles: (profiles: CatalogProfileTemplate[]) => void;
+  resetDiagnosticProfiles: () => void;
 
   // Laboratory Instruments & Hardware Interfacing
   instruments: LabInstrument[];
@@ -286,23 +301,36 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   });
 
-  // 6. Test Catalog
+  // 6. Test Catalog (Auto-merged to guarantee all 142 individual tests)
   const [testCatalog, setTestCatalog] = useState<InvoiceTestItem[]>(() => {
     try {
-      const saved = localStorage.getItem(CATALOG_KEY);
-      return saved ? JSON.parse(saved) : DEFAULT_TEST_CATALOG;
+      const saved = localStorage.getItem(CATALOG_KEY) || localStorage.getItem('rt_lab_individual_tests_v2');
+      const parsed = saved ? JSON.parse(saved) : null;
+      return mergeCatalogWithDefaults(Array.isArray(parsed) && parsed.length > 0 ? parsed : undefined);
     } catch {
-      return DEFAULT_TEST_CATALOG;
+      return mergeCatalogWithDefaults();
     }
   });
 
-  // 6b. Comprehensive Packages
+  // 6b. Comprehensive Packages (Auto-merged to guarantee 15 packages)
   const [packages, setPackages] = useState<ComprehensivePackage[]>(() => {
     try {
       const saved = localStorage.getItem(PACKAGES_KEY);
-      return saved ? JSON.parse(saved) : INITIAL_PACKAGES;
+      const parsed = saved ? JSON.parse(saved) : null;
+      return mergePackagesWithDefaults(Array.isArray(parsed) && parsed.length > 0 ? parsed : undefined);
     } catch {
-      return INITIAL_PACKAGES;
+      return mergePackagesWithDefaults();
+    }
+  });
+
+  // 6c. Diagnostic Profile Templates (Auto-merged to guarantee 24 comprehensive profiles)
+  const [diagnosticProfiles, setDiagnosticProfiles] = useState<CatalogProfileTemplate[]>(() => {
+    try {
+      const saved = localStorage.getItem(DIAGNOSTIC_PROFILES_KEY) || localStorage.getItem('rt_lab_custom_catalog_v3') || localStorage.getItem('rt_lab_catalog_v2');
+      const parsed = saved ? JSON.parse(saved) : null;
+      return mergeProfilesWithDefaults(Array.isArray(parsed) && parsed.length > 0 ? parsed : undefined);
+    } catch {
+      return mergeProfilesWithDefaults();
     }
   });
 
@@ -444,8 +472,42 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useEffect(() => { try { localStorage.setItem(TRANSMISSIONS_KEY, JSON.stringify(transmissions)); } catch (e) { console.error(e); } }, [transmissions]);
   useEffect(() => { try { localStorage.setItem(AUDIT_KEY, JSON.stringify(auditLogs)); } catch (e) { console.error(e); } }, [auditLogs]);
   useEffect(() => { try { localStorage.setItem(LAB_INFO_KEY, JSON.stringify(labInfo)); } catch (e) { console.error(e); } }, [labInfo]);
-  useEffect(() => { try { localStorage.setItem(CATALOG_KEY, JSON.stringify(testCatalog)); } catch (e) { console.error(e); } }, [testCatalog]);
-  useEffect(() => { try { localStorage.setItem(PACKAGES_KEY, JSON.stringify(packages)); } catch (e) { console.error(e); } }, [packages]);
+  useEffect(() => { 
+    try { 
+      localStorage.setItem(CATALOG_KEY, JSON.stringify(testCatalog)); 
+      localStorage.setItem('rt_lab_individual_tests_v2', JSON.stringify(testCatalog));
+    } catch (e) { 
+      console.error(e); 
+    } 
+  }, [testCatalog]);
+
+  useEffect(() => { 
+    try { 
+      localStorage.setItem(PACKAGES_KEY, JSON.stringify(packages)); 
+    } catch (e) { 
+      console.error(e); 
+    } 
+  }, [packages]);
+
+  useEffect(() => { 
+    try { 
+      localStorage.setItem(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(diagnosticProfiles)); 
+      localStorage.setItem('rt_lab_catalog_v2', JSON.stringify(diagnosticProfiles));
+    } catch (e) { 
+      console.error(e); 
+    } 
+  }, [diagnosticProfiles]);
+
+  // Automatic Migration Run on Mount
+  useEffect(() => {
+    try {
+      if (typeof window !== 'undefined' && localStorage.getItem(MIGRATION_VERSION_KEY) !== 'true') {
+        runGlobalDataUpgrade();
+      }
+    } catch (err) {
+      console.warn('Migration run error:', err);
+    }
+  }, []);
 
   // Real-Time Multi-Device Cloud Synchronization (Firebase Firestore + GitHub Cloud Backup)
   useEffect(() => {
@@ -513,6 +575,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (Array.isArray(msg.payload)) {
           setInventory(msg.payload);
         }
+      } else if (msg.action === 'UPDATE_CATALOG' && Array.isArray(msg.payload)) {
+        setTestCatalog(prev => mergeCatalogWithDefaults(msg.payload));
+      } else if (msg.action === 'UPDATE_PACKAGES' && Array.isArray(msg.payload)) {
+        setPackages(prev => mergePackagesWithDefaults(msg.payload));
       } else if (msg.action === 'PING_TEST') {
         addNotification({
           title: '⚡ تسميع لحظي متزامن فوري',
@@ -572,6 +638,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (res.data.labInfo) {
           setLabInfo(res.data.labInfo);
         }
+        if (Array.isArray(res.data.testCatalog) && res.data.testCatalog.length > 0) {
+          setTestCatalog(prev => mergeCatalogWithDefaults(res.data.testCatalog));
+        }
+        if (Array.isArray(res.data.packages) && res.data.packages.length > 0) {
+          setPackages(prev => mergePackagesWithDefaults(res.data.packages));
+        }
       } else {
         // Fallback to GitHub repo store if Firestore snapshot is not initialized yet
         pullFullStoreFromGitHub(githubConfig).then(ghRes => {
@@ -590,6 +662,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                 return Array.from(map.values());
               });
             }
+            if (Array.isArray(ghRes.data.testCatalog) && ghRes.data.testCatalog.length > 0) {
+              setTestCatalog(prev => mergeCatalogWithDefaults(ghRes.data.testCatalog));
+            }
+            if (Array.isArray(ghRes.data.packages) && ghRes.data.packages.length > 0) {
+              setPackages(prev => mergePackagesWithDefaults(ghRes.data.packages));
+            }
           }
         }).catch(() => {});
       }
@@ -603,14 +681,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Debounced cloud save whenever critical lab data changes (Push to Firebase Firestore & GitHub)
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (reports.length > 0 || incomeRecords.length > 0) {
+      if (reports.length > 0 || incomeRecords.length > 0 || testCatalog.length > 0) {
         const payload = {
           reports,
           incomeRecords,
           expenses,
           loyaltyProfiles,
           inventory,
-          labInfo
+          labInfo,
+          testCatalog,
+          packages
         };
 
         // 1. Instant Firebase Cloud persistence
@@ -623,7 +703,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
     }, 1800);
     return () => clearTimeout(timer);
-  }, [reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, githubConfig]);
+  }, [reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, packages, githubConfig]);
 
   // Audit Logging helper
   const logAction = useCallback((action: AuditLog['action'], module: AuditLog['module'], description: string) => {
@@ -793,47 +873,131 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     logAction('DELETE', 'INCOME', `حذف الفاتورة رقم ${inv?.invoiceNumber || id} للمريض ${inv?.patientName}`);
   }, [incomeRecords, logAction]);
 
-  // Test Catalog CRUD
+  // Test Catalog CRUD with instant real-time broadcast
   const addCatalogTest = useCallback((test: InvoiceTestItem) => {
-    setTestCatalog(prev => [test, ...prev]);
+    setTestCatalog(prev => {
+      const next = [test, ...prev];
+      realtimeSyncManager.broadcastAction('UPDATE_CATALOG', next);
+      return next;
+    });
     logAction('CATALOG_UPDATE', 'CATALOG', `إضافة تحليل جديد للكتالوج: ${test.nameAr} (${test.code})`);
   }, [logAction]);
 
   const updateCatalogTest = useCallback((code: string, updates: Partial<InvoiceTestItem>) => {
-    setTestCatalog(prev => prev.map(t => t.code === code ? { ...t, ...updates } : t));
+    setTestCatalog(prev => {
+      const next = prev.map(t => t.code === code ? { ...t, ...updates } : t);
+      realtimeSyncManager.broadcastAction('UPDATE_CATALOG', next);
+      return next;
+    });
     logAction('CATALOG_UPDATE', 'CATALOG', `تعديل سعر/بيانات التحليل: ${code}`);
   }, [logAction]);
 
   const deleteCatalogTest = useCallback((code: string) => {
-    setTestCatalog(prev => prev.filter(t => t.code !== code));
+    setTestCatalog(prev => {
+      const next = prev.filter(t => t.code !== code);
+      realtimeSyncManager.broadcastAction('UPDATE_CATALOG', next);
+      return next;
+    });
     logAction('CATALOG_UPDATE', 'CATALOG', `حذف التحليل ${code} من الكتالوج`);
   }, [logAction]);
 
   // Packages Management CRUD
   const updatePackages = useCallback((pkgs: ComprehensivePackage[]) => {
     setPackages(pkgs);
+    realtimeSyncManager.broadcastAction('UPDATE_PACKAGES', pkgs);
     logAction('UPDATE', 'CATALOG', 'تحديث قائمة باقات الفحص الشامل المتاحة');
   }, [logAction]);
 
   const addPackage = useCallback((pkg: ComprehensivePackage) => {
-    setPackages(prev => [pkg, ...prev]);
+    setPackages(prev => {
+      const next = [pkg, ...prev];
+      realtimeSyncManager.broadcastAction('UPDATE_PACKAGES', next);
+      return next;
+    });
     logAction('CREATE', 'CATALOG', `إضافة باقة فحص جديدة: ${pkg.titleAr} (${pkg.code})`);
   }, [logAction]);
 
   const updateSinglePackage = useCallback((id: string, updates: Partial<ComprehensivePackage>) => {
-    setPackages(prev => prev.map(p => p.id === id ? { ...p, ...updates } : p));
+    setPackages(prev => {
+      const next = prev.map(p => p.id === id ? { ...p, ...updates } : p);
+      realtimeSyncManager.broadcastAction('UPDATE_PACKAGES', next);
+      return next;
+    });
     logAction('UPDATE', 'CATALOG', `تعديل بيانات الباقة: ${id}`);
   }, [logAction]);
 
   const deletePackage = useCallback((id: string) => {
-    setPackages(prev => prev.filter(p => p.id !== id));
+    setPackages(prev => {
+      const next = prev.filter(p => p.id !== id);
+      realtimeSyncManager.broadcastAction('UPDATE_PACKAGES', next);
+      return next;
+    });
     logAction('DELETE', 'CATALOG', `حذف الباقة: ${id}`);
   }, [logAction]);
 
   const resetPackages = useCallback(() => {
-    setPackages(INITIAL_PACKAGES);
-    logAction('UPDATE', 'CATALOG', 'استعادة الباقات الافتراضية الـ 15 المتكاملة');
+    const fullPkgs = mergePackagesWithDefaults();
+    setPackages(fullPkgs);
+    realtimeSyncManager.broadcastAction('UPDATE_PACKAGES', fullPkgs);
+    logAction('UPDATE', 'CATALOG', `استعادة الباقات الافتراضية الـ 15 المتكاملة (${fullPkgs.length} باقة)`);
   }, [logAction]);
+
+  const updateDiagnosticProfiles = useCallback((profiles: CatalogProfileTemplate[]) => {
+    setDiagnosticProfiles(profiles);
+    logAction('CATALOG_UPDATE', 'CATALOG', `تحديث بروفايلات التحاليل الشاملة (${profiles.length} بروفايل)`);
+  }, [logAction]);
+
+  const resetDiagnosticProfiles = useCallback(() => {
+    setDiagnosticProfiles(LAB_CATALOG);
+    logAction('CATALOG_UPDATE', 'CATALOG', 'استعادة بروفايلات التحاليل الافتراضية (24 بروفايل طبي)');
+  }, [logAction]);
+
+  const forceSyncCatalog = useCallback(() => {
+    const refreshedTests = mergeCatalogWithDefaults(testCatalog);
+    const refreshedPackages = mergePackagesWithDefaults(packages);
+    const refreshedProfiles = mergeProfilesWithDefaults(diagnosticProfiles);
+
+    setTestCatalog(refreshedTests);
+    setPackages(refreshedPackages);
+    setDiagnosticProfiles(refreshedProfiles);
+
+    try {
+      localStorage.setItem(CATALOG_KEY, JSON.stringify(refreshedTests));
+      localStorage.setItem('rt_lab_individual_tests_v2', JSON.stringify(refreshedTests));
+      localStorage.setItem(PACKAGES_KEY, JSON.stringify(refreshedPackages));
+      localStorage.setItem(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(refreshedProfiles));
+      localStorage.setItem('rt_lab_catalog_v2', JSON.stringify(refreshedProfiles));
+    } catch (e) {
+      console.error('Local storage save error:', e);
+    }
+
+    const syncPayload = {
+      reports,
+      incomeRecords,
+      expenses,
+      loyaltyProfiles,
+      inventory,
+      labInfo,
+      testCatalog: refreshedTests,
+      packages: refreshedPackages
+    };
+
+    realtimeSyncManager.pushMasterSnapshot(syncPayload);
+    realtimeSyncManager.broadcastAction('UPDATE_CATALOG', refreshedTests);
+    realtimeSyncManager.broadcastAction('UPDATE_PACKAGES', refreshedPackages);
+
+    if (githubConfig.token) {
+      pushFullStoreToGitHub(githubConfig, syncPayload).catch(() => {});
+    }
+
+    logAction('CATALOG_UPDATE', 'CATALOG', `مزامنة وتوحيد شامل للكتالوج: ${refreshedTests.length} فحص منفرد + ${refreshedPackages.length} باقة + ${refreshedProfiles.length} بروفايل`);
+
+    return {
+      testsCount: refreshedTests.length,
+      packagesCount: refreshedPackages.length,
+      profilesCount: refreshedProfiles.length
+    };
+  }, [testCatalog, packages, diagnosticProfiles, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, githubConfig, logAction]);
 
   // Apply Package Directly to Any Report (Unpacks all profile tables & test results)
   const applyPackageToReport = useCallback((reportId: string, pkg: ComprehensivePackage) => {
@@ -1240,8 +1404,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [incomeRecords, expenses, profitConfig]);
 
   const resetCatalog = useCallback(() => {
-    setTestCatalog(DEFAULT_TEST_CATALOG);
-    logAction('CATALOG_UPDATE', 'CATALOG', 'إعادة ضبط كتالوج التحاليل للقيم الافتراضية');
+    const fullDefaults = mergeCatalogWithDefaults();
+    setTestCatalog(fullDefaults);
+    realtimeSyncManager.broadcastAction('UPDATE_CATALOG', fullDefaults);
+    logAction('CATALOG_UPDATE', 'CATALOG', `إعادة ضبط كتالوج التحاليل للقيم الافتراضية (${fullDefaults.length} فحص)`);
   }, [logAction]);
 
   const updateLoyaltyConfig = useCallback((newConfig: LoyaltyConfig) => {
@@ -1894,6 +2060,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     updateCatalogTest,
     deleteCatalogTest,
     resetCatalog,
+    forceSyncCatalog,
 
     packages,
     updatePackages,
@@ -1902,6 +2069,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     deletePackage,
     resetPackages,
     applyPackageToReport,
+
+    diagnosticProfiles,
+    updateDiagnosticProfiles,
+    resetDiagnosticProfiles,
 
     instruments,
     transmissions,

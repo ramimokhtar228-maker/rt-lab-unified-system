@@ -52,7 +52,9 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
     setSelectedReportId,
     setIsPatientFormOpen,
     packages,
-    testCatalog
+    testCatalog,
+    diagnosticProfiles,
+    forceSyncCatalog
   } = useApp();
 
   const today = new Date().toISOString().split('T')[0];
@@ -119,8 +121,8 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
 
   // Financial Calculations
   const getTestDetails = (code: string) => {
-    return INITIAL_INDIVIDUAL_TESTS.find(t => t.code.toUpperCase() === code.toUpperCase())
-        || testCatalog.find(t => t.code.toUpperCase() === code.toUpperCase());
+    return testCatalog.find(t => t.code.toUpperCase() === code.toUpperCase())
+        || INITIAL_INDIVIDUAL_TESTS.find(t => t.code.toUpperCase() === code.toUpperCase());
   };
 
   const { packageItems, extraItems } = useMemo(() => {
@@ -720,13 +722,27 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
                   <Sparkles className="w-4 h-4 text-rose-600" />
                   البحث الذكي المباشر عن التحاليل والباقات:
                 </span>
-                <span className="text-[11px] text-slate-400">ابحث بالعربي أو الإنجليزي أو كود التحليل</span>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const res = forceSyncCatalog();
+                      alert(`✅ تم تحديث ومزامنة الكتالوج (${res.testsCount} فحص طبي + ${res.packagesCount} باقة).`);
+                    }}
+                    className="text-[11px] font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-2 py-0.5 rounded border border-emerald-200 flex items-center gap-1 transition-colors"
+                    title="مزامنة فورية للكتالوج"
+                  >
+                    <Sparkles className="w-3 h-3 text-emerald-600 animate-pulse" />
+                    <span>مزامنة الكتالوج ({testCatalog.length})</span>
+                  </button>
+                  <span className="text-[11px] text-slate-400">ابحث بالعربي أو الإنجليزي أو كود التحليل</span>
+                </div>
               </div>
 
               <SmartTestSearch
                 packages={packages}
-                profiles={LAB_CATALOG}
-                individualTests={INITIAL_INDIVIDUAL_TESTS}
+                profiles={diagnosticProfiles && diagnosticProfiles.length > 0 ? diagnosticProfiles : LAB_CATALOG}
+                individualTests={testCatalog && testCatalog.length > 0 ? (testCatalog as any) : INITIAL_INDIVIDUAL_TESTS}
                 selectedItemCodes={selectedTests.map(t => t.code)}
                 onToggleTest={handleToggleTest}
                 onSelectPackage={(pkg) => handleSelectPackage(pkg.id)}

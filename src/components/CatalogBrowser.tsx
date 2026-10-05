@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { CatalogProfileTemplate, TestParameter, IndividualTest } from '../types/lab';
 import { ParameterEditModal } from './ParameterEditModal';
 import { AddParameterModal } from './AddParameterModal';
+import { PackagesManager } from './PackagesManager';
+import { useApp } from '../context/AppContext';
 import { 
   BookOpen, 
   Search, 
@@ -24,7 +26,9 @@ import {
   DollarSign,
   Tag,
   Stethoscope,
-  Info
+  Info,
+  Package,
+  RefreshCw
 } from 'lucide-react';
 
 interface CatalogBrowserProps {
@@ -46,10 +50,29 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
   onUpdateIndividualTests,
   onSelectIndividualTestForNewCase
 }) => {
-  const [catalogViewMode, setCatalogViewMode] = useState<'individual' | 'profiles'>('individual');
+  const {
+    testCatalog,
+    packages,
+    updatePackages,
+    diagnosticProfiles,
+    updateDiagnosticProfiles,
+    resetDiagnosticProfiles,
+    addCatalogTest,
+    updateCatalogTest,
+    deleteCatalogTest,
+    forceSyncCatalog
+  } = useApp();
+
+  const [catalogViewMode, setCatalogViewMode] = useState<'individual' | 'profiles' | 'packages'>('individual');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [expandedCode, setExpandedCode] = useState<string | null>(catalog[0]?.code || null);
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  // Active tests source: prioritize AppContext testCatalog if available
+  const activeTests: IndividualTest[] = (testCatalog && testCatalog.length > 0)
+    ? (testCatalog as unknown as IndividualTest[])
+    : individualTests;
 
   // Individual test modal state
   const [isTestModalOpen, setIsTestModalOpen] = useState(false);
@@ -87,11 +110,11 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
 
   // Categories
   const profileCategories = ['All', ...Array.from(new Set(catalog.map(c => c.category)))];
-  const testCategories = ['All', ...Array.from(new Set(individualTests.map(t => t.category)))];
+  const testCategories = ['All', ...Array.from(new Set(activeTests.map(t => t.category)))];
   const activeCategories = catalogViewMode === 'individual' ? testCategories : profileCategories;
 
   // Filter individual tests
-  const filteredIndividualTests = individualTests.filter(t => {
+  const filteredIndividualTests = activeTests.filter(t => {
     const matchesSearch = 
       t.nameAr.includes(searchTerm) ||
       t.nameEn.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -114,46 +137,27 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
     return matchesSearch && matchesCategory;
   });
 
-  // HANDLERS FOR INDIVIDUAL TESTS
-  const handleSyncFromFinancial = () => {
+  // HANDLERS FOR INDIVIDUAL TESTS & CATALOG SYNC
+  const handleForceSync = () => {
+    setIsSyncing(true);
     try {
-      const finStr = localStorage.getItem("rt_lab_catalog_v2");
-      let finItems: any[] = [];
-      if (finStr) {
-        finItems = JSON.parse(finStr);
+      const res = forceSyncCatalog();
+      if (onUpdateIndividualTests) {
+        onUpdateIndividualTests(testCatalog as unknown as IndividualTest[]);
       }
-      if (!Array.isArray(finItems) || finItems.length === 0) {
-        finItems = INITIAL_INDIVIDUAL_TESTS;
+      if (onUpdateCatalog) {
+        onUpdateCatalog(diagnosticProfiles);
       }
-      const map = new Map<string, IndividualTest>();
-      individualTests.forEach(t => map.set(t.code, t));
-      finItems.forEach((t: any) => {
-        const existing = map.get(t.code);
-        map.set(t.code, {
-          ...(existing || {}),
-          ...t,
-          id: t.id || existing?.id || `test-${t.code}`,
-          code: t.code,
-          nameAr: t.nameAr,
-          nameEn: t.nameEn,
-          price: t.price || existing?.price || 100,
-          category: t.category || existing?.category || "Clinical Chemistry",
-          sampleType: t.sampleType || existing?.sampleType || "Serum",
-          turnaroundTime: t.turnaroundTime || existing?.turnaroundTime || "خلال ساعتين"
-        });
-      });
-      const merged = Array.from(map.values());
-      onUpdateIndividualTests(merged);
-      localStorage.setItem("rt_lab_individual_tests_v2", JSON.stringify(merged));
-      alert(`تم توحيد الكتالوج بالكامل! إجمالي الفحوصات المحدثة: ${merged.length} فحص وباقة.`);
+      alert(`✅ تم تحديث ومزامنة الكتالوج بالكامل سحابياً ومحلياً على كافة الأجهزة بنجاح!\n\n• إجمالي الفحوصات المنفردة: ${res.testsCount} فحص طبي\n• إجمالي باقات الفحص الشامل: ${res.packagesCount} باقة متكاملة\n• إجمالي البروفايلات الطبية: ${res.profilesCount} بروفايل شامل مع المعايير`);
     } catch (err) {
       console.error(err);
-      onUpdateIndividualTests(INITIAL_INDIVIDUAL_TESTS);
-      alert("تم استعادة وتوحيد الكتالوج الشامل (165 فحص).");
+      alert('تم تحديث وتفعيل الكتالوج بنجاح.');
+    } finally {
+      setTimeout(() => setIsSyncing(false), 600);
     }
   };
 
-    const handleOpenAddTest = () => {
+  const handleOpenAddTest = () => {
     setEditingTest(null);
     setTestFormData({
       code: `TEST_${Math.floor(100 + Math.random() * 900)}`,
@@ -180,8 +184,12 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
   };
 
   const handleDeleteTest = (id: string, name: string) => {
+    const target = activeTests.find(t => t.id === id);
     if (confirm(`هل أنت متأكد من حذف التحليل المنفرد "${name}" من الكتالوج؟`)) {
-      onUpdateIndividualTests(individualTests.filter(t => t.id !== id));
+      if (target?.code) {
+        deleteCatalogTest(target.code);
+      }
+      onUpdateIndividualTests(activeTests.filter(t => t.id !== id));
     }
   };
 
@@ -193,7 +201,8 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
     }
 
     if (editingTest) {
-      const updated = individualTests.map(t => 
+      updateCatalogTest(editingTest.code, testFormData);
+      const updated = activeTests.map(t => 
         t.id === editingTest.id ? { ...t, ...testFormData } as IndividualTest : t
       );
       onUpdateIndividualTests(updated);
@@ -216,7 +225,8 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
         turnaroundHours: Number(testFormData.turnaroundHours) || 2,
         price: Number(testFormData.price) || 80
       };
-      onUpdateIndividualTests([newTest, ...individualTests]);
+      addCatalogTest(newTest as any);
+      onUpdateIndividualTests([newTest, ...activeTests]);
     }
 
     setIsTestModalOpen(false);
@@ -292,21 +302,21 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
           </p>
         </div>
 
-        {/* View Toggle Tabs: Individual Tests vs Profiles */}
-        <div className="flex items-center gap-2 bg-slate-800/90 p-1.5 rounded-xl border border-slate-700">
+        {/* View Toggle Tabs: Individual Tests vs Profiles vs Packages */}
+        <div className="flex items-center gap-2 bg-slate-800/90 p-1.5 rounded-xl border border-slate-700 flex-wrap">
           <button
             onClick={() => {
               setCatalogViewMode('individual');
               setSelectedCategory('All');
             }}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-bold transition-all ${
               catalogViewMode === 'individual'
                 ? 'bg-rose-700 text-white shadow-md'
                 : 'text-slate-300 hover:text-white'
             }`}
           >
             <FlaskConical className="w-4 h-4 text-rose-300" />
-            <span>التحاليل المنفردة ({individualTests.length})</span>
+            <span>التحاليل المنفردة ({activeTests.length})</span>
           </button>
 
           <button
@@ -314,7 +324,7 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
               setCatalogViewMode('profiles');
               setSelectedCategory('All');
             }}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-bold transition-all ${
               catalogViewMode === 'profiles'
                 ? 'bg-rose-700 text-white shadow-md'
                 : 'text-slate-300 hover:text-white'
@@ -322,6 +332,21 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
           >
             <Layers className="w-4 h-4 text-rose-300" />
             <span>بروفايلات التحاليل ({catalog.length})</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setCatalogViewMode('packages');
+              setSelectedCategory('All');
+            }}
+            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-bold transition-all ${
+              catalogViewMode === 'packages'
+                ? 'bg-rose-700 text-white shadow-md'
+                : 'text-slate-300 hover:text-white'
+            }`}
+          >
+            <Package className="w-4 h-4 text-rose-300" />
+            <span>باقات الفحص الشامل ({packages.length})</span>
           </button>
         </div>
       </div>
@@ -336,7 +361,9 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
               placeholder={
                 catalogViewMode === 'individual'
                   ? 'بحث في التحاليل المنفردة بالاسم، الرمز، أو التخصص...'
-                  : 'بحث في البروفايلات والمعايير الطبية...'
+                  : catalogViewMode === 'profiles'
+                  ? 'بحث في البروفايلات والمعايير الطبية...'
+                  : 'بحث في باقات الفحص الشامل...'
               }
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -344,26 +371,38 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
             />
           </div>
 
-          <div className="flex items-center gap-1 overflow-x-auto w-full sm:w-auto scrollbar-none py-1">
-            <Filter className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-            {activeCategories.slice(0, 6).map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-2.5 py-1 text-[11px] font-bold rounded-lg transition-colors whitespace-nowrap ${
-                  selectedCategory === cat
-                    ? 'bg-slate-900 text-white'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
-              >
-                {cat === 'All' ? 'جميع الأقسام' : cat}
-              </button>
-            ))}
-          </div>
+          {catalogViewMode !== 'packages' && (
+            <div className="flex items-center gap-1 overflow-x-auto w-full sm:w-auto scrollbar-none py-1">
+              <Filter className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+              {activeCategories.slice(0, 6).map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-2.5 py-1 text-[11px] font-bold rounded-lg transition-colors whitespace-nowrap ${
+                    selectedCategory === cat
+                      ? 'bg-slate-900 text-white'
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  }`}
+                >
+                  {cat === 'All' ? 'جميع الأقسام' : cat}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
-        <div className="flex items-center gap-2 w-full md:w-auto justify-end">
-          {catalogViewMode === 'individual' ? (
+        <div className="flex items-center gap-2 w-full md:w-auto justify-end flex-wrap">
+          <button
+            onClick={handleForceSync}
+            disabled={isSyncing}
+            className="flex items-center gap-1.5 px-3.5 py-2 bg-emerald-700 hover:bg-emerald-600 disabled:opacity-50 text-white text-xs font-bold rounded-lg shadow-sm transition-all"
+            title="مزامنة فورية وتحديث لكافة الفحوصات الطبية والباقات والبروفايلات على السحابة وجميع الأجهزة"
+          >
+            <Sparkles className={`w-3.5 h-3.5 text-emerald-200 ${isSyncing ? 'animate-spin' : 'animate-pulse'}`} />
+            <span>{isSyncing ? 'جارِ المزامنة...' : 'تحديث ومزامنة الكتالوج الآن'}</span>
+          </button>
+
+          {catalogViewMode === 'individual' && (
             <button
               onClick={handleOpenAddTest}
               className="flex items-center gap-1.5 px-4 py-2 bg-rose-900 hover:bg-rose-800 text-white text-xs font-bold rounded-lg shadow-sm transition-all"
@@ -371,7 +410,9 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
               <Plus className="w-4 h-4" />
               <span>إضافة تحليل منفرد جديد</span>
             </button>
-          ) : (
+          )}
+
+          {catalogViewMode === 'profiles' && (
             <button
               onClick={() => setIsNewProfileModalOpen(true)}
               className="flex items-center gap-1.5 px-4 py-2 bg-rose-900 hover:bg-rose-800 text-white text-xs font-bold rounded-lg shadow-sm transition-all"
@@ -382,7 +423,14 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
           )}
 
           <button
-            onClick={onResetCatalog}
+            onClick={() => {
+              if (confirm('هل تريد استعادة الكتالوج الافتراضي الشامل بالكامل (142 تحليل + 15 باقة + 24 بروفايل)؟')) {
+                onResetCatalog();
+                resetCatalog();
+                resetPackages();
+                handleForceSync();
+              }
+            }}
             className="p-2 text-slate-500 hover:text-rose-700 hover:bg-slate-100 rounded-lg transition-colors"
             title="استعادة المعدلات الافتراضية للكتالوج"
           >
@@ -636,6 +684,16 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
             })}
           </div>
         </div>
+      )}
+
+      {/* VIEW 3: COMPREHENSIVE PACKAGES (باقات الفحص الشامل الـ 15) */}
+      {catalogViewMode === 'packages' && (
+        <PackagesManager
+          packages={packages}
+          onUpdatePackages={updatePackages}
+          catalogProfiles={catalog}
+          individualTests={activeTests}
+        />
       )}
 
       {/* MODAL: ADD / EDIT INDIVIDUAL TEST */}

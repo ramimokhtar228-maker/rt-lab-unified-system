@@ -18,6 +18,8 @@ export type SyncActionType =
   | 'UPDATE_LOYALTY'
   | 'UPDATE_EXPENSES'
   | 'UPDATE_INVENTORY'
+  | 'UPDATE_CATALOG'
+  | 'UPDATE_PACKAGES'
   | 'PING_TEST'
   | 'FULL_SYNC';
 

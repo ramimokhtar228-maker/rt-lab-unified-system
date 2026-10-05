@@ -14,7 +14,8 @@ import {
   X,
   Clock,
   Tag,
-  DollarSign
+  DollarSign,
+  Sparkles
 } from 'lucide-react';
 
 interface TestCatalogManagerModalProps {
@@ -23,7 +24,8 @@ interface TestCatalogManagerModalProps {
 }
 
 export const TestCatalogManagerModal: React.FC<TestCatalogManagerModalProps> = ({ isOpen, onClose }) => {
-  const { testCatalog, addCatalogTest, updateCatalogTest, deleteCatalogTest, resetCatalog, language } = useApp();
+  const { testCatalog, addCatalogTest, updateCatalogTest, deleteCatalogTest, resetCatalog, forceSyncCatalog, language } = useApp();
+  const [isSyncing, setIsSyncing] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -181,12 +183,31 @@ export const TestCatalogManagerModal: React.FC<TestCatalogManagerModalProps> = (
 
             <button
               onClick={() => {
-                if (window.confirm('هل تريد بالتأكيد إعادة ضبط الكتالوج إلى القائمة الافتراضية الشاملة لمعامل RT (165 فحص)؟')) {
+                setIsSyncing(true);
+                try {
+                  const res = forceSyncCatalog();
+                  alert(`✅ تم تحديث ومزامنة الكتالوج بنجاح!\n• التحاليل الطبية: ${res.testsCount} فحص\n• الباقات الشاملة: ${res.packagesCount} باقة`);
+                } finally {
+                  setTimeout(() => setIsSyncing(false), 500);
+                }
+              }}
+              disabled={isSyncing}
+              className="flex items-center gap-1.5 px-3 py-2 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold rounded-xl transition-colors text-xs"
+              title="تحديث ومزامنة الكتالوج مع السحابة"
+            >
+              <Sparkles className={`w-3.5 h-3.5 text-emerald-100 ${isSyncing ? 'animate-spin' : ''}`} />
+              <span className="hidden sm:inline">{isSyncing ? 'جارِ...' : 'مزامنة الكتالوج'}</span>
+            </button>
+
+            <button
+              onClick={() => {
+                if (window.confirm('هل تريد بالتأكيد إعادة ضبط وتحديث الكتالوج إلى القائمة الافتراضية الشاملة لمعامل RT (142 فحص طبي معتمد)؟')) {
                   resetCatalog();
+                  forceSyncCatalog();
                 }
               }}
               className="flex items-center gap-1 px-3 py-2 bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 font-bold rounded-xl transition-colors"
-              title="إعادة ضبط القائمة الافتراضية"
+              title="إعادة ضبط القائمة الافتراضية الشاملة"
             >
               <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
               <span className="hidden sm:inline">إعادة ضبط</span>

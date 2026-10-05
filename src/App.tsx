@@ -57,7 +57,16 @@ const AppContent: React.FC = () => {
     isLabInfoModalOpen,
     setIsLabInfoModalOpen,
     labInfo,
-    updateLabInfo
+    updateLabInfo,
+    testCatalog,
+    packages,
+    diagnosticProfiles,
+    updateDiagnosticProfiles,
+    resetDiagnosticProfiles,
+    updateCatalogTest,
+    addCatalogTest,
+    deleteCatalogTest,
+    forceSyncCatalog
   } = useApp();
 
   const [archiveSearch, setArchiveSearch] = useState('');
@@ -70,9 +79,7 @@ const AppContent: React.FC = () => {
   const [manualTestModalOpen, setManualTestModalOpen] = useState(false);
   const [isPrintPreviewActive, setIsPrintPreviewActive] = useState(false);
 
-  // Catalog & Staff Signatures state
-  const [catalog, setCatalog] = useState<CatalogProfileTemplate[]>(LAB_CATALOG);
-  const [individualTests, setIndividualTests] = useState<IndividualTest[]>(INITIAL_INDIVIDUAL_TESTS);
+  // Staff Signatures state
   const [staffSignatures, setStaffSignatures] = useState<LabStaffSignatures>(DEFAULT_STAFF);
 
   // Handlers for ReportEditor & Archive
@@ -257,9 +264,9 @@ const AppContent: React.FC = () => {
             {activeTab === 'hr' && <HRModule />}
             {activeTab === 'catalog' && (
               <CatalogBrowser
-                catalog={catalog}
-                onUpdateCatalog={setCatalog}
-                onResetCatalog={() => setCatalog(LAB_CATALOG)}
+                catalog={diagnosticProfiles}
+                onUpdateCatalog={updateDiagnosticProfiles}
+                onResetCatalog={resetDiagnosticProfiles}
                 onSelectProfileForNewCase={(template: CatalogProfileTemplate) => {
                   if (currentReport) {
                     const newProfile: TestProfile = {
@@ -283,8 +290,8 @@ const AppContent: React.FC = () => {
                     setActiveTab('diagnostic_editor');
                   }
                 }}
-                individualTests={individualTests}
-                onUpdateIndividualTests={setIndividualTests}
+                individualTests={testCatalog as any}
+                onUpdateIndividualTests={() => {}}
               />
             )}
             {activeTab === 'audit_settings' && <SettingsBackupModule />}
@@ -370,12 +377,21 @@ const AppContent: React.FC = () => {
         <TestCatalogModal
           isOpen={catalogModalOpen}
           onClose={() => setCatalogModalOpen(false)}
+          catalog={diagnosticProfiles}
+          individualTests={testCatalog as any}
+          packages={packages}
           existingProfileCodes={currentReport ? currentReport.profiles.map(p => p.profileCode) : []}
           onAddProfile={(newProf: TestProfile) => {
             if (currentReport) {
               updateReport(currentReport.id, {
                 profiles: [...currentReport.profiles, newProf]
               });
+            }
+            setCatalogModalOpen(false);
+          }}
+          onApplyPackage={(pkg) => {
+            if (currentReport) {
+              applyPackageToReport(currentReport.id, pkg);
             }
             setCatalogModalOpen(false);
           }}

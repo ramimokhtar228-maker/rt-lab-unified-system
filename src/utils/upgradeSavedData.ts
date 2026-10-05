@@ -1,9 +1,150 @@
-import { LabReport, TestProfile, TestParameter } from '../types/lab';
-import { LAB_CATALOG, DEFAULT_STAFF, INITIAL_INDIVIDUAL_TESTS, INITIAL_LAB_INFO } from '../data/labCatalog';
+import { LabReport, TestProfile, TestParameter, CatalogProfileTemplate, ComprehensivePackage, InvoiceTestItem, IndividualTest } from '../types/lab';
+import { LAB_CATALOG, DEFAULT_STAFF, INITIAL_INDIVIDUAL_TESTS, INITIAL_LAB_INFO, INITIAL_PACKAGES } from '../data/labCatalog';
 import { DISEASE_ILLUSTRATIONS, suggestHematologicalIllustration } from '../data/diseaseIllustrations';
 import { runAutomaticCalculations } from './calculator';
 
-export const MIGRATION_VERSION_KEY = 'rt_lab_migration_v7_complete';
+export const MIGRATION_VERSION_KEY = 'rt_lab_migration_v8_catalog_unified_142';
+
+/**
+ * Merges any existing test catalog with the full default catalog (142 tests)
+ * Preserves user modifications to prices/names, but guarantees all 142 tests are present
+ * with rich medical reference data, units, turnaround times, and sample types.
+ */
+export function mergeCatalogWithDefaults(savedCatalog?: InvoiceTestItem[]): InvoiceTestItem[] {
+  if (!Array.isArray(savedCatalog) || savedCatalog.length === 0) {
+    return [...INITIAL_INDIVIDUAL_TESTS];
+  }
+
+  const savedMap = new Map<string, InvoiceTestItem>();
+  savedCatalog.forEach(item => {
+    if (item && item.code) {
+      savedMap.set(item.code.toUpperCase().trim(), item);
+    }
+  });
+
+  // Guarantee every test from INITIAL_INDIVIDUAL_TESTS is present
+  const merged: InvoiceTestItem[] = INITIAL_INDIVIDUAL_TESTS.map(defTest => {
+    const codeKey = defTest.code.toUpperCase().trim();
+    const existing = savedMap.get(codeKey);
+    if (existing) {
+      savedMap.delete(codeKey);
+      return {
+        ...defTest,
+        ...existing,
+        // Ensure clinical reference and metadata are preserved if existing lacked them
+        nameAr: existing.nameAr || defTest.nameAr,
+        nameEn: existing.nameEn || defTest.nameEn,
+        sampleType: existing.sampleType || defTest.sampleType,
+        textReference: existing.textReference || defTest.textReference,
+        minNormal: existing.minNormal !== undefined ? existing.minNormal : defTest.minNormal,
+        maxNormal: existing.maxNormal !== undefined ? existing.maxNormal : defTest.maxNormal,
+        turnaroundTime: existing.turnaroundTime || defTest.turnaroundTime,
+        fastingInstructions: existing.fastingInstructions || defTest.fastingInstructions,
+        price: typeof existing.price === 'number' && existing.price > 0 ? existing.price : defTest.price,
+        cost: typeof existing.cost === 'number' && existing.cost > 0 ? existing.cost : defTest.cost,
+        category: existing.category || defTest.category,
+        unit: existing.unit || defTest.unit,
+        method: existing.method || defTest.method
+      };
+    }
+    return { ...defTest };
+  });
+
+  // Append custom user-created tests
+  savedMap.forEach(customTest => {
+    merged.push(customTest);
+  });
+
+  return merged;
+}
+
+/**
+ * Merges any existing packages with the 15 comprehensive default packages
+ */
+export function mergePackagesWithDefaults(savedPackages?: ComprehensivePackage[]): ComprehensivePackage[] {
+  if (!Array.isArray(savedPackages) || savedPackages.length === 0) {
+    return [...INITIAL_PACKAGES];
+  }
+
+  const savedMap = new Map<string, ComprehensivePackage>();
+  savedPackages.forEach(pkg => {
+    if (pkg) {
+      const key = (pkg.code || pkg.id || '').toUpperCase().trim();
+      if (key) savedMap.set(key, pkg);
+    }
+  });
+
+  const merged: ComprehensivePackage[] = INITIAL_PACKAGES.map(defPkg => {
+    const key = (defPkg.code || defPkg.id || '').toUpperCase().trim();
+    const existing = savedMap.get(key);
+    if (existing) {
+      savedMap.delete(key);
+      return {
+        ...defPkg,
+        ...existing,
+        nameAr: (existing as any).nameAr || (existing as any).titleAr || defPkg.titleAr,
+        titleAr: existing.titleAr || defPkg.titleAr,
+        titleEn: existing.titleEn || defPkg.titleEn,
+        packagePrice: typeof existing.packagePrice === 'number' && existing.packagePrice > 0 ? existing.packagePrice : defPkg.packagePrice,
+        originalPrice: typeof existing.originalPrice === 'number' && existing.originalPrice > 0 ? existing.originalPrice : defPkg.originalPrice,
+        includedProfiles: Array.isArray(existing.includedProfiles) && existing.includedProfiles.length > 0 
+          ? existing.includedProfiles 
+          : defPkg.includedProfiles,
+        includedIndividualTestCodes: Array.isArray(existing.includedIndividualTestCodes) && existing.includedIndividualTestCodes.length > 0 
+          ? existing.includedIndividualTestCodes 
+          : defPkg.includedIndividualTestCodes
+      };
+    }
+    return { ...defPkg };
+  });
+
+  // Append custom packages
+  savedMap.forEach(customPkg => {
+    merged.push(customPkg);
+  });
+
+  return merged;
+}
+
+/**
+ * Merges any existing diagnostic profiles with 24 default profiles
+ */
+export function mergeProfilesWithDefaults(savedProfiles?: CatalogProfileTemplate[]): CatalogProfileTemplate[] {
+  if (!Array.isArray(savedProfiles) || savedProfiles.length === 0) {
+    return [...LAB_CATALOG];
+  }
+
+  const savedMap = new Map<string, CatalogProfileTemplate>();
+  savedProfiles.forEach(p => {
+    if (p && p.code) savedMap.set(p.code.toUpperCase().trim(), p);
+  });
+
+  const merged: CatalogProfileTemplate[] = LAB_CATALOG.map(defProf => {
+    const key = defProf.code.toUpperCase().trim();
+    const existing = savedMap.get(key);
+    if (existing) {
+      savedMap.delete(key);
+      return {
+        ...defProf,
+        ...existing,
+        titleAr: existing.titleAr || defProf.titleAr,
+        titleEn: existing.titleEn || defProf.titleEn,
+        category: existing.category || defProf.category,
+        sampleType: existing.sampleType || defProf.sampleType,
+        parameters: existing.parameters && existing.parameters.length >= defProf.parameters.length
+          ? existing.parameters
+          : defProf.parameters
+      };
+    }
+    return { ...defProf };
+  });
+
+  savedMap.forEach(customProf => {
+    merged.push(customProf);
+  });
+
+  return merged;
+}
 
 /**
  * Maps a profile code or title to a pathological infogram
@@ -179,10 +320,26 @@ export function runGlobalDataUpgrade(): { upgradedReportsCount: number; success:
     localStorage.setItem('rt_lab_staff_v2', JSON.stringify(DEFAULT_STAFF));
     localStorage.setItem('rt_lab_staff_v3', JSON.stringify(DEFAULT_STAFF));
 
-    // 2. Upgrade Test Catalog in localStorage
-    localStorage.setItem('rt_lab_catalog_v2', JSON.stringify(LAB_CATALOG));
-    localStorage.setItem('rt_lab_custom_catalog_v3', JSON.stringify(LAB_CATALOG));
-    localStorage.setItem('rt_lab_individual_tests_v2', JSON.stringify(INITIAL_INDIVIDUAL_TESTS));
+    // 2. Upgrade and Merge Test Catalog in localStorage
+    const savedTestCatalogRaw = localStorage.getItem('rt_lab_unified_test_catalog_v3');
+    const existingTestCatalog = savedTestCatalogRaw ? JSON.parse(savedTestCatalogRaw) : [];
+    const mergedTestCatalog = mergeCatalogWithDefaults(existingTestCatalog);
+    localStorage.setItem('rt_lab_unified_test_catalog_v3', JSON.stringify(mergedTestCatalog));
+
+    const savedPackagesRaw = localStorage.getItem('rt_lab_unified_packages_v3');
+    const existingPackages = savedPackagesRaw ? JSON.parse(savedPackagesRaw) : [];
+    const mergedPackages = mergePackagesWithDefaults(existingPackages);
+    localStorage.setItem('rt_lab_unified_packages_v3', JSON.stringify(mergedPackages));
+
+    const savedProfilesRaw = localStorage.getItem('rt_lab_unified_diagnostic_profiles_v3');
+    const existingProfiles = savedProfilesRaw ? JSON.parse(savedProfilesRaw) : [];
+    const mergedProfiles = mergeProfilesWithDefaults(existingProfiles);
+    localStorage.setItem('rt_lab_unified_diagnostic_profiles_v3', JSON.stringify(mergedProfiles));
+
+    // Compatibility keys for legacy modules
+    localStorage.setItem('rt_lab_catalog_v2', JSON.stringify(mergedProfiles));
+    localStorage.setItem('rt_lab_custom_catalog_v3', JSON.stringify(mergedProfiles));
+    localStorage.setItem('rt_lab_individual_tests_v2', JSON.stringify(mergedTestCatalog));
 
     // 3. Scan and Upgrade ALL Saved Patient Reports
     let reportCount = 0;
