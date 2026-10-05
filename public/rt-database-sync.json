@@ -1,7 +1,336 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:54:18.213Z",
+  "syncedAt": "2026-10-05T15:54:23.996Z",
   "reports": [
+    {
+      "createdAt": "2026-10-04T14:41:58.128Z",
+      "profiles": [
+        {
+          "parameters": [
+            {
+              "unit": "mg/dL",
+              "maxNormal": 1.2,
+              "flag": "NORMAL",
+              "name": "Serum Creatinine",
+              "textReference": "",
+              "method": "Enzymatic / Jaffe Kinetic",
+              "id": "param-0-1791214314721-rn4",
+              "panicHigh": 4,
+              "minNormal": 0.6,
+              "result": "1.10"
+            },
+            {
+              "minNormal": 15,
+              "unit": "mg/dL",
+              "flag": "NORMAL",
+              "panicHigh": 120,
+              "name": "Blood Urea",
+              "maxNormal": 45,
+              "method": "Urease-GLDH",
+              "id": "param-1-1791214314721-qdt",
+              "result": "28",
+              "textReference": ""
+            },
+            {
+              "maxNormal": 7.2,
+              "textReference": "",
+              "flag": "NORMAL",
+              "result": "5.33",
+              "name": "Serum Uric Acid",
+              "minNormal": 3.5,
+              "method": "Uricase-PAP",
+              "unit": "mg/dL",
+              "id": "param-4-1791214314721-9za"
+            }
+          ],
+          "titleEn": "Kidney Function Profile",
+          "interpretation": "Renal biomarkers indicate adequate glomerular filtration and nitrogenous clearance.",
+          "id": "prof-1791214314721-x90k",
+          "sampleType": "Serum",
+          "profileCode": "KFT",
+          "titleAr": "وظائف الكلى واليوريا ومعدل الفلترة eGFR",
+          "category": "Clinical Chemistry"
+        },
+        {
+          "id": "prof-1791214314721-nna6",
+          "profileCode": "LIPID",
+          "interpretation": "Lipid ratios demonstrate favorable cardiovascular risk stratification.",
+          "titleEn": "Lipid Profile",
+          "titleAr": "دهون الدم الشاملة مع المؤشرات الحسابية",
+          "sampleType": "Serum (12h Fasting)",
+          "category": "Clinical Chemistry",
+          "parameters": [
+            {
+              "textReference": "",
+              "minNormal": 120,
+              "method": "CHOD-PAP",
+              "unit": "mg/dL",
+              "flag": "NORMAL",
+              "result": "",
+              "name": "Total Serum Cholesterol",
+              "maxNormal": 200,
+              "id": "param-0-1791214314721-3hd"
+            },
+            {
+              "maxNormal": 150,
+              "id": "param-1-1791214314721-2ck",
+              "name": "Serum Triglycerides",
+              "method": "GPO-PAP",
+              "textReference": "",
+              "flag": "NORMAL",
+              "panicHigh": 500,
+              "minNormal": 40,
+              "unit": "mg/dL",
+              "result": ""
+            },
+            {
+              "maxNormal": 65,
+              "unit": "mg/dL",
+              "flag": "NORMAL",
+              "name": "HDL - Cholesterol (Good)",
+              "minNormal": 40,
+              "method": "Direct Accelerator",
+              "textReference": "",
+              "id": "param-2-1791214314721-8zv",
+              "result": ""
+            },
+            {
+              "flag": "NORMAL",
+              "name": "LDL - Cholesterol (Calculated)",
+              "maxNormal": 100,
+              "unit": "mg/dL",
+              "result": "",
+              "textReference": "",
+              "id": "param-3-1791214314721-cav",
+              "notes": "Friedewald Formula: Total Chol - HDL - (TG / 5)",
+              "minNormal": 0
+            },
+            {
+              "maxNormal": 30,
+              "flag": "NORMAL",
+              "name": "VLDL - Cholesterol",
+              "notes": "Auto-calculated: Triglycerides / 5",
+              "unit": "mg/dL",
+              "minNormal": 5,
+              "result": "",
+              "textReference": "",
+              "id": "param-4-1791214314721-jdb"
+            },
+            {
+              "notes": "Auto-calculated: Total Chol - HDL",
+              "result": "",
+              "unit": "mg/dL",
+              "flag": "NORMAL",
+              "minNormal": 0,
+              "name": "Non-HDL Cholesterol",
+              "id": "param-5-1791214314721-kwb",
+              "textReference": "",
+              "maxNormal": 130
+            },
+            {
+              "id": "param-6-1791214314721-mwq",
+              "maxNormal": 4.5,
+              "notes": "Auto-calculated: Total Chol / HDL",
+              "result": "",
+              "unit": "Ratio",
+              "name": "Total Chol / HDL Ratio",
+              "textReference": "< 4.5 Desirable",
+              "minNormal": 0,
+              "flag": "NORMAL"
+            },
+            {
+              "id": "param-7-1791214314721-h3a",
+              "result": "",
+              "textReference": "< 3.0 Desirable",
+              "unit": "Ratio",
+              "maxNormal": 3,
+              "minNormal": 0,
+              "flag": "NORMAL",
+              "name": "LDL / HDL Ratio"
+            }
+          ]
+        },
+        {
+          "titleEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+          "parameters": [
+            {
+              "result": "10.70",
+              "maxNormal": 16.5,
+              "method": "Automated SLS-Hb",
+              "panicLow": 7,
+              "flag": "LOW",
+              "panicHigh": 20,
+              "name": "Hemoglobin (Hb)",
+              "textReference": "M: 13.0 - 17.5 | F: 12.0 - 15.5 g/dL",
+              "id": "param-0-1791214314721-4xq",
+              "minNormal": 12,
+              "unit": "g/dL"
+            },
+            {
+              "textReference": "M: 40 - 52% | F: 36 - 48%",
+              "maxNormal": 48,
+              "notes": "Calculated (HGB × 3)",
+              "flag": "LOW",
+              "result": "31.60",
+              "name": "Hematocrit (PCV)",
+              "id": "param-2-1791214314721-8d3",
+              "unit": "%",
+              "minNormal": 36
+            }
+          ],
+          "profileCode": "CBC",
+          "id": "prof-1791214314721-nnsm",
+          "sampleType": "EDTA Whole Blood",
+          "category": "Hematology",
+          "interpretation": "Microscopic evaluation and complete differential indices assessed according to international hematology criteria.",
+          "titleAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية"
+        },
+        {
+          "profileCode": "PKG_EXTRA",
+          "category": "Package Tests",
+          "titleAr": "فحوصات وفيتامينات باقة: باقة الفحص الدوري الشامل (Wellness Plus)",
+          "interpretation": "All complementary package tests evaluated according to certified reference ranges.",
+          "id": "prof-extra-1791214314721",
+          "titleEn": "Package Tests (Comprehensive Annual Wellness Package)",
+          "parameters": [
+            {
+              "unit": "U/L",
+              "flag": "NORMAL",
+              "maxNormal": 41,
+              "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
+              "id": "p-pkg-2-1791214314721",
+              "method": "IFCC Kinetic UV without Pyridoxal Phosphate",
+              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
+              "result": "25",
+              "minNormal": 0
+            },
+            {
+              "unit": "U/L",
+              "id": "p-pkg-3-1791214314721",
+              "name": "إنزيم كبد AST / SGOT (Aspartate Aminotransferase (AST / SGOT))",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 32 U/L",
+              "flag": "NORMAL",
+              "minNormal": 0,
+              "method": "IFCC Kinetic UV",
+              "result": "30",
+              "maxNormal": 40
+            },
+            {
+              "minNormal": 30,
+              "method": "CLIA (Chemiluminescence Immunoassay)",
+              "result": "",
+              "id": "p-pkg-4-1791214314721",
+              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
+              "flag": "NORMAL",
+              "maxNormal": 100,
+              "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+              "unit": "ng/mL"
+            }
+          ],
+          "sampleType": "Serum"
+        },
+        {
+          "category": "Clinical Chemistry",
+          "titleAr": "تقييم السكر التراكمي والجلوكوز ومتوسط السكر التقديري",
+          "parameters": [
+            {
+              "maxNormal": 99,
+              "result": "",
+              "unit": "mg/dL",
+              "flag": "",
+              "method": "Hexokinase",
+              "name": "Fasting Blood Glucose",
+              "minNormal": 70,
+              "id": "param-1791214459089-0",
+              "panicLow": 50,
+              "panicHigh": 400
+            },
+            {
+              "id": "param-1791214459089-1",
+              "name": "2 Hours Post-Prandial Glucose",
+              "flag": "",
+              "result": "",
+              "method": "Hexokinase",
+              "unit": "mg/dL",
+              "maxNormal": 140,
+              "panicHigh": 450,
+              "minNormal": 70
+            },
+            {
+              "result": "",
+              "maxNormal": 140,
+              "minNormal": 70,
+              "unit": "mg/dL",
+              "id": "param-1791214459089-2",
+              "flag": "",
+              "name": "Random Blood Glucose"
+            },
+            {
+              "method": "HPLC / Turbidimetric",
+              "name": "HbA1c (Glycated Hemoglobin)",
+              "flag": "",
+              "id": "param-1791214459089-3",
+              "unit": "%",
+              "minNormal": 4,
+              "result": "",
+              "textReference": "< 5.7% Normal, 5.7 - 6.4% Pre-Diabetes, ≥ 6.5% Diabetes",
+              "maxNormal": 5.6
+            },
+            {
+              "minNormal": 68,
+              "unit": "mg/dL",
+              "notes": "Auto-calculated: (28.7 × HbA1c) - 46.7",
+              "id": "param-1791214459089-4",
+              "name": "Estimated Average Glucose (eAG)",
+              "flag": "",
+              "maxNormal": 114,
+              "textReference": "80 - 120 mg/dL",
+              "result": ""
+            }
+          ],
+          "sampleType": "Fluoride Plasma & EDTA Blood",
+          "interpretation": "Glycemic parameters evaluated according to ADA guidelines.",
+          "id": "prof-1791214459088-y8vc",
+          "profileCode": "GLYCEMIC",
+          "titleEn": "Diabetes & Glycemic Assessment (HbA1c & eAG)"
+        }
+      ],
+      "patient": {
+        "ageUnit": "years",
+        "barcode": "26256865",
+        "referringDoctorTitle": "Prof. Dr.",
+        "id": "pat-inc-1791124918128",
+        "gender": "female",
+        "reportingDate": "2026-10-04T14:41",
+        "age": 51,
+        "loyaltyCardIssued": true,
+        "labNumber": "RT-BK-1432",
+        "phone": "01228439288",
+        "sampleDate": "2026-10-04T14:41",
+        "clinicalHistory": "طلب صادر من الفاتورة المالية RT-BK-1432 - السداد: مسدد بالكامل",
+        "referringDoctorName": "فحص بفرع (معامل RT للتحاليل التشخيصية)",
+        "loyaltyCardNumber": "RT-2026-0008",
+        "bloodGroup": "O+",
+        "totalCost": 198,
+        "fullName": "نورا سعيد حلمى"
+      },
+      "status": "in_progress",
+      "staff": {
+        "verifiedBy": "",
+        "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
+        "labChemist": ""
+      },
+      "packageApplied": {
+        "code": "PKG-ANNUAL-WELLNESS",
+        "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
+        "packagePrice": 199,
+        "originalPrice": 2900
+      },
+      "reportNumber": "RT-BK-1432",
+      "id": "rep-inc-1791124918128",
+      "updatedAt": "2026-10-05T15:34:19.089Z",
+      "generalComment": "طلب فحص مالي رقم RT-BK-1432 - تم التسميع آلياً من منظومة الفواتير"
+    },
     {
       "id": "rep-001",
       "reportNumber": "RT-2026-001",
@@ -3064,7 +3393,8 @@
         "EDTA Whole Blood",
         "Clean Urine"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة الفحص الدوري الشامل (Wellness Plus)"
     },
     {
       "id": "pkg-2",
@@ -3094,7 +3424,8 @@
         "Serum",
         "EDTA Whole Blood"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة صحة الرجل والبروستاتا الشاملة"
     },
     {
       "id": "pkg-3",
@@ -3124,7 +3455,8 @@
         "EDTA Whole Blood",
         "Clean Urine"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة صحة المرأة والهرمونات الحيوية"
     },
     {
       "id": "pkg-4",
@@ -3158,7 +3490,8 @@
         "EDTA Whole Blood",
         "Morning Urine"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة متابعة السكر والوقاية من المضاعفات"
     },
     {
       "id": "pkg-5",
@@ -3188,7 +3521,8 @@
         "Serum",
         "EDTA Whole Blood"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة الفحص الطبي الشامل لما قبل الزواج"
     },
     {
       "id": "pkg-6",
@@ -3223,7 +3557,8 @@
         "Serum",
         "Citrate Plasma"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "باقة وظائف الكبد والفيروسات الكبدية الكاملة"
     },
     {
       "id": "pkg-7",
@@ -3256,7 +3591,8 @@
         "Serum",
         "Fresh Urine"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "باقة وظائف الكلى والأملاح والنقرس"
     },
     {
       "id": "pkg-8",
@@ -3289,7 +3625,8 @@
         "Serum",
         "Citrate Plasma"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "باقة صحة القلب والدهون وتصلب الشرايين"
     },
     {
       "id": "pkg-9",
@@ -3321,7 +3658,8 @@
         "Serum",
         "EDTA Whole Blood"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة الفيتامينات والمعادن والطاقة الحيوية"
     },
     {
       "id": "pkg-10",
@@ -3359,7 +3697,8 @@
         "Fresh Urine",
         "Stool Specimen"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة كبار السن التنفيذية الشاملة (Golden Age)"
     },
     {
       "id": "pkg-11",
@@ -3392,7 +3731,8 @@
         "Serum",
         "EDTA Whole Blood"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة تشخيص تساقط الشعر والأنيميا والهرمونات"
     },
     {
       "id": "pkg-12",
@@ -3427,7 +3767,8 @@
         "Serum",
         "EDTA Whole Blood"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "باقة الرياضيين واللياقة وبناء الأجسام"
     },
     {
       "id": "pkg-13",
@@ -3459,7 +3800,8 @@
         "Fresh Urine",
         "Stool Specimen"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "باقة صحة ونمو الأطفال والديدان وفقر الدم"
     },
     {
       "id": "pkg-14",
@@ -3490,7 +3832,8 @@
         "EDTA Whole Blood",
         "Fresh Stool Specimen"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "باقة الجهاز الهضمي والقولون وجرثومة المعدة"
     },
     {
       "id": "pkg-15",
@@ -3539,7 +3882,8 @@
         "Fresh Urine",
         "Stool"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة الفحص الشامل الملكية VIP د. رامي مختار (32 فحص شامل)"
     }
   ]
 }
