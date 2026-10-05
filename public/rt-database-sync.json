@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T11:10:27.495Z",
+  "syncedAt": "2026-10-05T11:10:30.214Z",
   "reports": [
     {
       "id": "rep-1791198572864",
@@ -444,15 +444,6 @@
               "flag": "HIGH"
             },
             {
-              "name": "Random Blood Glucose",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 140,
-              "id": "param-2-1791198572863",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
               "name": "HbA1c (Glycated Hemoglobin)",
               "unit": "%",
               "minNormal": 4,
@@ -598,7 +589,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-05T11:09:32.864Z",
-      "updatedAt": "2026-10-05T11:10:25.186Z",
+      "updatedAt": "2026-10-05T11:10:27.713Z",
       "invoiceId": "inv-1791198572864"
     }
   ],
