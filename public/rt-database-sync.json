@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:33:16.469Z",
+  "syncedAt": "2026-10-05T15:33:22.260Z",
   "reports": [
     {
       "status": "released",
@@ -1933,7 +1933,7 @@
       }
     },
     {
-      "updatedAt": "2026-10-05T15:33:13.303Z",
+      "updatedAt": "2026-10-05T15:33:19.140Z",
       "patient": {
         "loyaltyCardNumber": "RT-2026-0008",
         "id": "pat-inc-1791124918128",
@@ -2130,7 +2130,7 @@
               "notes": "Calculated (HGB × 3)",
               "textReference": "M: 40 - 52% | F: 36 - 48%",
               "id": "param-2-1791214314721-8d3",
-              "result": "3",
+              "result": "31.60",
               "flag": "LOW"
             },
             {
@@ -2163,8 +2163,8 @@
               "notes": "Calculated: (HGB × 100) / HCT",
               "textReference": "32.0 - 36.0 g/dL",
               "id": "param-5-1791214314721-oom",
-              "result": "356.7",
-              "flag": "HIGH"
+              "result": "33.9",
+              "flag": "NORMAL"
             },
             {
               "name": "R.D.W-CV",
