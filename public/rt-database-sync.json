@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:12:39.658Z",
+  "syncedAt": "2026-10-05T15:13:09.297Z",
   "reports": [
     {
       "status": "draft",
@@ -3948,7 +3948,7 @@
     {
       "id": "rep-inc-1791124532954",
       "createdAt": "2026-10-04T14:35:32.954Z",
-      "updatedAt": "2026-10-05T15:12:32.880Z",
+      "updatedAt": "2026-10-05T15:13:03.277Z",
       "patient": {
         "reportingDate": "2026-10-04T14:35",
         "loyaltyCardIssued": true,
@@ -4122,7 +4122,7 @@
           "titleAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
           "category": "Hematology",
           "sampleType": "EDTA Whole Blood",
-          "interpretation": "Microscopic evaluation and complete differential indices assessed according to international hematology criteria.",
+          "interpretation": " ",
           "parameters": [
             {
               "name": "Hemoglobin (Hb)",
@@ -4159,17 +4159,6 @@
           "sampleType": "Serum",
           "interpretation": "All complementary package tests evaluated according to certified reference ranges.",
           "parameters": [
-            {
-              "id": "p-pkg-0-1791212993857",
-              "name": "الهرمون المنشط للغدة الدرقية (TSH Ultrasensitive) (Thyroid Stimulating Hormone (TSH))",
-              "result": "",
-              "unit": "uIU/mL",
-              "minNormal": 0.35,
-              "maxNormal": 4.94,
-              "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
-              "flag": "NORMAL",
-              "method": "CLIA (3rd Generation Chemiluminescence)"
-            },
             {
               "id": "p-pkg-1-1791212993857",
               "name": "سكر الدم الصائم (FBS) (Fasting Blood Sugar)",
