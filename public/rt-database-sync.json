@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:21:28.296Z",
+  "syncedAt": "2026-10-05T18:21:33.331Z",
   "reports": [
     {
       "status": "released",
@@ -864,11 +864,11 @@
         "gender": "female",
         "labNumber": "RT-BK-8226",
         "age": 56,
-        "clinicalHistory": "طلب صادر من الفاتورة المالية RT-BK-8226 - السداد: مسدد بالكامل",
+        "clinicalHistory": "",
         "totalCost": 230,
         "bloodGroup": "O+"
       },
-      "updatedAt": "2026-10-05T18:21:25.081Z",
+      "updatedAt": "2026-10-05T18:21:30.101Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-8226 - تم التسميع آلياً من منظومة الفواتير",
       "id": "rep-inc-1791127003337",
       "staff": {
