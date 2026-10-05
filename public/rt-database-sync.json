@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T14:09:49.228Z",
+  "syncedAt": "2026-10-05T14:10:45.674Z",
   "reports": [
     {
       "status": "draft",
@@ -2080,7 +2080,7 @@
         "verifiedBy": ""
       },
       "reportNumber": "RT-BK-5752",
-      "updatedAt": "2026-10-05T14:09:45.253Z",
+      "updatedAt": "2026-10-05T14:10:41.960Z",
       "createdAt": "2026-10-04T14:28:04.105Z",
       "id": "rep-inc-1791124084105",
       "profiles": [
@@ -2364,7 +2364,7 @@
       ],
       "generalComment": " ",
       "patient": {
-        "clinicalHistory": "طلب صادر من الفاتورة المالية RT-BK-5752 - السداد: مسدد بالكامل",
+        "clinicalHistory": " ",
         "bloodGroup": "O+",
         "loyaltyCardIssued": true,
         "sampleDate": "2026-10-04T14:28",
