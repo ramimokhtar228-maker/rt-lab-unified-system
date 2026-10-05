@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T14:03:23.894Z",
+  "syncedAt": "2026-10-05T14:03:28.303Z",
   "reports": [
     {
       "status": "draft",
@@ -2080,7 +2080,7 @@
         "verifiedBy": ""
       },
       "reportNumber": "RT-BK-5752",
-      "updatedAt": "2026-10-05T14:03:20.966Z",
+      "updatedAt": "2026-10-05T14:03:24.309Z",
       "createdAt": "2026-10-04T14:28:04.105Z",
       "id": "rep-inc-1791124084105",
       "profiles": [
@@ -2170,7 +2170,7 @@
               "method": "Direct Accelerator",
               "textReference": "",
               "id": "param-2-1791208922778-k2g",
-              "result": "",
+              "result": "49",
               "flag": "NORMAL"
             },
             {
@@ -2178,11 +2178,11 @@
               "unit": "mg/dL",
               "minNormal": 0,
               "maxNormal": 100,
-              "notes": "Friedewald Formula: Total Chol - HDL - (TG / 5)",
+              "notes": "Friedewald Formula: TC - HDL - (TG/5)",
               "textReference": "",
               "id": "param-3-1791208922778-3pc",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "128",
+              "flag": "HIGH"
             },
             {
               "name": "VLDL - Cholesterol",
@@ -2200,11 +2200,11 @@
               "unit": "mg/dL",
               "minNormal": 0,
               "maxNormal": 130,
-              "notes": "Auto-calculated: Total Chol - HDL",
+              "notes": "Calculated: Total Cholesterol - HDL",
               "textReference": "",
               "id": "param-5-1791208922778-2bi",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "151",
+              "flag": "HIGH"
             },
             {
               "name": "Total Chol / HDL Ratio",
@@ -2212,9 +2212,9 @@
               "minNormal": 0,
               "maxNormal": 4.5,
               "textReference": "< 4.5 Desirable",
-              "notes": "Auto-calculated: Total Chol / HDL",
+              "notes": "Desirable < 4.5",
               "id": "param-6-1791208922778-cai",
-              "result": "",
+              "result": "4.1",
               "flag": "NORMAL"
             },
             {
