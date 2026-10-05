@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T11:10:09.171Z",
+  "syncedAt": "2026-10-05T11:10:17.453Z",
   "reports": [
     {
       "id": "rep-1791198572864",
@@ -420,17 +420,7 @@
           "titleAr": "سكر بعد الأكل بساعتين (2h PPBS)",
           "category": "Diabetes",
           "sampleType": "Fluoride Plasma",
-          "parameters": [
-            {
-              "id": "p-1791198572863",
-              "name": "2h Post-Prandial Glucose",
-              "result": "",
-              "unit": "",
-              "textReference": "",
-              "flag": "NORMAL",
-              "method": "Automated Clinical Assay"
-            }
-          ]
+          "parameters": []
         },
         {
           "id": "prof-1791198572863-fiho",
@@ -619,7 +609,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-05T11:09:32.864Z",
-      "updatedAt": "2026-10-05T11:10:06.725Z",
+      "updatedAt": "2026-10-05T11:10:14.953Z",
       "invoiceId": "inv-1791198572864"
     }
   ],
