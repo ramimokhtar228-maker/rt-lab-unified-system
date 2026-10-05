@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T14:07:07.022Z",
+  "syncedAt": "2026-10-05T14:09:22.073Z",
   "reports": [
     {
       "status": "draft",
@@ -2080,7 +2080,7 @@
         "verifiedBy": ""
       },
       "reportNumber": "RT-BK-5752",
-      "updatedAt": "2026-10-05T14:07:03.919Z",
+      "updatedAt": "2026-10-05T14:09:19.050Z",
       "createdAt": "2026-10-04T14:28:04.105Z",
       "id": "rep-inc-1791124084105",
       "profiles": [
@@ -2337,6 +2337,27 @@
               "textReference": "Normal: < 5.7 % | Pre-diabetic: 5.7 - 6.4 % | Diabetic: >= 6.5 %",
               "method": "HPLC / Ion-Exchange Automated Analyzer (NGSP Certified)",
               "flag": "HIGH"
+            }
+          ]
+        },
+        {
+          "id": "prof-indiv-1791209359050",
+          "profileCode": "INDIVIDUAL",
+          "titleEn": "Individual Diagnostic Investigations",
+          "titleAr": "تحاليل منفردة ومحددة",
+          "category": "Kidney Function",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "param-1791209359050",
+              "name": "الكالسيوم الكلي (Total Serum Calcium) (Total Calcium)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 8.6,
+              "maxNormal": 10.3,
+              "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
+              "method": "Arsenazo III / CPC Photometric",
+              "flag": ""
             }
           ]
         }
