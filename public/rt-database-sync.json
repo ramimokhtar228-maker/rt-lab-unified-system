@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:20:25.162Z",
+  "syncedAt": "2026-10-05T15:20:36.313Z",
   "reports": [
     {
       "status": "released",
@@ -2047,7 +2047,7 @@
               "method": "Enzymatic / Jaffe Kinetic",
               "textReference": "",
               "id": "param-0-1791213622129-qdr",
-              "result": "",
+              "result": "1.05",
               "flag": "NORMAL"
             },
             {
@@ -2099,11 +2099,11 @@
               "unit": "mL/min/1.73m²",
               "minNormal": 90,
               "maxNormal": 120,
-              "notes": "Auto-calculated: CKD-EPI Formula",
+              "notes": "CKD-EPI: Stage 2 (Mild 60-89)",
               "textReference": "",
               "id": "param-5-1791213622129-6c3",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "67",
+              "flag": "LOW"
             }
           ]
         },
@@ -2671,7 +2671,7 @@
         }
       ],
       "status": "in_progress",
-      "updatedAt": "2026-10-05T15:20:22.129Z",
+      "updatedAt": "2026-10-05T15:20:33.702Z",
       "createdAt": "2026-10-04T14:38:22.671Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-4276 - تم التسميع آلياً من منظومة الفواتير",
       "reportNumber": "RT-BK-4276",
