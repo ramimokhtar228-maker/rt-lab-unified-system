@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:08:03.813Z",
+  "syncedAt": "2026-10-05T18:08:10.546Z",
   "reports": [
     {
       "status": "released",
@@ -5011,17 +5011,6 @@
               "method": "Hexokinase / GOD-PAP"
             },
             {
-              "id": "p-pkg-2-1791223515986",
-              "name": "صورة دم كاملة تفصيلية (CBC with Diff) (Complete Blood Count with Differential)",
-              "result": "",
-              "unit": "Multi-parameter",
-              "minNormal": 0,
-              "maxNormal": 0,
-              "textReference": "Hb: Male 13.0-17.5 g/dL, Female 12.0-15.5 | WBC: 4.0-11.0 10^3/uL | PLT: 150-450 10^3/uL",
-              "flag": "NORMAL",
-              "method": "5-Part Automated Flow Cytometry / Laser Impedance"
-            },
-            {
               "id": "p-pkg-3-1791223515986",
               "name": "كرياتينين بالدم (Serum Creatinine) (Serum Creatinine)",
               "result": "",
@@ -5117,7 +5106,7 @@
         "sampleDate": "2026-10-04T14:59"
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-9820 - تم التسميع آلياً من منظومة الفواتير",
-      "updatedAt": "2026-10-05T18:07:58.129Z",
+      "updatedAt": "2026-10-05T18:08:03.360Z",
       "packageApplied": {
         "code": "PKG-ANNUAL-WELLNESS",
         "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
