@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:51:34.178Z",
+  "syncedAt": "2026-10-05T17:52:31.025Z",
   "reports": [
     {
       "status": "released",
@@ -1805,7 +1805,7 @@
         }
       ],
       "id": "rep-inc-1791125455998",
-      "updatedAt": "2026-10-05T17:51:31.104Z",
+      "updatedAt": "2026-10-05T17:52:24.082Z",
       "createdAt": "2026-10-04T14:50:55.998Z",
       "generalComment": " ",
       "patient": {
@@ -1833,7 +1833,7 @@
         "labChemist": "",
         "verifiedBy": ""
       },
-      "status": "in_progress",
+      "status": "verified",
       "packageApplied": {
         "code": "PKG-ANNUAL-WELLNESS",
         "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
