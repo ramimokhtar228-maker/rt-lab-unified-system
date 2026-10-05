@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:15:34.536Z",
+  "syncedAt": "2026-10-05T15:15:40.734Z",
   "reports": [
     {
       "status": "draft",
@@ -3948,7 +3948,7 @@
     {
       "id": "rep-inc-1791124532954",
       "createdAt": "2026-10-04T14:35:32.954Z",
-      "updatedAt": "2026-10-05T15:15:31.461Z",
+      "updatedAt": "2026-10-05T15:15:36.092Z",
       "patient": {
         "reportingDate": "2026-10-04T14:35",
         "loyaltyCardIssued": true,
@@ -3966,7 +3966,8 @@
         "referringDoctorTitle": "Prof. Dr.",
         "age": 57,
         "referringDoctorName": "فحص بفرع (معامل RT للتحاليل التشخيصية)",
-        "phone": "01006222705"
+        "phone": "01006222705",
+        "fastingHours": 10
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-9242 - تم التسميع آلياً من منظومة الفواتير",
       "profiles": [
