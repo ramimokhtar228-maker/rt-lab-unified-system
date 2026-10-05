@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:51:17.554Z",
+  "syncedAt": "2026-10-05T17:51:34.178Z",
   "reports": [
     {
       "status": "released",
@@ -1793,19 +1793,19 @@
             {
               "id": "param-1791222674626",
               "name": "الكالسيوم الكلي (Total Serum Calcium) (Total Serum Calcium)",
-              "result": "",
+              "result": "8.90",
               "unit": "mg/dL",
               "minNormal": 8.6,
               "maxNormal": 10.3,
               "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
               "method": "Arsenazo III / CPC Photometric",
-              "flag": ""
+              "flag": "NORMAL"
             }
           ]
         }
       ],
       "id": "rep-inc-1791125455998",
-      "updatedAt": "2026-10-05T17:51:14.626Z",
+      "updatedAt": "2026-10-05T17:51:31.104Z",
       "createdAt": "2026-10-04T14:50:55.998Z",
       "generalComment": " ",
       "patient": {
