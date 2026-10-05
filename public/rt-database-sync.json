@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:44:14.752Z",
+  "syncedAt": "2026-10-05T17:44:48.057Z",
   "reports": [
     {
       "status": "released",
@@ -2583,10 +2583,31 @@
               "method": "Uricase / POD Enzymatic Colorimetric"
             }
           ]
+        },
+        {
+          "id": "prof-indiv-1791222284730",
+          "profileCode": "INDIVIDUAL",
+          "titleEn": "Individual Diagnostic Investigations",
+          "titleAr": "تحاليل منفردة ومحددة",
+          "category": "Thyroid",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "param-1791222284731",
+              "name": "الهرمون المنشط للغدة الدرقية (TSH Ultrasensitive) (Thyroid Stimulating Hormone (TSH))",
+              "result": "",
+              "unit": "uIU/mL",
+              "minNormal": 0.35,
+              "maxNormal": 4.94,
+              "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+              "method": "CLIA (3rd Generation Chemiluminescence)",
+              "flag": ""
+            }
+          ]
         }
       ],
       "id": "rep-inc-1791125455998",
-      "updatedAt": "2026-10-05T17:44:11.479Z",
+      "updatedAt": "2026-10-05T17:44:44.731Z",
       "createdAt": "2026-10-04T14:50:55.998Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-9599 - تم التسميع آلياً من منظومة الفواتير",
       "patient": {
