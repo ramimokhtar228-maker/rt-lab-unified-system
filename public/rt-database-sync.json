@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:13:31.645Z",
+  "syncedAt": "2026-10-05T15:13:47.532Z",
   "reports": [
     {
       "status": "draft",
@@ -3948,7 +3948,7 @@
     {
       "id": "rep-inc-1791124532954",
       "createdAt": "2026-10-04T14:35:32.954Z",
-      "updatedAt": "2026-10-05T15:13:23.804Z",
+      "updatedAt": "2026-10-05T15:13:37.547Z",
       "patient": {
         "reportingDate": "2026-10-04T14:35",
         "loyaltyCardIssued": true,
@@ -4173,7 +4173,7 @@
             {
               "id": "p-pkg-3-1791212993857",
               "name": "إنزيم كبد AST / SGOT (Aspartate Aminotransferase (AST / SGOT))",
-              "result": "",
+              "result": "37",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 40,
@@ -4184,12 +4184,12 @@
             {
               "id": "p-pkg-4-1791212993857",
               "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
-              "result": "",
+              "result": "26.12",
               "unit": "ng/mL",
               "minNormal": 30,
               "maxNormal": 100,
               "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
-              "flag": "NORMAL",
+              "flag": "LOW",
               "method": "CLIA (Chemiluminescence Immunoassay)"
             }
           ]
