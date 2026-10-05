@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:18:03.986Z",
+  "syncedAt": "2026-10-05T18:18:11.432Z",
   "reports": [
     {
       "status": "released",
@@ -644,10 +644,10 @@
             },
             {
               "name": "Segmented Neutrophils %",
-              "result": "",
+              "result": "61",
               "id": "p-mig-15-1791157348011",
               "maxNormal": 65,
-              "flag": "",
+              "flag": "NORMAL",
               "unit": "%",
               "textReference": "40 - 65 %",
               "minNormal": 40
@@ -748,9 +748,9 @@
               "unit": "x10^3/µL",
               "minNormal": 1.5,
               "id": "p-mig-25-1791157348011",
-              "result": "",
-              "notes": "Auto-calculated: (WBC × Neut%) / 100",
-              "flag": "",
+              "result": "6.8",
+              "notes": "Calculated: (WBC × Neut%) / 100",
+              "flag": "NORMAL",
               "textReference": "1.5 - 7.5 x10^3/µL",
               "name": "Absolute Neutrophils (ANC)"
             },
@@ -925,7 +925,7 @@
         "totalCost": 230,
         "bloodGroup": "O+"
       },
-      "updatedAt": "2026-10-05T18:18:00.583Z",
+      "updatedAt": "2026-10-05T18:18:07.662Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-8226 - تم التسميع آلياً من منظومة الفواتير",
       "id": "rep-inc-1791127003337",
       "staff": {
