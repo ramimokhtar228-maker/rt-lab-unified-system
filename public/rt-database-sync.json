@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:09:58.258Z",
+  "syncedAt": "2026-10-05T15:10:26.460Z",
   "reports": [
     {
       "status": "draft",
@@ -3948,7 +3948,7 @@
     {
       "id": "rep-inc-1791124532954",
       "createdAt": "2026-10-04T14:35:32.954Z",
-      "updatedAt": "2026-10-05T15:09:53.857Z",
+      "updatedAt": "2026-10-05T15:10:20.687Z",
       "patient": {
         "reportingDate": "2026-10-04T14:35",
         "loyaltyCardIssued": true,
@@ -3988,7 +3988,7 @@
               "method": "Enzymatic / Jaffe Kinetic",
               "textReference": "",
               "id": "param-0-1791212993856-mjo",
-              "result": "",
+              "result": "0.71",
               "flag": "NORMAL"
             },
             {
@@ -4040,10 +4040,10 @@
               "unit": "mL/min/1.73m²",
               "minNormal": 90,
               "maxNormal": 120,
-              "notes": "Auto-calculated: CKD-EPI Formula",
+              "notes": "CKD-EPI: Stage 1 (Normal > 90)",
               "textReference": "",
               "id": "param-5-1791212993856-qwn",
-              "result": "",
+              "result": "99",
               "flag": "NORMAL"
             }
           ]
