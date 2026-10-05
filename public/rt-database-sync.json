@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:26:18.007Z",
+  "syncedAt": "2026-10-05T15:26:26.321Z",
   "reports": [
     {
       "status": "released",
@@ -2024,7 +2024,7 @@
         "totalCost": 201,
         "referringDoctorTitle": "Prof. Dr.",
         "loyaltyCardNumber": "RT-2026-0009",
-        "sampleDate": "2026-10-04T14:38",
+        "sampleDate": "2026-09-30T11:38:00.000Z",
         "reportingDate": "2026-10-04T14:38",
         "age": 45,
         "fastingHours": 12
@@ -2299,7 +2299,7 @@
         }
       ],
       "status": "in_progress",
-      "updatedAt": "2026-10-05T15:26:14.862Z",
+      "updatedAt": "2026-10-05T15:26:23.383Z",
       "createdAt": "2026-10-04T14:38:22.671Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-4276 - تم التسميع آلياً من منظومة الفواتير",
       "reportNumber": "RT-BK-4276",
