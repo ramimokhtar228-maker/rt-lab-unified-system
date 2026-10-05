@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:08:29.486Z",
+  "syncedAt": "2026-10-05T18:08:37.058Z",
   "reports": [
     {
       "status": "released",
@@ -5046,7 +5046,7 @@
             {
               "id": "p-pkg-6-1791223515986",
               "name": "الكالسيوم الكلي (Total Serum Calcium) (Total Serum Calcium)",
-              "result": "",
+              "result": "9.11",
               "unit": "mg/dL",
               "minNormal": 8.6,
               "maxNormal": 10.3,
@@ -5106,7 +5106,7 @@
         "sampleDate": "2026-10-04T14:59"
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-9820 - تم التسميع آلياً من منظومة الفواتير",
-      "updatedAt": "2026-10-05T18:08:22.415Z",
+      "updatedAt": "2026-10-05T18:08:27.626Z",
       "packageApplied": {
         "code": "PKG-ANNUAL-WELLNESS",
         "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
