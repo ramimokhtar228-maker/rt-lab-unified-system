@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:12:08.055Z",
+  "syncedAt": "2026-10-05T18:12:17.842Z",
   "reports": [
     {
       "status": "released",
@@ -4887,7 +4887,7 @@
           "titleAr": "دهون الدم الشاملة مع المؤشرات الحسابية",
           "category": "Clinical Chemistry",
           "sampleType": "Serum (12h Fasting)",
-          "interpretation": "Hypercholesterolemia with elevated LDL-C. Cardiovascular risk evaluation and dietary modification recommended.",
+          "interpretation": "Desirable lipid profile with normal atherogenic index.",
           "parameters": [
             {
               "name": "Total Serum Cholesterol",
@@ -4965,16 +4965,6 @@
               "notes": "Desirable < 4.5",
               "id": "param-6-1791223515986-k1w",
               "result": "4.8",
-              "flag": "HIGH"
-            },
-            {
-              "name": "LDL / HDL Ratio",
-              "unit": "Ratio",
-              "minNormal": 0,
-              "maxNormal": 3,
-              "textReference": "< 3.0 Desirable",
-              "id": "param-7-1791223515986-qk4",
-              "result": "4.41",
               "flag": "HIGH"
             }
           ]
@@ -5127,7 +5117,7 @@
         "sampleDate": "2026-10-04T14:59"
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-9820 - تم التسميع آلياً من منظومة الفواتير",
-      "updatedAt": "2026-10-05T18:12:01.671Z",
+      "updatedAt": "2026-10-05T18:12:13.092Z",
       "packageApplied": {
         "code": "PKG-ANNUAL-WELLNESS",
         "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
