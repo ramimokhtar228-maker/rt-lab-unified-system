@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:47:05.581Z",
+  "syncedAt": "2026-10-05T17:47:13.440Z",
   "reports": [
     {
       "status": "released",
@@ -1582,16 +1582,6 @@
           ]
         },
         {
-          "id": "prof-1791222251478-nm5j",
-          "profileCode": "GLYCEMIC",
-          "titleEn": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
-          "titleAr": "تقييم السكر التراكمي والجلوكوز ومتوسط السكر التقديري",
-          "category": "Clinical Chemistry",
-          "sampleType": "Fluoride Plasma & EDTA Blood",
-          "interpretation": "Glycemic parameters evaluated according to ADA guidelines.",
-          "parameters": []
-        },
-        {
           "id": "prof-1791222251478-69f8",
           "profileCode": "LIPID",
           "titleEn": "Lipid Profile",
@@ -2187,7 +2177,7 @@
         }
       ],
       "id": "rep-inc-1791125455998",
-      "updatedAt": "2026-10-05T17:47:02.651Z",
+      "updatedAt": "2026-10-05T17:47:09.301Z",
       "createdAt": "2026-10-04T14:50:55.998Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-9599 - تم التسميع آلياً من منظومة الفواتير",
       "patient": {
