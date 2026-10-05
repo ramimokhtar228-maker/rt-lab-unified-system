@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T14:02:35.309Z",
+  "syncedAt": "2026-10-05T14:02:55.289Z",
   "reports": [
     {
       "status": "draft",
@@ -2080,7 +2080,7 @@
         "verifiedBy": ""
       },
       "reportNumber": "RT-BK-5752",
-      "updatedAt": "2026-10-05T14:02:32.406Z",
+      "updatedAt": "2026-10-05T14:02:52.665Z",
       "createdAt": "2026-10-04T14:28:04.105Z",
       "id": "rep-inc-1791124084105",
       "profiles": [
@@ -2115,16 +2115,6 @@
               "textReference": "",
               "id": "param-1-1791208922778-b03",
               "result": "33",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Blood Urea Nitrogen (BUN)",
-              "unit": "mg/dL",
-              "minNormal": 7,
-              "maxNormal": 20,
-              "textReference": "",
-              "id": "param-2-1791208922778-vsh",
-              "result": "",
               "flag": "NORMAL"
             },
             {
