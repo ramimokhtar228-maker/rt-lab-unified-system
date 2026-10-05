@@ -28,7 +28,9 @@ import {
   Calculator,
   AlertCircle,
   Receipt,
-  Microscope
+  Microscope,
+  User,
+  X
 } from 'lucide-react';
 
 interface ReportEditorProps {
@@ -62,6 +64,19 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
   const [modalParamToEdit, setModalParamToEdit] = useState<TestParameter | null>(null);
   const [isAddParamModalOpen, setIsAddParamModalOpen] = useState(false);
   const [lastCalculatedInfo, setLastCalculatedInfo] = useState<string[]>([]);
+  const [isPatientEditOpen, setIsPatientEditOpen] = useState(false);
+
+  // Update patient field directly
+  const handleUpdatePatient = (updates: Partial<typeof report.patient>) => {
+    onUpdateReport({
+      ...report,
+      patient: {
+        ...report.patient,
+        ...updates
+      },
+      updatedAt: new Date().toISOString()
+    });
+  };
 
   // Update profile field
   const handleUpdateProfile = (profileId: string, updates: Partial<TestProfile>) => {
@@ -70,6 +85,60 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
         return { ...p, ...updates };
       }
       return p;
+    });
+    onUpdateReport({ ...report, profiles: updatedProfiles, updatedAt: new Date().toISOString() });
+  };
+
+  // Add new empty profile
+  const handleAddNewProfile = () => {
+    const newProfId = `prof-${Date.now()}`;
+    const newProfile: TestProfile = {
+      id: newProfId,
+      profileCode: 'CUSTOM',
+      titleEn: 'New Diagnostic Profile',
+      titleAr: 'بروفايل تشخيصي جديد',
+      category: 'General',
+      sampleType: 'Serum',
+      parameters: [
+        {
+          id: `param-${Date.now()}`,
+          name: 'New Test Parameter',
+          result: '',
+          unit: '',
+          flag: '',
+          textReference: ''
+        }
+      ]
+    };
+    onUpdateReport({
+      ...report,
+      profiles: [...report.profiles, newProfile],
+      updatedAt: new Date().toISOString()
+    });
+    setActiveProfileTab(newProfId);
+  };
+
+  // Quick inline parameter add
+  const handleQuickAddParameter = (profileId: string) => {
+    const newParam: TestParameter = {
+      id: `param-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      name: 'New Test',
+      result: '',
+      unit: '',
+      flag: '',
+      minNormal: undefined,
+      maxNormal: undefined,
+      textReference: '',
+      method: ''
+    };
+    const updatedProfiles = report.profiles.map(prof => {
+      if (prof.id === profileId) {
+        return {
+          ...prof,
+          parameters: [...prof.parameters, newParam]
+        };
+      }
+      return prof;
     });
     onUpdateReport({ ...report, profiles: updatedProfiles, updatedAt: new Date().toISOString() });
   };
@@ -93,12 +162,10 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
       alert('يجب أن يحتوي التقرير على فحص واحد على الأقل.');
       return;
     }
-    if (confirm('هل أنت متأكد من حذف هذا البروفايل بالكامل من التقرير؟')) {
-      const filtered = report.profiles.filter(p => p.id !== profileId);
-      onUpdateReport({ ...report, profiles: filtered, updatedAt: new Date().toISOString() });
-      if (activeProfileTab === profileId) {
-        setActiveProfileTab(filtered[0]?.id || '');
-      }
+    const filtered = report.profiles.filter(p => p.id !== profileId);
+    onUpdateReport({ ...report, profiles: filtered, updatedAt: new Date().toISOString() });
+    if (activeProfileTab === profileId) {
+      setActiveProfileTab(filtered[0]?.id || '');
     }
   };
 
@@ -200,18 +267,16 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
 
   // Delete single parameter
   const handleDeleteParameter = (profileId: string, paramId: string) => {
-    if (confirm('هل أنت متأكد من حذف هذا التحليل من التقرير؟')) {
-      const updatedProfiles = report.profiles.map(prof => {
-        if (prof.id === profileId) {
-          return {
-            ...prof,
-            parameters: prof.parameters.filter(p => p.id !== paramId)
-          };
-        }
-        return prof;
-      });
-      onUpdateReport({ ...report, profiles: updatedProfiles, updatedAt: new Date().toISOString() });
-    }
+    const updatedProfiles = report.profiles.map(prof => {
+      if (prof.id === profileId) {
+        return {
+          ...prof,
+          parameters: prof.parameters.filter(p => p.id !== paramId)
+        };
+      }
+      return prof;
+    });
+    onUpdateReport({ ...report, profiles: updatedProfiles, updatedAt: new Date().toISOString() });
   };
 
   // Staff updates
@@ -312,6 +377,259 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
         </div>
       </div>
 
+      {/* Patient Demographics & Report Data Management Card */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 text-slate-800">
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-900 to-rose-700 text-white flex items-center justify-center font-bold text-sm shadow-sm shrink-0">
+              <User className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-xs text-slate-400 font-bold">بيانات المريض بالتقرير:</span>
+                <h3 className="text-base font-extrabold text-slate-900">{report.patient.fullName}</h3>
+                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-rose-50 text-rose-900 border border-rose-200">
+                  {report.patient.labNumber}
+                </span>
+                <span className="text-xs text-slate-600 font-bold">
+                  ({report.patient.age} {report.patient.ageUnit === 'years' ? 'سنة' : report.patient.ageUnit === 'months' ? 'شهر' : 'يوم'} / {report.patient.gender === 'male' ? 'ذكر' : 'أنثى'})
+                </span>
+              </div>
+              <div className="flex items-center gap-3 text-xs text-slate-500 mt-0.5 flex-wrap">
+                <span>الطبيب: <strong className="text-slate-700">{report.patient.referringDoctorTitle === 'Herself' || report.patient.referringDoctorTitle === 'Himself' ? 'طلب فحص ذاتي' : `${report.patient.referringDoctorTitle} ${report.patient.referringDoctorName || ''}`}</strong></span>
+                <span>•</span>
+                <span>تاريخ السحب: <strong className="font-mono text-slate-700">{report.patient.sampleDate ? new Date(report.patient.sampleDate).toLocaleDateString('ar-EG') : 'غير محدد'}</strong></span>
+                <span>•</span>
+                <span>الهاتف: <strong className="font-mono text-slate-700">{report.patient.phone}</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setIsPatientEditOpen(prev => !prev)}
+              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer ${
+                isPatientEditOpen
+                  ? 'bg-rose-900 text-white shadow-rose-900/30'
+                  : 'bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300'
+              }`}
+            >
+              <Edit2 className="w-3.5 h-3.5" />
+              <span>{isPatientEditOpen ? 'إغلاق نافذة التعديل' : 'تعديل أو حذف أي بند في بيانات المريض'}</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Expandable Full Patient Data Editor */}
+        {isPatientEditOpen && (
+          <div className="mt-4 pt-4 border-t border-slate-100 space-y-4 animate-in fade-in duration-150">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-black text-rose-900 flex items-center gap-1.5">
+                <span>تعديل وحذف أي بند في بيانات المريض:</span>
+              </span>
+              <span className="text-[11px] text-slate-500">كافة التعديلات تظهر فوراً في التقرير والطباعة</span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs">
+              {/* Patient Full Name */}
+              <div className="space-y-1">
+                <label className="font-bold text-slate-700">اسم المريض بالكامل:</label>
+                <input
+                  type="text"
+                  value={report.patient.fullName}
+                  onChange={(e) => handleUpdatePatient({ fullName: e.target.value })}
+                  className="w-full px-3 py-1.5 rounded-lg border border-slate-300 focus:border-rose-600 focus:outline-none font-bold"
+                />
+              </div>
+
+              {/* Age and Unit */}
+              <div className="space-y-1">
+                <label className="font-bold text-slate-700">السن والوحدة:</label>
+                <div className="flex items-center gap-1.5">
+                  <input
+                    type="number"
+                    min="0"
+                    value={report.patient.age}
+                    onChange={(e) => handleUpdatePatient({ age: Number(e.target.value) || 0 })}
+                    className="w-20 px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-rose-600 focus:outline-none font-mono font-bold"
+                  />
+                  <select
+                    value={report.patient.ageUnit}
+                    onChange={(e) => handleUpdatePatient({ ageUnit: e.target.value as any })}
+                    className="flex-1 px-2 py-1.5 rounded-lg border border-slate-300 focus:border-rose-600 focus:outline-none font-bold"
+                  >
+                    <option value="years">سنوات</option>
+                    <option value="months">شهور</option>
+                    <option value="days">أيام</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Gender */}
+              <div className="space-y-1">
+                <label className="font-bold text-slate-700">النوع:</label>
+                <div className="flex items-center gap-1 p-0.5 bg-slate-100 rounded-lg border border-slate-200">
+                  <button
+                    type="button"
+                    onClick={() => handleUpdatePatient({ gender: 'male' })}
+                    className={`flex-1 py-1 text-center font-bold rounded-md transition-all ${
+                      report.patient.gender === 'male' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    ذكر (Male)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleUpdatePatient({ gender: 'female' })}
+                    className={`flex-1 py-1 text-center font-bold rounded-md transition-all ${
+                      report.patient.gender === 'female' ? 'bg-rose-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    أنثى (Female)
+                  </button>
+                </div>
+              </div>
+
+              {/* Phone */}
+              <div className="space-y-1">
+                <label className="font-bold text-slate-700">الهاتف / واتساب:</label>
+                <input
+                  type="text"
+                  value={report.patient.phone}
+                  onChange={(e) => handleUpdatePatient({ phone: e.target.value })}
+                  className="w-full px-3 py-1.5 rounded-lg border border-slate-300 focus:border-rose-600 focus:outline-none font-mono"
+                />
+              </div>
+
+              {/* Lab Number */}
+              <div className="space-y-1">
+                <label className="font-bold text-slate-700">رقم المعمل (Lab No.):</label>
+                <input
+                  type="text"
+                  value={report.patient.labNumber}
+                  onChange={(e) => handleUpdatePatient({ labNumber: e.target.value })}
+                  className="w-full px-3 py-1.5 rounded-lg border border-slate-300 focus:border-rose-600 focus:outline-none font-mono font-bold"
+                />
+              </div>
+
+              {/* Barcode */}
+              <div className="space-y-1">
+                <label className="font-bold text-slate-700">الباركود (Barcode):</label>
+                <input
+                  type="text"
+                  value={report.patient.barcode}
+                  onChange={(e) => handleUpdatePatient({ barcode: e.target.value })}
+                  className="w-full px-3 py-1.5 rounded-lg border border-slate-300 focus:border-rose-600 focus:outline-none font-mono font-bold"
+                />
+              </div>
+
+              {/* Referring Doctor Title & Name */}
+              <div className="space-y-1 lg:col-span-2">
+                <div className="flex items-center justify-between">
+                  <label className="font-bold text-slate-700">الطبيب المعالج / جهة التحويل:</label>
+                  <button
+                    type="button"
+                    onClick={() => handleUpdatePatient({ referringDoctorTitle: 'Herself', referringDoctorName: '' })}
+                    className="text-[11px] text-rose-600 hover:text-rose-800 font-bold"
+                  >
+                    حذف الطبيب (طلب فحص ذاتي)
+                  </button>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <select
+                    value={report.patient.referringDoctorTitle}
+                    onChange={(e) => handleUpdatePatient({ referringDoctorTitle: e.target.value as any })}
+                    className="w-32 px-2 py-1.5 rounded-lg border border-slate-300 focus:border-rose-600 focus:outline-none font-bold"
+                  >
+                    <option value="Prof. Dr.">أ.د / Prof. Dr.</option>
+                    <option value="Dr.">د / Dr.</option>
+                    <option value="Herself">طلب فحص ذاتي (Self-Request)</option>
+                    <option value="Custom">أخرى</option>
+                  </select>
+                  <input
+                    type="text"
+                    placeholder="اسم الطبيب المعالج"
+                    value={report.patient.referringDoctorName}
+                    onChange={(e) => handleUpdatePatient({ referringDoctorName: e.target.value })}
+                    className="flex-1 px-3 py-1.5 rounded-lg border border-slate-300 focus:border-rose-600 focus:outline-none font-bold"
+                  />
+                </div>
+              </div>
+
+              {/* Sample Date */}
+              <div className="space-y-1">
+                <label className="font-bold text-slate-700">تاريخ سحب العينة:</label>
+                <input
+                  type="datetime-local"
+                  value={report.patient.sampleDate ? report.patient.sampleDate.substring(0, 16) : ''}
+                  onChange={(e) => handleUpdatePatient({ sampleDate: e.target.value ? new Date(e.target.value).toISOString() : new Date().toISOString() })}
+                  className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-rose-600 focus:outline-none font-mono text-xs"
+                />
+              </div>
+
+              {/* Reporting Date */}
+              <div className="space-y-1">
+                <label className="font-bold text-slate-700">تاريخ تسليم النتيجة:</label>
+                <input
+                  type="datetime-local"
+                  value={report.patient.reportingDate ? report.patient.reportingDate.substring(0, 16) : ''}
+                  onChange={(e) => handleUpdatePatient({ reportingDate: e.target.value ? new Date(e.target.value).toISOString() : new Date().toISOString() })}
+                  className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 focus:border-rose-600 focus:outline-none font-mono text-xs"
+                />
+              </div>
+
+              {/* Fasting Hours */}
+              <div className="space-y-1">
+                <div className="flex items-center justify-between">
+                  <label className="font-bold text-slate-700">ساعات الصيام:</label>
+                  {report.patient.fastingHours !== undefined && (
+                    <button
+                      type="button"
+                      onClick={() => handleUpdatePatient({ fastingHours: undefined })}
+                      className="text-[11px] text-red-600 hover:text-red-800 font-bold"
+                    >
+                      حذف البند
+                    </button>
+                  )}
+                </div>
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="عدد ساعات الصيام (اختياري)"
+                  value={report.patient.fastingHours ?? ''}
+                  onChange={(e) => handleUpdatePatient({ fastingHours: e.target.value ? Number(e.target.value) : undefined })}
+                  className="w-full px-3 py-1.5 rounded-lg border border-slate-300 focus:border-rose-600 focus:outline-none font-mono"
+                />
+              </div>
+
+              {/* Clinical History / Notes */}
+              <div className="space-y-1 lg:col-span-2">
+                <div className="flex items-center justify-between">
+                  <label className="font-bold text-slate-700">التشخيص والملاحظات السريرية:</label>
+                  {report.patient.clinicalHistory && (
+                    <button
+                      type="button"
+                      onClick={() => handleUpdatePatient({ clinicalHistory: '' })}
+                      className="text-[11px] text-red-600 hover:text-red-800 font-bold"
+                    >
+                      حذف الملاحظات
+                    </button>
+                  )}
+                </div>
+                <input
+                  type="text"
+                  placeholder="ملاحظات سريرية أو تشخيصية تظهر بالتقرير (اختياري)"
+                  value={report.patient.clinicalHistory || ''}
+                  onChange={(e) => handleUpdatePatient({ clinicalHistory: e.target.value })}
+                  className="w-full px-3 py-1.5 rounded-lg border border-slate-300 focus:border-rose-600 focus:outline-none"
+                />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
       {/* Profiles Tabs & Switcher */}
       <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="bg-slate-50 border-b border-slate-200 p-2 flex items-center justify-between gap-2 overflow-x-auto">
@@ -335,10 +653,20 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
             ))}
           </div>
 
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 shrink-0">
+            <button
+              type="button"
+              onClick={handleAddNewProfile}
+              className="flex items-center gap-1 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-bold shadow-2xs transition-all cursor-pointer"
+              title="إنشاء بروفايل فحص جديد فارغ وتسميته بنفسك"
+            >
+              <Plus className="w-3.5 h-3.5 text-rose-400" />
+              <span>+ بروفايل فحص جديد</span>
+            </button>
+
             <button
               onClick={onOpenCatalog}
-              className="flex items-center gap-1 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-900 rounded-lg text-xs font-bold border border-rose-200"
+              className="flex items-center gap-1 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-900 rounded-lg text-xs font-bold border border-rose-200 cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>إضافة بروفايل من الكتالوج</span>
@@ -793,20 +1121,31 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
             </div>
 
             {/* Bottom Add Parameter Bar */}
-            <div className="flex items-center justify-between pt-1">
-              <button
-                type="button"
-                onClick={() => setIsAddParamModalOpen(true)}
-                className="flex items-center gap-1.5 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-lg border border-slate-300 transition-colors"
-              >
-                <Plus className="w-4 h-4 text-rose-700" />
-                <span>+ إضافة سطر تحليل جديد لهذا الفحص</span>
-              </button>
+            <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleQuickAddParameter(currentProfile.id)}
+                  className="flex items-center gap-1.5 px-4 py-2 bg-rose-900 hover:bg-rose-800 text-white text-xs font-bold rounded-lg shadow-sm transition-all active:scale-95 cursor-pointer"
+                >
+                  <Plus className="w-4 h-4 text-rose-300" />
+                  <span>+ إضافة سطر تحليل جديد فوراً</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setIsAddParamModalOpen(true)}
+                  className="flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-lg border border-slate-300 transition-colors cursor-pointer"
+                >
+                  <Plus className="w-4 h-4 text-slate-600" />
+                  <span>إضافة تحليل بالمعدلات الطبيعية الكاملة</span>
+                </button>
+              </div>
 
               <button
                 type="button"
                 onClick={() => handleRunAutoCalc(currentProfile.id)}
-                className="flex items-center gap-1 text-xs font-bold text-blue-700 hover:text-blue-900"
+                className="flex items-center gap-1 text-xs font-bold text-blue-700 hover:text-blue-900 cursor-pointer"
               >
                 <Calculator className="w-3.5 h-3.5" />
                 <span>إعادة تشغيل الحسابات الآلية (Auto Calc)</span>
@@ -815,9 +1154,21 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
 
             {/* Clinical Interpretation & Comments */}
             <div className="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-4">
-              <div className="flex items-center gap-2 text-rose-950 font-bold text-xs">
-                <MessageSquare className="w-4 h-4 text-rose-700" />
-                <span>التشخيص والتعليق الإكلينيكي المعتمد (Clinical Interpretation):</span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-rose-950 font-bold text-xs">
+                  <MessageSquare className="w-4 h-4 text-rose-700" />
+                  <span>التشخيص والتعليق الإكلينيكي المعتمد (Clinical Interpretation):</span>
+                </div>
+                {currentProfile.interpretation && (
+                  <button
+                    type="button"
+                    onClick={() => handleUpdateProfile(currentProfile.id, { interpretation: '' })}
+                    className="text-red-600 hover:text-red-800 text-xs font-bold flex items-center gap-1 cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                    <span>حذف التعليق الإكلينيكي</span>
+                  </button>
+                )}
               </div>
 
               <div>
@@ -853,6 +1204,33 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
             </div>
           </div>
         )}
+      </div>
+
+      {/* General Overall Report Comment */}
+      <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-xs space-y-2">
+        <div className="flex items-center justify-between">
+          <span className="font-bold text-xs text-slate-800 flex items-center gap-1.5">
+            <MessageSquare className="w-4 h-4 text-rose-700" />
+            <span>ملاحظات عامة تشخيصية تظهر بنهاية التقرير (General Report Comment):</span>
+          </span>
+          {report.generalComment && (
+            <button
+              type="button"
+              onClick={() => onUpdateReport({ ...report, generalComment: '', updatedAt: new Date().toISOString() })}
+              className="text-red-600 hover:text-red-800 text-xs font-bold flex items-center gap-1 cursor-pointer"
+            >
+              <X className="w-3.5 h-3.5" />
+              <span>حذف الملاحظات العامة</span>
+            </button>
+          )}
+        </div>
+        <textarea
+          rows={2}
+          value={report.generalComment || ''}
+          onChange={(e) => onUpdateReport({ ...report, generalComment: e.target.value, updatedAt: new Date().toISOString() })}
+          placeholder="اكتب أي ملاحظات سريرية عامة أو تعليمات متابعة تظهر في أسفل التقرير المطبوع..."
+          className="w-full text-xs p-3 rounded-lg border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-600"
+        />
       </div>
 
       {/* Staff Signatures Box */}

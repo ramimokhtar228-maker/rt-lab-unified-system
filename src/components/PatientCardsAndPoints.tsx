@@ -95,7 +95,7 @@ export const PatientCardsAndPoints: React.FC<PatientCardsAndPointsProps> = ({
       showCardCode: true,
       showPatientName: true,
       showPatientPhone: true,
-      showBloodGroup: true,
+      showBloodGroup: false,
       showDates: true,
       showUsageNote: true,
       showFooter: true,
@@ -131,7 +131,7 @@ export const PatientCardsAndPoints: React.FC<PatientCardsAndPointsProps> = ({
       showCardCode: true,
       showPatientName: true,
       showPatientPhone: true,
-      showBloodGroup: true,
+      showBloodGroup: false,
       showDates: true,
       showUsageNote: true,
       showFooter: true,
@@ -720,8 +720,8 @@ export const PatientCardsAndPoints: React.FC<PatientCardsAndPointsProps> = ({
           <div style="font-family: monospace; font-size: 9px; color: #fde68a; margin-top: 1px;">${activeProfile.phone}</div>
         </div>
         <div style="text-align: center;">
-          <div style="font-size: 7.5px; color: #94a3b8;">فصيلة الدم:</div>
-          <div style="font-weight: 900; font-size: 11px; color: #f43f5e; font-family: monospace;">${activeProfile.bloodGroup || 'O+'}</div>
+          <div style="font-size: 7.5px; color: #94a3b8;">حالة الكارت:</div>
+          <div style="font-weight: 900; font-size: 11px; color: #10b981; font-family: monospace;">عضوية نشطة ✓</div>
         </div>
         <div style="text-align: left;">
           <div style="font-size: 7.5px; color: #94a3b8;">الخط الساخن:</div>

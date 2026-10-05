@@ -53,7 +53,7 @@ export function generateAndDownloadLoyaltyCard(params: LoyaltyCardParams): Promi
       showCardCode: params.fields?.showCardCode ?? true,
       showPatientName: params.fields?.showPatientName ?? true,
       showPatientPhone: params.fields?.showPatientPhone ?? true,
-      showBloodGroup: params.fields?.showBloodGroup ?? true,
+      showBloodGroup: params.fields?.showBloodGroup ?? false,
       showDates: params.fields?.showDates ?? true,
       showUsageNote: params.fields?.showUsageNote ?? true,
       showFooter: params.fields?.showFooter ?? true,

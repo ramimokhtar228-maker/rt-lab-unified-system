@@ -219,10 +219,6 @@ export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): voi
                 <span style="color:#64748b;">WhatsApp:</span>
                 <span style="font-family:monospace; margin-left:4px;">${p.phone}</span>
               </div>
-              <div dir="ltr" style="text-align:right;">
-                <span style="color:#64748b;">Blood Group:</span>
-                <strong style="color:#800000; margin-left:4px;">${p.bloodGroup || 'O+'}</strong>
-              </div>
             </div>
           </div>
 
