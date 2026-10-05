@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:50:00.928Z",
+  "syncedAt": "2026-10-05T17:50:27.103Z",
   "reports": [
     {
       "status": "released",
@@ -1779,17 +1779,6 @@
               "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
               "flag": "NORMAL",
               "method": "CLIA (3rd Generation Chemiluminescence)"
-            },
-            {
-              "id": "p-pkg-2-1791222251479",
-              "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
-              "result": "",
-              "unit": "mg/dL",
-              "minNormal": 3.5,
-              "maxNormal": 7.2,
-              "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
-              "flag": "NORMAL",
-              "method": "Uricase / POD Enzymatic Colorimetric"
             }
           ]
         },
@@ -1816,7 +1805,7 @@
         }
       ],
       "id": "rep-inc-1791125455998",
-      "updatedAt": "2026-10-05T17:49:58.027Z",
+      "updatedAt": "2026-10-05T17:50:22.825Z",
       "createdAt": "2026-10-04T14:50:55.998Z",
       "generalComment": " ",
       "patient": {
