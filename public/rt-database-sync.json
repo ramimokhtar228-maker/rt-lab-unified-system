@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T11:12:19.867Z",
+  "syncedAt": "2026-10-05T11:12:26.208Z",
   "reports": [
     {
       "id": "rep-1791198572864",
@@ -477,15 +477,6 @@
           "parameters": []
         },
         {
-          "id": "prof-1791198572863-frti",
-          "profileCode": "ALT_SGPT",
-          "titleEn": "Alanine Aminotransferase SGPT",
-          "titleAr": "إنزيم كبد ALT / SGPT",
-          "category": "Liver Function",
-          "sampleType": "Serum",
-          "parameters": []
-        },
-        {
           "id": "prof-1791198572863-3602",
           "profileCode": "KIDNEY_PROFILE",
           "titleEn": "Full Kidney Function Profile",
@@ -569,7 +560,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-05T11:09:32.864Z",
-      "updatedAt": "2026-10-05T11:12:17.440Z",
+      "updatedAt": "2026-10-05T11:12:23.320Z",
       "invoiceId": "inv-1791198572864"
     }
   ],
