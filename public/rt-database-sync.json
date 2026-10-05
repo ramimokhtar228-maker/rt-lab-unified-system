@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:14:36.659Z",
+  "syncedAt": "2026-10-05T15:15:30.432Z",
   "reports": [
     {
       "status": "draft",
@@ -3948,11 +3948,11 @@
     {
       "id": "rep-inc-1791124532954",
       "createdAt": "2026-10-04T14:35:32.954Z",
-      "updatedAt": "2026-10-05T15:14:30.247Z",
+      "updatedAt": "2026-10-05T15:15:27.400Z",
       "patient": {
         "reportingDate": "2026-10-04T14:35",
         "loyaltyCardIssued": true,
-        "sampleDate": "2026-10-04T14:35",
+        "sampleDate": "2026-09-30T11:35:00.000Z",
         "id": "pat-inc-1791124532954",
         "labNumber": "RT-BK-9242",
         "fullName": "كريمة حامد قورة",
