@@ -1,9 +1,9 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:18:19.874Z",
+  "syncedAt": "2026-10-05T15:18:35.158Z",
   "reports": [
     {
-      "status": "draft",
+      "status": "released",
       "createdAt": "2026-10-04T22:10:37.342Z",
       "reportNumber": "RT-2026-0910",
       "patient": {
@@ -412,7 +412,7 @@
         "labChemist": "",
         "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
       },
-      "updatedAt": "2026-10-05T07:13:36.865Z"
+      "updatedAt": "2026-10-05T15:18:28.558Z"
     },
     {
       "staff": {
