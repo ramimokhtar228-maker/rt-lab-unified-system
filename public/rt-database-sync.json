@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:47:51.425Z",
+  "syncedAt": "2026-10-05T17:47:57.277Z",
   "reports": [
     {
       "status": "released",
@@ -1667,16 +1667,6 @@
               "id": "param-6-1791222251478-0gy",
               "result": "4",
               "flag": "NORMAL"
-            },
-            {
-              "name": "LDL / HDL Ratio",
-              "unit": "Ratio",
-              "minNormal": 0,
-              "maxNormal": 3,
-              "textReference": "< 3.0 Desirable",
-              "id": "param-7-1791222251478-ufk",
-              "result": "",
-              "flag": "NORMAL"
             }
           ]
         },
@@ -2177,7 +2167,7 @@
         }
       ],
       "id": "rep-inc-1791125455998",
-      "updatedAt": "2026-10-05T17:47:47.826Z",
+      "updatedAt": "2026-10-05T17:47:54.043Z",
       "createdAt": "2026-10-04T14:50:55.998Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-9599 - تم التسميع آلياً من منظومة الفواتير",
       "patient": {
