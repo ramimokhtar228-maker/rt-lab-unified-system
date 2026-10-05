@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T14:02:59.569Z",
+  "syncedAt": "2026-10-05T14:03:03.651Z",
   "reports": [
     {
       "status": "draft",
@@ -2080,7 +2080,7 @@
         "verifiedBy": ""
       },
       "reportNumber": "RT-BK-5752",
-      "updatedAt": "2026-10-05T14:02:56.754Z",
+      "updatedAt": "2026-10-05T14:03:00.202Z",
       "createdAt": "2026-10-04T14:28:04.105Z",
       "id": "rep-inc-1791124084105",
       "profiles": [
@@ -2125,7 +2125,7 @@
               "method": "Uricase-PAP",
               "textReference": "",
               "id": "param-4-1791208922778-mba",
-              "result": "",
+              "result": "5.11",
               "flag": "NORMAL"
             }
           ]
