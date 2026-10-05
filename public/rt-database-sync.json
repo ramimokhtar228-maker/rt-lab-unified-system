@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T15:18:35.158Z",
+  "syncedAt": "2026-10-05T15:19:38.972Z",
   "reports": [
     {
       "status": "released",
@@ -2030,24 +2030,6 @@
       },
       "profiles": [
         {
-          "id": "prof-inc-1791124702671-1",
-          "parameters": [
-            {
-              "name": "باقة الفحص الشامل الملكية VIP د. رامي مختار (32 فحص) (RT Lab Royal Executive VIP Package)",
-              "textReference": "قيد الفحص المخبري",
-              "id": "p-1791124702671",
-              "flag": "",
-              "unit": "",
-              "result": ""
-            }
-          ],
-          "titleEn": "RT Lab Royal Executive VIP Package",
-          "titleAr": "باقة الفحص الشامل الملكية VIP د. رامي مختار (32 فحص)",
-          "category": "Packages",
-          "profileCode": "PKG_VIP_RT",
-          "sampleType": "Full Set (Blood & Urine)"
-        },
-        {
           "sampleType": "Serum",
           "category": "Endocrinology",
           "titleEn": "Thyroid Stimulating Hormone",
@@ -2067,7 +2049,7 @@
         }
       ],
       "status": "draft",
-      "updatedAt": "2026-10-04T14:38:22.671Z",
+      "updatedAt": "2026-10-05T15:19:33.225Z",
       "createdAt": "2026-10-04T14:38:22.671Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-4276 - تم التسميع آلياً من منظومة الفواتير",
       "reportNumber": "RT-BK-4276"
