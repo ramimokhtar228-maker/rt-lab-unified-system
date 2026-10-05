@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T18:15:36.805Z",
+  "syncedAt": "2026-10-05T18:15:43.997Z",
   "reports": [
     {
       "status": "released",
@@ -515,8 +515,8 @@
               "name": "R.B.Cs Count"
             },
             {
-              "flag": "NORMAL",
-              "result": "38.00",
+              "flag": "LOW",
+              "result": "34",
               "name": "Hematocrit (PCV)",
               "textReference": "M: 40 - 52% | F: 36 - 48%",
               "unit": "%",
@@ -527,7 +527,7 @@
             },
             {
               "name": "M.C.V",
-              "result": "92.2",
+              "result": "82.5",
               "maxNormal": 98,
               "flag": "NORMAL",
               "minNormal": 80,
@@ -549,10 +549,10 @@
             },
             {
               "unit": "g/dL",
-              "result": "29.9",
+              "result": "33.4",
               "textReference": "32.0 - 36.0 g/dL",
               "id": "p-mig-5-1791157348010",
-              "flag": "LOW",
+              "flag": "NORMAL",
               "notes": "Calculated: (HGB × 100) / HCT",
               "maxNormal": 36,
               "name": "M.C.H.C",
@@ -585,7 +585,7 @@
               "unit": "Ratio",
               "id": "p-mig-8-1791157348010",
               "flag": "NORMAL",
-              "result": "22.4"
+              "result": "20"
             },
             {
               "notes": "(MCV² × RDW) / (Hb × 100)",
@@ -934,7 +934,7 @@
         "totalCost": 230,
         "bloodGroup": "O+"
       },
-      "updatedAt": "2026-10-05T18:15:33.987Z",
+      "updatedAt": "2026-10-05T18:15:40.315Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-8226 - تم التسميع آلياً من منظومة الفواتير",
       "id": "rep-inc-1791127003337",
       "staff": {
