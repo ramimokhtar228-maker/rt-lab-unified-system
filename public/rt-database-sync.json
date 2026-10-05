@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-05T17:46:46.260Z",
+  "syncedAt": "2026-10-05T17:46:55.116Z",
   "reports": [
     {
       "status": "released",
@@ -1604,18 +1604,6 @@
               "flag": "NORMAL"
             },
             {
-              "name": "2 Hours Post-Prandial Glucose",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 140,
-              "panicHigh": 450,
-              "method": "Hexokinase",
-              "textReference": "",
-              "id": "param-1-1791222251478-mec",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
               "name": "Random Blood Glucose",
               "unit": "mg/dL",
               "minNormal": 70,
@@ -2245,7 +2233,7 @@
         }
       ],
       "id": "rep-inc-1791125455998",
-      "updatedAt": "2026-10-05T17:46:43.491Z",
+      "updatedAt": "2026-10-05T17:46:52.019Z",
       "createdAt": "2026-10-04T14:50:55.998Z",
       "generalComment": "طلب فحص مالي رقم RT-BK-9599 - تم التسميع آلياً من منظومة الفواتير",
       "patient": {
