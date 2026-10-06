@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T10:37:19.732Z",
+  "syncedAt": "2026-10-06T10:37:37.210Z",
   "reports": [
     {
       "createdAt": "2026-10-06T08:52:20.749Z",
@@ -1505,7 +1505,7 @@
       "nameAr": "بروتين بول 24 ساعة (24h Urine Protein)",
       "nameEn": "24-Hour Urine Protein Excretion",
       "category": "Kidney Function",
-      "price": 190,
+      "price": 400,
       "cost": 40,
       "sampleType": "24-Hour Urine Collection",
       "turnaroundTime": "خلال 24 ساعة",
