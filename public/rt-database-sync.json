@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T10:30:43.550Z",
+  "syncedAt": "2026-10-06T10:31:17.362Z",
   "reports": [
     {
       "generalComment": "الحالة تتماشى مع فقر الدم بعوز الحديد. يرجى المتابعة بطلب مخزون الحديد (Serum Ferritin).",
@@ -1301,7 +1301,7 @@
       "nameAr": "كرياتينين بالدم (Serum Creatinine)",
       "nameEn": "Serum Creatinine",
       "category": "Kidney Function",
-      "price": 88,
+      "price": 188,
       "cost": 12,
       "sampleType": "Serum",
       "turnaroundTime": "فوري (ساعة)",
