@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T10:30:37.832Z",
+  "syncedAt": "2026-10-06T10:30:43.550Z",
   "reports": [
     {
       "generalComment": "الحالة تتماشى مع فقر الدم بعوز الحديد. يرجى المتابعة بطلب مخزون الحديد (Serum Ferritin).",
@@ -1284,7 +1284,7 @@
       "nameAr": "مضاد الثرومبين 3 (Antithrombin III Activity)",
       "nameEn": "Antithrombin III Activity",
       "category": "Coagulation",
-      "price": 480,
+      "price": 988,
       "cost": 120,
       "sampleType": "Citrate Plasma",
       "turnaroundTime": "24-48 ساعة",
@@ -3358,35 +3358,35 @@
       "fastingInstructions": "عينة براز طازجة للأطفال"
     },
     {
-      "sampleType": "EDTA ",
-      "method": "Enzymatic",
-      "maxNormal": 49,
-      "fastingInstructions": "لا يشترط الصيام",
-      "nameEn": "Hematocrit %",
       "minNormal": 36,
-      "category": "Clinical Hematology ",
-      "nameAr": "هيماتوكريت0",
       "price": 10,
+      "sampleType": "EDTA ",
+      "code": "HCT",
+      "id": "test-1791282363076",
+      "nameAr": "هيماتوكريت0",
+      "maxNormal": 49,
+      "nameEn": "Hematocrit %",
+      "fastingInstructions": "لا يشترط الصيام",
+      "method": "Enzymatic",
       "unit": "%",
       "turnaroundHours": 2,
-      "id": "test-1791282363076",
-      "code": "HCT"
+      "category": "Clinical Hematology "
     },
     {
-      "code": "HB",
-      "method": "Enzymatic",
-      "fastingInstructions": "لا يشترط الصيام",
-      "turnaroundHours": 2,
-      "nameEn": "HB %",
-      "price": 210,
-      "nameAr": "هبموجلوبين ",
-      "maxNormal": 49,
-      "textReference": "Male : 13.5-17.5 /Female: 12.5-15.5",
-      "unit": "g/L",
       "id": "test-1791276005667",
+      "maxNormal": 49,
+      "nameAr": "هبموجلوبين ",
       "minNormal": 36,
+      "method": "Enzymatic",
+      "category": "Clinical Hematology ",
+      "nameEn": "HB %",
+      "turnaroundHours": 2,
+      "price": 210,
+      "unit": "g/L",
+      "fastingInstructions": "لا يشترط الصيام",
+      "textReference": "Male : 13.5-17.5 /Female: 12.5-15.5",
       "sampleType": " EDTA BLOOD ",
-      "category": "Clinical Hematology "
+      "code": "HB"
     }
   ],
   "packages": [
