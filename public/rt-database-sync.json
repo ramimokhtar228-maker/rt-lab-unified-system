@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:41:47.023Z",
+  "syncedAt": "2026-10-06T11:42:01.860Z",
   "reports": [
     {
       "id": "rep-1791286741642",
@@ -479,8 +479,8 @@
               "method": "Hexokinase",
               "textReference": "",
               "id": "param-0-1791286741642-1va",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "238",
+              "flag": "HIGH"
             },
             {
               "name": "2 Hours Post-Prandial Glucose",
@@ -536,7 +536,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:39:01.642Z",
-      "updatedAt": "2026-10-06T11:41:40.267Z",
+      "updatedAt": "2026-10-06T11:41:56.081Z",
       "invoiceId": "inv-1791286741643"
     },
     {
