@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T17:07:05.272Z",
+  "syncedAt": "2026-10-06T17:07:15.374Z",
   "reports": [
     {
       "id": "rep-1791306270693",
@@ -139,7 +139,7 @@
             {
               "id": "p-pkg-0-1791306270691-vjp",
               "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
-              "result": "2",
+              "result": "26.77",
               "unit": "ng/mL",
               "minNormal": 30,
               "maxNormal": 100,
@@ -151,7 +151,7 @@
             {
               "id": "p-pkg-1-1791306270691-juy",
               "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
-              "result": "",
+              "result": "6.0",
               "unit": "mg/dL",
               "minNormal": 3.5,
               "maxNormal": 7.2,
@@ -272,7 +272,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T17:04:30.693Z",
-      "updatedAt": "2026-10-06T17:06:59.877Z",
+      "updatedAt": "2026-10-06T17:07:10.978Z",
       "invoiceId": "inv-1791306270694"
     },
     {
