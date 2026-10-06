@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:19:21.134Z",
+  "syncedAt": "2026-10-06T07:19:38.916Z",
   "reports": [
     {
       "profiles": [
@@ -3009,7 +3009,7 @@
       "nameAr": "فيروس الروتا والديدان للأطفال بالبراز (Rotavirus & Adenovirus Ag)",
       "nameEn": "Rotavirus & Adenovirus Stool Antigen",
       "category": "Infectious & Viral",
-      "price": 150,
+      "price": 555,
       "cost": 35,
       "sampleType": "Fresh Stool",
       "turnaroundTime": "فوري (ساعة)",
