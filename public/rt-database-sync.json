@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:36:35.092Z",
+  "syncedAt": "2026-10-06T06:36:52.026Z",
   "reports": [
     {
       "profiles": [
@@ -1147,7 +1147,7 @@
       "nameAr": "الماغنيسيوم بالدم (Serum Magnesium)",
       "nameEn": "Serum Magnesium",
       "category": "Minerals & Bone",
-      "price": 120,
+      "price": 388,
       "cost": 18,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
