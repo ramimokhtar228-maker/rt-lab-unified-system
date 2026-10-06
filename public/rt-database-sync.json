@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:53:40.733Z",
+  "syncedAt": "2026-10-06T06:54:00.841Z",
   "reports": [
     {
       "profiles": [
@@ -1978,7 +1978,7 @@
       "nameAr": "السعة الكلية لربط الحديد (TIBC)",
       "nameEn": "Total Iron Binding Capacity (TIBC)",
       "category": "Anemia & Vitamins",
-      "price": 110,
+      "price": 355,
       "cost": 20,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
