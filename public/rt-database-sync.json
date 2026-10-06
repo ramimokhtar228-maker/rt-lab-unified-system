@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T09:18:23.944Z",
+  "syncedAt": "2026-10-06T09:19:26.650Z",
   "reports": [
     {
       "generalComment": "طلب فحص مالي رقم RT-BK-5873 - تم التسميع آلياً من منظومة الفواتير",
@@ -635,7 +635,7 @@
       "nameAr": "إنسولين صائم (Fasting Insulin)",
       "nameEn": "Fasting Serum Insulin",
       "category": "Diabetes",
-      "price": 260,
+      "price": 510,
       "cost": 65,
       "sampleType": "Serum",
       "turnaroundTime": "خلال 24 ساعة",
