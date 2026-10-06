@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:18:46.399Z",
+  "syncedAt": "2026-10-06T11:18:57.771Z",
   "reports": [
     {
       "id": "rep-1791285435316",
@@ -190,7 +190,7 @@
             {
               "id": "p-pkg-5-1791285435310",
               "name": "الكالسيوم الكلي (Total Serum Calcium) (Total Serum Calcium)",
-              "result": "",
+              "result": "9.70",
               "unit": "mg/dL",
               "minNormal": 8.6,
               "maxNormal": 10.3,
@@ -620,7 +620,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:17:15.316Z",
-      "updatedAt": "2026-10-06T11:18:41.745Z",
+      "updatedAt": "2026-10-06T11:18:52.774Z",
       "invoiceId": "inv-1791285435316"
     },
     {
