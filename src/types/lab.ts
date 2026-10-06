@@ -489,7 +489,9 @@ export interface LabReport {
   packageApplied?: {
     code: string;
     titleAr: string;
+    titleEn?: string;
     packagePrice: number;
+    originalPrice?: number;
   };
   attachedIllustrations?: DiseaseIllustration[];
   invoiceId?: string;

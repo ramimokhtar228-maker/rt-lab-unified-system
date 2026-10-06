@@ -42,7 +42,8 @@ export const INITIAL_STAFF_SIGNATURE_OPTIONS: {
 export const STAFF_OPTIONS = {
   chemists: INITIAL_STAFF_SIGNATURE_OPTIONS.chemists.map(c => `${c.name} - ${c.title}`),
   verifiers: INITIAL_STAFF_SIGNATURE_OPTIONS.verifiers.map(v => `${v.name} - ${v.title}`),
-  consultants: INITIAL_STAFF_SIGNATURE_OPTIONS.consultants.map(p => `${p.name} - ${p.title}`)
+  consultants: INITIAL_STAFF_SIGNATURE_OPTIONS.consultants.map(p => `${p.name} - ${p.title}`),
+  pathologists: INITIAL_STAFF_SIGNATURE_OPTIONS.consultants.map(p => `${p.name} - ${p.title}`)
 };
 
 export const COMMON_INTERPRETATIONS: { [key: string]: string[] } = {

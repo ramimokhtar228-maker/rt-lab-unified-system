@@ -2,6 +2,17 @@ import { LabReport, LabInfo } from '../types';
 import { formatReferenceDisplay, getChartPointerPosition } from './cbcCalculator';
 
 export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): void {
+  const staff = report.staff || {
+    labChemist: "د. هبة الشناوي - كيميائية تحاليل",
+    chemistTitle: "أخصائي الكيمياء الإكلينيكية",
+    chemistLicense: "EGY-SCI-88402",
+    verifiedBy: "د. مصطفى العوضي - استشاري التحاليل",
+    verifierTitle: "إدارة ضبط الجودة والتشغيل",
+    verifierLicense: "EGY-MGT-11024",
+    pathologist: "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
+    pathologistTitle: "استشاري الباثولوجيا الإكلينيكية - قصر العيني",
+    pathologistLicense: "EGY-MED-48201"
+  };
   const p = report.patient;
   const totalPages = report.profiles.length;
   const doctorDisplay = p.referringDoctorTitle === 'Herself' || p.referringDoctorTitle === 'Himself'
@@ -289,18 +300,18 @@ export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): voi
             <div>
               <div style="font-size:9.5px; font-weight:800; color:#64748b; text-transform:uppercase;">Lab CHEMIST</div>
               <div style="font-family:serif; font-style:italic; font-size:11px; color:#475569; padding:2px 0; font-weight:bold;">Approved / Chemist</div>
-              <div style="font-size:9.5px; font-weight:700; color:#0f172a;">${report.staff.labChemist}</div>
-              <div style="font-size:8px; color:#64748b;">${report.staff.chemistTitle || 'أخصائي الكيمياء الإكلينيكية'}</div>
-              <div style="font-size:7.5px; color:#94a3b8; font-family:monospace;">${report.staff.chemistLicense || 'EGY-SCI-88402'}</div>
+              <div style="font-size:9.5px; font-weight:700; color:#0f172a;">${staff.labChemist || "د. هبة الشناوي"}</div>
+              <div style="font-size:8px; color:#64748b;">${staff.chemistTitle || 'أخصائي الكيمياء الإكلينيكية'}</div>
+              <div style="font-size:7.5px; color:#94a3b8; font-family:monospace;">${staff.chemistLicense || 'EGY-SCI-88402'}</div>
             </div>
 
             <!-- Verify by -->
             <div>
               <div style="font-size:9.5px; font-weight:800; color:#64748b; text-transform:uppercase;">Verify by</div>
               <div style="font-family:serif; font-style:italic; font-size:11px; color:#475569; padding:2px 0; font-weight:bold;">Quality Audit Verified</div>
-              <div style="font-size:9.5px; font-weight:700; color:#0f172a;">${report.staff.verifiedBy}</div>
-              <div style="font-size:8px; color:#64748b;">${report.staff.verifierTitle || 'إدارة ضبط الجودة والتشغيل'}</div>
-              <div style="font-size:7.5px; color:#94a3b8; font-family:monospace;">${report.staff.verifierLicense || 'EGY-MGT-11024'}</div>
+              <div style="font-size:9.5px; font-weight:700; color:#0f172a;">${staff.verifiedBy || "د. مصطفى العوضي"}</div>
+              <div style="font-size:8px; color:#64748b;">${staff.verifierTitle || 'إدارة ضبط الجودة والتشغيل'}</div>
+              <div style="font-size:7.5px; color:#94a3b8; font-family:monospace;">${staff.verifierLicense || 'EGY-MGT-11024'}</div>
             </div>
 
             <!-- Consultant Pathologist -->
@@ -311,9 +322,9 @@ export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): voi
                   Prof. Dr. Rami Mokhtar
                 </span>
               </div>
-              <div style="font-size:10px; font-weight:800; color:#800000;">${report.staff.pathologist}</div>
-              <div style="font-size:8px; color:#475569;">${report.staff.pathologistTitle || 'استشاري الباثولوجيا الإكلينيكية - قصر العيني'}</div>
-              <div style="font-size:7.5px; color:#94a3b8; font-family:monospace;">${report.staff.pathologistLicense || 'EGY-MED-48201'}</div>
+              <div style="font-size:10px; font-weight:800; color:#800000;">${staff.pathologist || "أ.د. رامي مختار"}</div>
+              <div style="font-size:8px; color:#475569;">${staff.pathologistTitle || 'استشاري الباثولوجيا الإكلينيكية - قصر العيني'}</div>
+              <div style="font-size:7.5px; color:#94a3b8; font-family:monospace;">${staff.pathologistLicense || 'EGY-MED-48201'}</div>
             </div>
           </div>
 
@@ -328,7 +339,11 @@ export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): voi
 
   const printWindow = window.open('', '_blank', 'width=950,height=1000');
   if (!printWindow) {
-    alert('يرجى السماح بالنوافذ المنبثقة لمعاينة وطباعة التقرير.');
+    try {
+      window.print();
+    } catch {
+      alert('يرجى السماح بالنوافذ المنبثقة لمعاينة وطباعة التقرير.');
+    }
     return;
   }
 

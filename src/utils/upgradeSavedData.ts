@@ -39,7 +39,7 @@ export function mergeCatalogWithDefaults(savedCatalog?: InvoiceTestItem[]): Invo
         minNormal: existing.minNormal !== undefined ? existing.minNormal : defTest.minNormal,
         maxNormal: existing.maxNormal !== undefined ? existing.maxNormal : defTest.maxNormal,
         turnaroundTime: existing.turnaroundTime || defTest.turnaroundTime,
-        fastingInstructions: existing.fastingInstructions || defTest.fastingInstructions,
+        fastingInstructions: (existing as any).fastingInstructions || defTest.fastingInstructions,
         price: typeof existing.price === 'number' && existing.price > 0 ? existing.price : defTest.price,
         cost: typeof existing.cost === 'number' && existing.cost > 0 ? existing.cost : defTest.cost,
         category: existing.category || defTest.category,

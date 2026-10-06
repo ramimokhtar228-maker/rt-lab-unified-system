@@ -769,7 +769,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                     {report.packageApplied.code}
                   </span>
                   <span className="text-xs font-mono font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">
-                    {report.packageApplied.packagePrice} ج.م (بدلاً من {report.packageApplied.originalPrice} ج.م)
+                    {report.packageApplied.packagePrice} ج.م{report.packageApplied.originalPrice ? ` (بدلاً من ${report.packageApplied.originalPrice} ج.م)` : ''}
                   </span>
                 </div>
                 <h3 className="text-base font-black text-slate-900 mt-1">
@@ -1219,7 +1219,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                               <input
                                 type="text"
                                 value={param.name}
-                                onChange={(e) => handleUpdateParameter(profile.id, param.id, { name: e.target.value })}
+                                onChange={(e) => handleUpdateParameter(currentProfile.id, param.id, { name: e.target.value })}
                                 className="w-full font-bold text-slate-900 bg-transparent hover:bg-slate-50 focus:bg-white rounded px-1.5 py-1 focus:outline-none focus:ring-1 focus:ring-rose-500 border border-transparent focus:border-rose-400 text-sm"
                               />
                               <div className="flex items-center gap-2 text-[10px] text-slate-400 px-1 font-mono">
@@ -1236,14 +1236,14 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                               <QuickResultPicker
                                 paramName={param.name}
                                 currentValue={param.result}
-                                onSelect={(val) => handleUpdateParameter(profile.id, param.id, { result: val })}
+                                onSelect={(val) => handleUpdateParameter(currentProfile.id, param.id, { result: val })}
                               />
 
                               <input
                                 type="text"
                                 placeholder="النتيجة"
                                 value={param.result}
-                                onChange={(e) => handleUpdateParameter(profile.id, param.id, { result: e.target.value })}
+                                onChange={(e) => handleUpdateParameter(currentProfile.id, param.id, { result: e.target.value })}
                                 className={`w-28 text-center font-black font-mono-numbers text-sm rounded-md px-2 py-1 border transition-all ${
                                   param.flag === 'HIGH' || param.flag === 'PANIC_HIGH'
                                     ? 'bg-rose-50 text-rose-900 border-rose-400 font-extrabold'
@@ -1292,7 +1292,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                                 type="button"
                                 onClick={() => {
                                   setModalParamToEdit(param);
-                                  setModalParamProfileId(profile.id);
+                                  setModalParamProfileId(currentProfile.id);
                                 }}
                                 className="p-1.5 text-slate-500 hover:text-rose-900 hover:bg-rose-50 rounded-md transition-colors"
                                 title="تعديل اسم التحليل والمعدل الطبيعي ووحدة القياس"
@@ -1304,7 +1304,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                               <button
                                 type="button"
                                 disabled={pIdx === 0}
-                                onClick={() => handleMoveParameter(profile.id, pIdx, 'up')}
+                                onClick={() => handleMoveParameter(currentProfile.id, pIdx, 'up')}
                                 className="p-1 text-slate-400 hover:text-slate-700 disabled:opacity-20"
                                 title="تحريك لأعلى"
                               >
@@ -1314,8 +1314,8 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                               {/* Move Down */}
                               <button
                                 type="button"
-                                disabled={pIdx === profile.parameters.length - 1}
-                                onClick={() => handleMoveParameter(profile.id, pIdx, 'down')}
+                                disabled={pIdx === currentProfile.parameters.length - 1}
+                                onClick={() => handleMoveParameter(currentProfile.id, pIdx, 'down')}
                                 className="p-1 text-slate-400 hover:text-slate-700 disabled:opacity-20"
                                 title="تحريك لأسفل"
                               >
@@ -1325,7 +1325,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                               {/* Delete Parameter */}
                               <button
                                 type="button"
-                                onClick={() => handleDeleteParameter(profile.id, param.id)}
+                                onClick={() => handleDeleteParameter(currentProfile.id, param.id)}
                                 className="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors"
                                 title="حذف هذا التحليل"
                               >

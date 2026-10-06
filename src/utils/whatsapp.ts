@@ -25,8 +25,8 @@ export function formatWhatsAppMessage(report: LabReport, customLabInfo?: LabInfo
 ${profilesList}
 
 حالة التقرير: *معتمد ومدقق رسمياً* ✅
-إشراف: *${report.staff.pathologist}*
-مراجعة: ${report.staff.verifiedBy}
+إشراف: *${report.staff?.pathologist || "أ.د. رامي مختار"}*
+مراجعة: ${report.staff?.verifiedBy || "د. مصطفى العوضي"}
 
 📎 يسعدنا إبلاغكم بجاهزية نتائج تحاليلكم الطبية.
 يمكنكم استلام النسخة الورقية المعتمدة من فرع المعمل، أو طلب إرسال النسخة الرقمية (PDF) مباشرة عبر هذه المحادثة.

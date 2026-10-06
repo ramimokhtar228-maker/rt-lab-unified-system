@@ -68,7 +68,8 @@ const AppContent: React.FC = () => {
     updateCatalogTest,
     addCatalogTest,
     deleteCatalogTest,
-    forceSyncCatalog
+    forceSyncCatalog,
+    applyPackageToReport
   } = useApp();
 
   const [archiveSearch, setArchiveSearch] = useState('');

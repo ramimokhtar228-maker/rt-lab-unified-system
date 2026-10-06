@@ -218,7 +218,7 @@ export async function exportReportToPPTX(report: LabReport): Promise<void> {
     }
 
     // Signatures footer
-    slide.addText(`Lab Chemist: ${report.staff.labChemist}`, {
+    slide.addText(`Lab Chemist: ${report.staff?.labChemist || "د. هبة الشناوي"}`, {
       x: 0.6,
       y: 6.4,
       w: 2.8,
@@ -227,7 +227,7 @@ export async function exportReportToPPTX(report: LabReport): Promise<void> {
       color: '64748B'
     });
 
-    slide.addText(`Verified By: ${report.staff.verifiedBy}`, {
+    slide.addText(`Verified By: ${report.staff?.verifiedBy || "د. مصطفى العوضي"}`, {
       x: 3.6,
       y: 6.4,
       w: 2.6,
@@ -236,7 +236,7 @@ export async function exportReportToPPTX(report: LabReport): Promise<void> {
       color: '64748B'
     });
 
-    slide.addText(`Consultant Pathologist: ${report.staff.pathologist}`, {
+    slide.addText(`Consultant Pathologist: ${report.staff?.pathologist || "أ.د. رامي مختار"}`, {
       x: 6.4,
       y: 6.4,
       w: 3.0,

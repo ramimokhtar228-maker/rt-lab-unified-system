@@ -46,6 +46,17 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
   const { labInfo } = useApp();
   const p = report.patient;
   const totalPages = report.profiles.length;
+  const staff = report.staff || {
+    labChemist: "د. هبة الشناوي - كيميائية تحاليل",
+    chemistTitle: "أخصائي الكيمياء الإكلينيكية",
+    chemistLicense: "EGY-SCI-88402",
+    verifiedBy: "د. مصطفى العوضي - استشاري التحاليل",
+    verifierTitle: "إدارة ضبط الجودة والتشغيل",
+    verifierLicense: "EGY-MGT-11024",
+    pathologist: "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
+    pathologistTitle: "استشاري الباثولوجيا الإكلينيكية - قصر العيني",
+    pathologistLicense: "EGY-MED-48201"
+  };
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   const handleDownloadPDF = async () => {
@@ -61,7 +72,11 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
   };
 
   const handlePrint = () => {
-    openPrintReportWindow(report, labInfo);
+    try {
+      openPrintReportWindow(report, labInfo);
+    } catch {
+      window.print();
+    }
   };
 
   const handleWhatsApp = () => {
@@ -631,14 +646,14 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
                       </span>
                     </div>
                     <p className="text-xs font-bold text-slate-900">
-                      {report.staff.labChemist}
+                      {staff.labChemist}
                     </p>
                     <p className="text-[10px] text-slate-600 font-medium">
-                      {report.staff.chemistTitle || 'أخصائي الكيمياء الإكلينيكية'}
+                      {staff.chemistTitle || 'أخصائي الكيمياء الإكلينيكية'}
                     </p>
-                    {report.staff.chemistLicense && (
+                    {staff.chemistLicense && (
                       <p className="text-[9px] text-slate-400 font-mono">
-                        {report.staff.chemistLicense}
+                        {staff.chemistLicense}
                       </p>
                     )}
                   </div>
@@ -654,14 +669,14 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
                       </span>
                     </div>
                     <p className="text-xs font-bold text-slate-900">
-                      {report.staff.verifiedBy}
+                      {staff.verifiedBy}
                     </p>
                     <p className="text-[10px] text-slate-600 font-medium">
-                      {report.staff.verifierTitle || 'إدارة ضبط الجودة والتشغيل'}
+                      {staff.verifierTitle || 'إدارة ضبط الجودة والتشغيل'}
                     </p>
-                    {report.staff.verifierLicense && (
+                    {staff.verifierLicense && (
                       <p className="text-[9px] text-slate-400 font-mono">
-                        {report.staff.verifierLicense}
+                        {staff.verifierLicense}
                       </p>
                     )}
                   </div>
@@ -680,14 +695,14 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
                       </div>
                     </div>
                     <p className="text-xs font-bold text-rose-950">
-                      {report.staff.pathologist}
+                      {staff.pathologist}
                     </p>
                     <p className="text-[10px] text-rose-900 font-medium">
-                      {report.staff.pathologistTitle || 'استشاري الباثولوجيا الإكلينيكية - قصر العيني'}
+                      {staff.pathologistTitle || 'استشاري الباثولوجيا الإكلينيكية - قصر العيني'}
                     </p>
-                    {report.staff.pathologistLicense && (
+                    {staff.pathologistLicense && (
                       <p className="text-[9px] text-slate-400 font-mono">
-                        {report.staff.pathologistLicense}
+                        {staff.pathologistLicense}
                       </p>
                     )}
                   </div>

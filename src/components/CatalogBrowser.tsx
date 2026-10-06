@@ -57,6 +57,8 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
     diagnosticProfiles,
     updateDiagnosticProfiles,
     resetDiagnosticProfiles,
+    resetCatalog,
+    resetPackages,
     addCatalogTest,
     updateCatalogTest,
     deleteCatalogTest,
