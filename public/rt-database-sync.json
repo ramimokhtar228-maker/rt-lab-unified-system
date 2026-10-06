@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:13:13.952Z",
+  "syncedAt": "2026-10-06T07:13:33.152Z",
   "reports": [
     {
       "profiles": [
@@ -2772,7 +2772,7 @@
       "nameAr": "تحليل السائل المنوي الشامل (Semen Analysis WHO 6th)",
       "nameEn": "Comprehensive Semen Analysis (WHO 6th Edition)",
       "category": "Fertility & Andrology",
-      "price": 180,
+      "price": 488,
       "cost": 35,
       "sampleType": "Fresh Semen (Complete ejaculate)",
       "turnaroundTime": "خلال ساعتين",
