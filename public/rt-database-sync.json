@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:42:42.315Z",
+  "syncedAt": "2026-10-06T11:42:45.526Z",
   "reports": [
     {
       "id": "rep-1791286741642",
@@ -267,27 +267,6 @@
           ]
         },
         {
-          "id": "prof-1791286741641-d4wm",
-          "profileCode": "GLU_F",
-          "titleEn": "Fasting Blood Sugar",
-          "titleAr": "سكر الدم الصائم (FBS)",
-          "category": "Diabetes",
-          "sampleType": "Fluoride Plasma / Serum",
-          "parameters": [
-            {
-              "id": "p-1791286741641-k86",
-              "name": "سكر الدم الصائم (FBS) (Fasting Blood Sugar)",
-              "result": "",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 100,
-              "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
-              "flag": "NORMAL",
-              "method": "Hexokinase / GOD-PAP"
-            }
-          ]
-        },
-        {
           "id": "prof-1791286741642-oto3",
           "profileCode": "GLYCEMIC",
           "titleEn": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
@@ -341,7 +320,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:39:01.642Z",
-      "updatedAt": "2026-10-06T11:42:39.655Z",
+      "updatedAt": "2026-10-06T11:42:41.878Z",
       "invoiceId": "inv-1791286741643"
     },
     {
