@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:02:22.406Z",
+  "syncedAt": "2026-10-06T07:02:39.264Z",
   "reports": [
     {
       "profiles": [
@@ -2316,7 +2316,7 @@
       "nameAr": "الأجسام المضادة للروماتويد (Anti-CCP 3rd Gen)",
       "nameEn": "Anti-Cyclic Citrullinated Peptide (Anti-CCP)",
       "category": "Immunology",
-      "price": 380,
+      "price": 988,
       "cost": 100,
       "sampleType": "Serum",
       "turnaroundTime": "خلال 24 ساعة",
