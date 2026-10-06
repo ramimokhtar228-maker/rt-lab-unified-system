@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:50:50.469Z",
+  "syncedAt": "2026-10-06T06:51:04.270Z",
   "reports": [
     {
       "profiles": [
@@ -1827,7 +1827,7 @@
       "nameAr": "هرمون الذكورة الحر النشط (Free Testosterone)",
       "nameEn": "Free Testosterone",
       "category": "Fertility & Hormones",
-      "price": 340,
+      "price": 598,
       "cost": 85,
       "sampleType": "Serum",
       "turnaroundTime": "خلال 24 ساعة",
