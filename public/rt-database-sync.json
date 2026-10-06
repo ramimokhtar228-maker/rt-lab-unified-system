@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T10:31:59.385Z",
+  "syncedAt": "2026-10-06T10:32:07.653Z",
   "reports": [
     {
       "createdAt": "2026-10-06T08:52:20.749Z",
@@ -1267,7 +1267,7 @@
       "nameAr": "بروتين إس الحر للتجلط (Protein S Free Antigen)",
       "nameEn": "Protein S Free Antigen",
       "category": "Coagulation",
-      "price": 520,
+      "price": 877,
       "cost": 140,
       "sampleType": "Citrate Plasma",
       "turnaroundTime": "24-48 ساعة",
