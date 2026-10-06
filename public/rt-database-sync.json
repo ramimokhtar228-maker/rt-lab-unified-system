@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:11:14.342Z",
+  "syncedAt": "2026-10-06T07:11:36.238Z",
   "reports": [
     {
       "profiles": [
@@ -2693,7 +2693,7 @@
       "nameAr": "الفيروس المضخم للخلايا (CMV IgG & IgM)",
       "nameEn": "Cytomegalovirus (CMV) IgG & IgM",
       "category": "TORCH & Pregnancy",
-      "price": 260,
+      "price": 1111,
       "cost": 60,
       "sampleType": "Serum",
       "turnaroundTime": "خلال 24 ساعة",
