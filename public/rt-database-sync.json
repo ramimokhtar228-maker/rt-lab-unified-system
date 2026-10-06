@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:09:53.523Z",
+  "syncedAt": "2026-10-06T07:10:19.694Z",
   "reports": [
     {
       "profiles": [
@@ -2648,7 +2648,7 @@
       "nameAr": "تحليل الحمى المالطية والبروسيلا (Brucella Melitensis & Abortus)",
       "nameEn": "Brucella Serology (Standard Agglutination Test)",
       "category": "Infectious & Viral",
-      "price": 120,
+      "price": 600,
       "cost": 25,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
