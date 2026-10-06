@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T16:53:54.454Z",
+  "syncedAt": "2026-10-06T16:53:58.105Z",
   "reports": [
     {
       "id": "rep-1791305504343",
@@ -132,18 +132,6 @@
               "textReference": "> 13 Iron Def. | < 13 Thalassemia",
               "id": "param-8-1791305504342-bdu",
               "result": "21.6",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Platelets Count",
-              "unit": "x10^3/µL",
-              "minNormal": 150,
-              "maxNormal": 450,
-              "panicLow": 50,
-              "panicHigh": 1000,
-              "textReference": "150 - 450 x10^3/µL",
-              "id": "param-10-1791305504342-n9y",
-              "result": "225",
               "flag": "NORMAL"
             },
             {
@@ -430,7 +418,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T16:51:44.343Z",
-      "updatedAt": "2026-10-06T16:53:52.903Z",
+      "updatedAt": "2026-10-06T16:53:56.219Z",
       "invoiceId": "inv-1791305504343"
     },
     {
