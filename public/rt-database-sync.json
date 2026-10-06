@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:50:30.648Z",
+  "syncedAt": "2026-10-06T06:50:50.469Z",
   "reports": [
     {
       "profiles": [
@@ -1810,7 +1810,7 @@
       "nameAr": "هرمون الذكورة الكلي (Total Testosterone)",
       "nameEn": "Total Testosterone",
       "category": "Fertility & Hormones",
-      "price": 220,
+      "price": 580,
       "cost": 50,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
