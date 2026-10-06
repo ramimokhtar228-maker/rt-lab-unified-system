@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T08:31:51.488Z",
+  "syncedAt": "2026-10-06T08:32:05.511Z",
   "reports": [
     {
       "updatedAt": "2026-10-05T15:18:28.558Z",
@@ -3280,7 +3280,7 @@
       },
       "reportNumber": "RT-BK-5873",
       "id": "rep-inc-1791123722634",
-      "updatedAt": "2026-10-06T08:31:46.176Z",
+      "updatedAt": "2026-10-06T08:31:59.552Z",
       "profiles": [
         {
           "titleAr": "دهون الدم الشاملة مع المؤشرات الحسابية",
@@ -3519,202 +3519,6 @@
               "name": "Hematocrit (PCV)",
               "flag": "NORMAL",
               "maxNormal": 48
-            },
-            {
-              "notes": "Auto-calculated: (PCV × 10) / RBC",
-              "textReference": "80.0 - 98.0 fL",
-              "name": "M.C.V",
-              "maxNormal": 98,
-              "flag": "",
-              "unit": "fL",
-              "result": "",
-              "minNormal": 80,
-              "id": "p-mig-3-1791188313957"
-            },
-            {
-              "result": "34.7",
-              "id": "p-mig-5-1791188313957",
-              "unit": "g/dL",
-              "maxNormal": 36,
-              "notes": "Calculated: (HGB × 100) / HCT",
-              "flag": "NORMAL",
-              "name": "M.C.H.C",
-              "minNormal": 32,
-              "textReference": "32.0 - 36.0 g/dL"
-            },
-            {
-              "name": "R.D.W-CV",
-              "flag": "",
-              "result": "",
-              "minNormal": 11.5,
-              "unit": "%",
-              "id": "p-mig-6-1791188313957",
-              "maxNormal": 14.5,
-              "textReference": "11.5 - 14.5 %"
-            },
-            {
-              "unit": "fL",
-              "id": "p-mig-7-1791188313957",
-              "result": "",
-              "flag": "",
-              "textReference": "39.0 - 46.0 fL",
-              "maxNormal": 46,
-              "name": "R.D.W-SD",
-              "minNormal": 39
-            },
-            {
-              "flag": "",
-              "notes": "<13 Thalassemia Trait | >13 Iron Deficiency",
-              "id": "p-mig-8-1791188313957",
-              "name": "Mentzer Index (MCV/RBC)",
-              "unit": "Ratio",
-              "result": "",
-              "textReference": "> 13 Iron Def. | < 13 Thalassemia"
-            },
-            {
-              "notes": "(MCV² × RDW) / (Hb × 100)",
-              "name": "Green & King Index",
-              "id": "p-mig-9-1791188313957",
-              "textReference": "< 72 Thalassemia | > 72 Iron Def.",
-              "result": "",
-              "flag": "",
-              "unit": "Index"
-            },
-            {
-              "panicHigh": 1000,
-              "id": "p-mig-10-1791188313957",
-              "maxNormal": 450,
-              "textReference": "150 - 450 x10^3/µL",
-              "panicLow": 50,
-              "minNormal": 150,
-              "result": "",
-              "unit": "x10^3/µL",
-              "flag": "",
-              "name": "Platelets Count"
-            },
-            {
-              "id": "p-mig-11-1791188313957",
-              "maxNormal": 11.5,
-              "minNormal": 7.5,
-              "flag": "",
-              "name": "MPV (Mean Platelet Volume)",
-              "textReference": "7.5 - 11.5 fL",
-              "result": "",
-              "unit": "fL"
-            },
-            {
-              "flag": "",
-              "name": "PDW (Platelet Dist. Width)",
-              "id": "p-mig-12-1791188313957",
-              "minNormal": 9,
-              "unit": "%",
-              "textReference": "9.0 - 17.0 %",
-              "maxNormal": 17,
-              "result": ""
-            },
-            {
-              "result": "",
-              "id": "p-mig-13-1791188313957",
-              "minNormal": 0.17,
-              "maxNormal": 0.35,
-              "notes": "Auto-calculated: (PLT × MPV) / 10,000",
-              "unit": "%",
-              "flag": "",
-              "textReference": "0.17 - 0.35 %",
-              "name": "PCT (Plateletcrit)"
-            },
-            {
-              "panicLow": 2,
-              "name": "Total Leucocytic Count (TLC)",
-              "flag": "",
-              "unit": "x10^3/µL",
-              "minNormal": 4,
-              "maxNormal": 11,
-              "id": "p-mig-14-1791188313958",
-              "textReference": "4.0 - 11.0 x10^3/µL",
-              "result": "",
-              "panicHigh": 30
-            },
-            {
-              "flag": "",
-              "name": "Segmented Neutrophils %",
-              "textReference": "40 - 65 %",
-              "maxNormal": 65,
-              "id": "p-mig-15-1791188313958",
-              "unit": "%",
-              "result": "",
-              "minNormal": 40
-            },
-            {
-              "id": "p-mig-16-1791188313958",
-              "unit": "%",
-              "flag": "",
-              "minNormal": 0,
-              "name": "Band Forms (Stab) %",
-              "textReference": "0 - 5 % (Left Shift if > 6%)",
-              "maxNormal": 5,
-              "result": ""
-            },
-            {
-              "minNormal": 40,
-              "id": "p-mig-17-1791188313958",
-              "textReference": "40 - 70 %",
-              "notes": "Auto-calculated: Segmented% + Band%",
-              "result": "",
-              "maxNormal": 70,
-              "unit": "%",
-              "flag": "",
-              "name": "Total Neutrophils %"
-            },
-            {
-              "unit": "%",
-              "name": "Lymphocytes %",
-              "minNormal": 20,
-              "flag": "",
-              "result": "",
-              "textReference": "20 - 45 %",
-              "id": "p-mig-18-1791188313958",
-              "maxNormal": 45
-            },
-            {
-              "unit": "%",
-              "name": "Monocytes %",
-              "maxNormal": 8,
-              "flag": "",
-              "result": "",
-              "id": "p-mig-19-1791188313958",
-              "textReference": "2 - 8 %",
-              "minNormal": 2
-            },
-            {
-              "id": "p-mig-20-1791188313958",
-              "unit": "%",
-              "maxNormal": 6,
-              "result": "",
-              "flag": "",
-              "textReference": "1 - 6 %",
-              "name": "Eosinophils %",
-              "minNormal": 1
-            },
-            {
-              "textReference": "0 - 1 %",
-              "unit": "%",
-              "flag": "",
-              "maxNormal": 1,
-              "name": "Basophils %",
-              "id": "p-mig-21-1791188313958",
-              "result": "",
-              "minNormal": 0
-            },
-            {
-              "id": "p-mig-22-1791188313958",
-              "flag": "",
-              "name": "Metamyelocytes %",
-              "maxNormal": 0,
-              "unit": "%",
-              "textReference": "0 % (Absent in normal blood)",
-              "result": "",
-              "minNormal": 0
             },
             {
               "name": "Myelocytes %",
