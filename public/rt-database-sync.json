@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T19:51:49.952Z",
+  "syncedAt": "2026-10-06T19:51:51.301Z",
   "reports": [
     {
       "id": "rep-001",
@@ -3064,7 +3064,8 @@
         "EDTA Whole Blood",
         "Clean Urine"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة الفحص الدوري الشامل (Wellness Plus)"
     },
     {
       "id": "pkg-2",
@@ -3094,7 +3095,8 @@
         "Serum",
         "EDTA Whole Blood"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة صحة الرجل والبروستاتا الشاملة"
     },
     {
       "id": "pkg-3",
@@ -3124,7 +3126,8 @@
         "EDTA Whole Blood",
         "Clean Urine"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة صحة المرأة والهرمونات الحيوية"
     },
     {
       "id": "pkg-4",
@@ -3158,7 +3161,8 @@
         "EDTA Whole Blood",
         "Morning Urine"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة متابعة السكر والوقاية من المضاعفات"
     },
     {
       "id": "pkg-5",
@@ -3188,7 +3192,8 @@
         "Serum",
         "EDTA Whole Blood"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة الفحص الطبي الشامل لما قبل الزواج"
     },
     {
       "id": "pkg-6",
@@ -3223,7 +3228,8 @@
         "Serum",
         "Citrate Plasma"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "باقة وظائف الكبد والفيروسات الكبدية الكاملة"
     },
     {
       "id": "pkg-7",
@@ -3256,7 +3262,8 @@
         "Serum",
         "Fresh Urine"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "باقة وظائف الكلى والأملاح والنقرس"
     },
     {
       "id": "pkg-8",
@@ -3289,7 +3296,8 @@
         "Serum",
         "Citrate Plasma"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "باقة صحة القلب والدهون وتصلب الشرايين"
     },
     {
       "id": "pkg-9",
@@ -3321,7 +3329,8 @@
         "Serum",
         "EDTA Whole Blood"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة الفيتامينات والمعادن والطاقة الحيوية"
     },
     {
       "id": "pkg-10",
@@ -3359,7 +3368,8 @@
         "Fresh Urine",
         "Stool Specimen"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة كبار السن التنفيذية الشاملة (Golden Age)"
     },
     {
       "id": "pkg-11",
@@ -3392,7 +3402,8 @@
         "Serum",
         "EDTA Whole Blood"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة تشخيص تساقط الشعر والأنيميا والهرمونات"
     },
     {
       "id": "pkg-12",
@@ -3427,7 +3438,8 @@
         "Serum",
         "EDTA Whole Blood"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "باقة الرياضيين واللياقة وبناء الأجسام"
     },
     {
       "id": "pkg-13",
@@ -3459,7 +3471,8 @@
         "Fresh Urine",
         "Stool Specimen"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "باقة صحة ونمو الأطفال والديدان وفقر الدم"
     },
     {
       "id": "pkg-14",
@@ -3490,7 +3503,8 @@
         "EDTA Whole Blood",
         "Fresh Stool Specimen"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "باقة الجهاز الهضمي والقولون وجرثومة المعدة"
     },
     {
       "id": "pkg-15",
@@ -3539,7 +3553,8 @@
         "Fresh Urine",
         "Stool"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة الفحص الشامل الملكية VIP د. رامي مختار (32 فحص شامل)"
     }
   ]
 }
