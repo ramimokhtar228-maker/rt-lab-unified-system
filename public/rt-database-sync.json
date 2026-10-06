@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T10:40:39.269Z",
+  "syncedAt": "2026-10-06T10:41:03.995Z",
   "reports": [
     {
       "id": "rep-001",
@@ -1369,7 +1369,7 @@
       "nameAr": "صوديوم بالدم (Serum Sodium Na+)",
       "nameEn": "Serum Sodium (Na+)",
       "category": "Electrolytes",
-      "price": 110,
+      "price": 277,
       "cost": 20,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
