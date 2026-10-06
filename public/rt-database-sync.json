@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:56:39.149Z",
+  "syncedAt": "2026-10-06T06:56:58.678Z",
   "reports": [
     {
       "profiles": [
@@ -2112,7 +2112,7 @@
       "nameAr": "دلالات أورام القولون والجهاز الهضمي (CEA)",
       "nameEn": "Carcinoembryonic Antigen (CEA)",
       "category": "Tumor Markers",
-      "price": 240,
+      "price": 520,
       "cost": 55,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
