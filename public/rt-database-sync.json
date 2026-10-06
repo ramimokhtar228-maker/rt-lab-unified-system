@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:47:21.093Z",
+  "syncedAt": "2026-10-06T06:47:35.257Z",
   "reports": [
     {
       "profiles": [
@@ -1640,7 +1640,7 @@
       "nameAr": "أجسام مضادة لبيروكسيديز الدرقية (Anti-TPO)",
       "nameEn": "Thyroid Peroxidase Antibodies",
       "category": "Thyroid",
-      "price": 280,
+      "price": 980,
       "cost": 70,
       "sampleType": "Serum",
       "turnaroundTime": "خلال 24 ساعة",
