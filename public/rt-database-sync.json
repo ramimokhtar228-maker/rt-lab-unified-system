@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:42:13.450Z",
+  "syncedAt": "2026-10-06T11:42:22.451Z",
   "reports": [
     {
       "id": "rep-1791286741642",
@@ -440,27 +440,6 @@
           ]
         },
         {
-          "id": "prof-1791286741642-s5fx",
-          "profileCode": "HCT",
-          "titleEn": "Hematocrit %",
-          "titleAr": "هيماتوكريت0",
-          "category": "Clinical Hematology ",
-          "sampleType": "EDTA ",
-          "parameters": [
-            {
-              "id": "p-1791286741642-m7z",
-              "name": "هيماتوكريت0 (Hematocrit %)",
-              "result": "",
-              "unit": "%",
-              "minNormal": 36,
-              "maxNormal": 49,
-              "textReference": "Normal",
-              "flag": "NORMAL",
-              "method": "Enzymatic"
-            }
-          ]
-        },
-        {
           "id": "prof-1791286741642-oto3",
           "profileCode": "GLYCEMIC",
           "titleEn": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
@@ -514,7 +493,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:39:01.642Z",
-      "updatedAt": "2026-10-06T11:42:08.254Z",
+      "updatedAt": "2026-10-06T11:42:16.711Z",
       "invoiceId": "inv-1791286741643"
     },
     {
