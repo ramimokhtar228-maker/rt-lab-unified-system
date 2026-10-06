@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:54:00.841Z",
+  "syncedAt": "2026-10-06T06:54:22.697Z",
   "reports": [
     {
       "profiles": [
@@ -1995,7 +1995,7 @@
       "nameAr": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total)",
       "nameEn": "25-Hydroxy Vitamin D Total",
       "category": "Anemia & Vitamins",
-      "price": 360,
+      "price": 911,
       "cost": 85,
       "sampleType": "Serum (Protected from light)",
       "turnaroundTime": "خلال ساعتين",
