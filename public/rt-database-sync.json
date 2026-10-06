@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T10:56:43.103Z",
+  "syncedAt": "2026-10-06T10:56:50.935Z",
   "reports": [
     {
       "id": "rep-1791284141332",
@@ -70,7 +70,7 @@
               "notes": "Calculated (HGB × 3)",
               "textReference": "M: 40 - 52% | F: 36 - 48%",
               "id": "param-2-1791284141331-qe8",
-              "result": "3",
+              "result": "35.88",
               "flag": "LOW"
             },
             {
@@ -81,8 +81,8 @@
               "notes": "Calculated: (HCT × 10) / RBC",
               "textReference": "80.0 - 98.0 fL",
               "id": "param-3-1791284141331-abs",
-              "result": "7.5",
-              "flag": "LOW"
+              "result": "89.7",
+              "flag": "NORMAL"
             },
             {
               "name": "M.C.H",
@@ -103,8 +103,8 @@
               "notes": "Calculated: (HGB × 100) / HCT",
               "textReference": "32.0 - 36.0 g/dL",
               "id": "param-5-1791284141331-m3f",
-              "result": "366.7",
-              "flag": "HIGH"
+              "result": "30.7",
+              "flag": "LOW"
             },
             {
               "name": "R.D.W-CV",
@@ -129,10 +129,10 @@
             {
               "name": "Mentzer Index (MCV/RBC)",
               "unit": "Ratio",
-              "notes": "Mentzer < 13: Suggestive of Beta Thalassemia Trait",
+              "notes": "Mentzer > 13: Suggestive of Iron Deficiency Anemia",
               "textReference": "> 13 Iron Def. | < 13 Thalassemia",
               "id": "param-8-1791284141331-sjn",
-              "result": "1.9",
+              "result": "22.4",
               "flag": "NORMAL"
             },
             {
@@ -544,7 +544,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T10:55:41.332Z",
-      "updatedAt": "2026-10-06T10:56:39.491Z",
+      "updatedAt": "2026-10-06T10:56:46.558Z",
       "invoiceId": "inv-1791284141332"
     },
     {
