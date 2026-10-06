@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:34:35.526Z",
+  "syncedAt": "2026-10-06T11:34:55.597Z",
   "reports": [
     {
       "id": "rep-1791286375200",
@@ -34,105 +34,6 @@
         "originalPrice": 2900
       },
       "profiles": [
-        {
-          "id": "prof-1791286375195-8x4i",
-          "profileCode": "LIPID",
-          "titleEn": "Lipid Profile",
-          "titleAr": "دهون الدم الشاملة مع المؤشرات الحسابية",
-          "category": "Clinical Chemistry",
-          "sampleType": "Serum (12h Fasting)",
-          "interpretation": "Lipid ratios demonstrate favorable cardiovascular risk stratification.",
-          "parameters": [
-            {
-              "name": "Total Serum Cholesterol",
-              "unit": "mg/dL",
-              "minNormal": 120,
-              "maxNormal": 200,
-              "method": "CHOD-PAP",
-              "textReference": "",
-              "id": "param-0-1791286375197-fho",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Serum Triglycerides",
-              "unit": "mg/dL",
-              "minNormal": 40,
-              "maxNormal": 150,
-              "panicHigh": 500,
-              "method": "GPO-PAP",
-              "textReference": "",
-              "id": "param-1-1791286375197-9ng",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "HDL - Cholesterol (Good)",
-              "unit": "mg/dL",
-              "minNormal": 40,
-              "maxNormal": 65,
-              "method": "Direct Accelerator",
-              "textReference": "",
-              "id": "param-2-1791286375197-iwp",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "LDL - Cholesterol (Calculated)",
-              "unit": "mg/dL",
-              "minNormal": 0,
-              "maxNormal": 100,
-              "notes": "Friedewald Formula: Total Chol - HDL - (TG / 5)",
-              "textReference": "",
-              "id": "param-3-1791286375197-qxo",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "VLDL - Cholesterol",
-              "unit": "mg/dL",
-              "minNormal": 5,
-              "maxNormal": 30,
-              "notes": "Auto-calculated: Triglycerides / 5",
-              "textReference": "",
-              "id": "param-4-1791286375197-p8h",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Non-HDL Cholesterol",
-              "unit": "mg/dL",
-              "minNormal": 0,
-              "maxNormal": 130,
-              "notes": "Auto-calculated: Total Chol - HDL",
-              "textReference": "",
-              "id": "param-5-1791286375197-wh0",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Total Chol / HDL Ratio",
-              "unit": "Ratio",
-              "minNormal": 0,
-              "maxNormal": 4.5,
-              "textReference": "< 4.5 Desirable",
-              "notes": "Auto-calculated: Total Chol / HDL",
-              "id": "param-6-1791286375197-r0f",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "LDL / HDL Ratio",
-              "unit": "Ratio",
-              "minNormal": 0,
-              "maxNormal": 3,
-              "textReference": "< 3.0 Desirable",
-              "id": "param-7-1791286375197-ng1",
-              "result": "",
-              "flag": "NORMAL"
-            }
-          ]
-        },
         {
           "id": "prof-extra-1791286375198",
           "profileCode": "PKG_EXTRA",
@@ -272,27 +173,6 @@
               "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
               "flag": "NORMAL",
               "method": "Arsenazo III / CPC Photometric"
-            }
-          ]
-        },
-        {
-          "id": "prof-1791286375199-liyg",
-          "profileCode": "ALT",
-          "titleEn": "Alanine Aminotransferase (ALT / SGPT)",
-          "titleAr": "إنزيم كبد ALT / SGPT",
-          "category": "Liver Function",
-          "sampleType": "Serum",
-          "parameters": [
-            {
-              "id": "p-1791286375199-qa5",
-              "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
-              "result": "",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 41,
-              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
-              "flag": "NORMAL",
-              "method": "IFCC Kinetic UV without Pyridoxal Phosphate"
             }
           ]
         },
@@ -482,7 +362,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:32:55.200Z",
-      "updatedAt": "2026-10-06T11:34:28.631Z",
+      "updatedAt": "2026-10-06T11:34:51.314Z",
       "invoiceId": "inv-1791286375201"
     },
     {
