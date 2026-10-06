@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T16:55:14.360Z",
+  "syncedAt": "2026-10-06T16:55:39.359Z",
   "reports": [
     {
       "id": "rep-1791305504343",
@@ -35,7 +35,7 @@
           "titleAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
           "category": "Hematology",
           "sampleType": "EDTA Whole Blood",
-          "interpretation": "Mild  hypochromic anemia, iron deficiency picture is suggested. Serum Ferritin is recommended.",
+          "interpretation": "Mild  hypochromic anemia, iron deficiency picture is suggested. Serum Ferritin is recommended.\n",
           "parameters": [
             {
               "name": "Hemoglobin (Hb)",
@@ -329,7 +329,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T16:51:44.343Z",
-      "updatedAt": "2026-10-06T16:55:11.961Z",
+      "updatedAt": "2026-10-06T16:55:36.533Z",
       "invoiceId": "inv-1791305504343"
     },
     {
