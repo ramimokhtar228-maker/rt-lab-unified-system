@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:11:57.382Z",
+  "syncedAt": "2026-10-06T07:12:14.603Z",
   "reports": [
     {
       "profiles": [
@@ -2723,7 +2723,7 @@
       "nameAr": "تحليل براز كامل وفحص طفيليات (Complete Stool Analysis)",
       "nameEn": "Complete Stool Examination & Parasitology",
       "category": "Urinalysis & Parasitology",
-      "price": 70,
+      "price": 140,
       "cost": 15,
       "sampleType": "Fresh Stool Specimen",
       "turnaroundTime": "فوري (ساعة)",
