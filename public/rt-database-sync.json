@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:56:20.796Z",
+  "syncedAt": "2026-10-06T06:56:39.149Z",
   "reports": [
     {
       "profiles": [
@@ -2097,7 +2097,7 @@
       "nameAr": "دلالات أورام البروستاتا الحرة والنسبة (Free PSA)",
       "nameEn": "Free PSA & Free/Total Ratio",
       "category": "Tumor Markers",
-      "price": 240,
+      "price": 570,
       "cost": 55,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
