@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:05:54.109Z",
+  "syncedAt": "2026-10-06T07:06:05.034Z",
   "reports": [
     {
       "profiles": [
@@ -2467,7 +2467,7 @@
       "nameAr": "أجسام بيتا-2 جليكوبروتين 1 (Anti-Beta 2 Glycoprotein IgG/IgM)",
       "nameEn": "Anti-Beta 2 Glycoprotein 1 Antibodies",
       "category": "Immunology",
-      "price": 120,
+      "price": 1200,
       "cost": 110,
       "sampleType": "Serum",
       "turnaroundTime": "24-48 ساعة",
