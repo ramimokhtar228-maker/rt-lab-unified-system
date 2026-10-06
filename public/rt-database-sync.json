@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:03:42.628Z",
+  "syncedAt": "2026-10-06T07:04:01.470Z",
   "reports": [
     {
       "profiles": [
@@ -2382,7 +2382,7 @@
       "nameAr": "المكمل المناعي C4 (Complement C4)",
       "nameEn": "Complement Component C4",
       "category": "Immunology",
-      "price": 220,
+      "price": 570,
       "cost": 55,
       "sampleType": "Serum",
       "turnaroundTime": "خلال 24 ساعة",
