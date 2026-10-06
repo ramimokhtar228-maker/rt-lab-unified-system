@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T10:43:24.542Z",
+  "syncedAt": "2026-10-06T10:43:33.779Z",
   "reports": [
     {
       "id": "rep-001",
@@ -1777,7 +1777,7 @@
       "nameAr": "تروبونين عالي الحساسية لعضلة القلب (hs-Troponin I)",
       "nameEn": "High-Sensitivity Troponin I",
       "category": "Cardiac",
-      "price": 360,
+      "price": 988,
       "cost": 90,
       "sampleType": "Serum / Heparin Plasma",
       "turnaroundTime": "فوري (ساعة)",
