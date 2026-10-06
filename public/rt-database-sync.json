@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:53:05.546Z",
+  "syncedAt": "2026-10-06T06:53:23.465Z",
   "reports": [
     {
       "profiles": [
@@ -1944,7 +1944,7 @@
       "nameAr": "مخزون الحديد بالدم (Serum Ferritin)",
       "nameEn": "Serum Ferritin Level",
       "category": "Anemia & Vitamins",
-      "price": 220,
+      "price": 390,
       "cost": 45,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
