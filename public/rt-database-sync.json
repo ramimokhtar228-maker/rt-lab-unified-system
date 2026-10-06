@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T12:00:39.055Z",
+  "syncedAt": "2026-10-06T12:01:19.768Z",
   "reports": [
     {
       "id": "rep-1791287976696",
@@ -157,7 +157,7 @@
             {
               "id": "p-pkg-2-1791287976694",
               "name": "سكر الدم الصائم (FBS) (Fasting Blood Sugar)",
-              "result": "",
+              "result": "98",
               "unit": "mg/dL",
               "minNormal": 70,
               "maxNormal": 100,
@@ -552,7 +552,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:59:36.696Z",
-      "updatedAt": "2026-10-06T12:00:34.625Z",
+      "updatedAt": "2026-10-06T12:01:16.594Z",
       "invoiceId": "inv-1791287976696"
     },
     {
