@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:43:57.631Z",
+  "syncedAt": "2026-10-06T06:44:17.080Z",
   "reports": [
     {
       "profiles": [
@@ -1521,7 +1521,7 @@
       "nameAr": "مؤشر قصور وفشل عضلة القلب (NT-proBNP)",
       "nameEn": "NT-proBNP Heart Failure Biomarker",
       "category": "Cardiac",
-      "price": 650,
+      "price": 1200,
       "cost": 160,
       "sampleType": "Serum / EDTA Plasma",
       "turnaroundTime": "خلال 4 ساعات",
