@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:57:20.153Z",
+  "syncedAt": "2026-10-06T06:57:37.634Z",
   "reports": [
     {
       "profiles": [
@@ -2146,7 +2146,7 @@
       "nameAr": "دلالات أورام البنكرياس والمرارة (CA 19-9)",
       "nameEn": "Cancer Antigen 19-9 (CA 19-9)",
       "category": "Tumor Markers",
-      "price": 260,
+      "price": 566,
       "cost": 60,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
