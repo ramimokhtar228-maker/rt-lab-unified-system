@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:05:16.416Z",
+  "syncedAt": "2026-10-06T07:05:35.594Z",
   "reports": [
     {
       "profiles": [
@@ -2450,7 +2450,7 @@
       "nameAr": "أجسام مضادة للفوسفوليبيد وكارديوليبين (Anti-Cardiolipin IgG/IgM)",
       "nameEn": "Anti-Cardiolipin Antibodies (IgG & IgM)",
       "category": "Immunology",
-      "price": 440,
+      "price": 700,
       "cost": 110,
       "sampleType": "Serum",
       "turnaroundTime": "24-48 ساعة",
