@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:24:24.286Z",
+  "syncedAt": "2026-10-06T06:24:36.755Z",
   "reports": [
     {
       "profiles": [
@@ -707,7 +707,7 @@
       "nameAr": "سكر عشوائي (RBS)",
       "nameEn": "Random Blood Sugar",
       "category": "Diabetes",
-      "price": 50,
+      "price": 88,
       "cost": 10,
       "sampleType": "Serum / Plasma",
       "turnaroundTime": "فوري (30 دقيقة)",
