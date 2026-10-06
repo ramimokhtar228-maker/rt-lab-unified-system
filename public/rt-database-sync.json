@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T16:51:46.178Z",
+  "syncedAt": "2026-10-06T16:52:07.252Z",
   "reports": [
     {
       "id": "rep-1791305504343",
@@ -9,7 +9,7 @@
         "id": "pat-1791305504340",
         "labNumber": "RT-2026-009",
         "barcode": "RT-10039",
-        "fullName": "ٌٍّّرجاء حسن ابراهيم",
+        "fullName": "ٍّّرجاء حسن ابراهيم",
         "phone": "01124485444",
         "age": 56,
         "ageUnit": "years",
@@ -439,7 +439,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T16:51:44.343Z",
-      "updatedAt": "2026-10-06T16:51:44.343Z",
+      "updatedAt": "2026-10-06T16:52:05.807Z",
       "invoiceId": "inv-1791305504343"
     },
     {
