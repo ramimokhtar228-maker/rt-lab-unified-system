@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T09:19:26.650Z",
+  "syncedAt": "2026-10-06T09:20:01.716Z",
   "reports": [
     {
       "generalComment": "طلب فحص مالي رقم RT-BK-5873 - تم التسميع آلياً من منظومة الفواتير",
@@ -652,7 +652,7 @@
       "nameAr": "سي ببتيد صائم (C-Peptide Fasting)",
       "nameEn": "Fasting C-Peptide",
       "category": "Diabetes",
-      "price": 290,
+      "price": 900,
       "cost": 75,
       "sampleType": "Serum",
       "turnaroundTime": "خلال 24 ساعة",
