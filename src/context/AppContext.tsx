@@ -1175,14 +1175,45 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
     }
 
-    // 2. Unpack any extra selected individual tests or profiles chosen by user
+    // 2. Extra selected tests (only when NOT already covered by package — keep single page when package used)
     selectedTests.forEach(test => {
       const testCode = test.code.toUpperCase();
-      // If already added by package, skip duplicate
+
+      // If a package was applied: append extras into the same package profile (no new pages)
+      if (packageApplied && generatedProfiles.length > 0) {
+        const pkgProfile = generatedProfiles[0];
+        const already = pkgProfile.parameters.some(p =>
+          (p.name || '').toUpperCase().includes(testCode) ||
+          (p.name || '').toUpperCase().includes((test.nameEn || '').toUpperCase())
+        );
+        if (already) return;
+        const packageCodes = new Set([
+          ...(packageApplied.includedProfiles || []).map((x: string) => x.toUpperCase()),
+          ...(packageApplied.includedIndividualTestCodes || []).map((x: string) => x.toUpperCase())
+        ]);
+        if (packageCodes.has(testCode)) return;
+
+        const richTest = INITIAL_INDIVIDUAL_TESTS.find(t => t.code.toUpperCase() === testCode)
+                      || testCatalog.find(t => t.code.toUpperCase() === testCode)
+                      || test;
+        pkgProfile.parameters.push({
+          id: `p-extra-${Date.now()}-${Math.random().toString(36).substr(2, 3)}`,
+          name: `${(richTest as any).nameAr || test.nameAr} (${(richTest as any).nameEn || test.nameEn || test.code})`,
+          result: '',
+          unit: (richTest as any).unit || 'Score / Units',
+          minNormal: (richTest as any).minNormal,
+          maxNormal: (richTest as any).maxNormal,
+          textReference: (richTest as any).textReference || 'Normal',
+          flag: 'NORMAL',
+          method: (richTest as any).method || 'Automated Clinical Assay'
+        });
+        return;
+      }
+
       if (generatedProfiles.some(gp => gp.profileCode.toUpperCase() === testCode)) return;
 
-      const catalogTemplate = LAB_CATALOG.find(c => 
-        c.code.toUpperCase() === testCode || 
+      const catalogTemplate = LAB_CATALOG.find(c =>
+        c.code.toUpperCase() === testCode ||
         c.titleEn.toLowerCase().includes(test.code.toLowerCase())
       );
 
@@ -1203,26 +1234,25 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           }))
         });
       } else {
-        // Detailed individual test
         const richTest = INITIAL_INDIVIDUAL_TESTS.find(t => t.code.toUpperCase() === testCode) || test;
         generatedProfiles.push({
           id: `prof-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
-          profileCode: richTest.code,
-          titleEn: richTest.nameEn,
-          titleAr: richTest.nameAr,
-          category: richTest.category || 'General Diagnostic',
-          sampleType: richTest.sampleType || 'Serum',
+          profileCode: (richTest as any).code || test.code,
+          titleEn: (richTest as any).nameEn || test.nameEn || test.code,
+          titleAr: (richTest as any).nameAr || test.nameAr || test.code,
+          category: (richTest as any).category || 'General Diagnostic',
+          sampleType: (richTest as any).sampleType || 'Serum',
           parameters: [
             {
               id: `p-${Date.now()}-${Math.random().toString(36).substr(2, 3)}`,
-              name: `${richTest.nameAr} (${richTest.nameEn})`,
+              name: `${(richTest as any).nameAr || test.nameAr} (${(richTest as any).nameEn || test.nameEn || test.code})`,
               result: '',
-              unit: richTest.unit || 'Score / Units',
-              minNormal: richTest.minNormal,
-              maxNormal: richTest.maxNormal,
-              textReference: richTest.textReference || 'Normal',
+              unit: (richTest as any).unit || 'Score / Units',
+              minNormal: (richTest as any).minNormal,
+              maxNormal: (richTest as any).maxNormal,
+              textReference: (richTest as any).textReference || 'Normal',
               flag: 'NORMAL',
-              method: richTest.method || 'Automated Clinical Assay'
+              method: (richTest as any).method || 'Automated Clinical Assay'
             }
           ]
         });
