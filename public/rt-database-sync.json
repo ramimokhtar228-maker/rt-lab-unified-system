@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:49:29.611Z",
+  "syncedAt": "2026-10-06T11:49:32.282Z",
   "reports": [
     {
       "id": "rep-1791287331555",
@@ -276,27 +276,6 @@
           ]
         },
         {
-          "id": "prof-1791287331554-qto5",
-          "profileCode": "CALCIUM_TOTAL",
-          "titleEn": "Total Serum Calcium",
-          "titleAr": "الكالسيوم الكلي (Total Serum Calcium)",
-          "category": "Minerals & Bone",
-          "sampleType": "Serum",
-          "parameters": [
-            {
-              "id": "p-1791287331554-zpe",
-              "name": "الكالسيوم الكلي (Total Serum Calcium) (Total Serum Calcium)",
-              "result": "",
-              "unit": "mg/dL",
-              "minNormal": 8.6,
-              "maxNormal": 10.3,
-              "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
-              "flag": "NORMAL",
-              "method": "Arsenazo III / CPC Photometric"
-            }
-          ]
-        },
-        {
           "id": "prof-1791287331554-6xm5",
           "profileCode": "ALT",
           "titleEn": "Alanine Aminotransferase (ALT / SGPT)",
@@ -456,7 +435,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:48:51.555Z",
-      "updatedAt": "2026-10-06T11:49:26.680Z",
+      "updatedAt": "2026-10-06T11:49:29.031Z",
       "invoiceId": "inv-1791287331555"
     },
     {
