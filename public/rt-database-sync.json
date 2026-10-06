@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:20:44.301Z",
+  "syncedAt": "2026-10-06T11:21:06.166Z",
   "reports": [
     {
       "id": "rep-1791285435316",
@@ -16,7 +16,7 @@
         "gender": "male",
         "referringDoctorTitle": "Dr.",
         "referringDoctorName": "HIMSELF",
-        "sampleDate": "2026-10-06",
+        "sampleDate": "2026-09-30T11:20:00.000Z",
         "reportingDate": "2026-10-06",
         "fastingHours": 12,
         "bookingType": "branch",
@@ -275,8 +275,8 @@
               "textReference": "< 5.7% Normal, 5.7 - 6.4% Pre-Diabetes, ≥ 6.5% Diabetes",
               "method": "HPLC / Turbidimetric",
               "id": "param-1791285625999-3",
-              "result": "",
-              "flag": ""
+              "result": "6.33",
+              "flag": "HIGH"
             },
             {
               "name": "Estimated Average Glucose (eAG)",
@@ -284,10 +284,10 @@
               "minNormal": 68,
               "maxNormal": 114,
               "textReference": "80 - 120 mg/dL",
-              "notes": "Auto-calculated: (28.7 × HbA1c) - 46.7",
+              "notes": "Calculated: (28.7 × HbA1c) - 46.7",
               "id": "param-1791285625999-4",
-              "result": "",
-              "flag": ""
+              "result": "135",
+              "flag": "HIGH"
             }
           ]
         }
@@ -299,7 +299,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:17:15.316Z",
-      "updatedAt": "2026-10-06T11:20:36.888Z",
+      "updatedAt": "2026-10-06T11:21:01.407Z",
       "invoiceId": "inv-1791285435316"
     },
     {
