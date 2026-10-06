@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T10:27:17.791Z",
+  "syncedAt": "2026-10-06T10:27:20.322Z",
   "reports": [
     {
       "generalComment": "الحالة تتماشى مع فقر الدم بعوز الحديد. يرجى المتابعة بطلب مخزون الحديد (Serum Ferritin).",
@@ -1082,7 +1082,7 @@
       "nameAr": "سي ببتيد صائم (C-Peptide Fasting)",
       "nameEn": "Fasting C-Peptide",
       "category": "Diabetes",
-      "price": 290,
+      "price": 900,
       "cost": 75,
       "sampleType": "Serum",
       "turnaroundTime": "خلال 24 ساعة",
@@ -3358,35 +3358,35 @@
       "fastingInstructions": "عينة براز طازجة للأطفال"
     },
     {
-      "price": 10,
       "fastingInstructions": "لا يشترط الصيام",
+      "price": 10,
       "nameAr": "هيماتوكريت0",
-      "id": "test-1791282363076",
-      "sampleType": "EDTA ",
-      "category": "Clinical Hematology ",
-      "code": "HCT",
-      "minNormal": 36,
-      "turnaroundHours": 2,
-      "method": "Enzymatic",
-      "unit": "%",
+      "maxNormal": 49,
       "nameEn": "Hematocrit %",
-      "maxNormal": 49
+      "minNormal": 36,
+      "method": "Enzymatic",
+      "category": "Clinical Hematology ",
+      "id": "test-1791282363076",
+      "unit": "%",
+      "code": "HCT",
+      "sampleType": "EDTA ",
+      "turnaroundHours": 2
     },
     {
-      "minNormal": 36,
-      "textReference": "Male : 13.5-17.5 /Female: 12.5-15.5",
-      "id": "test-1791276005667",
-      "maxNormal": 49,
-      "price": 210,
-      "nameAr": "هبموجلوبين ",
-      "fastingInstructions": "لا يشترط الصيام",
-      "nameEn": "HB %",
-      "method": "Enzymatic",
-      "turnaroundHours": 2,
-      "sampleType": " EDTA BLOOD ",
       "unit": "g/L",
+      "id": "test-1791276005667",
       "code": "HB",
-      "category": "Clinical Hematology "
+      "nameAr": "هبموجلوبين ",
+      "sampleType": " EDTA BLOOD ",
+      "fastingInstructions": "لا يشترط الصيام",
+      "maxNormal": 49,
+      "method": "Enzymatic",
+      "textReference": "Male : 13.5-17.5 /Female: 12.5-15.5",
+      "turnaroundHours": 2,
+      "minNormal": 36,
+      "price": 210,
+      "category": "Clinical Hematology ",
+      "nameEn": "HB %"
     }
   ],
   "packages": [
