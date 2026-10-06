@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:33:03.647Z",
+  "syncedAt": "2026-10-06T06:33:21.555Z",
   "reports": [
     {
       "profiles": [
@@ -994,7 +994,7 @@
       "nameAr": "بولينا بالدم (Blood Urea)",
       "nameEn": "Blood Urea",
       "category": "Kidney Function",
-      "price": 88,
+      "price": 188,
       "cost": 12,
       "sampleType": "Serum",
       "turnaroundTime": "فوري (ساعة)",
