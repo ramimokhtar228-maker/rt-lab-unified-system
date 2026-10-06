@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:08:04.626Z",
+  "syncedAt": "2026-10-06T11:10:22.403Z",
   "reports": [
     {
       "id": "rep-1791284141332",
@@ -1577,18 +1577,18 @@
     }
   ],
   "labInfo": {
-    "sloganAr": "التشخيص الصحيح يبدأ معنا · دقة، سرعة، وأمان تشخيصي",
-    "instapay": "01100874444",
-    "accreditation": "ISO 15189 Certified Quality Management",
-    "whatsapp": "01100874444",
-    "sloganEn": "Accurate Diagnosis Starts With Us",
-    "phone": "01013242777",
-    "labNameEn": "RT Diagnostic Laboratories",
-    "mainAddress": "ميدان بهتيم برج صيدليه العزبى الدور الثالث امام الأسانسير شبرا الخيمه",
-    "hotline": "01100046841",
-    "supervisionAr": "أطباء واستشاريو كلية طب قصر العيني",
-    "supervisionEn": "Kasr Al Ainy Faculty of Medicine Consultants",
     "labNameAr": "معامل RT للتحاليل الطبية والتشخيصية",
+    "labNameEn": "RT Diagnostic Laboratories",
+    "sloganAr": "التشخيص الصحيح يبدأ معنا · دقة، سرعة، وأمان تشخيصي",
+    "sloganEn": "Accurate Diagnosis Starts With Us · Precision & Care",
+    "supervisionAr": "أطباء واستشاريو كلية طب قصر العيني - جامعة القاهرة",
+    "supervisionEn": "Kasr Al Ainy Faculty of Medicine Consultants - Cairo University",
+    "accreditation": "ISO 15189 Certified Quality Management",
+    "hotline": "01100046841",
+    "phone": "01013242777",
+    "whatsapp": "01100877777",
+    "mainAddress": "ميدان بهتيم برج صيدليه العزبى الدور الثالث امام الأسانسير شبرا الخيمه",
+    "instapay": "ramirtlab@instapay",
     "vodafoneCash": "01100046841"
   },
   "testCatalog": [
