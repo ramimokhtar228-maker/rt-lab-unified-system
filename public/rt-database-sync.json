@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T21:04:19.169Z",
+  "syncedAt": "2026-10-06T21:11:14.999Z",
   "reports": [
     {
       "id": "rep-1791306270693",
@@ -253,7 +253,8 @@
               "maxNormal": 49,
               "textReference": "36-49",
               "flag": "NORMAL",
-              "notes": "Calculated (HGB × 3)"
+              "notes": "Calculated (HGB × 3)",
+              "method": "Enzymatic"
             }
           ]
         }
@@ -271,7 +272,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T17:04:30.693Z",
-      "updatedAt": "2026-10-06T17:13:18.232Z",
+      "updatedAt": "2026-10-06T21:11:10.834Z",
       "invoiceId": "inv-1791306270694"
     },
     {
@@ -651,7 +652,7 @@
       },
       "generalComment": "كافة الفحوصات المخبرية للمريض (أمال محمد) تقع في النطاقات الآمنة بشكل عام مع انتظام مؤشرات الأعضاء الحيوية ونشاط فسيولوجي متوازن.",
       "createdAt": "2026-10-06T11:59:36.696Z",
-      "updatedAt": "2026-10-06T14:19:16.482Z",
+      "updatedAt": "2026-10-06T21:11:10.835Z",
       "status": "verified",
       "profiles": [
         {
@@ -854,11 +855,11 @@
               "result": "32.77",
               "method": "Enzymatic",
               "flag": "LOW",
-              "textReference": "Normal",
+              "textReference": "36-49",
               "notes": "Calculated (HGB × 3)",
               "id": "p-pkg-9-1791287976695",
               "unit": "%",
-              "name": "هيماتوكريت0 (Hematocrit %)"
+              "name": "هيماتوكريت  (Hematocrit %)"
             }
           ],
           "category": "Package Tests",
@@ -925,7 +926,7 @@
         "packagePrice": 199
       },
       "status": "draft",
-      "updatedAt": "2026-10-06T11:55:46.143Z",
+      "updatedAt": "2026-10-06T21:11:10.835Z",
       "createdAt": "2026-10-06T11:48:51.555Z",
       "reportNumber": "RT-2026-007",
       "patient": {
@@ -1147,8 +1148,8 @@
             },
             {
               "flag": "NORMAL",
-              "textReference": "Normal",
-              "name": "هيماتوكريت0 (Hematocrit %)",
+              "textReference": "36-49",
+              "name": "هيماتوكريت  (Hematocrit %)",
               "unit": "%",
               "maxNormal": 49,
               "minNormal": 36,
@@ -1403,9 +1404,9 @@
             {
               "flag": "LOW",
               "unit": "%",
-              "name": "هيماتوكريت0 (Hematocrit %)",
+              "name": "هيماتوكريت  (Hematocrit %)",
               "notes": "Calculated (HGB × 3)",
-              "textReference": "Normal",
+              "textReference": "36-49",
               "method": "Enzymatic",
               "result": "31.60",
               "id": "p-pkg-9-1791286741640",
@@ -1467,7 +1468,7 @@
       ],
       "invoiceId": "inv-1791286741643",
       "reportNumber": "RT-2026-006",
-      "updatedAt": "2026-10-06T11:45:03.637Z",
+      "updatedAt": "2026-10-06T21:11:10.836Z",
       "createdAt": "2026-10-06T11:39:01.642Z",
       "packageApplied": {
         "originalPrice": 2900,
@@ -1663,12 +1664,12 @@
               "maxNormal": 49,
               "flag": "NORMAL",
               "minNormal": 36,
-              "name": "هيماتوكريت0 (Hematocrit %)",
+              "name": "هيماتوكريت  (Hematocrit %)",
               "unit": "%",
               "notes": "Calculated (HGB × 3)",
               "method": "Enzymatic",
               "result": "39.00",
-              "textReference": "Normal"
+              "textReference": "36-49"
             }
           ],
           "titleEn": "Package Tests (Comprehensive Annual Wellness Package)",
@@ -1763,7 +1764,7 @@
       "reportNumber": "RT-2026-005",
       "id": "rep-1791285435316",
       "createdAt": "2026-10-06T11:17:15.316Z",
-      "updatedAt": "2026-10-06T11:22:45.299Z"
+      "updatedAt": "2026-10-06T21:11:10.836Z"
     },
     {
       "updatedAt": "2026-10-06T11:12:50.609Z",
@@ -7821,12 +7822,13 @@
       "unit": "%",
       "turnaroundHours": 2,
       "minNormal": 36,
-      "nameAr": "هيماتوكريت0",
+      "nameAr": "هيماتوكريت ",
       "maxNormal": 49,
       "category": "Clinical Hematology ",
       "nameEn": "Hematocrit %",
       "fastingInstructions": "لا يشترط الصيام",
-      "method": "Enzymatic"
+      "method": "Enzymatic",
+      "textReference": "36-49"
     },
     {
       "fastingInstructions": "لا يشترط الصيام",
