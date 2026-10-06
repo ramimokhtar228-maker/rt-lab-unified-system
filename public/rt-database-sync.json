@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:34:17.130Z",
+  "syncedAt": "2026-10-06T11:34:21.774Z",
   "reports": [
     {
       "id": "rep-1791286375200",
@@ -272,27 +272,6 @@
               "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
               "flag": "NORMAL",
               "method": "Uricase / POD Enzymatic Colorimetric"
-            }
-          ]
-        },
-        {
-          "id": "prof-1791286375199-8j5j",
-          "profileCode": "GLU_F",
-          "titleEn": "Fasting Blood Sugar",
-          "titleAr": "سكر الدم الصائم (FBS)",
-          "category": "Diabetes",
-          "sampleType": "Fluoride Plasma / Serum",
-          "parameters": [
-            {
-              "id": "p-1791286375199-mf3",
-              "name": "سكر الدم الصائم (FBS) (Fasting Blood Sugar)",
-              "result": "",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 100,
-              "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
-              "flag": "NORMAL",
-              "method": "Hexokinase / GOD-PAP"
             }
           ]
         },
@@ -609,7 +588,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:32:55.200Z",
-      "updatedAt": "2026-10-06T11:34:13.831Z",
+      "updatedAt": "2026-10-06T11:34:17.616Z",
       "invoiceId": "inv-1791286375201"
     },
     {
