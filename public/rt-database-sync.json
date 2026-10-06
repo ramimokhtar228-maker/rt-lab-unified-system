@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:10:19.694Z",
+  "syncedAt": "2026-10-06T07:10:42.801Z",
   "reports": [
     {
       "profiles": [
@@ -2663,7 +2663,7 @@
       "nameAr": "داء القطط للحوامل (Toxoplasma IgG & IgM)",
       "nameEn": "Toxoplasma Gondii Antibodies (IgG & IgM)",
       "category": "TORCH & Pregnancy",
-      "price": 260,
+      "price": 1100,
       "cost": 60,
       "sampleType": "Serum",
       "turnaroundTime": "خلال 24 ساعة",
