@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:53:23.465Z",
+  "syncedAt": "2026-10-06T06:53:40.733Z",
   "reports": [
     {
       "profiles": [
@@ -1961,7 +1961,7 @@
       "nameAr": "الحديد الكلي بالدم (Serum Iron)",
       "nameEn": "Serum Iron",
       "category": "Anemia & Vitamins",
-      "price": 110,
+      "price": 388,
       "cost": 20,
       "sampleType": "Serum (Morning sample)",
       "turnaroundTime": "خلال ساعتين",
