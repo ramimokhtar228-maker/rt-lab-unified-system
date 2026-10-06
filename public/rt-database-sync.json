@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:04:28.920Z",
+  "syncedAt": "2026-10-06T11:04:41.266Z",
   "reports": [
     {
       "id": "rep-1791284141332",
@@ -365,64 +365,6 @@
               "id": "param-30-1791284141331-wr7",
               "result": "1.2",
               "flag": "NORMAL"
-            },
-            {
-              "name": "PLR (Platelet/Lymphocyte)",
-              "unit": "Ratio",
-              "minNormal": 100,
-              "maxNormal": 150,
-              "notes": "Auto-calculated: PLT / ALC",
-              "textReference": "100 - 150",
-              "id": "param-31-1791284141331-17w",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Reticulocyte Count %",
-              "unit": "%",
-              "minNormal": 0.5,
-              "maxNormal": 2.5,
-              "textReference": "0.5 - 2.5 %",
-              "id": "param-32-1791284141331-6fe",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "RPI (Reticulocyte Production Index)",
-              "unit": "Index",
-              "minNormal": 1,
-              "maxNormal": 3,
-              "textReference": "> 2.0 indicates adequate marrow response",
-              "id": "param-33-1791284141331-p92",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "RBC Morphology",
-              "unit": "/HPF",
-              "textReference": "Normocytic normochromic, no anisopoikilocytosis",
-              "method": "Leishman Stain Microscopy",
-              "id": "param-34-1791284141331-m5w",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "WBC Morphology",
-              "unit": "pH Units",
-              "textReference": "Mature differential, no toxic granules, vacuoles, or blasts",
-              "method": "Leishman Stain Microscopy",
-              "id": "param-35-1791284141331-xvh",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Platelet Morphology",
-              "unit": "pH Units",
-              "textReference": "Adequate on smear, normal aggregation, no giant forms",
-              "method": "Leishman Stain Microscopy",
-              "id": "param-36-1791284141331-tmd",
-              "result": "",
-              "flag": "NORMAL"
             }
           ]
         },
@@ -544,7 +486,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T10:55:41.332Z",
-      "updatedAt": "2026-10-06T11:04:24.216Z",
+      "updatedAt": "2026-10-06T11:04:37.275Z",
       "invoiceId": "inv-1791284141332"
     },
     {
