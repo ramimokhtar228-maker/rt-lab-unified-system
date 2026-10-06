@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:15:43.613Z",
+  "syncedAt": "2026-10-06T07:16:04.791Z",
   "reports": [
     {
       "profiles": [
@@ -2892,7 +2892,7 @@
       "nameAr": "بي سي آر فيروس سي كمي وحمل الفيروس (HCV Viral Load PCR)",
       "nameEn": "HCV RNA Quantitative Real-Time PCR",
       "category": "Molecular & PCR",
-      "price": 650,
+      "price": 1100,
       "cost": 160,
       "sampleType": "EDTA Plasma",
       "turnaroundTime": "24-48 ساعة",
