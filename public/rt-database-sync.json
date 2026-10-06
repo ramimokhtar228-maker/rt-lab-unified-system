@@ -1,7 +1,638 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:14:08.874Z",
+  "syncedAt": "2026-10-06T11:17:18.513Z",
   "reports": [
+    {
+      "id": "rep-1791285435316",
+      "reportNumber": "RT-2026-005",
+      "patient": {
+        "id": "pat-1791285435307",
+        "labNumber": "RT-2026-005",
+        "barcode": "RT-10035",
+        "fullName": "محمد صلاح الدين عبدة",
+        "phone": "01004359187",
+        "age": 47,
+        "ageUnit": "years",
+        "gender": "male",
+        "referringDoctorTitle": "Dr.",
+        "referringDoctorName": "HIMSELF",
+        "sampleDate": "2026-10-06",
+        "reportingDate": "2026-10-06",
+        "fastingHours": 12,
+        "bookingType": "branch",
+        "visitFee": 0,
+        "testsSubtotal": 599,
+        "totalCost": 599,
+        "discountApplied": 0,
+        "paymentMethod": "cash",
+        "assignedPackageId": "pkg-1"
+      },
+      "packageApplied": {
+        "code": "PKG-ANNUAL-WELLNESS",
+        "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
+        "packagePrice": 199,
+        "originalPrice": 2900
+      },
+      "profiles": [
+        {
+          "id": "prof-1791285435309-wf7i",
+          "profileCode": "LIPID",
+          "titleEn": "Lipid Profile",
+          "titleAr": "دهون الدم الشاملة مع المؤشرات الحسابية",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum (12h Fasting)",
+          "interpretation": "Lipid ratios demonstrate favorable cardiovascular risk stratification.",
+          "parameters": [
+            {
+              "name": "Total Serum Cholesterol",
+              "unit": "mg/dL",
+              "minNormal": 120,
+              "maxNormal": 200,
+              "method": "CHOD-PAP",
+              "textReference": "",
+              "id": "param-0-1791285435309-av9",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Serum Triglycerides",
+              "unit": "mg/dL",
+              "minNormal": 40,
+              "maxNormal": 150,
+              "panicHigh": 500,
+              "method": "GPO-PAP",
+              "textReference": "",
+              "id": "param-1-1791285435309-xam",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "HDL - Cholesterol (Good)",
+              "unit": "mg/dL",
+              "minNormal": 40,
+              "maxNormal": 65,
+              "method": "Direct Accelerator",
+              "textReference": "",
+              "id": "param-2-1791285435309-meu",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "LDL - Cholesterol (Calculated)",
+              "unit": "mg/dL",
+              "minNormal": 0,
+              "maxNormal": 100,
+              "notes": "Friedewald Formula: Total Chol - HDL - (TG / 5)",
+              "textReference": "",
+              "id": "param-3-1791285435309-brk",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "VLDL - Cholesterol",
+              "unit": "mg/dL",
+              "minNormal": 5,
+              "maxNormal": 30,
+              "notes": "Auto-calculated: Triglycerides / 5",
+              "textReference": "",
+              "id": "param-4-1791285435309-sxw",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Non-HDL Cholesterol",
+              "unit": "mg/dL",
+              "minNormal": 0,
+              "maxNormal": 130,
+              "notes": "Auto-calculated: Total Chol - HDL",
+              "textReference": "",
+              "id": "param-5-1791285435309-9n7",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Total Chol / HDL Ratio",
+              "unit": "Ratio",
+              "minNormal": 0,
+              "maxNormal": 4.5,
+              "textReference": "< 4.5 Desirable",
+              "notes": "Auto-calculated: Total Chol / HDL",
+              "id": "param-6-1791285435309-b1v",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "LDL / HDL Ratio",
+              "unit": "Ratio",
+              "minNormal": 0,
+              "maxNormal": 3,
+              "textReference": "< 3.0 Desirable",
+              "id": "param-7-1791285435309-8lj",
+              "result": "",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-extra-1791285435311",
+          "profileCode": "PKG_EXTRA",
+          "titleAr": "فحوصات وفيتامينات باقة: باقة الفحص الدوري الشامل (Wellness Plus)",
+          "titleEn": "Package Tests (Comprehensive Annual Wellness Package)",
+          "category": "Package Tests",
+          "sampleType": "Serum",
+          "interpretation": "All complementary package tests evaluated according to certified reference ranges.",
+          "parameters": [
+            {
+              "id": "p-pkg-0-1791285435310",
+              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
+              "result": "",
+              "unit": "ng/mL",
+              "minNormal": 30,
+              "maxNormal": 100,
+              "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+              "flag": "NORMAL",
+              "method": "CLIA (Chemiluminescence Immunoassay)"
+            },
+            {
+              "id": "p-pkg-1-1791285435310",
+              "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 3.5,
+              "maxNormal": 7.2,
+              "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
+              "flag": "NORMAL",
+              "method": "Uricase / POD Enzymatic Colorimetric"
+            },
+            {
+              "id": "p-pkg-2-1791285435310",
+              "name": "سكر الدم الصائم (FBS) (Fasting Blood Sugar)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 70,
+              "maxNormal": 100,
+              "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
+              "flag": "NORMAL",
+              "method": "Hexokinase / GOD-PAP"
+            },
+            {
+              "id": "p-pkg-3-1791285435310",
+              "name": "كرياتينين بالدم (Serum Creatinine) (Serum Creatinine)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 0.6,
+              "maxNormal": 1.2,
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.1 mg/dL",
+              "flag": "NORMAL",
+              "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)"
+            },
+            {
+              "id": "p-pkg-4-1791285435310",
+              "name": "بولينا بالدم (Blood Urea) (Blood Urea)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 15,
+              "maxNormal": 45,
+              "textReference": "15 - 45 mg/dL",
+              "flag": "NORMAL",
+              "method": "Urease / GLDH Enzymatic Kinetic"
+            },
+            {
+              "id": "p-pkg-5-1791285435310",
+              "name": "الكالسيوم الكلي (Total Serum Calcium) (Total Serum Calcium)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 8.6,
+              "maxNormal": 10.3,
+              "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
+              "flag": "NORMAL",
+              "method": "Arsenazo III / CPC Photometric"
+            },
+            {
+              "id": "p-pkg-6-1791285435310",
+              "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
+              "result": "",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 41,
+              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
+              "flag": "NORMAL",
+              "method": "IFCC Kinetic UV without Pyridoxal Phosphate"
+            },
+            {
+              "id": "p-pkg-7-1791285435310",
+              "name": "إنزيم كبد AST / SGOT (Aspartate Aminotransferase (AST / SGOT))",
+              "result": "",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 40,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 32 U/L",
+              "flag": "NORMAL",
+              "method": "IFCC Kinetic UV"
+            },
+            {
+              "id": "p-pkg-8-1791285435311",
+              "name": "هبموجلوبين  (HB %)",
+              "result": "",
+              "unit": "g/L",
+              "minNormal": 36,
+              "maxNormal": 49,
+              "textReference": "Male : 13.5-17.5 /Female: 12.5-15.5",
+              "flag": "NORMAL",
+              "method": "Enzymatic"
+            },
+            {
+              "id": "p-pkg-9-1791285435311",
+              "name": "هيماتوكريت0 (Hematocrit %)",
+              "result": "",
+              "unit": "%",
+              "minNormal": 36,
+              "maxNormal": 49,
+              "textReference": "Normal",
+              "flag": "NORMAL",
+              "method": "Enzymatic"
+            }
+          ]
+        },
+        {
+          "id": "prof-1791285435313-oy3p",
+          "profileCode": "VIT_D",
+          "titleEn": "25-Hydroxy Vitamin D Total",
+          "titleAr": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total)",
+          "category": "Anemia & Vitamins",
+          "sampleType": "Serum (Protected from light)",
+          "parameters": [
+            {
+              "id": "p-1791285435313-sxb",
+              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
+              "result": "",
+              "unit": "ng/mL",
+              "minNormal": 30,
+              "maxNormal": 100,
+              "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+              "flag": "NORMAL",
+              "method": "CLIA (Chemiluminescence Immunoassay)"
+            }
+          ]
+        },
+        {
+          "id": "prof-1791285435313-agus",
+          "profileCode": "URIC",
+          "titleEn": "Serum Uric Acid",
+          "titleAr": "حمض البوليك والنقرس (Serum Uric Acid)",
+          "category": "Kidney Function",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-1791285435314-5d3",
+              "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 3.5,
+              "maxNormal": 7.2,
+              "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
+              "flag": "NORMAL",
+              "method": "Uricase / POD Enzymatic Colorimetric"
+            }
+          ]
+        },
+        {
+          "id": "prof-1791285435314-yc2g",
+          "profileCode": "GLU_F",
+          "titleEn": "Fasting Blood Sugar",
+          "titleAr": "سكر الدم الصائم (FBS)",
+          "category": "Diabetes",
+          "sampleType": "Fluoride Plasma / Serum",
+          "parameters": [
+            {
+              "id": "p-1791285435314-nbj",
+              "name": "سكر الدم الصائم (FBS) (Fasting Blood Sugar)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 70,
+              "maxNormal": 100,
+              "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
+              "flag": "NORMAL",
+              "method": "Hexokinase / GOD-PAP"
+            }
+          ]
+        },
+        {
+          "id": "prof-1791285435314-u43b",
+          "profileCode": "ACR",
+          "titleEn": "Urine Albumin / Creatinine Ratio (ACR)",
+          "titleAr": "معدل الزلال إلى الكرياتينين في البول (الكشف المبكر لاعتلال الكلى)",
+          "category": "Clinical Chemistry",
+          "sampleType": "First Morning Urine Spot Specimen",
+          "interpretation": "ACR provides sensitive early detection of diabetic and hypertensive microalbuminuria.",
+          "parameters": [
+            {
+              "name": "Urine Microalbumin",
+              "unit": "mg/L",
+              "minNormal": 0,
+              "maxNormal": 20,
+              "method": "Immunoturbidimetry",
+              "textReference": "",
+              "id": "param-0-1791285435315-xrd",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Urine Creatinine",
+              "unit": "mg/dL",
+              "minNormal": 20,
+              "maxNormal": 300,
+              "method": "Enzymatic / Jaffe",
+              "textReference": "",
+              "id": "param-1-1791285435315-fjo",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Albumin/Creatinine Ratio (ACR)",
+              "unit": "mg/g",
+              "minNormal": 0,
+              "maxNormal": 30,
+              "textReference": "< 30 Normal, 30 - 300 Microalbuminuria, > 300 Macroalbuminuria",
+              "notes": "Auto-calculated: (Microalbumin / Urine Creatinine) × 100",
+              "id": "param-2-1791285435315-93j",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Total Urine Protein",
+              "unit": "mg/dL",
+              "minNormal": 0,
+              "maxNormal": 15,
+              "textReference": "",
+              "id": "param-3-1791285435315-fmf",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Protein/Creatinine Ratio (UPCR)",
+              "unit": "mg/mg",
+              "minNormal": 0,
+              "maxNormal": 0.2,
+              "textReference": "< 0.2 mg/mg",
+              "id": "param-4-1791285435315-q12",
+              "result": "",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-1791285435315-s02g",
+          "profileCode": "UREA",
+          "titleEn": "Blood Urea",
+          "titleAr": "بولينا بالدم (Blood Urea)",
+          "category": "Kidney Function",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-1791285435315-wwy",
+              "name": "بولينا بالدم (Blood Urea) (Blood Urea)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 15,
+              "maxNormal": 45,
+              "textReference": "15 - 45 mg/dL",
+              "flag": "NORMAL",
+              "method": "Urease / GLDH Enzymatic Kinetic"
+            }
+          ]
+        },
+        {
+          "id": "prof-1791285435315-ba6w",
+          "profileCode": "CALCIUM_TOTAL",
+          "titleEn": "Total Serum Calcium",
+          "titleAr": "الكالسيوم الكلي (Total Serum Calcium)",
+          "category": "Minerals & Bone",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-1791285435315-b4z",
+              "name": "الكالسيوم الكلي (Total Serum Calcium) (Total Serum Calcium)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 8.6,
+              "maxNormal": 10.3,
+              "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
+              "flag": "NORMAL",
+              "method": "Arsenazo III / CPC Photometric"
+            }
+          ]
+        },
+        {
+          "id": "prof-1791285435315-8vdg",
+          "profileCode": "ALT",
+          "titleEn": "Alanine Aminotransferase (ALT / SGPT)",
+          "titleAr": "إنزيم كبد ALT / SGPT",
+          "category": "Liver Function",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-1791285435315-z2q",
+              "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
+              "result": "",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 41,
+              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
+              "flag": "NORMAL",
+              "method": "IFCC Kinetic UV without Pyridoxal Phosphate"
+            }
+          ]
+        },
+        {
+          "id": "prof-1791285435315-moip",
+          "profileCode": "AST",
+          "titleEn": "Aspartate Aminotransferase (AST / SGOT)",
+          "titleAr": "إنزيم كبد AST / SGOT",
+          "category": "Liver Function",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-1791285435315-hmq",
+              "name": "إنزيم كبد AST / SGOT (Aspartate Aminotransferase (AST / SGOT))",
+              "result": "",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 40,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 32 U/L",
+              "flag": "NORMAL",
+              "method": "IFCC Kinetic UV"
+            }
+          ]
+        },
+        {
+          "id": "prof-1791285435315-ddn4",
+          "profileCode": "GLYCEMIC",
+          "titleEn": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "titleAr": "تقييم السكر التراكمي والجلوكوز ومتوسط السكر التقديري",
+          "category": "Clinical Chemistry",
+          "sampleType": "Fluoride Plasma & EDTA Blood",
+          "interpretation": "Glycemic parameters evaluated according to ADA guidelines.",
+          "parameters": [
+            {
+              "name": "Fasting Blood Glucose",
+              "unit": "mg/dL",
+              "minNormal": 70,
+              "maxNormal": 99,
+              "panicLow": 50,
+              "panicHigh": 400,
+              "method": "Hexokinase",
+              "textReference": "",
+              "id": "param-0-1791285435315-ih3",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "2 Hours Post-Prandial Glucose",
+              "unit": "mg/dL",
+              "minNormal": 70,
+              "maxNormal": 140,
+              "panicHigh": 450,
+              "method": "Hexokinase",
+              "textReference": "",
+              "id": "param-1-1791285435315-cqa",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Random Blood Glucose",
+              "unit": "mg/dL",
+              "minNormal": 70,
+              "maxNormal": 140,
+              "textReference": "",
+              "id": "param-2-1791285435315-km5",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "HbA1c (Glycated Hemoglobin)",
+              "unit": "%",
+              "minNormal": 4,
+              "maxNormal": 5.6,
+              "textReference": "< 5.7% Normal, 5.7 - 6.4% Pre-Diabetes, ≥ 6.5% Diabetes",
+              "method": "HPLC / Turbidimetric",
+              "id": "param-3-1791285435315-tjw",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Estimated Average Glucose (eAG)",
+              "unit": "mg/dL",
+              "minNormal": 68,
+              "maxNormal": 114,
+              "textReference": "80 - 120 mg/dL",
+              "notes": "Auto-calculated: (28.7 × HbA1c) - 46.7",
+              "id": "param-4-1791285435315-lif",
+              "result": "",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-1791285435316-e6co",
+          "profileCode": "HCT",
+          "titleEn": "Hematocrit %",
+          "titleAr": "هيماتوكريت0",
+          "category": "Clinical Hematology ",
+          "sampleType": "EDTA ",
+          "parameters": [
+            {
+              "id": "p-1791285435316-2td",
+              "name": "هيماتوكريت0 (Hematocrit %)",
+              "result": "",
+              "unit": "%",
+              "minNormal": 36,
+              "maxNormal": 49,
+              "textReference": "Normal",
+              "flag": "NORMAL",
+              "method": "Enzymatic"
+            }
+          ]
+        },
+        {
+          "id": "prof-1791285435316-ai3t",
+          "profileCode": "GLYCEMIC",
+          "titleEn": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "titleAr": "تقييم السكر التراكمي والجلوكوز ومتوسط السكر التقديري",
+          "category": "Clinical Chemistry",
+          "sampleType": "Fluoride Plasma & EDTA Blood",
+          "interpretation": "Glycemic parameters evaluated according to ADA guidelines.",
+          "parameters": [
+            {
+              "name": "Fasting Blood Glucose",
+              "unit": "mg/dL",
+              "minNormal": 70,
+              "maxNormal": 99,
+              "panicLow": 50,
+              "panicHigh": 400,
+              "method": "Hexokinase",
+              "textReference": "",
+              "id": "param-0-1791285435316-xy9",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "2 Hours Post-Prandial Glucose",
+              "unit": "mg/dL",
+              "minNormal": 70,
+              "maxNormal": 140,
+              "panicHigh": 450,
+              "method": "Hexokinase",
+              "textReference": "",
+              "id": "param-1-1791285435316-7f2",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Random Blood Glucose",
+              "unit": "mg/dL",
+              "minNormal": 70,
+              "maxNormal": 140,
+              "textReference": "",
+              "id": "param-2-1791285435316-xid",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "HbA1c (Glycated Hemoglobin)",
+              "unit": "%",
+              "minNormal": 4,
+              "maxNormal": 5.6,
+              "textReference": "< 5.7% Normal, 5.7 - 6.4% Pre-Diabetes, ≥ 6.5% Diabetes",
+              "method": "HPLC / Turbidimetric",
+              "id": "param-3-1791285435316-p2r",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Estimated Average Glucose (eAG)",
+              "unit": "mg/dL",
+              "minNormal": 68,
+              "maxNormal": 114,
+              "textReference": "80 - 120 mg/dL",
+              "notes": "Auto-calculated: (28.7 × HbA1c) - 46.7",
+              "id": "param-4-1791285435316-c9q",
+              "result": "",
+              "flag": "NORMAL"
+            }
+          ]
+        }
+      ],
+      "staff": {
+        "labChemist": "د. هبة الشناوي - كيميائية تحاليل",
+        "verifiedBy": "د. مصطفى العوضي - استشاري التحاليل",
+        "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
+      },
+      "status": "draft",
+      "createdAt": "2026-10-06T11:17:15.316Z",
+      "updatedAt": "2026-10-06T11:17:15.316Z",
+      "invoiceId": "inv-1791285435316"
+    },
     {
       "status": "draft",
       "updatedAt": "2026-10-06T11:12:50.609Z",
@@ -1169,6 +1800,226 @@
   ],
   "incomeRecords": [
     {
+      "id": "inv-1791285435316",
+      "invoiceNumber": "INV-2026-005",
+      "patientName": "محمد صلاح الدين عبدة",
+      "patientPhone": "01004359187",
+      "patientAge": 47,
+      "patientGender": "male",
+      "barcode": "RT-10035",
+      "labNumber": "RT-2026-005",
+      "referringDoctor": "HIMSELF",
+      "tests": [
+        {
+          "id": "prof-LIPID",
+          "code": "LIPID",
+          "nameAr": "دهون الدم الشاملة مع المؤشرات الحسابية",
+          "nameEn": "Lipid Profile",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum (12h Fasting)"
+        },
+        {
+          "id": "t-79",
+          "code": "VIT_D",
+          "nameAr": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total)",
+          "nameEn": "25-Hydroxy Vitamin D Total",
+          "category": "Anemia & Vitamins",
+          "price": 360,
+          "cost": 85,
+          "sampleType": "Serum (Protected from light)",
+          "turnaroundTime": "خلال ساعتين",
+          "unit": "ng/mL",
+          "minNormal": 30,
+          "maxNormal": 100,
+          "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+          "method": "CLIA (Chemiluminescence Immunoassay)",
+          "fastingInstructions": "لا يشترط صيام"
+        },
+        {
+          "id": "t-22",
+          "code": "URIC",
+          "nameAr": "حمض البوليك والنقرس (Serum Uric Acid)",
+          "nameEn": "Serum Uric Acid",
+          "category": "Kidney Function",
+          "price": 88,
+          "cost": 12,
+          "sampleType": "Serum",
+          "turnaroundTime": "فوري (ساعة)",
+          "unit": "mg/dL",
+          "minNormal": 3.5,
+          "maxNormal": 7.2,
+          "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
+          "method": "Uricase / POD Enzymatic Colorimetric",
+          "fastingInstructions": "صيام من 4 إلى 8 ساعات يفضل"
+        },
+        {
+          "id": "t-1",
+          "code": "GLU_F",
+          "nameAr": "سكر الدم الصائم (FBS)",
+          "nameEn": "Fasting Blood Sugar",
+          "category": "Diabetes",
+          "price": 88,
+          "cost": 12,
+          "sampleType": "Fluoride Plasma / Serum",
+          "turnaroundTime": "فوري (ساعة)",
+          "unit": "mg/dL",
+          "minNormal": 70,
+          "maxNormal": 100,
+          "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
+          "method": "Hexokinase / GOD-PAP",
+          "fastingInstructions": "صيام من 8 إلى 10 ساعات (يُسمح بالماء فقط)"
+        },
+        {
+          "id": "t-19",
+          "code": "CREAT",
+          "nameAr": "كرياتينين بالدم (Serum Creatinine)",
+          "nameEn": "Serum Creatinine",
+          "category": "Kidney Function",
+          "price": 88,
+          "cost": 12,
+          "sampleType": "Serum",
+          "turnaroundTime": "فوري (ساعة)",
+          "unit": "mg/dL",
+          "minNormal": 0.6,
+          "maxNormal": 1.2,
+          "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.1 mg/dL",
+          "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
+          "fastingInstructions": "لا يشترط صيام ولكن يفضل تجنب الوجبات اللحمية الدسمة"
+        },
+        {
+          "id": "t-20",
+          "code": "UREA",
+          "nameAr": "بولينا بالدم (Blood Urea)",
+          "nameEn": "Blood Urea",
+          "category": "Kidney Function",
+          "price": 88,
+          "cost": 12,
+          "sampleType": "Serum",
+          "turnaroundTime": "فوري (ساعة)",
+          "unit": "mg/dL",
+          "minNormal": 15,
+          "maxNormal": 45,
+          "textReference": "15 - 45 mg/dL",
+          "method": "Urease / GLDH Enzymatic Kinetic",
+          "fastingInstructions": "لا يشترط صيام"
+        },
+        {
+          "id": "t-26",
+          "code": "CALCIUM_TOTAL",
+          "nameAr": "الكالسيوم الكلي (Total Serum Calcium)",
+          "nameEn": "Total Serum Calcium",
+          "category": "Minerals & Bone",
+          "price": 110,
+          "cost": 15,
+          "sampleType": "Serum",
+          "turnaroundTime": "خلال ساعتين",
+          "unit": "mg/dL",
+          "minNormal": 8.6,
+          "maxNormal": 10.3,
+          "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
+          "method": "Arsenazo III / CPC Photometric",
+          "fastingInstructions": "صيام 8-10 ساعات (يفضل صباحاً)"
+        },
+        {
+          "id": "t-32",
+          "code": "ALT",
+          "nameAr": "إنزيم كبد ALT / SGPT",
+          "nameEn": "Alanine Aminotransferase (ALT / SGPT)",
+          "category": "Liver Function",
+          "price": 88,
+          "cost": 12,
+          "sampleType": "Serum",
+          "turnaroundTime": "فوري (ساعة)",
+          "unit": "U/L",
+          "minNormal": 0,
+          "maxNormal": 41,
+          "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
+          "method": "IFCC Kinetic UV without Pyridoxal Phosphate",
+          "fastingInstructions": "لا يشترط صيام"
+        },
+        {
+          "id": "t-33",
+          "code": "AST",
+          "nameAr": "إنزيم كبد AST / SGOT",
+          "nameEn": "Aspartate Aminotransferase (AST / SGOT)",
+          "category": "Liver Function",
+          "price": 88,
+          "cost": 12,
+          "sampleType": "Serum",
+          "turnaroundTime": "فوري (ساعة)",
+          "unit": "U/L",
+          "minNormal": 0,
+          "maxNormal": 40,
+          "textReference": "Adult Males: < 40 U/L | Adult Females: < 32 U/L",
+          "method": "IFCC Kinetic UV",
+          "fastingInstructions": "لا يشترط صيام"
+        },
+        {
+          "fastingInstructions": "لا يشترط الصيام",
+          "nameAr": "هبموجلوبين ",
+          "unit": "g/L",
+          "code": "HB",
+          "method": "Enzymatic",
+          "category": "Clinical Hematology ",
+          "nameEn": "HB %",
+          "sampleType": " EDTA BLOOD ",
+          "maxNormal": 49,
+          "turnaroundHours": 2,
+          "minNormal": 36,
+          "textReference": "Male : 13.5-17.5 /Female: 12.5-15.5",
+          "price": 210,
+          "id": "test-1791276005667"
+        },
+        {
+          "id": "test-1791282363076",
+          "price": 10,
+          "code": "HCT",
+          "sampleType": "EDTA ",
+          "unit": "%",
+          "turnaroundHours": 2,
+          "minNormal": 36,
+          "nameAr": "هيماتوكريت0",
+          "maxNormal": 49,
+          "category": "Clinical Hematology ",
+          "nameEn": "Hematocrit %",
+          "fastingInstructions": "لا يشترط الصيام",
+          "method": "Enzymatic"
+        },
+        {
+          "id": "t-4",
+          "code": "HBA1C",
+          "nameAr": "السكر التراكمي (HbA1c)",
+          "nameEn": "Glycated Hemoglobin (HbA1c)",
+          "category": "Diabetes",
+          "price": 400,
+          "cost": 35,
+          "sampleType": "EDTA Whole Blood",
+          "turnaroundTime": "خلال ساعتين",
+          "unit": "%",
+          "minNormal": 4,
+          "maxNormal": 5.6,
+          "textReference": "Normal: < 5.7 % | Pre-diabetic: 5.7 - 6.4 % | Diabetic: >= 6.5 %",
+          "method": "HPLC / Ion-Exchange Automated Analyzer (NGSP Certified)"
+        }
+      ],
+      "subtotal": 599,
+      "testsSubtotal": 599,
+      "discount": 0,
+      "visitFee": 0,
+      "isHomeVisit": false,
+      "netAmount": 599,
+      "paidAmount": 599,
+      "remainingAmount": 0,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "cashierName": "أ.د. رامي مختار",
+      "branch": "فرع القصر العيني - الرئيسي",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-06T11:17:15.316Z",
+      "updatedAt": "2026-10-06T11:17:15.316Z"
+    },
+    {
       "isHomeVisit": true,
       "visitAddress": "مدينتى",
       "visitFee": 0,
@@ -1353,6 +2204,29 @@
   ],
   "expenses": [],
   "loyaltyProfiles": [
+    {
+      "patientId": "pat-loyalty-1791285435325",
+      "patientName": "محمد صلاح الدين عبدة",
+      "phone": "01004359187",
+      "barcode": "RT-10035",
+      "cardNumber": "RT-GOLD-10035",
+      "bloodGroup": "",
+      "totalPoints": 599,
+      "tier": "Gold",
+      "lifetimeSpent": 599,
+      "issueDate": "2026-10-06",
+      "transactions": [
+        {
+          "id": "tx-1791285435325",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-005",
+          "invoiceNumber": "RT-2026-005",
+          "amountEGP": 599
+        }
+      ]
+    },
     {
       "tier": "Gold",
       "patientId": "pat-loyalty-1791284141343",
