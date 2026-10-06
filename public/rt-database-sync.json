@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:51:00.059Z",
+  "syncedAt": "2026-10-06T11:51:04.803Z",
   "reports": [
     {
       "id": "rep-1791287331555",
@@ -74,8 +74,8 @@
               "method": "Direct Accelerator",
               "textReference": "",
               "id": "param-2-1791287331552-r22",
-              "result": "43",
-              "flag": "NORMAL"
+              "result": "",
+              "flag": ""
             },
             {
               "name": "LDL - Cholesterol (Calculated)",
@@ -85,7 +85,7 @@
               "notes": "Friedewald Formula: TC - HDL - (TG/5)",
               "textReference": "",
               "id": "param-3-1791287331552-74o",
-              "result": "178",
+              "result": "218",
               "flag": "HIGH"
             },
             {
@@ -107,7 +107,7 @@
               "notes": "Calculated: Total Cholesterol - HDL",
               "textReference": "",
               "id": "param-5-1791287331552-lvu",
-              "result": "211",
+              "result": "251",
               "flag": "HIGH"
             },
             {
@@ -118,7 +118,7 @@
               "textReference": "< 4.5 Desirable",
               "notes": "Desirable < 4.5",
               "id": "param-6-1791287331552-jti",
-              "result": "5.9",
+              "result": "84.7",
               "flag": "HIGH"
             },
             {
@@ -283,7 +283,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:48:51.555Z",
-      "updatedAt": "2026-10-06T11:50:56.935Z",
+      "updatedAt": "2026-10-06T11:51:01.761Z",
       "invoiceId": "inv-1791287331555"
     },
     {
