@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:37:51.608Z",
+  "syncedAt": "2026-10-06T06:38:17.301Z",
   "reports": [
     {
       "profiles": [
@@ -1215,14 +1215,14 @@
       "nameAr": "إنزيم كبد AST / SGOT",
       "nameEn": "Aspartate Aminotransferase (AST / SGOT)",
       "category": "Liver Function",
-      "price": 88,
+      "price": 188,
       "cost": 12,
       "sampleType": "Serum",
       "turnaroundTime": "فوري (ساعة)",
       "unit": "U/L",
       "minNormal": 0,
       "maxNormal": 40,
-      "textReference": "Adult Males: < 40 U/L | Adult Females: < 32 U/L",
+      "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
       "method": "IFCC Kinetic UV",
       "fastingInstructions": "لا يشترط صيام"
     },
