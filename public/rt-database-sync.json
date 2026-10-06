@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:22:57.328Z",
+  "syncedAt": "2026-10-06T06:24:24.286Z",
   "reports": [
     {
       "profiles": [
@@ -713,7 +713,7 @@
       "turnaroundTime": "فوري (30 دقيقة)",
       "unit": "mg/dL",
       "minNormal": 70,
-      "maxNormal": 140,
+      "maxNormal": 199,
       "textReference": "Normal: 70 - 140 mg/dL | Suspicious: > 200 mg/dL with symptoms",
       "method": "Hexokinase / GOD-PAP",
       "fastingInstructions": "لا يشترط صيام"
