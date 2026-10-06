@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:50:23.158Z",
+  "syncedAt": "2026-10-06T11:50:32.297Z",
   "reports": [
     {
       "id": "rep-1791287331555",
@@ -75,18 +75,18 @@
               "textReference": "",
               "id": "param-2-1791287331552-r22",
               "result": "",
-              "flag": "NORMAL"
+              "flag": ""
             },
             {
               "name": "LDL - Cholesterol (Calculated)",
               "unit": "mg/dL",
               "minNormal": 0,
               "maxNormal": 100,
-              "notes": "Friedewald Formula: Total Chol - HDL - (TG / 5)",
+              "notes": "Friedewald Formula: TC - HDL - (TG/5)",
               "textReference": "",
               "id": "param-3-1791287331552-74o",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "218",
+              "flag": "HIGH"
             },
             {
               "name": "VLDL - Cholesterol",
@@ -104,11 +104,11 @@
               "unit": "mg/dL",
               "minNormal": 0,
               "maxNormal": 130,
-              "notes": "Auto-calculated: Total Chol - HDL",
+              "notes": "Calculated: Total Cholesterol - HDL",
               "textReference": "",
               "id": "param-5-1791287331552-lvu",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "251",
+              "flag": "HIGH"
             },
             {
               "name": "Total Chol / HDL Ratio",
@@ -116,10 +116,10 @@
               "minNormal": 0,
               "maxNormal": 4.5,
               "textReference": "< 4.5 Desirable",
-              "notes": "Auto-calculated: Total Chol / HDL",
+              "notes": "Desirable < 4.5",
               "id": "param-6-1791287331552-jti",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "84.7",
+              "flag": "HIGH"
             },
             {
               "name": "LDL / HDL Ratio",
@@ -283,7 +283,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:48:51.555Z",
-      "updatedAt": "2026-10-06T11:50:19.419Z",
+      "updatedAt": "2026-10-06T11:50:29.535Z",
       "invoiceId": "inv-1791287331555"
     },
     {
