@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:00:53.630Z",
+  "syncedAt": "2026-10-06T07:01:15.775Z",
   "reports": [
     {
       "profiles": [
@@ -2282,7 +2282,7 @@
       "nameAr": "ميكروب سبحي سرعة الحلق (ASOT Quantitative)",
       "nameEn": "Anti-Streptolysin O Titre (ASOT)",
       "category": "Immunology",
-      "price": 130,
+      "price": 299,
       "cost": 25,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
