@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T08:38:49.479Z",
+  "syncedAt": "2026-10-06T08:41:07.676Z",
   "reports": [
     {
       "id": "rep-001",
@@ -3034,19 +3034,20 @@
       "fastingInstructions": "عينة براز طازجة للأطفال"
     },
     {
-      "nameAr": "بيليلسيي",
+      "nameAr": "هبموجلوبين ",
       "method": "Enzymatic",
-      "maxNormal": 100,
-      "price": 188,
-      "minNormal": 0,
-      "sampleType": "Serum",
-      "unit": "mg/dL",
-      "category": "Clinical Chemistry",
-      "nameEn": "HB",
+      "maxNormal": 49,
+      "price": 210,
+      "minNormal": 36,
+      "sampleType": " EDTA BLOOD ",
+      "unit": "g/L",
+      "category": "Clinical Hematology ",
+      "nameEn": "HB %",
       "fastingInstructions": "لا يشترط الصيام",
-      "code": "TEST_202",
+      "code": "HB",
       "turnaroundHours": 2,
-      "id": "test-1791276005667"
+      "id": "test-1791276005667",
+      "textReference": "Male : 13.5-17.5 /Female: 12.5-15.5"
     }
   ],
   "packages": [
