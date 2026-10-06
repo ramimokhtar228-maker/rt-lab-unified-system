@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:51:24.109Z",
+  "syncedAt": "2026-10-06T06:51:39.767Z",
   "reports": [
     {
       "profiles": [
@@ -1861,7 +1861,7 @@
       "nameAr": "هرمون البروجستيرون (Progesterone Day 21)",
       "nameEn": "Progesterone (Day 21)",
       "category": "Fertility & Hormones",
-      "price": 190,
+      "price": 544,
       "cost": 45,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
