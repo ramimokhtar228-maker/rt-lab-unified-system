@@ -743,7 +743,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const logAction = useCallback((action: AuditLog['action'], module: AuditLog['module'], description: string) => {
     const newLog: AuditLog = {
       id: `log-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
-      timestamp: new Date().toLocaleString('ar-EG'),
+      timestamp: new Date().toLocaleString('en-US'),
       userId: currentUser.id,
       userName: currentUser.nameAr,
       userRole: currentUser.role,
@@ -759,7 +759,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const newNotif: AppNotification = {
       ...notif,
       id: `notif-${Date.now()}`,
-      timestamp: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }),
+      timestamp: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
       read: false
     };
     setNotifications(prev => [newNotif, ...prev]);
@@ -1116,37 +1116,38 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const today = new Date().toISOString().split('T')[0];
     const generatedProfiles: TestProfile[] = [];
 
-    // 1. If a Package was applied, completely unpack all its profiles and all individual tests
+    // 1. If a Package was applied: ONE profile only (all tests listed together — no separate pages)
     if (packageApplied) {
-      // A) Unpack all included profiles from LAB_CATALOG
+      const packageParams: TestParameter[] = [];
+      const seenCodes = new Set<string>();
+
+      // A) Flatten included profiles into parameters (do NOT create separate profile pages)
       (packageApplied.includedProfiles || []).forEach((pCode: string) => {
         const template = LAB_CATALOG.find(c => c.code.toUpperCase() === pCode.toUpperCase());
-        if (template && !generatedProfiles.some(gp => gp.profileCode.toUpperCase() === template.code.toUpperCase())) {
-          generatedProfiles.push({
-            id: `prof-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
-            profileCode: template.code,
-            titleEn: template.titleEn,
-            titleAr: template.titleAr,
-            category: template.category,
-            sampleType: template.sampleType,
-            interpretation: template.defaultInterpretation || '',
-            parameters: template.parameters.map((p, idx) => ({
-              ...p,
-              id: `param-${idx}-${Date.now()}-${Math.random().toString(36).substr(2, 3)}`,
-              result: '',
-              flag: 'NORMAL'
-            }))
+        if (!template) return;
+        template.parameters.forEach((p, idx) => {
+          const key = `${template.code}:${p.name}`.toUpperCase();
+          if (seenCodes.has(key)) return;
+          seenCodes.add(key);
+          packageParams.push({
+            ...p,
+            id: `param-pkg-${template.code}-${idx}-${Date.now()}-${Math.random().toString(36).substr(2, 3)}`,
+            result: '',
+            flag: 'NORMAL' as const,
+            name: p.name?.includes(template.titleEn) ? p.name : `${p.name}`
           });
-        }
+        });
       });
 
-      // B) Unpack all included complementary individual tests
-      const extraParams: TestParameter[] = [];
+      // B) Flatten complementary individual tests into same parameter list
       (packageApplied.includedIndividualTestCodes || []).forEach((tCode: string, idx: number) => {
-        const indTest = INITIAL_INDIVIDUAL_TESTS.find(t => t.code.toUpperCase() === tCode.toUpperCase())
-                     || testCatalog.find(t => t.code.toUpperCase() === tCode.toUpperCase());
+        const codeKey = tCode.toUpperCase();
+        if (seenCodes.has(codeKey)) return;
+        seenCodes.add(codeKey);
+        const indTest = INITIAL_INDIVIDUAL_TESTS.find(t => t.code.toUpperCase() === codeKey)
+                     || testCatalog.find(t => t.code.toUpperCase() === codeKey);
         if (indTest) {
-          extraParams.push({
+          packageParams.push({
             id: `p-pkg-${idx}-${Date.now()}`,
             name: `${indTest.nameAr} (${indTest.nameEn})`,
             result: '',
@@ -1160,16 +1161,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
       });
 
-      if (extraParams.length > 0) {
+      if (packageParams.length > 0) {
         generatedProfiles.push({
-          id: `prof-extra-${Date.now()}`,
-          profileCode: 'PKG_EXTRA',
-          titleAr: `فحوصات وفيتامينات باقة: ${packageApplied.titleAr}`,
-          titleEn: `Package Tests (${packageApplied.titleEn})`,
-          category: 'Package Tests',
-          sampleType: packageApplied.sampleTypes?.[0] || 'Serum',
-          interpretation: 'All complementary package tests evaluated according to certified reference ranges.',
-          parameters: extraParams
+          id: `prof-pkg-${Date.now()}`,
+          profileCode: packageApplied.code || 'PACKAGE',
+          titleAr: packageApplied.titleAr || 'باقة التحاليل',
+          titleEn: packageApplied.titleEn || 'Test Package',
+          category: packageApplied.category || 'Package',
+          sampleType: (packageApplied.sampleTypes && packageApplied.sampleTypes[0]) || 'Serum',
+          interpretation: `Package panel: ${packageApplied.titleEn || packageApplied.titleAr || ''} — all tests listed in one report page.`,
+          parameters: packageParams
         });
       }
     }
@@ -1726,7 +1727,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       id: `tx-${Date.now()}`,
       instrumentId: inst.id,
       instrumentName: inst.name,
-      timestamp: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }),
+      timestamp: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
       sampleBarcode: barcode,
       patientLabNumber: labNumber || `RT-2026-${Math.floor(100 + Math.random() * 900)}`,
       patientName: patientName || 'عينة واردة من الجهاز',
@@ -1850,7 +1851,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       employeeId,
       employeeName: emp.fullName,
       date: today,
-      checkInTime: checkIn || new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }),
+      checkInTime: checkIn || new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
       checkOutTime: checkOut,
       status,
       hoursWorked: checkOut ? 8 : 0,
@@ -1891,7 +1892,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (a.employeeId === empId && a.date === today && !a.checkOutTime) {
         return {
           ...a,
-          checkOutTime: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }),
+          checkOutTime: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
           hoursWorked: 8
         };
       }
@@ -2033,7 +2034,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          message: `Auto-sync unified data: ${reports.length} reports, ${incomeRecords.length} invoices [${new Date().toLocaleString('ar-EG')}]`,
+          message: `Auto-sync unified data: ${reports.length} reports, ${incomeRecords.length} invoices [${new Date().toLocaleString('en-US')}]`,
           content: contentBase64,
           branch: githubConfig.branch || 'main',
           sha
@@ -2041,7 +2042,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       });
 
       if (putRes.ok) {
-        setGithubConfig(prev => ({ ...prev, lastSyncAt: new Date().toLocaleString('ar-EG'), status: 'connected' }));
+        setGithubConfig(prev => ({ ...prev, lastSyncAt: new Date().toLocaleString('en-US'), status: 'connected' }));
         logAction('SYNC', 'SECURITY', 'مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح');
         return { success: true, message: "تمت المزامنة وحفظ البيانات سحابياً بنجاح!" };
       } else {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { LabReport, TestProfile, TestParameter, LabStaffSignatures, ReportStatus, ComprehensivePackage } from '../types/lab';
 import { calculateFlag, formatReferenceDisplay, runAutomaticCalculations } from '../utils/calculator';
-import { COMMON_INTERPRETATIONS, STAFF_OPTIONS } from '../data/labCatalog';
+import { COMMON_INTERPRETATIONS, STAFF_OPTIONS, loadSignatureRoster, addSignatureToRoster, SignatureOption } from '../data/labCatalog';
 import { suggestHematologicalIllustration } from '../data/diseaseIllustrations';
 import { ColouredRangeChart } from './ColouredRangeChart';
 import { FlagBadge } from './FlagBadge';
@@ -335,7 +335,37 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
   };
 
   // Staff updates
-  const handleStaffChange = <K extends keyof LabStaffSignatures>(key: K, val: string) => {
+  const [signatureRoster, setSignatureRoster] = useState(() => {
+    if (typeof window === 'undefined') return STAFF_OPTIONS;
+    return loadSignatureRoster();
+  });
+  const [newSigName, setNewSigName] = useState('');
+  const [newSigTitle, setNewSigTitle] = useState('');
+  const [newSigRole, setNewSigRole] = useState<'chemists' | 'verifiers' | 'pathologists'>('chemists');
+
+  const applySignature = (role: 'labChemist' | 'verifiedBy' | 'pathologist', option: SignatureOption) => {
+    const titleKey = role === 'labChemist' ? 'chemistTitle' : role === 'verifiedBy' ? 'verifierTitle' : 'pathologistTitle';
+    onUpdateReport({
+      ...report,
+      staff: {
+        ...report.staff,
+        [role]: option.name,
+        [titleKey]: option.title
+      },
+      updatedAt: new Date().toISOString()
+    });
+  };
+
+  const handleAddSignature = () => {
+    if (!newSigName.trim()) return;
+    const opt = { name: newSigName.trim(), title: newSigTitle.trim() || 'Staff Member' };
+    addSignatureToRoster(newSigRole, opt);
+    setSignatureRoster(loadSignatureRoster());
+    setNewSigName('');
+    setNewSigTitle('');
+  };
+
+    const handleStaffChange = <K extends keyof LabStaffSignatures>(key: K, val: string) => {
     onUpdateReport({
       ...report,
       staff: {
@@ -1460,43 +1490,123 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Lab Chemist */}
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">
-              Lab CHEMIST (الكيميائي المسؤول):
-            </label>
+          <div className="space-y-1.5">
+            <label className="block text-xs font-bold text-slate-700">Lab Chemist / الكيميائي</label>
+            <select
+              className="w-full text-xs p-2.5 rounded-lg border border-slate-300 bg-white focus:ring-1 focus:ring-rose-500"
+              value=""
+              onChange={(e) => {
+                const opt = signatureRoster.chemists.find(o => o.name === e.target.value);
+                if (opt) applySignature('labChemist', opt);
+              }}
+            >
+              <option value="">— Select from roster —</option>
+              {signatureRoster.chemists.map((o, i) => (
+                <option key={i} value={o.name}>{o.name} — {o.title}</option>
+              ))}
+            </select>
             <input
               type="text"
               value={report.staff.labChemist}
               onChange={(e) => handleStaffChange('labChemist', e.target.value)}
-              className="w-full text-xs p-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-rose-500"
+              placeholder="Name"
+              className="w-full text-xs p-2 rounded-lg border border-slate-300"
+            />
+            <input
+              type="text"
+              value={report.staff.chemistTitle || ''}
+              onChange={(e) => handleStaffChange('chemistTitle', e.target.value)}
+              placeholder="Job title"
+              className="w-full text-xs p-2 rounded-lg border border-slate-200 text-slate-600"
             />
           </div>
 
           {/* Verifier */}
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">
-              Verify by (المراجعة الإكلينيكية):
-            </label>
+          <div className="space-y-1.5">
+            <label className="block text-xs font-bold text-slate-700">Verifier / المدقق</label>
+            <select
+              className="w-full text-xs p-2.5 rounded-lg border border-slate-300 bg-white focus:ring-1 focus:ring-rose-500"
+              value=""
+              onChange={(e) => {
+                const opt = signatureRoster.verifiers.find(o => o.name === e.target.value);
+                if (opt) applySignature('verifiedBy', opt);
+              }}
+            >
+              <option value="">— Select from roster —</option>
+              {signatureRoster.verifiers.map((o, i) => (
+                <option key={i} value={o.name}>{o.name} — {o.title}</option>
+              ))}
+            </select>
             <input
               type="text"
               value={report.staff.verifiedBy}
               onChange={(e) => handleStaffChange('verifiedBy', e.target.value)}
-              className="w-full text-xs p-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-1 focus:ring-rose-500"
+              placeholder="Name"
+              className="w-full text-xs p-2 rounded-lg border border-slate-300"
+            />
+            <input
+              type="text"
+              value={report.staff.verifierTitle || ''}
+              onChange={(e) => handleStaffChange('verifierTitle', e.target.value)}
+              placeholder="Job title"
+              className="w-full text-xs p-2 rounded-lg border border-slate-200 text-slate-600"
             />
           </div>
 
           {/* Pathologist */}
-          <div>
-            <label className="block text-xs font-bold text-rose-900 mb-1">
-              Consultant Pathologist (استشاري الباثولوجيا):
-            </label>
+          <div className="space-y-1.5">
+            <label className="block text-xs font-bold text-rose-900">Consultant / الاستشاري</label>
+            <select
+              className="w-full text-xs p-2.5 rounded-lg border border-rose-300 bg-rose-50/40 focus:ring-1 focus:ring-rose-500"
+              value=""
+              onChange={(e) => {
+                const opt = signatureRoster.pathologists.find(o => o.name === e.target.value);
+                if (opt) applySignature('pathologist', opt);
+              }}
+            >
+              <option value="">— Select from roster —</option>
+              {signatureRoster.pathologists.map((o, i) => (
+                <option key={i} value={o.name}>{o.name} — {o.title}</option>
+              ))}
+            </select>
             <input
               type="text"
               value={report.staff.pathologist}
               onChange={(e) => handleStaffChange('pathologist', e.target.value)}
-              className="w-full text-xs p-2.5 rounded-lg border border-rose-300 bg-rose-50/40 text-rose-950 font-bold focus:outline-none focus:ring-1 focus:ring-rose-500"
+              placeholder="Name"
+              className="w-full text-xs p-2 rounded-lg border border-rose-300 bg-rose-50/40 font-bold text-rose-950"
+            />
+            <input
+              type="text"
+              value={report.staff.pathologistTitle || ''}
+              onChange={(e) => handleStaffChange('pathologistTitle', e.target.value)}
+              placeholder="Job title"
+              className="w-full text-xs p-2 rounded-lg border border-rose-200 text-rose-800"
             />
           </div>
+        </div>
+
+        {/* Add to signature roster */}
+        <div className="mt-4 p-3 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row gap-2 items-end">
+          <div className="flex-1 w-full">
+            <label className="text-[10px] font-bold text-slate-500">Add name</label>
+            <input value={newSigName} onChange={e => setNewSigName(e.target.value)} className="w-full text-xs p-2 rounded-lg border border-slate-300" placeholder="Full name" />
+          </div>
+          <div className="flex-1 w-full">
+            <label className="text-[10px] font-bold text-slate-500">Job title</label>
+            <input value={newSigTitle} onChange={e => setNewSigTitle(e.target.value)} className="w-full text-xs p-2 rounded-lg border border-slate-300" placeholder="Job title" />
+          </div>
+          <div className="w-full sm:w-40">
+            <label className="text-[10px] font-bold text-slate-500">Role</label>
+            <select value={newSigRole} onChange={e => setNewSigRole(e.target.value as any)} className="w-full text-xs p-2 rounded-lg border border-slate-300">
+              <option value="chemists">Chemist</option>
+              <option value="verifiers">Verifier</option>
+              <option value="pathologists">Consultant</option>
+            </select>
+          </div>
+          <button type="button" onClick={handleAddSignature} className="px-4 py-2 rounded-lg bg-rose-900 text-white text-xs font-bold whitespace-nowrap">
+            + Add to roster
+          </button>
         </div>
       </div>
 

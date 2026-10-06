@@ -160,7 +160,7 @@ export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): voi
               <h1 style="margin:0; font-size:17px; font-weight:900; color:#800000;">${labNameAr}</h1>
               <h2 style="margin:1px 0 0 0; font-size:12px; font-weight:700; color:#0f172a;">معامل أ.د. رامي مختار</h2>
               <p style="margin:1px 0 0 0; font-size:10.5px; font-weight:600; color:#800000;">${supervisionAr}</p>
-              <p style="margin:2px 0 0 0; font-size:9px; color:#475569; font-weight:bold;">📍 ${address} | هاتف: ${phone} / ${hotline}</p>
+              <p style="margin:2px 0 0 0; font-size:10px; color:#334155; font-weight:700; direction:ltr; text-align:right;">📍 ${address}<br/>Tel: ${phone} &nbsp;|&nbsp; Hotline: ${hotline}</p>
             </div>
 
             <!-- Central 3D Brand Logo -->
@@ -338,8 +338,8 @@ export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): voi
           background: #525659;
           font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
           color: #0f172a;
-          font-size: 12.5px;
-          line-height: 1.65;
+          font-size: 13px;
+          line-height: 1.7;
           -webkit-font-smoothing: antialiased;
           text-rendering: optimizeLegibility;
         }

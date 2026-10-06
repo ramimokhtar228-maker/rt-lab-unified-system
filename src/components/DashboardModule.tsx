@@ -164,7 +164,7 @@ export const DashboardModule: React.FC = () => {
   const handleSendTestPing = async () => {
     try {
       await realtimeSyncManager.broadcastAction('PING_TEST', {
-        time: new Date().toLocaleTimeString('ar-EG'),
+        time: new Date().toLocaleTimeString('en-US'),
       });
       setSyncFeedback(`تم إرسال إشارة التسميع اللحظي بنجاح من (${syncStatus.activeDeviceName})! ستظهر فوراً على اللابتوب والموبايل.`);
       setTimeout(() => setSyncFeedback(null), 6000);
@@ -353,7 +353,7 @@ export const DashboardModule: React.FC = () => {
           </div>
           <div className="flex items-baseline gap-2">
             <span className="text-2xl font-black text-slate-900 font-mono">
-              {totalGrossIncome.toLocaleString('ar-EG')}
+              {totalGrossIncome.toLocaleString('en-US')}
             </span>
             <span className="text-xs font-bold text-slate-500">ج.م</span>
           </div>
@@ -373,7 +373,7 @@ export const DashboardModule: React.FC = () => {
           </div>
           <div className="flex items-baseline gap-2">
             <span className={`text-2xl font-black font-mono ${netOperatingProfit >= 0 ? 'text-blue-900' : 'text-red-700'}`}>
-              {netOperatingProfit.toLocaleString('ar-EG')}
+              {netOperatingProfit.toLocaleString('en-US')}
             </span>
             <span className="text-xs font-bold text-slate-500">ج.م</span>
           </div>

@@ -11,13 +11,57 @@ export const DEFAULT_STAFF: LabStaffSignatures = {
   pathologist: "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
 };
 
-export const STAFF_OPTIONS = {
-  chemists: [],
-  verifiers: [],
+export type SignatureOption = { name: string; title: string };
+
+export const STAFF_OPTIONS: {
+  chemists: SignatureOption[];
+  verifiers: SignatureOption[];
+  pathologists: SignatureOption[];
+} = {
+  chemists: [
+    { name: "د. هبة الشناوي", title: "Clinical Chemistry Specialist" },
+    { name: "د. مصطفى العوضي", title: "Lab Chemist" }
+  ],
+  verifiers: [
+    { name: "د. مصطفى العوضي", title: "Quality Control & Clinical Review" },
+    { name: "د. هبة الشناوي", title: "Senior Verifier" }
+  ],
   pathologists: [
-    "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
+    { name: "أ.د. رامي مختار", title: "Consultant Clinical Pathology - Kasr Al Ainy" }
   ]
 };
+
+const SIGNATURE_ROSTER_KEY = 'rt_lab_signature_roster_v1';
+
+export function loadSignatureRoster(): typeof STAFF_OPTIONS {
+  try {
+    const raw = localStorage.getItem(SIGNATURE_ROSTER_KEY);
+    if (!raw) return { ...STAFF_OPTIONS, chemists: [...STAFF_OPTIONS.chemists], verifiers: [...STAFF_OPTIONS.verifiers], pathologists: [...STAFF_OPTIONS.pathologists] };
+    const parsed = JSON.parse(raw);
+    return {
+      chemists: [...STAFF_OPTIONS.chemists, ...(parsed.chemists || [])],
+      verifiers: [...STAFF_OPTIONS.verifiers, ...(parsed.verifiers || [])],
+      pathologists: [...STAFF_OPTIONS.pathologists, ...(parsed.pathologists || [])]
+    };
+  } catch {
+    return STAFF_OPTIONS;
+  }
+}
+
+export function addSignatureToRoster(role: 'chemists' | 'verifiers' | 'pathologists', option: SignatureOption) {
+  try {
+    const raw = localStorage.getItem(SIGNATURE_ROSTER_KEY);
+    const parsed = raw ? JSON.parse(raw) : { chemists: [], verifiers: [], pathologists: [] };
+    if (!parsed[role]) parsed[role] = [];
+    const exists = parsed[role].some((o: SignatureOption) => o.name === option.name && o.title === option.title);
+    if (!exists) {
+      parsed[role].push(option);
+      localStorage.setItem(SIGNATURE_ROSTER_KEY, JSON.stringify(parsed));
+    }
+  } catch (e) {
+    console.warn(e);
+  }
+}
 
 export const COMMON_INTERPRETATIONS: { [key: string]: string[] } = {
   CBC: [
