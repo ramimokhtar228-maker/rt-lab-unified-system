@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:10:42.801Z",
+  "syncedAt": "2026-10-06T07:10:59.928Z",
   "reports": [
     {
       "profiles": [
@@ -2678,7 +2678,7 @@
       "nameAr": "الحصبة الألمانية (Rubella IgG & IgM)",
       "nameEn": "Rubella Virus Antibodies (IgG & IgM)",
       "category": "TORCH & Pregnancy",
-      "price": 260,
+      "price": 120,
       "cost": 60,
       "sampleType": "Serum",
       "turnaroundTime": "خلال 24 ساعة",
