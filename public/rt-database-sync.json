@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:49:10.149Z",
+  "syncedAt": "2026-10-06T11:49:19.765Z",
   "reports": [
     {
       "id": "rep-1791287331555",
@@ -251,27 +251,6 @@
               "textReference": "Normal",
               "flag": "NORMAL",
               "method": "Enzymatic"
-            }
-          ]
-        },
-        {
-          "id": "prof-1791287331553-2t2f",
-          "profileCode": "URIC",
-          "titleEn": "Serum Uric Acid",
-          "titleAr": "حمض البوليك والنقرس (Serum Uric Acid)",
-          "category": "Kidney Function",
-          "sampleType": "Serum",
-          "parameters": [
-            {
-              "id": "p-1791287331554-sbr",
-              "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
-              "result": "",
-              "unit": "mg/dL",
-              "minNormal": 3.5,
-              "maxNormal": 7.2,
-              "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
-              "flag": "NORMAL",
-              "method": "Uricase / POD Enzymatic Colorimetric"
             }
           ]
         },
@@ -541,7 +520,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:48:51.555Z",
-      "updatedAt": "2026-10-06T11:49:06.003Z",
+      "updatedAt": "2026-10-06T11:49:16.784Z",
       "invoiceId": "inv-1791287331555"
     },
     {
