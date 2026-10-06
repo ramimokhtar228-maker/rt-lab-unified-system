@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T10:43:40.268Z",
+  "syncedAt": "2026-10-06T10:43:48.625Z",
   "reports": [
     {
       "id": "rep-001",
@@ -1811,7 +1811,7 @@
       "nameAr": "إنزيم العضلات والقلب الكلي (CPK Total)",
       "nameEn": "Total Creatine Kinase (CPK)",
       "category": "Cardiac",
-      "price": 120,
+      "price": 500,
       "cost": 20,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
