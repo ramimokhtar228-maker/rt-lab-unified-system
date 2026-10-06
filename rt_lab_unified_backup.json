@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-06T10:41:47.118Z",
+  "timestamp": "2026-10-06T10:41:54.498Z",
   "reportsCount": 3,
   "incomeCount": 2,
   "loyaltyProfilesCount": 2,
@@ -978,6 +978,16 @@
   ],
   "dailyCloseouts": [],
   "auditLogs": [
+    {
+      "id": "log-1791283309990-z4gae",
+      "timestamp": "٦‏/١٠‏/٢٠٢٦، ١:٤١:٤٩ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "SYNC",
+      "module": "SECURITY",
+      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
+    },
     {
       "id": "log-1791283261008-rtzuy",
       "timestamp": "٦‏/١٠‏/٢٠٢٦، ١:٤١:٠١ م",
