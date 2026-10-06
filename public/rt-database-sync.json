@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:06:26.794Z",
+  "syncedAt": "2026-10-06T07:06:47.430Z",
   "reports": [
     {
       "profiles": [
@@ -2501,7 +2501,7 @@
       "nameAr": "إنترلوكين-6 للعواصف المناعية (IL-6 Interleukin-6)",
       "nameEn": "Interleukin-6 (IL-6) Quantitative",
       "category": "Immunology",
-      "price": 550,
+      "price": 1555,
       "cost": 150,
       "sampleType": "Serum / EDTA Plasma",
       "turnaroundTime": "خلال 24 ساعة",
