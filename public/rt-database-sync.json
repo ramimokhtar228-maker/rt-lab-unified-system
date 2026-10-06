@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:39:37.789Z",
+  "syncedAt": "2026-10-06T06:40:04.776Z",
   "reports": [
     {
       "profiles": [
@@ -1300,7 +1300,7 @@
       "nameAr": "إنزيم الفوسفاتيز القلوي (Alkaline Phosphatase ALP)",
       "nameEn": "Alkaline Phosphatase (ALP)",
       "category": "Liver Function",
-      "price": 90,
+      "price": 215,
       "cost": 15,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
