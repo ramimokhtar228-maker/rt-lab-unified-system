@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:14:29.018Z",
+  "syncedAt": "2026-10-06T07:14:46.020Z",
   "reports": [
     {
       "profiles": [
@@ -2832,7 +2832,7 @@
       "nameAr": "مزرعة صديد وجروح ومسحات (Wound Swab Culture)",
       "nameEn": "Wound & Pus Culture with Sensitivity",
       "category": "Microbiology",
-      "price": 240,
+      "price": 700,
       "cost": 55,
       "sampleType": "Sterile Swab in Transport Medium",
       "turnaroundTime": "48 - 72 ساعة",
