@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:51:04.270Z",
+  "syncedAt": "2026-10-06T06:51:24.109Z",
   "reports": [
     {
       "profiles": [
@@ -1844,7 +1844,7 @@
       "nameAr": "هرمون الأنوثة إستراديول (Estradiol E2)",
       "nameEn": "Estradiol (E2)",
       "category": "Fertility & Hormones",
-      "price": 190,
+      "price": 520,
       "cost": 45,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
