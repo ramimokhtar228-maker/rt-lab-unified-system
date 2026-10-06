@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:19:04.972Z",
+  "syncedAt": "2026-10-06T11:19:15.356Z",
   "reports": [
     {
       "id": "rep-1791285435316",
@@ -212,7 +212,7 @@
             {
               "id": "p-pkg-7-1791285435310",
               "name": "إنزيم كبد AST / SGOT (Aspartate Aminotransferase (AST / SGOT))",
-              "result": "",
+              "result": "31",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 40,
@@ -223,24 +223,25 @@
             {
               "id": "p-pkg-8-1791285435311",
               "name": "هبموجلوبين  (HB %)",
-              "result": "",
+              "result": "13.50",
               "unit": "g/L",
               "minNormal": 36,
               "maxNormal": 49,
               "textReference": "Male : 13.5-17.5 /Female: 12.5-15.5",
-              "flag": "NORMAL",
+              "flag": "LOW",
               "method": "Enzymatic"
             },
             {
               "id": "p-pkg-9-1791285435311",
               "name": "هيماتوكريت0 (Hematocrit %)",
-              "result": "",
+              "result": "3",
               "unit": "%",
               "minNormal": 36,
               "maxNormal": 49,
               "textReference": "Normal",
-              "flag": "NORMAL",
-              "method": "Enzymatic"
+              "flag": "LOW",
+              "method": "Enzymatic",
+              "notes": "Calculated (HGB × 3)"
             }
           ]
         },
@@ -620,7 +621,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:17:15.316Z",
-      "updatedAt": "2026-10-06T11:18:57.487Z",
+      "updatedAt": "2026-10-06T11:19:10.696Z",
       "invoiceId": "inv-1791285435316"
     },
     {
