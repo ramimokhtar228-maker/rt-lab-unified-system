@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T17:07:31.745Z",
+  "syncedAt": "2026-10-06T17:07:44.218Z",
   "reports": [
     {
       "id": "rep-1791306270693",
@@ -187,7 +187,7 @@
             {
               "id": "p-pkg-4-1791306270691-vbi",
               "name": "بولينا بالدم (Blood Urea) (Blood Urea)",
-              "result": "",
+              "result": "26",
               "unit": "mg/dL",
               "minNormal": 15,
               "maxNormal": 45,
@@ -199,7 +199,7 @@
             {
               "id": "p-pkg-5-1791306270691-bi7",
               "name": "الكالسيوم الكلي (Total Serum Calcium) (Total Serum Calcium)",
-              "result": "",
+              "result": "9.11",
               "unit": "mg/dL",
               "minNormal": 8.6,
               "maxNormal": 10.3,
@@ -272,7 +272,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T17:04:30.693Z",
-      "updatedAt": "2026-10-06T17:07:24.501Z",
+      "updatedAt": "2026-10-06T17:07:40.238Z",
       "invoiceId": "inv-1791306270694"
     },
     {
