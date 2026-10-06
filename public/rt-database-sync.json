@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:09:11.300Z",
+  "syncedAt": "2026-10-06T07:09:34.912Z",
   "reports": [
     {
       "profiles": [
@@ -2616,7 +2616,7 @@
       "nameAr": "أجسام مضادة لجرثومة المعدة بالدم (H. Pylori IgG & IgM)",
       "nameEn": "H. Pylori Serum Antibodies (IgG & IgM)",
       "category": "Gastroenterology",
-      "price": 180,
+      "price": 450,
       "cost": 40,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
