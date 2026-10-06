@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:11:36.238Z",
+  "syncedAt": "2026-10-06T07:11:57.382Z",
   "reports": [
     {
       "profiles": [
@@ -2708,7 +2708,7 @@
       "nameAr": "تحليل بول كامل وفحص رواسب ميكروسكوبي (Complete Urinalysis)",
       "nameEn": "Complete Urine Analysis & Microscopy",
       "category": "Urinalysis & Parasitology",
-      "price": 70,
+      "price": 133,
       "cost": 15,
       "sampleType": "Clean Mid-stream Fresh Urine",
       "turnaroundTime": "فوري (ساعة)",
