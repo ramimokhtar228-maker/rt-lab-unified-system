@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:20:13.587Z",
+  "syncedAt": "2026-10-06T11:20:20.978Z",
   "reports": [
     {
       "id": "rep-1791285435316",
@@ -244,48 +244,6 @@
               "notes": "Calculated (HGB × 3)"
             }
           ]
-        },
-        {
-          "id": "prof-1791285435313-agus",
-          "profileCode": "URIC",
-          "titleEn": "Serum Uric Acid",
-          "titleAr": "حمض البوليك والنقرس (Serum Uric Acid)",
-          "category": "Kidney Function",
-          "sampleType": "Serum",
-          "parameters": [
-            {
-              "id": "p-1791285435314-5d3",
-              "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
-              "result": "",
-              "unit": "mg/dL",
-              "minNormal": 3.5,
-              "maxNormal": 7.2,
-              "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
-              "flag": "NORMAL",
-              "method": "Uricase / POD Enzymatic Colorimetric"
-            }
-          ]
-        },
-        {
-          "id": "prof-1791285435314-yc2g",
-          "profileCode": "GLU_F",
-          "titleEn": "Fasting Blood Sugar",
-          "titleAr": "سكر الدم الصائم (FBS)",
-          "category": "Diabetes",
-          "sampleType": "Fluoride Plasma / Serum",
-          "parameters": [
-            {
-              "id": "p-1791285435314-nbj",
-              "name": "سكر الدم الصائم (FBS) (Fasting Blood Sugar)",
-              "result": "",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 100,
-              "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
-              "flag": "NORMAL",
-              "method": "Hexokinase / GOD-PAP"
-            }
-          ]
         }
       ],
       "staff": {
@@ -295,7 +253,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:17:15.316Z",
-      "updatedAt": "2026-10-06T11:20:07.962Z",
+      "updatedAt": "2026-10-06T11:20:16.023Z",
       "invoiceId": "inv-1791285435316"
     },
     {
