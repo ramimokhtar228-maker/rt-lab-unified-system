@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:17:01.788Z",
+  "syncedAt": "2026-10-06T07:17:17.634Z",
   "reports": [
     {
       "profiles": [
@@ -2936,21 +2936,6 @@
       "textReference": "Target Not Detected (< 20 copies/mL)",
       "method": "Automated Real-Time RT-PCR",
       "fastingInstructions": "لا يشترط صيام"
-    },
-    {
-      "id": "t-137",
-      "code": "COVID_PCR",
-      "nameAr": "مسحة كورونا والإنفلونزا بي سي آر (Respiratory Viral PCR)",
-      "nameEn": "SARS-CoV-2 & Influenza A/B RT-PCR",
-      "category": "Molecular & PCR",
-      "price": 380,
-      "cost": 95,
-      "sampleType": "Nasopharyngeal / Oropharyngeal Swab in VTM",
-      "turnaroundTime": "خلال 6 ساعات",
-      "unit": "Qualitative",
-      "textReference": "Negative (Target RNA Not Detected)",
-      "method": "Multiplex Real-Time RT-PCR",
-      "fastingInstructions": "أخذ المسحة الأنفية البلعومية بعناية"
     },
     {
       "id": "t-138",
