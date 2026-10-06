@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:20:09.088Z",
+  "syncedAt": "2026-10-06T11:20:13.587Z",
   "reports": [
     {
       "id": "rep-1791285435316",
@@ -246,27 +246,6 @@
           ]
         },
         {
-          "id": "prof-1791285435313-oy3p",
-          "profileCode": "VIT_D",
-          "titleEn": "25-Hydroxy Vitamin D Total",
-          "titleAr": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total)",
-          "category": "Anemia & Vitamins",
-          "sampleType": "Serum (Protected from light)",
-          "parameters": [
-            {
-              "id": "p-1791285435313-sxb",
-              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
-              "result": "",
-              "unit": "ng/mL",
-              "minNormal": 30,
-              "maxNormal": 100,
-              "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
-              "flag": "NORMAL",
-              "method": "CLIA (Chemiluminescence Immunoassay)"
-            }
-          ]
-        },
-        {
           "id": "prof-1791285435313-agus",
           "profileCode": "URIC",
           "titleEn": "Serum Uric Acid",
@@ -316,7 +295,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:17:15.316Z",
-      "updatedAt": "2026-10-06T11:20:04.375Z",
+      "updatedAt": "2026-10-06T11:20:07.962Z",
       "invoiceId": "inv-1791285435316"
     },
     {
