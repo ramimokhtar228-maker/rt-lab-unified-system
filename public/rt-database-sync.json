@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:14:46.020Z",
+  "syncedAt": "2026-10-06T07:15:04.490Z",
   "reports": [
     {
       "profiles": [
@@ -2847,7 +2847,7 @@
       "nameAr": "مزرعة ومسحة الحلق واللوزتين (Throat Swab Culture)",
       "nameEn": "Throat Swab Culture (Streptococcus)",
       "category": "Microbiology",
-      "price": 220,
+      "price": 500,
       "cost": 50,
       "sampleType": "Posterior Pharynx & Tonsils Swab",
       "turnaroundTime": "48 - 72 ساعة",
