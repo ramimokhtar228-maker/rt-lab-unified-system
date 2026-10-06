@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T09:20:01.716Z",
+  "syncedAt": "2026-10-06T09:20:59.515Z",
   "reports": [
     {
       "generalComment": "طلب فحص مالي رقم RT-BK-5873 - تم التسميع آلياً من منظومة الفواتير",
@@ -327,7 +327,96 @@
       "createdAt": "2026-10-04T14:22:02.634Z"
     }
   ],
-  "incomeRecords": [],
+  "incomeRecords": [
+    {
+      "id": "inv-001",
+      "invoiceNumber": "INV-2026-001",
+      "patientName": "أحمد محمود إبراهيم",
+      "patientPhone": "01012345678",
+      "patientAge": 34,
+      "patientGender": "male",
+      "barcode": "RT-10029",
+      "labNumber": "RT-2026-001",
+      "referringDoctor": "د. طارق المنشاوي",
+      "tests": [
+        {
+          "id": "t-cbc",
+          "code": "CBC",
+          "nameAr": "صورة الدم الكاملة (CBC 5-Diff)",
+          "nameEn": "Complete Blood Count",
+          "price": 280,
+          "category": "Hematology",
+          "cost": 45,
+          "sampleType": "EDTA Whole Blood"
+        }
+      ],
+      "subtotal": 280,
+      "testsSubtotal": 280,
+      "discount": 28,
+      "loyaltyDiscountEGP": 28,
+      "loyaltyPointsRedeemed": 0,
+      "loyaltyPointsEarned": 252,
+      "netAmount": 252,
+      "paidAmount": 252,
+      "remainingAmount": 0,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "cashierName": "المحاسب المالي",
+      "branch": "فرع القصر العيني - الرئيسي",
+      "notes": "خصم كارت الولاء الفضي 10%",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-06T09:20:54.635Z",
+      "updatedAt": "2026-10-06T09:20:54.635Z"
+    },
+    {
+      "id": "inv-002",
+      "invoiceNumber": "INV-2026-002",
+      "patientName": "منى عادل عبد الرحمن",
+      "patientPhone": "01198765432",
+      "patientAge": 48,
+      "patientGender": "female",
+      "barcode": "RT-10030",
+      "labNumber": "RT-2026-002",
+      "referringDoctor": "أ.د. خالد الببلاوي",
+      "tests": [
+        {
+          "id": "t-hba1c",
+          "code": "HBA1C",
+          "nameAr": "السكر التراكمي (HbA1c HPLC)",
+          "nameEn": "Glycated Hemoglobin HbA1c",
+          "price": 160,
+          "category": "Diabetes",
+          "cost": 35
+        },
+        {
+          "id": "t-kft",
+          "code": "KFT",
+          "nameAr": "وظائف كلى كاملة (KFT)",
+          "nameEn": "Renal Function Panel",
+          "price": 220,
+          "category": "Biochemistry",
+          "cost": 30
+        }
+      ],
+      "subtotal": 380,
+      "testsSubtotal": 380,
+      "discount": 38,
+      "loyaltyDiscountEGP": 38,
+      "loyaltyPointsRedeemed": 0,
+      "loyaltyPointsEarned": 342,
+      "netAmount": 342,
+      "paidAmount": 342,
+      "remainingAmount": 0,
+      "paymentMethod": "visa",
+      "paymentStatus": "paid",
+      "cashierName": "المحاسب المالي",
+      "branch": "فرع القصر العيني - الرئيسي",
+      "notes": "خصم كارت الولاء الذهبي 10%",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-06T09:20:54.635Z",
+      "updatedAt": "2026-10-06T09:20:54.635Z"
+    }
+  ],
   "expenses": [],
   "loyaltyProfiles": [
     {
@@ -546,21 +635,6 @@
     "vodafoneCash": "01100046841"
   },
   "testCatalog": [
-    {
-      "id": "test-1791278251890",
-      "code": "HCT",
-      "nameEn": "Hematocrit %",
-      "nameAr": "هيماتوكريت",
-      "category": "Clinical Hematology",
-      "sampleType": "EDTA",
-      "unit": "%",
-      "minNormal": 36,
-      "maxNormal": 49,
-      "method": "Enzymatic",
-      "fastingInstructions": "لا يشترط الصيام",
-      "turnaroundHours": 2,
-      "price": 10
-    },
     {
       "id": "t-1",
       "code": "GLU_F",
@@ -2926,6 +3000,21 @@
       "textReference": "Negative for Rotavirus & Adenovirus Antigens",
       "method": "Immunochromatographic Duo Rapid Test",
       "fastingInstructions": "عينة براز طازجة للأطفال"
+    },
+    {
+      "id": "test-1791278251890",
+      "code": "HCT",
+      "nameEn": "Hematocrit %",
+      "nameAr": "هيماتوكريت",
+      "category": "Clinical Hematology",
+      "sampleType": "EDTA",
+      "unit": "%",
+      "minNormal": 36,
+      "maxNormal": 49,
+      "method": "Enzymatic",
+      "fastingInstructions": "لا يشترط الصيام",
+      "turnaroundHours": 2,
+      "price": 10
     },
     {
       "unit": "g/L",
