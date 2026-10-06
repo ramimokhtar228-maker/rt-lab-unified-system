@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:13:33.152Z",
+  "syncedAt": "2026-10-06T07:13:52.048Z",
   "reports": [
     {
       "profiles": [
@@ -2787,7 +2787,7 @@
       "nameAr": "مزرعة وميكروبيولوجي البول والمضادات (Urine Culture & Sensitivity)",
       "nameEn": "Urine Culture & Antimicrobial Sensitivity",
       "category": "Microbiology",
-      "price": 220,
+      "price": 400,
       "cost": 50,
       "sampleType": "Sterile Clean Catch Mid-stream Urine",
       "turnaroundTime": "48 - 72 ساعة",
