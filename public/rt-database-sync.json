@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T12:01:55.628Z",
+  "syncedAt": "2026-10-06T12:02:00.712Z",
   "reports": [
     {
       "id": "rep-1791287976696",
@@ -234,7 +234,7 @@
             {
               "id": "p-pkg-9-1791287976695",
               "name": "هيماتوكريت0 (Hematocrit %)",
-              "result": "3",
+              "result": "32.77",
               "unit": "%",
               "minNormal": 36,
               "maxNormal": 49,
@@ -553,7 +553,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:59:36.696Z",
-      "updatedAt": "2026-10-06T12:01:51.252Z",
+      "updatedAt": "2026-10-06T12:01:56.487Z",
       "invoiceId": "inv-1791287976696"
     },
     {
