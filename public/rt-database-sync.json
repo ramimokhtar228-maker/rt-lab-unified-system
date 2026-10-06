@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:42:16.474Z",
+  "syncedAt": "2026-10-06T06:42:34.932Z",
   "reports": [
     {
       "profiles": [
@@ -1436,7 +1436,7 @@
       "nameAr": "الكولسترول الضار منخفض الكثافة (LDL Direct)",
       "nameEn": "LDL Direct Cholesterol",
       "category": "Lipid Profile",
-      "price": 90,
+      "price": 900,
       "cost": 15,
       "sampleType": "Serum",
       "turnaroundTime": "فوري (ساعة)",
