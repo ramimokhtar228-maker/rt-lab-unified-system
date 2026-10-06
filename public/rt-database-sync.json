@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:55:49.628Z",
+  "syncedAt": "2026-10-06T06:56:03.151Z",
   "reports": [
     {
       "profiles": [
@@ -2063,7 +2063,7 @@
       "nameAr": "النحاس بالدم (Serum Copper Level)",
       "nameEn": "Serum Copper Level",
       "category": "Anemia & Vitamins",
-      "price": 280,
+      "price": 590,
       "cost": 65,
       "sampleType": "Serum",
       "turnaroundTime": "خلال 24 ساعة",
