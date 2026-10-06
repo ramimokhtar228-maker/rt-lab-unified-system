@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:41:30.287Z",
+  "syncedAt": "2026-10-06T11:41:36.773Z",
   "reports": [
     {
       "id": "rep-1791286741642",
@@ -130,7 +130,7 @@
           "titleEn": "Package Tests (Comprehensive Annual Wellness Package)",
           "category": "Package Tests",
           "sampleType": "Serum",
-          "interpretation": "All complementary package tests evaluated according to certified reference ranges.",
+          "interpretation": " ",
           "parameters": [
             {
               "id": "p-pkg-0-1791286741639",
@@ -621,7 +621,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:39:01.642Z",
-      "updatedAt": "2026-10-06T11:41:25.423Z",
+      "updatedAt": "2026-10-06T11:41:32.701Z",
       "invoiceId": "inv-1791286741643"
     },
     {
