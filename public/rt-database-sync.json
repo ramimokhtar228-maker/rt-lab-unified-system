@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:59:08.394Z",
+  "syncedAt": "2026-10-06T06:59:31.434Z",
   "reports": [
     {
       "profiles": [
@@ -2231,7 +2231,7 @@
       "nameAr": "كالسيستونين لأورام الغدة الدرقية (Calcitonin)",
       "nameEn": "Serum Calcitonin (Medullary Thyroid)",
       "category": "Tumor Markers",
-      "price": 520,
+      "price": 114,
       "cost": 140,
       "sampleType": "Serum (Frozen immediately)",
       "turnaroundTime": "48 ساعة",
