@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:59:52.016Z",
+  "syncedAt": "2026-10-06T07:00:13.052Z",
   "reports": [
     {
       "profiles": [
@@ -2248,7 +2248,7 @@
       "nameAr": "بروتين سي التفاعلي كمي (CRP Quantitative)",
       "nameEn": "C-Reactive Protein (CRP Quantitative)",
       "category": "Immunology",
-      "price": 130,
+      "price": 333,
       "cost": 25,
       "sampleType": "Serum",
       "turnaroundTime": "فوري (ساعة)",
