@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:40:39.245Z",
+  "syncedAt": "2026-10-06T06:41:02.001Z",
   "reports": [
     {
       "profiles": [
@@ -1351,7 +1351,7 @@
       "nameAr": "إنزيم الأميليز للبنكرياس (Serum Amylase)",
       "nameEn": "Serum Amylase",
       "category": "Pancreas",
-      "price": 130,
+      "price": 390,
       "cost": 25,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
