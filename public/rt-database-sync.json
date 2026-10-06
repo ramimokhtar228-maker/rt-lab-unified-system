@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:50:48.196Z",
+  "syncedAt": "2026-10-06T11:50:51.571Z",
   "reports": [
     {
       "id": "rep-1791287331555",
@@ -63,8 +63,8 @@
               "method": "GPO-PAP",
               "textReference": "",
               "id": "param-1-1791287331552-anl",
-              "result": "133",
-              "flag": "NORMAL"
+              "result": "166",
+              "flag": "HIGH"
             },
             {
               "name": "HDL - Cholesterol (Good)",
@@ -85,7 +85,7 @@
               "notes": "Friedewald Formula: TC - HDL - (TG/5)",
               "textReference": "",
               "id": "param-3-1791287331552-74o",
-              "result": "222",
+              "result": "246",
               "flag": "HIGH"
             },
             {
@@ -96,8 +96,8 @@
               "notes": "Calculated: Triglycerides / 5",
               "textReference": "",
               "id": "param-4-1791287331552-zg2",
-              "result": "27",
-              "flag": "NORMAL"
+              "result": "33",
+              "flag": "HIGH"
             },
             {
               "name": "Non-HDL Cholesterol",
@@ -107,8 +107,8 @@
               "notes": "Calculated: Total Cholesterol - HDL",
               "textReference": "",
               "id": "param-5-1791287331552-lvu",
-              "result": "249",
-              "flag": "HIGH"
+              "result": "5",
+              "flag": "NORMAL"
             },
             {
               "name": "Total Chol / HDL Ratio",
@@ -118,8 +118,8 @@
               "textReference": "< 4.5 Desirable",
               "notes": "Desirable < 4.5",
               "id": "param-6-1791287331552-jti",
-              "result": "50.8",
-              "flag": "HIGH"
+              "result": "1",
+              "flag": "NORMAL"
             },
             {
               "name": "LDL / HDL Ratio",
@@ -283,7 +283,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:48:51.555Z",
-      "updatedAt": "2026-10-06T11:50:45.509Z",
+      "updatedAt": "2026-10-06T11:50:48.655Z",
       "invoiceId": "inv-1791287331555"
     },
     {
