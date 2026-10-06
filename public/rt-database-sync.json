@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:32:28.673Z",
+  "syncedAt": "2026-10-06T06:32:46.321Z",
   "reports": [
     {
       "profiles": [
@@ -960,7 +960,7 @@
       "nameAr": "مضاد الثرومبين 3 (Antithrombin III Activity)",
       "nameEn": "Antithrombin III Activity",
       "category": "Coagulation",
-      "price": 480,
+      "price": 855,
       "cost": 120,
       "sampleType": "Citrate Plasma",
       "turnaroundTime": "24-48 ساعة",
