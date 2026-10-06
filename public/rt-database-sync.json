@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T16:54:04.708Z",
+  "syncedAt": "2026-10-06T16:54:08.809Z",
   "reports": [
     {
       "id": "rep-1791305504343",
@@ -132,17 +132,6 @@
               "textReference": "> 13 Iron Def. | < 13 Thalassemia",
               "id": "param-8-1791305504342-bdu",
               "result": "21.6",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "PCT (Plateletcrit)",
-              "unit": "%",
-              "minNormal": 0.17,
-              "maxNormal": 0.35,
-              "notes": "Auto-calculated: (PLT × MPV) / 10,000",
-              "textReference": "0.17 - 0.35 %",
-              "id": "param-13-1791305504342-zpl",
-              "result": "",
               "flag": "NORMAL"
             },
             {
@@ -398,7 +387,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T16:51:44.343Z",
-      "updatedAt": "2026-10-06T16:54:02.850Z",
+      "updatedAt": "2026-10-06T16:54:06.068Z",
       "invoiceId": "inv-1791305504343"
     },
     {
