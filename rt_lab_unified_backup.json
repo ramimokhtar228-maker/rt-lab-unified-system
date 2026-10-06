@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-06T07:48:33.473Z",
+  "timestamp": "2026-10-06T07:51:54.814Z",
   "reportsCount": 17,
   "incomeCount": 2,
   "loyaltyProfilesCount": 2,
@@ -6033,6 +6033,46 @@
   "dailyCloseouts": [],
   "auditLogs": [
     {
+      "id": "log-1791273109505-b37o9",
+      "timestamp": "٦‏/١٠‏/٢٠٢٦، ١٠:٥١:٤٩ ص",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "CATALOG_UPDATE",
+      "module": "CATALOG",
+      "description": "تحديث بروفايلات التحاليل الشاملة (20 بروفايل)"
+    },
+    {
+      "id": "log-1791273109505-r1vfa",
+      "timestamp": "٦‏/١٠‏/٢٠٢٦، ١٠:٥١:٤٩ ص",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "CATALOG_UPDATE",
+      "module": "CATALOG",
+      "description": "مزامنة وتوحيد شامل للكتالوج: 143 فحص منفرد + 15 باقة + 20 بروفايل"
+    },
+    {
+      "id": "log-1791273062842-bu4ob",
+      "timestamp": "٦‏/١٠‏/٢٠٢٦، ١٠:٥١:٠٢ ص",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "CATALOG_UPDATE",
+      "module": "CATALOG",
+      "description": "إضافة تحليل جديد للكتالوج: هيماتوكريت (HCT)"
+    },
+    {
+      "id": "log-1791272918407-8q609",
+      "timestamp": "٦‏/١٠‏/٢٠٢٦، ١٠:٤٨:٣٨ ص",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "SYNC",
+      "module": "SECURITY",
+      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
+    },
+    {
       "id": "log-1791272761280-yxpr1",
       "timestamp": "٦‏/١٠‏/٢٠٢٦، ١٠:٤٦:٠١ ص",
       "userId": "user-ceo",
@@ -6485,46 +6525,6 @@
     {
       "id": "log-1791224368754-1qzl2",
       "timestamp": "٥‏/١٠‏/٢٠٢٦، ٩:١٩:٢٨ م",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "UPDATE",
-      "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-inc-1791127003337"
-    },
-    {
-      "id": "log-1791224356129-r7unx",
-      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٩:١٩:١٦ م",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "UPDATE",
-      "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-inc-1791127003337"
-    },
-    {
-      "id": "log-1791224355224-tx2m9",
-      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٩:١٩:١٥ م",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "UPDATE",
-      "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-inc-1791127003337"
-    },
-    {
-      "id": "log-1791224354140-v9n9g",
-      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٩:١٩:١٤ م",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "UPDATE",
-      "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-inc-1791127003337"
-    },
-    {
-      "id": "log-1791224343682-an0rc",
-      "timestamp": "٥‏/١٠‏/٢٠٢٦، ٩:١٩:٠٣ م",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
