@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:41:03.039Z",
+  "syncedAt": "2026-10-06T11:41:11.376Z",
   "reports": [
     {
       "id": "rep-1791286741642",
@@ -201,7 +201,7 @@
             {
               "id": "p-pkg-6-1791286741640",
               "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
-              "result": "",
+              "result": "25",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 41,
@@ -620,7 +620,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:39:01.642Z",
-      "updatedAt": "2026-10-06T11:40:58.026Z",
+      "updatedAt": "2026-10-06T11:41:03.991Z",
       "invoiceId": "inv-1791286741643"
     },
     {
