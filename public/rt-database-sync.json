@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:47:02.317Z",
+  "syncedAt": "2026-10-06T06:47:21.093Z",
   "reports": [
     {
       "profiles": [
@@ -1623,7 +1623,7 @@
       "nameAr": "هرمون الغدة الدرقية الكلي (Total T4)",
       "nameEn": "Total Thyroxine (TT4)",
       "category": "Thyroid",
-      "price": 150,
+      "price": 355,
       "cost": 30,
       "sampleType": "Serum",
       "turnaroundTime": "خلال 24 ساعة",
