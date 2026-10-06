@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:27:48.231Z",
+  "syncedAt": "2026-10-06T06:28:54.839Z",
   "reports": [
     {
       "profiles": [
@@ -826,14 +826,14 @@
       "nameAr": "زمن ونسبة البروثرومبين (PT & INR)",
       "nameEn": "Prothrombin Time & INR",
       "category": "Coagulation",
-      "price": 130,
+      "price": 290,
       "cost": 25,
       "sampleType": "Sodium Citrate 3.2% Plasma",
       "turnaroundTime": "خلال ساعتين",
       "unit": "Seconds / Ratio",
       "minNormal": 11,
-      "maxNormal": 13.5,
-      "textReference": "PT: 11.0 - 13.5 sec | INR: 0.85 - 1.15 (Warfarin Target: 2.0 - 3.0)",
+      "maxNormal": 14,
+      "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)",
       "method": "Optical Clotting Detection Analyzer",
       "fastingInstructions": "لا يشترط صيام (يُفضل تسجيل جرعة مضادات التجلط)"
     },
