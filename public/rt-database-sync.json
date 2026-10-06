@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:39:54.192Z",
+  "syncedAt": "2026-10-06T11:40:02.891Z",
   "reports": [
     {
       "id": "rep-1791286741642",
@@ -146,7 +146,7 @@
             {
               "id": "p-pkg-1-1791286741640",
               "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
-              "result": "",
+              "result": "6.55",
               "unit": "mg/dL",
               "minNormal": 3.5,
               "maxNormal": 7.2,
@@ -620,7 +620,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:39:01.642Z",
-      "updatedAt": "2026-10-06T11:39:49.571Z",
+      "updatedAt": "2026-10-06T11:39:57.899Z",
       "invoiceId": "inv-1791286741643"
     },
     {
