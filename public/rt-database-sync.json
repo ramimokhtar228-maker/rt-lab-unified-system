@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:13:52.048Z",
+  "syncedAt": "2026-10-06T07:14:11.162Z",
   "reports": [
     {
       "profiles": [
@@ -2802,7 +2802,7 @@
       "nameAr": "مزرعة براز ومضادات حيوية (Stool Culture & Sensitivity)",
       "nameEn": "Stool Culture & Antimicrobial Sensitivity",
       "category": "Microbiology",
-      "price": 240,
+      "price": 444,
       "cost": 55,
       "sampleType": "Sterile Fresh Stool",
       "turnaroundTime": "48 - 72 ساعة",
