@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:56:03.151Z",
+  "syncedAt": "2026-10-06T06:56:20.796Z",
   "reports": [
     {
       "profiles": [
@@ -2080,7 +2080,7 @@
       "nameAr": "دلالات أورام البروستاتا الكلية (Total PSA)",
       "nameEn": "Total PSA (Prostate Specific Antigen)",
       "category": "Tumor Markers",
-      "price": 220,
+      "price": 580,
       "cost": 50,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
