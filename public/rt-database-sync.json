@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:36:52.026Z",
+  "syncedAt": "2026-10-06T06:37:09.391Z",
   "reports": [
     {
       "profiles": [
@@ -1164,7 +1164,7 @@
       "nameAr": "زلال دقيق بالبول كمي ونسبة ACR",
       "nameEn": "Microalbumin / Creatinine Ratio (ACR)",
       "category": "Kidney Function",
-      "price": 190,
+      "price": 400,
       "cost": 40,
       "sampleType": "Random Morning Urine",
       "turnaroundTime": "خلال 3 ساعات",
