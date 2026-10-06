@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T10:22:34.879Z",
+  "syncedAt": "2026-10-06T10:26:08.305Z",
   "reports": [
     {
       "generalComment": "الحالة تتماشى مع فقر الدم بعوز الحديد. يرجى المتابعة بطلب مخزون الحديد (Serum Ferritin).",
@@ -991,6 +991,21 @@
     "sloganAr": "التشخيص الصحيح يبدأ معنا · دقة، سرعة، وأمان تشخيصي"
   },
   "testCatalog": [
+    {
+      "id": "test-1791282363076",
+      "code": "HCT",
+      "nameEn": "Hematocrit %",
+      "nameAr": "هيماتوكريت0",
+      "category": "Clinical Hematology ",
+      "sampleType": "EDTA ",
+      "unit": "%",
+      "minNormal": 36,
+      "maxNormal": 49,
+      "method": "Enzymatic",
+      "fastingInstructions": "لا يشترط الصيام",
+      "turnaroundHours": 2,
+      "price": 10
+    },
     {
       "id": "t-1",
       "code": "GLU_F",
