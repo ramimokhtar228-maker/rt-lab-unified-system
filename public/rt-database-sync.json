@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T10:27:10.154Z",
+  "syncedAt": "2026-10-06T10:27:17.791Z",
   "reports": [
     {
       "generalComment": "الحالة تتماشى مع فقر الدم بعوز الحديد. يرجى المتابعة بطلب مخزون الحديد (Serum Ferritin).",
@@ -1065,7 +1065,7 @@
       "nameAr": "إنسولين صائم (Fasting Insulin)",
       "nameEn": "Fasting Serum Insulin",
       "category": "Diabetes",
-      "price": 260,
+      "price": 530,
       "cost": 65,
       "sampleType": "Serum",
       "turnaroundTime": "خلال 24 ساعة",
@@ -3358,34 +3358,34 @@
       "fastingInstructions": "عينة براز طازجة للأطفال"
     },
     {
-      "unit": "%",
-      "sampleType": "EDTA ",
-      "minNormal": 36,
-      "code": "HCT",
-      "maxNormal": 49,
-      "method": "Enzymatic",
+      "price": 10,
       "fastingInstructions": "لا يشترط الصيام",
-      "id": "test-1791282363076",
-      "nameEn": "Hematocrit %",
-      "turnaroundHours": 2,
       "nameAr": "هيماتوكريت0",
+      "id": "test-1791282363076",
+      "sampleType": "EDTA ",
       "category": "Clinical Hematology ",
-      "price": 10
+      "code": "HCT",
+      "minNormal": 36,
+      "turnaroundHours": 2,
+      "method": "Enzymatic",
+      "unit": "%",
+      "nameEn": "Hematocrit %",
+      "maxNormal": 49
     },
     {
       "minNormal": 36,
-      "maxNormal": 49,
       "textReference": "Male : 13.5-17.5 /Female: 12.5-15.5",
-      "code": "HB",
-      "turnaroundHours": 2,
-      "unit": "g/L",
-      "fastingInstructions": "لا يشترط الصيام",
-      "sampleType": " EDTA BLOOD ",
+      "id": "test-1791276005667",
+      "maxNormal": 49,
       "price": 210,
       "nameAr": "هبموجلوبين ",
+      "fastingInstructions": "لا يشترط الصيام",
       "nameEn": "HB %",
-      "id": "test-1791276005667",
       "method": "Enzymatic",
+      "turnaroundHours": 2,
+      "sampleType": " EDTA BLOOD ",
+      "unit": "g/L",
+      "code": "HB",
       "category": "Clinical Hematology "
     }
   ],
