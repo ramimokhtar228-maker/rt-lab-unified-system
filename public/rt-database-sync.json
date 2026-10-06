@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:02:39.264Z",
+  "syncedAt": "2026-10-06T07:02:58.210Z",
   "reports": [
     {
       "profiles": [
@@ -2333,7 +2333,7 @@
       "nameAr": "الأجسام المضادة للنواة (ANA IFA Titre)",
       "nameEn": "Antinuclear Antibodies IFA Titre",
       "category": "Immunology",
-      "price": 280,
+      "price": 780,
       "cost": 75,
       "sampleType": "Serum",
       "turnaroundTime": "خلال 24 ساعة",
