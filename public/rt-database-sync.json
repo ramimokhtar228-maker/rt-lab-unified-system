@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:43:41.058Z",
+  "syncedAt": "2026-10-06T06:43:57.631Z",
   "reports": [
     {
       "profiles": [
@@ -1504,7 +1504,7 @@
       "nameAr": "ميوجلوبين بالدم لعضلة القلب (Serum Myoglobin)",
       "nameEn": "Serum Myoglobin",
       "category": "Cardiac",
-      "price": 290,
+      "price": 800,
       "cost": 70,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
