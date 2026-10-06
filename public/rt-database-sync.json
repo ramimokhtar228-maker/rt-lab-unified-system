@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:49:25.521Z",
+  "syncedAt": "2026-10-06T06:49:47.499Z",
   "reports": [
     {
       "profiles": [
@@ -1759,7 +1759,7 @@
       "nameAr": "هرمون تحفيز المبيض والخصية (FSH)",
       "nameEn": "Follicle Stimulating Hormone (FSH)",
       "category": "Fertility & Hormones",
-      "price": 180,
+      "price": 580,
       "cost": 40,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
