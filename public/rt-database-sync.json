@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:44:33.399Z",
+  "syncedAt": "2026-10-06T11:44:39.743Z",
   "reports": [
     {
       "id": "rep-1791286741642",
@@ -283,12 +283,12 @@
       ],
       "staff": {
         "labChemist": "د. هبة الشناوي - كيميائية تحاليل",
-        "verifiedBy": " رحاب على ",
+        "verifiedBy": " رحاب على / ",
         "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:39:01.642Z",
-      "updatedAt": "2026-10-06T11:44:30.262Z",
+      "updatedAt": "2026-10-06T11:44:36.941Z",
       "invoiceId": "inv-1791286741643"
     },
     {
