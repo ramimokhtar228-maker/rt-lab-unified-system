@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:26:16.219Z",
+  "syncedAt": "2026-10-06T06:26:51.709Z",
   "reports": [
     {
       "profiles": [
@@ -792,14 +792,14 @@
       "nameAr": "صورة دم كاملة تفصيلية (CBC with Diff)",
       "nameEn": "Complete Blood Count with Differential",
       "category": "Hematology",
-      "price": 180,
+      "price": 400,
       "cost": 30,
       "sampleType": "EDTA Whole Blood",
       "turnaroundTime": "فوري (ساعة)",
       "unit": "Multi-parameter",
       "minNormal": 0,
       "maxNormal": 0,
-      "textReference": "Hb: Male 13.0-17.5 g/dL, Female 12.0-15.5 | WBC: 4.0-11.0 10^3/uL | PLT: 150-450 10^3/uL",
+      "textReference": "Hb: Male 13.0-17.5 g/dL, Female 12.5-15.5 | WBC: 4.0-11.0 10^3/uL | PLT: 150-450 10^3/uL",
       "method": "5-Part Automated Flow Cytometry / Laser Impedance",
       "fastingInstructions": "لا يشترط صيام"
     },
