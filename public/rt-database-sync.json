@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:08:37.961Z",
+  "syncedAt": "2026-10-06T07:09:11.300Z",
   "reports": [
     {
       "profiles": [
@@ -2601,7 +2601,7 @@
       "nameAr": "جرثومة المعدة بالبراز كمي (H. Pylori Antigen in Stool)",
       "nameEn": "Helicobacter Pylori Stool Antigen (HpSA)",
       "category": "Gastroenterology",
-      "price": 190,
+      "price": 777,
       "cost": 40,
       "sampleType": "Fresh Stool Specimen",
       "turnaroundTime": "خلال 3 ساعات",
