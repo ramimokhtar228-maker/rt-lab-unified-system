@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:29:30.118Z",
+  "syncedAt": "2026-10-06T06:29:49.076Z",
   "reports": [
     {
       "profiles": [
@@ -860,7 +860,7 @@
       "nameAr": "دي دايمر كمي بالدم (D-Dimer Quantitative)",
       "nameEn": "D-Dimer Quantitative Assay",
       "category": "Coagulation",
-      "price": 320,
+      "price": 599,
       "cost": 75,
       "sampleType": "Citrate Plasma",
       "turnaroundTime": "خلال ساعتين",
