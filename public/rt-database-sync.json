@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:33:45.530Z",
+  "syncedAt": "2026-10-06T06:34:31.311Z",
   "reports": [
     {
       "profiles": [
@@ -1028,14 +1028,14 @@
       "nameAr": "حمض البوليك والنقرس (Serum Uric Acid)",
       "nameEn": "Serum Uric Acid",
       "category": "Kidney Function",
-      "price": 88,
+      "price": 188,
       "cost": 12,
       "sampleType": "Serum",
       "turnaroundTime": "فوري (ساعة)",
       "unit": "mg/dL",
       "minNormal": 3.5,
-      "maxNormal": 7.2,
-      "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
+      "maxNormal": 6.2,
+      "textReference": "Males: 3.5 - 6.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
       "method": "Uricase / POD Enzymatic Colorimetric",
       "fastingInstructions": "صيام من 4 إلى 8 ساعات يفضل"
     },
