@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:17:57.371Z",
+  "syncedAt": "2026-10-06T07:18:31.440Z",
   "reports": [
     {
       "profiles": [
@@ -2977,7 +2977,7 @@
       "nameAr": "بروفايل الذئبة والمناعة الذاتية الكامل (ANA Profile Blot 17)",
       "nameEn": "ANA Profile 17 Autoantibodies Immunoblot",
       "category": "Immunology",
-      "price": 890,
+      "price": 350,
       "cost": 260,
       "sampleType": "Serum",
       "turnaroundTime": "48 ساعة",
