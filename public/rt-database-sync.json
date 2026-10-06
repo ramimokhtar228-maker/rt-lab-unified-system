@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:40:48.440Z",
+  "syncedAt": "2026-10-06T11:40:56.464Z",
   "reports": [
     {
       "id": "rep-1791286741642",
@@ -179,7 +179,7 @@
             {
               "id": "p-pkg-4-1791286741640",
               "name": "بولينا بالدم (Blood Urea) (Blood Urea)",
-              "result": "",
+              "result": "26",
               "unit": "mg/dL",
               "minNormal": 15,
               "maxNormal": 45,
@@ -620,7 +620,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:39:01.642Z",
-      "updatedAt": "2026-10-06T11:40:43.419Z",
+      "updatedAt": "2026-10-06T11:40:49.781Z",
       "invoiceId": "inv-1791286741643"
     },
     {
