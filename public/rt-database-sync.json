@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T12:02:10.619Z",
+  "syncedAt": "2026-10-06T12:02:16.779Z",
   "reports": [
     {
       "id": "rep-1791287976696",
@@ -242,48 +242,6 @@
               "flag": "LOW",
               "method": "Enzymatic",
               "notes": "Calculated (HGB × 3)"
-            }
-          ]
-        },
-        {
-          "id": "prof-1791287976695-f7el",
-          "profileCode": "VIT_D",
-          "titleEn": "25-Hydroxy Vitamin D Total",
-          "titleAr": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total)",
-          "category": "Anemia & Vitamins",
-          "sampleType": "Serum (Protected from light)",
-          "parameters": [
-            {
-              "id": "p-1791287976695-1o3",
-              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
-              "result": "",
-              "unit": "ng/mL",
-              "minNormal": 30,
-              "maxNormal": 100,
-              "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
-              "flag": "NORMAL",
-              "method": "CLIA (Chemiluminescence Immunoassay)"
-            }
-          ]
-        },
-        {
-          "id": "prof-1791287976695-h8q5",
-          "profileCode": "URIC",
-          "titleEn": "Serum Uric Acid",
-          "titleAr": "حمض البوليك والنقرس (Serum Uric Acid)",
-          "category": "Kidney Function",
-          "sampleType": "Serum",
-          "parameters": [
-            {
-              "id": "p-1791287976695-xo7",
-              "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
-              "result": "",
-              "unit": "mg/dL",
-              "minNormal": 3.5,
-              "maxNormal": 7.2,
-              "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
-              "flag": "NORMAL",
-              "method": "Uricase / POD Enzymatic Colorimetric"
             }
           ]
         },
@@ -553,7 +511,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:59:36.696Z",
-      "updatedAt": "2026-10-06T12:02:03.057Z",
+      "updatedAt": "2026-10-06T12:02:11.463Z",
       "invoiceId": "inv-1791287976696"
     },
     {
