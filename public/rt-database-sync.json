@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:33:21.555Z",
+  "syncedAt": "2026-10-06T06:33:45.530Z",
   "reports": [
     {
       "profiles": [
@@ -1011,7 +1011,7 @@
       "nameAr": "نيتروجين بولينا الدم (Blood Urea Nitrogen BUN)",
       "nameEn": "Blood Urea Nitrogen (BUN)",
       "category": "Kidney Function",
-      "price": 88,
+      "price": 200,
       "cost": 12,
       "sampleType": "Serum",
       "turnaroundTime": "فوري (ساعة)",
