@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:02:58.210Z",
+  "syncedAt": "2026-10-06T07:03:24.822Z",
   "reports": [
     {
       "profiles": [
@@ -2348,7 +2348,7 @@
       "nameAr": "أجسام الذئبة الحمراء (Anti-dsDNA Titre)",
       "nameEn": "Anti-Double Stranded DNA (Anti-dsDNA)",
       "category": "Immunology",
-      "price": 290,
+      "price": 699,
       "cost": 80,
       "sampleType": "Serum",
       "turnaroundTime": "خلال 24 ساعة",
