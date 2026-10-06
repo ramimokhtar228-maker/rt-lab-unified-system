@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:41:41.805Z",
+  "syncedAt": "2026-10-06T11:41:47.023Z",
   "reports": [
     {
       "id": "rep-1791286741642",
@@ -288,70 +288,6 @@
           ]
         },
         {
-          "id": "prof-1791286741641-4p1y",
-          "profileCode": "ACR",
-          "titleEn": "Urine Albumin / Creatinine Ratio (ACR)",
-          "titleAr": "معدل الزلال إلى الكرياتينين في البول (الكشف المبكر لاعتلال الكلى)",
-          "category": "Clinical Chemistry",
-          "sampleType": "First Morning Urine Spot Specimen",
-          "interpretation": "ACR provides sensitive early detection of diabetic and hypertensive microalbuminuria.",
-          "parameters": [
-            {
-              "name": "Urine Microalbumin",
-              "unit": "mg/L",
-              "minNormal": 0,
-              "maxNormal": 20,
-              "method": "Immunoturbidimetry",
-              "textReference": "",
-              "id": "param-0-1791286741641-zvo",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Urine Creatinine",
-              "unit": "mg/dL",
-              "minNormal": 20,
-              "maxNormal": 300,
-              "method": "Enzymatic / Jaffe",
-              "textReference": "",
-              "id": "param-1-1791286741641-kpm",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Albumin/Creatinine Ratio (ACR)",
-              "unit": "mg/g",
-              "minNormal": 0,
-              "maxNormal": 30,
-              "textReference": "< 30 Normal, 30 - 300 Microalbuminuria, > 300 Macroalbuminuria",
-              "notes": "Auto-calculated: (Microalbumin / Urine Creatinine) × 100",
-              "id": "param-2-1791286741641-v8z",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Total Urine Protein",
-              "unit": "mg/dL",
-              "minNormal": 0,
-              "maxNormal": 15,
-              "textReference": "",
-              "id": "param-3-1791286741641-m9q",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Protein/Creatinine Ratio (UPCR)",
-              "unit": "mg/mg",
-              "minNormal": 0,
-              "maxNormal": 0.2,
-              "textReference": "< 0.2 mg/mg",
-              "id": "param-4-1791286741641-18a",
-              "result": "",
-              "flag": "NORMAL"
-            }
-          ]
-        },
-        {
           "id": "prof-1791286741641-caf9",
           "profileCode": "UREA",
           "titleEn": "Blood Urea",
@@ -600,7 +536,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:39:01.642Z",
-      "updatedAt": "2026-10-06T11:41:37.005Z",
+      "updatedAt": "2026-10-06T11:41:40.267Z",
       "invoiceId": "inv-1791286741643"
     },
     {
