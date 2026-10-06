@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T10:38:05.920Z",
+  "syncedAt": "2026-10-06T10:38:58.382Z",
   "reports": [
     {
       "reportNumber": "RT-2026-001",
@@ -1624,7 +1624,7 @@
       "nameAr": "إنزيم الفوسفاتيز القلوي (Alkaline Phosphatase ALP)",
       "nameEn": "Alkaline Phosphatase (ALP)",
       "category": "Liver Function",
-      "price": 90,
+      "price": 222,
       "cost": 15,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
@@ -1641,7 +1641,7 @@
       "nameAr": "إنزيم جاما جي تي (Gamma-Glutamyl Transferase GGT)",
       "nameEn": "Gamma-GT (GGT)",
       "category": "Liver Function",
-      "price": 110,
+      "price": 344,
       "cost": 20,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
@@ -3358,35 +3358,35 @@
       "fastingInstructions": "عينة براز طازجة للأطفال"
     },
     {
-      "category": "Clinical Hematology ",
-      "id": "test-1791282363076",
-      "method": "Enzymatic",
-      "minNormal": 36,
-      "nameEn": "Hematocrit %",
-      "nameAr": "هيماتوكريت0",
-      "sampleType": "EDTA ",
-      "fastingInstructions": "لا يشترط الصيام",
       "price": 10,
-      "turnaroundHours": 2,
       "unit": "%",
+      "turnaroundHours": 2,
+      "method": "Enzymatic",
+      "nameEn": "Hematocrit %",
       "code": "HCT",
-      "maxNormal": 49
+      "nameAr": "هيماتوكريت0",
+      "maxNormal": 49,
+      "sampleType": "EDTA ",
+      "minNormal": 36,
+      "fastingInstructions": "لا يشترط الصيام",
+      "id": "test-1791282363076",
+      "category": "Clinical Hematology "
     },
     {
-      "textReference": "Male : 13.5-17.5 /Female: 12.5-15.5",
+      "sampleType": " EDTA BLOOD ",
+      "category": "Clinical Hematology ",
+      "fastingInstructions": "لا يشترط الصيام",
+      "price": 210,
+      "turnaroundHours": 2,
+      "minNormal": 36,
+      "nameAr": "هبموجلوبين ",
       "code": "HB",
+      "nameEn": "HB %",
       "id": "test-1791276005667",
       "maxNormal": 49,
       "unit": "g/L",
-      "nameAr": "هبموجلوبين ",
-      "fastingInstructions": "لا يشترط الصيام",
-      "minNormal": 36,
-      "nameEn": "HB %",
-      "price": 210,
-      "category": "Clinical Hematology ",
-      "sampleType": " EDTA BLOOD ",
       "method": "Enzymatic",
-      "turnaroundHours": 2
+      "textReference": "Male : 13.5-17.5 /Female: 12.5-15.5"
     }
   ],
   "packages": [
