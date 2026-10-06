@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:29:49.076Z",
+  "syncedAt": "2026-10-06T06:30:09.831Z",
   "reports": [
     {
       "profiles": [
@@ -877,7 +877,7 @@
       "nameAr": "فصيلة الدم وعامل ريسس (ABO & Rh Group)",
       "nameEn": "ABO & Rh Blood Grouping",
       "category": "Hematology",
-      "price": 60,
+      "price": 220,
       "cost": 15,
       "sampleType": "EDTA Whole Blood",
       "turnaroundTime": "فوري (ساعة)",
