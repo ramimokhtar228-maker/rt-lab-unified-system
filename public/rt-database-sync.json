@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:04:04.518Z",
+  "syncedAt": "2026-10-06T11:04:21.461Z",
   "reports": [
     {
       "id": "rep-1791284141332",
@@ -247,7 +247,7 @@
               "maxNormal": 8,
               "textReference": "2 - 8 %",
               "id": "param-19-1791284141331-h9o",
-              "result": "",
+              "result": "04",
               "flag": "NORMAL"
             },
             {
@@ -257,7 +257,7 @@
               "maxNormal": 6,
               "textReference": "1 - 6 %",
               "id": "param-20-1791284141331-ime",
-              "result": "",
+              "result": "03",
               "flag": "NORMAL"
             },
             {
@@ -267,7 +267,7 @@
               "maxNormal": 1,
               "textReference": "0 - 1 %",
               "id": "param-21-1791284141331-qgq",
-              "result": "",
+              "result": "00",
               "flag": "NORMAL"
             },
             {
@@ -330,8 +330,8 @@
               "notes": "Auto-calculated: (WBC × Mono%) / 100",
               "textReference": "0.2 - 0.8 x10^3/µL",
               "id": "param-27-1791284141331-hyi",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "0.1",
+              "flag": "LOW"
             },
             {
               "name": "Absolute Eosinophils (AEC)",
@@ -341,7 +341,7 @@
               "notes": "Auto-calculated: (WBC × Eos%) / 100",
               "textReference": "0.04 - 0.44 x10^3/µL",
               "id": "param-28-1791284141331-kgm",
-              "result": "",
+              "result": "0.1",
               "flag": "NORMAL"
             },
             {
@@ -352,8 +352,8 @@
               "notes": "Auto-calculated: (WBC × Baso%) / 100",
               "textReference": "0.01 - 0.1 x10^3/µL",
               "id": "param-29-1791284141331-v81",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "0",
+              "flag": "LOW"
             },
             {
               "name": "NLR (Neutrophil/Lymphocyte)",
@@ -544,7 +544,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T10:55:41.332Z",
-      "updatedAt": "2026-10-06T11:03:51.428Z",
+      "updatedAt": "2026-10-06T11:04:03.931Z",
       "invoiceId": "inv-1791284141332"
     },
     {
