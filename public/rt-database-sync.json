@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:06:47.430Z",
+  "syncedAt": "2026-10-06T07:07:20.448Z",
   "reports": [
     {
       "profiles": [
@@ -2518,7 +2518,7 @@
       "nameAr": "فيروس بي الكبدي السطحي (HBsAg Hepatitis B)",
       "nameEn": "Hepatitis B Surface Antigen (HBsAg)",
       "category": "Infectious & Viral",
-      "price": 150,
+      "price": 422,
       "cost": 30,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
