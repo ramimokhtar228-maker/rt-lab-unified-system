@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:44:17.080Z",
+  "syncedAt": "2026-10-06T06:44:40.591Z",
   "reports": [
     {
       "profiles": [
@@ -1538,7 +1538,7 @@
       "nameAr": "هوموسيستين بالدم لتصلب الشرايين (Homocysteine)",
       "nameEn": "Serum Total Homocysteine",
       "category": "Cardiac",
-      "price": 490,
+      "price": 966,
       "cost": 130,
       "sampleType": "Serum / EDTA (Centrifuged immediately)",
       "turnaroundTime": "خلال 24 ساعة",
