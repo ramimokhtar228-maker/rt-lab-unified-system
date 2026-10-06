@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T16:55:04.956Z",
+  "syncedAt": "2026-10-06T16:55:09.627Z",
   "reports": [
     {
       "id": "rep-1791305504343",
@@ -35,7 +35,7 @@
           "titleAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
           "category": "Hematology",
           "sampleType": "EDTA Whole Blood",
-          "interpretation": "Microscopic evaluation and complete differential indices assessed according to international hematology criteria.",
+          "interpretation": "Mild microcytic hypochromic anemia, iron deficiency picture is suggested. Serum Ferritin is recommended.",
           "parameters": [
             {
               "name": "Hemoglobin (Hb)",
@@ -312,43 +312,6 @@
               "id": "param-30-1791305504342-w4d",
               "result": "2.3",
               "flag": "NORMAL"
-            },
-            {
-              "name": "RPI (Reticulocyte Production Index)",
-              "unit": "Index",
-              "minNormal": 1,
-              "maxNormal": 3,
-              "textReference": "> 2.0 indicates adequate marrow response",
-              "id": "param-33-1791305504342-7b9",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "RBC Morphology",
-              "unit": "/HPF",
-              "textReference": "Normocytic normochromic, no anisopoikilocytosis",
-              "method": "Leishman Stain Microscopy",
-              "id": "param-34-1791305504343-0zk",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "WBC Morphology",
-              "unit": "pH Units",
-              "textReference": "Mature differential, no toxic granules, vacuoles, or blasts",
-              "method": "Leishman Stain Microscopy",
-              "id": "param-35-1791305504343-oxt",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Platelet Morphology",
-              "unit": "pH Units",
-              "textReference": "Adequate on smear, normal aggregation, no giant forms",
-              "method": "Leishman Stain Microscopy",
-              "id": "param-36-1791305504343-5ct",
-              "result": "",
-              "flag": "NORMAL"
             }
           ]
         }
@@ -366,7 +329,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T16:51:44.343Z",
-      "updatedAt": "2026-10-06T16:55:00.456Z",
+      "updatedAt": "2026-10-06T16:55:07.637Z",
       "invoiceId": "inv-1791305504343"
     },
     {
