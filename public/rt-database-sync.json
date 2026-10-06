@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T10:43:33.779Z",
+  "syncedAt": "2026-10-06T10:43:40.268Z",
   "reports": [
     {
       "id": "rep-001",
@@ -1794,7 +1794,7 @@
       "nameAr": "إنزيم القلب CK-MB كمي بالدم",
       "nameEn": "Creatine Kinase-MB Mass",
       "category": "Cardiac",
-      "price": 180,
+      "price": 533,
       "cost": 40,
       "sampleType": "Serum",
       "turnaroundTime": "فوري (ساعة)",
