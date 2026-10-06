@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:35:25.438Z",
+  "syncedAt": "2026-10-06T06:35:43.617Z",
   "reports": [
     {
       "profiles": [
@@ -1096,7 +1096,7 @@
       "nameAr": "الكالسيوم الكلي (Total Serum Calcium)",
       "nameEn": "Total Serum Calcium",
       "category": "Minerals & Bone",
-      "price": 110,
+      "price": 268,
       "cost": 15,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
