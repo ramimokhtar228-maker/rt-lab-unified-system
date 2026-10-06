@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:54:22.697Z",
+  "syncedAt": "2026-10-06T06:54:40.238Z",
   "reports": [
     {
       "profiles": [
@@ -2012,7 +2012,7 @@
       "nameAr": "فيتامين ب12 بالدم (Vitamin B12 Level)",
       "nameEn": "Vitamin B12 Cyanocobalamin",
       "category": "Anemia & Vitamins",
-      "price": 290,
+      "price": 110,
       "cost": 70,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
