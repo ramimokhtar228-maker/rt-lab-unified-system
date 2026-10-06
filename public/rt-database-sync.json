@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:48:47.701Z",
+  "syncedAt": "2026-10-06T06:49:06.047Z",
   "reports": [
     {
       "profiles": [
@@ -1725,7 +1725,7 @@
       "nameAr": "هرمون الغدة النخامية الكظري (ACTH Morning)",
       "nameEn": "Adrenocorticotropic Hormone (ACTH)",
       "category": "Endocrinology",
-      "price": 380,
+      "price": 980,
       "cost": 95,
       "sampleType": "EDTA Plasma on ice (Centrifuged cold)",
       "turnaroundTime": "24-48 ساعة",
