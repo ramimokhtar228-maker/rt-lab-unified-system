@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:52:02.358Z",
+  "syncedAt": "2026-10-06T11:52:11.606Z",
   "reports": [
     {
       "id": "rep-1791287331555",
@@ -168,7 +168,7 @@
             {
               "id": "p-pkg-3-1791287331553",
               "name": "كرياتينين بالدم (Serum Creatinine) (Serum Creatinine)",
-              "result": "",
+              "result": "1.20",
               "unit": "mg/dL",
               "minNormal": 0.6,
               "maxNormal": 1.2,
@@ -273,7 +273,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:48:51.555Z",
-      "updatedAt": "2026-10-06T11:51:59.320Z",
+      "updatedAt": "2026-10-06T11:52:07.871Z",
       "invoiceId": "inv-1791287331555"
     },
     {
