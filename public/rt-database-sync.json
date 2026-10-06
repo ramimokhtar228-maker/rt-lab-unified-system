@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T16:54:40.059Z",
+  "syncedAt": "2026-10-06T16:54:43.564Z",
   "reports": [
     {
       "id": "rep-1791305504343",
@@ -214,7 +214,7 @@
               "maxNormal": 1,
               "textReference": "0 - 1 %",
               "id": "param-21-1791305504342-bns",
-              "result": "",
+              "result": "00",
               "flag": "NORMAL"
             },
             {
@@ -299,8 +299,8 @@
               "notes": "Auto-calculated: (WBC × Baso%) / 100",
               "textReference": "0.01 - 0.1 x10^3/µL",
               "id": "param-29-1791305504342-4vj",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "0",
+              "flag": "LOW"
             },
             {
               "name": "NLR (Neutrophil/Lymphocyte)",
@@ -387,7 +387,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T16:51:44.343Z",
-      "updatedAt": "2026-10-06T16:54:37.009Z",
+      "updatedAt": "2026-10-06T16:54:39.789Z",
       "invoiceId": "inv-1791305504343"
     },
     {
