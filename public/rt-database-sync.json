@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:01:15.775Z",
+  "syncedAt": "2026-10-06T07:02:07.352Z",
   "reports": [
     {
       "profiles": [
@@ -2299,14 +2299,14 @@
       "nameAr": "معامل الروماتويد كمي بالدم (RF Quantitative)",
       "nameEn": "Rheumatoid Factor Quantitative",
       "category": "Immunology",
-      "price": 140,
+      "price": 360,
       "cost": 30,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
       "unit": "IU/mL",
       "minNormal": 0,
-      "maxNormal": 14,
-      "textReference": "Negative: < 14.0 IU/mL | Positive: >= 14.0 IU/mL",
+      "maxNormal": 10,
+      "textReference": "Negative: < 10.0IU/mL | Positive: >= 110.0IU/mL",
       "method": "Latex-Enhanced Immunoturbidimetry",
       "fastingInstructions": "لا يشترط صيام"
     },
