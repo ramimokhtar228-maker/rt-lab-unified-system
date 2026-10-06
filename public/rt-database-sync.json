@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T08:20:48.796Z",
+  "syncedAt": "2026-10-06T08:20:52.546Z",
   "reports": [
     {
       "staff": {
@@ -8,7 +8,7 @@
         "labChemist": "",
         "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
       },
-      "updatedAt": "2026-10-06T08:20:45.071Z",
+      "updatedAt": "2026-10-06T08:20:49.732Z",
       "id": "rep-inc-1791151837342",
       "createdAt": "2026-10-04T22:10:37.342Z",
       "patient": {
@@ -18,7 +18,7 @@
         "referringDoctorTitle": "Prof. Dr.",
         "id": "pat-inc-1791151837342",
         "referringDoctorName": "Herself",
-        "clinicalHistory": "طلب صادر من الفاتورة المالية INV-2026-0910 - السداد: مسدد بالكامل",
+        "clinicalHistory": " ",
         "appointmentDate": "2026-09-30",
         "loyaltyCardNumber": "RT-2026-0001",
         "phone": "01277634220",
