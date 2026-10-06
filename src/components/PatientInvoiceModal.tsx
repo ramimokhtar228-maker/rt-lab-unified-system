@@ -175,15 +175,15 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
   const paidAmount = isPaid ? netTotal : Math.round(netTotal * 0.5);
   const remainingAmount = netTotal - paidAmount;
 
-  const sampleDateFormatted = p.sampleDate ? new Date(p.sampleDate).toLocaleDateString('ar-EG', {
+  const sampleDateFormatted = p.sampleDate ? new Date(p.sampleDate).toLocaleDateString('en-GB', {
     year: 'numeric',
-    month: 'long',
+    month: 'numeric',
     day: 'numeric'
   }) : 'اليوم';
 
-  const reportingDateFormatted = p.reportingDate ? new Date(p.reportingDate).toLocaleDateString('ar-EG', {
+  const reportingDateFormatted = p.reportingDate ? new Date(p.reportingDate).toLocaleDateString('en-GB', {
     year: 'numeric',
-    month: 'long',
+    month: 'numeric',
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit'

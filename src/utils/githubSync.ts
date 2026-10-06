@@ -723,7 +723,7 @@ export async function pushFullStoreToGitHub(
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        message: `مزامنة سحابية شاملة لقاعدة بيانات المعمل: ${new Date().toLocaleTimeString('ar-EG')}`,
+        message: `مزامنة سحابية شاملة لقاعدة بيانات المعمل: ${new Date().toLocaleTimeString('en-US')}`,
         content: contentBase64,
         branch: 'main',
         ...(existingSha ? { sha: existingSha } : {})

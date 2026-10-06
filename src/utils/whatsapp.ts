@@ -1,21 +1,19 @@
-import { LabReport } from '../types/lab';
+import { LabReport, LabInfo } from '../types/lab';
 
-export function formatWhatsAppMessage(report: LabReport): string {
+export function formatWhatsAppMessage(report: LabReport, customLabInfo?: LabInfo): string {
   const p = report.patient;
   const profilesList = report.profiles.map(pr => `• ${pr.titleEn} (${pr.titleAr})`).join('\n');
-  const dateFormatted = new Date(p.sampleDate).toLocaleDateString('ar-EG', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
+  const dateFormatted = p.sampleDate ? new Date(p.sampleDate).toLocaleDateString('en-GB') : new Date().toLocaleDateString('en-GB');
 
   const referringDr = p.referringDoctorTitle === 'Herself' || p.referringDoctorTitle === 'Himself'
     ? 'طلب فحص ذاتي (Self-Request)'
     : `${p.referringDoctorTitle} ${p.referringDoctorName}`.trim();
 
-  return `🔬 *معامل RT للتحاليل التشخيصية*
-*معامل رامي مختار*
+  const phoneDisplay = customLabInfo?.hotline || customLabInfo?.phone || customLabInfo?.whatsapp || LAB_PHONE;
+  const addressDisplay = customLabInfo?.mainAddress || BRANCH_MAIN_ADDRESS;
+
+  return `🔬 *${customLabInfo?.labNameAr || 'معامل RT للتحاليل التشخيصية'}*
+*معامل أ.د. رامي مختار*
 *أطباء الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني*
 ────────────────────
 سعادة المريض/ة: *${p.fullName}*
@@ -34,8 +32,8 @@ ${profilesList}
 يمكنكم استلام النسخة الورقية المعتمدة من فرع المعمل، أو طلب إرسال النسخة الرقمية (PDF) مباشرة عبر هذه المحادثة.
 
 مع تمنيات أسرة *معامل RT* لكم بموفور الصحة والعافية. 🌸
-📞 هاتف المعمل: 01000000000
-📍 العنوان: كلية طب قصر العيني - القاهرة`;
+📞 هاتف المعمل: ${phoneDisplay}
+📍 العنوان: ${addressDisplay}`;
 }
 
 export function openWhatsApp(phone: string, message: string): void {
@@ -124,7 +122,7 @@ export function formatPostSampleWhatsAppMessage(params: {
 
 ✅ *تم سحب واستلام عيناتكم الطبية بنجاح.*
 • *رقم الملف:* #${params.labNumber}
-• *تاريخ ووقت السحب:* ${new Date().toLocaleString('ar-EG')}
+• *تاريخ ووقت السحب:* ${new Date().toLocaleDateString('en-GB')} ${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
 ${params.notes ? `• *ملاحظات العينة:* ${params.notes}\n` : ''}• *الموعد المتوقع لصدور النتيجة المعتمدة:* ${params.expectedTime || 'خلال ساعات قليلة اليوم بإذن الله'}
 
 نعمل بأعلى معايير الدقة المعملية الدولية لضمان أصح النتائج. سيصلكم إشعار بالنتيجة فور اعتمادها.

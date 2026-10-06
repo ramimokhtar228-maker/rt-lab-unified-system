@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { LabReport, TestProfile, TestParameter, LabStaffSignatures, ReportStatus, ComprehensivePackage } from '../types/lab';
 import { calculateFlag, formatReferenceDisplay, runAutomaticCalculations } from '../utils/calculator';
-import { COMMON_INTERPRETATIONS, STAFF_OPTIONS, loadSignatureRoster, addSignatureToRoster, SignatureOption } from '../data/labCatalog';
+import { COMMON_INTERPRETATIONS, STAFF_OPTIONS } from '../data/labCatalog';
 import { suggestHematologicalIllustration } from '../data/diseaseIllustrations';
 import { ColouredRangeChart } from './ColouredRangeChart';
 import { FlagBadge } from './FlagBadge';
 import { QuickResultPicker } from './QuickResultPicker';
 import { ParameterEditModal } from './ParameterEditModal';
 import { AddParameterModal } from './AddParameterModal';
+import { StaffSignaturesPicker } from './StaffSignaturesPicker';
 import { useApp } from '../context/AppContext';
 import { 
   Plus, 
@@ -71,6 +72,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
   const { packages, applyPackageToReport } = useApp();
   const [activeProfileTab, setActiveProfileTab] = useState<string>(report.profiles[0]?.id || '');
   const [modalParamToEdit, setModalParamToEdit] = useState<TestParameter | null>(null);
+  const [modalParamProfileId, setModalParamProfileId] = useState<string>('');
   const [isAddParamModalOpen, setIsAddParamModalOpen] = useState(false);
   const [lastCalculatedInfo, setLastCalculatedInfo] = useState<string[]>([]);
   const [isPatientEditOpen, setIsPatientEditOpen] = useState(false);
@@ -251,7 +253,8 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
   // Update single parameter
   const handleUpdateParameter = (profileId: string, paramId: string, updates: Partial<TestParameter>) => {
     const updatedProfiles = report.profiles.map(prof => {
-      if (prof.id === profileId) {
+      const hasParam = prof.parameters.some(param => param.id === paramId);
+      if (prof.id === profileId || hasParam) {
         let updatedParams = prof.parameters.map(param => {
           if (param.id === paramId) {
             const merged = { ...param, ...updates };
@@ -335,37 +338,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
   };
 
   // Staff updates
-  const [signatureRoster, setSignatureRoster] = useState(() => {
-    if (typeof window === 'undefined') return STAFF_OPTIONS;
-    return loadSignatureRoster();
-  });
-  const [newSigName, setNewSigName] = useState('');
-  const [newSigTitle, setNewSigTitle] = useState('');
-  const [newSigRole, setNewSigRole] = useState<'chemists' | 'verifiers' | 'pathologists'>('chemists');
-
-  const applySignature = (role: 'labChemist' | 'verifiedBy' | 'pathologist', option: SignatureOption) => {
-    const titleKey = role === 'labChemist' ? 'chemistTitle' : role === 'verifiedBy' ? 'verifierTitle' : 'pathologistTitle';
-    onUpdateReport({
-      ...report,
-      staff: {
-        ...report.staff,
-        [role]: option.name,
-        [titleKey]: option.title
-      },
-      updatedAt: new Date().toISOString()
-    });
-  };
-
-  const handleAddSignature = () => {
-    if (!newSigName.trim()) return;
-    const opt = { name: newSigName.trim(), title: newSigTitle.trim() || 'Staff Member' };
-    addSignatureToRoster(newSigRole, opt);
-    setSignatureRoster(loadSignatureRoster());
-    setNewSigName('');
-    setNewSigTitle('');
-  };
-
-    const handleStaffChange = <K extends keyof LabStaffSignatures>(key: K, val: string) => {
+  const handleStaffChange = <K extends keyof LabStaffSignatures>(key: K, val: string) => {
     onUpdateReport({
       ...report,
       staff: {
@@ -530,7 +503,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
               <div className="flex items-center gap-3 text-xs text-slate-500 mt-0.5 flex-wrap">
                 <span>الطبيب: <strong className="text-slate-700">{report.patient.referringDoctorTitle === 'Herself' || report.patient.referringDoctorTitle === 'Himself' ? 'طلب فحص ذاتي' : `${report.patient.referringDoctorTitle} ${report.patient.referringDoctorName || ''}`}</strong></span>
                 <span>•</span>
-                <span>تاريخ السحب: <strong className="font-mono text-slate-700">{report.patient.sampleDate ? new Date(report.patient.sampleDate).toLocaleDateString('ar-EG') : 'غير محدد'}</strong></span>
+                <span>تاريخ السحب: <strong className="font-mono text-slate-700">{report.patient.sampleDate ? new Date(report.patient.sampleDate).toLocaleDateString('en-GB') : 'غير محدد'}</strong></span>
                 <span>•</span>
                 <span>الهاتف: <strong className="font-mono text-slate-700">{report.patient.phone}</strong></span>
               </div>
@@ -1246,7 +1219,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                               <input
                                 type="text"
                                 value={param.name}
-                                onChange={(e) => handleUpdateParameter(currentProfile.id, param.id, { name: e.target.value })}
+                                onChange={(e) => handleUpdateParameter(profile.id, param.id, { name: e.target.value })}
                                 className="w-full font-bold text-slate-900 bg-transparent hover:bg-slate-50 focus:bg-white rounded px-1.5 py-1 focus:outline-none focus:ring-1 focus:ring-rose-500 border border-transparent focus:border-rose-400 text-sm"
                               />
                               <div className="flex items-center gap-2 text-[10px] text-slate-400 px-1 font-mono">
@@ -1263,14 +1236,14 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                               <QuickResultPicker
                                 paramName={param.name}
                                 currentValue={param.result}
-                                onSelect={(val) => handleUpdateParameter(currentProfile.id, param.id, { result: val })}
+                                onSelect={(val) => handleUpdateParameter(profile.id, param.id, { result: val })}
                               />
 
                               <input
                                 type="text"
                                 placeholder="النتيجة"
                                 value={param.result}
-                                onChange={(e) => handleUpdateParameter(currentProfile.id, param.id, { result: e.target.value })}
+                                onChange={(e) => handleUpdateParameter(profile.id, param.id, { result: e.target.value })}
                                 className={`w-28 text-center font-black font-mono-numbers text-sm rounded-md px-2 py-1 border transition-all ${
                                   param.flag === 'HIGH' || param.flag === 'PANIC_HIGH'
                                     ? 'bg-rose-50 text-rose-900 border-rose-400 font-extrabold'
@@ -1317,7 +1290,10 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                               {/* Edit Modal Button */}
                               <button
                                 type="button"
-                                onClick={() => setModalParamToEdit(param)}
+                                onClick={() => {
+                                  setModalParamToEdit(param);
+                                  setModalParamProfileId(profile.id);
+                                }}
                                 className="p-1.5 text-slate-500 hover:text-rose-900 hover:bg-rose-50 rounded-md transition-colors"
                                 title="تعديل اسم التحليل والمعدل الطبيعي ووحدة القياس"
                               >
@@ -1328,7 +1304,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                               <button
                                 type="button"
                                 disabled={pIdx === 0}
-                                onClick={() => handleMoveParameter(currentProfile.id, pIdx, 'up')}
+                                onClick={() => handleMoveParameter(profile.id, pIdx, 'up')}
                                 className="p-1 text-slate-400 hover:text-slate-700 disabled:opacity-20"
                                 title="تحريك لأعلى"
                               >
@@ -1338,8 +1314,8 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                               {/* Move Down */}
                               <button
                                 type="button"
-                                disabled={pIdx === currentProfile.parameters.length - 1}
-                                onClick={() => handleMoveParameter(currentProfile.id, pIdx, 'down')}
+                                disabled={pIdx === profile.parameters.length - 1}
+                                onClick={() => handleMoveParameter(profile.id, pIdx, 'down')}
                                 className="p-1 text-slate-400 hover:text-slate-700 disabled:opacity-20"
                                 title="تحريك لأسفل"
                               >
@@ -1349,7 +1325,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                               {/* Delete Parameter */}
                               <button
                                 type="button"
-                                onClick={() => handleDeleteParameter(currentProfile.id, param.id)}
+                                onClick={() => handleDeleteParameter(profile.id, param.id)}
                                 className="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors"
                                 title="حذف هذا التحليل"
                               >
@@ -1478,146 +1454,23 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
         />
       </div>
 
-      {/* Staff Signatures Box */}
-      <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs space-y-4">
-        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-          <div className="flex items-center gap-2">
-            <UserCheck className="w-4 h-4 text-rose-800" />
-            <h3 className="font-bold text-sm text-slate-900">طاقم الفحص والاعتماد (يظهر أسفل كل صفحة بالتقرير)</h3>
-          </div>
-          <span className="text-xs text-slate-500">معامل رامي مختار - قصر العيني</span>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Lab Chemist */}
-          <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-slate-700">Lab Chemist / الكيميائي</label>
-            <select
-              className="w-full text-xs p-2.5 rounded-lg border border-slate-300 bg-white focus:ring-1 focus:ring-rose-500"
-              value=""
-              onChange={(e) => {
-                const opt = signatureRoster.chemists.find(o => o.name === e.target.value);
-                if (opt) applySignature('labChemist', opt);
-              }}
-            >
-              <option value="">— Select from roster —</option>
-              {signatureRoster.chemists.map((o, i) => (
-                <option key={i} value={o.name}>{o.name} — {o.title}</option>
-              ))}
-            </select>
-            <input
-              type="text"
-              value={report.staff.labChemist}
-              onChange={(e) => handleStaffChange('labChemist', e.target.value)}
-              placeholder="Name"
-              className="w-full text-xs p-2 rounded-lg border border-slate-300"
-            />
-            <input
-              type="text"
-              value={report.staff.chemistTitle || ''}
-              onChange={(e) => handleStaffChange('chemistTitle', e.target.value)}
-              placeholder="Job title"
-              className="w-full text-xs p-2 rounded-lg border border-slate-200 text-slate-600"
-            />
-          </div>
-
-          {/* Verifier */}
-          <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-slate-700">Verifier / المدقق</label>
-            <select
-              className="w-full text-xs p-2.5 rounded-lg border border-slate-300 bg-white focus:ring-1 focus:ring-rose-500"
-              value=""
-              onChange={(e) => {
-                const opt = signatureRoster.verifiers.find(o => o.name === e.target.value);
-                if (opt) applySignature('verifiedBy', opt);
-              }}
-            >
-              <option value="">— Select from roster —</option>
-              {signatureRoster.verifiers.map((o, i) => (
-                <option key={i} value={o.name}>{o.name} — {o.title}</option>
-              ))}
-            </select>
-            <input
-              type="text"
-              value={report.staff.verifiedBy}
-              onChange={(e) => handleStaffChange('verifiedBy', e.target.value)}
-              placeholder="Name"
-              className="w-full text-xs p-2 rounded-lg border border-slate-300"
-            />
-            <input
-              type="text"
-              value={report.staff.verifierTitle || ''}
-              onChange={(e) => handleStaffChange('verifierTitle', e.target.value)}
-              placeholder="Job title"
-              className="w-full text-xs p-2 rounded-lg border border-slate-200 text-slate-600"
-            />
-          </div>
-
-          {/* Pathologist */}
-          <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-rose-900">Consultant / الاستشاري</label>
-            <select
-              className="w-full text-xs p-2.5 rounded-lg border border-rose-300 bg-rose-50/40 focus:ring-1 focus:ring-rose-500"
-              value=""
-              onChange={(e) => {
-                const opt = signatureRoster.pathologists.find(o => o.name === e.target.value);
-                if (opt) applySignature('pathologist', opt);
-              }}
-            >
-              <option value="">— Select from roster —</option>
-              {signatureRoster.pathologists.map((o, i) => (
-                <option key={i} value={o.name}>{o.name} — {o.title}</option>
-              ))}
-            </select>
-            <input
-              type="text"
-              value={report.staff.pathologist}
-              onChange={(e) => handleStaffChange('pathologist', e.target.value)}
-              placeholder="Name"
-              className="w-full text-xs p-2 rounded-lg border border-rose-300 bg-rose-50/40 font-bold text-rose-950"
-            />
-            <input
-              type="text"
-              value={report.staff.pathologistTitle || ''}
-              onChange={(e) => handleStaffChange('pathologistTitle', e.target.value)}
-              placeholder="Job title"
-              className="w-full text-xs p-2 rounded-lg border border-rose-200 text-rose-800"
-            />
-          </div>
-        </div>
-
-        {/* Add to signature roster */}
-        <div className="mt-4 p-3 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row gap-2 items-end">
-          <div className="flex-1 w-full">
-            <label className="text-[10px] font-bold text-slate-500">Add name</label>
-            <input value={newSigName} onChange={e => setNewSigName(e.target.value)} className="w-full text-xs p-2 rounded-lg border border-slate-300" placeholder="Full name" />
-          </div>
-          <div className="flex-1 w-full">
-            <label className="text-[10px] font-bold text-slate-500">Job title</label>
-            <input value={newSigTitle} onChange={e => setNewSigTitle(e.target.value)} className="w-full text-xs p-2 rounded-lg border border-slate-300" placeholder="Job title" />
-          </div>
-          <div className="w-full sm:w-40">
-            <label className="text-[10px] font-bold text-slate-500">Role</label>
-            <select value={newSigRole} onChange={e => setNewSigRole(e.target.value as any)} className="w-full text-xs p-2 rounded-lg border border-slate-300">
-              <option value="chemists">Chemist</option>
-              <option value="verifiers">Verifier</option>
-              <option value="pathologists">Consultant</option>
-            </select>
-          </div>
-          <button type="button" onClick={handleAddSignature} className="px-4 py-2 rounded-lg bg-rose-900 text-white text-xs font-bold whitespace-nowrap">
-            + Add to roster
-          </button>
-        </div>
-      </div>
+      {/* Staff Signatures Box with Dropdown Selection & Add New Member */}
+      <StaffSignaturesPicker
+        signatures={report.staff}
+        onChange={(updated) => onUpdateReport({ ...report, staff: updated, updatedAt: new Date().toISOString() })}
+      />
 
       {/* Parameter Edit Modal */}
       <ParameterEditModal
         isOpen={!!modalParamToEdit}
-        onClose={() => setModalParamToEdit(null)}
+        onClose={() => {
+          setModalParamToEdit(null);
+          setModalParamProfileId('');
+        }}
         parameter={modalParamToEdit}
         onSave={(updated) => {
-          if (modalParamToEdit && currentProfile) {
-            handleUpdateParameter(currentProfile.id, modalParamToEdit.id, updated);
+          if (modalParamToEdit) {
+            handleUpdateParameter(modalParamProfileId || currentProfile.id, modalParamToEdit.id, updated);
           }
         }}
       />

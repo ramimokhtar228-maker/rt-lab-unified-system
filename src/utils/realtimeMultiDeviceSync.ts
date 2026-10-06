@@ -214,7 +214,7 @@ class RealtimeMultiDeviceSyncEngine {
     } else if (this.isSyncing) {
       text = 'جاري التسميع السحابي اللحظي...';
     } else if (this.lastSyncedAt) {
-      text = `متصل سحابياً فورياً (آخر تسميع: ${this.lastSyncedAt.toLocaleTimeString('ar-EG')})`;
+      text = `متصل سحابياً فورياً (آخر تسميع: ${this.lastSyncedAt.toLocaleTimeString('en-US')})`;
     }
 
     return {

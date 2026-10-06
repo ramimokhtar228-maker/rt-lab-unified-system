@@ -7,6 +7,7 @@ import { exportReportToPPTX } from '../utils/pptxExport';
 import { formatWhatsAppMessage, openWhatsApp } from '../utils/whatsapp';
 import { downloadReportPDF, triggerPrintDialog } from '../utils/pdfExport';
 import { openPrintReportWindow } from '../utils/printReportWindow';
+import { useApp } from '../context/AppContext';
 import { 
   Printer, 
   Share2, 
@@ -42,6 +43,7 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
   onOpenIllustrationsModal,
   onOpenSmartReport
 }) => {
+  const { labInfo } = useApp();
   const p = report.patient;
   const totalPages = report.profiles.length;
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
@@ -52,18 +54,18 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
       await downloadReportPDF(report);
     } catch (err) {
       console.error('Failed to generate PDF:', err);
-      openPrintReportWindow(report);
+      openPrintReportWindow(report, labInfo);
     } finally {
       setIsGeneratingPDF(false);
     }
   };
 
   const handlePrint = () => {
-    openPrintReportWindow(report);
+    openPrintReportWindow(report, labInfo);
   };
 
   const handleWhatsApp = () => {
-    const msg = formatWhatsAppMessage(report);
+    const msg = formatWhatsAppMessage(report, labInfo);
     openWhatsApp(p.phone, msg);
   };
 
@@ -206,9 +208,23 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
                       <p className="text-xs text-slate-600 font-medium">
                         كلية طب قصر العيني - جامعة القاهرة
                       </p>
-                      <p className="text-[10px] text-slate-500 font-bold mt-1">
-                        📍 المقر الرئيسي: ميدان بهتيم برج صيدلية العزبي الدور الثالث شبرا الخيمة | هاتف: 01012345678
-                      </p>
+                      <div className="text-[10px] text-slate-600 font-bold mt-1.5 pt-1 border-t border-slate-200/60 flex flex-wrap items-center justify-between gap-1">
+                        <span>📍 {labInfo?.mainAddress || 'ميدان بهتيم برج صيدلية العزبي الدور الثالث شبرا الخيمة'}</span>
+                        <span className="flex items-center gap-1.5">
+                          <span>📞 هاتف: <strong className="font-mono text-slate-900">{labInfo?.phone || '0244667788'}</strong></span>
+                          <span>| الخط الساخن: <strong className="font-mono text-rose-900">{labInfo?.hotline || labInfo?.whatsapp || '01012345678'}</strong></span>
+                          {onOpenLabInfoModal && (
+                            <button
+                              type="button"
+                              onClick={onOpenLabInfoModal}
+                              className="no-print mr-1 text-[10px] bg-rose-50 hover:bg-rose-100 text-rose-900 px-1.5 py-0.5 rounded border border-rose-300 font-semibold cursor-pointer"
+                              title="تعديل الهاتف والعنوان في رأس التقرير"
+                            >
+                              تعديل ✏️
+                            </button>
+                          )}
+                        </span>
+                      </div>
                     </div>
 
                     {/* Laboratory Central 3D Logo matching uploaded brand images */}
@@ -605,51 +621,75 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
                 */}
                 <div className="grid grid-cols-3 gap-4 text-center mb-4">
                   {/* Lab CHEMIST */}
-                  <div className="space-y-1">
+                  <div className="space-y-0.5">
                     <p className="text-[11px] font-bold uppercase text-slate-500 tracking-wide">
                       Lab CHEMIST
                     </p>
-                    <div className="h-9 flex items-center justify-center">
+                    <div className="h-7 flex items-center justify-center">
                       <span className="font-serif italic text-xs text-slate-500 font-bold tracking-wider">
                         Approved / Chemist
                       </span>
                     </div>
-                    <p className="text-xs font-semibold text-slate-800">
+                    <p className="text-xs font-bold text-slate-900">
                       {report.staff.labChemist}
                     </p>
+                    <p className="text-[10px] text-slate-600 font-medium">
+                      {report.staff.chemistTitle || 'أخصائي الكيمياء الإكلينيكية'}
+                    </p>
+                    {report.staff.chemistLicense && (
+                      <p className="text-[9px] text-slate-400 font-mono">
+                        {report.staff.chemistLicense}
+                      </p>
+                    )}
                   </div>
 
                   {/* Verify by */}
-                  <div className="space-y-1">
+                  <div className="space-y-0.5">
                     <p className="text-[11px] font-bold uppercase text-slate-500 tracking-wide">
                       Verify by
                     </p>
-                    <div className="h-9 flex items-center justify-center">
+                    <div className="h-7 flex items-center justify-center">
                       <span className="font-serif italic text-xs text-slate-500 font-bold tracking-wider">
                         Quality Audit Verified
                       </span>
                     </div>
-                    <p className="text-xs font-semibold text-slate-800">
+                    <p className="text-xs font-bold text-slate-900">
                       {report.staff.verifiedBy}
                     </p>
+                    <p className="text-[10px] text-slate-600 font-medium">
+                      {report.staff.verifierTitle || 'إدارة ضبط الجودة والتشغيل'}
+                    </p>
+                    {report.staff.verifierLicense && (
+                      <p className="text-[9px] text-slate-400 font-mono">
+                        {report.staff.verifierLicense}
+                      </p>
+                    )}
                   </div>
 
                   {/* Pathologist */}
-                  <div className="space-y-1 border-r border-slate-200 pr-2">
+                  <div className="space-y-0.5 border-r border-slate-200 pr-2">
                     <p className="text-[11px] font-bold uppercase text-rose-950 tracking-wide">
                       Consultant Pathologist
                     </p>
-                    <div className="h-9 flex items-center justify-center">
+                    <div className="h-7 flex items-center justify-center">
                       {/* Realistic signature stamp representation */}
                       <div className="inline-block px-2 py-0.5 border border-dashed border-rose-800 rounded bg-rose-50/50">
                         <span className="font-serif italic text-xs text-rose-900 font-black">
-                          Dr. Rami Mokhtar
+                          Prof. Dr. Rami Mokhtar
                         </span>
                       </div>
                     </div>
                     <p className="text-xs font-bold text-rose-950">
                       {report.staff.pathologist}
                     </p>
+                    <p className="text-[10px] text-rose-900 font-medium">
+                      {report.staff.pathologistTitle || 'استشاري الباثولوجيا الإكلينيكية - قصر العيني'}
+                    </p>
+                    {report.staff.pathologistLicense && (
+                      <p className="text-[9px] text-slate-400 font-mono">
+                        {report.staff.pathologistLicense}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -663,9 +703,9 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
                     <span>·</span>
                     <span>Kasr Al Ainy Faculty of Medicine</span>
                     <span>·</span>
-                    <span>المقر: ميدان بهتيم برج العزبي</span>
+                    <span>المقر: {labInfo?.mainAddress ? (labInfo.mainAddress.length > 35 ? labInfo.mainAddress.substring(0, 35) + '...' : labInfo.mainAddress) : 'ميدان بهتيم برج العزبي'}</span>
                     <span>·</span>
-                    <span>Tel: 01012345678 / 0244667788</span>
+                    <span>Tel: <strong className="font-mono text-slate-800">{labInfo?.phone || '0244667788'}</strong> | <strong className="font-mono text-rose-900">{labInfo?.hotline || '01012345678'}</strong></span>
                   </div>
 
                   <div className="font-mono font-bold text-slate-600">

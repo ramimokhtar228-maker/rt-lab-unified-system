@@ -93,7 +93,7 @@ export const Header: React.FC = () => {
             <div className="hidden lg:flex items-center gap-3 bg-slate-800/80 border border-slate-700/70 rounded-xl px-3 py-1.5 text-xs font-medium">
               <div className="text-center px-1">
                 <span className="text-[10px] text-slate-400 block">إيراد اليوم</span>
-                <span className="font-mono font-bold text-emerald-400">{todayRevenue.toLocaleString('ar-EG')} ج.م</span>
+                <span className="font-mono font-bold text-emerald-400">{todayRevenue.toLocaleString('en-US')} ج.م</span>
               </div>
               <div className="h-6 w-px bg-slate-700" />
               <div className="text-center px-1">

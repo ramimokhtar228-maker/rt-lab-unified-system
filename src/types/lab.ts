@@ -454,6 +454,14 @@ export interface TestProfile {
   };
 }
 
+export interface StaffOptionItem {
+  id: string;
+  name: string;
+  title: string;
+  role: 'chemist' | 'verifier' | 'consultant';
+  license?: string;
+}
+
 export interface LabStaffSignatures {
   labChemist: string;
   verifiedBy: string;

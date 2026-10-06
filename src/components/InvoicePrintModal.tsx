@@ -137,8 +137,8 @@ export const InvoicePrintModal: React.FC<InvoicePrintModalProps> = ({ invoice, o
                 </div>
                 <div>
                   <span className="text-slate-500 block">التاريخ والوقت:</span>
-                  <span className="font-semibold text-slate-800">
-                    {new Date(invoice.createdAt).toLocaleDateString('ar-EG')} - {new Date(invoice.createdAt).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })}
+                  <span className="font-semibold text-slate-800 font-mono">
+                    {new Date(invoice.createdAt).toLocaleDateString('en-GB')} - {new Date(invoice.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </div>
                 <div>
@@ -306,7 +306,7 @@ export const InvoicePrintModal: React.FC<InvoicePrintModalProps> = ({ invoice, o
               <div className="py-2 text-[11px] border-b border-dashed border-slate-400 space-y-1">
                 <div>فاتورة: <span className="font-bold">{invoice.invoiceNumber}</span></div>
                 <div>كود العينة: <span className="font-bold">{invoice.labNumber}</span></div>
-                <div>التاريخ: {new Date(invoice.createdAt).toLocaleDateString('ar-EG')}</div>
+                <div>التاريخ: <span className="font-mono">{new Date(invoice.createdAt).toLocaleDateString('en-GB')} {new Date(invoice.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</span></div>
                 <div>المريض: <span className="font-bold">{invoice.patientName}</span></div>
                 <div>السن: {invoice.patientAge} | {invoice.patientGender === 'male' ? 'ذكر' : 'أنثى'}</div>
               </div>

@@ -58,6 +58,8 @@ const AppContent: React.FC = () => {
     setIsLabInfoModalOpen,
     labInfo,
     updateLabInfo,
+    staffSignatures,
+    updateStaffSignatures,
     testCatalog,
     packages,
     diagnosticProfiles,
@@ -78,9 +80,6 @@ const AppContent: React.FC = () => {
   const [catalogModalOpen, setCatalogModalOpen] = useState(false);
   const [manualTestModalOpen, setManualTestModalOpen] = useState(false);
   const [isPrintPreviewActive, setIsPrintPreviewActive] = useState(false);
-
-  // Staff Signatures state
-  const [staffSignatures, setStaffSignatures] = useState<LabStaffSignatures>(DEFAULT_STAFF);
 
   // Handlers for ReportEditor & Archive
   const handleSelectReport = (report: LabReport) => {
@@ -200,7 +199,7 @@ const AppContent: React.FC = () => {
                     onSaveToArchive={() => setActiveTab('reports_archive')}
                     onPrintPreview={() => setIsPrintPreviewActive(true)}
                     onSendWhatsApp={() => {
-                      const msg = formatWhatsAppMessage(currentReport);
+                      const msg = formatWhatsAppMessage(currentReport, labInfo);
                       openWhatsApp(currentReport.patient.phone, msg);
                     }}
                     onExportPPTX={() => exportReportToPPTX(currentReport)}
@@ -356,7 +355,7 @@ const AppContent: React.FC = () => {
           labInfo={labInfo}
           onUpdateLabInfo={updateLabInfo}
           staffSignatures={staffSignatures}
-          onUpdateStaffSignatures={setStaffSignatures}
+          onUpdateStaffSignatures={updateStaffSignatures}
         />
       )}
 

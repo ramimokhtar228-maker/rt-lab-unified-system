@@ -358,8 +358,8 @@ export const DashboardModule: React.FC = () => {
             <span className="text-xs font-bold text-slate-500">ج.م</span>
           </div>
           <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-100">
-            <span>نقدي: <strong className="text-slate-800 font-mono">{totalPaidCash}</strong></span>
-            <span>فيزا/إلكتروني: <strong className="text-slate-800 font-mono">{totalPaidVisa + totalPaidElectronic}</strong></span>
+            <span>نقدي: <strong className="text-slate-800 font-mono">{totalPaidCash.toLocaleString('en-US')}</strong></span>
+            <span>فيزا/إلكتروني: <strong className="text-slate-800 font-mono">{(totalPaidVisa + totalPaidElectronic).toLocaleString('en-US')}</strong></span>
           </div>
         </div>
 

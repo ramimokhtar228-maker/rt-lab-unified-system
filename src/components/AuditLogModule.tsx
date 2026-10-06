@@ -123,8 +123,8 @@ export const AuditLogModule: React.FC = () => {
               ) : (
                 filteredLogs.map(log => (
                   <tr key={log.id} className="hover:bg-slate-50 transition-colors">
-                    <td className="py-3 px-4 text-slate-600 whitespace-nowrap">
-                      {new Date(log.timestamp).toLocaleDateString('ar-EG')} - {new Date(log.timestamp).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                    <td className="py-3 px-4 text-slate-600 whitespace-nowrap font-mono text-xs">
+                      {new Date(log.timestamp).toLocaleDateString('en-GB')} - {new Date(log.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                     </td>
                     <td className="py-3 px-4 font-sans font-bold text-slate-900">
                       <div>{log.userName}</div>

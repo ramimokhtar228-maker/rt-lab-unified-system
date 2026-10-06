@@ -114,7 +114,7 @@ export const IncomeModule: React.FC = () => {
         <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-1">
           <span className="text-xs font-bold text-slate-500">إجمالي الفواتير الصادرة</span>
           <div className="text-2xl font-black text-slate-900 font-mono">
-            {totalBilled.toLocaleString('ar-EG')} <span className="text-xs font-normal">ج.م</span>
+            {totalBilled.toLocaleString('en-US')} <span className="text-xs font-normal">ج.م</span>
           </div>
           <span className="text-[11px] text-slate-400 block">{filteredInvoices.length} فاتورة مسجلة</span>
         </div>
@@ -122,7 +122,7 @@ export const IncomeModule: React.FC = () => {
         <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-1">
           <span className="text-xs font-bold text-emerald-700">المحصل فعلياً بالخزينة</span>
           <div className="text-2xl font-black text-emerald-700 font-mono">
-            {totalCollected.toLocaleString('ar-EG')} <span className="text-xs font-normal">ج.م</span>
+            {totalCollected.toLocaleString('en-US')} <span className="text-xs font-normal">ج.م</span>
           </div>
           <span className="text-[11px] text-slate-400 block">نسبة التحصيل: {totalBilled > 0 ? Math.round((totalCollected / totalBilled) * 100) : 100}%</span>
         </div>
@@ -130,7 +130,7 @@ export const IncomeModule: React.FC = () => {
         <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-1">
           <span className="text-xs font-bold text-amber-700">المديونيات والمتبقي المعلق</span>
           <div className="text-2xl font-black text-amber-700 font-mono">
-            {totalRemaining.toLocaleString('ar-EG')} <span className="text-xs font-normal">ج.م</span>
+            {totalRemaining.toLocaleString('en-US')} <span className="text-xs font-normal">ج.م</span>
           </div>
           <span className="text-[11px] text-slate-400 block">{filteredInvoices.filter(i => i.remainingAmount > 0).length} فاتورة غير مكتملة السداد</span>
         </div>

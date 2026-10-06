@@ -91,7 +91,7 @@ export const PatientTrendChart: React.FC<PatientTrendChartProps> = ({
           if (!isNaN(val)) {
             points.push({
               date: v.patient.sampleDate,
-              formattedDate: new Date(v.patient.sampleDate).toLocaleDateString('ar-EG', {
+              formattedDate: new Date(v.patient.sampleDate).toLocaleDateString('en-GB', {
                 year: 'numeric',
                 month: 'short',
                 day: 'numeric'

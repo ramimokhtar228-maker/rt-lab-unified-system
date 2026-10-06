@@ -160,7 +160,7 @@ export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): voi
               <h1 style="margin:0; font-size:17px; font-weight:900; color:#800000;">${labNameAr}</h1>
               <h2 style="margin:1px 0 0 0; font-size:12px; font-weight:700; color:#0f172a;">معامل أ.د. رامي مختار</h2>
               <p style="margin:1px 0 0 0; font-size:10.5px; font-weight:600; color:#800000;">${supervisionAr}</p>
-              <p style="margin:2px 0 0 0; font-size:10px; color:#334155; font-weight:700; direction:ltr; text-align:right;">📍 ${address}<br/>Tel: ${phone} &nbsp;|&nbsp; Hotline: ${hotline}</p>
+              <p style="margin:2px 0 0 0; font-size:9px; color:#475569; font-weight:bold;">📍 ${address} | هاتف: ${phone} / ${hotline}</p>
             </div>
 
             <!-- Central 3D Brand Logo -->
@@ -221,6 +221,17 @@ export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): voi
               </div>
             </div>
           </div>
+
+          <!-- Official Package Banner if applied -->
+          ${report.packageApplied ? `
+            <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:5px; padding:4px 10px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; font-size:11px;">
+              <div>
+                <span style="background:#d97706; color:#ffffff; font-weight:800; padding:1px 6px; border-radius:3px; font-size:9.5px; margin-left:6px;">باقة معتمدة</span>
+                <strong style="color:#78350f;">${report.packageApplied.titleAr} (${report.packageApplied.code})</strong>
+              </div>
+              <span style="color:#92400e; font-size:10px;">معامل د. رامي مختار - فحص شامل مسرود</span>
+            </div>
+          ` : ''}
 
           <!-- Profile Title Banner -->
           <div style="background:linear-gradient(90deg, #700b0b, #0f172a); color:#ffffff; padding:6px 12px; border-radius:5px; display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -338,8 +349,8 @@ export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): voi
           background: #525659;
           font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
           color: #0f172a;
-          font-size: 13px;
-          line-height: 1.7;
+          font-size: 12.5px;
+          line-height: 1.65;
           -webkit-font-smoothing: antialiased;
           text-rendering: optimizeLegibility;
         }

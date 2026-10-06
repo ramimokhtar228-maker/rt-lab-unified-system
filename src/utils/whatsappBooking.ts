@@ -100,7 +100,7 @@ export function generatePostSampleWhatsAppMessage(params: {
 ✅ *تم سحب واستلام عيناتكم الطبية بنجاح.*
 
 • *رقم الإيصال:* #${params.bookingNumber}
-• *تاريخ ووقت السحب:* ${new Date().toLocaleString('ar-EG')}
+• *تاريخ ووقت السحب:* ${new Date().toLocaleDateString('en-GB')} ${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
 ${params.notes ? `• *ملاحظات العينة:* ${params.notes}\n` : ''}• *الموعد المتوقع لصدور النتيجة المعتمدة:* ${params.expectedTime || 'خلال ساعات قليلة اليوم بإذن الله'}
 
 سيصلكم إشعار ورابط النتيجة فور اعتمادها من استشاري التحاليل الطبية.${loyaltyPart}

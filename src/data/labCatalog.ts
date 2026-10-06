@@ -3,65 +3,47 @@ export { INITIAL_INDIVIDUAL_TESTS } from "./individualTestsData";
 export { INITIAL_LAB_INFO, INITIAL_FACILITIES, INITIAL_STAFF_MEMBERS } from "./staffAndFacilitiesData";
 export { INITIAL_LOYALTY_PROFILES, TIER_BENEFITS } from "./loyaltyData";
 
-import { CatalogProfileTemplate, LabStaffSignatures } from '../types/lab';
+import { CatalogProfileTemplate, LabStaffSignatures, StaffOptionItem } from '../types/lab';
 
 export const DEFAULT_STAFF: LabStaffSignatures = {
-  labChemist: "",
-  verifiedBy: "",
-  pathologist: "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
+  labChemist: "د/ عمر فؤاد القاضي",
+  verifiedBy: "أ/ سارة إبراهيم الشربيني",
+  pathologist: "أ.د. رامي مختار",
+  chemistTitle: "أخصائي أول كيمياء إكلينيكية وهرمونات",
+  verifierTitle: "مدير العمليات وضبط الجودة الإدارية",
+  pathologistTitle: "استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
+  chemistLicense: "EGY-SCI-88402",
+  verifierLicense: "EGY-MGT-11024",
+  pathologistLicense: "EGY-MED-48201"
 };
 
-export type SignatureOption = { name: string; title: string };
-
-export const STAFF_OPTIONS: {
-  chemists: SignatureOption[];
-  verifiers: SignatureOption[];
-  pathologists: SignatureOption[];
+export const INITIAL_STAFF_SIGNATURE_OPTIONS: {
+  chemists: StaffOptionItem[];
+  verifiers: StaffOptionItem[];
+  consultants: StaffOptionItem[];
 } = {
   chemists: [
-    { name: "د. هبة الشناوي", title: "Clinical Chemistry Specialist" },
-    { name: "د. مصطفى العوضي", title: "Lab Chemist" }
+    { id: 'c-1', name: 'د/ عمر فؤاد القاضي', title: 'أخصائي أول كيمياء إكلينيكية وهرمونات', role: 'chemist', license: 'EGY-SCI-88402' },
+    { id: 'c-2', name: 'د/ آية محمود الباز', title: 'أخصائية أمراض الدم والمناعة والمزارع', role: 'chemist', license: 'EGY-SCI-91204' },
+    { id: 'c-3', name: 'د/ كريم حسن الديب', title: 'كيميائي تحاليل طبية وتشخيصية', role: 'chemist', license: 'EGY-SCI-65432' },
+    { id: 'c-4', name: 'د/ هبة الشناوي', title: 'كيميائية تحاليل وفحوصات فورية', role: 'chemist', license: 'EGY-SCI-77210' }
   ],
   verifiers: [
-    { name: "د. مصطفى العوضي", title: "Quality Control & Clinical Review" },
-    { name: "د. هبة الشناوي", title: "Senior Verifier" }
+    { id: 'v-1', name: 'أ/ سارة إبراهيم الشربيني', title: 'مدير العمليات والجودة الإدارية', role: 'verifier', license: 'EGY-MGT-11024' },
+    { id: 'v-2', name: 'د/ دعاء الشافعي', title: 'مراجع ومراقب جودة التحاليل الإكلينيكية', role: 'verifier', license: 'EGY-MGT-55412' },
+    { id: 'v-3', name: 'د/ مصطفى العوضي', title: 'استشاري مراجعة التحاليل وضبط المعايرة', role: 'verifier', license: 'EGY-MGT-33109' }
   ],
-  pathologists: [
-    { name: "أ.د. رامي مختار", title: "Consultant Clinical Pathology - Kasr Al Ainy" }
+  consultants: [
+    { id: 'p-1', name: 'أ.د. رامي مختار', title: 'استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني', role: 'consultant', license: 'EGY-MED-48201' },
+    { id: 'p-2', name: 'د/ سامح عبد الرازق', title: 'استشاري أمراض الدم والباثولوجيا الإكلينيكية', role: 'consultant', license: 'EGY-MED-39108' }
   ]
 };
 
-const SIGNATURE_ROSTER_KEY = 'rt_lab_signature_roster_v1';
-
-export function loadSignatureRoster(): typeof STAFF_OPTIONS {
-  try {
-    const raw = localStorage.getItem(SIGNATURE_ROSTER_KEY);
-    if (!raw) return { ...STAFF_OPTIONS, chemists: [...STAFF_OPTIONS.chemists], verifiers: [...STAFF_OPTIONS.verifiers], pathologists: [...STAFF_OPTIONS.pathologists] };
-    const parsed = JSON.parse(raw);
-    return {
-      chemists: [...STAFF_OPTIONS.chemists, ...(parsed.chemists || [])],
-      verifiers: [...STAFF_OPTIONS.verifiers, ...(parsed.verifiers || [])],
-      pathologists: [...STAFF_OPTIONS.pathologists, ...(parsed.pathologists || [])]
-    };
-  } catch {
-    return STAFF_OPTIONS;
-  }
-}
-
-export function addSignatureToRoster(role: 'chemists' | 'verifiers' | 'pathologists', option: SignatureOption) {
-  try {
-    const raw = localStorage.getItem(SIGNATURE_ROSTER_KEY);
-    const parsed = raw ? JSON.parse(raw) : { chemists: [], verifiers: [], pathologists: [] };
-    if (!parsed[role]) parsed[role] = [];
-    const exists = parsed[role].some((o: SignatureOption) => o.name === option.name && o.title === option.title);
-    if (!exists) {
-      parsed[role].push(option);
-      localStorage.setItem(SIGNATURE_ROSTER_KEY, JSON.stringify(parsed));
-    }
-  } catch (e) {
-    console.warn(e);
-  }
-}
+export const STAFF_OPTIONS = {
+  chemists: INITIAL_STAFF_SIGNATURE_OPTIONS.chemists.map(c => `${c.name} - ${c.title}`),
+  verifiers: INITIAL_STAFF_SIGNATURE_OPTIONS.verifiers.map(v => `${v.name} - ${v.title}`),
+  consultants: INITIAL_STAFF_SIGNATURE_OPTIONS.consultants.map(p => `${p.name} - ${p.title}`)
+};
 
 export const COMMON_INTERPRETATIONS: { [key: string]: string[] } = {
   CBC: [
