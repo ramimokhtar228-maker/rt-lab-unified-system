@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:57:37.634Z",
+  "syncedAt": "2026-10-06T06:57:54.190Z",
   "reports": [
     {
       "profiles": [
@@ -2163,7 +2163,7 @@
       "nameAr": "دلالات أورام الثدي (CA 15-3)",
       "nameEn": "Cancer Antigen 15-3 (CA 15-3)",
       "category": "Tumor Markers",
-      "price": 260,
+      "price": 555,
       "cost": 60,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
