@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:49:36.445Z",
+  "syncedAt": "2026-10-06T11:49:40.810Z",
   "reports": [
     {
       "id": "rep-1791287331555",
@@ -255,27 +255,6 @@
           ]
         },
         {
-          "id": "prof-1791287331554-6xm5",
-          "profileCode": "ALT",
-          "titleEn": "Alanine Aminotransferase (ALT / SGPT)",
-          "titleAr": "إنزيم كبد ALT / SGPT",
-          "category": "Liver Function",
-          "sampleType": "Serum",
-          "parameters": [
-            {
-              "id": "p-1791287331554-mrb",
-              "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
-              "result": "",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 41,
-              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
-              "flag": "NORMAL",
-              "method": "IFCC Kinetic UV without Pyridoxal Phosphate"
-            }
-          ]
-        },
-        {
           "id": "prof-1791287331554-9s8h",
           "profileCode": "AST",
           "titleEn": "Aspartate Aminotransferase (AST / SGOT)",
@@ -414,7 +393,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:48:51.555Z",
-      "updatedAt": "2026-10-06T11:49:33.623Z",
+      "updatedAt": "2026-10-06T11:49:36.811Z",
       "invoiceId": "inv-1791287331555"
     },
     {
