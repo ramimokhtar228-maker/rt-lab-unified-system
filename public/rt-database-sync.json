@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:34:27.066Z",
+  "syncedAt": "2026-10-06T11:34:35.526Z",
   "reports": [
     {
       "id": "rep-1791286375200",
@@ -255,48 +255,6 @@
           ]
         },
         {
-          "id": "prof-1791286375199-ldtg",
-          "profileCode": "URIC",
-          "titleEn": "Serum Uric Acid",
-          "titleAr": "حمض البوليك والنقرس (Serum Uric Acid)",
-          "category": "Kidney Function",
-          "sampleType": "Serum",
-          "parameters": [
-            {
-              "id": "p-1791286375199-bhc",
-              "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
-              "result": "",
-              "unit": "mg/dL",
-              "minNormal": 3.5,
-              "maxNormal": 7.2,
-              "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
-              "flag": "NORMAL",
-              "method": "Uricase / POD Enzymatic Colorimetric"
-            }
-          ]
-        },
-        {
-          "id": "prof-1791286375199-hvav",
-          "profileCode": "UREA",
-          "titleEn": "Blood Urea",
-          "titleAr": "بولينا بالدم (Blood Urea)",
-          "category": "Kidney Function",
-          "sampleType": "Serum",
-          "parameters": [
-            {
-              "id": "p-1791286375199-q62",
-              "name": "بولينا بالدم (Blood Urea) (Blood Urea)",
-              "result": "",
-              "unit": "mg/dL",
-              "minNormal": 15,
-              "maxNormal": 45,
-              "textReference": "15 - 45 mg/dL",
-              "flag": "NORMAL",
-              "method": "Urease / GLDH Enzymatic Kinetic"
-            }
-          ]
-        },
-        {
           "id": "prof-1791286375199-rst3",
           "profileCode": "CALCIUM_TOTAL",
           "titleEn": "Total Serum Calcium",
@@ -524,7 +482,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:32:55.200Z",
-      "updatedAt": "2026-10-06T11:34:22.479Z",
+      "updatedAt": "2026-10-06T11:34:28.631Z",
       "invoiceId": "inv-1791286375201"
     },
     {
