@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:06:44.589Z",
+  "syncedAt": "2026-10-06T11:06:49.272Z",
   "reports": [
     {
       "id": "rep-1791284141332",
@@ -459,7 +459,7 @@
               "textReference": "< 5.7% Normal, 5.7 - 6.4% Pre-Diabetes, ≥ 6.5% Diabetes",
               "method": "HPLC / Turbidimetric",
               "id": "param-3-1791284141332-820",
-              "result": "",
+              "result": "5.22",
               "flag": "NORMAL"
             },
             {
@@ -468,9 +468,9 @@
               "minNormal": 68,
               "maxNormal": 114,
               "textReference": "80 - 120 mg/dL",
-              "notes": "Auto-calculated: (28.7 × HbA1c) - 46.7",
+              "notes": "Calculated: (28.7 × HbA1c) - 46.7",
               "id": "param-4-1791284141332-q8t",
-              "result": "",
+              "result": "103",
               "flag": "NORMAL"
             }
           ]
@@ -483,7 +483,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T10:55:41.332Z",
-      "updatedAt": "2026-10-06T11:06:41.784Z",
+      "updatedAt": "2026-10-06T11:06:46.670Z",
       "invoiceId": "inv-1791284141332"
     },
     {
