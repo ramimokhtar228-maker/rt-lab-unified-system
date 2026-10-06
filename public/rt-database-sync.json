@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:51:11.066Z",
+  "syncedAt": "2026-10-06T11:51:17.426Z",
   "reports": [
     {
       "id": "rep-1791287331555",
@@ -51,8 +51,8 @@
               "method": "CHOD-PAP",
               "textReference": "",
               "id": "param-0-1791287331552-hon",
-              "result": "254",
-              "flag": "HIGH"
+              "result": "200",
+              "flag": "NORMAL"
             },
             {
               "name": "Serum Triglycerides",
@@ -85,7 +85,7 @@
               "notes": "Friedewald Formula: TC - HDL - (TG/5)",
               "textReference": "",
               "id": "param-3-1791287331552-74o",
-              "result": "190",
+              "result": "136",
               "flag": "HIGH"
             },
             {
@@ -107,7 +107,7 @@
               "notes": "Calculated: Total Cholesterol - HDL",
               "textReference": "",
               "id": "param-5-1791287331552-lvu",
-              "result": "214",
+              "result": "160",
               "flag": "HIGH"
             },
             {
@@ -118,7 +118,7 @@
               "textReference": "< 4.5 Desirable",
               "notes": "Desirable < 4.5",
               "id": "param-6-1791287331552-jti",
-              "result": "6.3",
+              "result": "5",
               "flag": "HIGH"
             },
             {
@@ -283,7 +283,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:48:51.555Z",
-      "updatedAt": "2026-10-06T11:51:08.337Z",
+      "updatedAt": "2026-10-06T11:51:14.495Z",
       "invoiceId": "inv-1791287331555"
     },
     {
