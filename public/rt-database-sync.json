@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T16:52:50.653Z",
+  "syncedAt": "2026-10-06T16:53:00.069Z",
   "reports": [
     {
       "id": "rep-1791305504343",
@@ -58,7 +58,7 @@
               "method": "Electrical Impedance",
               "textReference": "M: 4.5 - 5.9 | F: 4.0 - 5.2",
               "id": "param-1-1791305504342-yw4",
-              "result": "",
+              "result": "4.",
               "flag": "NORMAL"
             },
             {
@@ -77,21 +77,21 @@
               "unit": "fL",
               "minNormal": 80,
               "maxNormal": 98,
-              "notes": "Auto-calculated: (PCV × 10) / RBC",
+              "notes": "Calculated: (HCT × 10) / RBC",
               "textReference": "80.0 - 98.0 fL",
               "id": "param-3-1791305504342-tsu",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "7.5",
+              "flag": "LOW"
             },
             {
               "name": "M.C.H",
               "unit": "pg",
               "minNormal": 27,
               "maxNormal": 33,
-              "notes": "Auto-calculated: (Hb × 10) / RBC",
+              "notes": "Calculated: (HGB × 10) / RBC",
               "textReference": "27.0 - 33.0 pg",
               "id": "param-4-1791305504342-vwy",
-              "result": "",
+              "result": "27.5",
               "flag": "NORMAL"
             },
             {
@@ -128,10 +128,10 @@
             {
               "name": "Mentzer Index (MCV/RBC)",
               "unit": "Ratio",
-              "notes": "<13 Thalassemia Trait | >13 Iron Deficiency",
+              "notes": "Mentzer < 13: Suggestive of Beta Thalassemia Trait",
               "textReference": "> 13 Iron Def. | < 13 Thalassemia",
               "id": "param-8-1791305504342-bdu",
-              "result": "",
+              "result": "1.9",
               "flag": "NORMAL"
             },
             {
@@ -439,7 +439,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T16:51:44.343Z",
-      "updatedAt": "2026-10-06T16:52:49.173Z",
+      "updatedAt": "2026-10-06T16:52:57.813Z",
       "invoiceId": "inv-1791305504343"
     },
     {
