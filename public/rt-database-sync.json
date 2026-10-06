@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:52:25.882Z",
+  "syncedAt": "2026-10-06T06:53:05.546Z",
   "reports": [
     {
       "profiles": [
@@ -1927,7 +1927,7 @@
       "nameAr": "اختبار الحمل الرقمي التراكمي (Quantitative Beta-hCG)",
       "nameEn": "Beta-hCG Total Quantitative",
       "category": "Fertility & Hormones",
-      "price": 240,
+      "price": 440,
       "cost": 55,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
