@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:39:21.318Z",
+  "syncedAt": "2026-10-06T06:39:37.789Z",
   "reports": [
     {
       "profiles": [
@@ -1283,7 +1283,7 @@
       "nameAr": "البروتين الكلي بالدم (Total Protein)",
       "nameEn": "Total Serum Protein",
       "category": "Liver Function",
-      "price": 88,
+      "price": 211,
       "cost": 12,
       "sampleType": "Serum",
       "turnaroundTime": "فوري (ساعة)",
