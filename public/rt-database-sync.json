@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:03:24.822Z",
+  "syncedAt": "2026-10-06T07:03:42.628Z",
   "reports": [
     {
       "profiles": [
@@ -2365,7 +2365,7 @@
       "nameAr": "المكمل المناعي C3 (Complement C3)",
       "nameEn": "Complement Component C3",
       "category": "Immunology",
-      "price": 220,
+      "price": 580,
       "cost": 55,
       "sampleType": "Serum",
       "turnaroundTime": "خلال 24 ساعة",
