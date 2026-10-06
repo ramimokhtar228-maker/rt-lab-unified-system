@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:39:44.082Z",
+  "syncedAt": "2026-10-06T11:39:54.192Z",
   "reports": [
     {
       "id": "rep-1791286741642",
@@ -120,16 +120,6 @@
               "id": "param-6-1791286741639-pd6",
               "result": "4.8",
               "flag": "HIGH"
-            },
-            {
-              "name": "LDL / HDL Ratio",
-              "unit": "Ratio",
-              "minNormal": 0,
-              "maxNormal": 3,
-              "textReference": "< 3.0 Desirable",
-              "id": "param-7-1791286741639-vil",
-              "result": "",
-              "flag": "NORMAL"
             }
           ]
         },
@@ -145,7 +135,7 @@
             {
               "id": "p-pkg-0-1791286741639",
               "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
-              "result": "",
+              "result": "31",
               "unit": "ng/mL",
               "minNormal": 30,
               "maxNormal": 100,
@@ -630,7 +620,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:39:01.642Z",
-      "updatedAt": "2026-10-06T11:39:37.293Z",
+      "updatedAt": "2026-10-06T11:39:49.571Z",
       "invoiceId": "inv-1791286741643"
     },
     {
