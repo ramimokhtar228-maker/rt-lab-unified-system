@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:36:05.692Z",
+  "syncedAt": "2026-10-06T06:36:22.654Z",
   "reports": [
     {
       "profiles": [
@@ -1130,7 +1130,7 @@
       "nameAr": "الفوسفور غير العضوي (Serum Phosphorus)",
       "nameEn": "Serum Inorganic Phosphorus",
       "category": "Minerals & Bone",
-      "price": 110,
+      "price": 110240,
       "cost": 15,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
