@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-06T10:26:15.204Z",
+  "timestamp": "2026-10-06T10:31:25.975Z",
   "reportsCount": 3,
   "incomeCount": 2,
   "loyaltyProfilesCount": 2,
@@ -978,6 +978,26 @@
   ],
   "dailyCloseouts": [],
   "auditLogs": [
+    {
+      "id": "log-1791282672526-iwq7v",
+      "timestamp": "٦‏/١٠‏/٢٠٢٦ ١:٣١:١٢ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "CATALOG_UPDATE",
+      "module": "CATALOG",
+      "description": "تعديل سعر/بيانات التحليل: CREAT"
+    },
+    {
+      "id": "log-1791282377839-b5ggu",
+      "timestamp": "٦‏/١٠‏/٢٠٢٦ ١:٢٦:١٧ م",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "SYNC",
+      "module": "SECURITY",
+      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
+    },
     {
       "id": "log-1791282363126-qp4ps",
       "timestamp": "٦‏/١٠‏/٢٠٢٦ ١:٢٦:٠٣ م",
