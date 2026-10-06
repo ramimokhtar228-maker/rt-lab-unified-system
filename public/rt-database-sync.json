@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:57:54.190Z",
+  "syncedAt": "2026-10-06T06:58:12.076Z",
   "reports": [
     {
       "profiles": [
@@ -2180,7 +2180,7 @@
       "nameAr": "ألفا فيتو بروتين - أورام الكبد (AFP)",
       "nameEn": "Alpha-Fetoprotein (AFP)",
       "category": "Tumor Markers",
-      "price": 240,
+      "price": 577,
       "cost": 55,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
