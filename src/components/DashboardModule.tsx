@@ -151,11 +151,13 @@ export const DashboardModule: React.FC = () => {
     setManualSyncing(true);
     setSyncFeedback(null);
     try {
+      await realtimeSyncManager.pullMasterSnapshot();
+      await realtimeSyncManager.broadcastAction('REQUEST_LATEST_STATE', { from: 'manual' });
       const res = await syncUnifiedDataToGitHub();
-      setSyncFeedback(res.message);
+      setSyncFeedback(res.message || 'تمت مزامنة البيانات بين الأجهزة');
       setTimeout(() => setSyncFeedback(null), 4000);
     } catch {
-      setSyncFeedback('فشلت المزامنة السحابية');
+      setSyncFeedback('فشلت المزامنة السحابية — تحقق من الإنترنت أو حصة Firebase');
     } finally {
       setManualSyncing(false);
     }

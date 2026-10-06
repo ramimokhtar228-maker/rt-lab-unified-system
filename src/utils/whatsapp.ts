@@ -54,53 +54,82 @@ export function openWhatsApp(phone: string, message: string): void {
 
 export const BRANCH_MAIN_ADDRESS = 'ميدان بهتيم برج صيدليه العزبى الدور الثالث امام الأسانسير شبرا الخيمه';
 export const LAB_NAME_AR = 'معامل RT للتحاليل الطبية والتشخيصية';
-export const LAB_PHONE = '01012345678';
+export const LAB_PHONE = '01100874444';
 export const INSTAPAY_IPA = 'ramirtlab@instapay';
 
 export function formatBookingConfirmationWhatsAppMessage(params: {
   patientName: string;
   labNumber: string;
+  phone?: string;
   date: string;
   time: string;
   isHomeVisit: boolean;
   address?: string;
   deliveryNotes?: string;
+  branchAddress?: string;
   testsList: string;
   subtotal: number;
   discountAmount: number;
   discountLabel: string;
+  visitFee?: number;
   netAmount: number;
   paymentMethod: string;
+  fastingHours?: number;
 }): string {
+  const branchAddr = params.branchAddress || BRANCH_MAIN_ADDRESS;
   const loc = params.isHomeVisit
-    ? `🏠 *نوع الحجز: زيارة منزلية خاصة*\n📍 *العنوان:* ${params.address || 'العنوان المسجل'}\n📝 *ملاحظات التوصيل:* ${params.deliveryNotes || 'لا توجد ملاحظات خاصة'}`
-    : `📍 *المقر: الفرع الرئيسي لمعامل RT*\n🏢 *العنوان:* ${BRANCH_MAIN_ADDRESS}`;
+    ? `🏠 *نوع الحجز:* زيارة منزلية
+📍 *عنوان الزيارة:* ${params.address || '—'}
+${params.deliveryNotes ? `📝 *تفاصيل الزيارة:* ${params.deliveryNotes}\n` : ''}📞 *تليفون التواصل:* ${params.phone || '—'}`
+    : `🏥 *نوع الحجز:* حضور بالمعمل
+🏢 *عنوان الفرع:* ${branchAddr}
+📞 *تليفون التواصل:* ${params.phone || LAB_PHONE}`;
 
-  return `*مرحباً بك في ${LAB_NAME_AR}* 🔬✨
-تم تأكيد حجز موعد التحاليل الطبية الخاص بكم بنجاح!
+  const visitFeeLine = (params.visitFee && params.visitFee > 0)
+    ? `• *رسوم الزيارة المنزلية:* ${params.visitFee} ج.م\n`
+    : '';
 
-📋 *بيانات الحجز:*
-• *رقم الملف / الحجز:* #${params.labNumber}
-• *اسم المريض:* ${params.patientName}
+  const fastingNote = (params.fastingHours && params.fastingHours > 0)
+    ? `• الصيام لمدة *${params.fastingHours} ساعة* قبل سحب العينة (الماء مسموح).`
+    : `• يُرجى الصيام إذا كانت التحاليل تتطلب ذلك (الماء مسموح).`;
+
+  return `🌟 *مرحباً بك في ${LAB_NAME_AR}*
+*معامل رامي مختار — أطباء كلية طب قصر العيني*
+
+تم تأكيد حجز موعد التحاليل بنجاح ✅
+
+────────────────────
+👤 *البيانات الشخصية*
+• *الاسم:* ${params.patientName}
+• *رقم الحجز / الملف:* #${params.labNumber}
+• *الهاتف:* ${params.phone || '—'}
 • *اليوم والتاريخ:* ${params.date}
-• *الساعة المحددة:* ${params.time}
+• *الساعة:* ${params.time}
 
 ${loc}
 
-🧪 *الفحوصات المطلوبة:*
+────────────────────
+🧪 *التحاليل المطلوبة* (اختصارات)
 ${params.testsList}
 
-💰 *تفاصيل التسعير والحساب:*
-• *الإجمالي قبل الخصم:* ${params.subtotal} ج.م
-• *قيمة الخصم المطبق:* ${params.discountLabel} (-${params.discountAmount} ج.م)
-• *المبلغ الصافي المطلوب:* *${params.netAmount} ج.م*
+────────────────────
+💰 *الحساب*
+• *السعر الأصلي (إجمالي):* ${params.subtotal} ج.م
+• *نسبة / قيمة الخصم أو كرت الولاء:* ${params.discountLabel}${params.discountAmount ? ` (−${params.discountAmount} ج.م)` : ''}
+${visitFeeLine}• *السعر بعد الخصم + الرسوم:* *${params.netAmount} ج.م*
 • *طريقة الدفع:* ${params.paymentMethod}
 
-⚠️ *تنبيه الصيام:* يرجى الصيام في حال طلبت الفحوصات ذلك (شرب الماء مسموح).
-🎁 *ملاحظة:* بعد سحب العينة سيتم تفعيل كارت الولاء RT بنسبة خصم دائمة ونقاط تراكمية!
+────────────────────
+⚠️ *تعليمات وشروط ما قبل التحاليل*
+${fastingNote}
+• إحضار البطاقة الشخصية عند الحضور أو الزيارة.
+• في الزيارة المنزلية: التواجد في العنوان في الموعد المحدد.
+• أي تعديل على الموعد يُرجى إبلاغ المعمل مسبقاً.
 
-📞 *لأي استفسار أو تعديل الموعد:* ${LAB_PHONE}
-مع تمنياتنا لكم بدوام الصحة والعافية! ❤️`;
+────────────────────
+شكراً لثقتكم 🌸
+معامل RT تتمنى لكم دوام الصحة والعافية.
+📞 ${LAB_PHONE}`;
 }
 
 export function formatPostSampleWhatsAppMessage(params: {

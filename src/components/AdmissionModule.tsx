@@ -39,6 +39,7 @@ interface AdmissionModuleProps {
 
 export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isModal = false }) => {
   const {
+    labInfo,
     createReportFromAdmission,
     earnLoyaltyPoints,
     redeemLoyaltyPoints,
@@ -73,6 +74,9 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
   const [bookingType, setBookingType] = useState<'branch' | 'home_visit'>('branch');
   const [homeAddress, setHomeAddress] = useState('');
   const [homeVisitFee, setHomeVisitFee] = useState<number>(80);
+  const [appointmentDate, setAppointmentDate] = useState<string>(today);
+  const [appointmentTime, setAppointmentTime] = useState<string>('09:00');
+  const [deliveryNotes, setDeliveryNotes] = useState<string>('');
 
   // Selected Tests & Packages
   const [selectedTests, setSelectedTests] = useState<InvoiceTestItem[]>([
@@ -281,13 +285,16 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
       nationalId: nationalId.trim() || undefined,
       referringDoctorTitle: "Dr.",
       referringDoctorName: referringDoctor.trim(),
-      sampleDate: today,
-      reportingDate: today,
+      sampleDate: appointmentDate || today,
+      reportingDate: appointmentDate || today,
       clinicalHistory: clinicalHistory.trim() || undefined,
       fastingHours: Number(fastingHours) || 0,
       bookingType,
       homeAddress: bookingType === 'home_visit' ? homeAddress : undefined,
       visitFee: effectiveVisitFee,
+      appointmentDate,
+      appointmentTime,
+      deliveryNotes: bookingType === 'home_visit' ? deliveryNotes : undefined,
       testsSubtotal,
       totalCost: netTotal,
       discountApplied: totalDiscount,
@@ -318,22 +325,34 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
   };
 
   const handleSendWhatsApp = () => {
+    const testsAbbrev = selectedTests.map(t => `• ${t.code}`).join('\n') || '• —';
+    const discountLabel = selectedPackage
+      ? 'باقة / خصم باقة'
+      : (discountPercent > 0
+          ? `${discountPercent}%${loyaltyProfile ? ' (كرت ولاء)' : ''}`
+          : (totalDiscount > 0 ? 'خصم مطبق' : 'لا يوجد'));
     const text = formatBookingConfirmationWhatsAppMessage({
       patientName: fullName,
-      labNumber: nextLabNumber,
-      date: today,
-      time: 'صباحاً',
+      labNumber: nextLabNumber || createdLabNum,
+      phone: phone.trim(),
+      date: appointmentDate || today,
+      time: appointmentTime || '09:00',
       isHomeVisit: bookingType === 'home_visit',
       address: homeAddress,
-      testsList: selectedTests.map(t => t.nameAr).join('، '),
+      deliveryNotes,
+      branchAddress: labInfo?.mainAddress,
+      testsList: testsAbbrev,
       subtotal: testsSubtotal,
       discountAmount: totalDiscount,
-      discountLabel: `${discountPercent}%`,
+      discountLabel,
+      visitFee: effectiveVisitFee,
       netAmount: netTotal,
-      paymentMethod
+      paymentMethod: paymentMethod === 'cash' ? 'نقدي' : paymentMethod === 'visa' ? 'فيزا' : paymentMethod === 'instapay' ? 'إنستا باي' : String(paymentMethod),
+      fastingHours: Number(fastingHours) || 0
     });
     openWhatsApp(phone, text);
   };
+
 
   if (isSubmitted) {
     return (
@@ -992,26 +1011,37 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
                 </button>
               </div>
 
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="font-bold text-slate-700 block mb-1 text-xs">يوم الحجز:</label>
+                  <input type="date" value={appointmentDate} onChange={(e) => setAppointmentDate(e.target.value)}
+                    className="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs font-mono" required />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 block mb-1 text-xs">ساعة الحجز:</label>
+                  <input type="time" value={appointmentTime} onChange={(e) => setAppointmentTime(e.target.value)}
+                    className="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs font-mono" required />
+                </div>
+              </div>
+
               {bookingType === 'home_visit' && (
                 <div className="p-3 bg-rose-50/70 border border-rose-200 rounded-xl space-y-2 text-xs">
                   <div>
                     <label className="font-bold text-slate-700 block mb-1">عنوان الزيارة المنزلية:</label>
-                    <input
-                      type="text"
-                      value={homeAddress}
-                      onChange={(e) => setHomeAddress(e.target.value)}
+                    <input type="text" value={homeAddress} onChange={(e) => setHomeAddress(e.target.value)}
                       placeholder="رقم العقار، الشارع، المنطقة، الدور، الشقة"
-                      className="w-full bg-white border border-rose-200 rounded-lg p-2 text-xs"
-                    />
+                      className="w-full bg-white border border-rose-200 rounded-lg p-2 text-xs" required />
+                  </div>
+                  <div>
+                    <label className="font-bold text-slate-700 block mb-1">تفاصيل الزيارة / ملاحظات الوصول:</label>
+                    <textarea value={deliveryNotes} onChange={(e) => setDeliveryNotes(e.target.value)}
+                      placeholder="علامة مميزة، دور، رقم شقة، مواعيد التواجد..." rows={2}
+                      className="w-full bg-white border border-rose-200 rounded-lg p-2 text-xs" />
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-slate-600">رسوم الانتقال والتمريض:</span>
-                    <input
-                      type="number"
-                      value={homeVisitFee}
-                      onChange={(e) => setHomeVisitFee(Number(e.target.value))}
-                      className="w-20 font-mono font-bold bg-white border border-rose-200 rounded-lg p-1 text-center"
-                    />
+                    <span className="text-slate-600">رسوم الزيارة المنزلية:</span>
+                    <input type="number" value={homeVisitFee} onChange={(e) => setHomeVisitFee(Number(e.target.value))}
+                      className="w-20 font-mono font-bold bg-white border border-rose-200 rounded-lg p-1 text-center" />
                   </div>
                 </div>
               )}
