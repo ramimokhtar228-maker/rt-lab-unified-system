@@ -1,462 +1,826 @@
 {
-  "timestamp": "2026-10-06T09:44:04.631Z",
-  "reportsCount": 2,
-  "incomeCount": 1,
+  "timestamp": "2026-10-06T10:26:15.204Z",
+  "reportsCount": 3,
+  "incomeCount": 2,
   "loyaltyProfilesCount": 2,
   "reports": [
     {
+      "generalComment": "الحالة تتماشى مع فقر الدم بعوز الحديد. يرجى المتابعة بطلب مخزون الحديد (Serum Ferritin).",
+      "invoiceId": "inv-001",
+      "reportNumber": "RT-2026-001",
       "staff": {
-        "verifierTitle": "أخصائي باثولوجيا إكلينيكية",
         "labChemist": "د. هبة الشناوي - كيميائية تحاليل",
-        "pathologistTitle": "استشاري الباثولوجيا الإكلينيكية - قصر العيني",
         "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
-        "chemistTitle": "كيميائية طبية أولى",
-        "verifiedBy": "د. مصطفى العوضي - استشاري التحاليل"
+        "pathologistTitle": "استشاري الباثولوجيا الإكلينيكية - قصر العيني",
+        "verifiedBy": "د. مصطفى العوضي - استشاري التحاليل",
+        "verifierTitle": "أخصائي باثولوجيا إكلينيكية",
+        "chemistTitle": "كيميائية طبية أولى"
       },
       "updatedAt": "2026-10-06T08:52:20.749Z",
-      "invoiceId": "inv-001",
       "status": "verified",
+      "createdAt": "2026-10-06T08:52:20.749Z",
+      "id": "rep-001",
+      "patient": {
+        "totalCost": 280,
+        "nationalId": "29005120101993",
+        "paymentMethod": "cash",
+        "age": 34,
+        "discountApplied": 28,
+        "loyaltyCardNumber": "RT-SILVER-10029",
+        "loyaltyCardIssued": true,
+        "sampleDate": "2026-10-06",
+        "id": "pat-001",
+        "testsSubtotal": 280,
+        "fullName": "أحمد محمود إبراهيم",
+        "barcode": "RT-10029",
+        "clinicalHistory": "إرهاق عام وشحوب مستمر وصداع عند المجهود",
+        "reportingDate": "2026-10-06",
+        "bloodGroup": "A+",
+        "loyaltyPoints": 120,
+        "gender": "male",
+        "phone": "01012345678",
+        "referringDoctorName": "د. طارق المنشاوي",
+        "fastingHours": 0,
+        "ageUnit": "years",
+        "labNumber": "RT-2026-001",
+        "referringDoctorTitle": "Dr."
+      },
       "profiles": [
         {
-          "category": "Hematology",
-          "titleAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
-          "bloodFilmFindings": {
-            "rbcMorphology": "Moderate anisopoikilocytosis, microcytes, hypochromic cells with prominent central pallor, occasional pencil / cigar-shaped cells.",
-            "wbcMorphology": "Normal leucocyte count with normal differential distribution. No immature myeloid precursors or toxic granulations.",
-            "plateletMorphology": "Mild reactive thrombocytosis. Adequate granular morphology, no platelet clumps seen.",
-            "differentialSummary": "Neutrophils: 62% | Lymphocytes: 29% | Monocytes: 6% | Eosinophils: 2% | Basophils: 1%"
-          },
-          "profileCode": "CBC",
-          "titleEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
-          "id": "prof-cbc-1",
-          "sampleType": "EDTA Whole Blood",
-          "comment": "تم فحص الشريحة ميكروسكوبياً بواسطة استشاري الباثولوجيا الإكلينيكية.",
           "attachedIllustration": {
-            "category": "hematology",
-            "descriptionEn": "Normocytic, normochromic erythrocytes with normal central pallor (~1/3 diameter). Adequate platelets and normal differential leucocytic morphology.",
-            "associatedConditions": [
-              "Physiological Baseline",
-              "Healthy Reference",
-              "Routine Wellness"
-            ],
-            "pathologySummaryAr": "كرات دم حمراء طبيعية الحجم ومتساوية الصبغ (Normocytic Normochromic) مع مساحة شحوب مركزي طبيعية تعادل ثلث قطر الخلية، مع توزيع طبيعي لكرات الدم البيضاء والصفائح الدموية.",
             "id": "hem-normal",
-            "keyDiagnosticPoints": [
-              "MCV: 80 - 98 fL | MCH: 27 - 33 pg | MCHC: 32 - 36 g/dL",
-              "RBCs: uniform size and biconcave disc shape",
-              "WBC differential within normal reference intervals",
-              "Platelets: 150 - 450 x10^3/µL with normal granular appearance"
-            ],
-            "differentialDiagnosis": "No cytopenias or dysplastic features identified.",
-            "titleAr": "شريحة دم محيطي طبيعية (Normal Peripheral Blood Smear)",
             "diagnosticCriteria": [
               "MCV: 80 - 98 fL | MCH: 27 - 33 pg | MCHC: 32 - 36 g/dL",
               "RBCs: uniform size and biconcave disc shape",
               "WBC differential within normal reference intervals",
               "Platelets: 150 - 450 x10^3/µL with normal granular appearance"
             ],
-            "titleEn": "Normal Peripheral Blood Smear",
+            "category": "hematology",
+            "descriptionAr": "كرات دم حمراء طبيعية الحجم ومتساوية الصبغ (Normocytic Normochromic) مع مساحة شحوب مركزي طبيعية تعادل ثلث قطر الخلية، مع توزيع طبيعي لكرات الدم البيضاء والصفائح الدموية.",
+            "keyDiagnosticPoints": [
+              "MCV: 80 - 98 fL | MCH: 27 - 33 pg | MCHC: 32 - 36 g/dL",
+              "RBCs: uniform size and biconcave disc shape",
+              "WBC differential within normal reference intervals",
+              "Platelets: 150 - 450 x10^3/µL with normal granular appearance"
+            ],
+            "associatedConditions": [
+              "Physiological Baseline",
+              "Healthy Reference",
+              "Routine Wellness"
+            ],
             "pathologySummaryEn": "Normocytic, normochromic erythrocytes with normal central pallor (~1/3 diameter). Adequate platelets and normal differential leucocytic morphology.",
-            "imageUrl": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2270%22%20fill%3D%22%230f172a%22%20stroke%3D%22%23881337%22%20stroke-width%3D%222%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%23f43f5e%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3ENORMAL%20BLOOD%20SMEAR%20%281000X%29%3C/text%3E%20%3C%21--%20Normal%20RBCs%20with%201/3%20central%20pallor%20--%3E%20%3Cg%20fill%3D%22%23e11d48%22%3E%20%3Ccircle%20cx%3D%22105%22%20cy%3D%2265%22%20r%3D%2216%22/%3E%3Ccircle%20cx%3D%22105%22%20cy%3D%2265%22%20r%3D%225.5%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22145%22%20cy%3D%2255%22%20r%3D%2215%22/%3E%3Ccircle%20cx%3D%22145%22%20cy%3D%2255%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22170%22%20cy%3D%2280%22%20r%3D%2216%22/%3E%3Ccircle%20cx%3D%22170%22%20cy%3D%2280%22%20r%3D%225.5%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22130%22%20cy%3D%22105%22%20r%3D%2216%22/%3E%3Ccircle%20cx%3D%22130%22%20cy%3D%22105%22%20r%3D%225.5%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%2295%22%20cy%3D%2298%22%20r%3D%2215%22/%3E%3Ccircle%20cx%3D%2295%22%20cy%3D%2298%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3C/g%3E%20%3C%21--%20Neutrophil%20--%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2217%22%20fill%3D%22%23fbcfe8%22%20opacity%3D%220.4%22/%3E%20%3Cellipse%20cx%3D%22135%22%20cy%3D%2276%22%20rx%3D%224%22%20ry%3D%225%22%20fill%3D%22%236b21a8%22/%3E%20%3Cellipse%20cx%3D%22145%22%20cy%3D%2277%22%20rx%3D%224%22%20ry%3D%224%22%20fill%3D%22%236b21a8%22/%3E%20%3Cellipse%20cx%3D%22139%22%20cy%3D%2286%22%20rx%3D%224.5%22%20ry%3D%223.5%22%20fill%3D%22%236b21a8%22/%3E%20%3C%21--%20Platelets%20--%3E%20%3Ccircle%20cx%3D%22120%22%20cy%3D%2260%22%20r%3D%222.5%22%20fill%3D%22%2338bdf8%22/%3E%20%3Ccircle%20cx%3D%22160%22%20cy%3D%22100%22%20r%3D%222.5%22%20fill%3D%22%2338bdf8%22/%3E%20%3Ccircle%20cx%3D%22163%22%20cy%3D%2297%22%20r%3D%222%22%20fill%3D%22%2338bdf8%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%22148%22%20text-anchor%3D%22middle%22%20fill%3D%22%2394a3b8%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3ENormocytic%20Normochromic%20Erythrocytes%3C/text%3E%20%3C/svg%3E",
+            "titleAr": "شريحة دم محيطي طبيعية (Normal Peripheral Blood Smear)",
+            "descriptionEn": "Normocytic, normochromic erythrocytes with normal central pallor (~1/3 diameter). Adequate platelets and normal differential leucocytic morphology.",
+            "titleEn": "Normal Peripheral Blood Smear",
             "code": "HEM_NORMAL",
-            "descriptionAr": "كرات دم حمراء طبيعية الحجم ومتساوية الصبغ (Normocytic Normochromic) مع مساحة شحوب مركزي طبيعية تعادل ثلث قطر الخلية، مع توزيع طبيعي لكرات الدم البيضاء والصفائح الدموية."
+            "imageUrl": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2270%22%20fill%3D%22%230f172a%22%20stroke%3D%22%23881337%22%20stroke-width%3D%222%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%23f43f5e%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3ENORMAL%20BLOOD%20SMEAR%20%281000X%29%3C/text%3E%20%3C%21--%20Normal%20RBCs%20with%201/3%20central%20pallor%20--%3E%20%3Cg%20fill%3D%22%23e11d48%22%3E%20%3Ccircle%20cx%3D%22105%22%20cy%3D%2265%22%20r%3D%2216%22/%3E%3Ccircle%20cx%3D%22105%22%20cy%3D%2265%22%20r%3D%225.5%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22145%22%20cy%3D%2255%22%20r%3D%2215%22/%3E%3Ccircle%20cx%3D%22145%22%20cy%3D%2255%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22170%22%20cy%3D%2280%22%20r%3D%2216%22/%3E%3Ccircle%20cx%3D%22170%22%20cy%3D%2280%22%20r%3D%225.5%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22130%22%20cy%3D%22105%22%20r%3D%2216%22/%3E%3Ccircle%20cx%3D%22130%22%20cy%3D%22105%22%20r%3D%225.5%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%2295%22%20cy%3D%2298%22%20r%3D%2215%22/%3E%3Ccircle%20cx%3D%2295%22%20cy%3D%2298%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3C/g%3E%20%3C%21--%20Neutrophil%20--%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2217%22%20fill%3D%22%23fbcfe8%22%20opacity%3D%220.4%22/%3E%20%3Cellipse%20cx%3D%22135%22%20cy%3D%2276%22%20rx%3D%224%22%20ry%3D%225%22%20fill%3D%22%236b21a8%22/%3E%20%3Cellipse%20cx%3D%22145%22%20cy%3D%2277%22%20rx%3D%224%22%20ry%3D%224%22%20fill%3D%22%236b21a8%22/%3E%20%3Cellipse%20cx%3D%22139%22%20cy%3D%2286%22%20rx%3D%224.5%22%20ry%3D%223.5%22%20fill%3D%22%236b21a8%22/%3E%20%3C%21--%20Platelets%20--%3E%20%3Ccircle%20cx%3D%22120%22%20cy%3D%2260%22%20r%3D%222.5%22%20fill%3D%22%2338bdf8%22/%3E%20%3Ccircle%20cx%3D%22160%22%20cy%3D%22100%22%20r%3D%222.5%22%20fill%3D%22%2338bdf8%22/%3E%20%3Ccircle%20cx%3D%22163%22%20cy%3D%2297%22%20r%3D%222%22%20fill%3D%22%2338bdf8%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%22148%22%20text-anchor%3D%22middle%22%20fill%3D%22%2394a3b8%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3ENormocytic%20Normochromic%20Erythrocytes%3C/text%3E%20%3C/svg%3E",
+            "differentialDiagnosis": "No cytopenias or dysplastic features identified.",
+            "pathologySummaryAr": "كرات دم حمراء طبيعية الحجم ومتساوية الصبغ (Normocytic Normochromic) مع مساحة شحوب مركزي طبيعية تعادل ثلث قطر الخلية، مع توزيع طبيعي لكرات الدم البيضاء والصفائح الدموية."
           },
+          "id": "prof-cbc-1",
           "interpretation": "Microcytic hypochromic anemia picture. Morphological findings and low MCV/MCH strongly suggest Iron Deficiency Anemia (IDA). Serum Ferritin and Iron studies are recommended.",
+          "comment": "تم فحص الشريحة ميكروسكوبياً بواسطة استشاري الباثولوجيا الإكلينيكية.",
+          "titleEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+          "category": "Hematology",
+          "titleAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
+          "bloodFilmFindings": {
+            "differentialSummary": "Neutrophils: 62% | Lymphocytes: 29% | Monocytes: 6% | Eosinophils: 2% | Basophils: 1%",
+            "plateletMorphology": "Mild reactive thrombocytosis. Adequate granular morphology, no platelet clumps seen.",
+            "wbcMorphology": "Normal leucocyte count with normal differential distribution. No immature myeloid precursors or toxic granulations.",
+            "rbcMorphology": "Moderate anisopoikilocytosis, microcytes, hypochromic cells with prominent central pallor, occasional pencil / cigar-shaped cells."
+          },
           "parameters": [
             {
+              "name": "Hemoglobin (Hb)",
+              "panicHigh": 20,
+              "id": "p-1",
+              "minNormal": 13,
+              "maxNormal": 17,
+              "result": "8.6",
               "flag": "LOW",
               "method": "SLS Hemoglobin Method",
-              "maxNormal": 17,
-              "panicLow": 7,
-              "name": "Hemoglobin (Hb)",
               "unit": "g/dL",
-              "result": "8.6",
-              "minNormal": 13,
-              "id": "p-1",
-              "panicHigh": 20
+              "panicLow": 7
             },
             {
-              "minNormal": 4.5,
-              "unit": "x10^6/µL",
-              "id": "p-2",
               "maxNormal": 5.9,
-              "method": "Electrical Impedance",
               "result": "3.80",
-              "name": "RBC Count",
-              "flag": "LOW"
+              "unit": "x10^6/µL",
+              "minNormal": 4.5,
+              "method": "Electrical Impedance",
+              "id": "p-2",
+              "flag": "LOW",
+              "name": "RBC Count"
             },
             {
-              "method": "Calculated",
-              "unit": "%",
-              "maxNormal": 52,
-              "id": "p-3",
-              "flag": "LOW",
               "minNormal": 40,
               "result": "27.2",
-              "name": "Hematocrit (Hct / PCV)"
+              "name": "Hematocrit (Hct / PCV)",
+              "flag": "LOW",
+              "id": "p-3",
+              "maxNormal": 52,
+              "unit": "%",
+              "method": "Calculated"
             },
             {
               "id": "p-4",
-              "method": "Direct Measurement",
-              "unit": "fL",
-              "maxNormal": 98,
+              "name": "MCV",
               "flag": "LOW",
+              "method": "Direct Measurement",
               "minNormal": 80,
               "result": "71.5",
-              "name": "MCV"
+              "unit": "fL",
+              "maxNormal": 98
             },
             {
-              "name": "MCH",
               "result": "22.6",
-              "flag": "LOW",
               "maxNormal": 33,
-              "minNormal": 27,
               "unit": "pg",
+              "minNormal": 27,
               "method": "Calculated",
-              "id": "p-5"
-            },
-            {
-              "name": "MCHC",
-              "result": "31.6",
-              "id": "p-6",
+              "id": "p-5",
               "flag": "LOW",
+              "name": "MCH"
+            },
+            {
+              "method": "Calculated",
+              "maxNormal": 36,
               "unit": "g/dL",
-              "method": "Calculated",
+              "flag": "LOW",
+              "name": "MCHC",
+              "id": "p-6",
               "minNormal": 32,
-              "maxNormal": 36
+              "result": "31.6"
             },
             {
-              "id": "p-7",
               "result": "17.8",
-              "unit": "%",
-              "minNormal": 11.5,
-              "flag": "HIGH",
+              "id": "p-7",
               "maxNormal": 14.5,
+              "unit": "%",
               "method": "Calculated",
-              "name": "RDW-CV"
+              "flag": "HIGH",
+              "name": "RDW-CV",
+              "minNormal": 11.5
             },
             {
+              "flag": "NORMAL",
               "name": "Total Leucocytic Count (TLC / WBC)",
               "result": "6.8",
-              "flag": "NORMAL",
-              "minNormal": 4,
+              "id": "p-8",
               "maxNormal": 11,
               "unit": "x10^3/µL",
-              "method": "Electrical Impedance / Flow Cytometry",
-              "id": "p-8"
+              "minNormal": 4,
+              "method": "Electrical Impedance / Flow Cytometry"
             },
             {
-              "method": "Electrical Impedance",
+              "result": "410",
+              "minNormal": 150,
+              "unit": "x10^3/µL",
+              "id": "p-9",
               "flag": "NORMAL",
               "name": "Platelet Count",
-              "id": "p-9",
-              "minNormal": 150,
               "maxNormal": 450,
-              "unit": "x10^3/µL",
-              "result": "410"
+              "method": "Electrical Impedance"
             },
             {
-              "maxNormal": 75,
               "minNormal": 40,
+              "name": "Neutrophils %",
+              "flag": "NORMAL",
               "id": "p-10",
-              "unit": "%",
+              "maxNormal": 75,
               "result": "62",
-              "flag": "NORMAL",
-              "name": "Neutrophils %"
+              "unit": "%"
             },
             {
-              "flag": "NORMAL",
-              "name": "Lymphocytes %",
-              "maxNormal": 45,
               "result": "29",
-              "id": "p-11",
+              "maxNormal": 45,
               "unit": "%",
-              "minNormal": 20
+              "name": "Lymphocytes %",
+              "minNormal": 20,
+              "flag": "NORMAL",
+              "id": "p-11"
             },
             {
-              "minNormal": 2,
-              "maxNormal": 10,
-              "name": "Monocytes %",
+              "unit": "%",
               "id": "p-12",
+              "minNormal": 2,
+              "result": "6",
+              "name": "Monocytes %",
               "flag": "NORMAL",
-              "unit": "%",
-              "result": "6"
+              "maxNormal": 10
             },
             {
+              "unit": "%",
               "minNormal": 1,
-              "maxNormal": 6,
-              "unit": "%",
-              "flag": "NORMAL",
+              "id": "p-13",
               "result": "2",
+              "flag": "NORMAL",
               "name": "Eosinophils %",
-              "id": "p-13"
+              "maxNormal": 6
             },
             {
-              "name": "Basophils %",
-              "minNormal": 0,
-              "flag": "NORMAL",
+              "unit": "%",
               "maxNormal": 2,
               "result": "1",
-              "unit": "%",
-              "id": "p-14"
+              "name": "Basophils %",
+              "flag": "NORMAL",
+              "id": "p-14",
+              "minNormal": 0
             }
-          ]
+          ],
+          "profileCode": "CBC",
+          "sampleType": "EDTA Whole Blood"
         }
-      ],
-      "generalComment": "الحالة تتماشى مع فقر الدم بعوز الحديد. يرجى المتابعة بطلب مخزون الحديد (Serum Ferritin).",
-      "patient": {
-        "id": "pat-001",
-        "gender": "male",
-        "bloodGroup": "A+",
-        "nationalId": "29005120101993",
-        "discountApplied": 28,
-        "loyaltyCardNumber": "RT-SILVER-10029",
-        "fastingHours": 0,
-        "ageUnit": "years",
-        "barcode": "RT-10029",
-        "referringDoctorName": "د. طارق المنشاوي",
-        "totalCost": 280,
-        "reportingDate": "2026-10-06",
-        "phone": "01012345678",
-        "clinicalHistory": "إرهاق عام وشحوب مستمر وصداع عند المجهود",
-        "age": 34,
-        "referringDoctorTitle": "Dr.",
-        "fullName": "أحمد محمود إبراهيم",
-        "loyaltyPoints": 120,
-        "testsSubtotal": 280,
-        "sampleDate": "2026-10-06",
-        "labNumber": "RT-2026-001",
-        "loyaltyCardIssued": true,
-        "paymentMethod": "cash"
-      },
-      "reportNumber": "RT-2026-001",
-      "id": "rep-001",
-      "createdAt": "2026-10-06T08:52:20.749Z"
+      ]
     },
     {
-      "createdAt": "2026-10-06T08:52:20.749Z",
+      "invoiceId": "inv-002",
+      "status": "verified",
+      "id": "rep-002",
       "patient": {
-        "reportingDate": "2026-10-06",
-        "clinicalHistory": "متابعة دورية لمرض السكري من النوع الثاني وارتفاع ضغط الدم",
-        "fullName": "منى عادل عبد الرحمن",
-        "id": "pat-002",
-        "labNumber": "RT-2026-002",
-        "fastingHours": 12,
-        "gender": "female",
-        "bloodGroup": "O+",
-        "discountApplied": 38,
-        "loyaltyCardIssued": true,
-        "nationalId": "27608140102844",
-        "age": 48,
-        "paymentMethod": "visa",
-        "loyaltyCardNumber": "RT-GOLD-10030",
-        "referringDoctorName": "أ.د. خالد الببلاوي - استشاري السكر والغدد",
-        "totalCost": 380,
-        "phone": "01198765432",
-        "testsSubtotal": 380,
-        "loyaltyPoints": 340,
-        "barcode": "RT-10030",
         "ageUnit": "years",
         "sampleDate": "2026-10-06",
-        "referringDoctorTitle": "Prof. Dr."
+        "clinicalHistory": "متابعة دورية لمرض السكري من النوع الثاني وارتفاع ضغط الدم",
+        "phone": "01198765432",
+        "id": "pat-002",
+        "nationalId": "27608140102844",
+        "discountApplied": 38,
+        "totalCost": 380,
+        "loyaltyPoints": 340,
+        "loyaltyCardNumber": "RT-GOLD-10030",
+        "referringDoctorTitle": "Prof. Dr.",
+        "fastingHours": 12,
+        "loyaltyCardIssued": true,
+        "testsSubtotal": 380,
+        "fullName": "منى عادل عبد الرحمن",
+        "labNumber": "RT-2026-002",
+        "referringDoctorName": "أ.د. خالد الببلاوي - استشاري السكر والغدد",
+        "gender": "female",
+        "reportingDate": "2026-10-06",
+        "bloodGroup": "O+",
+        "barcode": "RT-10030",
+        "age": 48,
+        "paymentMethod": "visa"
       },
-      "staff": {
-        "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
-        "verifiedBy": "د. مصطفى العوضي - استشاري التحاليل",
-        "labChemist": "د. هبة الشناوي - كيميائية تحاليل"
-      },
-      "id": "rep-002",
       "profiles": [
         {
-          "id": "prof-gly-2",
-          "titleAr": "الملف الشامل للسكر والمؤشرات الأيضية",
           "category": "Biochemistry",
-          "sampleType": "Fluoride Plasma & EDTA",
-          "profileCode": "GLYCEMIC",
-          "titleEn": "Comprehensive Diabetes & Glycemic Profile",
-          "interpretation": "Suboptimal glycemic control. Fasting glucose and HbA1c are elevated above standard ADA targets for non-pregnant adults.",
+          "titleAr": "الملف الشامل للسكر والمؤشرات الأيضية",
           "parameters": [
             {
-              "panicHigh": 400,
-              "flag": "HIGH",
+              "maxNormal": 105,
+              "minNormal": 70,
               "name": "Fasting Blood Glucose",
               "result": "148",
+              "panicHigh": 400,
               "method": "Hexokinase",
-              "minNormal": 70,
+              "id": "p-g1",
               "unit": "mg/dL",
               "panicLow": 50,
-              "id": "p-g1",
-              "maxNormal": 105
+              "flag": "HIGH"
             },
             {
-              "flag": "HIGH",
-              "minNormal": 4,
-              "panicLow": 3.5,
-              "name": "Glycated Hemoglobin (HbA1c)",
-              "unit": "%",
               "panicHigh": 14,
+              "method": "HPLC NGSP Certified",
+              "minNormal": 4,
+              "name": "Glycated Hemoglobin (HbA1c)",
+              "panicLow": 3.5,
               "maxNormal": 5.6,
-              "id": "p-g2",
+              "flag": "HIGH",
+              "unit": "%",
               "result": "7.9",
-              "method": "HPLC NGSP Certified"
+              "id": "p-g2"
             },
             {
-              "name": "Estimated Average Glucose (eAG)",
+              "maxNormal": 126,
               "flag": "HIGH",
+              "name": "Estimated Average Glucose (eAG)",
               "result": "180",
+              "minNormal": 70,
               "method": "Calculated from HbA1c",
               "id": "p-g3",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 126
+              "unit": "mg/dL"
             }
-          ]
+          ],
+          "sampleType": "Fluoride Plasma & EDTA",
+          "titleEn": "Comprehensive Diabetes & Glycemic Profile",
+          "id": "prof-gly-2",
+          "interpretation": "Suboptimal glycemic control. Fasting glucose and HbA1c are elevated above standard ADA targets for non-pregnant adults.",
+          "profileCode": "GLYCEMIC"
         },
         {
           "profileCode": "KFT",
           "titleAr": "وظائف الكلى والأملاح ومؤشرات الفلترة",
-          "interpretation": "Kidney function biomarkers are within normal acceptable physiological limits. No evidence of azotemia.",
-          "id": "prof-kft-2",
+          "sampleType": "Serum",
+          "category": "Biochemistry",
           "parameters": [
             {
-              "minNormal": 0.5,
+              "name": "Serum Creatinine",
+              "flag": "NORMAL",
+              "id": "p-k1",
               "result": "0.82",
               "maxNormal": 1.1,
-              "id": "p-k1",
               "unit": "mg/dL",
-              "flag": "NORMAL",
-              "method": "Enzymatic Spectrophotometry",
-              "name": "Serum Creatinine"
+              "minNormal": 0.5,
+              "method": "Enzymatic Spectrophotometry"
             },
             {
               "maxNormal": 45,
-              "minNormal": 15,
-              "method": "GLDH Coupled",
+              "result": "28",
               "unit": "mg/dL",
               "id": "p-k2",
-              "result": "28",
+              "method": "GLDH Coupled",
+              "minNormal": 15,
               "flag": "NORMAL",
               "name": "Blood Urea"
             },
             {
+              "result": "4.9",
+              "unit": "mg/dL",
+              "maxNormal": 6,
+              "id": "p-k3",
               "method": "Uricase Colorimetric",
               "name": "Serum Uric Acid",
               "flag": "NORMAL",
-              "maxNormal": 6,
-              "minNormal": 2.6,
-              "id": "p-k3",
-              "unit": "mg/dL",
-              "result": "4.9"
+              "minNormal": 2.6
             }
           ],
-          "category": "Biochemistry",
+          "interpretation": "Kidney function biomarkers are within normal acceptable physiological limits. No evidence of azotemia.",
           "titleEn": "Kidney Function Tests (Renal Profile)",
-          "sampleType": "Serum"
+          "id": "prof-kft-2"
         }
       ],
-      "invoiceId": "inv-002",
-      "status": "verified",
-      "generalComment": "يرجى مراجعة الطبيب المعالج لتعديل جرعات العلاج الغذائي والدوائي.",
       "updatedAt": "2026-10-06T08:52:20.749Z",
-      "reportNumber": "RT-2026-002"
+      "createdAt": "2026-10-06T08:52:20.749Z",
+      "generalComment": "يرجى مراجعة الطبيب المعالج لتعديل جرعات العلاج الغذائي والدوائي.",
+      "reportNumber": "RT-2026-002",
+      "staff": {
+        "labChemist": "د. هبة الشناوي - كيميائية تحاليل",
+        "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
+        "verifiedBy": "د. مصطفى العوضي - استشاري التحاليل"
+      }
+    },
+    {
+      "status": "released",
+      "profiles": [
+        {
+          "category": "Clinical Chemistry",
+          "interpretation": "Lipid ratios demonstrate favorable cardiovascular risk stratification.",
+          "titleAr": "دهون الدم الشاملة مع المؤشرات الحسابية",
+          "id": "prof-1791187761769-trlx",
+          "profileCode": "LIPID",
+          "titleEn": "Lipid Profile",
+          "parameters": [
+            {
+              "id": "param-1791187761769-0-m8ed",
+              "method": "CHOD-PAP",
+              "flag": "NORMAL",
+              "name": "Total Serum Cholesterol",
+              "maxNormal": 200,
+              "minNormal": 120,
+              "unit": "mg/dL",
+              "result": "200"
+            },
+            {
+              "id": "param-1791187761769-1-y4ki",
+              "result": "123",
+              "name": "Serum Triglycerides",
+              "unit": "mg/dL",
+              "panicHigh": 500,
+              "minNormal": 40,
+              "flag": "NORMAL",
+              "method": "GPO-PAP",
+              "maxNormal": 150
+            },
+            {
+              "method": "Direct Accelerator",
+              "maxNormal": 65,
+              "flag": "NORMAL",
+              "name": "HDL - Cholesterol (Good)",
+              "id": "param-1791187761769-2-ucia",
+              "minNormal": 40,
+              "result": "49",
+              "unit": "mg/dL"
+            },
+            {
+              "minNormal": 0,
+              "flag": "HIGH",
+              "name": "LDL - Cholesterol (Calculated)",
+              "maxNormal": 100,
+              "id": "param-1791187761769-3-cizp",
+              "notes": "Friedewald Formula: TC - HDL - (TG/5)",
+              "result": "126",
+              "unit": "mg/dL"
+            },
+            {
+              "unit": "mg/dL",
+              "notes": "Calculated: Triglycerides / 5",
+              "maxNormal": 30,
+              "result": "25",
+              "id": "param-1791187761769-4-f7sq",
+              "minNormal": 5,
+              "name": "VLDL - Cholesterol",
+              "flag": "NORMAL"
+            },
+            {
+              "minNormal": 0,
+              "name": "Non-HDL Cholesterol",
+              "flag": "HIGH",
+              "result": "151",
+              "id": "param-1791187761769-5-rjtx",
+              "maxNormal": 130,
+              "notes": "Calculated: Total Cholesterol - HDL",
+              "unit": "mg/dL"
+            },
+            {
+              "notes": "Desirable < 4.5",
+              "result": "4.1",
+              "unit": "Ratio",
+              "textReference": "< 4.5 Desirable",
+              "flag": "NORMAL",
+              "maxNormal": 4.5,
+              "id": "param-1791187761769-6-68ll",
+              "minNormal": 0,
+              "name": "Total Chol / HDL Ratio"
+            },
+            {
+              "result": "2.57",
+              "minNormal": 0,
+              "unit": "Ratio",
+              "id": "param-1791187761769-7-xa8r",
+              "maxNormal": 3,
+              "textReference": "< 3.0 Desirable",
+              "name": "LDL / HDL Ratio",
+              "flag": "NORMAL"
+            }
+          ],
+          "sampleType": "Serum (12h Fasting)"
+        },
+        {
+          "category": "Special Chemistry & Hormones",
+          "titleEn": "Comprehensive Annual Wellness Package - Special Investigations",
+          "id": "prof-indiv-1791187761771",
+          "sampleType": "Serum, EDTA Whole Blood, Random Urine",
+          "parameters": [
+            {
+              "method": "CLIA",
+              "name": "فيتامين د النشط بالدم (Vitamin D 25-OH Total) (25-Hydroxy Vitamin D)",
+              "id": "param-1791187761770-7ha3",
+              "maxNormal": 100,
+              "unit": "ng/mL",
+              "flag": "LOW",
+              "textReference": "Deficiency: < 20 | Insufficient: 20 - 29 | Sufficient: 30 - 100 ng/mL",
+              "minNormal": 30,
+              "result": "29.00"
+            },
+            {
+              "id": "param-1791187761770-f12k",
+              "name": "سكر الدم الصائم (FBS) (Fasting Blood Sugar)",
+              "result": "119",
+              "unit": "mg/dL",
+              "method": "Hexokinase / GOD-PAP",
+              "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
+              "maxNormal": 100,
+              "flag": "HIGH",
+              "minNormal": 70
+            },
+            {
+              "name": "السكر التراكمي (HbA1c HPLC) (Glycated Hemoglobin HbA1c)",
+              "method": "HPLC Certified",
+              "id": "param-1791187828049",
+              "maxNormal": 5.7,
+              "textReference": "Normal: 4.5 - 5.7% | Pre-diabetic: 5.7 - 6.4% | Diabetic: >= 6.5%",
+              "minNormal": 4.5,
+              "flag": "NORMAL",
+              "unit": "%",
+              "result": "5.44"
+            },
+            {
+              "textReference": "8.6-10.5",
+              "result": "8.99",
+              "flag": "NORMAL",
+              "name": "الكالسيوم الكلي (Total Serum Calcium) (Total Calcium)",
+              "id": "param-1791187761770-fmxb",
+              "method": "Automated Analyzer",
+              "unit": "mg/dl"
+            },
+            {
+              "minNormal": 3.5,
+              "textReference": "Males: 3.5 - 7.2 | Females: 2.6 - 6.0 mg/dL",
+              "name": "حمض البوليك / يوريك أسيد (Serum Uric Acid) (Serum Uric Acid)",
+              "maxNormal": 7.2,
+              "result": "5.11",
+              "id": "param-1791187761770-2asy",
+              "method": "Uricase",
+              "flag": "NORMAL",
+              "unit": "mg/dL"
+            },
+            {
+              "method": "Jaffe Modified / Enzymatic",
+              "name": "كرياتينين بالدم (Serum Creatinine) (Serum Creatinine)",
+              "minNormal": 0.6,
+              "result": "0.71",
+              "id": "param-1791187761771-673n",
+              "unit": "mg/dL",
+              "textReference": "Adult Males: 0.7 - 1.3 | Adult Females: 0.6 - 1.1 mg/dL",
+              "maxNormal": 1.3,
+              "flag": "NORMAL"
+            },
+            {
+              "minNormal": 15,
+              "method": "Urease - GLDH",
+              "flag": "NORMAL",
+              "maxNormal": 45,
+              "unit": "mg/dL",
+              "name": "بولينا بالدم (Blood Urea / BUN) (Blood Urea Nitrogen)",
+              "id": "param-1791187761771-pgym",
+              "result": "28",
+              "textReference": "15 - 45 mg/dL"
+            }
+          ],
+          "profileCode": "INDIVIDUAL",
+          "titleAr": "فحوصات باقة الفحص الدوري الشامل (Wellness Plus) الإضافية"
+        },
+        {
+          "interpretation": "Normal values ",
+          "category": "Hematology",
+          "bloodFilmFindings": {
+            "plateletMorphology": "Adequate in number and well-distributed on peripheral smear.",
+            "rbcMorphology": "Normocytic normochromic RBCs. No significant anisopoikilocytosis.",
+            "differentialSummary": "Differential leukocyte count within physiological reference intervals.",
+            "wbcMorphology": "Normal mature leukocyte series. No toxic granulation or atypical forms.",
+            "reticulocytesPercent": "1.0 %"
+          },
+          "profileCode": "CBC",
+          "titleEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+          "attachedIllustration": {
+            "descriptionEn": "Normocytic, normochromic erythrocytes with normal central pallor (~1/3 diameter). Adequate platelets and normal differential leucocytic morphology.",
+            "imageUrl": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2270%22%20fill%3D%22%230f172a%22%20stroke%3D%22%23881337%22%20stroke-width%3D%222%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%23f43f5e%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3ENORMAL%20BLOOD%20SMEAR%20%281000X%29%3C/text%3E%20%3C%21--%20Normal%20RBCs%20with%201/3%20central%20pallor%20--%3E%20%3Cg%20fill%3D%22%23e11d48%22%3E%20%3Ccircle%20cx%3D%22105%22%20cy%3D%2265%22%20r%3D%2216%22/%3E%3Ccircle%20cx%3D%22105%22%20cy%3D%2265%22%20r%3D%225.5%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22145%22%20cy%3D%2255%22%20r%3D%2215%22/%3E%3Ccircle%20cx%3D%22145%22%20cy%3D%2255%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22170%22%20cy%3D%2280%22%20r%3D%2216%22/%3E%3Ccircle%20cx%3D%22170%22%20cy%3D%2280%22%20r%3D%225.5%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22130%22%20cy%3D%22105%22%20r%3D%2216%22/%3E%3Ccircle%20cx%3D%22130%22%20cy%3D%22105%22%20r%3D%225.5%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%2295%22%20cy%3D%2298%22%20r%3D%2215%22/%3E%3Ccircle%20cx%3D%2295%22%20cy%3D%2298%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3C/g%3E%20%3C%21--%20Neutrophil%20--%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2217%22%20fill%3D%22%23fbcfe8%22%20opacity%3D%220.4%22/%3E%20%3Cellipse%20cx%3D%22135%22%20cy%3D%2276%22%20rx%3D%224%22%20ry%3D%225%22%20fill%3D%22%236b21a8%22/%3E%20%3Cellipse%20cx%3D%22145%22%20cy%3D%2277%22%20rx%3D%224%22%20ry%3D%224%22%20fill%3D%22%236b21a8%22/%3E%20%3Cellipse%20cx%3D%22139%22%20cy%3D%2286%22%20rx%3D%224.5%22%20ry%3D%223.5%22%20fill%3D%22%236b21a8%22/%3E%20%3C%21--%20Platelets%20--%3E%20%3Ccircle%20cx%3D%22120%22%20cy%3D%2260%22%20r%3D%222.5%22%20fill%3D%22%2338bdf8%22/%3E%20%3Ccircle%20cx%3D%22160%22%20cy%3D%22100%22%20r%3D%222.5%22%20fill%3D%22%2338bdf8%22/%3E%20%3Ccircle%20cx%3D%22163%22%20cy%3D%2297%22%20r%3D%222%22%20fill%3D%22%2338bdf8%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%22148%22%20text-anchor%3D%22middle%22%20fill%3D%22%2394a3b8%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3ENormocytic%20Normochromic%20Erythrocytes%3C/text%3E%20%3C/svg%3E",
+            "titleEn": "Normal Peripheral Blood Smear",
+            "pathologySummaryAr": "كرات دم حمراء طبيعية الحجم ومتساوية الصبغ (Normocytic Normochromic) مع مساحة شحوب مركزي طبيعية تعادل ثلث قطر الخلية، مع توزيع طبيعي لكرات الدم البيضاء والصفائح الدموية.",
+            "code": "HEM_NORMAL",
+            "pathologySummaryEn": "Normocytic, normochromic erythrocytes with normal central pallor (~1/3 diameter). Adequate platelets and normal differential leucocytic morphology.",
+            "titleAr": "شريحة دم محيطي طبيعية (Normal Peripheral Blood Smear)",
+            "id": "hem-normal",
+            "descriptionAr": "كرات دم حمراء طبيعية الحجم ومتساوية الصبغ (Normocytic Normochromic) مع مساحة شحوب مركزي طبيعية تعادل ثلث قطر الخلية، مع توزيع طبيعي لكرات الدم البيضاء والصفائح الدموية.",
+            "differentialDiagnosis": "No cytopenias or dysplastic features identified.",
+            "associatedConditions": [
+              "Physiological Baseline",
+              "Healthy Reference",
+              "Routine Wellness"
+            ],
+            "category": "hematology",
+            "diagnosticCriteria": [
+              "MCV: 80 - 98 fL | MCH: 27 - 33 pg | MCHC: 32 - 36 g/dL",
+              "RBCs: uniform size and biconcave disc shape",
+              "WBC differential within normal reference intervals",
+              "Platelets: 150 - 450 x10^3/µL with normal granular appearance"
+            ],
+            "keyDiagnosticPoints": [
+              "MCV: 80 - 98 fL | MCH: 27 - 33 pg | MCHC: 32 - 36 g/dL",
+              "RBCs: uniform size and biconcave disc shape",
+              "WBC differential within normal reference intervals",
+              "Platelets: 150 - 450 x10^3/µL with normal granular appearance"
+            ]
+          },
+          "titleAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
+          "sampleType": "EDTA Whole Blood",
+          "parameters": [
+            {
+              "name": "Hemoglobin (Hb)",
+              "textReference": "M: 13.0 - 17.5 | F: 12.0 - 15.5 g/dL",
+              "panicLow": 7,
+              "result": "12.90",
+              "id": "p-mig-0-1791188313957",
+              "method": "Automated SLS-Hb",
+              "panicHigh": 20,
+              "unit": "g/dL",
+              "minNormal": 12,
+              "flag": "NORMAL",
+              "maxNormal": 16.5
+            },
+            {
+              "minNormal": 36,
+              "notes": "Auto-calculated: Hb × 3",
+              "flag": "NORMAL",
+              "textReference": "M: 40 - 52% | F: 36 - 48%",
+              "maxNormal": 48,
+              "unit": "%",
+              "result": "37.22",
+              "name": "Hematocrit (PCV)",
+              "id": "p-mig-2-1791188313957"
+            }
+          ],
+          "id": "prof-1791187787353-wd4d"
+        },
+        {
+          "titleEn": "Liver Function Tests (LFT)",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum",
+          "id": "prof-1791187807201-tt62",
+          "parameters": [
+            {
+              "method": "IFCC UV with P5P",
+              "unit": "U/L",
+              "maxNormal": 45,
+              "name": "ALT (SGPT)",
+              "flag": "NORMAL",
+              "result": "28",
+              "minNormal": 0,
+              "id": "param-1791187807201-0"
+            },
+            {
+              "minNormal": 0,
+              "result": "20",
+              "unit": "U/L",
+              "id": "param-1791187807201-1",
+              "flag": "NORMAL",
+              "maxNormal": 40,
+              "name": "AST (SGOT)",
+              "method": "IFCC UV with P5P"
+            }
+          ],
+          "profileCode": "LFT",
+          "interpretation": "Enzyme activities and synthetic hepatic markers are within normal limits.",
+          "titleAr": "وظائف كبد متكاملة ومؤشرات الصفراء والبروتين"
+        }
+      ],
+      "id": "rep-inc-1791123722634",
+      "generalComment": "طلب فحص مالي رقم RT-BK-5873 - تم التسميع آلياً من منظومة الفواتير",
+      "patient": {
+        "fastingHours": 12,
+        "ageUnit": "years",
+        "assignedPackageId": "pkg-1",
+        "phone": "01127452964",
+        "fullName": "منال محمود بكر",
+        "referringDoctorName": "فحص بفرع (معامل RT للتحاليل التشخيصية)",
+        "gender": "female",
+        "loyaltyCardNumber": "RT-2026-0012",
+        "loyaltyCardIssued": true,
+        "totalCost": 199,
+        "sampleDate": "2026-09-30T11:22:00.000Z",
+        "appointmentDate": "2026-09-30",
+        "barcode": "26202971",
+        "age": 52,
+        "reportingDate": "2026-10-04T14:22",
+        "referringDoctorTitle": "Prof. Dr.",
+        "labNumber": "RT-BK-5873",
+        "clinicalHistory": " check ",
+        "discountApplied": 1451,
+        "bloodGroup": "O+",
+        "id": "pat-inc-1791123722634"
+      },
+      "updatedAt": "2026-10-06T08:32:11.543Z",
+      "staff": {
+        "verifiedBy": "",
+        "labChemist": "",
+        "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
+      },
+      "createdAt": "2026-10-04T14:22:02.634Z",
+      "reportNumber": "RT-BK-5873",
+      "packageApplied": {
+        "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
+        "code": "PKG-ANNUAL-WELLNESS",
+        "packagePrice": 199
+      }
     }
   ],
   "incomeRecords": [
     {
-      "remainingAmount": 0,
-      "loyaltyPointsEarned": 342,
+      "testsSubtotal": 280,
+      "discount": 28,
+      "updatedAt": "2026-10-06T09:20:54.635Z",
+      "notes": "خصم كارت الولاء الفضي 10%",
+      "patientPhone": "01012345678",
       "branch": "فرع القصر العيني - الرئيسي",
-      "loyaltyPointsRedeemed": 0,
-      "patientPhone": "01198765432",
-      "discount": 38,
-      "patientGender": "female",
-      "updatedAt": "2026-10-06T08:36:58.182Z",
-      "subtotal": 380,
-      "syncStatus": "synced",
-      "loyaltyDiscountEGP": 38,
-      "notes": "خصم كارت الولاء الذهبي 10%",
-      "referringDoctor": "أ.د. خالد الببلاوي",
-      "id": "inv-002",
-      "patientName": "منى عادل عبد الرحمن",
-      "paymentStatus": "paid",
-      "labNumber": "RT-2026-002",
+      "patientName": "أحمد محمود إبراهيم",
+      "netAmount": 252,
+      "loyaltyPointsEarned": 252,
       "cashierName": "المحاسب المالي",
-      "barcode": "RT-10030",
-      "paidAmount": 342,
-      "netAmount": 342,
-      "paymentMethod": "visa",
-      "createdAt": "2026-10-06T08:36:58.182Z",
+      "paymentMethod": "cash",
+      "createdAt": "2026-10-06T09:20:54.635Z",
+      "remainingAmount": 0,
+      "loyaltyDiscountEGP": 28,
+      "paymentStatus": "paid",
+      "paidAmount": 252,
+      "id": "inv-001",
+      "invoiceNumber": "INV-2026-001",
       "tests": [
         {
-          "cost": 35,
-          "price": 160,
-          "id": "t-hba1c",
-          "nameAr": "السكر التراكمي (HbA1c HPLC)",
-          "code": "HBA1C",
-          "category": "Diabetes",
-          "nameEn": "Glycated Hemoglobin HbA1c"
-        },
-        {
-          "nameEn": "Renal Function Panel",
-          "category": "Biochemistry",
-          "id": "t-kft",
-          "cost": 30,
-          "nameAr": "وظائف كلى كاملة (KFT)",
-          "price": 220,
-          "code": "KFT"
+          "id": "t-cbc",
+          "nameAr": "صورة الدم الكاملة (CBC 5-Diff)",
+          "nameEn": "Complete Blood Count",
+          "category": "Hematology",
+          "cost": 45,
+          "sampleType": "EDTA Whole Blood",
+          "price": 280,
+          "code": "CBC"
         }
       ],
-      "testsSubtotal": 380,
+      "subtotal": 280,
+      "barcode": "RT-10029",
+      "patientAge": 34,
+      "syncStatus": "synced",
+      "patientGender": "male",
+      "labNumber": "RT-2026-001",
+      "referringDoctor": "د. طارق المنشاوي",
+      "loyaltyPointsRedeemed": 0
+    },
+    {
+      "notes": "خصم كارت الولاء الذهبي 10%",
+      "patientGender": "female",
+      "loyaltyPointsEarned": 342,
+      "referringDoctor": "أ.د. خالد الببلاوي",
+      "barcode": "RT-10030",
+      "loyaltyDiscountEGP": 38,
+      "cashierName": "المحاسب المالي",
+      "subtotal": 380,
+      "createdAt": "2026-10-06T08:36:58.182Z",
+      "paidAmount": 342,
+      "updatedAt": "2026-10-06T08:36:58.182Z",
+      "patientName": "منى عادل عبد الرحمن",
+      "netAmount": 342,
+      "tests": [
+        {
+          "code": "HBA1C",
+          "price": 160,
+          "id": "t-hba1c",
+          "cost": 35,
+          "nameEn": "Glycated Hemoglobin HbA1c",
+          "nameAr": "السكر التراكمي (HbA1c HPLC)",
+          "category": "Diabetes"
+        },
+        {
+          "id": "t-kft",
+          "nameEn": "Renal Function Panel",
+          "code": "KFT",
+          "category": "Biochemistry",
+          "cost": 30,
+          "price": 220,
+          "nameAr": "وظائف كلى كاملة (KFT)"
+        }
+      ],
+      "invoiceNumber": "INV-2026-002",
+      "loyaltyPointsRedeemed": 0,
       "patientAge": 48,
-      "invoiceNumber": "INV-2026-002"
+      "labNumber": "RT-2026-002",
+      "syncStatus": "synced",
+      "paymentStatus": "paid",
+      "patientPhone": "01198765432",
+      "remainingAmount": 0,
+      "discount": 38,
+      "id": "inv-002",
+      "paymentMethod": "visa",
+      "testsSubtotal": 380,
+      "branch": "فرع القصر العيني - الرئيسي"
     }
   ],
   "loyaltyProfiles": [
     {
-      "lifetimeSpent": 252,
-      "issueDate": "2026-10-06",
-      "phone": "01012345678",
-      "bloodGroup": "A+",
-      "cardNumber": "RT-SILVER-10029",
-      "patientName": "أحمد محمود إبراهيم",
       "patientId": "pat-001",
-      "totalPoints": 252,
       "barcode": "RT-10029",
+      "totalPoints": 252,
+      "patientName": "أحمد محمود إبراهيم",
+      "bloodGroup": "A+",
+      "lifetimeSpent": 252,
+      "tier": "Silver",
+      "issueDate": "2026-10-06",
       "transactions": [
         {
+          "invoiceNumber": "INV-2026-001",
+          "id": "tx-l-1",
+          "description": "نقاط فاتورة تحاليل CBC رقم INV-2026-001",
+          "date": "2026-10-06",
           "points": 252,
           "type": "earn",
-          "id": "tx-l-1",
-          "invoiceNumber": "INV-2026-001",
-          "date": "2026-10-06",
-          "amountEGP": 252,
-          "description": "نقاط فاتورة تحاليل CBC رقم INV-2026-001"
+          "amountEGP": 252
         }
       ],
-      "tier": "Silver"
+      "phone": "01012345678",
+      "cardNumber": "RT-SILVER-10029"
     },
     {
-      "tier": "Gold",
-      "patientId": "pat-002",
-      "bloodGroup": "O+",
-      "totalPoints": 682,
-      "phone": "01198765432",
-      "patientName": "منى عادل عبد الرحمن",
       "lifetimeSpent": 682,
-      "issueDate": "2026-10-06",
+      "patientName": "منى عادل عبد الرحمن",
+      "patientId": "pat-002",
+      "barcode": "RT-10030",
+      "totalPoints": 682,
       "cardNumber": "RT-GOLD-10030",
+      "issueDate": "2026-10-06",
+      "tier": "Gold",
       "transactions": [
         {
-          "id": "tx-l-2",
-          "date": "2026-10-06",
-          "description": "نقاط فاتورة تحاليل السكر والكلى INV-2026-002",
-          "type": "earn",
-          "invoiceNumber": "INV-2026-002",
+          "points": 342,
           "amountEGP": 342,
-          "points": 342
+          "invoiceNumber": "INV-2026-002",
+          "date": "2026-10-06",
+          "id": "tx-l-2",
+          "type": "earn",
+          "description": "نقاط فاتورة تحاليل السكر والكلى INV-2026-002"
         }
       ],
-      "barcode": "RT-10030"
+      "phone": "01198765432",
+      "bloodGroup": "O+"
     }
   ],
   "inventory": [
@@ -615,64 +979,14 @@
   "dailyCloseouts": [],
   "auditLogs": [
     {
-      "id": "log-1791276936886-1oqnc",
-      "timestamp": "٦‏/١٠‏/٢٠٢٦ ١١:٥٥:٣٦ ص",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "SYNC",
-      "module": "SECURITY",
-      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
-    },
-    {
-      "id": "log-1791276913208-koqeo",
-      "timestamp": "٦‏/١٠‏/٢٠٢٦ ١١:٥٥:١٣ ص",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "SYNC",
-      "module": "SECURITY",
-      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
-    },
-    {
-      "id": "log-1791276724865-s4hdz",
-      "timestamp": "٦‏/١٠‏/٢٠٢٦ ١١:٥٢:٠٤ ص",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "SYNC",
-      "module": "SECURITY",
-      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
-    },
-    {
-      "id": "log-1791276721135-tpf55",
-      "timestamp": "٦‏/١٠‏/٢٠٢٦ ١١:٥٢:٠١ ص",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "SYNC",
-      "module": "SECURITY",
-      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
-    },
-    {
-      "id": "log-1791276359524-5m53n",
-      "timestamp": "٦‏/١٠‏/٢٠٢٦ ١١:٤٥:٥٩ ص",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "SYNC",
-      "module": "SECURITY",
-      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
-    },
-    {
-      "id": "log-1791276064583-hlg93",
-      "timestamp": "٦‏/١٠‏/٢٠٢٦ ١١:٤١:٠٤ ص",
+      "id": "log-1791282363126-qp4ps",
+      "timestamp": "٦‏/١٠‏/٢٠٢٦ ١:٢٦:٠٣ م",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "CATALOG_UPDATE",
       "module": "CATALOG",
-      "description": "تعديل سعر/بيانات التحليل: TEST_202"
+      "description": "إضافة تحليل جديد للكتالوج: هيماتوكريت0 (HCT)"
     }
   ]
 }
