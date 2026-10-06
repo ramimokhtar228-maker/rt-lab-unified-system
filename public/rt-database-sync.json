@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:52:08.492Z",
+  "syncedAt": "2026-10-06T06:52:25.882Z",
   "reports": [
     {
       "profiles": [
@@ -1895,7 +1895,7 @@
       "nameAr": "هرمون الذكورة الكظري (DHEA-Sulfate)",
       "nameEn": "Dehydroepiandrosterone Sulfate (DHEA-S)",
       "category": "Fertility & Hormones",
-      "price": 290,
+      "price": 990,
       "cost": 70,
       "sampleType": "Serum",
       "turnaroundTime": "خلال 24 ساعة",
