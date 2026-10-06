@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:49:49.097Z",
+  "syncedAt": "2026-10-06T11:49:53.447Z",
   "reports": [
     {
       "id": "rep-1791287331555",
@@ -253,27 +253,6 @@
               "method": "Enzymatic"
             }
           ]
-        },
-        {
-          "id": "prof-1791287331554-96om",
-          "profileCode": "HCT",
-          "titleEn": "Hematocrit %",
-          "titleAr": "هيماتوكريت0",
-          "category": "Clinical Hematology ",
-          "sampleType": "EDTA ",
-          "parameters": [
-            {
-              "id": "p-1791287331554-1cg",
-              "name": "هيماتوكريت0 (Hematocrit %)",
-              "result": "",
-              "unit": "%",
-              "minNormal": 36,
-              "maxNormal": 49,
-              "textReference": "Normal",
-              "flag": "NORMAL",
-              "method": "Enzymatic"
-            }
-          ]
         }
       ],
       "staff": {
@@ -283,7 +262,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:48:51.555Z",
-      "updatedAt": "2026-10-06T11:49:46.159Z",
+      "updatedAt": "2026-10-06T11:49:50.222Z",
       "invoiceId": "inv-1791287331555"
     },
     {
