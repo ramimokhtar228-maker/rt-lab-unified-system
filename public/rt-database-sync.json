@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T12:02:31.310Z",
+  "syncedAt": "2026-10-06T12:02:36.770Z",
   "reports": [
     {
       "id": "rep-1791287976696",
@@ -246,48 +246,6 @@
           ]
         },
         {
-          "id": "prof-1791287976695-8hfj",
-          "profileCode": "CALCIUM_TOTAL",
-          "titleEn": "Total Serum Calcium",
-          "titleAr": "الكالسيوم الكلي (Total Serum Calcium)",
-          "category": "Minerals & Bone",
-          "sampleType": "Serum",
-          "parameters": [
-            {
-              "id": "p-1791287976695-3r7",
-              "name": "الكالسيوم الكلي (Total Serum Calcium) (Total Serum Calcium)",
-              "result": "",
-              "unit": "mg/dL",
-              "minNormal": 8.6,
-              "maxNormal": 10.3,
-              "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
-              "flag": "NORMAL",
-              "method": "Arsenazo III / CPC Photometric"
-            }
-          ]
-        },
-        {
-          "id": "prof-1791287976695-y4kq",
-          "profileCode": "ALT",
-          "titleEn": "Alanine Aminotransferase (ALT / SGPT)",
-          "titleAr": "إنزيم كبد ALT / SGPT",
-          "category": "Liver Function",
-          "sampleType": "Serum",
-          "parameters": [
-            {
-              "id": "p-1791287976695-oz1",
-              "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
-              "result": "",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 41,
-              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
-              "flag": "NORMAL",
-              "method": "IFCC Kinetic UV without Pyridoxal Phosphate"
-            }
-          ]
-        },
-        {
           "id": "prof-1791287976696-0msh",
           "profileCode": "AST",
           "titleEn": "Aspartate Aminotransferase (AST / SGOT)",
@@ -405,7 +363,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:59:36.696Z",
-      "updatedAt": "2026-10-06T12:02:25.455Z",
+      "updatedAt": "2026-10-06T12:02:31.592Z",
       "invoiceId": "inv-1791287976696"
     },
     {
