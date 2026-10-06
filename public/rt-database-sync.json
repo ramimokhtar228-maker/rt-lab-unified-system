@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:56:58.678Z",
+  "syncedAt": "2026-10-06T06:57:20.153Z",
   "reports": [
     {
       "profiles": [
@@ -2129,7 +2129,7 @@
       "nameAr": "دلالات أورام المبيض والرحم (CA 125)",
       "nameEn": "Cancer Antigen 125 (CA 125)",
       "category": "Tumor Markers",
-      "price": 260,
+      "price": 590,
       "cost": 60,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
