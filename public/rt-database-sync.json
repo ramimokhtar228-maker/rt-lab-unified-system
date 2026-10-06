@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:12:34.226Z",
+  "syncedAt": "2026-10-06T07:12:54.303Z",
   "reports": [
     {
       "profiles": [
@@ -2738,7 +2738,7 @@
       "nameAr": "الدم الخفي بالبراز مناعي (Stool Occult Blood FIT)",
       "nameEn": "Fecal Occult Blood Test (FIT Immunochemical)",
       "category": "Gastroenterology",
-      "price": 560,
+      "price": 800,
       "cost": 25,
       "sampleType": "Stool Specimen",
       "turnaroundTime": "خلال ساعتين",
