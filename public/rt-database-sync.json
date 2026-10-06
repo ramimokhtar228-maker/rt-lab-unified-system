@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:02:07.352Z",
+  "syncedAt": "2026-10-06T07:02:22.406Z",
   "reports": [
     {
       "profiles": [
@@ -2306,7 +2306,7 @@
       "unit": "IU/mL",
       "minNormal": 0,
       "maxNormal": 10,
-      "textReference": "Negative: < 10.0IU/mL | Positive: >= 110.0IU/mL",
+      "textReference": "Negative: < 10.0IU/mL | Positive: >= 10.0IU/mL",
       "method": "Latex-Enhanced Immunoturbidimetry",
       "fastingInstructions": "لا يشترط صيام"
     },
