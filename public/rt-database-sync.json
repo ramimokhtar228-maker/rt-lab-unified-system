@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:15:04.490Z",
+  "syncedAt": "2026-10-06T07:15:23.786Z",
   "reports": [
     {
       "profiles": [
@@ -2862,7 +2862,7 @@
       "nameAr": "مزرعة دم هوائية ولاهوائية (Blood Culture 2 Bottles)",
       "nameEn": "Blood Culture Aerobic & Anaerobic (Pair)",
       "category": "Microbiology",
-      "price": 450,
+      "price": 1140,
       "cost": 110,
       "sampleType": "Whole Blood in Automated Blood Culture Bottles",
       "turnaroundTime": "5 - 7 أيام (إخطار مبكر خلال 24 ساعة)",
