@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T17:12:10.393Z",
+  "syncedAt": "2026-10-06T17:12:26.385Z",
   "reports": [
     {
       "id": "rep-1791306270693",
@@ -154,8 +154,8 @@
               "result": "6.0",
               "unit": "mg/dL",
               "minNormal": 3.5,
-              "maxNormal": 7.2,
-              "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
+              "maxNormal": 6.2,
+              "textReference": "Males: 3.5 - 6.2  mg/dL | Females: 2.6 - 6.0 mg/dL",
               "flag": "NORMAL",
               "method": "Uricase / POD Enzymatic Colorimetric",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
@@ -272,7 +272,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T17:04:30.693Z",
-      "updatedAt": "2026-10-06T17:12:07.054Z",
+      "updatedAt": "2026-10-06T17:12:24.751Z",
       "invoiceId": "inv-1791306270694"
     },
     {
