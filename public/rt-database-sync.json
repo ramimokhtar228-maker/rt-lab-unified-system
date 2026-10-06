@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:45:39.446Z",
+  "syncedAt": "2026-10-06T06:46:07.246Z",
   "reports": [
     {
       "profiles": [
@@ -1561,7 +1561,7 @@
       "turnaroundTime": "خلال ساعتين",
       "unit": "uIU/mL",
       "minNormal": 0.55,
-      "maxNormal": 4.87,
+      "maxNormal": 4.78,
       "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
       "method": "CLIA (3rd Generation Chemiluminescence)",
       "fastingInstructions": "لا يشترط صيام (يفضل الصباح الباكر قبل تناول علاج الغدة)"
