@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T17:08:20.969Z",
+  "syncedAt": "2026-10-06T17:08:45.159Z",
   "reports": [
     {
       "id": "rep-1791306270693",
@@ -16,7 +16,7 @@
         "gender": "female",
         "referringDoctorTitle": "Dr.",
         "referringDoctorName": "HERSELF",
-        "sampleDate": "2026-10-06",
+        "sampleDate": "2026-10-04T17:08:00.000Z",
         "reportingDate": "2026-10-06",
         "fastingHours": 0,
         "bookingType": "home_visit",
@@ -42,7 +42,7 @@
           "titleEn": "Comprehensive Annual Wellness Package",
           "category": "باقة فحوصات شاملة",
           "sampleType": "Serum + EDTA Whole Blood + Clean Urine",
-          "interpretation": "جميع تحاليل وفحوصات الباقة الشاملة تم تقييمها وتدقيقها طبقاً للمعدلات المرجعية المعتمدة دولياً.",
+          "interpretation": " ",
           "parameters": [
             {
               "name": "Total Serum Cholesterol",
@@ -272,7 +272,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T17:04:30.693Z",
-      "updatedAt": "2026-10-06T17:08:07.192Z",
+      "updatedAt": "2026-10-06T17:08:38.828Z",
       "invoiceId": "inv-1791306270694"
     },
     {
