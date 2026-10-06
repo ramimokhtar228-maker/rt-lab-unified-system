@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:42:48.247Z",
+  "syncedAt": "2026-10-06T11:42:53.073Z",
   "reports": [
     {
       "id": "rep-1791286741642",
@@ -155,17 +155,6 @@
               "method": "Uricase / POD Enzymatic Colorimetric"
             },
             {
-              "id": "p-pkg-2-1791286741640",
-              "name": "سكر الدم الصائم (FBS) (Fasting Blood Sugar)",
-              "result": "238",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 100,
-              "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
-              "flag": "HIGH",
-              "method": "Hexokinase / GOD-PAP"
-            },
-            {
               "id": "p-pkg-3-1791286741640",
               "name": "كرياتينين بالدم (Serum Creatinine) (Serum Creatinine)",
               "result": "1.10",
@@ -299,7 +288,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:39:01.642Z",
-      "updatedAt": "2026-10-06T11:42:45.207Z",
+      "updatedAt": "2026-10-06T11:42:50.296Z",
       "invoiceId": "inv-1791286741643"
     },
     {
