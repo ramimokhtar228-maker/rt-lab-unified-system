@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:02:09.028Z",
+  "syncedAt": "2026-10-06T11:02:19.715Z",
   "reports": [
     {
       "id": "rep-1791284141332",
@@ -163,7 +163,7 @@
               "maxNormal": 11.5,
               "textReference": "7.5 - 11.5 fL",
               "id": "param-11-1791284141331-tdm",
-              "result": "",
+              "result": "10.00",
               "flag": "NORMAL"
             },
             {
@@ -181,10 +181,10 @@
               "unit": "%",
               "minNormal": 0.17,
               "maxNormal": 0.35,
-              "notes": "Auto-calculated: (PLT × MPV) / 10,000",
+              "notes": "Calculated: (PLT × MPV) / 10,000",
               "textReference": "0.17 - 0.35 %",
               "id": "param-13-1791284141331-069",
-              "result": "",
+              "result": "0.3",
               "flag": "NORMAL"
             },
             {
@@ -544,7 +544,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T10:55:41.332Z",
-      "updatedAt": "2026-10-06T11:02:04.312Z",
+      "updatedAt": "2026-10-06T11:02:15.081Z",
       "invoiceId": "inv-1791284141332"
     },
     {
