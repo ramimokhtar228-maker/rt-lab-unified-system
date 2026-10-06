@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:38:17.301Z",
+  "syncedAt": "2026-10-06T06:38:35.340Z",
   "reports": [
     {
       "profiles": [
@@ -1232,7 +1232,7 @@
       "nameAr": "الصفراء الكلية بالدم (Total Bilirubin)",
       "nameEn": "Total Bilirubin",
       "category": "Liver Function",
-      "price": 88,
+      "price": 122,
       "cost": 12,
       "sampleType": "Serum (Protected from light)",
       "turnaroundTime": "فوري (ساعة)",
