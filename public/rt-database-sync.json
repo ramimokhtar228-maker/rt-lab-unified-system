@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:25:54.882Z",
+  "syncedAt": "2026-10-06T06:26:16.219Z",
   "reports": [
     {
       "profiles": [
@@ -775,7 +775,7 @@
       "nameAr": "مقاومة الإنسولين الحسابية (HOMA-IR)",
       "nameEn": "HOMA-IR Insulin Resistance",
       "category": "Diabetes",
-      "price": 330,
+      "price": 755,
       "cost": 75,
       "sampleType": "Serum + Fluoride Plasma",
       "turnaroundTime": "خلال 24 ساعة",
