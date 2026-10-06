@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:08:04.093Z",
+  "syncedAt": "2026-10-06T07:08:23.328Z",
   "reports": [
     {
       "profiles": [
@@ -2569,7 +2569,7 @@
       "nameAr": "فيروس أ الكبدي الحاد (HAV IgM)",
       "nameEn": "Hepatitis A Virus IgM Antibody",
       "category": "Infectious & Viral",
-      "price": 180,
+      "price": 400,
       "cost": 45,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
