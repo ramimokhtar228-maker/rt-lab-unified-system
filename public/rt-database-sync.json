@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T17:05:46.910Z",
+  "syncedAt": "2026-10-06T17:05:55.884Z",
   "reports": [
     {
       "id": "rep-1791306270693",
@@ -65,8 +65,8 @@
               "method": "GPO-PAP",
               "textReference": "",
               "id": "param-LIPID-1-1791306270690-nwx",
-              "result": "",
-              "flag": "NORMAL",
+              "result": "1",
+              "flag": "LOW",
               "notes": "دهون الدم الشاملة مع المؤشرات الحسابية"
             },
             {
@@ -97,11 +97,11 @@
               "unit": "mg/dL",
               "minNormal": 5,
               "maxNormal": 30,
-              "notes": "Auto-calculated: Triglycerides / 5",
+              "notes": "Calculated: Triglycerides / 5",
               "textReference": "",
               "id": "param-LIPID-4-1791306270690-kn1",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "0",
+              "flag": "LOW"
             },
             {
               "name": "Non-HDL Cholesterol",
@@ -272,7 +272,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T17:04:30.693Z",
-      "updatedAt": "2026-10-06T17:05:44.256Z",
+      "updatedAt": "2026-10-06T17:05:53.770Z",
       "invoiceId": "inv-1791306270694"
     },
     {
