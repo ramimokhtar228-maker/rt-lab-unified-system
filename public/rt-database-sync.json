@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T10:57:24.181Z",
+  "syncedAt": "2026-10-06T11:02:00.998Z",
   "reports": [
     {
       "id": "rep-1791284141332",
@@ -141,7 +141,7 @@
               "notes": "(MCV² × RDW) / (Hb × 100)",
               "textReference": "< 72 Thalassemia | > 72 Iron Def.",
               "id": "param-9-1791284141331-jcr",
-              "result": "",
+              "result": "104",
               "flag": "NORMAL"
             },
             {
@@ -544,7 +544,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T10:55:41.332Z",
-      "updatedAt": "2026-10-06T10:57:19.650Z",
+      "updatedAt": "2026-10-06T11:01:54.344Z",
       "invoiceId": "inv-1791284141332"
     },
     {
