@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T07:17:34.888Z",
+  "syncedAt": "2026-10-06T07:17:57.371Z",
   "reports": [
     {
       "profiles": [
@@ -2960,7 +2960,7 @@
       "nameAr": "فوسفاتيز قلوي عظمي (Bone-Specific Alkaline Phosphatase)",
       "nameEn": "Bone-Specific Alkaline Phosphatase (BAP)",
       "category": "Minerals & Bone",
-      "price": 420,
+      "price": 1400,
       "cost": 110,
       "sampleType": "Serum",
       "turnaroundTime": "خلال 24 ساعة",
