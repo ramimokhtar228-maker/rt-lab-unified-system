@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:51:07.959Z",
+  "syncedAt": "2026-10-06T11:51:11.066Z",
   "reports": [
     {
       "id": "rep-1791287331555",
@@ -63,8 +63,8 @@
               "method": "GPO-PAP",
               "textReference": "",
               "id": "param-1-1791287331552-anl",
-              "result": "166",
-              "flag": "HIGH"
+              "result": "122",
+              "flag": "NORMAL"
             },
             {
               "name": "HDL - Cholesterol (Good)",
@@ -85,7 +85,7 @@
               "notes": "Friedewald Formula: TC - HDL - (TG/5)",
               "textReference": "",
               "id": "param-3-1791287331552-74o",
-              "result": "181",
+              "result": "190",
               "flag": "HIGH"
             },
             {
@@ -96,8 +96,8 @@
               "notes": "Calculated: Triglycerides / 5",
               "textReference": "",
               "id": "param-4-1791287331552-zg2",
-              "result": "33",
-              "flag": "HIGH"
+              "result": "24",
+              "flag": "NORMAL"
             },
             {
               "name": "Non-HDL Cholesterol",
@@ -283,7 +283,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:48:51.555Z",
-      "updatedAt": "2026-10-06T11:51:05.135Z",
+      "updatedAt": "2026-10-06T11:51:08.337Z",
       "invoiceId": "inv-1791287331555"
     },
     {
