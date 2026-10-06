@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:55:00.877Z",
+  "syncedAt": "2026-10-06T06:55:30.228Z",
   "reports": [
     {
       "profiles": [
@@ -2029,7 +2029,7 @@
       "nameAr": "حمض الفوليك بالدم (Serum Folic Acid)",
       "nameEn": "Serum Folic Acid (Folate)",
       "category": "Anemia & Vitamins",
-      "price": 290,
+      "price": 920,
       "cost": 70,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
