@@ -199,7 +199,9 @@ export const DashboardModule: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-7 pb-8">
+      {/* Soft professional page backdrop accent */}
+      <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-rose-50/80 via-slate-50 to-slate-100" aria-hidden />
       {/* 0. PWA Install Quick Action Banner */}
       <PWAInstallButton variant="banner" />
 
@@ -306,8 +308,8 @@ export const DashboardModule: React.FC = () => {
       {/* 3. Time Filter & High-Impact Summary Cards */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-lg font-black text-slate-900">لوحة التحكم والمتابعة اللحظية</h1>
-          <p className="text-xs text-slate-500">نظرة عامة على الإيرادات، العينات، والتشخيص الطبي اليومي</p>
+          <h1 className="text-xl font-black text-slate-900 tracking-tight">لوحة التحكم المركزية</h1>
+          <p className="text-sm text-slate-500 mt-0.5">متابعة لحظية للإيرادات والعينات والتشخيص — تصميم موحّد وواضح للعمل اليومي</p>
         </div>
 
         {/* Time Filter Pills */}
@@ -342,7 +344,7 @@ export const DashboardModule: React.FC = () => {
       {/* 4 Financial & Diagnostic KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1: Gross & Paid Income */}
-        <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-2 hover:border-emerald-300 transition-all">
+        <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-5 border border-slate-200/90 shadow-sm shadow-slate-200/50 space-y-2 hover:border-emerald-300 hover:shadow-md transition-all">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-500">إجمالي الإيراد الصافي</span>
             <div className="p-2 rounded-xl bg-emerald-50 text-emerald-700">
@@ -362,7 +364,7 @@ export const DashboardModule: React.FC = () => {
         </div>
 
         {/* Card 2: Net Profit & Expenses */}
-        <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-2 hover:border-blue-300 transition-all">
+        <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-5 border border-slate-200/90 shadow-sm shadow-slate-200/50 space-y-2 hover:border-blue-300 hover:shadow-md transition-all">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-500">صافي الأرباح (P&L)</span>
             <div className="p-2 rounded-xl bg-blue-50 text-blue-700">
@@ -382,7 +384,7 @@ export const DashboardModule: React.FC = () => {
         </div>
 
         {/* Card 3: Patients & Samples */}
-        <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-2 hover:border-rose-300 transition-all">
+        <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-5 border border-slate-200/90 shadow-sm shadow-slate-200/50 space-y-2 hover:border-rose-300 hover:shadow-md transition-all">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-500">العينات المسجلة</span>
             <div className="p-2 rounded-xl bg-rose-50 text-rose-700">
@@ -526,7 +528,7 @@ export const DashboardModule: React.FC = () => {
       )}
 
       {/* 6. Today's Active Cases & Fast Interactive Actions Table */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 space-y-4">
+      <div className="bg-white/95 backdrop-blur-sm rounded-3xl border border-slate-200/90 shadow-sm shadow-slate-200/40 p-6 space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h2 className="font-black text-slate-900 text-base flex items-center gap-2">

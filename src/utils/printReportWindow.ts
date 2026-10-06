@@ -329,16 +329,26 @@ export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): voi
       <title>تقرير تحليل طبي - ${p.fullName} - ${report.reportNumber}</title>
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
       <style>
         * { box-sizing: border-box; }
         body {
           margin: 0;
           padding: 0;
           background: #525659;
-          font-family: 'Cairo', sans-serif;
+          font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
           color: #0f172a;
+          font-size: 12.5px;
+          line-height: 1.65;
+          -webkit-font-smoothing: antialiased;
+          text-rendering: optimizeLegibility;
         }
+        table { font-size: 12px; line-height: 1.55; }
+        th { font-weight: 800; letter-spacing: 0.01em; }
+        td { font-weight: 500; }
+        h1, h2, h3 { font-weight: 900; letter-spacing: -0.01em; line-height: 1.35; }
+        .patient-name, .report-title { font-size: 15px; font-weight: 900; }
+        .result-value { font-family: 'JetBrains Mono', 'Courier New', monospace; font-weight: 700; font-size: 12.5px; }
         @media print {
           body {
             background: #ffffff;

@@ -678,6 +678,40 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
   }, [githubConfig]);
 
+
+  // Re-pull latest cloud state when user returns to the tab (multi-device immediate catch-up)
+  useEffect(() => {
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') {
+        realtimeSyncManager.pullMasterSnapshot().then(res => {
+          if (res.success && res.data) {
+            const data = res.data;
+            if (Array.isArray(data.reports) && data.reports.length > 0) {
+              setReports(prev => {
+                const map = new Map(prev.map((r: any) => [r.id, r]));
+                data.reports.forEach((r: any) => map.set(r.id, r));
+                return Array.from(map.values());
+              });
+            }
+            if (Array.isArray(data.incomeRecords) && data.incomeRecords.length > 0) {
+              setIncomeRecords(prev => {
+                const map = new Map(prev.map((i: any) => [i.id, i]));
+                data.incomeRecords.forEach((i: any) => map.set(i.id, i));
+                return Array.from(map.values());
+              });
+            }
+          }
+        }).catch(() => {});
+      }
+    };
+    document.addEventListener('visibilitychange', onVisible);
+    window.addEventListener('focus', onVisible);
+    return () => {
+      document.removeEventListener('visibilitychange', onVisible);
+      window.removeEventListener('focus', onVisible);
+    };
+  }, []);
+
   // Debounced cloud save whenever critical lab data changes (Push to Firebase Firestore & GitHub)
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -701,7 +735,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           pushFullStoreToGitHub(githubConfig, payload).catch(() => {});
         }
       }
-    }, 1800);
+    }, 500);
     return () => clearTimeout(timer);
   }, [reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, packages, githubConfig]);
 
