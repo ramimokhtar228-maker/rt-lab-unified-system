@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:55:05.650Z",
+  "syncedAt": "2026-10-06T11:55:40.911Z",
   "reports": [
     {
       "id": "rep-1791287331555",
@@ -10,7 +10,7 @@
         "labNumber": "RT-2026-007",
         "barcode": "RT-10037",
         "fullName": "شريف عادل",
-        "phone": "01100",
+        "phone": "010",
         "age": 36,
         "ageUnit": "years",
         "gender": "male",
@@ -274,7 +274,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:48:51.555Z",
-      "updatedAt": "2026-10-06T11:55:01.518Z",
+      "updatedAt": "2026-10-06T11:55:36.225Z",
       "invoiceId": "inv-1791287331555"
     },
     {
