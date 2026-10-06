@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T11:51:17.426Z",
+  "syncedAt": "2026-10-06T11:51:25.153Z",
   "reports": [
     {
       "id": "rep-1791287331555",
@@ -120,16 +120,6 @@
               "id": "param-6-1791287331552-jti",
               "result": "5",
               "flag": "HIGH"
-            },
-            {
-              "name": "LDL / HDL Ratio",
-              "unit": "Ratio",
-              "minNormal": 0,
-              "maxNormal": 3,
-              "textReference": "< 3.0 Desirable",
-              "id": "param-7-1791287331552-uuk",
-              "result": "",
-              "flag": "NORMAL"
             }
           ]
         },
@@ -283,7 +273,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:48:51.555Z",
-      "updatedAt": "2026-10-06T11:51:14.495Z",
+      "updatedAt": "2026-10-06T11:51:19.768Z",
       "invoiceId": "inv-1791287331555"
     },
     {
