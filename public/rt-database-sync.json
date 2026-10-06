@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T16:54:08.809Z",
+  "syncedAt": "2026-10-06T16:54:15.015Z",
   "reports": [
     {
       "id": "rep-1791305504343",
@@ -143,8 +143,8 @@
               "panicHigh": 30,
               "textReference": "4.0 - 11.0 x10^3/µL",
               "id": "param-14-1791305504342-hjv",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "11.2",
+              "flag": "HIGH"
             },
             {
               "name": "Segmented Neutrophils %",
@@ -387,7 +387,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T16:51:44.343Z",
-      "updatedAt": "2026-10-06T16:54:06.068Z",
+      "updatedAt": "2026-10-06T16:54:11.747Z",
       "invoiceId": "inv-1791305504343"
     },
     {
