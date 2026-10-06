@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:48:10.481Z",
+  "syncedAt": "2026-10-06T06:48:30.892Z",
   "reports": [
     {
       "profiles": [
@@ -1691,7 +1691,7 @@
       "nameAr": "كورتيزول صباحي 8 صباحاً (Cortisol AM)",
       "nameEn": "Morning Serum Cortisol (8 AM)",
       "category": "Endocrinology",
-      "price": 240,
+      "price": 550,
       "cost": 55,
       "sampleType": "Serum",
       "turnaroundTime": "خلال 24 ساعة",
