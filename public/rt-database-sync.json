@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:26:51.709Z",
+  "syncedAt": "2026-10-06T06:27:48.231Z",
   "reports": [
     {
       "profiles": [
@@ -809,14 +809,14 @@
       "nameAr": "سرعة ترسيب الدم (ESR)",
       "nameEn": "Erythrocyte Sedimentation Rate",
       "category": "Hematology",
-      "price": 70,
+      "price": 188,
       "cost": 15,
       "sampleType": "Citrated Whole Blood (1:4)",
       "turnaroundTime": "ساعتان",
       "unit": "mm/1st hr",
       "minNormal": 0,
       "maxNormal": 15,
-      "textReference": "Males: < 15 mm/1st hr | Females: < 20 mm/1st hr (Higher with age)",
+      "textReference": "Males: < 20 mm/1st hr | Females: < 20 mm/1st hr (Higher with age)",
       "method": "Modified Westergren Automated Method",
       "fastingInstructions": "لا يشترط صيام"
     },
