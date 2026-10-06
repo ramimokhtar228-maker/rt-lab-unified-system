@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:47:53.130Z",
+  "syncedAt": "2026-10-06T06:48:10.481Z",
   "reports": [
     {
       "profiles": [
@@ -1674,7 +1674,7 @@
       "nameAr": "هرمون الغدة الجار درقية (Intact PTH)",
       "nameEn": "Intact Parathyroid Hormone (PTH)",
       "category": "Endocrinology",
-      "price": 320,
+      "price": 911,
       "cost": 80,
       "sampleType": "Serum / EDTA Plasma (Frozen if delayed)",
       "turnaroundTime": "خلال 24 ساعة",
