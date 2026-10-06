@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T17:06:00.704Z",
+  "syncedAt": "2026-10-06T17:06:34.833Z",
   "reports": [
     {
       "id": "rep-1791306270693",
@@ -77,7 +77,7 @@
               "method": "Direct Accelerator",
               "textReference": "",
               "id": "param-LIPID-2-1791306270690-nbo",
-              "result": "",
+              "result": "46",
               "flag": "NORMAL",
               "notes": "دهون الدم الشاملة مع المؤشرات الحسابية"
             },
@@ -86,11 +86,11 @@
               "unit": "mg/dL",
               "minNormal": 0,
               "maxNormal": 100,
-              "notes": "Friedewald Formula: Total Chol - HDL - (TG / 5)",
+              "notes": "Friedewald Formula: TC - HDL - (TG/5)",
               "textReference": "",
               "id": "param-LIPID-3-1791306270690-p13",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "122",
+              "flag": "HIGH"
             },
             {
               "name": "VLDL - Cholesterol",
@@ -108,11 +108,11 @@
               "unit": "mg/dL",
               "minNormal": 0,
               "maxNormal": 130,
-              "notes": "Auto-calculated: Total Chol - HDL",
+              "notes": "Calculated: Total Cholesterol - HDL",
               "textReference": "",
               "id": "param-LIPID-5-1791306270690-m19",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "142",
+              "flag": "HIGH"
             },
             {
               "name": "Total Chol / HDL Ratio",
@@ -120,9 +120,9 @@
               "minNormal": 0,
               "maxNormal": 4.5,
               "textReference": "< 4.5 Desirable",
-              "notes": "Auto-calculated: Total Chol / HDL",
+              "notes": "Desirable < 4.5",
               "id": "param-LIPID-6-1791306270690-o83",
-              "result": "",
+              "result": "4.1",
               "flag": "NORMAL"
             },
             {
@@ -132,7 +132,7 @@
               "maxNormal": 3,
               "textReference": "< 3.0 Desirable",
               "id": "param-LIPID-7-1791306270690-the",
-              "result": "",
+              "result": "2.",
               "flag": "NORMAL",
               "notes": "دهون الدم الشاملة مع المؤشرات الحسابية"
             },
@@ -272,7 +272,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T17:04:30.693Z",
-      "updatedAt": "2026-10-06T17:05:55.533Z",
+      "updatedAt": "2026-10-06T17:06:31.198Z",
       "invoiceId": "inv-1791306270694"
     },
     {
