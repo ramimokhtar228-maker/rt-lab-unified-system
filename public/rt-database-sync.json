@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T08:32:05.511Z",
+  "syncedAt": "2026-10-06T08:32:17.136Z",
   "reports": [
     {
       "updatedAt": "2026-10-05T15:18:28.558Z",
@@ -3280,7 +3280,7 @@
       },
       "reportNumber": "RT-BK-5873",
       "id": "rep-inc-1791123722634",
-      "updatedAt": "2026-10-06T08:31:59.552Z",
+      "updatedAt": "2026-10-06T08:32:11.543Z",
       "profiles": [
         {
           "titleAr": "دهون الدم الشاملة مع المؤشرات الحسابية",
@@ -3519,150 +3519,6 @@
               "name": "Hematocrit (PCV)",
               "flag": "NORMAL",
               "maxNormal": 48
-            },
-            {
-              "name": "Myelocytes %",
-              "flag": "",
-              "unit": "%",
-              "result": "",
-              "minNormal": 0,
-              "id": "p-mig-23-1791188313958",
-              "textReference": "0 % (Absent in normal blood)",
-              "maxNormal": 0
-            },
-            {
-              "unit": "%",
-              "result": "",
-              "name": "Blast Cells %",
-              "flag": "",
-              "minNormal": 0,
-              "id": "p-mig-24-1791188313958",
-              "textReference": "0 % (Absent in normal blood)",
-              "maxNormal": 0
-            },
-            {
-              "notes": "Auto-calculated: (WBC × Neut%) / 100",
-              "minNormal": 1.5,
-              "result": "",
-              "textReference": "1.5 - 7.5 x10^3/µL",
-              "maxNormal": 7.5,
-              "name": "Absolute Neutrophils (ANC)",
-              "flag": "",
-              "unit": "x10^3/µL",
-              "id": "p-mig-25-1791188313958"
-            },
-            {
-              "id": "p-mig-26-1791188313958",
-              "textReference": "1.0 - 4.0 x10^3/µL",
-              "notes": "Auto-calculated: (WBC × Lymph%) / 100",
-              "result": "",
-              "minNormal": 1,
-              "unit": "x10^3/µL",
-              "flag": "",
-              "maxNormal": 4,
-              "name": "Absolute Lymphocytes (ALC)"
-            },
-            {
-              "flag": "",
-              "name": "Absolute Monocytes (AMC)",
-              "maxNormal": 0.8,
-              "result": "",
-              "unit": "x10^3/µL",
-              "textReference": "0.2 - 0.8 x10^3/µL",
-              "minNormal": 0.2,
-              "id": "p-mig-27-1791188313958",
-              "notes": "Auto-calculated: (WBC × Mono%) / 100"
-            },
-            {
-              "minNormal": 0.04,
-              "textReference": "0.04 - 0.44 x10^3/µL",
-              "notes": "Auto-calculated: (WBC × Eos%) / 100",
-              "maxNormal": 0.44,
-              "id": "p-mig-28-1791188313958",
-              "flag": "",
-              "result": "",
-              "name": "Absolute Eosinophils (AEC)",
-              "unit": "x10^3/µL"
-            },
-            {
-              "minNormal": 0.01,
-              "notes": "Auto-calculated: (WBC × Baso%) / 100",
-              "result": "",
-              "maxNormal": 0.1,
-              "id": "p-mig-29-1791188313958",
-              "textReference": "0.01 - 0.1 x10^3/µL",
-              "unit": "x10^3/µL",
-              "name": "Absolute Basophils (ABC)",
-              "flag": ""
-            },
-            {
-              "id": "p-mig-30-1791188313958",
-              "textReference": "0.8 - 2.5 (Inflammatory Index)",
-              "minNormal": 0.8,
-              "result": "",
-              "maxNormal": 2.5,
-              "unit": "Ratio",
-              "flag": "",
-              "name": "NLR (Neutrophil/Lymphocyte)",
-              "notes": "Auto-calculated: Neut% / Lymph%"
-            },
-            {
-              "flag": "",
-              "name": "PLR (Platelet/Lymphocyte)",
-              "unit": "Ratio",
-              "notes": "Auto-calculated: PLT / ALC",
-              "result": "",
-              "id": "p-mig-31-1791188313958",
-              "minNormal": 100,
-              "maxNormal": 150,
-              "textReference": "100 - 150"
-            },
-            {
-              "unit": "%",
-              "result": "",
-              "minNormal": 0.5,
-              "name": "Reticulocyte Count %",
-              "flag": "",
-              "maxNormal": 2.5,
-              "textReference": "0.5 - 2.5 %",
-              "id": "p-mig-32-1791188313958"
-            },
-            {
-              "maxNormal": 3,
-              "unit": "Index",
-              "name": "RPI (Reticulocyte Production Index)",
-              "flag": "",
-              "minNormal": 1,
-              "id": "p-mig-33-1791188313958",
-              "result": "",
-              "textReference": "> 2.0 indicates adequate marrow response"
-            },
-            {
-              "method": "Leishman Stain Microscopy",
-              "unit": "",
-              "name": "RBC Morphology",
-              "flag": "",
-              "textReference": "Normocytic normochromic, no anisopoikilocytosis",
-              "id": "p-mig-34-1791188313958",
-              "result": ""
-            },
-            {
-              "result": "",
-              "unit": "",
-              "textReference": "Mature differential, no toxic granules, vacuoles, or blasts",
-              "name": "WBC Morphology",
-              "flag": "",
-              "method": "Leishman Stain Microscopy",
-              "id": "p-mig-35-1791188313958"
-            },
-            {
-              "textReference": "Adequate on smear, normal aggregation, no giant forms",
-              "id": "p-mig-36-1791188313958",
-              "result": "",
-              "method": "Leishman Stain Microscopy",
-              "unit": "",
-              "flag": "",
-              "name": "Platelet Morphology"
             }
           ],
           "interpretation": "Normal values ",
