@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T12:02:24.666Z",
+  "syncedAt": "2026-10-06T12:02:31.310Z",
   "reports": [
     {
       "id": "rep-1791287976696",
@@ -246,27 +246,6 @@
           ]
         },
         {
-          "id": "prof-1791287976695-ffyy",
-          "profileCode": "UREA",
-          "titleEn": "Blood Urea",
-          "titleAr": "بولينا بالدم (Blood Urea)",
-          "category": "Kidney Function",
-          "sampleType": "Serum",
-          "parameters": [
-            {
-              "id": "p-1791287976695-3d3",
-              "name": "بولينا بالدم (Blood Urea) (Blood Urea)",
-              "result": "",
-              "unit": "mg/dL",
-              "minNormal": 15,
-              "maxNormal": 45,
-              "textReference": "15 - 45 mg/dL",
-              "flag": "NORMAL",
-              "method": "Urease / GLDH Enzymatic Kinetic"
-            }
-          ]
-        },
-        {
           "id": "prof-1791287976695-8hfj",
           "profileCode": "CALCIUM_TOTAL",
           "titleEn": "Total Serum Calcium",
@@ -426,7 +405,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T11:59:36.696Z",
-      "updatedAt": "2026-10-06T12:02:18.584Z",
+      "updatedAt": "2026-10-06T12:02:25.455Z",
       "invoiceId": "inv-1791287976696"
     },
     {
