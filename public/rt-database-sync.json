@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-06T06:35:43.617Z",
+  "syncedAt": "2026-10-06T06:36:05.692Z",
   "reports": [
     {
       "profiles": [
@@ -1113,7 +1113,7 @@
       "nameAr": "الكالسيوم المتأين الحر (Ionized Calcium Ca++)",
       "nameEn": "Ionized Calcium (Ca++)",
       "category": "Minerals & Bone",
-      "price": 150,
+      "price": 498,
       "cost": 30,
       "sampleType": "Serum (Anaerobic collection)",
       "turnaroundTime": "خلال ساعتين",
