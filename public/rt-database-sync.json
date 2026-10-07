@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:59:00.098Z",
+  "syncedAt": "2026-10-07T21:59:13.403Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -533,7 +533,7 @@
               "maxNormal": 45,
               "textReference": "20 - 45 %",
               "id": "param-18-1791359724809-d2c",
-              "result": "",
+              "result": "29",
               "flag": "NORMAL"
             },
             {
@@ -612,10 +612,10 @@
               "unit": "x10^3/µL",
               "minNormal": 1,
               "maxNormal": 4,
-              "notes": "Auto-calculated: (WBC × Lymph%) / 100",
+              "notes": "Calculated: (WBC × Lymph%) / 100",
               "textReference": "1.0 - 4.0 x10^3/µL",
               "id": "param-26-1791359724809-vdg",
-              "result": "",
+              "result": "2.4",
               "flag": "NORMAL"
             },
             {
@@ -656,10 +656,10 @@
               "unit": "Ratio",
               "minNormal": 0.8,
               "maxNormal": 2.5,
-              "notes": "Auto-calculated: Neut% / Lymph%",
+              "notes": "Normal target < 2.5",
               "textReference": "0.8 - 2.5 (Inflammatory Index)",
               "id": "param-30-1791359724809-ets",
-              "result": "",
+              "result": "2.1",
               "flag": "NORMAL"
             },
             {
@@ -865,7 +865,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T07:55:24.810Z",
-      "updatedAt": "2026-10-07T21:58:55.736Z",
+      "updatedAt": "2026-10-07T21:59:08.930Z",
       "invoiceId": "inv-1791359724811"
     },
     {
