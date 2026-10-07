@@ -24,6 +24,7 @@ export type SyncActionType =
   | 'FULL_SYNC';
 
 export interface SyncMessage {
+  eventId?: string;
   action: SyncActionType;
   senderDeviceId: string;
   senderDeviceName: string;
@@ -80,6 +81,14 @@ export const getDeviceName = (): string => {
   return 'متصفح معمل RT';
 };
 
+/** Safe timeout wrapper so Firestore quota exhaustion never blocks the app */
+function withTimeout<T>(promise: Promise<T>, ms: number = 2500): Promise<T | null> {
+  return Promise.race([
+    promise,
+    new Promise<null>((resolve) => setTimeout(() => resolve(null), ms))
+  ]);
+}
+
 class RealtimeMultiDeviceSyncEngine {
   private deviceId: string;
   private deviceName: string;
@@ -91,16 +100,41 @@ class RealtimeMultiDeviceSyncEngine {
   private lastSyncedAt: Date | null = null;
   private isSyncing: boolean = false;
   private unsubscribeSnapshot: (() => void) | null = null;
-  private lastProcessedTimestamp: number = Date.now();
+  private seenEventIds: Set<string> = new Set();
+  private broadcastQueue: Promise<void> = Promise.resolve();
 
   constructor() {
     this.deviceId = getDeviceId();
     this.deviceName = getDeviceName();
 
     if (typeof window !== 'undefined') {
+      try {
+        const storedSeen = sessionStorage.getItem('rt_lab_seen_events_v1');
+        if (storedSeen) {
+          const parsed = JSON.parse(storedSeen);
+          if (Array.isArray(parsed)) {
+            parsed.forEach((id: string) => this.seenEventIds.add(id));
+          }
+        }
+      } catch {
+        /* ignore */
+      }
+
       this.initNetworkListeners();
       this.initBroadcastChannel();
       this.initFirestoreSync();
+    }
+  }
+
+  private markEventSeen(id: string) {
+    this.seenEventIds.add(id);
+    try {
+      if (typeof window !== 'undefined') {
+        const arr = Array.from(this.seenEventIds).slice(-100);
+        sessionStorage.setItem('rt_lab_seen_events_v1', JSON.stringify(arr));
+      }
+    } catch {
+      /* ignore */
     }
   }
 
@@ -124,9 +158,13 @@ class RealtimeMultiDeviceSyncEngine {
         this.broadcastChannel.onmessage = (event) => {
           const msg = event.data as SyncMessage;
           if (msg && msg.senderDeviceId !== this.deviceId) {
-            this.lastSyncedAt = new Date();
-            this.notifyListeners(msg);
-            this.notifyStatus();
+            const evId = msg.eventId || `${msg.senderDeviceId}-${msg.timestamp}-${msg.action}`;
+            if (!this.seenEventIds.has(evId)) {
+              this.markEventSeen(evId);
+              this.lastSyncedAt = new Date();
+              this.notifyListeners(msg);
+              this.notifyStatus();
+            }
           }
         };
       }
@@ -147,23 +185,32 @@ class RealtimeMultiDeviceSyncEngine {
           if (snapshot.exists()) {
             const data = snapshot.data();
             const recentEvents: SyncMessage[] = Array.isArray(data.recentEvents) ? data.recentEvents : [];
-            
-            // Collect all events newer than last processed timestamp
-            const newEvents = recentEvents.filter(
-              (ev) => ev && ev.senderDeviceId !== this.deviceId && ev.timestamp > this.lastProcessedTimestamp
-            );
+            const eventsToProcess: SyncMessage[] = [];
 
-            // Also check main doc message if recentEvents is not populated
-            if (newEvents.length === 0 && data.action && data.senderDeviceId !== this.deviceId && data.timestamp > this.lastProcessedTimestamp) {
-              newEvents.push(data as SyncMessage);
+            // 1. Check all events in recentEvents
+            for (const ev of recentEvents) {
+              if (!ev || !ev.action) continue;
+              const evId = ev.eventId || `${ev.senderDeviceId}-${ev.timestamp}-${ev.action}`;
+              if (ev.senderDeviceId !== this.deviceId && !this.seenEventIds.has(evId)) {
+                this.markEventSeen(evId);
+                eventsToProcess.push({ ...ev, eventId: evId });
+              }
             }
 
-            if (newEvents.length > 0) {
+            // 2. Also check top-level message if not in recentEvents
+            if (data.action && data.senderDeviceId && data.senderDeviceId !== this.deviceId) {
+              const topEvId = data.eventId || `${data.senderDeviceId}-${data.timestamp}-${data.action}`;
+              if (!this.seenEventIds.has(topEvId)) {
+                this.markEventSeen(topEvId);
+                eventsToProcess.push({ ...data, eventId: topEvId } as SyncMessage);
+              }
+            }
+
+            if (eventsToProcess.length > 0) {
               // Sort chronological
-              newEvents.sort((a, b) => a.timestamp - b.timestamp);
-              for (const ev of newEvents) {
-                this.lastProcessedTimestamp = Math.max(this.lastProcessedTimestamp, ev.timestamp);
-                this.lastSyncedAt = new Date(ev.timestamp);
+              eventsToProcess.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+              for (const ev of eventsToProcess) {
+                this.lastSyncedAt = new Date(ev.timestamp || Date.now());
                 this.notifyListeners(ev);
               }
               this.notifyStatus();
@@ -251,10 +298,21 @@ class RealtimeMultiDeviceSyncEngine {
     this.notifyStatus();
   }
 
-  // Broadcast action across all devices instantaneously via Firebase Firestore
-  public async broadcastAction(action: SyncActionType, payload: any) {
+  // Broadcast action across all devices instantaneously via Firebase Firestore with sequential execution queue
+  public broadcastAction(action: SyncActionType, payload: any): Promise<void> {
+    this.broadcastQueue = this.broadcastQueue
+      .then(() => this.executeBroadcastAction(action, payload))
+      .catch((err) => {
+        console.warn('Broadcast action queue execution warning:', err);
+      });
+    return this.broadcastQueue;
+  }
+
+  private async executeBroadcastAction(action: SyncActionType, payload: any): Promise<void> {
+    const eventId = `evt-${Date.now()}-${this.deviceId}-${Math.random().toString(36).substring(2, 7)}`;
     const sanitizedPayload = sanitizeForFirestore(payload);
     const msg: SyncMessage = {
+      eventId,
       action,
       senderDeviceId: this.deviceId,
       senderDeviceName: this.deviceName,
@@ -262,7 +320,8 @@ class RealtimeMultiDeviceSyncEngine {
       payload: sanitizedPayload,
     };
 
-    this.lastProcessedTimestamp = msg.timestamp;
+    // Mark as seen locally to prevent self reflection
+    this.markEventSeen(eventId);
     this.lastSyncedAt = new Date();
 
     // 1. Instant local BroadcastChannel (tabs on same device)
@@ -280,22 +339,22 @@ class RealtimeMultiDeviceSyncEngine {
       if (action === 'ADMIT_PATIENT' && payload?.report && payload?.invoice) {
         const repDoc = doc(db, 'reports', payload.report.id);
         const invDoc = doc(db, 'income_records', payload.invoice.id);
-        await Promise.all([
+        await withTimeout(Promise.all([
           setDoc(repDoc, sanitizeForFirestore(payload.report)),
           setDoc(invDoc, sanitizeForFirestore(payload.invoice))
-        ]);
+        ]));
       } else if (action === 'UPDATE_REPORT' && payload?.id) {
         const repDoc = doc(db, 'reports', payload.id);
-        await setDoc(repDoc, sanitizedPayload);
+        await withTimeout(setDoc(repDoc, sanitizedPayload));
       } else if (action === 'DELETE_REPORT' && typeof payload === 'string') {
         const repDoc = doc(db, 'reports', payload);
-        await deleteDoc(repDoc).catch(() => {});
+        await withTimeout(deleteDoc(repDoc).catch(() => {}));
       } else if (action === 'UPDATE_INVOICE' && payload?.id) {
         const invDoc = doc(db, 'income_records', payload.id);
-        await setDoc(invDoc, sanitizedPayload);
+        await withTimeout(setDoc(invDoc, sanitizedPayload));
       } else if (action === 'DELETE_INVOICE' && typeof payload === 'string') {
         const invDoc = doc(db, 'income_records', payload);
-        await deleteDoc(invDoc).catch(() => {});
+        await withTimeout(deleteDoc(invDoc).catch(() => {}));
       }
     } catch (docErr) {
       console.warn('Individual Firestore doc save notice:', docErr);
@@ -304,18 +363,18 @@ class RealtimeMultiDeviceSyncEngine {
     // 3. Instant Cloud Firestore Replication (multi-device live channel)
     try {
       const channelRef = doc(db, 'lab_sync', 'live_channel');
-      const snap = await getDoc(channelRef).catch(() => null);
+      const snap = await withTimeout(getDoc(channelRef).catch(() => null));
       const prevEvents = (snap?.exists() && Array.isArray(snap.data()?.recentEvents))
         ? snap.data()?.recentEvents
         : [];
       
-      const oneHourAgo = Date.now() - 3600000;
-      const recentEvents = [msg, ...prevEvents.filter((e: any) => e.timestamp > oneHourAgo)].slice(0, 30);
+      const twoHoursAgo = Date.now() - 7200000;
+      const recentEvents = [msg, ...prevEvents.filter((e: any) => e && e.timestamp > twoHoursAgo)].slice(0, 40);
 
-      await setDoc(channelRef, {
+      await withTimeout(setDoc(channelRef, {
         ...msg,
         recentEvents
-      });
+      }));
     } catch (err) {
       console.warn('Firestore live broadcast note:', err);
       try {
@@ -340,7 +399,7 @@ class RealtimeMultiDeviceSyncEngine {
         updatedByDeviceName: this.deviceName,
         ...fullData,
       });
-      await setDoc(snapshotRef, cleanPayload);
+      await withTimeout(setDoc(snapshotRef, cleanPayload));
       this.lastSyncedAt = new Date();
       this.notifyStatus();
       return true;
@@ -361,8 +420,8 @@ class RealtimeMultiDeviceSyncEngine {
   public async pullMasterSnapshot(): Promise<{ success: boolean; data?: any }> {
     try {
       const snapshotRef = doc(db, 'lab_sync', 'master_snapshot');
-      const snap = await getDoc(snapshotRef);
-      if (snap.exists()) {
+      const snap = await withTimeout(getDoc(snapshotRef));
+      if (snap && snap.exists()) {
         const data = snap.data();
         this.lastSyncedAt = new Date();
         this.notifyStatus();
@@ -385,17 +444,21 @@ class RealtimeMultiDeviceSyncEngine {
     const reports: any[] = [];
     const incomeRecords: any[] = [];
     try {
-      const [repsSnap, incsSnap] = await Promise.all([
+      const [repsSnap, incsSnap] = await withTimeout(Promise.all([
         getDocs(collection(db, 'reports')),
         getDocs(collection(db, 'income_records'))
-      ]);
+      ])) || [null, null];
 
-      repsSnap.forEach(d => {
-        if (d.exists()) reports.push(d.data());
-      });
-      incsSnap.forEach(d => {
-        if (d.exists()) incomeRecords.push(d.data());
-      });
+      if (repsSnap) {
+        repsSnap.forEach(d => {
+          if (d.exists()) reports.push(d.data());
+        });
+      }
+      if (incsSnap) {
+        incsSnap.forEach(d => {
+          if (d.exists()) incomeRecords.push(d.data());
+        });
+      }
     } catch (err) {
       console.warn('Fetch all Firestore records notice:', err);
     }
