@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:28:40.721Z",
+  "syncedAt": "2026-10-07T21:29:20.039Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -6791,7 +6791,7 @@
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-9599 - تم التسميع آلياً من منظومة الفواتير",
       "createdAt": "2026-10-04T14:50:55.998Z",
-      "updatedAt": "2026-10-07T21:28:36.449Z",
+      "updatedAt": "2026-10-07T21:29:15.695Z",
       "profiles": [
         {
           "id": "prof-pkg-1791408346561",
@@ -6800,7 +6800,7 @@
           "titleEn": "Comprehensive Annual Wellness Package",
           "category": "باقة فحوصات شاملة",
           "sampleType": "Serum + EDTA Whole Blood + Clean Urine",
-          "interpretation": " ",
+          "interpretation": " CBC WITH DIFFERENTIAL FILM, IRON PROFILE , RECOMMENDED ",
           "parameters": [
             {
               "name": "Total Serum Cholesterol",
