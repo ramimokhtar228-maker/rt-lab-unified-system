@@ -1,7 +1,152 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T23:06:42.972Z",
+  "syncedAt": "2026-10-07T23:07:43.558Z",
   "reports": [
+    {
+      "id": "rep-1791414459333",
+      "reportNumber": "RT-2026-032",
+      "patient": {
+        "id": "pat-1791414459306",
+        "labNumber": "RT-2026-032",
+        "barcode": "RT-10062",
+        "fullName": "جيهان عبدالفتاح",
+        "phone": "01022231270",
+        "age": 47,
+        "ageUnit": "years",
+        "gender": "female",
+        "referringDoctorTitle": "Dr.",
+        "referringDoctorName": "PROF. DR",
+        "sampleDate": "2026-10-08",
+        "reportingDate": "2026-10-08",
+        "fastingHours": 10,
+        "bookingType": "home_visit",
+        "homeAddress": "١١ شارع محمد كامل. بيجام. شبرا الخيمة. بجوار مسجد السلام",
+        "visitFee": 45,
+        "appointmentDate": "2026-10-08",
+        "appointmentTime": "11:00",
+        "deliveryNotes": "",
+        "testsSubtotal": 250,
+        "totalCost": 295,
+        "discountApplied": 0,
+        "paymentMethod": "cash"
+      },
+      "profiles": [
+        {
+          "id": "prof-1791414459332-0jve",
+          "profileCode": "LIPID",
+          "titleEn": "Lipid Profile",
+          "titleAr": "دهون الدم الشاملة مع المؤشرات الحسابية",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum (12h Fasting)",
+          "interpretation": "Lipid ratios demonstrate favorable cardiovascular risk stratification.",
+          "parameters": [
+            {
+              "name": "Total Serum Cholesterol",
+              "unit": "mg/dL",
+              "minNormal": 120,
+              "maxNormal": 200,
+              "method": "CHOD-PAP",
+              "textReference": "",
+              "id": "param-0-1791414459332-diy",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Serum Triglycerides",
+              "unit": "mg/dL",
+              "minNormal": 40,
+              "maxNormal": 150,
+              "panicHigh": 500,
+              "method": "GPO-PAP",
+              "textReference": "",
+              "id": "param-1-1791414459332-lto",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "HDL - Cholesterol (Good)",
+              "unit": "mg/dL",
+              "minNormal": 40,
+              "maxNormal": 65,
+              "method": "Direct Accelerator",
+              "textReference": "",
+              "id": "param-2-1791414459332-cjc",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "LDL - Cholesterol (Calculated)",
+              "unit": "mg/dL",
+              "minNormal": 0,
+              "maxNormal": 100,
+              "notes": "Friedewald Formula: Total Chol - HDL - (TG / 5)",
+              "textReference": "",
+              "id": "param-3-1791414459332-2zd",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "VLDL - Cholesterol",
+              "unit": "mg/dL",
+              "minNormal": 5,
+              "maxNormal": 30,
+              "notes": "Auto-calculated: Triglycerides / 5",
+              "textReference": "",
+              "id": "param-4-1791414459332-kw8",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Non-HDL Cholesterol",
+              "unit": "mg/dL",
+              "minNormal": 0,
+              "maxNormal": 130,
+              "notes": "Auto-calculated: Total Chol - HDL",
+              "textReference": "",
+              "id": "param-5-1791414459332-mbb",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Total Chol / HDL Ratio",
+              "unit": "Ratio",
+              "minNormal": 0,
+              "maxNormal": 4.5,
+              "textReference": "< 4.5 Desirable",
+              "notes": "Auto-calculated: Total Chol / HDL",
+              "id": "param-6-1791414459332-5c7",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "LDL / HDL Ratio",
+              "unit": "Ratio",
+              "minNormal": 0,
+              "maxNormal": 3,
+              "textReference": "< 3.0 Desirable",
+              "id": "param-7-1791414459332-7qz",
+              "result": "",
+              "flag": "NORMAL"
+            }
+          ]
+        }
+      ],
+      "staff": {
+        "labChemist": "منى احمد",
+        "verifiedBy": "رحاب على عبدالحميد",
+        "pathologist": "رامي مختار",
+        "chemistTitle": "أخصائي أول كيمياء إكلينيكية وهرمونات",
+        "verifierTitle": "طبيب باثولوجى / المدير التنفيذي",
+        "pathologistTitle": "طبيب الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
+        "chemistLicense": "EGY-SCI-88402",
+        "verifierLicense": "EGY-MGT-11024",
+        "pathologistLicense": "EGY-MED-48201"
+      },
+      "status": "draft",
+      "createdAt": "2026-10-07T23:07:39.333Z",
+      "updatedAt": "2026-10-07T23:07:39.333Z",
+      "invoiceId": "inv-1791414459333"
+    },
     {
       "id": "rep-1791400927196",
       "reportNumber": "RT-2026-031",
@@ -8790,6 +8935,44 @@
   ],
   "incomeRecords": [
     {
+      "id": "inv-1791414459333",
+      "invoiceNumber": "INV-2026-032",
+      "patientName": "جيهان عبدالفتاح",
+      "patientPhone": "01022231270",
+      "patientAge": 47,
+      "patientGender": "female",
+      "barcode": "RT-10062",
+      "labNumber": "RT-2026-032",
+      "referringDoctor": "PROF. DR",
+      "tests": [
+        {
+          "id": "prof-LIPID",
+          "code": "LIPID",
+          "nameAr": "دهون الدم الشاملة مع المؤشرات الحسابية",
+          "nameEn": "Lipid Profile",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum (12h Fasting)"
+        }
+      ],
+      "subtotal": 295,
+      "testsSubtotal": 250,
+      "discount": 0,
+      "visitFee": 45,
+      "isHomeVisit": true,
+      "visitAddress": "١١ شارع محمد كامل. بيجام. شبرا الخيمة. بجوار مسجد السلام",
+      "netAmount": 340,
+      "paidAmount": 340,
+      "remainingAmount": 0,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "cashierName": "أ.د. رامي مختار",
+      "branch": "فرع القصر العيني - الرئيسي",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-07T23:07:39.333Z",
+      "updatedAt": "2026-10-07T23:07:39.333Z"
+    },
+    {
       "id": "inv-1791400927197",
       "invoiceNumber": "INV-2026-031",
       "patientName": "جيهان عبدالفتاح",
@@ -11020,6 +11203,29 @@
   ],
   "expenses": [],
   "loyaltyProfiles": [
+    {
+      "patientId": "pat-loyalty-1791414459348",
+      "patientName": "جيهان عبدالفتاح",
+      "phone": "01022231270",
+      "barcode": "RT-10062",
+      "cardNumber": "RT-SILVER-10062",
+      "bloodGroup": "",
+      "totalPoints": 333,
+      "tier": "Silver",
+      "lifetimeSpent": 333,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1791414459348",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 333,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-032",
+          "invoiceNumber": "RT-2026-032",
+          "amountEGP": 333
+        }
+      ]
+    },
     {
       "patientId": "pat-loyalty-1791381439613",
       "patientName": "محمد حسن على",
