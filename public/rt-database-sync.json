@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T19:27:17.590Z",
+  "syncedAt": "2026-10-07T19:27:49.526Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -209,7 +209,7 @@
               "maxNormal": 8,
               "textReference": "2 - 8 %",
               "id": "param-19-1791400927196-xk0",
-              "result": "",
+              "result": "03",
               "flag": "NORMAL"
             },
             {
@@ -219,7 +219,7 @@
               "maxNormal": 6,
               "textReference": "1 - 6 %",
               "id": "param-20-1791400927196-d7i",
-              "result": "",
+              "result": "02",
               "flag": "NORMAL"
             },
             {
@@ -229,7 +229,7 @@
               "maxNormal": 1,
               "textReference": "0 - 1 %",
               "id": "param-21-1791400927196-a9q",
-              "result": "",
+              "result": "00",
               "flag": "NORMAL"
             },
             {
@@ -292,7 +292,7 @@
               "notes": "Auto-calculated: (WBC × Mono%) / 100",
               "textReference": "0.2 - 0.8 x10^3/µL",
               "id": "param-27-1791400927196-xv5",
-              "result": "",
+              "result": "0.2",
               "flag": "NORMAL"
             },
             {
@@ -303,7 +303,7 @@
               "notes": "Auto-calculated: (WBC × Eos%) / 100",
               "textReference": "0.04 - 0.44 x10^3/µL",
               "id": "param-28-1791400927196-mu8",
-              "result": "",
+              "result": "0.1",
               "flag": "NORMAL"
             },
             {
@@ -314,8 +314,8 @@
               "notes": "Auto-calculated: (WBC × Baso%) / 100",
               "textReference": "0.01 - 0.1 x10^3/µL",
               "id": "param-29-1791400927196-65i",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "0",
+              "flag": "LOW"
             },
             {
               "name": "NLR (Neutrophil/Lymphocyte)",
@@ -402,7 +402,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T19:22:07.197Z",
-      "updatedAt": "2026-10-07T19:26:56.810Z",
+      "updatedAt": "2026-10-07T19:27:44.289Z",
       "invoiceId": "inv-1791400927197"
     },
     {
