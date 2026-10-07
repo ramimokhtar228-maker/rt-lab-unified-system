@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:14:11.420Z",
+  "syncedAt": "2026-10-07T21:14:25.963Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -1439,7 +1439,7 @@
               "panicHigh": 30,
               "textReference": "4.0 - 11.0 x10^3/µL",
               "id": "param-14-1791359462608-62v",
-              "result": "",
+              "result": "5.60",
               "flag": "NORMAL"
             },
             {
@@ -1449,7 +1449,7 @@
               "maxNormal": 65,
               "textReference": "40 - 65 %",
               "id": "param-15-1791359462608-bxq",
-              "result": "",
+              "result": "56",
               "flag": "NORMAL"
             },
             {
@@ -1459,7 +1459,7 @@
               "maxNormal": 5,
               "textReference": "0 - 5 % (Left Shift if > 6%)",
               "id": "param-16-1791359462608-1we",
-              "result": "",
+              "result": "04",
               "flag": "NORMAL"
             },
             {
@@ -1548,10 +1548,10 @@
               "unit": "x10^3/µL",
               "minNormal": 1.5,
               "maxNormal": 7.5,
-              "notes": "Auto-calculated: (WBC × Neut%) / 100",
+              "notes": "Calculated: (WBC × Neut%) / 100",
               "textReference": "1.5 - 7.5 x10^3/µL",
               "id": "param-25-1791359462608-gta",
-              "result": "",
+              "result": "3.1",
               "flag": "NORMAL"
             },
             {
@@ -1881,7 +1881,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T07:51:02.609Z",
-      "updatedAt": "2026-10-07T21:14:07.114Z",
+      "updatedAt": "2026-10-07T21:14:21.582Z",
       "invoiceId": "inv-1791359462609",
       "generalComment": "كافة الفحوصات المخبرية للمريض (محمد حسن على) تقع في النطاقات الآمنة بشكل عام مع انتظام مؤشرات الأعضاء الحيوية ونشاط فسيولوجي متوازن."
     },
@@ -2050,7 +2050,7 @@
               "panicHigh": 30,
               "textReference": "4.0 - 11.0 x10^3/µL",
               "id": "param-14-1791359462608-62v",
-              "result": "",
+              "result": "5.60",
               "flag": "NORMAL"
             },
             {
@@ -2060,7 +2060,7 @@
               "maxNormal": 65,
               "textReference": "40 - 65 %",
               "id": "param-15-1791359462608-bxq",
-              "result": "",
+              "result": "56",
               "flag": "NORMAL"
             },
             {
@@ -2070,7 +2070,7 @@
               "maxNormal": 5,
               "textReference": "0 - 5 % (Left Shift if > 6%)",
               "id": "param-16-1791359462608-1we",
-              "result": "",
+              "result": "04",
               "flag": "NORMAL"
             },
             {
@@ -2159,10 +2159,10 @@
               "unit": "x10^3/µL",
               "minNormal": 1.5,
               "maxNormal": 7.5,
-              "notes": "Auto-calculated: (WBC × Neut%) / 100",
+              "notes": "Calculated: (WBC × Neut%) / 100",
               "textReference": "1.5 - 7.5 x10^3/µL",
               "id": "param-25-1791359462608-gta",
-              "result": "",
+              "result": "3.1",
               "flag": "NORMAL"
             },
             {
@@ -2492,7 +2492,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T07:51:02.609Z",
-      "updatedAt": "2026-10-07T21:14:07.114Z",
+      "updatedAt": "2026-10-07T21:14:21.582Z",
       "invoiceId": "inv-1791359462609",
       "generalComment": "كافة الفحوصات المخبرية للمريض (محمد حسن على) تقع في النطاقات الآمنة بشكل عام مع انتظام مؤشرات الأعضاء الحيوية ونشاط فسيولوجي متوازن."
     },
