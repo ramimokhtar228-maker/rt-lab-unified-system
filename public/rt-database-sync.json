@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T09:28:58.892Z",
+  "syncedAt": "2026-10-07T09:32:15.098Z",
   "reports": [
     {
       "profiles": [
@@ -7245,6 +7245,52 @@
   "expenses": [],
   "loyaltyProfiles": [
     {
+      "patientId": "pat-loyalty-1791359724840",
+      "patientName": "فيرا ممدوح عبدالمسيح",
+      "phone": "01221502703",
+      "barcode": "RT-10044",
+      "cardNumber": "RT-SILVER-10044",
+      "bloodGroup": "",
+      "totalPoints": 498,
+      "tier": "Silver",
+      "lifetimeSpent": 498,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1791359724840",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 498,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-014",
+          "invoiceNumber": "RT-2026-014",
+          "amountEGP": 498
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791359462638",
+      "patientName": "حبيبه مجدى محمد",
+      "phone": "01148879943",
+      "barcode": "RT-10043",
+      "cardNumber": "RT-GOLD-10043",
+      "bloodGroup": "",
+      "totalPoints": 1026,
+      "tier": "Gold",
+      "lifetimeSpent": 1026,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1791359462638",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 1026,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-013",
+          "invoiceNumber": "RT-2026-013",
+          "amountEGP": 1026
+        }
+      ]
+    },
+    {
       "patientId": "pat-loyalty-1791358565055",
       "patientName": "كوثر ابراهيم",
       "phone": "01095920078",
@@ -7500,52 +7546,6 @@
         }
       ],
       "lifetimeSpent": 682
-    },
-    {
-      "patientId": "pat-loyalty-1791359724840",
-      "patientName": "فيرا ممدوح عبدالمسيح",
-      "phone": "01221502703",
-      "barcode": "RT-10044",
-      "cardNumber": "RT-SILVER-10044",
-      "bloodGroup": "",
-      "totalPoints": 498,
-      "tier": "Silver",
-      "lifetimeSpent": 498,
-      "issueDate": "2026-10-07",
-      "transactions": [
-        {
-          "id": "tx-1791359724840",
-          "date": "2026-10-07",
-          "type": "earn",
-          "points": 498,
-          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-014",
-          "invoiceNumber": "RT-2026-014",
-          "amountEGP": 498
-        }
-      ]
-    },
-    {
-      "patientId": "pat-loyalty-1791359462638",
-      "patientName": "حبيبه مجدى محمد",
-      "phone": "01148879943",
-      "barcode": "RT-10043",
-      "cardNumber": "RT-GOLD-10043",
-      "bloodGroup": "",
-      "totalPoints": 1026,
-      "tier": "Gold",
-      "lifetimeSpent": 1026,
-      "issueDate": "2026-10-07",
-      "transactions": [
-        {
-          "id": "tx-1791359462638",
-          "date": "2026-10-07",
-          "type": "earn",
-          "points": 1026,
-          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-013",
-          "invoiceNumber": "RT-2026-013",
-          "amountEGP": 1026
-        }
-      ]
     }
   ],
   "inventory": [
@@ -7702,19 +7702,19 @@
     }
   ],
   "labInfo": {
-    "labNameAr": "معامل RT للتحاليل الطبية والتشخيصية",
-    "labNameEn": "RT Diagnostic Laboratories",
+    "whatsapp": "01100874444",
     "sloganAr": "التشخيص الصحيح يبدأ معنا · دقة، سرعة، وأمان تشخيصي",
-    "sloganEn": "Accurate Diagnosis Starts With Us",
-    "supervisionAr": "أطباء واستشاريو كلية طب قصر العيني",
-    "supervisionEn": "Kasr Al Ainy Faculty of Medicine Consultants",
-    "accreditation": "ISO 15189 Certified Quality Management",
-    "hotline": "01012345678",
-    "phone": "0244667788",
-    "whatsapp": "01012345678",
+    "supervisionAr": "أطباء واستشاريو كلية طب قصر العيني - جامعة القاهرة",
+    "labNameEn": "RT Diagnostic Laboratories",
+    "sloganEn": "Accurate Diagnosis Starts With Us · Precision & Care",
+    "hotline": "01100046841",
+    "phone": "01013242777",
     "mainAddress": "ميدان بهتيم برج صيدليه العزبى الدور الثالث امام الأسانسير شبرا الخيمه",
+    "labNameAr": "معامل RT للتحاليل الطبية والتشخيصية",
+    "vodafoneCash": "01100046841",
     "instapay": "ramirtlab@instapay",
-    "vodafoneCash": "01098765432"
+    "accreditation": "ISO 15189 Certified Quality Management",
+    "supervisionEn": "Kasr Al Ainy Faculty of Medicine Consultants - Cairo University"
   },
   "testCatalog": [
     {
