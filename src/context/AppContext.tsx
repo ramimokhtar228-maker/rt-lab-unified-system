@@ -587,92 +587,116 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const fsCollectionsRes = await realtimeSyncManager.fetchAllFirestoreRecords();
 
       // 4. Smart Deep Deduplication and Merging for Reports
-      setReports(prevReports => {
-        const reportMap = new Map<string, LabReport>();
+      const reportMap = new Map<string, LabReport>();
 
-        // Seed with existing local reports
-        prevReports.forEach(r => {
-          if (r && r.id) reportMap.set(r.id, r);
+      // Seed with existing local reports from localStorage and state
+      try {
+        const localSaved = localStorage.getItem(REPORTS_KEY) || localStorage.getItem('rt_lab_reports_v2');
+        if (localSaved) {
+          const parsed = JSON.parse(localSaved);
+          if (Array.isArray(parsed)) {
+            parsed.forEach((r: any) => { if (r && r.id) reportMap.set(r.id, r); });
+          }
+        }
+      } catch { /* ignore */ }
+
+      reports.forEach(r => { if (r && r.id) reportMap.set(r.id, r); });
+
+      const mergeOneReport = (r: any) => {
+        if (!r || !r.id) return;
+        const existingKey = Array.from(reportMap.keys()).find(k => {
+          const cur = reportMap.get(k);
+          if (!cur) return false;
+          return cur.id === r.id ||
+            (cur.reportNumber && r.reportNumber && cur.reportNumber === r.reportNumber) ||
+            (cur.patient?.barcode && r.patient?.barcode && cur.patient.barcode === r.patient.barcode);
         });
 
-        const mergeOneReport = (r: any) => {
-          if (!r || !r.id) return;
-          // Match by id, reportNumber, or barcode
-          const existingKey = Array.from(reportMap.keys()).find(k => {
-            const cur = reportMap.get(k);
-            if (!cur) return false;
-            return cur.id === r.id ||
-              (cur.reportNumber && r.reportNumber && cur.reportNumber === r.reportNumber) ||
-              (cur.patient?.barcode && r.patient?.barcode && cur.patient.barcode === r.patient.barcode);
-          });
-
-          if (existingKey) {
-            const existing = reportMap.get(existingKey)!;
-            const isNewer = (r.updatedAt && (!existing.updatedAt || r.updatedAt > existing.updatedAt)) ||
-                            (r.status === 'verified' && existing.status !== 'verified');
-            if (isNewer) {
-              reportMap.set(existingKey, { ...existing, ...r });
-            }
-          } else {
-            reportMap.set(r.id, r);
+        if (existingKey) {
+          const existing = reportMap.get(existingKey)!;
+          const isNewer = (r.updatedAt && (!existing.updatedAt || r.updatedAt > existing.updatedAt)) ||
+                          (r.status === 'verified' && existing.status !== 'verified');
+          if (isNewer) {
+            reportMap.set(existingKey, { ...existing, ...r });
           }
-        };
+        } else {
+          reportMap.set(r.id, r);
+        }
+      };
 
-        if (ghRes.success && ghRes.data && Array.isArray(ghRes.data.reports)) {
-          ghRes.data.reports.forEach(mergeOneReport);
-        }
-        if (fsSnapshotRes.success && fsSnapshotRes.data && Array.isArray(fsSnapshotRes.data.reports)) {
-          fsSnapshotRes.data.reports.forEach(mergeOneReport);
-        }
-        if (fsCollectionsRes.reports && Array.isArray(fsCollectionsRes.reports)) {
-          fsCollectionsRes.reports.forEach(mergeOneReport);
-        }
+      if (ghRes.success && ghRes.data && Array.isArray(ghRes.data.reports)) {
+        ghRes.data.reports.forEach(mergeOneReport);
+      }
+      if (fsSnapshotRes.success && fsSnapshotRes.data && Array.isArray(fsSnapshotRes.data.reports)) {
+        fsSnapshotRes.data.reports.forEach(mergeOneReport);
+      }
+      if (fsCollectionsRes.reports && Array.isArray(fsCollectionsRes.reports)) {
+        fsCollectionsRes.reports.forEach(mergeOneReport);
+      }
 
-        const merged = Array.from(reportMap.values());
-        merged.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
-        return merged;
-      });
+      const mergedReports = Array.from(reportMap.values());
+      mergedReports.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
 
       // 5. Smart Deep Deduplication and Merging for Income Records
-      setIncomeRecords(prevIncome => {
-        const incomeMap = new Map<string, IncomeRecord>();
-        prevIncome.forEach(i => { if (i && i.id) incomeMap.set(i.id, i); });
+      const incomeMap = new Map<string, IncomeRecord>();
 
-        const mergeOneIncome = (i: any) => {
-          if (!i || !i.id) return;
-          const existingKey = Array.from(incomeMap.keys()).find(k => {
-            const cur = incomeMap.get(k);
-            if (!cur) return false;
-            return cur.id === i.id ||
-              (cur.invoiceNumber && i.invoiceNumber && cur.invoiceNumber === i.invoiceNumber) ||
-              (cur.barcode && i.barcode && cur.barcode === i.barcode);
-          });
-
-          if (existingKey) {
-            const existing = incomeMap.get(existingKey)!;
-            const isNewer = i.updatedAt && (!existing.updatedAt || i.updatedAt > existing.updatedAt);
-            if (isNewer) {
-              incomeMap.set(existingKey, { ...existing, ...i });
-            }
-          } else {
-            incomeMap.set(i.id, i);
+      try {
+        const localSavedInc = localStorage.getItem(INCOME_KEY);
+        if (localSavedInc) {
+          const parsed = JSON.parse(localSavedInc);
+          if (Array.isArray(parsed)) {
+            parsed.forEach((i: any) => { if (i && i.id) incomeMap.set(i.id, i); });
           }
-        };
+        }
+      } catch { /* ignore */ }
 
-        if (ghRes.success && ghRes.data && Array.isArray(ghRes.data.incomeRecords)) {
-          ghRes.data.incomeRecords.forEach(mergeOneIncome);
-        }
-        if (fsSnapshotRes.success && fsSnapshotRes.data && Array.isArray(fsSnapshotRes.data.incomeRecords)) {
-          fsSnapshotRes.data.incomeRecords.forEach(mergeOneIncome);
-        }
-        if (fsCollectionsRes.incomeRecords && Array.isArray(fsCollectionsRes.incomeRecords)) {
-          fsCollectionsRes.incomeRecords.forEach(mergeOneIncome);
-        }
+      incomeRecords.forEach(i => { if (i && i.id) incomeMap.set(i.id, i); });
 
-        const merged = Array.from(incomeMap.values());
-        merged.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
-        return merged;
-      });
+      const mergeOneIncome = (i: any) => {
+        if (!i || !i.id) return;
+        const existingKey = Array.from(incomeMap.keys()).find(k => {
+          const cur = incomeMap.get(k);
+          if (!cur) return false;
+          return cur.id === i.id ||
+            (cur.invoiceNumber && i.invoiceNumber && cur.invoiceNumber === i.invoiceNumber) ||
+            (cur.barcode && i.barcode && cur.barcode === i.barcode);
+        });
+
+        if (existingKey) {
+          const existing = incomeMap.get(existingKey)!;
+          const isNewer = i.updatedAt && (!existing.updatedAt || i.updatedAt > existing.updatedAt);
+          if (isNewer) {
+            incomeMap.set(existingKey, { ...existing, ...i });
+          }
+        } else {
+          incomeMap.set(i.id, i);
+        }
+      };
+
+      if (ghRes.success && ghRes.data && Array.isArray(ghRes.data.incomeRecords)) {
+        ghRes.data.incomeRecords.forEach(mergeOneIncome);
+      }
+      if (fsSnapshotRes.success && fsSnapshotRes.data && Array.isArray(fsSnapshotRes.data.incomeRecords)) {
+        fsSnapshotRes.data.incomeRecords.forEach(mergeOneIncome);
+      }
+      if (fsCollectionsRes.incomeRecords && Array.isArray(fsCollectionsRes.incomeRecords)) {
+        fsCollectionsRes.incomeRecords.forEach(mergeOneIncome);
+      }
+
+      const mergedIncome = Array.from(incomeMap.values());
+      mergedIncome.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+
+      // Save directly to localStorage immediately
+      try {
+        localStorage.setItem(REPORTS_KEY, JSON.stringify(mergedReports));
+        localStorage.setItem(INCOME_KEY, JSON.stringify(mergedIncome));
+      } catch (err) {
+        console.warn('LocalStorage save error:', err);
+      }
+
+      // Update React states
+      setReports(mergedReports);
+      setIncomeRecords(mergedIncome);
 
       // 6. Merge Catalog & Packages if available in Cloud
       if (ghRes.success && ghRes.data) {
@@ -691,10 +715,28 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
       }
 
+      // 7. Push unified master state back to Firestore so all other devices have it
+      if (mergedReports.length > 0 || mergedIncome.length > 0) {
+        const unifiedPayload = {
+          reports: mergedReports,
+          incomeRecords: mergedIncome,
+          expenses,
+          loyaltyProfiles,
+          inventory,
+          labInfo,
+          testCatalog,
+          packages
+        };
+        realtimeSyncManager.pushMasterSnapshot(unifiedPayload).catch(() => {});
+        if (githubConfig.autoSync && githubConfig.token) {
+          pushFullStoreToGitHub(githubConfig, unifiedPayload).catch(() => {});
+        }
+      }
+
       setLastDeviceSyncAt(new Date());
       setIsInitialSyncCompleted(true);
 
-      const successMsg = `تم جلب وتوحيد كافة بيانات الأجهزة السحابية بنجاح!`;
+      const successMsg = `تم جلب وتوحيد كافة بيانات الأجهزة السحابية بنجاح (${mergedReports.length} تقرير طبي، ${mergedIncome.length} فاتورة)`;
       addNotification({
         title: '⚡ اكتمل التسميع وجلب بيانات الأجهزة',
         message: successMsg,
@@ -704,8 +746,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       return {
         success: true,
         message: successMsg,
-        reportsCount: reports.length,
-        incomeCount: incomeRecords.length
+        reportsCount: mergedReports.length,
+        incomeCount: mergedIncome.length
       };
     } catch (err) {
       console.error('Error fetching all devices data:', err);
@@ -718,7 +760,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     } finally {
       setIsDeviceSyncing(false);
     }
-  }, [githubConfig, addNotification, reports.length, incomeRecords.length]);
+  }, [githubConfig, addNotification, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, packages]);
 
   // Real-Time Multi-Device Cloud Synchronization Event Listener
   useEffect(() => {
@@ -1481,8 +1523,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       invoice: newInvoice,
       patient
     });
-    realtimeSyncManager.broadcastAction('UPDATE_REPORT', newReport);
-    realtimeSyncManager.broadcastAction('UPDATE_INVOICE', newInvoice);
 
     logAction('CREATE', 'DIAGNOSTIC', `تسجيل مريض جديد ${patient.fullName} وحجز تحاليل وربط التقرير بالفاتورة المالية`);
     addNotification({
