@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:14:25.963Z",
+  "syncedAt": "2026-10-07T21:14:52.564Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -1470,7 +1470,7 @@
               "notes": "Auto-calculated: Segmented% + Band%",
               "textReference": "40 - 70 %",
               "id": "param-17-1791359462608-dvw",
-              "result": "",
+              "result": "60",
               "flag": "NORMAL"
             },
             {
@@ -1480,7 +1480,7 @@
               "maxNormal": 45,
               "textReference": "20 - 45 %",
               "id": "param-18-1791359462608-3a7",
-              "result": "",
+              "result": "34",
               "flag": "NORMAL"
             },
             {
@@ -1490,7 +1490,7 @@
               "maxNormal": 8,
               "textReference": "2 - 8 %",
               "id": "param-19-1791359462608-yzm",
-              "result": "",
+              "result": "03",
               "flag": "NORMAL"
             },
             {
@@ -1500,7 +1500,7 @@
               "maxNormal": 6,
               "textReference": "1 - 6 %",
               "id": "param-20-1791359462608-j5m",
-              "result": "",
+              "result": "03",
               "flag": "NORMAL"
             },
             {
@@ -1510,7 +1510,7 @@
               "maxNormal": 1,
               "textReference": "0 - 1 %",
               "id": "param-21-1791359462608-odb",
-              "result": "",
+              "result": "00",
               "flag": "NORMAL"
             },
             {
@@ -1520,7 +1520,7 @@
               "maxNormal": 0,
               "textReference": "0 % (Absent in normal blood)",
               "id": "param-22-1791359462608-l73",
-              "result": "",
+              "result": "00",
               "flag": "NORMAL"
             },
             {
@@ -1530,7 +1530,7 @@
               "maxNormal": 0,
               "textReference": "0 % (Absent in normal blood)",
               "id": "param-23-1791359462608-elv",
-              "result": "",
+              "result": "00",
               "flag": "NORMAL"
             },
             {
@@ -1540,7 +1540,7 @@
               "maxNormal": 0,
               "textReference": "0 % (Absent in normal blood)",
               "id": "param-24-1791359462608-jr3",
-              "result": "",
+              "result": "00",
               "flag": "NORMAL"
             },
             {
@@ -1559,10 +1559,10 @@
               "unit": "x10^3/µL",
               "minNormal": 1,
               "maxNormal": 4,
-              "notes": "Auto-calculated: (WBC × Lymph%) / 100",
+              "notes": "Calculated: (WBC × Lymph%) / 100",
               "textReference": "1.0 - 4.0 x10^3/µL",
               "id": "param-26-1791359462608-ijw",
-              "result": "",
+              "result": "1.9",
               "flag": "NORMAL"
             },
             {
@@ -1573,7 +1573,7 @@
               "notes": "Auto-calculated: (WBC × Mono%) / 100",
               "textReference": "0.2 - 0.8 x10^3/µL",
               "id": "param-27-1791359462608-3u9",
-              "result": "",
+              "result": "0.2",
               "flag": "NORMAL"
             },
             {
@@ -1584,7 +1584,7 @@
               "notes": "Auto-calculated: (WBC × Eos%) / 100",
               "textReference": "0.04 - 0.44 x10^3/µL",
               "id": "param-28-1791359462608-2df",
-              "result": "",
+              "result": "0.2",
               "flag": "NORMAL"
             },
             {
@@ -1595,18 +1595,18 @@
               "notes": "Auto-calculated: (WBC × Baso%) / 100",
               "textReference": "0.01 - 0.1 x10^3/µL",
               "id": "param-29-1791359462608-opu",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "0",
+              "flag": "LOW"
             },
             {
               "name": "NLR (Neutrophil/Lymphocyte)",
               "unit": "Ratio",
               "minNormal": 0.8,
               "maxNormal": 2.5,
-              "notes": "Auto-calculated: Neut% / Lymph%",
+              "notes": "Normal target < 2.5",
               "textReference": "0.8 - 2.5 (Inflammatory Index)",
               "id": "param-30-1791359462608-u1y",
-              "result": "",
+              "result": "1.6",
               "flag": "NORMAL"
             },
             {
@@ -1881,7 +1881,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T07:51:02.609Z",
-      "updatedAt": "2026-10-07T21:14:21.582Z",
+      "updatedAt": "2026-10-07T21:14:48.130Z",
       "invoiceId": "inv-1791359462609",
       "generalComment": "كافة الفحوصات المخبرية للمريض (محمد حسن على) تقع في النطاقات الآمنة بشكل عام مع انتظام مؤشرات الأعضاء الحيوية ونشاط فسيولوجي متوازن."
     },
@@ -2081,7 +2081,7 @@
               "notes": "Auto-calculated: Segmented% + Band%",
               "textReference": "40 - 70 %",
               "id": "param-17-1791359462608-dvw",
-              "result": "",
+              "result": "60",
               "flag": "NORMAL"
             },
             {
@@ -2091,7 +2091,7 @@
               "maxNormal": 45,
               "textReference": "20 - 45 %",
               "id": "param-18-1791359462608-3a7",
-              "result": "",
+              "result": "34",
               "flag": "NORMAL"
             },
             {
@@ -2101,7 +2101,7 @@
               "maxNormal": 8,
               "textReference": "2 - 8 %",
               "id": "param-19-1791359462608-yzm",
-              "result": "",
+              "result": "03",
               "flag": "NORMAL"
             },
             {
@@ -2111,7 +2111,7 @@
               "maxNormal": 6,
               "textReference": "1 - 6 %",
               "id": "param-20-1791359462608-j5m",
-              "result": "",
+              "result": "03",
               "flag": "NORMAL"
             },
             {
@@ -2121,7 +2121,7 @@
               "maxNormal": 1,
               "textReference": "0 - 1 %",
               "id": "param-21-1791359462608-odb",
-              "result": "",
+              "result": "00",
               "flag": "NORMAL"
             },
             {
@@ -2131,7 +2131,7 @@
               "maxNormal": 0,
               "textReference": "0 % (Absent in normal blood)",
               "id": "param-22-1791359462608-l73",
-              "result": "",
+              "result": "00",
               "flag": "NORMAL"
             },
             {
@@ -2141,7 +2141,7 @@
               "maxNormal": 0,
               "textReference": "0 % (Absent in normal blood)",
               "id": "param-23-1791359462608-elv",
-              "result": "",
+              "result": "00",
               "flag": "NORMAL"
             },
             {
@@ -2151,7 +2151,7 @@
               "maxNormal": 0,
               "textReference": "0 % (Absent in normal blood)",
               "id": "param-24-1791359462608-jr3",
-              "result": "",
+              "result": "00",
               "flag": "NORMAL"
             },
             {
@@ -2170,10 +2170,10 @@
               "unit": "x10^3/µL",
               "minNormal": 1,
               "maxNormal": 4,
-              "notes": "Auto-calculated: (WBC × Lymph%) / 100",
+              "notes": "Calculated: (WBC × Lymph%) / 100",
               "textReference": "1.0 - 4.0 x10^3/µL",
               "id": "param-26-1791359462608-ijw",
-              "result": "",
+              "result": "1.9",
               "flag": "NORMAL"
             },
             {
@@ -2184,7 +2184,7 @@
               "notes": "Auto-calculated: (WBC × Mono%) / 100",
               "textReference": "0.2 - 0.8 x10^3/µL",
               "id": "param-27-1791359462608-3u9",
-              "result": "",
+              "result": "0.2",
               "flag": "NORMAL"
             },
             {
@@ -2195,7 +2195,7 @@
               "notes": "Auto-calculated: (WBC × Eos%) / 100",
               "textReference": "0.04 - 0.44 x10^3/µL",
               "id": "param-28-1791359462608-2df",
-              "result": "",
+              "result": "0.2",
               "flag": "NORMAL"
             },
             {
@@ -2206,18 +2206,18 @@
               "notes": "Auto-calculated: (WBC × Baso%) / 100",
               "textReference": "0.01 - 0.1 x10^3/µL",
               "id": "param-29-1791359462608-opu",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "0",
+              "flag": "LOW"
             },
             {
               "name": "NLR (Neutrophil/Lymphocyte)",
               "unit": "Ratio",
               "minNormal": 0.8,
               "maxNormal": 2.5,
-              "notes": "Auto-calculated: Neut% / Lymph%",
+              "notes": "Normal target < 2.5",
               "textReference": "0.8 - 2.5 (Inflammatory Index)",
               "id": "param-30-1791359462608-u1y",
-              "result": "",
+              "result": "1.6",
               "flag": "NORMAL"
             },
             {
@@ -2492,7 +2492,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T07:51:02.609Z",
-      "updatedAt": "2026-10-07T21:14:21.582Z",
+      "updatedAt": "2026-10-07T21:14:48.130Z",
       "invoiceId": "inv-1791359462609",
       "generalComment": "كافة الفحوصات المخبرية للمريض (محمد حسن على) تقع في النطاقات الآمنة بشكل عام مع انتظام مؤشرات الأعضاء الحيوية ونشاط فسيولوجي متوازن."
     },
