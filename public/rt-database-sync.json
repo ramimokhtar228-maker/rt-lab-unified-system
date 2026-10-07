@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T22:00:09.990Z",
+  "syncedAt": "2026-10-07T22:00:49.462Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -683,8 +683,8 @@
               "method": "Hexokinase",
               "textReference": "",
               "id": "param-0-1791359724809-nrq",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "338",
+              "flag": "HIGH"
             },
             {
               "name": "2 Hours Post-Prandial Glucose",
@@ -695,18 +695,8 @@
               "method": "Hexokinase",
               "textReference": "",
               "id": "param-1-1791359724809-938",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Random Blood Glucose",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 140,
-              "textReference": "",
-              "id": "param-2-1791359724809-6qh",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "428",
+              "flag": "HIGH"
             },
             {
               "name": "HbA1c (Glycated Hemoglobin)",
@@ -807,7 +797,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T07:55:24.810Z",
-      "updatedAt": "2026-10-07T22:00:05.744Z",
+      "updatedAt": "2026-10-07T22:00:45.259Z",
       "invoiceId": "inv-1791359724811"
     },
     {
