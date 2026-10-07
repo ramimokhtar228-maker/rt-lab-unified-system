@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:57:36.797Z",
+  "syncedAt": "2026-10-07T21:57:43.503Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -405,8 +405,8 @@
               "method": "Electrical Impedance",
               "textReference": "M: 4.5 - 5.9 | F: 4.0 - 5.2",
               "id": "param-1-1791359724809-162",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "38.66",
+              "flag": "HIGH"
             },
             {
               "name": "Hematocrit (PCV)",
@@ -424,22 +424,22 @@
               "unit": "fL",
               "minNormal": 80,
               "maxNormal": 98,
-              "notes": "Auto-calculated: (PCV × 10) / RBC",
+              "notes": "Calculated: (HCT × 10) / RBC",
               "textReference": "80.0 - 98.0 fL",
               "id": "param-3-1791359724809-7kc",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "0.8",
+              "flag": "LOW"
             },
             {
               "name": "M.C.H",
               "unit": "pg",
               "minNormal": 27,
               "maxNormal": 33,
-              "notes": "Auto-calculated: (Hb × 10) / RBC",
+              "notes": "Calculated: (HGB × 10) / RBC",
               "textReference": "27.0 - 33.0 pg",
               "id": "param-4-1791359724809-j37",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "3.5",
+              "flag": "LOW"
             },
             {
               "name": "M.C.H.C",
@@ -475,10 +475,10 @@
             {
               "name": "Mentzer Index (MCV/RBC)",
               "unit": "Ratio",
-              "notes": "<13 Thalassemia Trait | >13 Iron Deficiency",
+              "notes": "Mentzer < 13: Suggestive of Beta Thalassemia Trait",
               "textReference": "> 13 Iron Def. | < 13 Thalassemia",
               "id": "param-8-1791359724809-sab",
-              "result": "",
+              "result": "0",
               "flag": "NORMAL"
             },
             {
@@ -915,7 +915,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T07:55:24.810Z",
-      "updatedAt": "2026-10-07T21:57:32.415Z",
+      "updatedAt": "2026-10-07T21:57:39.032Z",
       "invoiceId": "inv-1791359724811"
     },
     {
