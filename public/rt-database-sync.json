@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:44:59.421Z",
+  "syncedAt": "2026-10-07T21:45:06.689Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -1865,7 +1865,7 @@
             {
               "id": "p-pkg-0-1791321555659-tq7",
               "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
-              "result": "20",
+              "result": "20.0",
               "unit": "ng/mL",
               "minNormal": 30,
               "maxNormal": 100,
@@ -2019,7 +2019,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T21:19:15.663Z",
-      "updatedAt": "2026-10-07T21:44:55.179Z",
+      "updatedAt": "2026-10-07T21:45:02.423Z",
       "invoiceId": "inv-1791321555664"
     },
     {
