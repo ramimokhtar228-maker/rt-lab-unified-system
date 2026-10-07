@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T19:22:11.979Z",
+  "syncedAt": "2026-10-07T19:22:46.278Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -50,8 +50,8 @@
               "method": "Automated SLS-Hb",
               "textReference": "M: 13.0 - 17.5 | F: 12.0 - 15.5 g/dL",
               "id": "param-0-1791400927194-4oj",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "10.60",
+              "flag": "LOW"
             },
             {
               "name": "R.B.Cs Count",
@@ -69,11 +69,11 @@
               "unit": "%",
               "minNormal": 36,
               "maxNormal": 48,
-              "notes": "Auto-calculated: Hb × 3",
+              "notes": "Calculated (HGB × 3)",
               "textReference": "M: 40 - 52% | F: 36 - 48%",
               "id": "param-2-1791400927194-6c0",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "3",
+              "flag": "LOW"
             },
             {
               "name": "M.C.V",
@@ -102,11 +102,11 @@
               "unit": "g/dL",
               "minNormal": 32,
               "maxNormal": 36,
-              "notes": "Auto-calculated: (Hb × 100) / PCV",
+              "notes": "Calculated: (HGB × 100) / HCT",
               "textReference": "32.0 - 36.0 g/dL",
               "id": "param-5-1791400927195-tid",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "353.3",
+              "flag": "HIGH"
             },
             {
               "name": "R.D.W-CV",
@@ -442,7 +442,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T19:22:07.197Z",
-      "updatedAt": "2026-10-07T19:22:07.197Z",
+      "updatedAt": "2026-10-07T19:22:41.352Z",
       "invoiceId": "inv-1791400927197"
     },
     {
