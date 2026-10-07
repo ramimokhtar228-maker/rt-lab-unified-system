@@ -58,6 +58,8 @@ export interface InvoiceTestItem {
   maxNormal?: number;
   textReference?: string;
   method?: string;
+  fastingInstructions?: string;
+  turnaroundHours?: number;
 }
 
 export interface IncomeRecord {
