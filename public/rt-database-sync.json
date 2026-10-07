@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:14:03.714Z",
+  "syncedAt": "2026-10-07T21:14:11.420Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -1431,37 +1431,6 @@
               "flag": "NORMAL"
             },
             {
-              "name": "MPV (Mean Platelet Volume)",
-              "unit": "fL",
-              "minNormal": 7.5,
-              "maxNormal": 11.5,
-              "textReference": "7.5 - 11.5 fL",
-              "id": "param-11-1791359462608-tob",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "PDW (Platelet Dist. Width)",
-              "unit": "%",
-              "minNormal": 9,
-              "maxNormal": 17,
-              "textReference": "9.0 - 17.0 %",
-              "id": "param-12-1791359462608-fyu",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "PCT (Plateletcrit)",
-              "unit": "%",
-              "minNormal": 0.17,
-              "maxNormal": 0.35,
-              "notes": "Auto-calculated: (PLT × MPV) / 10,000",
-              "textReference": "0.17 - 0.35 %",
-              "id": "param-13-1791359462608-gwv",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
               "name": "Total Leucocytic Count (TLC)",
               "unit": "x10^3/µL",
               "minNormal": 4,
@@ -1912,7 +1881,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T07:51:02.609Z",
-      "updatedAt": "2026-10-07T21:13:59.361Z",
+      "updatedAt": "2026-10-07T21:14:07.114Z",
       "invoiceId": "inv-1791359462609",
       "generalComment": "كافة الفحوصات المخبرية للمريض (محمد حسن على) تقع في النطاقات الآمنة بشكل عام مع انتظام مؤشرات الأعضاء الحيوية ونشاط فسيولوجي متوازن."
     },
@@ -2073,37 +2042,6 @@
               "flag": "NORMAL"
             },
             {
-              "name": "MPV (Mean Platelet Volume)",
-              "unit": "fL",
-              "minNormal": 7.5,
-              "maxNormal": 11.5,
-              "textReference": "7.5 - 11.5 fL",
-              "id": "param-11-1791359462608-tob",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "PDW (Platelet Dist. Width)",
-              "unit": "%",
-              "minNormal": 9,
-              "maxNormal": 17,
-              "textReference": "9.0 - 17.0 %",
-              "id": "param-12-1791359462608-fyu",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "PCT (Plateletcrit)",
-              "unit": "%",
-              "minNormal": 0.17,
-              "maxNormal": 0.35,
-              "notes": "Auto-calculated: (PLT × MPV) / 10,000",
-              "textReference": "0.17 - 0.35 %",
-              "id": "param-13-1791359462608-gwv",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
               "name": "Total Leucocytic Count (TLC)",
               "unit": "x10^3/µL",
               "minNormal": 4,
@@ -2554,7 +2492,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T07:51:02.609Z",
-      "updatedAt": "2026-10-07T21:13:59.361Z",
+      "updatedAt": "2026-10-07T21:14:07.114Z",
       "invoiceId": "inv-1791359462609",
       "generalComment": "كافة الفحوصات المخبرية للمريض (محمد حسن على) تقع في النطاقات الآمنة بشكل عام مع انتظام مؤشرات الأعضاء الحيوية ونشاط فسيولوجي متوازن."
     },
