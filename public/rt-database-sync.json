@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:57:43.503Z",
+  "syncedAt": "2026-10-07T21:57:57.513Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -405,8 +405,8 @@
               "method": "Electrical Impedance",
               "textReference": "M: 4.5 - 5.9 | F: 4.0 - 5.2",
               "id": "param-1-1791359724809-162",
-              "result": "38.66",
-              "flag": "HIGH"
+              "result": "4.434",
+              "flag": "NORMAL"
             },
             {
               "name": "Hematocrit (PCV)",
@@ -416,8 +416,8 @@
               "notes": "Calculated (HGB × 3)",
               "textReference": "M: 40 - 52% | F: 36 - 48%",
               "id": "param-2-1791359724809-uyc",
-              "result": "3",
-              "flag": "LOW"
+              "result": "38.77",
+              "flag": "NORMAL"
             },
             {
               "name": "M.C.V",
@@ -427,8 +427,8 @@
               "notes": "Calculated: (HCT × 10) / RBC",
               "textReference": "80.0 - 98.0 fL",
               "id": "param-3-1791359724809-7kc",
-              "result": "0.8",
-              "flag": "LOW"
+              "result": "87.4",
+              "flag": "NORMAL"
             },
             {
               "name": "M.C.H",
@@ -438,8 +438,8 @@
               "notes": "Calculated: (HGB × 10) / RBC",
               "textReference": "27.0 - 33.0 pg",
               "id": "param-4-1791359724809-j37",
-              "result": "3.5",
-              "flag": "LOW"
+              "result": "30.4",
+              "flag": "NORMAL"
             },
             {
               "name": "M.C.H.C",
@@ -449,8 +449,8 @@
               "notes": "Calculated: (HGB × 100) / HCT",
               "textReference": "32.0 - 36.0 g/dL",
               "id": "param-5-1791359724809-f9f",
-              "result": "450",
-              "flag": "HIGH"
+              "result": "34.8",
+              "flag": "NORMAL"
             },
             {
               "name": "R.D.W-CV",
@@ -475,10 +475,10 @@
             {
               "name": "Mentzer Index (MCV/RBC)",
               "unit": "Ratio",
-              "notes": "Mentzer < 13: Suggestive of Beta Thalassemia Trait",
+              "notes": "Mentzer > 13: Suggestive of Iron Deficiency Anemia",
               "textReference": "> 13 Iron Def. | < 13 Thalassemia",
               "id": "param-8-1791359724809-sab",
-              "result": "0",
+              "result": "19.7",
               "flag": "NORMAL"
             },
             {
@@ -915,7 +915,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T07:55:24.810Z",
-      "updatedAt": "2026-10-07T21:57:39.032Z",
+      "updatedAt": "2026-10-07T21:57:52.982Z",
       "invoiceId": "inv-1791359724811"
     },
     {
