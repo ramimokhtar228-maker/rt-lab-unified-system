@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T13:50:34.319Z",
+  "syncedAt": "2026-10-07T13:50:36.410Z",
   "reports": [
     {
       "id": "rep-1791359724810",
@@ -4748,6 +4748,46 @@
   ],
   "incomeRecords": [
     {
+      "cashierName": "المحاسب المالي",
+      "createdAt": "2026-10-07T08:04:25.368Z",
+      "paidAmount": 252,
+      "paymentMethod": "cash",
+      "patientAge": 34,
+      "paymentStatus": "paid",
+      "patientGender": "male",
+      "barcode": "RT-10029",
+      "loyaltyPointsRedeemed": 0,
+      "branch": "فرع القصر العيني - الرئيسي",
+      "testsSubtotal": 280,
+      "loyaltyPointsEarned": 252,
+      "discount": 28,
+      "updatedAt": "2026-10-07T08:04:25.368Z",
+      "patientName": "أحمد محمود إبراهيم",
+      "labNumber": "RT-2026-001",
+      "notes": "خصم كارت الولاء الفضي 10%",
+      "netAmount": 252,
+      "subtotal": 280,
+      "id": "inv-001",
+      "patientPhone": "01012345678",
+      "remainingAmount": 0,
+      "loyaltyDiscountEGP": 28,
+      "invoiceNumber": "INV-2026-001",
+      "tests": [
+        {
+          "id": "t-cbc",
+          "price": 280,
+          "code": "CBC",
+          "nameEn": "Complete Blood Count",
+          "cost": 45,
+          "category": "Hematology",
+          "nameAr": "صورة الدم الكاملة (CBC 5-Diff)",
+          "sampleType": "EDTA Whole Blood"
+        }
+      ],
+      "referringDoctor": "د. طارق المنشاوي",
+      "syncStatus": "synced"
+    },
+    {
       "branch": "فرع القصر العيني - الرئيسي",
       "paidAmount": 342,
       "referringDoctor": "أ.د. خالد الببلاوي",
@@ -4794,46 +4834,6 @@
       "id": "inv-002",
       "updatedAt": "2026-10-07T08:04:25.368Z",
       "labNumber": "RT-2026-002"
-    },
-    {
-      "cashierName": "المحاسب المالي",
-      "createdAt": "2026-10-07T08:04:25.368Z",
-      "paidAmount": 252,
-      "paymentMethod": "cash",
-      "patientAge": 34,
-      "paymentStatus": "paid",
-      "patientGender": "male",
-      "barcode": "RT-10029",
-      "loyaltyPointsRedeemed": 0,
-      "branch": "فرع القصر العيني - الرئيسي",
-      "testsSubtotal": 280,
-      "loyaltyPointsEarned": 252,
-      "discount": 28,
-      "updatedAt": "2026-10-07T08:04:25.368Z",
-      "patientName": "أحمد محمود إبراهيم",
-      "labNumber": "RT-2026-001",
-      "notes": "خصم كارت الولاء الفضي 10%",
-      "netAmount": 252,
-      "subtotal": 280,
-      "id": "inv-001",
-      "patientPhone": "01012345678",
-      "remainingAmount": 0,
-      "loyaltyDiscountEGP": 28,
-      "invoiceNumber": "INV-2026-001",
-      "tests": [
-        {
-          "id": "t-cbc",
-          "price": 280,
-          "code": "CBC",
-          "nameEn": "Complete Blood Count",
-          "cost": 45,
-          "category": "Hematology",
-          "nameAr": "صورة الدم الكاملة (CBC 5-Diff)",
-          "sampleType": "EDTA Whole Blood"
-        }
-      ],
-      "referringDoctor": "د. طارق المنشاوي",
-      "syncStatus": "synced"
     },
     {
       "id": "inv-1791359724811",
