@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:44:39.913Z",
+  "syncedAt": "2026-10-07T21:44:46.844Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -1814,7 +1814,7 @@
               "method": "Direct Accelerator",
               "textReference": "",
               "id": "param-LIPID-2-1791321555658-cut",
-              "result": "",
+              "result": "40",
               "flag": "NORMAL",
               "notes": "دهون الدم الشاملة مع المؤشرات الحسابية"
             },
@@ -1823,11 +1823,11 @@
               "unit": "mg/dL",
               "minNormal": 0,
               "maxNormal": 100,
-              "notes": "Friedewald Formula: Total Chol - HDL - (TG / 5)",
+              "notes": "Friedewald Formula: TC - HDL - (TG/5)",
               "textReference": "",
               "id": "param-LIPID-3-1791321555658-myk",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "151",
+              "flag": "HIGH"
             },
             {
               "name": "VLDL - Cholesterol",
@@ -1845,11 +1845,11 @@
               "unit": "mg/dL",
               "minNormal": 0,
               "maxNormal": 130,
-              "notes": "Auto-calculated: Total Chol - HDL",
+              "notes": "Calculated: Total Cholesterol - HDL",
               "textReference": "",
               "id": "param-LIPID-5-1791321555658-cip",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "182",
+              "flag": "HIGH"
             },
             {
               "name": "Total Chol / HDL Ratio",
@@ -1857,10 +1857,10 @@
               "minNormal": 0,
               "maxNormal": 4.5,
               "textReference": "< 4.5 Desirable",
-              "notes": "Auto-calculated: Total Chol / HDL",
+              "notes": "Desirable < 4.5",
               "id": "param-LIPID-6-1791321555658-xpc",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "5.5",
+              "flag": "HIGH"
             },
             {
               "name": "LDL / HDL Ratio",
@@ -2030,7 +2030,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T21:19:15.663Z",
-      "updatedAt": "2026-10-07T21:44:35.689Z",
+      "updatedAt": "2026-10-07T21:44:42.521Z",
       "invoiceId": "inv-1791321555664"
     },
     {
