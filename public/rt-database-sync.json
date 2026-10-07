@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:20:49.631Z",
+  "syncedAt": "2026-10-07T21:21:00.703Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -1731,8 +1731,8 @@
               "method": "CLIA / Immunoturbidimetry",
               "textReference": "15-150",
               "id": "param-4-1791359462609-kny",
-              "result": "",
-              "flag": ""
+              "result": "25",
+              "flag": "NORMAL"
             }
           ]
         },
@@ -1882,7 +1882,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T07:51:02.609Z",
-      "updatedAt": "2026-10-07T21:20:45.210Z",
+      "updatedAt": "2026-10-07T21:20:56.180Z",
       "invoiceId": "inv-1791359462609",
       "generalComment": ""
     },
