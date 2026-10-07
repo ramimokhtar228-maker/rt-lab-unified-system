@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:15:42.748Z",
+  "syncedAt": "2026-10-07T21:15:56.762Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -1624,7 +1624,7 @@
               "textReference": "Mature differential, no toxic granules, vacuoles, or blasts",
               "method": "Leishman Stain Microscopy",
               "id": "param-35-1791359462608-yrs",
-              "result": "",
+              "result": "NORMAL ",
               "flag": "NORMAL"
             },
             {
@@ -1850,7 +1850,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T07:51:02.609Z",
-      "updatedAt": "2026-10-07T21:15:38.158Z",
+      "updatedAt": "2026-10-07T21:15:52.372Z",
       "invoiceId": "inv-1791359462609",
       "generalComment": "كافة الفحوصات المخبرية للمريض (محمد حسن على) تقع في النطاقات الآمنة بشكل عام مع انتظام مؤشرات الأعضاء الحيوية ونشاط فسيولوجي متوازن."
     },
@@ -2204,7 +2204,7 @@
               "textReference": "Mature differential, no toxic granules, vacuoles, or blasts",
               "method": "Leishman Stain Microscopy",
               "id": "param-35-1791359462608-yrs",
-              "result": "",
+              "result": "NORMAL ",
               "flag": "NORMAL"
             },
             {
@@ -2430,7 +2430,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T07:51:02.609Z",
-      "updatedAt": "2026-10-07T21:15:38.158Z",
+      "updatedAt": "2026-10-07T21:15:52.372Z",
       "invoiceId": "inv-1791359462609",
       "generalComment": "كافة الفحوصات المخبرية للمريض (محمد حسن على) تقع في النطاقات الآمنة بشكل عام مع انتظام مؤشرات الأعضاء الحيوية ونشاط فسيولوجي متوازن."
     },
