@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T13:59:46.137Z",
+  "syncedAt": "2026-10-07T14:00:04.459Z",
   "reports": [
     {
       "id": "rep-1791381439019",
@@ -16,7 +16,7 @@
         "gender": "male",
         "referringDoctorTitle": "Dr.",
         "referringDoctorName": "HIMSELF",
-        "sampleDate": "2026-10-05",
+        "sampleDate": "2026-10-04T13:59:00.000Z",
         "reportingDate": "2026-10-05",
         "clinicalHistory": "Coagulopathy , neuropathy",
         "fastingHours": 0,
@@ -65,7 +65,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T13:57:19.019Z",
-      "updatedAt": "2026-10-07T13:57:19.019Z",
+      "updatedAt": "2026-10-07T14:00:00.284Z",
       "invoiceId": "inv-1791381439019"
     },
     {
