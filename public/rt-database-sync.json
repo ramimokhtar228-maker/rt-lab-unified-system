@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T07:47:06.456Z",
+  "syncedAt": "2026-10-07T07:47:08.000Z",
   "reports": [
     {
       "id": "rep-001",
@@ -360,6 +360,227 @@
     }
   ],
   "incomeRecords": [
+    {
+      "patientPhone": "01095920078",
+      "invoiceNumber": "INV-2026-012",
+      "paidAmount": 349,
+      "remainingAmount": 0,
+      "updatedAt": "2026-10-07T07:36:05.025Z",
+      "cashierName": "أ.د. رامي مختار",
+      "barcode": "RT-10042",
+      "syncStatus": "synced",
+      "patientGender": "female",
+      "tests": [
+        {
+          "sampleType": "Serum (12h Fasting)",
+          "price": 250,
+          "nameEn": "Lipid Profile",
+          "id": "prof-LIPID",
+          "nameAr": "دهون الدم الشاملة مع المؤشرات الحسابية",
+          "category": "Clinical Chemistry",
+          "code": "LIPID"
+        },
+        {
+          "category": "Anemia & Vitamins",
+          "code": "VIT_D",
+          "cost": 85,
+          "turnaroundTime": "خلال ساعتين",
+          "minNormal": 30,
+          "unit": "ng/mL",
+          "sampleType": "Serum (Protected from light)",
+          "method": "CLIA (Chemiluminescence Immunoassay)",
+          "id": "t-79",
+          "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+          "fastingInstructions": "لا يشترط صيام",
+          "maxNormal": 100,
+          "nameAr": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total)",
+          "price": 360,
+          "nameEn": "25-Hydroxy Vitamin D Total"
+        },
+        {
+          "unit": "mg/dL",
+          "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
+          "method": "Uricase / POD Enzymatic Colorimetric",
+          "category": "Kidney Function",
+          "cost": 12,
+          "code": "URIC",
+          "price": 88,
+          "minNormal": 3.5,
+          "id": "t-22",
+          "nameEn": "Serum Uric Acid",
+          "nameAr": "حمض البوليك والنقرس (Serum Uric Acid)",
+          "turnaroundTime": "فوري (ساعة)",
+          "maxNormal": 7.2,
+          "fastingInstructions": "صيام من 4 إلى 8 ساعات يفضل",
+          "sampleType": "Serum"
+        },
+        {
+          "price": 88,
+          "sampleType": "Fluoride Plasma / Serum",
+          "maxNormal": 100,
+          "id": "t-1",
+          "minNormal": 70,
+          "turnaroundTime": "فوري (ساعة)",
+          "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
+          "unit": "mg/dL",
+          "method": "Hexokinase / GOD-PAP",
+          "nameEn": "Fasting Blood Sugar",
+          "category": "Diabetes",
+          "cost": 12,
+          "fastingInstructions": "صيام من 8 إلى 10 ساعات (يُسمح بالماء فقط)",
+          "nameAr": "سكر الدم الصائم (FBS)",
+          "code": "GLU_F"
+        },
+        {
+          "cost": 12,
+          "turnaroundTime": "فوري (ساعة)",
+          "code": "CREAT",
+          "maxNormal": 1.2,
+          "id": "t-19",
+          "category": "Kidney Function",
+          "unit": "mg/dL",
+          "minNormal": 0.6,
+          "fastingInstructions": "لا يشترط صيام ولكن يفضل تجنب الوجبات اللحمية الدسمة",
+          "nameAr": "كرياتينين بالدم (Serum Creatinine)",
+          "nameEn": "Serum Creatinine",
+          "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
+          "sampleType": "Serum",
+          "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.1 mg/dL",
+          "price": 88
+        },
+        {
+          "method": "Urease / GLDH Enzymatic Kinetic",
+          "code": "UREA",
+          "minNormal": 15,
+          "cost": 12,
+          "category": "Kidney Function",
+          "sampleType": "Serum",
+          "unit": "mg/dL",
+          "textReference": "15 - 45 mg/dL",
+          "nameAr": "بولينا بالدم (Blood Urea)",
+          "fastingInstructions": "لا يشترط صيام",
+          "nameEn": "Blood Urea",
+          "turnaroundTime": "فوري (ساعة)",
+          "id": "t-20",
+          "maxNormal": 45,
+          "price": 88
+        },
+        {
+          "id": "t-26",
+          "sampleType": "Serum",
+          "maxNormal": 10.3,
+          "unit": "mg/dL",
+          "turnaroundTime": "خلال ساعتين",
+          "fastingInstructions": "صيام 8-10 ساعات (يفضل صباحاً)",
+          "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
+          "code": "CALCIUM_TOTAL",
+          "category": "Minerals & Bone",
+          "cost": 15,
+          "price": 110,
+          "method": "Arsenazo III / CPC Photometric",
+          "nameEn": "Total Serum Calcium",
+          "minNormal": 8.6,
+          "nameAr": "الكالسيوم الكلي (Total Serum Calcium)"
+        },
+        {
+          "fastingInstructions": "لا يشترط صيام",
+          "sampleType": "Serum",
+          "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
+          "price": 88,
+          "minNormal": 0,
+          "method": "IFCC Kinetic UV without Pyridoxal Phosphate",
+          "category": "Liver Function",
+          "cost": 12,
+          "maxNormal": 41,
+          "code": "ALT",
+          "turnaroundTime": "فوري (ساعة)",
+          "id": "t-32",
+          "nameAr": "إنزيم كبد ALT / SGPT",
+          "nameEn": "Alanine Aminotransferase (ALT / SGPT)",
+          "unit": "U/L"
+        },
+        {
+          "turnaroundTime": "فوري (ساعة)",
+          "price": 88,
+          "method": "IFCC Kinetic UV",
+          "textReference": "Adult Males: < 40 U/L | Adult Females: < 32 U/L",
+          "maxNormal": 40,
+          "nameEn": "Aspartate Aminotransferase (AST / SGOT)",
+          "nameAr": "إنزيم كبد AST / SGOT",
+          "id": "t-33",
+          "fastingInstructions": "لا يشترط صيام",
+          "minNormal": 0,
+          "category": "Liver Function",
+          "unit": "U/L",
+          "sampleType": "Serum",
+          "cost": 12,
+          "code": "AST"
+        },
+        {
+          "minNormal": 36,
+          "turnaroundHours": 2,
+          "unit": "g/L",
+          "price": 210,
+          "category": "Clinical Hematology ",
+          "id": "test-1791276005667",
+          "code": "HB",
+          "fastingInstructions": "لا يشترط الصيام",
+          "sampleType": " EDTA BLOOD ",
+          "method": "Enzymatic",
+          "textReference": "Male : 13.5-17.5 /Female: 12.5-15.5",
+          "maxNormal": 49,
+          "nameEn": "HB %",
+          "nameAr": "هبموجلوبين "
+        },
+        {
+          "sampleType": "EDTA ",
+          "turnaroundHours": 2,
+          "category": "Clinical Hematology ",
+          "unit": "%",
+          "maxNormal": 49,
+          "id": "test-1791282363076",
+          "code": "HCT",
+          "method": "Enzymatic",
+          "fastingInstructions": "لا يشترط الصيام",
+          "textReference": "36-49",
+          "price": 10,
+          "minNormal": 36,
+          "nameEn": "Hematocrit %",
+          "nameAr": "هيماتوكريت "
+        },
+        {
+          "nameAr": "الهرمون المنشط للغدة الدرقية (TSH Ultrasensitive)",
+          "nameEn": "Thyroid Stimulating Hormone (TSH)",
+          "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+          "method": "CLIA (3rd Generation Chemiluminescence)",
+          "turnaroundTime": "خلال ساعتين",
+          "id": "t-53",
+          "maxNormal": 4.94,
+          "sampleType": "Serum",
+          "cost": 30,
+          "code": "TSH",
+          "minNormal": 0.35,
+          "category": "Thyroid",
+          "price": 150,
+          "unit": "uIU/mL"
+        }
+      ],
+      "paymentStatus": "paid",
+      "subtotal": 349,
+      "createdAt": "2026-10-07T07:36:05.025Z",
+      "paymentMethod": "cash",
+      "patientAge": 33,
+      "labNumber": "RT-2026-012",
+      "isHomeVisit": false,
+      "visitFee": 0,
+      "netAmount": 349,
+      "id": "inv-1791358565025",
+      "discount": 0,
+      "testsSubtotal": 349,
+      "patientName": "كوثر ابراهيم",
+      "referringDoctor": "HERSELF",
+      "branch": "فرع القصر العيني - الرئيسي"
+    },
     {
       "id": "inv-001",
       "invoiceNumber": "INV-2026-001",
@@ -3064,7 +3285,8 @@
         "EDTA Whole Blood",
         "Clean Urine"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة الفحص الدوري الشامل (Wellness Plus)"
     },
     {
       "id": "pkg-2",
@@ -3094,7 +3316,8 @@
         "Serum",
         "EDTA Whole Blood"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة صحة الرجل والبروستاتا الشاملة"
     },
     {
       "id": "pkg-3",
@@ -3124,7 +3347,8 @@
         "EDTA Whole Blood",
         "Clean Urine"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة صحة المرأة والهرمونات الحيوية"
     },
     {
       "id": "pkg-4",
@@ -3158,7 +3382,8 @@
         "EDTA Whole Blood",
         "Morning Urine"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة متابعة السكر والوقاية من المضاعفات"
     },
     {
       "id": "pkg-5",
@@ -3188,7 +3413,8 @@
         "Serum",
         "EDTA Whole Blood"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة الفحص الطبي الشامل لما قبل الزواج"
     },
     {
       "id": "pkg-6",
@@ -3223,7 +3449,8 @@
         "Serum",
         "Citrate Plasma"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "باقة وظائف الكبد والفيروسات الكبدية الكاملة"
     },
     {
       "id": "pkg-7",
@@ -3256,7 +3483,8 @@
         "Serum",
         "Fresh Urine"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "باقة وظائف الكلى والأملاح والنقرس"
     },
     {
       "id": "pkg-8",
@@ -3289,7 +3517,8 @@
         "Serum",
         "Citrate Plasma"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "باقة صحة القلب والدهون وتصلب الشرايين"
     },
     {
       "id": "pkg-9",
@@ -3321,7 +3550,8 @@
         "Serum",
         "EDTA Whole Blood"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة الفيتامينات والمعادن والطاقة الحيوية"
     },
     {
       "id": "pkg-10",
@@ -3359,7 +3589,8 @@
         "Fresh Urine",
         "Stool Specimen"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة كبار السن التنفيذية الشاملة (Golden Age)"
     },
     {
       "id": "pkg-11",
@@ -3392,7 +3623,8 @@
         "Serum",
         "EDTA Whole Blood"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة تشخيص تساقط الشعر والأنيميا والهرمونات"
     },
     {
       "id": "pkg-12",
@@ -3427,7 +3659,8 @@
         "Serum",
         "EDTA Whole Blood"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "باقة الرياضيين واللياقة وبناء الأجسام"
     },
     {
       "id": "pkg-13",
@@ -3459,7 +3692,8 @@
         "Fresh Urine",
         "Stool Specimen"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "باقة صحة ونمو الأطفال والديدان وفقر الدم"
     },
     {
       "id": "pkg-14",
@@ -3490,7 +3724,8 @@
         "EDTA Whole Blood",
         "Fresh Stool Specimen"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "باقة الجهاز الهضمي والقولون وجرثومة المعدة"
     },
     {
       "id": "pkg-15",
@@ -3539,7 +3774,8 @@
         "Fresh Urine",
         "Stool"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة الفحص الشامل الملكية VIP د. رامي مختار (32 فحص شامل)"
     }
   ]
 }
