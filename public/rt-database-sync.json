@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T22:08:10.716Z",
+  "syncedAt": "2026-10-07T22:08:36.824Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -333,7 +333,7 @@
       ],
       "staff": {
         "labChemist": "مني احمد ",
-        "verifiedBy": "رحاب على عبدالحميد ",
+        "verifiedBy": "أ.د. رامي مختار",
         "pathologist": " رامي مختار",
         "chemistTitle": "أخصائي أول كيمياء إكلينيكية وهرمونات",
         "verifierTitle": "طبيب باثولوجى",
@@ -342,9 +342,9 @@
         "verifierLicense": "EGY-MGT-11024",
         "pathologistLicense": "EGY-MED-48201"
       },
-      "status": "released",
+      "status": "verified",
       "createdAt": "2026-10-07T19:22:07.197Z",
-      "updatedAt": "2026-10-07T21:06:19.670Z",
+      "updatedAt": "2026-10-07T22:08:21.409Z",
       "invoiceId": "inv-1791400927197"
     },
     {
@@ -818,7 +818,7 @@
       ],
       "staff": {
         "labChemist": "منى احمد",
-        "verifiedBy": "رحاب على عبدالحميد",
+        "verifiedBy": "أ.د. رامي مختار",
         "pathologist": "رامي مختار",
         "chemistTitle": "أخصائي أول كيمياء إكلينيكية وهرمونات",
         "verifierTitle": "طبيب باثولوجى / المدير التنفيذي",
@@ -827,9 +827,9 @@
         "verifierLicense": "EGY-MGT-11024",
         "pathologistLicense": "EGY-MED-48201"
       },
-      "status": "draft",
+      "status": "verified",
       "createdAt": "2026-10-07T07:55:24.810Z",
-      "updatedAt": "2026-10-07T22:06:38.540Z",
+      "updatedAt": "2026-10-07T22:08:24.861Z",
       "invoiceId": "inv-1791359724811"
     },
     {
@@ -1352,7 +1352,7 @@
       ],
       "staff": {
         "labChemist": "منى احمد",
-        "verifiedBy": "رحاب على عبدالحميد",
+        "verifiedBy": "أ.د. رامي مختار",
         "pathologist": "رامي مختار",
         "chemistTitle": "أخصائي أول كيمياء إكلينيكية وهرمونات",
         "verifierTitle": "طبيب باثولوجى / المدير التنفيذي",
@@ -1361,9 +1361,9 @@
         "verifierLicense": "EGY-MGT-11024",
         "pathologistLicense": "EGY-MED-48201"
       },
-      "status": "released",
+      "status": "verified",
       "createdAt": "2026-10-07T07:51:02.609Z",
-      "updatedAt": "2026-10-07T21:43:12.220Z",
+      "updatedAt": "2026-10-07T22:08:28.024Z",
       "invoiceId": "inv-1791359462609",
       "generalComment": ""
     },
@@ -1638,7 +1638,7 @@
       ],
       "staff": {
         "labChemist": "منى احمد",
-        "verifiedBy": "رحاب على عبدالحميد",
+        "verifiedBy": "أ.د. رامي مختار",
         "pathologist": "رامي مختار",
         "chemistTitle": "أخصائي أول كيمياء إكلينيكية وهرمونات",
         "verifierTitle": "طبيب باثولوجى / المدير التنفيذي",
@@ -1647,9 +1647,9 @@
         "verifierLicense": "EGY-MGT-11024",
         "pathologistLicense": "EGY-MED-48201"
       },
-      "status": "released",
+      "status": "verified",
       "createdAt": "2026-10-07T07:36:05.025Z",
-      "updatedAt": "2026-10-07T21:43:22.907Z",
+      "updatedAt": "2026-10-07T22:08:30.809Z",
       "invoiceId": "inv-1791358565025"
     },
     {
@@ -1923,7 +1923,7 @@
       ],
       "staff": {
         "labChemist": "منى احمد",
-        "verifiedBy": "رحاب على عبدالحميد",
+        "verifiedBy": "أ.د. رامي مختار",
         "pathologist": "رامي مختار",
         "chemistTitle": "أخصائي أول كيمياء إكلينيكية وهرمونات",
         "verifierTitle": "طبيب باثولوجى / المدير التنفيذي",
@@ -1932,9 +1932,9 @@
         "verifierLicense": "EGY-MGT-11024",
         "pathologistLicense": "EGY-MED-48201"
       },
-      "status": "draft",
+      "status": "verified",
       "createdAt": "2026-10-06T21:19:15.663Z",
-      "updatedAt": "2026-10-07T21:50:48.261Z",
+      "updatedAt": "2026-10-07T22:08:32.602Z",
       "invoiceId": "inv-1791321555664"
     },
     {
