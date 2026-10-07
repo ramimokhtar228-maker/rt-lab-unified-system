@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T23:14:17.503Z",
+  "syncedAt": "2026-10-07T23:14:24.688Z",
   "reports": [
     {
       "id": "rep-1791414844234",
@@ -11259,20 +11259,11 @@
       "barcode": "RT-10062",
       "cardNumber": "RT-SILVER-10062",
       "bloodGroup": "",
-      "totalPoints": 615,
-      "tier": "Gold",
-      "lifetimeSpent": 615,
+      "totalPoints": 333,
+      "tier": "Silver",
+      "lifetimeSpent": 333,
       "issueDate": "2026-10-07",
       "transactions": [
-        {
-          "id": "tx-1791414844478",
-          "date": "2026-10-07",
-          "type": "earn",
-          "points": 282,
-          "description": "اكتساب نقاط عن فاتورة رقم RT-2026-032",
-          "invoiceNumber": "RT-2026-032",
-          "amountEGP": 282
-        },
         {
           "id": "tx-1791414459348",
           "date": "2026-10-07",
