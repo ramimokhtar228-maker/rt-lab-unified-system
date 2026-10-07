@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:31:28.318Z",
+  "syncedAt": "2026-10-07T21:31:33.608Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -6789,9 +6789,9 @@
         "verifiedBy": "",
         "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
       },
-      "generalComment": "طلب فحص مالي رقم RT-BK-9599 - تم التسميع آلياً من منظومة الفواتير",
+      "generalComment": " ",
       "createdAt": "2026-10-04T14:50:55.998Z",
-      "updatedAt": "2026-10-07T21:31:23.958Z",
+      "updatedAt": "2026-10-07T21:31:29.384Z",
       "profiles": [
         {
           "id": "prof-pkg-1791408346561",
