@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:25:07.463Z",
+  "syncedAt": "2026-10-07T21:25:15.020Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -6776,11 +6776,12 @@
         "referringDoctorName": "فحص بفرع (معامل RT للتحاليل التشخيصية)",
         "sampleDate": "2026-10-01T11:50:00.000Z",
         "reportingDate": "2026-10-06T11:50:00.000Z",
-        "clinicalHistory": "طلب صادر من الفاتورة المالية RT-BK-9599 - السداد: مسدد بالكامل",
+        "clinicalHistory": " ",
         "bloodGroup": "O+",
         "totalCost": 201,
         "loyaltyCardIssued": true,
-        "loyaltyCardNumber": "RT-2026-0006"
+        "loyaltyCardNumber": "RT-2026-0006",
+        "fastingHours": 12
       },
       "status": "draft",
       "staff": {
@@ -6790,7 +6791,7 @@
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-9599 - تم التسميع آلياً من منظومة الفواتير",
       "createdAt": "2026-10-04T14:50:55.998Z",
-      "updatedAt": "2026-10-07T21:25:03.311Z",
+      "updatedAt": "2026-10-07T21:25:10.796Z",
       "profiles": [
         {
           "id": "prof-inc-1791125455998-1",
