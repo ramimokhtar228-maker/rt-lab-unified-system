@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:16:09.718Z",
+  "syncedAt": "2026-10-07T21:16:38.327Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -1310,7 +1310,7 @@
           "titleAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
           "category": "Hematology",
           "sampleType": "EDTA Whole Blood",
-          "interpretation": "Microscopic evaluation and complete differential indices assessed according to international hematology criteria.",
+          "interpretation": "Mild  hypochromic anemia, iron deficiency picture is suggested. Serum Ferritin is recommended.",
           "parameters": [
             {
               "name": "Hemoglobin (Hb)",
@@ -1615,7 +1615,7 @@
               "textReference": "Normocytic normochromic, no anisopoikilocytosis",
               "method": "Leishman Stain Microscopy",
               "id": "param-34-1791359462608-h5x",
-              "result": "hypochromic , anisocytosis",
+              "result": "HYPOCHROMIC , ANISOCYTOSIS ",
               "flag": "NORMAL"
             },
             {
@@ -1850,7 +1850,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T07:51:02.609Z",
-      "updatedAt": "2026-10-07T21:16:05.257Z",
+      "updatedAt": "2026-10-07T21:16:34.038Z",
       "invoiceId": "inv-1791359462609",
       "generalComment": "كافة الفحوصات المخبرية للمريض (محمد حسن على) تقع في النطاقات الآمنة بشكل عام مع انتظام مؤشرات الأعضاء الحيوية ونشاط فسيولوجي متوازن."
     },
@@ -1890,7 +1890,7 @@
           "titleAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
           "category": "Hematology",
           "sampleType": "EDTA Whole Blood",
-          "interpretation": "Microscopic evaluation and complete differential indices assessed according to international hematology criteria.",
+          "interpretation": "Mild  hypochromic anemia, iron deficiency picture is suggested. Serum Ferritin is recommended.",
           "parameters": [
             {
               "name": "Hemoglobin (Hb)",
@@ -2195,7 +2195,7 @@
               "textReference": "Normocytic normochromic, no anisopoikilocytosis",
               "method": "Leishman Stain Microscopy",
               "id": "param-34-1791359462608-h5x",
-              "result": "hypochromic , anisocytosis",
+              "result": "HYPOCHROMIC , ANISOCYTOSIS ",
               "flag": "NORMAL"
             },
             {
@@ -2430,7 +2430,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T07:51:02.609Z",
-      "updatedAt": "2026-10-07T21:16:05.257Z",
+      "updatedAt": "2026-10-07T21:16:34.038Z",
       "invoiceId": "inv-1791359462609",
       "generalComment": "كافة الفحوصات المخبرية للمريض (محمد حسن على) تقع في النطاقات الآمنة بشكل عام مع انتظام مؤشرات الأعضاء الحيوية ونشاط فسيولوجي متوازن."
     },
