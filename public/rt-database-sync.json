@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:47:05.795Z",
+  "syncedAt": "2026-10-07T21:47:26.043Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -1779,7 +1779,7 @@
           "titleEn": "Comprehensive Annual Wellness Package",
           "category": "باقة فحوصات شاملة",
           "sampleType": "Serum + EDTA Whole Blood + Clean Urine",
-          "interpretation": " CBC WITH DIFFERENTIAL FILM, IRON PROFILE , MG, ZN , ",
+          "interpretation": " CBC WITH DIFFERENTIAL FILM, IRON PROFILE , MG, ZN , PH4, ALP, PTH RECOMMENDED ",
           "parameters": [
             {
               "name": "Total Serum Cholesterol",
@@ -2019,7 +2019,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T21:19:15.663Z",
-      "updatedAt": "2026-10-07T21:47:01.592Z",
+      "updatedAt": "2026-10-07T21:47:21.827Z",
       "invoiceId": "inv-1791321555664"
     },
     {
