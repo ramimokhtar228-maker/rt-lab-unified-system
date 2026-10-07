@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:18:02.230Z",
+  "syncedAt": "2026-10-07T21:18:33.662Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -1687,7 +1687,7 @@
               "method": "Ferene / Colorimetric",
               "textReference": "",
               "id": "param-0-1791359462608-3bn",
-              "result": "",
+              "result": "85",
               "flag": "NORMAL"
             },
             {
@@ -1882,7 +1882,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T07:51:02.609Z",
-      "updatedAt": "2026-10-07T21:17:57.971Z",
+      "updatedAt": "2026-10-07T21:18:29.228Z",
       "invoiceId": "inv-1791359462609",
       "generalComment": ""
     },
