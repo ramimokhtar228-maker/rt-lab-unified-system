@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T14:00:14.564Z",
+  "syncedAt": "2026-10-07T14:00:44.112Z",
   "reports": [
     {
       "id": "rep-1791381439019",
@@ -43,7 +43,7 @@
             {
               "id": "p-1791381439019-gbs",
               "name": "جرثومة المعدة بالبراز كمي (H. Pylori Antigen in Stool) (Helicobacter Pylori Stool Antigen (HpSA))",
-              "result": "",
+              "result": "Negative ",
               "unit": "Qualitative",
               "textReference": "Negative (No H. Pylori antigen detected in stool)",
               "flag": "NORMAL",
@@ -65,7 +65,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T13:57:19.019Z",
-      "updatedAt": "2026-10-07T14:00:10.407Z",
+      "updatedAt": "2026-10-07T14:00:39.959Z",
       "invoiceId": "inv-1791381439019"
     },
     {
