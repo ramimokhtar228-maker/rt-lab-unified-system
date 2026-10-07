@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:45:59.884Z",
+  "syncedAt": "2026-10-07T21:46:13.947Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -1925,19 +1925,19 @@
             {
               "id": "p-pkg-5-1791321555660-i6z",
               "name": "الكالسيوم الكلي (Total Serum Calcium) (Total Serum Calcium)",
-              "result": "",
+              "result": "8.00",
               "unit": "mg/dL",
               "minNormal": 8.6,
               "maxNormal": 10.3,
               "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
-              "flag": "NORMAL",
+              "flag": "LOW",
               "method": "Arsenazo III / CPC Photometric",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
             },
             {
               "id": "p-pkg-6-1791321555660-4bx",
               "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
-              "result": "",
+              "result": "21",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 41,
@@ -1949,7 +1949,7 @@
             {
               "id": "p-pkg-7-1791321555660-t67",
               "name": "إنزيم كبد AST / SGOT (Aspartate Aminotransferase (AST / SGOT))",
-              "result": "",
+              "result": "33",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 40,
@@ -2019,7 +2019,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T21:19:15.663Z",
-      "updatedAt": "2026-10-07T21:45:55.687Z",
+      "updatedAt": "2026-10-07T21:46:09.742Z",
       "invoiceId": "inv-1791321555664"
     },
     {
