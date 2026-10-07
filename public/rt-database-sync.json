@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T22:09:03.832Z",
+  "syncedAt": "2026-10-07T22:09:31.283Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -6819,15 +6819,15 @@
         "loyaltyCardIssued": true,
         "loyaltyCardNumber": "RT-2026-0010"
       },
-      "status": "draft",
+      "status": "verified",
       "staff": {
         "labChemist": "",
-        "verifiedBy": "",
+        "verifiedBy": "أ.د. رامي مختار",
         "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-9242 - تم التسميع آلياً من منظومة الفواتير",
       "createdAt": "2026-10-04T14:35:32.954Z",
-      "updatedAt": "2026-10-04T14:35:32.954Z",
+      "updatedAt": "2026-10-07T22:09:19.105Z",
       "profiles": [
         {
           "id": "prof-inc-1791124532954-1",
@@ -6889,15 +6889,15 @@
         "loyaltyCardIssued": true,
         "loyaltyCardNumber": "RT-2026-0011"
       },
-      "status": "draft",
+      "status": "verified",
       "staff": {
         "labChemist": "",
-        "verifiedBy": "",
+        "verifiedBy": "أ.د. رامي مختار",
         "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-5752 - تم التسميع آلياً من منظومة الفواتير",
       "createdAt": "2026-10-04T14:28:04.105Z",
-      "updatedAt": "2026-10-04T14:28:04.105Z",
+      "updatedAt": "2026-10-07T22:09:21.714Z",
       "profiles": [
         {
           "id": "prof-inc-1791124084105-1",
@@ -7652,15 +7652,15 @@
         "appointmentDate": "2026-09-30",
         "appointmentTime": "11:00 ص"
       },
-      "status": "draft",
+      "status": "verified",
       "staff": {
         "labChemist": "",
-        "verifiedBy": "",
+        "verifiedBy": "أ.د. رامي مختار",
         "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-8097 - تم التسميع آلياً من منظومة الفواتير",
       "createdAt": "2026-10-04T14:16:24.421Z",
-      "updatedAt": "2026-10-05T00:06:10.706Z",
+      "updatedAt": "2026-10-07T22:09:23.720Z",
       "profiles": [
         {
           "id": "prof-inc-1791123384421-12",
@@ -7950,15 +7950,15 @@
         "loyaltyCardIssued": true,
         "loyaltyCardNumber": "RT-2026-0011"
       },
-      "status": "in_progress",
+      "status": "verified",
       "staff": {
         "labChemist": "",
-        "verifiedBy": "",
+        "verifiedBy": "أ.د. رامي مختار",
         "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
       },
       "generalComment": "",
       "createdAt": "2026-10-04T06:29:57.660Z",
-      "updatedAt": "2026-10-04T06:30:12.430Z",
+      "updatedAt": "2026-10-07T22:09:25.577Z",
       "profiles": [
         {
           "id": "prof-1791095397668",
@@ -7994,15 +7994,15 @@
         "loyaltyCardIssued": true,
         "loyaltyCardNumber": "RT-2026-0014"
       },
-      "status": "in_progress",
+      "status": "verified",
       "staff": {
         "labChemist": "",
-        "verifiedBy": "",
+        "verifiedBy": "أ.د. رامي مختار",
         "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
       },
       "generalComment": "",
       "createdAt": "2026-10-03T23:04:19.875Z",
-      "updatedAt": "2026-10-03T23:04:44.635Z",
+      "updatedAt": "2026-10-07T22:09:26.969Z",
       "profiles": [
         {
           "id": "prof-1791068659875",
