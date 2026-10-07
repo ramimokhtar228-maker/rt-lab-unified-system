@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T15:07:10.084Z",
+  "syncedAt": "2026-10-07T15:07:14.642Z",
   "reports": [
     {
       "id": "rep-1791381439019",
@@ -9064,12 +9064,12 @@
       "nameAr": "جرثومة المعدة بالبراز كمي (H. Pylori Antigen in Stool)",
       "nameEn": "Helicobacter Pylori Stool Antigen (HpSA)",
       "category": "Gastroenterology",
-      "price": 190,
+      "price": 777,
       "cost": 40,
       "sampleType": "Fresh Stool Specimen",
       "turnaroundTime": "خلال 3 ساعات",
-      "unit": "Qualitative",
-      "textReference": "Negative (No H. Pylori antigen detected in stool)",
+      "unit": " ng/mL",
+      "textReference": "Negative  : 0.0 – 0.9  Equivocal   : 0.9 – 1.1  Positive  : > 1.1",
       "method": "Rapid Chromatographic Immunoassay / ELISA",
       "fastingInstructions": "عينة براز طازجة، والتوقف عن المضادات الحيوية قبلها بأسبوعين"
     },
@@ -9079,14 +9079,14 @@
       "nameAr": "أجسام مضادة لجرثومة المعدة بالدم (H. Pylori IgG & IgM)",
       "nameEn": "H. Pylori Serum Antibodies (IgG & IgM)",
       "category": "Gastroenterology",
-      "price": 180,
+      "price": 444,
       "cost": 40,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
       "unit": "U/mL",
       "minNormal": 0,
       "maxNormal": 0.9,
-      "textReference": "Negative: < 0.90 U/mL | Positive: >= 1.10 U/mL",
+      "textReference": "Negative  : 0.0 – 0.9  Equivocal   : 0.9 – 1.1  Positive  : > 1.1",
       "method": "ELISA / Rapid Serology",
       "fastingInstructions": "لا يشترط صيام"
     },
