@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:55:57.553Z",
+  "syncedAt": "2026-10-07T21:56:27.194Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -361,7 +361,7 @@
         "gender": "female",
         "referringDoctorTitle": "Dr.",
         "referringDoctorName": "HERSELF",
-        "sampleDate": "2026-10-04",
+        "sampleDate": "2026-10-03T21:56:00.000Z",
         "reportingDate": "2026-10-04",
         "clinicalHistory": "DM",
         "fastingHours": 0,
@@ -915,7 +915,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T07:55:24.810Z",
-      "updatedAt": "2026-10-07T14:14:13.240Z",
+      "updatedAt": "2026-10-07T21:56:22.849Z",
       "invoiceId": "inv-1791359724811"
     },
     {
