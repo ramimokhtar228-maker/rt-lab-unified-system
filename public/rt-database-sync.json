@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:43:05.688Z",
+  "syncedAt": "2026-10-07T21:43:16.571Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -1447,9 +1447,9 @@
         "verifierLicense": "EGY-MGT-11024",
         "pathologistLicense": "EGY-MED-48201"
       },
-      "status": "draft",
+      "status": "released",
       "createdAt": "2026-10-07T07:51:02.609Z",
-      "updatedAt": "2026-10-07T21:22:46.343Z",
+      "updatedAt": "2026-10-07T21:43:12.220Z",
       "invoiceId": "inv-1791359462609",
       "generalComment": ""
     },
