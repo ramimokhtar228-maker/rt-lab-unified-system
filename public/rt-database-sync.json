@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:59:13.403Z",
+  "syncedAt": "2026-10-07T21:59:35.169Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -543,7 +543,7 @@
               "maxNormal": 8,
               "textReference": "2 - 8 %",
               "id": "param-19-1791359724809-uzw",
-              "result": "",
+              "result": "03",
               "flag": "NORMAL"
             },
             {
@@ -553,7 +553,7 @@
               "maxNormal": 6,
               "textReference": "1 - 6 %",
               "id": "param-20-1791359724809-kxc",
-              "result": "",
+              "result": "03",
               "flag": "NORMAL"
             },
             {
@@ -563,7 +563,7 @@
               "maxNormal": 1,
               "textReference": "0 - 1 %",
               "id": "param-21-1791359724809-ahg",
-              "result": "",
+              "result": "00",
               "flag": "NORMAL"
             },
             {
@@ -573,7 +573,7 @@
               "maxNormal": 0,
               "textReference": "0 % (Absent in normal blood)",
               "id": "param-22-1791359724809-3tr",
-              "result": "",
+              "result": "00",
               "flag": "NORMAL"
             },
             {
@@ -583,7 +583,7 @@
               "maxNormal": 0,
               "textReference": "0 % (Absent in normal blood)",
               "id": "param-23-1791359724809-ga7",
-              "result": "",
+              "result": "00",
               "flag": "NORMAL"
             },
             {
@@ -593,7 +593,7 @@
               "maxNormal": 0,
               "textReference": "0 % (Absent in normal blood)",
               "id": "param-24-1791359724809-iwb",
-              "result": "",
+              "result": "00",
               "flag": "NORMAL"
             },
             {
@@ -626,7 +626,7 @@
               "notes": "Auto-calculated: (WBC × Mono%) / 100",
               "textReference": "0.2 - 0.8 x10^3/µL",
               "id": "param-27-1791359724809-gmz",
-              "result": "",
+              "result": "0.3",
               "flag": "NORMAL"
             },
             {
@@ -637,7 +637,7 @@
               "notes": "Auto-calculated: (WBC × Eos%) / 100",
               "textReference": "0.04 - 0.44 x10^3/µL",
               "id": "param-28-1791359724809-00c",
-              "result": "",
+              "result": "0.3",
               "flag": "NORMAL"
             },
             {
@@ -648,8 +648,8 @@
               "notes": "Auto-calculated: (WBC × Baso%) / 100",
               "textReference": "0.01 - 0.1 x10^3/µL",
               "id": "param-29-1791359724809-j0r",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "0",
+              "flag": "LOW"
             },
             {
               "name": "NLR (Neutrophil/Lymphocyte)",
@@ -865,7 +865,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T07:55:24.810Z",
-      "updatedAt": "2026-10-07T21:59:08.930Z",
+      "updatedAt": "2026-10-07T21:59:30.881Z",
       "invoiceId": "inv-1791359724811"
     },
     {
