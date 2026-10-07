@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T07:56:09.159Z",
+  "syncedAt": "2026-10-07T07:56:46.492Z",
   "reports": [
     {
       "id": "rep-1791359724810",
@@ -2719,7 +2719,7 @@
       "staff": {
         "pathologist": "أ.د. رامي مختار",
         "labChemist": "د/ عمر فؤاد القاضي",
-        "verifiedBy": "أ/ سارة إبراهيم الشربيني"
+        "verifiedBy": "أ.د. رامي مختار"
       },
       "packageApplied": {
         "code": "PKG-ANNUAL-WELLNESS",
@@ -2727,8 +2727,8 @@
         "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
         "packagePrice": 199
       },
-      "status": "draft",
-      "updatedAt": "2026-10-06T21:11:10.835Z",
+      "status": "verified",
+      "updatedAt": "2026-10-07T07:56:44.461Z",
       "createdAt": "2026-10-06T11:48:51.555Z",
       "reportNumber": "RT-2026-007",
       "patient": {
