@@ -127,8 +127,39 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
 
   // Financial Calculations
   const getTestDetails = (code: string) => {
-    return testCatalog.find(t => t.code.toUpperCase() === code.toUpperCase())
-        || INITIAL_INDIVIDUAL_TESTS.find(t => t.code.toUpperCase() === code.toUpperCase());
+    const key = code.toUpperCase();
+    return testCatalog.find(t => t.code.toUpperCase() === key)
+        || INITIAL_INDIVIDUAL_TESTS.find(t => t.code.toUpperCase() === key);
+  };
+
+  /** Always resolve display/billing price from the official catalog (same source as دليل التحاليل) */
+  const resolveCatalogPrice = (code: string, fallback?: number): number => {
+    const key = code.toUpperCase();
+    const ind = getTestDetails(key);
+    if (ind && typeof ind.price === 'number' && ind.price > 0) return ind.price;
+    const prof = LAB_CATALOG.find(p => p.code.toUpperCase() === key);
+    if (prof && typeof (prof as any).profilePrice === 'number' && (prof as any).profilePrice > 0) {
+      return (prof as any).profilePrice;
+    }
+    return fallback && fallback > 0 ? fallback : 0;
+  };
+
+  const normalizeTestItem = (test: InvoiceTestItem): InvoiceTestItem => {
+    const cat = getTestDetails(test.code);
+    const price = resolveCatalogPrice(test.code, test.price);
+    return {
+      ...test,
+      ...(cat || {}),
+      id: test.id || cat?.id || `t-${test.code}`,
+      code: (cat?.code || test.code).toUpperCase() === (cat?.code || test.code) ? (cat?.code || test.code) : test.code,
+      nameAr: cat?.nameAr || test.nameAr,
+      nameEn: cat?.nameEn || test.nameEn,
+      category: cat?.category || test.category,
+      price,
+      sampleType: cat?.sampleType || test.sampleType,
+      unit: cat?.unit || (test as any).unit,
+      cost: cat?.cost ?? (test as any).cost
+    } as InvoiceTestItem;
   };
 
   const { packageItems, extraItems } = useMemo(() => {
@@ -175,6 +206,12 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
   const totalDiscount = percentageDiscountAmount + pointsRedeemValue;
   const netTotal = Math.max(0, grossSubtotal - totalDiscount);
 
+  // Keep booking list prices matched to دليل التحاليل / testCatalog
+  useEffect(() => {
+    setSelectedTests(prev => prev.map(t => normalizeTestItem(t)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [testCatalog]);
+
   // Auto set paid amount to netTotal
   useEffect(() => {
     setPaidAmount(netTotal);
@@ -184,16 +221,18 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
 
   // Add/Remove Tests
   const handleAddTest = (test: InvoiceTestItem) => {
-    if (!selectedTests.some(t => t.code.toUpperCase() === test.code.toUpperCase())) {
-      setSelectedTests(prev => [...prev, test]);
+    const normalized = normalizeTestItem(test);
+    if (!selectedTests.some(t => t.code.toUpperCase() === normalized.code.toUpperCase())) {
+      setSelectedTests(prev => [...prev, normalized]);
     }
   };
 
   const handleToggleTest = (test: InvoiceTestItem) => {
-    if (selectedTests.some(t => t.code.toUpperCase() === test.code.toUpperCase())) {
-      setSelectedTests(prev => prev.filter(t => t.code.toUpperCase() !== test.code.toUpperCase()));
+    const normalized = normalizeTestItem(test);
+    if (selectedTests.some(t => t.code.toUpperCase() === normalized.code.toUpperCase())) {
+      setSelectedTests(prev => prev.filter(t => t.code.toUpperCase() !== normalized.code.toUpperCase()));
     } else {
-      setSelectedTests(prev => [...prev, test]);
+      setSelectedTests(prev => [...prev, normalized]);
     }
   };
 
@@ -209,7 +248,7 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
           nameAr: profile.titleAr,
           nameEn: profile.titleEn,
           category: profile.category,
-          price: profile.profilePrice || 250,
+          price: resolveCatalogPrice(profile.code, profile.profilePrice || 0),
           sampleType: profile.sampleType
         }
       ]);
@@ -247,7 +286,7 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
           nameAr: foundProfile.titleAr,
           nameEn: foundProfile.titleEn,
           category: foundProfile.category,
-          price: foundProfile.profilePrice || 250,
+          price: resolveCatalogPrice(foundProfile.code, foundProfile.profilePrice || 0),
           sampleType: foundProfile.sampleType
         });
       }
@@ -257,7 +296,7 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
       const found = INITIAL_INDIVIDUAL_TESTS.find(t => t.code.toUpperCase() === code.toUpperCase())
                  || testCatalog.find(t => t.code.toUpperCase() === code.toUpperCase());
       if (found && !pkgTests.some(t => t.code.toUpperCase() === found.code.toUpperCase())) {
-        pkgTests.push(found);
+        pkgTests.push(normalizeTestItem(found as InvoiceTestItem));
       }
     });
 
@@ -391,15 +430,29 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-3">
+          <div className="w-full text-center text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-xl px-3 py-2">
+            ✓ تم الحفظ بنجاح في النظام — يمكنك إرسال تأكيد واتساب للمريض الآن
+          </div>
           {phone && (
             <button
               onClick={handleSendWhatsApp}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-colors cursor-pointer"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm shadow-lg transition-colors cursor-pointer"
             >
-              <MessageCircle className="w-4 h-4" />
-              <span>إرسال تأكيد الحجز بالواتساب</span>
+              <MessageCircle className="w-5 h-5" />
+              <span>إرسال تأكيد الحجز واتساب</span>
             </button>
           )}
+
+          <button
+            onClick={() => {
+              setActiveTab('reports_archive');
+              if (isModal) setIsPatientFormOpen(false);
+            }}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs shadow-md transition-colors cursor-pointer"
+          >
+            <CheckCircle2 className="w-4 h-4" />
+            <span>عرض المحفوظات</span>
+          </button>
 
           <button
             onClick={() => {
