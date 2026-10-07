@@ -127,39 +127,8 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
 
   // Financial Calculations
   const getTestDetails = (code: string) => {
-    const key = code.toUpperCase();
-    return testCatalog.find(t => t.code.toUpperCase() === key)
-        || INITIAL_INDIVIDUAL_TESTS.find(t => t.code.toUpperCase() === key);
-  };
-
-  /** Always resolve display/billing price from the official catalog (same source as دليل التحاليل) */
-  const resolveCatalogPrice = (code: string, fallback?: number): number => {
-    const key = code.toUpperCase();
-    const ind = getTestDetails(key);
-    if (ind && typeof ind.price === 'number' && ind.price > 0) return ind.price;
-    const prof = LAB_CATALOG.find(p => p.code.toUpperCase() === key);
-    if (prof && typeof (prof as any).profilePrice === 'number' && (prof as any).profilePrice > 0) {
-      return (prof as any).profilePrice;
-    }
-    return fallback && fallback > 0 ? fallback : 0;
-  };
-
-  const normalizeTestItem = (test: InvoiceTestItem): InvoiceTestItem => {
-    const cat = getTestDetails(test.code);
-    const price = resolveCatalogPrice(test.code, test.price);
-    return {
-      ...test,
-      ...(cat || {}),
-      id: test.id || cat?.id || `t-${test.code}`,
-      code: (cat?.code || test.code).toUpperCase() === (cat?.code || test.code) ? (cat?.code || test.code) : test.code,
-      nameAr: cat?.nameAr || test.nameAr,
-      nameEn: cat?.nameEn || test.nameEn,
-      category: cat?.category || test.category,
-      price,
-      sampleType: cat?.sampleType || test.sampleType,
-      unit: cat?.unit || (test as any).unit,
-      cost: cat?.cost ?? (test as any).cost
-    } as InvoiceTestItem;
+    return testCatalog.find(t => t.code.toUpperCase() === code.toUpperCase())
+        || INITIAL_INDIVIDUAL_TESTS.find(t => t.code.toUpperCase() === code.toUpperCase());
   };
 
   const { packageItems, extraItems } = useMemo(() => {
@@ -206,12 +175,6 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
   const totalDiscount = percentageDiscountAmount + pointsRedeemValue;
   const netTotal = Math.max(0, grossSubtotal - totalDiscount);
 
-  // Keep booking list prices matched to دليل التحاليل / testCatalog
-  useEffect(() => {
-    setSelectedTests(prev => prev.map(t => normalizeTestItem(t)));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [testCatalog]);
-
   // Auto set paid amount to netTotal
   useEffect(() => {
     setPaidAmount(netTotal);
@@ -221,18 +184,16 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
 
   // Add/Remove Tests
   const handleAddTest = (test: InvoiceTestItem) => {
-    const normalized = normalizeTestItem(test);
-    if (!selectedTests.some(t => t.code.toUpperCase() === normalized.code.toUpperCase())) {
-      setSelectedTests(prev => [...prev, normalized]);
+    if (!selectedTests.some(t => t.code.toUpperCase() === test.code.toUpperCase())) {
+      setSelectedTests(prev => [...prev, test]);
     }
   };
 
   const handleToggleTest = (test: InvoiceTestItem) => {
-    const normalized = normalizeTestItem(test);
-    if (selectedTests.some(t => t.code.toUpperCase() === normalized.code.toUpperCase())) {
-      setSelectedTests(prev => prev.filter(t => t.code.toUpperCase() !== normalized.code.toUpperCase()));
+    if (selectedTests.some(t => t.code.toUpperCase() === test.code.toUpperCase())) {
+      setSelectedTests(prev => prev.filter(t => t.code.toUpperCase() !== test.code.toUpperCase()));
     } else {
-      setSelectedTests(prev => [...prev, normalized]);
+      setSelectedTests(prev => [...prev, test]);
     }
   };
 
@@ -248,7 +209,7 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
           nameAr: profile.titleAr,
           nameEn: profile.titleEn,
           category: profile.category,
-          price: resolveCatalogPrice(profile.code, profile.profilePrice || 0),
+          price: profile.profilePrice || 250,
           sampleType: profile.sampleType
         }
       ]);
@@ -286,7 +247,7 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
           nameAr: foundProfile.titleAr,
           nameEn: foundProfile.titleEn,
           category: foundProfile.category,
-          price: resolveCatalogPrice(foundProfile.code, foundProfile.profilePrice || 0),
+          price: foundProfile.profilePrice || 250,
           sampleType: foundProfile.sampleType
         });
       }
@@ -296,7 +257,7 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
       const found = INITIAL_INDIVIDUAL_TESTS.find(t => t.code.toUpperCase() === code.toUpperCase())
                  || testCatalog.find(t => t.code.toUpperCase() === code.toUpperCase());
       if (found && !pkgTests.some(t => t.code.toUpperCase() === found.code.toUpperCase())) {
-        pkgTests.push(normalizeTestItem(found as InvoiceTestItem));
+        pkgTests.push(found);
       }
     });
 
@@ -367,15 +328,47 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
   };
 
   const handleSendWhatsApp = () => {
-    const testsAbbrev = selectedTests.map(t => `• ${t.code}`).join('\n') || '• —';
-    const discountLabel = selectedPackage
-      ? 'باقة / خصم باقة'
-      : (discountPercent > 0
-          ? `${discountPercent}%${loyaltyProfile ? ' (كرت ولاء)' : ''}`
-          : (totalDiscount > 0 ? 'خصم مطبق' : 'لا يوجد'));
+    let testsAbbrev = '';
+    if (selectedPackage) {
+      const abbreviations: string[] = [];
+      if (selectedPackage.includedProfiles && selectedPackage.includedProfiles.length > 0) {
+        selectedPackage.includedProfiles.forEach((p: string) => {
+          if (!abbreviations.includes(p)) abbreviations.push(p);
+        });
+      }
+      if (selectedPackage.includedIndividualTestCodes && selectedPackage.includedIndividualTestCodes.length > 0) {
+        selectedPackage.includedIndividualTestCodes.forEach((t: string) => {
+          if (!abbreviations.includes(t)) abbreviations.push(t);
+        });
+      }
+      selectedTests.forEach(t => {
+        const code = t.code || t.nameEn || t.nameAr;
+        if (code && !abbreviations.includes(code)) {
+          abbreviations.push(code);
+        }
+      });
+      if (abbreviations.length === 0 && selectedPackage.code) {
+        abbreviations.push(selectedPackage.code);
+      }
+      testsAbbrev = abbreviations.map(a => `• ${a}`).join('\n');
+    } else {
+      testsAbbrev = selectedTests.map(t => `• ${t.code || t.nameEn || t.nameAr}`).join('\n') || '• —';
+    }
+
+    let discountLabel = 'لا يوجد خصم';
+    if (selectedPackage) {
+      discountLabel = `باقة (${selectedPackage.titleAr}) - خصم باقة خاص`;
+    } else if (loyaltyProfile && discountPercent > 0) {
+      discountLabel = `كارت ولاء RT (${loyaltyProfile.cardNumber || loyaltyProfile.tier}) - خصم ${discountPercent}%`;
+    } else if (discountPercent > 0) {
+      discountLabel = `خصم معتمد ${discountPercent}%`;
+    } else if (totalDiscount > 0) {
+      discountLabel = `خصم مطبق بقيمة ${totalDiscount} ج.م`;
+    }
+
     const text = formatBookingConfirmationWhatsAppMessage({
       patientName: fullName,
-      labNumber: nextLabNumber || createdLabNum,
+      labNumber: isSubmitted && createdLabNum ? createdLabNum : (nextLabNumber || createdLabNum),
       phone: phone.trim(),
       date: appointmentDate || today,
       time: appointmentTime || '09:00',
@@ -430,29 +423,15 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-3">
-          <div className="w-full text-center text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-xl px-3 py-2">
-            ✓ تم الحفظ بنجاح في النظام — يمكنك إرسال تأكيد واتساب للمريض الآن
-          </div>
           {phone && (
             <button
               onClick={handleSendWhatsApp}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm shadow-lg transition-colors cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-colors cursor-pointer"
             >
-              <MessageCircle className="w-5 h-5" />
-              <span>إرسال تأكيد الحجز واتساب</span>
+              <MessageCircle className="w-4 h-4" />
+              <span>إرسال تأكيد الحجز بالواتساب</span>
             </button>
           )}
-
-          <button
-            onClick={() => {
-              setActiveTab('reports_archive');
-              if (isModal) setIsPatientFormOpen(false);
-            }}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs shadow-md transition-colors cursor-pointer"
-          >
-            <CheckCircle2 className="w-4 h-4" />
-            <span>عرض المحفوظات</span>
-          </button>
 
           <button
             onClick={() => {
