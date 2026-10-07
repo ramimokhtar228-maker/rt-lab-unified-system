@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T22:01:24.198Z",
+  "syncedAt": "2026-10-07T22:01:59.544Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -671,7 +671,7 @@
           "titleAr": "تقييم السكر التراكمي والجلوكوز ومتوسط السكر التقديري",
           "category": "Clinical Chemistry",
           "sampleType": "Fluoride Plasma & EDTA Blood",
-          "interpretation": "Glycemic results consistent with diabetes mellitus criteria.\nACR, ",
+          "interpretation": "Glycemic results consistent with diabetes mellitus criteria.\nACR, LIPID PROFILE , RENAL PROFILE , RECOMMENDED ",
           "parameters": [
             {
               "name": "Fasting Blood Glucose",
@@ -797,7 +797,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T07:55:24.810Z",
-      "updatedAt": "2026-10-07T22:01:20.014Z",
+      "updatedAt": "2026-10-07T22:01:55.349Z",
       "invoiceId": "inv-1791359724811"
     },
     {
