@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:06:41.358Z",
+  "syncedAt": "2026-10-07T21:09:03.738Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -1389,8 +1389,8 @@
               "method": "Automated SLS-Hb",
               "textReference": "M: 13.0 - 17.5 | F: 12.0 - 15.5 g/dL",
               "id": "param-0-1791359462607-saw",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "11.98",
+              "flag": "LOW"
             },
             {
               "name": "R.B.Cs Count",
@@ -1400,7 +1400,7 @@
               "method": "Electrical Impedance",
               "textReference": "M: 4.5 - 5.9 | F: 4.0 - 5.2",
               "id": "param-1-1791359462607-e20",
-              "result": "",
+              "result": "4.336",
               "flag": "NORMAL"
             },
             {
@@ -1408,32 +1408,32 @@
               "unit": "%",
               "minNormal": 36,
               "maxNormal": 48,
-              "notes": "Auto-calculated: Hb × 3",
+              "notes": "Calculated (HGB × 3)",
               "textReference": "M: 40 - 52% | F: 36 - 48%",
               "id": "param-2-1791359462607-rqc",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "3",
+              "flag": "LOW"
             },
             {
               "name": "M.C.V",
               "unit": "fL",
               "minNormal": 80,
               "maxNormal": 98,
-              "notes": "Auto-calculated: (PCV × 10) / RBC",
+              "notes": "Calculated: (HCT × 10) / RBC",
               "textReference": "80.0 - 98.0 fL",
               "id": "param-3-1791359462607-yw8",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "6.9",
+              "flag": "LOW"
             },
             {
               "name": "M.C.H",
               "unit": "pg",
               "minNormal": 27,
               "maxNormal": 33,
-              "notes": "Auto-calculated: (Hb × 10) / RBC",
+              "notes": "Calculated: (HGB × 10) / RBC",
               "textReference": "27.0 - 33.0 pg",
               "id": "param-4-1791359462608-crg",
-              "result": "",
+              "result": "27.6",
               "flag": "NORMAL"
             },
             {
@@ -1441,11 +1441,11 @@
               "unit": "g/dL",
               "minNormal": 32,
               "maxNormal": 36,
-              "notes": "Auto-calculated: (Hb × 100) / PCV",
+              "notes": "Calculated: (HGB × 100) / HCT",
               "textReference": "32.0 - 36.0 g/dL",
               "id": "param-5-1791359462608-0o5",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "399.3",
+              "flag": "HIGH"
             },
             {
               "name": "R.D.W-CV",
@@ -1470,10 +1470,10 @@
             {
               "name": "Mentzer Index (MCV/RBC)",
               "unit": "Ratio",
-              "notes": "<13 Thalassemia Trait | >13 Iron Deficiency",
+              "notes": "Mentzer < 13: Suggestive of Beta Thalassemia Trait",
               "textReference": "> 13 Iron Def. | < 13 Thalassemia",
               "id": "param-8-1791359462608-2r3",
-              "result": "",
+              "result": "1.6",
               "flag": "NORMAL"
             },
             {
@@ -1979,7 +1979,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T07:51:02.609Z",
-      "updatedAt": "2026-10-07T07:51:02.609Z",
+      "updatedAt": "2026-10-07T21:08:59.611Z",
       "invoiceId": "inv-1791359462609"
     },
     {
