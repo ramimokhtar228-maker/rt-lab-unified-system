@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:25:50.835Z",
+  "syncedAt": "2026-10-07T21:26:07.457Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -6791,7 +6791,7 @@
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-9599 - تم التسميع آلياً من منظومة الفواتير",
       "createdAt": "2026-10-04T14:50:55.998Z",
-      "updatedAt": "2026-10-07T21:25:46.561Z",
+      "updatedAt": "2026-10-07T21:26:03.202Z",
       "profiles": [
         {
           "id": "prof-pkg-1791408346561",
@@ -7013,6 +7013,27 @@
               "flag": "NORMAL",
               "method": "Enzymatic",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
+            }
+          ]
+        },
+        {
+          "id": "prof-indiv-1791408363201",
+          "profileCode": "INDIVIDUAL",
+          "titleEn": "Individual Diagnostic Investigations",
+          "titleAr": "تحاليل منفردة ومحددة",
+          "category": "Thyroid",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "param-1791408363201",
+              "name": "الهرمون المنشط للغدة الدرقية (TSH Ultrasensitive) (Thyroid Stimulating Hormone (TSH))",
+              "result": "",
+              "unit": "uIU/mL",
+              "minNormal": 0.35,
+              "maxNormal": 4.94,
+              "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+              "method": "CLIA (3rd Generation Chemiluminescence)",
+              "flag": ""
             }
           ]
         }
