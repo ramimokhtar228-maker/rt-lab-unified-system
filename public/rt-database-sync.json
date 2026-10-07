@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T22:04:25.014Z",
+  "syncedAt": "2026-10-07T22:04:38.311Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -754,12 +754,12 @@
             {
               "id": "p-1791359724809-9fy",
               "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
-              "result": "",
+              "result": "24.88",
               "unit": "ng/mL",
               "minNormal": 30,
               "maxNormal": 100,
               "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
-              "flag": "NORMAL",
+              "flag": "LOW",
               "method": "CLIA (Chemiluminescence Immunoassay)"
             }
           ]
@@ -797,7 +797,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T07:55:24.810Z",
-      "updatedAt": "2026-10-07T22:01:55.349Z",
+      "updatedAt": "2026-10-07T22:04:34.168Z",
       "invoiceId": "inv-1791359724811"
     },
     {
