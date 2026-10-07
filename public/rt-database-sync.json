@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T19:28:10.621Z",
+  "syncedAt": "2026-10-07T19:28:25.229Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -259,7 +259,7 @@
               "maxNormal": 0,
               "textReference": "0 % (Absent in normal blood)",
               "id": "param-24-1791400927196-wnt",
-              "result": "",
+              "result": "00",
               "flag": "NORMAL"
             },
             {
@@ -402,7 +402,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T19:22:07.197Z",
-      "updatedAt": "2026-10-07T19:28:05.409Z",
+      "updatedAt": "2026-10-07T19:28:20.011Z",
       "invoiceId": "inv-1791400927197"
     },
     {
