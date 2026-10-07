@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:18:50.627Z",
+  "syncedAt": "2026-10-07T21:19:02.071Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -1697,7 +1697,7 @@
               "maxNormal": 450,
               "textReference": "",
               "id": "param-1-1791359462609-ahv",
-              "result": "",
+              "result": "333",
               "flag": "NORMAL"
             },
             {
@@ -1705,10 +1705,10 @@
               "unit": "µg/dL",
               "minNormal": 150,
               "maxNormal": 300,
-              "notes": "Auto-calculated: TIBC - Serum Iron",
+              "notes": "Calculated: TIBC - Serum Iron",
               "textReference": "",
               "id": "param-2-1791359462609-jsg",
-              "result": "",
+              "result": "248",
               "flag": "NORMAL"
             },
             {
@@ -1717,9 +1717,9 @@
               "minNormal": 20,
               "maxNormal": 50,
               "textReference": "20 - 50 %",
-              "notes": "Auto-calculated: (Iron / TIBC) × 100%",
+              "notes": "Calculated: (Iron / TIBC) × 100%",
               "id": "param-3-1791359462609-0ws",
-              "result": "",
+              "result": "26",
               "flag": "NORMAL"
             },
             {
@@ -1882,7 +1882,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T07:51:02.609Z",
-      "updatedAt": "2026-10-07T21:18:29.228Z",
+      "updatedAt": "2026-10-07T21:18:57.784Z",
       "invoiceId": "inv-1791359462609",
       "generalComment": ""
     },
