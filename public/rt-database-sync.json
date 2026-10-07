@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:46:13.947Z",
+  "syncedAt": "2026-10-07T21:46:27.301Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -1779,7 +1779,7 @@
           "titleEn": "Comprehensive Annual Wellness Package",
           "category": "باقة فحوصات شاملة",
           "sampleType": "Serum + EDTA Whole Blood + Clean Urine",
-          "interpretation": "جميع تحاليل وفحوصات الباقة الشاملة تم تقييمها وتدقيقها طبقاً للمعدلات المرجعية المعتمدة دولياً.",
+          "interpretation": " ",
           "parameters": [
             {
               "name": "Total Serum Cholesterol",
@@ -1961,26 +1961,26 @@
             {
               "id": "p-pkg-8-1791321555661-1n8",
               "name": "هبموجلوبين  (HB %)",
-              "result": "",
+              "result": "10.80",
               "unit": "g/L",
               "minNormal": 36,
               "maxNormal": 49,
               "textReference": "Male : 13.5-17.5 /Female: 12.5-15.5",
-              "flag": "NORMAL",
+              "flag": "LOW",
               "method": "Enzymatic",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
             },
             {
               "id": "p-pkg-9-1791321555661-3c2",
               "name": "هيماتوكريت0 (Hematocrit %)",
-              "result": "",
+              "result": "32.88",
               "unit": "%",
               "minNormal": 36,
               "maxNormal": 49,
               "textReference": "Normal",
-              "flag": "NORMAL",
+              "flag": "LOW",
               "method": "Enzymatic",
-              "notes": "فحوصات وفيتامينات إضافية للباقة"
+              "notes": "Calculated (HGB × 3)"
             }
           ]
         },
@@ -2019,7 +2019,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T21:19:15.663Z",
-      "updatedAt": "2026-10-07T21:46:09.742Z",
+      "updatedAt": "2026-10-07T21:46:23.095Z",
       "invoiceId": "inv-1791321555664"
     },
     {
