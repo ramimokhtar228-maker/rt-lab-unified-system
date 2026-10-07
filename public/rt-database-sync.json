@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:25:40.154Z",
+  "syncedAt": "2026-10-07T21:25:50.835Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -6783,7 +6783,7 @@
         "loyaltyCardNumber": "RT-2026-0006",
         "fastingHours": 12
       },
-      "status": "draft",
+      "status": "in_progress",
       "staff": {
         "labChemist": "",
         "verifiedBy": "",
@@ -6791,27 +6791,238 @@
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-9599 - تم التسميع آلياً من منظومة الفواتير",
       "createdAt": "2026-10-04T14:50:55.998Z",
-      "updatedAt": "2026-10-07T21:25:35.946Z",
+      "updatedAt": "2026-10-07T21:25:46.561Z",
       "profiles": [
         {
-          "id": "prof-inc-1791125455998-2",
-          "profileCode": "TSH",
-          "titleEn": "Thyroid Stimulating Hormone",
-          "titleAr": "هرمون الغدة الدرقية الحساس (TSH 3rd Gen)",
-          "category": "Endocrinology",
-          "sampleType": "Serum",
+          "id": "prof-pkg-1791408346561",
+          "profileCode": "PKG-ANNUAL-WELLNESS",
+          "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
+          "titleEn": "Comprehensive Annual Wellness Package",
+          "category": "باقة فحوصات شاملة",
+          "sampleType": "Serum + EDTA Whole Blood + Clean Urine",
+          "interpretation": "جميع تحاليل وفحوصات الباقة الشاملة تم تقييمها ومطابقتها للمعدلات المرجعية المعتمدة دولياً.",
           "parameters": [
             {
-              "id": "p-1791127150857",
-              "name": "هرمون الغدة الدرقية الحساس (TSH 3rd Gen) (Thyroid Stimulating Hormone)",
+              "name": "Total Serum Cholesterol",
+              "unit": "mg/dL",
+              "minNormal": 120,
+              "maxNormal": 200,
+              "method": "CHOD-PAP",
+              "textReference": "",
+              "id": "param-LIPID-0-1791408346559-7c9",
               "result": "",
-              "unit": "",
-              "flag": "",
-              "textReference": "قيد الفحص المخبري"
+              "flag": "NORMAL",
+              "notes": "دهون الدم الشاملة مع المؤشرات الحسابية"
+            },
+            {
+              "name": "Serum Triglycerides",
+              "unit": "mg/dL",
+              "minNormal": 40,
+              "maxNormal": 150,
+              "panicHigh": 500,
+              "method": "GPO-PAP",
+              "textReference": "",
+              "id": "param-LIPID-1-1791408346559-zw5",
+              "result": "",
+              "flag": "NORMAL",
+              "notes": "دهون الدم الشاملة مع المؤشرات الحسابية"
+            },
+            {
+              "name": "HDL - Cholesterol (Good)",
+              "unit": "mg/dL",
+              "minNormal": 40,
+              "maxNormal": 65,
+              "method": "Direct Accelerator",
+              "textReference": "",
+              "id": "param-LIPID-2-1791408346559-lbq",
+              "result": "",
+              "flag": "NORMAL",
+              "notes": "دهون الدم الشاملة مع المؤشرات الحسابية"
+            },
+            {
+              "name": "LDL - Cholesterol (Calculated)",
+              "unit": "mg/dL",
+              "minNormal": 0,
+              "maxNormal": 100,
+              "notes": "Friedewald Formula: Total Chol - HDL - (TG / 5)",
+              "textReference": "",
+              "id": "param-LIPID-3-1791408346559-u0x",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "VLDL - Cholesterol",
+              "unit": "mg/dL",
+              "minNormal": 5,
+              "maxNormal": 30,
+              "notes": "Auto-calculated: Triglycerides / 5",
+              "textReference": "",
+              "id": "param-LIPID-4-1791408346559-0ww",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Non-HDL Cholesterol",
+              "unit": "mg/dL",
+              "minNormal": 0,
+              "maxNormal": 130,
+              "notes": "Auto-calculated: Total Chol - HDL",
+              "textReference": "",
+              "id": "param-LIPID-5-1791408346559-xtd",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Total Chol / HDL Ratio",
+              "unit": "Ratio",
+              "minNormal": 0,
+              "maxNormal": 4.5,
+              "textReference": "< 4.5 Desirable",
+              "notes": "Auto-calculated: Total Chol / HDL",
+              "id": "param-LIPID-6-1791408346559-b06",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "LDL / HDL Ratio",
+              "unit": "Ratio",
+              "minNormal": 0,
+              "maxNormal": 3,
+              "textReference": "< 3.0 Desirable",
+              "id": "param-LIPID-7-1791408346559-6nk",
+              "result": "",
+              "flag": "NORMAL",
+              "notes": "دهون الدم الشاملة مع المؤشرات الحسابية"
+            },
+            {
+              "id": "p-pkg-0-1791408346560-9en",
+              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
+              "result": "",
+              "unit": "ng/mL",
+              "minNormal": 30,
+              "maxNormal": 100,
+              "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+              "flag": "NORMAL",
+              "method": "CLIA (Chemiluminescence Immunoassay)",
+              "notes": "فحوصات وفيتامينات إضافية للباقة"
+            },
+            {
+              "id": "p-pkg-1-1791408346560-d9m",
+              "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 3.5,
+              "maxNormal": 7.2,
+              "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
+              "flag": "NORMAL",
+              "method": "Uricase / POD Enzymatic Colorimetric",
+              "notes": "فحوصات وفيتامينات إضافية للباقة"
+            },
+            {
+              "id": "p-pkg-2-1791408346560-chg",
+              "name": "سكر الدم الصائم (FBS) (Fasting Blood Sugar)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 70,
+              "maxNormal": 100,
+              "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
+              "flag": "NORMAL",
+              "method": "Hexokinase / GOD-PAP",
+              "notes": "فحوصات وفيتامينات إضافية للباقة"
+            },
+            {
+              "id": "p-pkg-3-1791408346560-orb",
+              "name": "كرياتينين بالدم (Serum Creatinine) (Serum Creatinine)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 0.6,
+              "maxNormal": 1.2,
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.1 mg/dL",
+              "flag": "NORMAL",
+              "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
+              "notes": "فحوصات وفيتامينات إضافية للباقة"
+            },
+            {
+              "id": "p-pkg-4-1791408346560-41f",
+              "name": "بولينا بالدم (Blood Urea) (Blood Urea)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 15,
+              "maxNormal": 45,
+              "textReference": "15 - 45 mg/dL",
+              "flag": "NORMAL",
+              "method": "Urease / GLDH Enzymatic Kinetic",
+              "notes": "فحوصات وفيتامينات إضافية للباقة"
+            },
+            {
+              "id": "p-pkg-5-1791408346560-mc5",
+              "name": "الكالسيوم الكلي (Total Serum Calcium) (Total Serum Calcium)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 8.6,
+              "maxNormal": 10.3,
+              "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
+              "flag": "NORMAL",
+              "method": "Arsenazo III / CPC Photometric",
+              "notes": "فحوصات وفيتامينات إضافية للباقة"
+            },
+            {
+              "id": "p-pkg-6-1791408346560-q69",
+              "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
+              "result": "",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 41,
+              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
+              "flag": "NORMAL",
+              "method": "IFCC Kinetic UV without Pyridoxal Phosphate",
+              "notes": "فحوصات وفيتامينات إضافية للباقة"
+            },
+            {
+              "id": "p-pkg-7-1791408346560-0v0",
+              "name": "إنزيم كبد AST / SGOT (Aspartate Aminotransferase (AST / SGOT))",
+              "result": "",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 40,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 32 U/L",
+              "flag": "NORMAL",
+              "method": "IFCC Kinetic UV",
+              "notes": "فحوصات وفيتامينات إضافية للباقة"
+            },
+            {
+              "id": "p-pkg-8-1791408346561-lm4",
+              "name": "هبموجلوبين  (HB %)",
+              "result": "",
+              "unit": "g/L",
+              "minNormal": 36,
+              "maxNormal": 49,
+              "textReference": "Male : 13.5-17.5 /Female: 12.5-15.5",
+              "flag": "NORMAL",
+              "method": "Enzymatic",
+              "notes": "فحوصات وفيتامينات إضافية للباقة"
+            },
+            {
+              "id": "p-pkg-9-1791408346561-0zz",
+              "name": "هيماتوكريت  (Hematocrit %)",
+              "result": "",
+              "unit": "%",
+              "minNormal": 36,
+              "maxNormal": 49,
+              "textReference": "36-49",
+              "flag": "NORMAL",
+              "method": "Enzymatic",
+              "notes": "فحوصات وفيتامينات إضافية للباقة"
             }
           ]
         }
-      ]
+      ],
+      "packageApplied": {
+        "code": "PKG-ANNUAL-WELLNESS",
+        "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
+        "packagePrice": 199,
+        "originalPrice": 2900
+      }
     },
     {
       "id": "rep-inc-1791125273776",
