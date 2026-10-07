@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:49:42.989Z",
+  "syncedAt": "2026-10-07T21:50:21.297Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -1995,12 +1995,12 @@
             {
               "id": "p-1791321555663-hv4",
               "name": "الهرمون المنشط للغدة الدرقية (TSH Ultrasensitive) (Thyroid Stimulating Hormone (TSH))",
-              "result": "",
+              "result": "0.30",
               "unit": "uIU/mL",
               "minNormal": 0.35,
               "maxNormal": 4.94,
               "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
-              "flag": "NORMAL",
+              "flag": "LOW",
               "method": "CLIA (3rd Generation Chemiluminescence)"
             }
           ]
@@ -2019,7 +2019,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-06T21:19:15.663Z",
-      "updatedAt": "2026-10-07T21:47:21.827Z",
+      "updatedAt": "2026-10-07T21:50:17.104Z",
       "invoiceId": "inv-1791321555664"
     },
     {
