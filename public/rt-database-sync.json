@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T19:23:11.488Z",
+  "syncedAt": "2026-10-07T19:23:22.329Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -61,7 +61,7 @@
               "method": "Electrical Impedance",
               "textReference": "M: 4.5 - 5.9 | F: 4.0 - 5.2",
               "id": "param-1-1791400927194-x6v",
-              "result": "",
+              "result": "ذ",
               "flag": "NORMAL"
             },
             {
@@ -442,7 +442,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T19:22:07.197Z",
-      "updatedAt": "2026-10-07T19:22:41.352Z",
+      "updatedAt": "2026-10-07T19:23:17.255Z",
       "invoiceId": "inv-1791400927197"
     },
     {
