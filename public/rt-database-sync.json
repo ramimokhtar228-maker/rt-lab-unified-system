@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T21:21:00.703Z",
+  "syncedAt": "2026-10-07T21:21:39.761Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -1755,48 +1755,7 @@
               "method": "Arsenazo III",
               "textReference": "",
               "id": "param-0-1791359462609-lr5",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Serum Albumin",
-              "unit": "g/dL",
-              "minNormal": 3.5,
-              "maxNormal": 5.2,
-              "textReference": "",
-              "id": "param-1-1791359462609-ti3",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Corrected Calcium (CA-I)",
-              "unit": "mg/dL",
-              "minNormal": 8.5,
-              "maxNormal": 10.5,
-              "textReference": "8.5 - 10.5 mg/dL",
-              "notes": "Auto-calculated: Total Ca + 0.8 × (4.0 - Albumin)",
-              "id": "param-2-1791359462609-bjh",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Ionized Calcium",
-              "unit": "mmol/L",
-              "minNormal": 1.15,
-              "maxNormal": 1.33,
-              "textReference": "",
-              "id": "param-3-1791359462609-sve",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Serum Inorganic Phosphorus",
-              "unit": "mg/dL",
-              "minNormal": 2.5,
-              "maxNormal": 4.5,
-              "textReference": "",
-              "id": "param-4-1791359462609-zpk",
-              "result": "",
+              "result": "8.80",
               "flag": "NORMAL"
             },
             {
@@ -1806,43 +1765,7 @@
               "maxNormal": 2.6,
               "textReference": "",
               "id": "param-5-1791359462609-l9r",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Serum Sodium (Na+)",
-              "unit": "mmol/L",
-              "minNormal": 135,
-              "maxNormal": 145,
-              "panicLow": 120,
-              "panicHigh": 160,
-              "method": "ISE Direct",
-              "textReference": "",
-              "id": "param-6-1791359462609-tro",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Serum Potassium (K+)",
-              "unit": "mmol/L",
-              "minNormal": 3.5,
-              "maxNormal": 5.1,
-              "panicLow": 2.8,
-              "panicHigh": 6.5,
-              "method": "ISE Direct",
-              "textReference": "",
-              "id": "param-7-1791359462609-w2i",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Serum Chloride (Cl-)",
-              "unit": "mmol/L",
-              "minNormal": 98,
-              "maxNormal": 107,
-              "textReference": "",
-              "id": "param-8-1791359462609-mt1",
-              "result": "",
+              "result": "2.44",
               "flag": "NORMAL"
             }
           ]
@@ -1882,7 +1805,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T07:51:02.609Z",
-      "updatedAt": "2026-10-07T21:20:56.180Z",
+      "updatedAt": "2026-10-07T21:21:35.414Z",
       "invoiceId": "inv-1791359462609",
       "generalComment": ""
     },
