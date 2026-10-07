@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T23:09:14.698Z",
+  "syncedAt": "2026-10-07T23:09:45.652Z",
   "reports": [
     {
       "id": "rep-1791414459333",
@@ -493,6 +493,33 @@
       "invoiceId": "inv-1791400927197"
     },
     {
+      "id": "rep-002",
+      "reportNumber": "RT-2026-002",
+      "patient": {
+        "ageUnit": "years",
+        "barcode": "RT-10030",
+        "reportingDate": "2026-10-07",
+        "testsSubtotal": 380,
+        "referringDoctorTitle": "Prof. Dr.",
+        "discountApplied": 38,
+        "referringDoctorName": "أ.د. خالد الببلاوي - استشاري السكر والغدد",
+        "loyaltyCardNumber": "RT-GOLD-10030",
+        "labNumber": "RT-2026-002",
+        "loyaltyPoints": 340,
+        "totalCost": 380,
+        "sampleDate": "2026-10-07",
+        "nationalId": "27608140102844",
+        "fullName": "منى عادل عبد الرحمن",
+        "clinicalHistory": "متابعة دورية لمرض السكري من النوع الثاني وارتفاع ضغط الدم",
+        "id": "pat-002",
+        "age": 48,
+        "phone": "01198765432",
+        "gender": "female",
+        "paymentMethod": "visa",
+        "fastingHours": 12,
+        "loyaltyCardIssued": true,
+        "bloodGroup": "O+"
+      },
       "profiles": [
         {
           "profileCode": "GLYCEMIC",
@@ -581,45 +608,20 @@
           "profileCode": "KFT"
         }
       ],
-      "generalComment": "يرجى مراجعة الطبيب المعالج لتعديل جرعات العلاج الغذائي والدوائي.",
-      "reportNumber": "RT-2026-002",
-      "status": "verified",
-      "id": "rep-002",
-      "createdAt": "2026-10-07T08:04:25.368Z",
-      "updatedAt": "2026-10-07T08:04:25.368Z",
-      "patient": {
-        "ageUnit": "years",
-        "barcode": "RT-10030",
-        "reportingDate": "2026-10-07",
-        "testsSubtotal": 380,
-        "referringDoctorTitle": "Prof. Dr.",
-        "discountApplied": 38,
-        "referringDoctorName": "أ.د. خالد الببلاوي - استشاري السكر والغدد",
-        "loyaltyCardNumber": "RT-GOLD-10030",
-        "labNumber": "RT-2026-002",
-        "loyaltyPoints": 340,
-        "totalCost": 380,
-        "sampleDate": "2026-10-07",
-        "nationalId": "27608140102844",
-        "fullName": "منى عادل عبد الرحمن",
-        "clinicalHistory": "متابعة دورية لمرض السكري من النوع الثاني وارتفاع ضغط الدم",
-        "id": "pat-002",
-        "age": 48,
-        "phone": "01198765432",
-        "gender": "female",
-        "paymentMethod": "visa",
-        "fastingHours": 12,
-        "loyaltyCardIssued": true,
-        "bloodGroup": "O+"
-      },
       "staff": {
         "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
         "labChemist": "د. هبة الشناوي - كيميائية تحاليل",
         "verifiedBy": "د. مصطفى العوضي - استشاري التحاليل"
       },
+      "generalComment": "يرجى مراجعة الطبيب المعالج لتعديل جرعات العلاج الغذائي والدوائي.",
+      "status": "verified",
+      "createdAt": "2026-10-07T08:04:25.368Z",
+      "updatedAt": "2026-10-07T08:04:25.368Z",
       "invoiceId": "inv-002"
     },
     {
+      "id": "rep-001",
+      "reportNumber": "RT-2026-001",
       "patient": {
         "totalCost": 280,
         "bloodGroup": "A+",
@@ -645,7 +647,6 @@
         "reportingDate": "2026-10-07",
         "testsSubtotal": 280
       },
-      "reportNumber": "RT-2026-001",
       "profiles": [
         {
           "id": "prof-cbc-1",
@@ -833,11 +834,6 @@
           }
         }
       ],
-      "status": "verified",
-      "createdAt": "2026-10-07T08:04:25.367Z",
-      "updatedAt": "2026-10-07T08:04:25.367Z",
-      "id": "rep-001",
-      "generalComment": "الحالة تتماشى مع فقر الدم بعوز الحديد. يرجى المتابعة بطلب مخزون الحديد (Serum Ferritin).",
       "staff": {
         "verifierTitle": "أخصائي باثولوجيا إكلينيكية",
         "verifiedBy": "د. مصطفى العوضي - استشاري التحاليل",
@@ -846,6 +842,10 @@
         "chemistTitle": "كيميائية طبية أولى",
         "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
       },
+      "generalComment": "الحالة تتماشى مع فقر الدم بعوز الحديد. يرجى المتابعة بطلب مخزون الحديد (Serum Ferritin).",
+      "status": "verified",
+      "createdAt": "2026-10-07T08:04:25.367Z",
+      "updatedAt": "2026-10-07T08:04:25.367Z",
       "invoiceId": "inv-001"
     },
     {
@@ -9251,6 +9251,86 @@
       "updatedAt": "2026-10-07T07:55:24.811Z"
     },
     {
+      "id": "inv-1791359462609",
+      "invoiceNumber": "INV-2026-013",
+      "patientName": "حبيبه مجدى محمد",
+      "patientPhone": "01148879943",
+      "patientAge": 26,
+      "patientGender": "female",
+      "barcode": "RT-10043",
+      "labNumber": "RT-2026-013",
+      "referringDoctor": "HERSELF",
+      "tests": [
+        {
+          "id": "t-8",
+          "code": "CBC",
+          "nameAr": "صورة دم كاملة تفصيلية (CBC with Diff)",
+          "nameEn": "Complete Blood Count with Differential",
+          "category": "Hematology",
+          "price": 180,
+          "cost": 30,
+          "sampleType": "EDTA Whole Blood",
+          "turnaroundTime": "فوري (ساعة)",
+          "unit": "Multi-parameter",
+          "minNormal": 0,
+          "maxNormal": 0,
+          "textReference": "Hb: Male 13.0-17.5 g/dL, Female 12.0-15.5 | WBC: 4.0-11.0 10^3/uL | PLT: 150-450 10^3/uL",
+          "method": "5-Part Automated Flow Cytometry / Laser Impedance",
+          "fastingInstructions": "لا يشترط صيام"
+        },
+        {
+          "id": "prof-IRON",
+          "code": "IRON",
+          "nameAr": "مخزون الحديد وحديد المصل والأنيميا",
+          "nameEn": "Iron Kinetics & Storage Profile",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum (Morning Fasting)"
+        },
+        {
+          "id": "prof-CALCIUM_ELEC",
+          "code": "CALCIUM_ELEC",
+          "nameAr": "أملاح الدم والكالسيوم المصحح بالألبومين",
+          "nameEn": "Electrolytes & Corrected Calcium (CA-I)",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum"
+        },
+        {
+          "id": "t-79",
+          "code": "VIT_D",
+          "nameAr": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total)",
+          "nameEn": "25-Hydroxy Vitamin D Total",
+          "category": "Anemia & Vitamins",
+          "price": 360,
+          "cost": 85,
+          "sampleType": "Serum (Protected from light)",
+          "turnaroundTime": "خلال ساعتين",
+          "unit": "ng/mL",
+          "minNormal": 30,
+          "maxNormal": 100,
+          "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+          "method": "CLIA (Chemiluminescence Immunoassay)"
+        }
+      ],
+      "subtotal": 1026,
+      "testsSubtotal": 1040,
+      "discount": 94,
+      "visitFee": 80,
+      "isHomeVisit": true,
+      "visitAddress": "مدينه نصر",
+      "netAmount": 1012,
+      "paidAmount": 1012,
+      "remainingAmount": 0,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "cashierName": "أ.د. رامي مختار",
+      "branch": "فرع القصر العيني - الرئيسي",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-07T07:51:02.609Z",
+      "updatedAt": "2026-10-07T07:51:02.609Z"
+    },
+    {
       "id": "inv-1791358565025",
       "invoiceNumber": "INV-2026-012",
       "patientName": "كوثر ابراهيم",
@@ -9262,197 +9342,197 @@
       "referringDoctor": "HERSELF",
       "tests": [
         {
-          "category": "Clinical Chemistry",
-          "sampleType": "Serum (12h Fasting)",
-          "code": "LIPID",
-          "price": 250,
           "id": "prof-LIPID",
+          "code": "LIPID",
+          "nameAr": "دهون الدم الشاملة مع المؤشرات الحسابية",
           "nameEn": "Lipid Profile",
-          "nameAr": "دهون الدم الشاملة مع المؤشرات الحسابية"
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum (12h Fasting)"
         },
         {
-          "maxNormal": 100,
-          "turnaroundTime": "خلال ساعتين",
+          "id": "t-79",
+          "code": "VIT_D",
+          "nameAr": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total)",
+          "nameEn": "25-Hydroxy Vitamin D Total",
           "category": "Anemia & Vitamins",
           "price": 360,
-          "method": "CLIA (Chemiluminescence Immunoassay)",
-          "nameEn": "25-Hydroxy Vitamin D Total",
-          "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
-          "nameAr": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total)",
-          "id": "t-79",
-          "unit": "ng/mL",
-          "fastingInstructions": "لا يشترط صيام",
-          "sampleType": "Serum (Protected from light)",
-          "minNormal": 30,
           "cost": 85,
-          "code": "VIT_D"
+          "sampleType": "Serum (Protected from light)",
+          "turnaroundTime": "خلال ساعتين",
+          "unit": "ng/mL",
+          "minNormal": 30,
+          "maxNormal": 100,
+          "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+          "method": "CLIA (Chemiluminescence Immunoassay)",
+          "fastingInstructions": "لا يشترط صيام"
         },
         {
-          "minNormal": 3.5,
-          "category": "Kidney Function",
-          "method": "Uricase / POD Enzymatic Colorimetric",
-          "price": 88,
+          "id": "t-22",
+          "code": "URIC",
           "nameAr": "حمض البوليك والنقرس (Serum Uric Acid)",
           "nameEn": "Serum Uric Acid",
-          "id": "t-22",
-          "fastingInstructions": "صيام من 4 إلى 8 ساعات يفضل",
+          "category": "Kidney Function",
+          "price": 88,
           "cost": 12,
-          "code": "URIC",
-          "turnaroundTime": "فوري (ساعة)",
           "sampleType": "Serum",
-          "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
+          "turnaroundTime": "فوري (ساعة)",
           "unit": "mg/dL",
-          "maxNormal": 7.2
+          "minNormal": 3.5,
+          "maxNormal": 7.2,
+          "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
+          "method": "Uricase / POD Enzymatic Colorimetric",
+          "fastingInstructions": "صيام من 4 إلى 8 ساعات يفضل"
         },
         {
-          "cost": 12,
+          "id": "t-1",
           "code": "GLU_F",
           "nameAr": "سكر الدم الصائم (FBS)",
           "nameEn": "Fasting Blood Sugar",
-          "method": "Hexokinase / GOD-PAP",
-          "unit": "mg/dL",
-          "minNormal": 70,
-          "id": "t-1",
-          "maxNormal": 100,
           "category": "Diabetes",
+          "price": 88,
+          "cost": 12,
           "sampleType": "Fluoride Plasma / Serum",
           "turnaroundTime": "فوري (ساعة)",
-          "fastingInstructions": "صيام من 8 إلى 10 ساعات (يُسمح بالماء فقط)",
+          "unit": "mg/dL",
+          "minNormal": 70,
+          "maxNormal": 100,
           "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
-          "price": 88
+          "method": "Hexokinase / GOD-PAP",
+          "fastingInstructions": "صيام من 8 إلى 10 ساعات (يُسمح بالماء فقط)"
         },
         {
-          "category": "Kidney Function",
-          "sampleType": "Serum",
+          "id": "t-19",
+          "code": "CREAT",
           "nameAr": "كرياتينين بالدم (Serum Creatinine)",
           "nameEn": "Serum Creatinine",
-          "minNormal": 0.6,
-          "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
-          "id": "t-19",
-          "fastingInstructions": "لا يشترط صيام ولكن يفضل تجنب الوجبات اللحمية الدسمة",
-          "maxNormal": 1.2,
-          "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.1 mg/dL",
-          "turnaroundTime": "فوري (ساعة)",
-          "cost": 12,
-          "code": "CREAT",
-          "price": 88,
-          "unit": "mg/dL"
-        },
-        {
-          "method": "Urease / GLDH Enzymatic Kinetic",
-          "minNormal": 15,
-          "id": "t-20",
-          "textReference": "15 - 45 mg/dL",
-          "fastingInstructions": "لا يشترط صيام",
-          "nameAr": "بولينا بالدم (Blood Urea)",
-          "nameEn": "Blood Urea",
-          "turnaroundTime": "فوري (ساعة)",
           "category": "Kidney Function",
           "price": 88,
-          "code": "UREA",
           "cost": 12,
-          "maxNormal": 45,
-          "unit": "mg/dL",
-          "sampleType": "Serum"
-        },
-        {
-          "price": 110,
-          "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
-          "maxNormal": 10.3,
-          "fastingInstructions": "صيام 8-10 ساعات (يفضل صباحاً)",
-          "minNormal": 8.6,
-          "unit": "mg/dL",
-          "method": "Arsenazo III / CPC Photometric",
-          "nameEn": "Total Serum Calcium",
-          "nameAr": "الكالسيوم الكلي (Total Serum Calcium)",
-          "cost": 15,
-          "category": "Minerals & Bone",
-          "id": "t-26",
-          "turnaroundTime": "خلال ساعتين",
           "sampleType": "Serum",
-          "code": "CALCIUM_TOTAL"
+          "turnaroundTime": "فوري (ساعة)",
+          "unit": "mg/dL",
+          "minNormal": 0.6,
+          "maxNormal": 1.2,
+          "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.1 mg/dL",
+          "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
+          "fastingInstructions": "لا يشترط صيام ولكن يفضل تجنب الوجبات اللحمية الدسمة"
         },
         {
+          "id": "t-20",
+          "code": "UREA",
+          "nameAr": "بولينا بالدم (Blood Urea)",
+          "nameEn": "Blood Urea",
+          "category": "Kidney Function",
+          "price": 88,
+          "cost": 12,
+          "sampleType": "Serum",
+          "turnaroundTime": "فوري (ساعة)",
+          "unit": "mg/dL",
+          "minNormal": 15,
+          "maxNormal": 45,
+          "textReference": "15 - 45 mg/dL",
+          "method": "Urease / GLDH Enzymatic Kinetic",
+          "fastingInstructions": "لا يشترط صيام"
+        },
+        {
+          "id": "t-26",
+          "code": "CALCIUM_TOTAL",
+          "nameAr": "الكالسيوم الكلي (Total Serum Calcium)",
+          "nameEn": "Total Serum Calcium",
+          "category": "Minerals & Bone",
+          "price": 110,
+          "cost": 15,
+          "sampleType": "Serum",
+          "turnaroundTime": "خلال ساعتين",
+          "unit": "mg/dL",
+          "minNormal": 8.6,
+          "maxNormal": 10.3,
+          "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
+          "method": "Arsenazo III / CPC Photometric",
+          "fastingInstructions": "صيام 8-10 ساعات (يفضل صباحاً)"
+        },
+        {
+          "id": "t-32",
+          "code": "ALT",
+          "nameAr": "إنزيم كبد ALT / SGPT",
+          "nameEn": "Alanine Aminotransferase (ALT / SGPT)",
+          "category": "Liver Function",
+          "price": 88,
+          "cost": 12,
+          "sampleType": "Serum",
+          "turnaroundTime": "فوري (ساعة)",
           "unit": "U/L",
           "minNormal": 0,
-          "price": 88,
-          "sampleType": "Serum",
-          "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
-          "code": "ALT",
-          "fastingInstructions": "لا يشترط صيام",
-          "cost": 12,
-          "nameEn": "Alanine Aminotransferase (ALT / SGPT)",
-          "id": "t-32",
-          "nameAr": "إنزيم كبد ALT / SGPT",
           "maxNormal": 41,
-          "category": "Liver Function",
-          "turnaroundTime": "فوري (ساعة)",
-          "method": "IFCC Kinetic UV without Pyridoxal Phosphate"
+          "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
+          "method": "IFCC Kinetic UV without Pyridoxal Phosphate",
+          "fastingInstructions": "لا يشترط صيام"
         },
         {
-          "minNormal": 0,
-          "sampleType": "Serum",
-          "method": "IFCC Kinetic UV",
-          "price": 88,
-          "turnaroundTime": "فوري (ساعة)",
+          "id": "t-33",
+          "code": "AST",
           "nameAr": "إنزيم كبد AST / SGOT",
           "nameEn": "Aspartate Aminotransferase (AST / SGOT)",
-          "id": "t-33",
           "category": "Liver Function",
+          "price": 88,
           "cost": 12,
-          "textReference": "Adult Males: < 40 U/L | Adult Females: < 32 U/L",
-          "code": "AST",
+          "sampleType": "Serum",
+          "turnaroundTime": "فوري (ساعة)",
+          "unit": "U/L",
+          "minNormal": 0,
           "maxNormal": 40,
-          "fastingInstructions": "لا يشترط صيام",
-          "unit": "U/L"
+          "textReference": "Adult Males: < 40 U/L | Adult Females: < 32 U/L",
+          "method": "IFCC Kinetic UV",
+          "fastingInstructions": "لا يشترط صيام"
         },
         {
           "fastingInstructions": "لا يشترط الصيام",
+          "nameAr": "هبموجلوبين ",
           "unit": "g/L",
           "code": "HB",
-          "maxNormal": 49,
-          "sampleType": " EDTA BLOOD ",
-          "textReference": "Male : 13.5-17.5 /Female: 12.5-15.5",
-          "id": "test-1791276005667",
-          "price": 210,
-          "minNormal": 36,
-          "turnaroundHours": 2,
           "method": "Enzymatic",
           "category": "Clinical Hematology ",
           "nameEn": "HB %",
-          "nameAr": "هبموجلوبين "
+          "sampleType": " EDTA BLOOD ",
+          "maxNormal": 49,
+          "turnaroundHours": 2,
+          "minNormal": 36,
+          "textReference": "Male : 13.5-17.5 /Female: 12.5-15.5",
+          "price": 210,
+          "id": "test-1791276005667"
         },
         {
-          "minNormal": 36,
-          "fastingInstructions": "لا يشترط الصيام",
+          "id": "test-1791282363076",
+          "price": 10,
+          "code": "HCT",
+          "sampleType": "EDTA ",
           "unit": "%",
           "turnaroundHours": 2,
-          "textReference": "36-49",
-          "code": "HCT",
-          "nameEn": "Hematocrit %",
-          "price": 10,
+          "minNormal": 36,
           "nameAr": "هيماتوكريت ",
-          "category": "Clinical Hematology ",
-          "id": "test-1791282363076",
           "maxNormal": 49,
-          "sampleType": "EDTA ",
-          "method": "Enzymatic"
+          "category": "Clinical Hematology ",
+          "nameEn": "Hematocrit %",
+          "fastingInstructions": "لا يشترط الصيام",
+          "method": "Enzymatic",
+          "textReference": "36-49"
         },
         {
-          "method": "CLIA (3rd Generation Chemiluminescence)",
-          "category": "Thyroid",
-          "sampleType": "Serum",
-          "minNormal": 0.35,
-          "nameAr": "الهرمون المنشط للغدة الدرقية (TSH Ultrasensitive)",
-          "price": 150,
-          "nameEn": "Thyroid Stimulating Hormone (TSH)",
-          "cost": 30,
-          "code": "TSH",
-          "turnaroundTime": "خلال ساعتين",
           "id": "t-53",
-          "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+          "code": "TSH",
+          "nameAr": "الهرمون المنشط للغدة الدرقية (TSH Ultrasensitive)",
+          "nameEn": "Thyroid Stimulating Hormone (TSH)",
+          "category": "Thyroid",
+          "price": 150,
+          "cost": 30,
+          "sampleType": "Serum",
+          "turnaroundTime": "خلال ساعتين",
           "unit": "uIU/mL",
-          "maxNormal": 4.94
+          "minNormal": 0.35,
+          "maxNormal": 4.94,
+          "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+          "method": "CLIA (3rd Generation Chemiluminescence)"
         }
       ],
       "subtotal": 349,
@@ -11124,6 +11204,98 @@
   "expenses": [],
   "loyaltyProfiles": [
     {
+      "patientId": "pat-loyalty-1791414459348",
+      "patientName": "جيهان عبدالفتاح",
+      "phone": "01022231270",
+      "barcode": "RT-10062",
+      "cardNumber": "RT-SILVER-10062",
+      "bloodGroup": "",
+      "totalPoints": 333,
+      "tier": "Silver",
+      "lifetimeSpent": 333,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1791414459348",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 333,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-032",
+          "invoiceNumber": "RT-2026-032",
+          "amountEGP": 333
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791381439613",
+      "patientName": "محمد حسن على",
+      "phone": "01005314825",
+      "barcode": "RT-10043",
+      "cardNumber": "RT-SILVER-10043",
+      "bloodGroup": "",
+      "totalPoints": 190,
+      "tier": "Silver",
+      "lifetimeSpent": 190,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1791381439613",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 190,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-013",
+          "invoiceNumber": "RT-2026-013",
+          "amountEGP": 190
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791359724840",
+      "patientName": "فيرا ممدوح عبدالمسيح",
+      "phone": "01221502703",
+      "barcode": "RT-10044",
+      "cardNumber": "RT-SILVER-10044",
+      "bloodGroup": "",
+      "totalPoints": 498,
+      "tier": "Silver",
+      "lifetimeSpent": 498,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1791359724840",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 498,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-014",
+          "invoiceNumber": "RT-2026-014",
+          "amountEGP": 498
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791359462638",
+      "patientName": "حبيبه مجدى محمد",
+      "phone": "01148879943",
+      "barcode": "RT-10043",
+      "cardNumber": "RT-GOLD-10043",
+      "bloodGroup": "",
+      "totalPoints": 1026,
+      "tier": "Gold",
+      "lifetimeSpent": 1026,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1791359462638",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 1026,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-013",
+          "invoiceNumber": "RT-2026-013",
+          "amountEGP": 1026
+        }
+      ]
+    },
+    {
       "patientId": "pat-loyalty-1791358565055",
       "patientName": "كوثر ابراهيم",
       "phone": "01095920078",
@@ -11381,75 +11553,6 @@
       "lifetimeSpent": 682
     },
     {
-      "patientId": "pat-loyalty-1791359724840",
-      "patientName": "فيرا ممدوح عبدالمسيح",
-      "phone": "01221502703",
-      "barcode": "RT-10044",
-      "cardNumber": "RT-SILVER-10044",
-      "bloodGroup": "",
-      "totalPoints": 498,
-      "tier": "Silver",
-      "lifetimeSpent": 498,
-      "issueDate": "2026-10-07",
-      "transactions": [
-        {
-          "id": "tx-1791359724840",
-          "date": "2026-10-07",
-          "type": "earn",
-          "points": 498,
-          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-014",
-          "invoiceNumber": "RT-2026-014",
-          "amountEGP": 498
-        }
-      ]
-    },
-    {
-      "patientId": "pat-loyalty-1791359462638",
-      "patientName": "حبيبه مجدى محمد",
-      "phone": "01148879943",
-      "barcode": "RT-10043",
-      "cardNumber": "RT-GOLD-10043",
-      "bloodGroup": "",
-      "totalPoints": 1026,
-      "tier": "Gold",
-      "lifetimeSpent": 1026,
-      "issueDate": "2026-10-07",
-      "transactions": [
-        {
-          "id": "tx-1791359462638",
-          "date": "2026-10-07",
-          "type": "earn",
-          "points": 1026,
-          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-013",
-          "invoiceNumber": "RT-2026-013",
-          "amountEGP": 1026
-        }
-      ]
-    },
-    {
-      "patientId": "pat-loyalty-1791381439613",
-      "patientName": "محمد حسن على",
-      "phone": "01005314825",
-      "barcode": "RT-10043",
-      "cardNumber": "RT-SILVER-10043",
-      "bloodGroup": "",
-      "totalPoints": 190,
-      "tier": "Silver",
-      "lifetimeSpent": 190,
-      "issueDate": "2026-10-07",
-      "transactions": [
-        {
-          "id": "tx-1791381439613",
-          "date": "2026-10-07",
-          "type": "earn",
-          "points": 190,
-          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-013",
-          "invoiceNumber": "RT-2026-013",
-          "amountEGP": 190
-        }
-      ]
-    },
-    {
       "patientId": "pat-loyalty-1791400927210",
       "patientName": "جيهان عبدالفتاح",
       "phone": "01099999098",
@@ -11469,29 +11572,6 @@
           "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-031",
           "invoiceNumber": "RT-2026-031",
           "amountEGP": 184
-        }
-      ]
-    },
-    {
-      "patientId": "pat-loyalty-1791414459348",
-      "patientName": "جيهان عبدالفتاح",
-      "phone": "01022231270",
-      "barcode": "RT-10062",
-      "cardNumber": "RT-SILVER-10062",
-      "bloodGroup": "",
-      "totalPoints": 333,
-      "tier": "Silver",
-      "lifetimeSpent": 333,
-      "issueDate": "2026-10-07",
-      "transactions": [
-        {
-          "id": "tx-1791414459348",
-          "date": "2026-10-07",
-          "type": "earn",
-          "points": 333,
-          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-032",
-          "invoiceNumber": "RT-2026-032",
-          "amountEGP": 333
         }
       ]
     }
@@ -11650,19 +11730,19 @@
     }
   ],
   "labInfo": {
-    "labNameAr": "معامل RT للتحاليل الطبية والتشخيصية",
-    "labNameEn": "RT Diagnostic Laboratories",
+    "whatsapp": "01100874444",
     "sloganAr": "التشخيص الصحيح يبدأ معنا · دقة، سرعة، وأمان تشخيصي",
-    "sloganEn": "Accurate Diagnosis Starts With Us",
-    "supervisionAr": "أطباء واستشاريو كلية طب قصر العيني",
-    "supervisionEn": "Kasr Al Ainy Faculty of Medicine Consultants",
-    "accreditation": "ISO 15189 Certified Quality Management",
-    "hotline": "01012345678",
-    "phone": "0244667788",
-    "whatsapp": "01012345678",
+    "supervisionAr": "أطباء واستشاريو كلية طب قصر العيني - جامعة القاهرة",
+    "labNameEn": "RT Diagnostic Laboratories",
+    "sloganEn": "Accurate Diagnosis Starts With Us · Precision & Care",
+    "hotline": "01100046841",
+    "phone": "01013242777",
     "mainAddress": "ميدان بهتيم برج صيدليه العزبى الدور الثالث امام الأسانسير شبرا الخيمه",
+    "labNameAr": "معامل RT للتحاليل الطبية والتشخيصية",
+    "vodafoneCash": "01100046841",
     "instapay": "ramirtlab@instapay",
-    "vodafoneCash": "01098765432"
+    "accreditation": "ISO 15189 Certified Quality Management",
+    "supervisionEn": "Kasr Al Ainy Faculty of Medicine Consultants - Cairo University"
   },
   "testCatalog": [
     {
