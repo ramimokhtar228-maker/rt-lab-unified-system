@@ -692,22 +692,6 @@ export async function pushFullStoreToGitHub(
     const filePath = 'public/rt-database-sync.json';
     const apiUrl = `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/${filePath}`;
 
-    let existingSha: string | undefined;
-    try {
-      const checkRes = await fetch(apiUrl, {
-        headers: {
-          Authorization: `token ${creds.token}`,
-          Accept: 'application/vnd.github.v3+json'
-        }
-      });
-      if (checkRes.ok) {
-        const checkData = await checkRes.json();
-        existingSha = checkData.sha;
-      }
-    } catch {
-      // file might not exist yet
-    }
-
     const fullData = {
       system: 'RT Lab Unified Medical & Financial ERP',
       syncedAt: new Date().toISOString(),
@@ -715,7 +699,29 @@ export async function pushFullStoreToGitHub(
     };
 
     const contentBase64 = encodeBase64Utf8(JSON.stringify(fullData, null, 2));
-    const putRes = await fetch(apiUrl, {
+
+    // Helper to get latest sha
+    const getLatestSha = async (): Promise<string | undefined> => {
+      try {
+        const checkRes = await fetch(apiUrl, {
+          headers: {
+            Authorization: `token ${creds.token}`,
+            Accept: 'application/vnd.github.v3+json'
+          }
+        });
+        if (checkRes.ok) {
+          const checkData = await checkRes.json();
+          return checkData.sha;
+        }
+      } catch {
+        /* file might not exist yet */
+      }
+      return undefined;
+    };
+
+    let existingSha = await getLatestSha();
+
+    let putRes = await fetch(apiUrl, {
       method: 'PUT',
       headers: {
         Authorization: `token ${creds.token}`,
@@ -729,6 +735,25 @@ export async function pushFullStoreToGitHub(
         ...(existingSha ? { sha: existingSha } : {})
       })
     });
+
+    // Auto-retry once on 409 conflict
+    if (!putRes.ok && putRes.status === 409) {
+      existingSha = await getLatestSha();
+      putRes = await fetch(apiUrl, {
+        method: 'PUT',
+        headers: {
+          Authorization: `token ${creds.token}`,
+          Accept: 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: `مزامنة سحابية شاملة لقاعدة بيانات المعمل: ${new Date().toLocaleTimeString('en-US')}`,
+          content: contentBase64,
+          branch: 'main',
+          ...(existingSha ? { sha: existingSha } : {})
+        })
+      });
+    }
 
     if (!putRes.ok) {
       return { success: false, message: `فشل الحفظ السحابي: ${putRes.statusText}` };
@@ -758,20 +783,32 @@ export async function pullFullStoreFromGitHub(
       }
     });
 
-    if (!res.ok) {
-      // Also try fetching raw from gh-pages or public path
-      const publicRes = await fetch(`./rt-database-sync.json?t=${Date.now()}`);
-      if (publicRes.ok) {
-        const json = await publicRes.json();
-        return { success: true, data: json, message: 'تم استرداد البيانات من السحابة بنجاح' };
-      }
-      return { success: false, message: 'لم يتم العثور على نسخة سحابية بعد' };
+    if (res.ok) {
+      const data = await res.json();
+      const content = decodeBase64Utf8(data.content);
+      const parsed = JSON.parse(content);
+      return { success: true, data: parsed, message: 'تم استرداد وتحديث البيانات سحابياً بنجاح!' };
     }
 
-    const data = await res.json();
-    const content = decodeBase64Utf8(data.content);
-    const parsed = JSON.parse(content);
-    return { success: true, data: parsed, message: 'تم استرداد وتحديث البيانات سحابياً بنجاح!' };
+    // Direct raw fallback from GitHub
+    try {
+      const rawRes = await fetch(`https://raw.githubusercontent.com/${creds.owner}/${creds.repo}/main/public/rt-database-sync.json?t=${Date.now()}`);
+      if (rawRes.ok) {
+        const parsed = await rawRes.json();
+        return { success: true, data: parsed, message: 'تم استرداد البيانات من السحابة بنجاح' };
+      }
+    } catch {
+      /* ignore */
+    }
+
+    // Local public path fallback
+    const publicRes = await fetch(`./rt-database-sync.json?t=${Date.now()}`);
+    if (publicRes.ok) {
+      const json = await publicRes.json();
+      return { success: true, data: json, message: 'تم استرداد البيانات من السحابة بنجاح' };
+    }
+
+    return { success: false, message: 'لم يتم العثور على نسخة سحابية بعد' };
   } catch (err) {
     return { success: false, message: `خطأ أثناء الجلب: ${(err as Error).message}` };
   }

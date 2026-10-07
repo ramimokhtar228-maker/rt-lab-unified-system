@@ -33,11 +33,13 @@ export const Header: React.FC = () => {
     markNotificationRead,
     clearNotifications,
     syncUnifiedDataToGitHub,
+    fetchAllDevicesData,
+    isDeviceSyncing,
+    lastDeviceSyncAt,
     githubConfig
   } = useApp();
 
   const [notificationsOpen, setNotificationsOpen] = useState(false);
-  const [isSyncing, setIsSyncing] = useState(false);
   const [syncStatusMsg, setSyncStatusMsg] = useState<string | null>(null);
 
   const todayStr = new Date().toISOString().split('T')[0];
@@ -47,16 +49,18 @@ export const Header: React.FC = () => {
   const unreadCount = notifications.filter(n => !n.read).length;
 
   const handleCloudSync = async () => {
-    setIsSyncing(true);
     setSyncStatusMsg(null);
     try {
-      const res = await syncUnifiedDataToGitHub();
-      setSyncStatusMsg(res.message);
-      setTimeout(() => setSyncStatusMsg(null), 4000);
+      const res = await fetchAllDevicesData();
+      if (res.success) {
+        setSyncStatusMsg(`تم التسميع وجلب كافة البيانات بنجاح (${reports.length} تقرير و ${incomeRecords.length} فاتورة)`);
+      } else {
+        setSyncStatusMsg(res.message || "فشلت المزامنة");
+      }
+      setTimeout(() => setSyncStatusMsg(null), 5000);
     } catch {
-      setSyncStatusMsg("فشلت المزامنة");
-    } finally {
-      setIsSyncing(false);
+      setSyncStatusMsg("فشلت المزامنة والتسميع");
+      setTimeout(() => setSyncStatusMsg(null), 4000);
     }
   };
 
@@ -137,11 +141,11 @@ export const Header: React.FC = () => {
             <div className="relative">
               <button
                 onClick={handleCloudSync}
-                disabled={isSyncing}
+                disabled={isDeviceSyncing}
                 title="تسميع ومزامنة حية فورية بين الموبايل واللاب توب وجميع الأجهزة"
                 className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700 text-xs font-bold transition-all cursor-pointer active:scale-95 shadow-xs"
               >
-                {isSyncing ? (
+                {isDeviceSyncing ? (
                   <RefreshCw className="w-3.5 h-3.5 animate-spin text-rose-400" />
                 ) : (
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-xs shadow-emerald-500 animate-pulse" />

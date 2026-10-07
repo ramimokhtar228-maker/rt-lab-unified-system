@@ -243,10 +243,13 @@ interface AppContextType {
   clearNotifications: () => void;
   addNotification: (notif: Omit<AppNotification, 'id' | 'timestamp' | 'read'>) => void;
 
-  // GitHub Cloud Sync
+  // GitHub Cloud Sync & Multi-Device Live Data Unification
   githubConfig: GitHubSyncConfig;
   updateGithubConfig: (config: Partial<GitHubSyncConfig>) => void;
   syncUnifiedDataToGitHub: () => Promise<{ success: boolean; message: string }>;
+  fetchAllDevicesData: () => Promise<{ success: boolean; message: string; reportsCount: number; incomeCount: number }>;
+  isDeviceSyncing: boolean;
+  lastDeviceSyncAt: Date | null;
 
   // Backups
   exportBackup: (password?: string) => Promise<string>;
@@ -498,8 +501,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   ]);
 
-  // 16. GitHub Sync Config
+  // 16. GitHub Sync Config & Multi-Device Live State
   const [githubConfig, setGithubConfig] = useState<GitHubSyncConfig>(INITIAL_GITHUB_CONFIG);
+  const [isInitialSyncCompleted, setIsInitialSyncCompleted] = useState<boolean>(false);
+  const [isDeviceSyncing, setIsDeviceSyncing] = useState<boolean>(false);
+  const [lastDeviceSyncAt, setLastDeviceSyncAt] = useState<Date | null>(null);
 
   // Persistence Effects
   useEffect(() => { try { localStorage.setItem(REPORTS_KEY, JSON.stringify(reports)); } catch (e) { console.error(e); } }, [reports]);
@@ -556,13 +562,200 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   }, []);
 
-  // Real-Time Multi-Device Cloud Synchronization (Firebase Firestore + GitHub Cloud Backup)
+  // Notifications helper
+  const addNotification = useCallback((notif: Omit<AppNotification, 'id' | 'timestamp' | 'read'>) => {
+    const newNotif: AppNotification = {
+      ...notif,
+      id: `notif-${Date.now()}`,
+      timestamp: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+      read: false
+    };
+    setNotifications(prev => [newNotif, ...prev]);
+  }, []);
+
+  // Master function to fetch, unify and deduplicate all data recorded across all devices
+  const fetchAllDevicesData = useCallback(async (): Promise<{ success: boolean; message: string; reportsCount: number; incomeCount: number }> => {
+    setIsDeviceSyncing(true);
+    try {
+      // 1. Fetch from GitHub repository (public/rt-database-sync.json)
+      const ghRes = await pullFullStoreFromGitHub(githubConfig);
+
+      // 2. Fetch master snapshot from Firestore
+      const fsSnapshotRes = await realtimeSyncManager.pullMasterSnapshot();
+
+      // 3. Fetch individual records from Firestore collections (/reports and /income_records)
+      const fsCollectionsRes = await realtimeSyncManager.fetchAllFirestoreRecords();
+
+      // 4. Smart Deep Deduplication and Merging for Reports
+      setReports(prevReports => {
+        const reportMap = new Map<string, LabReport>();
+
+        // Seed with existing local reports
+        prevReports.forEach(r => {
+          if (r && r.id) reportMap.set(r.id, r);
+        });
+
+        const mergeOneReport = (r: any) => {
+          if (!r || !r.id) return;
+          // Match by id, reportNumber, or barcode
+          const existingKey = Array.from(reportMap.keys()).find(k => {
+            const cur = reportMap.get(k);
+            if (!cur) return false;
+            return cur.id === r.id ||
+              (cur.reportNumber && r.reportNumber && cur.reportNumber === r.reportNumber) ||
+              (cur.patient?.barcode && r.patient?.barcode && cur.patient.barcode === r.patient.barcode);
+          });
+
+          if (existingKey) {
+            const existing = reportMap.get(existingKey)!;
+            const isNewer = (r.updatedAt && (!existing.updatedAt || r.updatedAt > existing.updatedAt)) ||
+                            (r.status === 'verified' && existing.status !== 'verified');
+            if (isNewer) {
+              reportMap.set(existingKey, { ...existing, ...r });
+            }
+          } else {
+            reportMap.set(r.id, r);
+          }
+        };
+
+        if (ghRes.success && ghRes.data && Array.isArray(ghRes.data.reports)) {
+          ghRes.data.reports.forEach(mergeOneReport);
+        }
+        if (fsSnapshotRes.success && fsSnapshotRes.data && Array.isArray(fsSnapshotRes.data.reports)) {
+          fsSnapshotRes.data.reports.forEach(mergeOneReport);
+        }
+        if (fsCollectionsRes.reports && Array.isArray(fsCollectionsRes.reports)) {
+          fsCollectionsRes.reports.forEach(mergeOneReport);
+        }
+
+        const merged = Array.from(reportMap.values());
+        merged.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+        return merged;
+      });
+
+      // 5. Smart Deep Deduplication and Merging for Income Records
+      setIncomeRecords(prevIncome => {
+        const incomeMap = new Map<string, IncomeRecord>();
+        prevIncome.forEach(i => { if (i && i.id) incomeMap.set(i.id, i); });
+
+        const mergeOneIncome = (i: any) => {
+          if (!i || !i.id) return;
+          const existingKey = Array.from(incomeMap.keys()).find(k => {
+            const cur = incomeMap.get(k);
+            if (!cur) return false;
+            return cur.id === i.id ||
+              (cur.invoiceNumber && i.invoiceNumber && cur.invoiceNumber === i.invoiceNumber) ||
+              (cur.barcode && i.barcode && cur.barcode === i.barcode);
+          });
+
+          if (existingKey) {
+            const existing = incomeMap.get(existingKey)!;
+            const isNewer = i.updatedAt && (!existing.updatedAt || i.updatedAt > existing.updatedAt);
+            if (isNewer) {
+              incomeMap.set(existingKey, { ...existing, ...i });
+            }
+          } else {
+            incomeMap.set(i.id, i);
+          }
+        };
+
+        if (ghRes.success && ghRes.data && Array.isArray(ghRes.data.incomeRecords)) {
+          ghRes.data.incomeRecords.forEach(mergeOneIncome);
+        }
+        if (fsSnapshotRes.success && fsSnapshotRes.data && Array.isArray(fsSnapshotRes.data.incomeRecords)) {
+          fsSnapshotRes.data.incomeRecords.forEach(mergeOneIncome);
+        }
+        if (fsCollectionsRes.incomeRecords && Array.isArray(fsCollectionsRes.incomeRecords)) {
+          fsCollectionsRes.incomeRecords.forEach(mergeOneIncome);
+        }
+
+        const merged = Array.from(incomeMap.values());
+        merged.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+        return merged;
+      });
+
+      // 6. Merge Catalog & Packages if available in Cloud
+      if (ghRes.success && ghRes.data) {
+        if (Array.isArray(ghRes.data.loyaltyProfiles) && ghRes.data.loyaltyProfiles.length > 0) {
+          setLoyaltyProfiles(prev => {
+            const lMap = new Map(prev.map(p => [p.patientId || p.phone, p]));
+            ghRes.data.loyaltyProfiles.forEach((p: any) => lMap.set(p.patientId || p.phone, p));
+            return Array.from(lMap.values());
+          });
+        }
+        if (Array.isArray(ghRes.data.testCatalog) && ghRes.data.testCatalog.length > 0) {
+          setTestCatalog(prev => mergeCatalogWithDefaults(ghRes.data.testCatalog));
+        }
+        if (Array.isArray(ghRes.data.packages) && ghRes.data.packages.length > 0) {
+          setPackages(prev => mergePackagesWithDefaults(ghRes.data.packages));
+        }
+      }
+
+      setLastDeviceSyncAt(new Date());
+      setIsInitialSyncCompleted(true);
+
+      const successMsg = `تم جلب وتوحيد كافة بيانات الأجهزة السحابية بنجاح!`;
+      addNotification({
+        title: '⚡ اكتمل التسميع وجلب بيانات الأجهزة',
+        message: successMsg,
+        type: 'success'
+      });
+
+      return {
+        success: true,
+        message: successMsg,
+        reportsCount: reports.length,
+        incomeCount: incomeRecords.length
+      };
+    } catch (err) {
+      console.error('Error fetching all devices data:', err);
+      return {
+        success: false,
+        message: (err as Error).message || 'فشل جلب بيانات الأجهزة',
+        reportsCount: reports.length,
+        incomeCount: incomeRecords.length
+      };
+    } finally {
+      setIsDeviceSyncing(false);
+    }
+  }, [githubConfig, addNotification, reports.length, incomeRecords.length]);
+
+  // Real-Time Multi-Device Cloud Synchronization Event Listener
   useEffect(() => {
     // 1. Subscribe to real-time events from other devices via Firebase Firestore live channel
     const unsubscribe = realtimeSyncManager.subscribe((msg) => {
       if (!msg || !msg.action) return;
 
-      if (msg.action === 'UPDATE_REPORT' && msg.payload) {
+      if (msg.action === 'ADMIT_PATIENT' && msg.payload) {
+        const { report: rep, invoice: inv } = msg.payload;
+        if (rep) {
+          setReports(prev => {
+            const idx = prev.findIndex(r => r.id === rep.id || r.reportNumber === rep.reportNumber);
+            if (idx >= 0) {
+              const next = [...prev];
+              next[idx] = { ...next[idx], ...rep };
+              return next;
+            }
+            return [rep, ...prev];
+          });
+        }
+        if (inv) {
+          setIncomeRecords(prev => {
+            const idx = prev.findIndex(i => i.id === inv.id || i.invoiceNumber === inv.invoiceNumber);
+            if (idx >= 0) {
+              const next = [...prev];
+              next[idx] = { ...next[idx], ...inv };
+              return next;
+            }
+            return [inv, ...prev];
+          });
+        }
+        addNotification({
+          title: '⚡ حجز مريض متزامن لحظياً',
+          message: `تم استلام تسجيل المريض (${rep?.patient?.fullName || 'مريض جديد'}) لحظياً من: ${msg.senderDeviceName}`,
+          type: 'success'
+        });
+      } else if (msg.action === 'UPDATE_REPORT' && msg.payload) {
         setReports(prev => {
           const reportPayload = msg.payload as LabReport;
           const idx = prev.findIndex(r => r.id === reportPayload.id);
@@ -628,127 +821,33 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setPackages(prev => mergePackagesWithDefaults(msg.payload));
       } else if (msg.action === 'PING_TEST') {
         addNotification({
-          title: '⚡ تسميع لحظي متزامن فوري',
+          title: '⚡ إشارة تسميع لحظي متزامن',
           message: `تم استلام إشارة اتصال وتسميع فوري بنجاح من جهاز: ${msg.senderDeviceName}`,
           type: 'success'
         });
       } else if (msg.action === 'FULL_SYNC' && msg.payload) {
-        if (Array.isArray(msg.payload.reports)) {
-          setReports(prev => {
-            const map = new Map(prev.map(r => [r.id, r]));
-            msg.payload.reports.forEach((r: LabReport) => map.set(r.id, r));
-            return Array.from(map.values());
-          });
-        }
-        if (Array.isArray(msg.payload.incomeRecords)) {
-          setIncomeRecords(prev => {
-            const map = new Map(prev.map(i => [i.id, i]));
-            msg.payload.incomeRecords.forEach((i: IncomeRecord) => map.set(i.id, i));
-            return Array.from(map.values());
-          });
-        }
-        if (Array.isArray(msg.payload.expenses)) {
-          setExpenses(msg.payload.expenses);
-        }
-        if (Array.isArray(msg.payload.loyaltyProfiles)) {
-          setLoyaltyProfiles(msg.payload.loyaltyProfiles);
-        }
-        if (msg.payload.labInfo) {
-          setLabInfo(msg.payload.labInfo);
-        }
+        fetchAllDevicesData().catch(() => {});
       }
     });
-
-    // 2. Initial cloud master pull on mount (from Firebase Firestore first, fallback to GitHub)
-    realtimeSyncManager.pullMasterSnapshot().then(res => {
-      if (res.success && res.data) {
-        if (Array.isArray(res.data.reports) && res.data.reports.length > 0) {
-          setReports(prev => {
-            const map = new Map(prev.map(r => [r.id, r]));
-            res.data.reports.forEach((r: LabReport) => map.set(r.id, r));
-            return Array.from(map.values());
-          });
-        }
-        if (Array.isArray(res.data.incomeRecords) && res.data.incomeRecords.length > 0) {
-          setIncomeRecords(prev => {
-            const map = new Map(prev.map(i => [i.id, i]));
-            res.data.incomeRecords.forEach((i: IncomeRecord) => map.set(i.id, i));
-            return Array.from(map.values());
-          });
-        }
-        if (Array.isArray(res.data.expenses) && res.data.expenses.length > 0) {
-          setExpenses(res.data.expenses);
-        }
-        if (Array.isArray(res.data.loyaltyProfiles) && res.data.loyaltyProfiles.length > 0) {
-          setLoyaltyProfiles(res.data.loyaltyProfiles);
-        }
-        if (res.data.labInfo) {
-          setLabInfo(res.data.labInfo);
-        }
-        if (Array.isArray(res.data.testCatalog) && res.data.testCatalog.length > 0) {
-          setTestCatalog(prev => mergeCatalogWithDefaults(res.data.testCatalog));
-        }
-        if (Array.isArray(res.data.packages) && res.data.packages.length > 0) {
-          setPackages(prev => mergePackagesWithDefaults(res.data.packages));
-        }
-      } else {
-        // Fallback to GitHub repo store if Firestore snapshot is not initialized yet
-        pullFullStoreFromGitHub(githubConfig).then(ghRes => {
-          if (ghRes.success && ghRes.data) {
-            if (Array.isArray(ghRes.data.reports) && ghRes.data.reports.length > 0) {
-              setReports(prev => {
-                const map = new Map(prev.map(r => [r.id, r]));
-                ghRes.data.reports.forEach((r: LabReport) => map.set(r.id, r));
-                return Array.from(map.values());
-              });
-            }
-            if (Array.isArray(ghRes.data.incomeRecords) && ghRes.data.incomeRecords.length > 0) {
-              setIncomeRecords(prev => {
-                const map = new Map(prev.map(i => [i.id, i]));
-                ghRes.data.incomeRecords.forEach((i: IncomeRecord) => map.set(i.id, i));
-                return Array.from(map.values());
-              });
-            }
-            if (Array.isArray(ghRes.data.testCatalog) && ghRes.data.testCatalog.length > 0) {
-              setTestCatalog(prev => mergeCatalogWithDefaults(ghRes.data.testCatalog));
-            }
-            if (Array.isArray(ghRes.data.packages) && ghRes.data.packages.length > 0) {
-              setPackages(prev => mergePackagesWithDefaults(ghRes.data.packages));
-            }
-          }
-        }).catch(() => {});
-      }
-    }).catch(err => console.warn('Initial cloud pull:', err));
 
     return () => {
       unsubscribe();
     };
-  }, [githubConfig]);
+  }, [fetchAllDevicesData, addNotification]);
 
+  // Initial cloud master pull on mount
+  useEffect(() => {
+    fetchAllDevicesData().catch(err => {
+      console.warn('Initial multi-device data pull note:', err);
+      setIsInitialSyncCompleted(true);
+    });
+  }, []);
 
-  // Re-pull latest cloud state when user returns to the tab (multi-device immediate catch-up)
+  // Re-pull latest cloud state when user returns to the tab (immediate catch-up)
   useEffect(() => {
     const onVisible = () => {
       if (document.visibilityState === 'visible') {
-        realtimeSyncManager.pullMasterSnapshot().then(res => {
-          if (res.success && res.data) {
-            const data = res.data;
-            if (Array.isArray(data.reports) && data.reports.length > 0) {
-              setReports(prev => {
-                const map = new Map(prev.map((r: any) => [r.id, r]));
-                data.reports.forEach((r: any) => map.set(r.id, r));
-                return Array.from(map.values());
-              });
-            }
-            if (Array.isArray(data.incomeRecords) && data.incomeRecords.length > 0) {
-              setIncomeRecords(prev => {
-                const map = new Map(prev.map((i: any) => [i.id, i]));
-                data.incomeRecords.forEach((i: any) => map.set(i.id, i));
-                return Array.from(map.values());
-              });
-            }
-          }
-        }).catch(() => {});
+        fetchAllDevicesData().catch(() => {});
       }
     };
     document.addEventListener('visibilitychange', onVisible);
@@ -757,10 +856,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       document.removeEventListener('visibilitychange', onVisible);
       window.removeEventListener('focus', onVisible);
     };
-  }, []);
+  }, [fetchAllDevicesData]);
 
   // Debounced cloud save whenever critical lab data changes (Push to Firebase Firestore & GitHub)
+  // CRITICAL: Only triggers AFTER initial sync has loaded and unified existing cloud data!
   useEffect(() => {
+    if (!isInitialSyncCompleted) return;
+
     const timer = setTimeout(() => {
       if (reports.length > 0 || incomeRecords.length > 0 || testCatalog.length > 0) {
         const payload = {
@@ -782,9 +884,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           pushFullStoreToGitHub(githubConfig, payload).catch(() => {});
         }
       }
-    }, 500);
+    }, 4000);
     return () => clearTimeout(timer);
-  }, [reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, packages, githubConfig]);
+  }, [reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, packages, githubConfig, isInitialSyncCompleted]);
 
   // Audit Logging helper
   const logAction = useCallback((action: AuditLog['action'], module: AuditLog['module'], description: string) => {
@@ -800,17 +902,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
     setAuditLogs(prev => [newLog, ...prev.slice(0, 499)]);
   }, [currentUser]);
-
-  // Notifications helper
-  const addNotification = useCallback((notif: Omit<AppNotification, 'id' | 'timestamp' | 'read'>) => {
-    const newNotif: AppNotification = {
-      ...notif,
-      id: `notif-${Date.now()}`,
-      timestamp: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
-      read: false
-    };
-    setNotifications(prev => [newNotif, ...prev]);
-  }, []);
 
   const markNotificationRead = useCallback((id: string) => {
     setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
@@ -1385,6 +1476,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setIncomeRecords(prev => [newInvoice, ...prev]);
     newReport.invoiceId = newInvoice.id;
 
+    realtimeSyncManager.broadcastAction('ADMIT_PATIENT', {
+      report: newReport,
+      invoice: newInvoice,
+      patient
+    });
     realtimeSyncManager.broadcastAction('UPDATE_REPORT', newReport);
     realtimeSyncManager.broadcastAction('UPDATE_INVOICE', newInvoice);
 
@@ -2288,6 +2384,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     githubConfig,
     updateGithubConfig,
     syncUnifiedDataToGitHub,
+    fetchAllDevicesData,
+    isDeviceSyncing,
+    lastDeviceSyncAt,
 
     exportBackup,
     importBackup,

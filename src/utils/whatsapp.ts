@@ -77,59 +77,69 @@ export function formatBookingConfirmationWhatsAppMessage(params: {
   fastingHours?: number;
 }): string {
   const branchAddr = params.branchAddress || BRANCH_MAIN_ADDRESS;
-  const loc = params.isHomeVisit
-    ? `🏠 *نوع الحجز:* زيارة منزلية
-📍 *عنوان الزيارة:* ${params.address || '—'}
-${params.deliveryNotes ? `📝 *تفاصيل الزيارة:* ${params.deliveryNotes}\n` : ''}📞 *تليفون التواصل:* ${params.phone || '—'}`
-    : `🏥 *نوع الحجز:* حضور بالمعمل
-🏢 *عنوان الفرع:* ${branchAddr}
-📞 *تليفون التواصل:* ${params.phone || LAB_PHONE}`;
+  const priceAfterDiscount = Math.max(0, params.subtotal - (params.discountAmount || 0));
 
-  const visitFeeLine = (params.visitFee && params.visitFee > 0)
+  const locationSection = params.isHomeVisit
+    ? `🏠 *بيانات وعنوان الزيارة المنزلية:*
+• *العنوان:* ${params.address || '—'}
+${params.deliveryNotes ? `• *تفاصيل وملاحظات الزيارة:* ${params.deliveryNotes}\n` : ''}• *تليفون التواصل للزيارة:* ${params.phone || '—'}`
+    : `🏥 *بيانات الحضور بالمعمل:*
+• *عنوان الفرع:* ${branchAddr}
+• *تليفون المعمل للتواصل:* ${LAB_PHONE}`;
+
+  const visitFeeLine = (params.isHomeVisit && params.visitFee && params.visitFee > 0)
     ? `• *رسوم الزيارة المنزلية:* ${params.visitFee} ج.م\n`
     : '';
 
-  const fastingNote = (params.fastingHours && params.fastingHours > 0)
-    ? `• الصيام لمدة *${params.fastingHours} ساعة* قبل سحب العينة (الماء مسموح).`
-    : `• يُرجى الصيام إذا كانت التحاليل تتطلب ذلك (الماء مسموح).`;
+  const discountDetails = params.discountAmount > 0
+    ? `${params.discountLabel} (خصم: ${params.discountAmount} ج.م)`
+    : (params.discountLabel || 'لا يوجد خصم');
+
+  const fastingText = (params.fastingHours && params.fastingHours > 0)
+    ? `• الصيام لمدة *${params.fastingHours} ساعة* قبل سحب العينة (شرب الماء مسموح به ومفضل).`
+    : `• الصيام من 10 إلى 12 ساعة في حالة تحاليل السكر الصائم، الدهون الثلاثية، الكوليسترول، ووظائف الكبد والكلى (الماء مسموح به).`;
 
   return `🌟 *مرحباً بك في ${LAB_NAME_AR}*
-*معامل رامي مختار — أطباء كلية طب قصر العيني*
-
-تم تأكيد حجز موعد التحاليل بنجاح ✅
-
+*معامل أ.د. رامي مختار — أطباء كلية طب قصر العيني*
 ────────────────────
-👤 *البيانات الشخصية*
+أهلاً وسهلاً بحضرتك يا *${params.patientName}* 🌸
+نسعد بخدمتكم دائماً، تم تأكيد وتسجيل حجز موعد التحاليل بنجاح ✅
+
+👤 *البيانات الشخصية وتفاصيل الحجز:*
 • *الاسم:* ${params.patientName}
-• *رقم الحجز / الملف:* #${params.labNumber}
-• *الهاتف:* ${params.phone || '—'}
-• *اليوم والتاريخ:* ${params.date}
-• *الساعة:* ${params.time}
+• *رقم الملف / الحجز:* #${params.labNumber}
+• *هاتف التواصل:* ${params.phone || '—'}
+• *يوم وتاريخ الحجز:* ${params.date}
+• *ساعة الحجز / الموعد:* ${params.time}
+• *نوع الحجز:* ${params.isHomeVisit ? 'زيارة منزلية (Home Visit 🏠)' : 'حضور بالمعمل (Branch Visit 🏥)'}
 
-${loc}
+${locationSection}
 
 ────────────────────
-🧪 *التحاليل المطلوبة* (اختصارات)
+🧪 *التحاليل المطلوبة (اختصارات فقط بدون سعر):*
 ${params.testsList}
 
 ────────────────────
-💰 *الحساب*
-• *السعر الأصلي (إجمالي):* ${params.subtotal} ج.م
-• *نسبة / قيمة الخصم أو كرت الولاء:* ${params.discountLabel}${params.discountAmount ? ` (−${params.discountAmount} ج.م)` : ''}
-${visitFeeLine}• *السعر بعد الخصم + الرسوم:* *${params.netAmount} ج.م*
-• *طريقة الدفع:* ${params.paymentMethod}
+💰 *تفاصيل الحساب والفاتورة:*
+• *السعر الأصلي إجمالي:* ${params.subtotal} ج.م
+• *نسبة الخصم أو كرت الولاء:* ${discountDetails}
+• *السعر بعد الخصم:* ${priceAfterDiscount} ج.م
+${visitFeeLine}• *إجمالي الصافي المطلوب سداده:* *${params.netAmount} ج.م*
+• *طريقة السداد:* ${params.paymentMethod}
 
 ────────────────────
-⚠️ *تعليمات وشروط ما قبل التحاليل*
-${fastingNote}
-• إحضار البطاقة الشخصية عند الحضور أو الزيارة.
-• في الزيارة المنزلية: التواجد في العنوان في الموعد المحدد.
-• أي تعديل على الموعد يُرجى إبلاغ المعمل مسبقاً.
+⚠️ *تعليمات وشروط ما قبل التحاليل:*
+${fastingText}
+• يُفضل إحضار العينة الصباحية الأولى في عبوة معقمة مخصصة (لتحاليل البول والبراز).
+• تجنب المجهود البدني العنيف والتدخين قبل إجراء الفحوصات مباشرة.
+• إبلاغ المعمل بأي أدوية تؤخذ بانتظام (مثل أدوية الضغط، السيولة، أو الغدة).
+${params.isHomeVisit ? '• التواجد في العنوان في الموعد المحدد مع تجهيز إضاءة مناسبة لمكان السحب.\n' : '• إحضار بطاقة الرقم القومي أو إثبات الشخصية عند الحضور للفرع.\n'}• في حال الرغبة في تعديل الموعد يُرجى إبلاغ المعمل مسبقاً.
 
 ────────────────────
-شكراً لثقتكم 🌸
-معامل RT تتمنى لكم دوام الصحة والعافية.
-📞 ${LAB_PHONE}`;
+🌸 *نشكركم لاختياركم معامل RT، ونتشرف دائماً برعايتكم وتقديم أدق النتائج التشخيصية المعتمدة.*
+*معامل RT — معامل أ.د. رامي مختار*
+*نتمنى لحضرتكم دوام الصحة والعافية والشفاء التام* ✨
+📞 الخط الساخن وهاتف المعمل: ${LAB_PHONE}`;
 }
 
 export function formatPostSampleWhatsAppMessage(params: {

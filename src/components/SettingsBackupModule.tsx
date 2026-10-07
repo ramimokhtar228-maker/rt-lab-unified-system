@@ -13,9 +13,14 @@ import {
   HardDrive,
   Smartphone,
   Laptop,
-  Sparkles
+  Sparkles,
+  Cloud,
+  Radio,
+  Share2,
+  FileSpreadsheet
 } from 'lucide-react';
 import { PWAInstallModal } from './PWAInstallModal';
+import { realtimeSyncManager } from '../utils/realtimeMultiDeviceSync';
 
 export const SettingsBackupModule: React.FC = () => {
   const {
@@ -24,8 +29,17 @@ export const SettingsBackupModule: React.FC = () => {
     resetToDefaultData,
     clearPatientRecordsOnly,
     currentUser,
-    language
+    language,
+    reports,
+    incomeRecords,
+    fetchAllDevicesData,
+    syncUnifiedDataToGitHub,
+    isDeviceSyncing,
+    lastDeviceSyncAt
   } = useApp();
+
+  // Multi-Device Sync State
+  const [syncFeedback, setSyncFeedback] = useState<string | null>(null);
 
   // Export State
   const [exportPassword, setExportPassword] = useState('');
@@ -38,6 +52,34 @@ export const SettingsBackupModule: React.FC = () => {
   const [importFileContent, setImportFileContent] = useState<string | null>(null);
   const [importStatus, setImportStatus] = useState<{ success: boolean; message: string } | null>(null);
   const [isImporting, setIsImporting] = useState(false);
+
+  const handleFetchDevices = async () => {
+    setSyncFeedback('جاري الاتصال بالسحابة وجلب كافة بيانات الأجهزة...');
+    try {
+      const res = await fetchAllDevicesData();
+      setSyncFeedback(res.message);
+      setTimeout(() => setSyncFeedback(null), 6000);
+    } catch (err: any) {
+      setSyncFeedback(`خطأ: ${err.message || 'فشل جلب البيانات'}`);
+    }
+  };
+
+  const handlePushDevices = async () => {
+    setSyncFeedback('جاري رفع وتسميع البيانات لجميع الأجهزة سحابياً...');
+    try {
+      const res = await syncUnifiedDataToGitHub();
+      setSyncFeedback(res.message);
+      setTimeout(() => setSyncFeedback(null), 6000);
+    } catch (err: any) {
+      setSyncFeedback(`خطأ: ${err.message || 'فشل الرفع السحابي'}`);
+    }
+  };
+
+  const handlePingDevices = () => {
+    realtimeSyncManager.broadcastAction('PING_TEST', { time: Date.now() });
+    setSyncFeedback('⚡ تم إرسال إشارة اختبار التسميع اللحظي لجميع الأجهزة النشطة بنجاح');
+    setTimeout(() => setSyncFeedback(null), 4000);
+  };
 
   const handleExport = async () => {
     setIsExporting(true);
@@ -111,6 +153,92 @@ export const SettingsBackupModule: React.FC = () => {
             ? 'تصدير واستعادة كامل قاعدة بيانات معامل RT (المرضى، الفواتير، المصروفات، الكواشف، والمرتبات) مشفرة بخوارزمية AES-GCM 256-bit.'
             : 'Export and restore complete lab databases protected with military-grade AES-GCM encryption.'}
         </p>
+      </div>
+
+      {/* Real-time Multi-Device Sync Card */}
+      <div className="bg-gradient-to-r from-slate-900 via-rose-950 to-slate-900 text-white p-6 rounded-2xl border border-rose-900/50 shadow-xl space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 bg-rose-600/30 rounded-xl border border-rose-500/40 text-rose-300">
+              <Cloud className="w-6 h-6 animate-pulse" />
+            </div>
+            <div>
+              <h3 className="text-base font-black flex items-center gap-2">
+                <span>خاصية التسميع والمزامنة اللحظية بين الأجهزة</span>
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono">
+                  LIVE CLOUD SYNC
+                </span>
+              </h3>
+              <p className="text-xs text-slate-300">
+                تسميع فوري لحظي لكافة حالات المرضى والفواتير بين الموبايل، التابلت، ولاب توب المعمل عبر Firebase و GitHub
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <div className="text-left text-xs bg-black/40 px-3 py-1.5 rounded-xl border border-white/10 font-mono">
+              <span className="text-slate-400 block text-[10px]">الجهاز الحالي:</span>
+              <strong className="text-rose-200">{realtimeSyncManager.getStatus().activeDeviceName}</strong>
+            </div>
+          </div>
+        </div>
+
+        {/* Sync Controls & Actions */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-white/10">
+          <button
+            type="button"
+            onClick={handleFetchDevices}
+            disabled={isDeviceSyncing}
+            className="p-3 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold text-xs rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+          >
+            {isDeviceSyncing ? (
+              <RefreshCw className="w-4 h-4 animate-spin" />
+            ) : (
+              <Download className="w-4 h-4 text-emerald-200" />
+            )}
+            <span>جلب وتوحيد بيانات الأجهزة سحابياً</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handlePushDevices}
+            disabled={isDeviceSyncing}
+            className="p-3 bg-rose-800 hover:bg-rose-700 disabled:opacity-50 text-white font-bold text-xs rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+          >
+            <Upload className="w-4 h-4 text-rose-300" />
+            <span>رفع وتسميع البيانات لجميع الأجهزة</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handlePingDevices}
+            className="p-3 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl border border-slate-700 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+          >
+            <Radio className="w-4 h-4 text-amber-400" />
+            <span>اختبار إشارة التسميع اللحظي (Ping)</span>
+          </button>
+        </div>
+
+        {syncFeedback && (
+          <div className="p-2.5 rounded-xl bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 text-xs font-bold text-center animate-in fade-in">
+            {syncFeedback}
+          </div>
+        )}
+
+        {/* Sync Statistics */}
+        <div className="flex flex-wrap items-center justify-between text-[11px] text-slate-300 pt-2 border-t border-white/10">
+          <div className="flex items-center gap-4">
+            <span>التقارير الطبية المتزامنة: <strong className="text-white font-mono">{reports.length}</strong></span>
+            <span>الفواتير المسجلة: <strong className="text-emerald-400 font-mono">{incomeRecords.length}</strong></span>
+          </div>
+          <div>
+            {lastDeviceSyncAt ? (
+              <span>آخر جلب وتسميع: <strong className="text-rose-200 font-mono">{lastDeviceSyncAt.toLocaleTimeString('en-US')}</strong></span>
+            ) : (
+              <span className="text-slate-400">التسميع اللحظي نشط تلقائياً</span>
+            )}
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

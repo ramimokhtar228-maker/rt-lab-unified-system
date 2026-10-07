@@ -146,17 +146,20 @@ export const PatientForm: React.FC<PatientFormProps> = ({ patient, onChange, onR
     const msg = formatBookingConfirmationWhatsAppMessage({
       patientName: patient.fullName || 'العميل الكريم',
       labNumber: patient.labNumber,
+      phone: patient.phone || '',
       date: patient.appointmentDate || patient.sampleDate.split('T')[0],
       time: patient.appointmentTime || '10:00 ص',
       isHomeVisit: bookingType === 'home_visit',
       address: patient.homeAddress,
       deliveryNotes: patient.deliveryNotes,
-      testsList: patient.clinicalHistory || 'الفحوصات التشخيصية المسجلة',
+      testsList: patient.clinicalHistory ? `• ${patient.clinicalHistory}` : '• CBC\n• الفحوصات التشخيصية المسجلة',
       subtotal: baseSubtotal,
       discountAmount,
       discountLabel,
+      visitFee: effectiveHomeFee,
       netAmount,
-      paymentMethod: patient.paymentMethod === 'card' ? 'بطاقة ائتمانية' : patient.paymentMethod === 'instapay' ? 'إنستا باي' : patient.paymentMethod === 'wallet' ? 'محفظة إلكترونية' : 'نقداً (كاش)'
+      paymentMethod: patient.paymentMethod === 'card' ? 'بطاقة ائتمانية' : patient.paymentMethod === 'instapay' ? 'إنستا باي' : patient.paymentMethod === 'wallet' ? 'محفظة إلكترونية' : 'نقداً (كاش)',
+      fastingHours: patient.fastingHours || 0
     });
     openWhatsApp(patient.phone || '01000000000', msg);
     setWhatsAppSent(true);

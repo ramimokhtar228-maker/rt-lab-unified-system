@@ -22,6 +22,9 @@ import {
   Layers,
   FlaskConical,
   MessageCircle,
+  Building2,
+  Home,
+  MapPin,
   ChevronDown,
   ChevronUp,
   FileText
@@ -984,64 +987,184 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
             </div>
 
             {/* Booking Type: Branch or Home Visit */}
-            <div className="space-y-2">
-              <label className="block text-xs font-bold text-slate-700">نوع الحجز والمقر:</label>
+            <div className="space-y-3 bg-slate-50/90 p-3.5 rounded-2xl border border-slate-200">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                  <Calendar className="w-4 h-4 text-rose-800" />
+                  <span>تحديد موعد ومقر الفحص (يوم وساعة الحجز):</span>
+                </label>
+                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${bookingType === 'home_visit' ? 'bg-rose-100 text-rose-900 border border-rose-300' : 'bg-blue-100 text-blue-900 border border-blue-300'}`}>
+                  {bookingType === 'home_visit' ? 'زيارة منزلية 🏠' : 'حضور بالمعمل 🏥'}
+                </span>
+              </div>
+
+              {/* Toggle Buttons */}
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
                   onClick={() => setBookingType('branch')}
-                  className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+                  className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                     bookingType === 'branch'
-                      ? 'bg-rose-900 text-white border-rose-900 shadow-sm'
-                      : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                      ? 'bg-rose-900 text-white border-rose-900 shadow-md ring-2 ring-rose-300'
+                      : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
                   }`}
                 >
-                  فحص بالمعمل
+                  <Building2 className="w-3.5 h-3.5" />
+                  <span>حضور بالمعمل</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setBookingType('home_visit')}
-                  className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+                  className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                     bookingType === 'home_visit'
-                      ? 'bg-rose-900 text-white border-rose-900 shadow-sm'
-                      : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                      ? 'bg-rose-900 text-white border-rose-900 shadow-md ring-2 ring-rose-300'
+                      : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
                   }`}
                 >
-                  زيارة منزلية (+ رسوم)
+                  <Home className="w-3.5 h-3.5" />
+                  <span>زيارة منزلية (+ رسوم)</span>
                 </button>
               </div>
 
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="font-bold text-slate-700 block mb-1 text-xs">يوم الحجز:</label>
-                  <input type="date" value={appointmentDate} onChange={(e) => setAppointmentDate(e.target.value)}
-                    className="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs font-mono" required />
-                </div>
-                <div>
-                  <label className="font-bold text-slate-700 block mb-1 text-xs">ساعة الحجز:</label>
-                  <input type="time" value={appointmentTime} onChange={(e) => setAppointmentTime(e.target.value)}
-                    className="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs font-mono" required />
+              {/* Booking Date & Time */}
+              <div className="space-y-2 pt-1 border-t border-slate-200/80">
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="font-bold text-slate-700 block mb-1 text-xs">
+                      يوم وتاريخ الحجز: <span className="text-rose-600">*</span>
+                    </label>
+                    <input
+                      type="date"
+                      value={appointmentDate}
+                      onChange={(e) => setAppointmentDate(e.target.value)}
+                      className="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs font-mono font-bold"
+                      required
+                    />
+                    <div className="flex gap-1 mt-1">
+                      <button
+                        type="button"
+                        onClick={() => setAppointmentDate(today)}
+                        className={`px-1.5 py-0.5 text-[10px] font-bold rounded cursor-pointer ${appointmentDate === today ? 'bg-rose-800 text-white' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}`}
+                      >
+                        اليوم
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const tm = new Date();
+                          tm.setDate(tm.getDate() + 1);
+                          setAppointmentDate(tm.toISOString().split('T')[0]);
+                        }}
+                        className="px-1.5 py-0.5 text-[10px] font-bold rounded bg-slate-200 text-slate-700 hover:bg-slate-300 cursor-pointer"
+                      >
+                        غداً
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const tm = new Date();
+                          tm.setDate(tm.getDate() + 2);
+                          setAppointmentDate(tm.toISOString().split('T')[0]);
+                        }}
+                        className="px-1.5 py-0.5 text-[10px] font-bold rounded bg-slate-200 text-slate-700 hover:bg-slate-300 cursor-pointer"
+                      >
+                        بعد غد
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-slate-700 block mb-1 text-xs">
+                      ساعة وتوقيت الحجز: <span className="text-rose-600">*</span>
+                    </label>
+                    <input
+                      type="time"
+                      value={appointmentTime}
+                      onChange={(e) => setAppointmentTime(e.target.value)}
+                      className="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs font-mono font-bold"
+                      required
+                    />
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {['09:00', '10:30', '12:00', '17:00', '19:30'].map(t => (
+                        <button
+                          key={t}
+                          type="button"
+                          onClick={() => setAppointmentTime(t)}
+                          className={`px-1.5 py-0.5 text-[10px] font-mono rounded cursor-pointer ${appointmentTime === t ? 'bg-rose-900 text-white font-bold' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}`}
+                        >
+                          {t}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
 
+              {/* Branch Address info if Branch Visit */}
+              {bookingType === 'branch' && (
+                <div className="p-3 bg-blue-50/80 border border-blue-200 rounded-xl space-y-1 text-xs">
+                  <div className="font-bold text-blue-900 flex items-center gap-1.5">
+                    <Building2 className="w-3.5 h-3.5 text-blue-700" />
+                    <span>عنوان فرع المعمل للحضور:</span>
+                  </div>
+                  <p className="text-slate-700 font-medium text-[11px] leading-relaxed">
+                    {labInfo?.mainAddress || 'ميدان بهتيم برج صيدلية العزبي الدور الثالث أمام الأسانسير شبرا الخيمة'}
+                  </p>
+                  <div className="text-[10px] text-blue-800 font-semibold pt-1">
+                    📞 للتواصل والاستفسار: 01100874444
+                  </div>
+                </div>
+              )}
+
+              {/* Home Visit Address & Notes if Home Visit */}
               {bookingType === 'home_visit' && (
-                <div className="p-3 bg-rose-50/70 border border-rose-200 rounded-xl space-y-2 text-xs">
+                <div className="p-3 bg-rose-50/80 border border-rose-200 rounded-xl space-y-2.5 text-xs">
                   <div>
-                    <label className="font-bold text-slate-700 block mb-1">عنوان الزيارة المنزلية:</label>
-                    <input type="text" value={homeAddress} onChange={(e) => setHomeAddress(e.target.value)}
-                      placeholder="رقم العقار، الشارع، المنطقة، الدور، الشقة"
-                      className="w-full bg-white border border-rose-200 rounded-lg p-2 text-xs" required />
+                    <label className="font-bold text-slate-800 block mb-1">
+                      عنوان الزيارة المنزلية <span className="text-rose-600">*</span>:
+                    </label>
+                    <input
+                      type="text"
+                      value={homeAddress}
+                      onChange={(e) => setHomeAddress(e.target.value)}
+                      placeholder="رقم العقار، الشارع، المنطقة، الدور، الشقة..."
+                      className="w-full bg-white border border-rose-300 rounded-lg p-2 text-xs text-slate-900"
+                      required
+                    />
                   </div>
                   <div>
-                    <label className="font-bold text-slate-700 block mb-1">تفاصيل الزيارة / ملاحظات الوصول:</label>
-                    <textarea value={deliveryNotes} onChange={(e) => setDeliveryNotes(e.target.value)}
-                      placeholder="علامة مميزة، دور، رقم شقة، مواعيد التواجد..." rows={2}
-                      className="w-full bg-white border border-rose-200 rounded-lg p-2 text-xs" />
+                    <label className="font-bold text-slate-800 block mb-1">تفاصيل الزيارة / ملاحظات الوصول:</label>
+                    <textarea
+                      value={deliveryNotes}
+                      onChange={(e) => setDeliveryNotes(e.target.value)}
+                      placeholder="علامة مميزة، دور، رقم شقة، مواعيد التواجد، تفاصيل المريض..."
+                      rows={2}
+                      className="w-full bg-white border border-rose-200 rounded-lg p-2 text-xs text-slate-900"
+                    />
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-slate-600">رسوم الزيارة المنزلية:</span>
-                    <input type="number" value={homeVisitFee} onChange={(e) => setHomeVisitFee(Number(e.target.value))}
-                      className="w-20 font-mono font-bold bg-white border border-rose-200 rounded-lg p-1 text-center" />
+                  <div className="flex justify-between items-center pt-1 border-t border-rose-200">
+                    <span className="text-slate-700 font-bold">رسوم الزيارة المنزلية:</span>
+                    <div className="flex items-center gap-1">
+                      <input
+                        type="number"
+                        value={homeVisitFee}
+                        onChange={(e) => setHomeVisitFee(Number(e.target.value))}
+                        className="w-20 font-mono font-bold bg-white border border-rose-300 rounded-lg p-1 text-center text-xs text-rose-900"
+                      />
+                      <span className="text-slate-600 font-bold">ج.م</span>
+                    </div>
+                  </div>
+                  <div className="flex gap-1 justify-end">
+                    {[50, 70, 80, 100, 120].map(fee => (
+                      <button
+                        key={fee}
+                        type="button"
+                        onClick={() => setHomeVisitFee(fee)}
+                        className={`px-1.5 py-0.5 text-[10px] font-mono rounded cursor-pointer ${homeVisitFee === fee ? 'bg-rose-900 text-white font-bold' : 'bg-white border border-rose-200 text-slate-700'}`}
+                      >
+                        {fee} ج
+                      </button>
+                    ))}
                   </div>
                 </div>
               )}
@@ -1161,6 +1284,18 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
                 </div>
               </div>
             </div>
+
+            {/* Direct WhatsApp Booking Message Button */}
+            <button
+              type="button"
+              onClick={handleSendWhatsApp}
+              disabled={!phone.trim() || selectedTests.length === 0}
+              className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
+              title={!phone.trim() ? 'يرجى إدخال هاتف المريض أولاً' : 'إرسال رسالة واتساب بكافة تفاصيل الحجز والمقر والتحاليل والأسعار'}
+            >
+              <MessageCircle className="w-4 h-4" />
+              <span>إرسال تفاصيل الحجز للمريض بالواتساب الآن (WhatsApp)</span>
+            </button>
 
             {/* Submit Button */}
             <button
