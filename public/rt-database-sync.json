@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-07T19:23:22.329Z",
+  "syncedAt": "2026-10-07T19:23:47.288Z",
   "reports": [
     {
       "id": "rep-1791400927196",
@@ -61,8 +61,8 @@
               "method": "Electrical Impedance",
               "textReference": "M: 4.5 - 5.9 | F: 4.0 - 5.2",
               "id": "param-1-1791400927194-x6v",
-              "result": "ذ",
-              "flag": "NORMAL"
+              "result": "3.750",
+              "flag": "LOW"
             },
             {
               "name": "Hematocrit (PCV)",
@@ -80,21 +80,21 @@
               "unit": "fL",
               "minNormal": 80,
               "maxNormal": 98,
-              "notes": "Auto-calculated: (PCV × 10) / RBC",
+              "notes": "Calculated: (HCT × 10) / RBC",
               "textReference": "80.0 - 98.0 fL",
               "id": "param-3-1791400927194-b2p",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "8",
+              "flag": "LOW"
             },
             {
               "name": "M.C.H",
               "unit": "pg",
               "minNormal": 27,
               "maxNormal": 33,
-              "notes": "Auto-calculated: (Hb × 10) / RBC",
+              "notes": "Calculated: (HGB × 10) / RBC",
               "textReference": "27.0 - 33.0 pg",
               "id": "param-4-1791400927195-ya2",
-              "result": "",
+              "result": "28.3",
               "flag": "NORMAL"
             },
             {
@@ -131,10 +131,10 @@
             {
               "name": "Mentzer Index (MCV/RBC)",
               "unit": "Ratio",
-              "notes": "<13 Thalassemia Trait | >13 Iron Deficiency",
+              "notes": "Mentzer < 13: Suggestive of Beta Thalassemia Trait",
               "textReference": "> 13 Iron Def. | < 13 Thalassemia",
               "id": "param-8-1791400927195-29a",
-              "result": "",
+              "result": "2.1",
               "flag": "NORMAL"
             },
             {
@@ -442,7 +442,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T19:22:07.197Z",
-      "updatedAt": "2026-10-07T19:23:17.255Z",
+      "updatedAt": "2026-10-07T19:23:41.828Z",
       "invoiceId": "inv-1791400927197"
     },
     {
