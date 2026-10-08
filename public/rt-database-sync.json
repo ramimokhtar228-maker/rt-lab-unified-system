@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-09T00:03:51.640Z",
+  "syncedAt": "2026-10-09T00:04:02.603Z",
   "reports": [
     {
       "id": "rep-1791501113004",
@@ -1475,7 +1475,7 @@
         }
       ],
       "staff": {
-        "labChemist": "د/ آية محمود الباز",
+        "labChemist": "",
         "verifiedBy": "أ.د. رامي مختار",
         "pathologist": " رامي مختار",
         "chemistTitle": "أخصائية أمراض الدم والمناعة والمزارع",
@@ -1487,7 +1487,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-07T19:22:07.197Z",
-      "updatedAt": "2026-10-09T00:03:46.489Z",
+      "updatedAt": "2026-10-09T00:03:57.449Z",
       "invoiceId": "inv-1791400927197",
       "packageApplied": {
         "code": "PKG-ANNUAL-WELLNESS",
