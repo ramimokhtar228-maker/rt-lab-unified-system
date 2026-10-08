@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-08T21:50:52.019Z",
+  "syncedAt": "2026-10-08T21:51:07.126Z",
   "reports": [
     {
       "id": "rep-1791414844234",
@@ -144,11 +144,12 @@
         "showFinancialSignature": true,
         "financialDirector": "",
         "financialTitle": "المدير المالي ورئيس الحسابات (CFO)",
-        "financialLicense": "EGY-FIN-10492"
+        "financialLicense": "EGY-FIN-10492",
+        "showHrSignature": false
       },
       "status": "draft",
       "createdAt": "2026-10-07T23:14:04.234Z",
-      "updatedAt": "2026-10-08T21:50:43.373Z",
+      "updatedAt": "2026-10-08T21:51:02.839Z",
       "invoiceId": "inv-1791414844235"
     },
     {
