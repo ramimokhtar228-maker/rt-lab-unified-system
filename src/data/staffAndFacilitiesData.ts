@@ -3,7 +3,7 @@ import { StaffMember, LabFacility, LabInfo } from "../types/lab";
 export const INITIAL_LAB_INFO: LabInfo = {
   labNameAr: "معامل RT للتحاليل الطبية والتشخيصية",
   labNameEn: "RT Diagnostic Laboratories",
-  sloganAr: "التشخيص الصحيح يبدأ معنا · دقة، سرعة، وأمان تشخيصي",
+  sloganAr: "التشخيص الصحيح يبدأ معنا",
   sloganEn: "Accurate Diagnosis Starts With Us",
   supervisionAr: "أطباء واستشاريو كلية طب قصر العيني",
   supervisionEn: "Kasr Al Ainy Faculty of Medicine Consultants",

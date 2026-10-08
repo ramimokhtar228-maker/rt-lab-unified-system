@@ -1,17 +1,53 @@
-import { DiseaseIllustration } from '../types';
+import { DiseaseIllustration } from '../types/lab';
+
+export interface DiseaseIllustrationExtended extends DiseaseIllustration {
+  specialtyAr?: string;
+  specialtyEn?: string;
+}
+
+// Helper to generate SVG Data URI
+function createSvgDataUri(innerSvg: string, title: string, subtitle: string, borderColor = '#e11d48', titleColor = '#fb7185'): string {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" width="100%" height="100%">
+    <rect width="320" height="180" rx="14" fill="#090d16"/>
+    <circle cx="160" cy="90" r="76" fill="#0b1329" stroke="${borderColor}" stroke-width="2.5"/>
+    <text x="160" y="24" text-anchor="middle" fill="${titleColor}" font-size="10.5" font-weight="900" font-family="'Cairo', sans-serif">${title}</text>
+    ${innerSvg}
+    <text x="160" y="170" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="'Cairo', sans-serif">${subtitle}</text>
+  </svg>`;
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+}
 
 export const DISEASE_ILLUSTRATIONS: DiseaseIllustration[] = [
   // ==========================================
-  // HEMATOLOGY / CBC MICROSCOPIC DISEASE CARDS
+  // 1. أمراض الدم وصورة الدم (HEMATOLOGY)
   // ==========================================
   {
     id: "hem-normal",
     code: "HEM_NORMAL",
     category: "hematology",
-    imageUrl: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2270%22%20fill%3D%22%230f172a%22%20stroke%3D%22%23881337%22%20stroke-width%3D%222%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%23f43f5e%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3ENORMAL%20BLOOD%20SMEAR%20%281000X%29%3C/text%3E%20%3C%21--%20Normal%20RBCs%20with%201/3%20central%20pallor%20--%3E%20%3Cg%20fill%3D%22%23e11d48%22%3E%20%3Ccircle%20cx%3D%22105%22%20cy%3D%2265%22%20r%3D%2216%22/%3E%3Ccircle%20cx%3D%22105%22%20cy%3D%2265%22%20r%3D%225.5%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22145%22%20cy%3D%2255%22%20r%3D%2215%22/%3E%3Ccircle%20cx%3D%22145%22%20cy%3D%2255%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22170%22%20cy%3D%2280%22%20r%3D%2216%22/%3E%3Ccircle%20cx%3D%22170%22%20cy%3D%2280%22%20r%3D%225.5%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22130%22%20cy%3D%22105%22%20r%3D%2216%22/%3E%3Ccircle%20cx%3D%22130%22%20cy%3D%22105%22%20r%3D%225.5%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%2295%22%20cy%3D%2298%22%20r%3D%2215%22/%3E%3Ccircle%20cx%3D%2295%22%20cy%3D%2298%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3C/g%3E%20%3C%21--%20Neutrophil%20--%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2217%22%20fill%3D%22%23fbcfe8%22%20opacity%3D%220.4%22/%3E%20%3Cellipse%20cx%3D%22135%22%20cy%3D%2276%22%20rx%3D%224%22%20ry%3D%225%22%20fill%3D%22%236b21a8%22/%3E%20%3Cellipse%20cx%3D%22145%22%20cy%3D%2277%22%20rx%3D%224%22%20ry%3D%224%22%20fill%3D%22%236b21a8%22/%3E%20%3Cellipse%20cx%3D%22139%22%20cy%3D%2286%22%20rx%3D%224.5%22%20ry%3D%223.5%22%20fill%3D%22%236b21a8%22/%3E%20%3C%21--%20Platelets%20--%3E%20%3Ccircle%20cx%3D%22120%22%20cy%3D%2260%22%20r%3D%222.5%22%20fill%3D%22%2338bdf8%22/%3E%20%3Ccircle%20cx%3D%22160%22%20cy%3D%22100%22%20r%3D%222.5%22%20fill%3D%22%2338bdf8%22/%3E%20%3Ccircle%20cx%3D%22163%22%20cy%3D%2297%22%20r%3D%222%22%20fill%3D%22%2338bdf8%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%22148%22%20text-anchor%3D%22middle%22%20fill%3D%22%2394a3b8%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3ENormocytic%20Normochromic%20Erythrocytes%3C/text%3E%20%3C/svg%3E",
-    titleAr: "شريحة دم محيطي طبيعية (Normal Peripheral Blood Smear)",
+    specialtyAr: "أمراض الدم والمناعة",
+    imageUrl: createSvgDataUri(
+      `<g fill="#e11d48">
+        <circle cx="120" cy="75" r="16"/><circle cx="120" cy="75" r="5.5" fill="#fecdd3"/>
+        <circle cx="165" cy="65" r="15"/><circle cx="165" cy="65" r="5" fill="#fecdd3"/>
+        <circle cx="190" cy="95" r="16"/><circle cx="190" cy="95" r="5.5" fill="#fecdd3"/>
+        <circle cx="145" cy="115" r="16"/><circle cx="145" cy="115" r="5.5" fill="#fecdd3"/>
+        <circle cx="110" cy="108" r="15"/><circle cx="110" cy="108" r="5" fill="#fecdd3"/>
+      </g>
+      <circle cx="155" cy="90" r="17" fill="#fbcfe8" opacity="0.4"/>
+      <ellipse cx="150" cy="86" rx="4" ry="5" fill="#6b21a8"/>
+      <ellipse cx="160" cy="87" rx="4" ry="4" fill="#6b21a8"/>
+      <ellipse cx="154" cy="96" rx="4.5" ry="3.5" fill="#6b21a8"/>
+      <circle cx="135" cy="70" r="2.5" fill="#38bdf8"/>
+      <circle cx="180" cy="110" r="2.5" fill="#38bdf8"/>`,
+      "NORMAL BLOOD SMEAR (1000X)",
+      "Normocytic Normochromic Erythrocytes & Normal Platelets",
+      "#881337",
+      "#f43f5e"
+    ),
+    titleAr: "شريحة دم محيطي طبيعية (Normal Blood Smear)",
     titleEn: "Normal Peripheral Blood Smear",
-    pathologySummaryAr: "كرات دم حمراء طبيعية الحجم ومتساوية الصبغ (Normocytic Normochromic) مع مساحة شحوب مركزي طبيعية تعادل ثلث قطر الخلية، مع توزيع طبيعي لكرات الدم البيضاء والصفائح الدموية.",
+    pathologySummaryAr: "كرات دم حمراء طبيعية الحجم ومتساوية الصبغ (Normocytic Normochromic) مع مساحة شحوب مركزي طبيعية تعادل ثلث قطر الخلية، مع عدد وتوزيع طبيعي للعدلات والصفائح الدموية.",
     pathologySummaryEn: "Normocytic, normochromic erythrocytes with normal central pallor (~1/3 diameter). Adequate platelets and normal differential leucocytic morphology.",
     keyDiagnosticPoints: [
       "MCV: 80 - 98 fL | MCH: 27 - 33 pg | MCHC: 32 - 36 g/dL",
@@ -26,7 +62,21 @@ export const DISEASE_ILLUSTRATIONS: DiseaseIllustration[] = [
     id: "hem-iron-deficiency",
     code: "HEM_IDA",
     category: "hematology",
-    imageUrl: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2270%22%20fill%3D%22%230f172a%22%20stroke%3D%22%23e11d48%22%20stroke-width%3D%222%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%23fb7185%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3EIRON%20DEFICIENCY%20ANEMIA%20%28IDA%29%3C/text%3E%20%3C%21--%20Hypochromic%20microcytic%20RBCs%20with%20thin%20rim%20--%3E%20%3Cg%20fill%3D%22%23e11d48%22%3E%20%3Ccircle%20cx%3D%22100%22%20cy%3D%2265%22%20r%3D%2213%22/%3E%3Ccircle%20cx%3D%22100%22%20cy%3D%2265%22%20r%3D%228.5%22%20fill%3D%22%230f172a%22/%3E%20%3Ccircle%20cx%3D%22150%22%20cy%3D%2260%22%20r%3D%2212%22/%3E%3Ccircle%20cx%3D%22150%22%20cy%3D%2260%22%20r%3D%228%22%20fill%3D%22%230f172a%22/%3E%20%3Ccircle%20cx%3D%22120%22%20cy%3D%22105%22%20r%3D%2213%22/%3E%3Ccircle%20cx%3D%22120%22%20cy%3D%22105%22%20r%3D%228.5%22%20fill%3D%22%230f172a%22/%3E%20%3Ccircle%20cx%3D%22170%22%20cy%3D%2285%22%20r%3D%2211%22/%3E%3Ccircle%20cx%3D%22170%22%20cy%3D%2285%22%20r%3D%227%22%20fill%3D%22%230f172a%22/%3E%20%3C/g%3E%20%3C%21--%20Pencil%20/%20Cigar%20cell%20--%3E%20%3Cellipse%20cx%3D%22135%22%20cy%3D%2278%22%20rx%3D%2220%22%20ry%3D%226%22%20transform%3D%22rotate%2835%20135%2078%29%22%20fill%3D%22%23e11d48%22/%3E%20%3Cellipse%20cx%3D%22135%22%20cy%3D%2278%22%20rx%3D%2215%22%20ry%3D%223.5%22%20transform%3D%22rotate%2835%20135%2078%29%22%20fill%3D%22%230f172a%22/%3E%20%3C%21--%20Label%20--%3E%20%3Ctext%20x%3D%22140%22%20y%3D%22148%22%20text-anchor%3D%22middle%22%20fill%3D%22%23fca5a5%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3EMicrocytic%20Hypochromic%20%26amp%3B%20Pencil%20Cells%3C/text%3E%20%3C/svg%3E",
+    specialtyAr: "أمراض الدم والمناعة",
+    imageUrl: createSvgDataUri(
+      `<g fill="#e11d48">
+        <circle cx="115" cy="75" r="13"/><circle cx="115" cy="75" r="9" fill="#0b1329"/>
+        <circle cx="170" cy="70" r="12"/><circle cx="170" cy="70" r="8.5" fill="#0b1329"/>
+        <circle cx="135" cy="115" r="13"/><circle cx="135" cy="115" r="9" fill="#0b1329"/>
+        <circle cx="195" cy="95" r="11"/><circle cx="195" cy="95" r="7.5" fill="#0b1329"/>
+      </g>
+      <ellipse cx="150" cy="88" rx="22" ry="6.5" transform="rotate(35 150 88)" fill="#e11d48"/>
+      <ellipse cx="150" cy="88" rx="16" ry="4" transform="rotate(35 150 88)" fill="#0b1329"/>`,
+      "IRON DEFICIENCY ANEMIA (IDA)",
+      "Microcytic Hypochromic & Pencil Cells (Cigar Cells)",
+      "#e11d48",
+      "#fb7185"
+    ),
     titleAr: "أنيميا نقص الحديد (Iron Deficiency Anemia)",
     titleEn: "Microcytic Hypochromic Anemia (Iron Deficiency)",
     pathologySummaryAr: "صورة كرات دم حمراء صغيرة الحجم وشديدة الشحوب (Microcytic Hypochromic) مع اتساع واضح للشحوب المركزي وخلايا قلمية مميزة (Pencil / Cigar cells) وتباين في الأحجام (Anisocytosis) وارتفاع مؤشر RDW ومؤشر منتزر > 13.",
@@ -45,10 +95,20 @@ export const DISEASE_ILLUSTRATIONS: DiseaseIllustration[] = [
     id: "hem-thalassemia",
     code: "HEM_THAL",
     category: "hematology",
-    imageUrl: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2270%22%20fill%3D%22%230f172a%22%20stroke%3D%22%23d97706%22%20stroke-width%3D%222%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%23f59e0b%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3EBETA%20THALASSEMIA%20TRAIT%3C/text%3E%20%3C%21--%20Target%20Cells%20%28Bullseye%29%20--%3E%20%3Cg%3E%20%3Ccircle%20cx%3D%22115%22%20cy%3D%2270%22%20r%3D%2215%22%20fill%3D%22%23e11d48%22/%3E%20%3Ccircle%20cx%3D%22115%22%20cy%3D%2270%22%20r%3D%2210%22%20fill%3D%22%230f172a%22/%3E%20%3Ccircle%20cx%3D%22115%22%20cy%3D%2270%22%20r%3D%224.5%22%20fill%3D%22%23e11d48%22/%3E%20%3Ccircle%20cx%3D%22160%22%20cy%3D%2275%22%20r%3D%2214%22%20fill%3D%22%23e11d48%22/%3E%20%3Ccircle%20cx%3D%22160%22%20cy%3D%2275%22%20r%3D%229%22%20fill%3D%22%230f172a%22/%3E%20%3Ccircle%20cx%3D%22160%22%20cy%3D%2275%22%20r%3D%224%22%20fill%3D%22%23e11d48%22/%3E%20%3C/g%3E%20%3C%21--%20Basophilic%20Stippling%20RBC%20--%3E%20%3Ccircle%20cx%3D%22135%22%20cy%3D%22105%22%20r%3D%2213%22%20fill%3D%22%23e11d48%22/%3E%20%3Ccircle%20cx%3D%22135%22%20cy%3D%22105%22%20r%3D%226%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22133%22%20cy%3D%22103%22%20r%3D%221%22%20fill%3D%22%231e3a8a%22/%3E%20%3Ccircle%20cx%3D%22137%22%20cy%3D%22104%22%20r%3D%221%22%20fill%3D%22%231e3a8a%22/%3E%20%3Ccircle%20cx%3D%22134%22%20cy%3D%22107%22%20r%3D%221%22%20fill%3D%22%231e3a8a%22/%3E%20%3Ccircle%20cx%3D%22136%22%20cy%3D%22106%22%20r%3D%221%22%20fill%3D%22%231e3a8a%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%22148%22%20text-anchor%3D%22middle%22%20fill%3D%22%23fde68a%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3ETarget%20Cells%20%28Codocytes%29%20%26amp%3B%20Stippling%3C/text%3E%20%3C/svg%3E",
+    specialtyAr: "أمراض الدم والمناعة",
+    imageUrl: createSvgDataUri(
+      `<circle cx="130" cy="80" r="16" fill="#e11d48"/><circle cx="130" cy="80" r="11" fill="#0b1329"/><circle cx="130" cy="80" r="5" fill="#e11d48"/>
+      <circle cx="180" cy="85" r="15" fill="#e11d48"/><circle cx="180" cy="85" r="10" fill="#0b1329"/><circle cx="180" cy="85" r="4.5" fill="#e11d48"/>
+      <circle cx="150" cy="115" r="14" fill="#e11d48"/><circle cx="150" cy="115" r="6" fill="#fecdd3"/>
+      <circle cx="147" cy="113" r="1.2" fill="#1e3a8a"/><circle cx="152" cy="114" r="1.2" fill="#1e3a8a"/><circle cx="149" cy="117" r="1.2" fill="#1e3a8a"/>`,
+      "BETA THALASSEMIA TRAIT",
+      "Target Cells (Codocytes) & Basophilic Stippling",
+      "#d97706",
+      "#f59e0b"
+    ),
     titleAr: "أنيميا البحر المتوسط (ثلاسيميا بيتا - Beta Thalassemia)",
     titleEn: "Beta Thalassemia Minor / Trait",
-    pathologySummaryAr: "صغر واضح في حجم كرات الدم الحمراء (Microcytosis) مع وفرة عددية في كرات الدم الحمراء بالنسبة لنسبة الهيموجلوبين، وخلايا هدفية كلاسيكية (Target cells / Codocytes) مع تنقيط قاعدي مميز (Basophilic Stippling) ومؤشر منتزر أقل من 13.",
+    pathologySummaryAr: "صغر واضح في حجم كرات الدم الحمراء (Microcytosis) مع وفرة عددية في كرات الدم الحمراء بالنسبة لنسبة الهيموجلوبين، وخلايا هدفية كلاسيكية (Target cells / Codocytes) مع تنقيط قاعدي مميز ومؤشر منتزر أقل من 13.",
     pathologySummaryEn: "Profound microcytosis out of proportion to mild anemia, frequent Target cells (codocytes), basophilic stippling, normal to slightly elevated RDW, and Mentzer Index < 13.",
     keyDiagnosticPoints: [
       "Mentzer Index (MCV / RBC) < 13 (Highly suggestive of Thalassemia Trait)",
@@ -64,368 +124,822 @@ export const DISEASE_ILLUSTRATIONS: DiseaseIllustration[] = [
     id: "hem-megaloblastic",
     code: "HEM_MEGALO",
     category: "hematology",
-    imageUrl: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2270%22%20fill%3D%22%230f172a%22%20stroke%3D%22%238b5cf6%22%20stroke-width%3D%222%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%23a78bfa%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3EMEGALOBLASTIC%20ANEMIA%20%28B12/FOLATE%29%3C/text%3E%20%3C%21--%20Large%20Oval%20Macrocytes%20--%3E%20%3Cellipse%20cx%3D%22105%22%20cy%3D%2270%22%20rx%3D%2220%22%20ry%3D%2215%22%20transform%3D%22rotate%28-15%20105%2070%29%22%20fill%3D%22%23e11d48%22/%3E%20%3Cellipse%20cx%3D%22105%22%20cy%3D%2270%22%20rx%3D%228%22%20ry%3D%226%22%20transform%3D%22rotate%28-15%20105%2070%29%22%20fill%3D%22%23fecdd3%22/%3E%20%3C%21--%20Hypersegmented%20Neutrophil%20%286%20lobes%29%20--%3E%20%3Ccircle%20cx%3D%22155%22%20cy%3D%2285%22%20r%3D%2220%22%20fill%3D%22%23fbcfe8%22%20opacity%3D%220.35%22/%3E%20%3Cg%20fill%3D%22%23581c87%22%3E%20%3Ccircle%20cx%3D%22148%22%20cy%3D%2275%22%20r%3D%224.5%22/%3E%20%3Ccircle%20cx%3D%22157%22%20cy%3D%2274%22%20r%3D%224.5%22/%3E%20%3Ccircle%20cx%3D%22164%22%20cy%3D%2280%22%20r%3D%224.5%22/%3E%20%3Ccircle%20cx%3D%22162%22%20cy%3D%2289%22%20r%3D%224.5%22/%3E%20%3Ccircle%20cx%3D%22153%22%20cy%3D%2294%22%20r%3D%224.5%22/%3E%20%3Ccircle%20cx%3D%22146%22%20cy%3D%2285%22%20r%3D%224.5%22/%3E%20%3C/g%3E%20%3Ctext%20x%3D%22140%22%20y%3D%22148%22%20text-anchor%3D%22middle%22%20fill%3D%22%23ddd6fe%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3EOval%20Macrocytes%20%26amp%3B%20Hypersegmented%20PMN%20%28%26gt%3B5%20lobes%29%3C/text%3E%20%3C/svg%3E",
+    specialtyAr: "أمراض الدم والمناعة",
+    imageUrl: createSvgDataUri(
+      `<ellipse cx="120" cy="80" rx="22" ry="16" transform="rotate(-15 120 80)" fill="#e11d48"/><ellipse cx="120" cy="80" rx="9" ry="7" transform="rotate(-15 120 80)" fill="#fecdd3"/>
+      <circle cx="180" cy="95" r="22" fill="#fbcfe8" opacity="0.35"/>
+      <circle cx="172" cy="85" r="4.5" fill="#581c87"/><circle cx="182" cy="84" r="4.5" fill="#581c87"/><circle cx="190" cy="90" r="4.5" fill="#581c87"/><circle cx="188" cy="100" r="4.5" fill="#581c87"/><circle cx="178" cy="105" r="4.5" fill="#581c87"/><circle cx="170" cy="96" r="4.5" fill="#581c87"/>`,
+      "MEGALOBLASTIC ANEMIA (B12 / FOLATE)",
+      "Macro-ovalocytes & Hypersegmented PMN (>= 6 Lobes)",
+      "#8b5cf6",
+      "#a78bfa"
+    ),
     titleAr: "الأنيميا الخبيثة ونقص فيتامين ب12 والفوليك (Megaloblastic Anemia)",
     titleEn: "Megaloblastic Anemia (Vitamin B12 / Folate Deficiency)",
     pathologySummaryAr: "صورة كرات دم حمراء كروية بيضاوية ضخمة (Macro-ovalocytes) مع ارتفاع ملحوظ في الحجم الكروي الوسطي (MCV > 100 fL) مع خلايا متعادلة مفرطة التفصص (Hypersegmented Neutrophils تحوي 6 فصوص أو أكثر).",
     pathologySummaryEn: "Macro-ovalocytic erythrocytes with elevated MCV (> 100-115 fL), accompanied by pathognomonic hypersegmented neutrophils (>= 6 nuclear lobes) and pancytopenia.",
     keyDiagnosticPoints: [
       "High MCV (> 100 to 125 fL) with macro-ovalocytes",
-      "Hypersegmented polymorphonuclear leukocytes (>= 5 lobes in > 5% of neutrophils or single 6-lobed)",
+      "Hypersegmented polymorphonuclear leukocytes (>= 6 lobes)",
       "Howell-Jolly bodies (nuclear remnants) and Cabot rings",
       "Low Vitamin B12 (< 200 pg/mL) or low Serum / RBC Folate",
       "Markedly elevated serum LDH and indirect bilirubin (ineffective erythropoiesis)"
     ],
-    associatedConditions: ["Pernicious anemia (Anti-Intrinsic Factor)", "Vegan dietary restriction", "Metformin or PPI long-term use"],
-    differentialDiagnosis: "Non-megaloblastic macrocytosis (Liver disease, alcoholism, hypothyroidism, reticulocytosis)."
+    associatedConditions: ["Pernicious anemia", "Strict Vegan diets", "Metformin or PPI long-term therapy"],
+    differentialDiagnosis: "Non-megaloblastic macrocytosis (Liver disease, alcoholism, hypothyroidism)."
   },
   {
     id: "hem-sickle",
     code: "HEM_SICKLE",
     category: "hematology",
-    imageUrl: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2270%22%20fill%3D%22%230f172a%22%20stroke%3D%22%23ef4444%22%20stroke-width%3D%222%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%23f87171%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3ESICKLE%20CELL%20ANEMIA%20%28HbSS%29%3C/text%3E%20%3C%21--%20Crescent%20Drepanocytes%20--%3E%20%3Cpath%20d%3D%22M%20105%2C45%20Q%20145%2C65%20110%2C105%20Q%20128%2C72%20105%2C45%20Z%22%20fill%3D%22%23b91c1c%22/%3E%20%3Cpath%20d%3D%22M%20140%2C55%20Q%20185%2C85%20145%2C120%20Q%20165%2C85%20140%2C55%20Z%22%20fill%3D%22%23b91c1c%22/%3E%20%3C%21--%20Target%20cell%20%26%20Howell-Jolly%20body%20--%3E%20%3Ccircle%20cx%3D%22165%22%20cy%3D%2265%22%20r%3D%2212%22%20fill%3D%22%23e11d48%22/%3E%20%3Ccircle%20cx%3D%22165%22%20cy%3D%2265%22%20r%3D%227%22%20fill%3D%22%230f172a%22/%3E%20%3Ccircle%20cx%3D%22165%22%20cy%3D%2265%22%20r%3D%223%22%20fill%3D%22%23e11d48%22/%3E%20%3Ccircle%20cx%3D%22100%22%20cy%3D%2295%22%20r%3D%2211%22%20fill%3D%22%23e11d48%22/%3E%20%3Ccircle%20cx%3D%2298%22%20cy%3D%2292%22%20r%3D%222%22%20fill%3D%22%231e1b4b%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%22148%22%20text-anchor%3D%22middle%22%20fill%3D%22%23fca5a5%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3EDrepanocytes%20%28Sickle%20Cells%29%20%26amp%3B%20Howell-Jolly%3C/text%3E%20%3C/svg%3E",
+    specialtyAr: "أمراض الدم والمناعة",
+    imageUrl: createSvgDataUri(
+      `<path d="M 120,55 Q 165,75 125,120 Q 145,82 120,55 Z" fill="#b91c1c"/>
+      <path d="M 160,65 Q 205,95 165,135 Q 185,95 160,65 Z" fill="#b91c1c"/>
+      <circle cx="185" cy="75" r="13" fill="#e11d48"/><circle cx="185" cy="75" r="8" fill="#0b1329"/><circle cx="185" cy="75" r="3.5" fill="#e11d48"/>
+      <circle cx="115" cy="110" r="12" fill="#e11d48"/><circle cx="113" cy="107" r="2.5" fill="#1e1b4b"/>`,
+      "SICKLE CELL DISEASE (HbSS)",
+      "Drepanocytes (Sickle Cells) & Howell-Jolly Bodies",
+      "#ef4444",
+      "#f87171"
+    ),
     titleAr: "أنيميا الخلايا المنجلية (Sickle Cell Anemia - HbSS)",
     titleEn: "Sickle Cell Disease (Drepanocytosis)",
     pathologySummaryAr: "خلايا منجلية مقوسة مميزة حادة الأطراف (Sickle cells / Drepanocytes) ناتجة عن بلمرة هيموجلوبين S عند نقص الأكسجين، مع خلايا هدفية وأجسام هاول-جولي المصاحبة لقصور الطحال.",
-    pathologySummaryEn: "Crescent-shaped elongated sickle cells (drepanocytes) with pointed ends due to HbS polymerization, target cells, and Howell-Jolly bodies reflecting autosplenectomy.",
+    pathologySummaryEn: "Crescent-shaped elongated sickle cells (drepanocytes) with pointed ends due to HbS polymerization, target cells, and Howell-Jolly bodies.",
     keyDiagnosticPoints: [
       "Classic sickle / crescentic RBCs on film with pointed tips",
-      "Target cells, polychromasia, and nucleated RBCs in peripheral blood",
-      "Howell-Jolly bodies reflecting functional autosplenectomy",
+      "Target cells and nucleated RBCs in peripheral blood",
+      "Howell-Jolly bodies reflecting autosplenectomy",
       "Positive Sickling Test & Hemoglobin Electrophoresis (HbS > 80% in HbSS)",
-      "High Reticulocyte count and elevated unconjugated bilirubin"
+      "Elevated reticulocyte count and indirect bilirubin"
     ],
     associatedConditions: ["Vaso-occlusive pain crisis", "Acute chest syndrome", "Hemolytic jaundice"],
     differentialDiagnosis: "Sickle-Thalassemia, Hemoglobin SC disease."
   },
   {
-    id: "hem-spherocytosis",
-    code: "HEM_SPHERO",
-    category: "hematology",
-    imageUrl: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2270%22%20fill%3D%22%230f172a%22%20stroke%3D%22%23f43f5e%22%20stroke-width%3D%222%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%23fb7185%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3EHEREDITARY%20SPHEROCYTOSIS%3C/text%3E%20%3C%21--%20Small%20dense%20spheres%20without%20central%20pallor%20--%3E%20%3Cg%20fill%3D%22%239f1239%22%3E%20%3Ccircle%20cx%3D%22110%22%20cy%3D%2270%22%20r%3D%2211%22/%3E%20%3Ccircle%20cx%3D%22135%22%20cy%3D%2260%22%20r%3D%2210.5%22/%3E%20%3Ccircle%20cx%3D%22160%22%20cy%3D%2275%22%20r%3D%2211%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2295%22%20r%3D%2211.5%22/%3E%20%3Ccircle%20cx%3D%22115%22%20cy%3D%22100%22%20r%3D%2210.5%22/%3E%20%3C/g%3E%20%3C%21--%20One%20normal%20RBC%20for%20comparison%20--%3E%20%3Ccircle%20cx%3D%22168%22%20cy%3D%22105%22%20r%3D%2214%22%20fill%3D%22%23e11d48%22/%3E%20%3Ccircle%20cx%3D%22168%22%20cy%3D%22105%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%22148%22%20text-anchor%3D%22middle%22%20fill%3D%22%23fecdd3%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3EMicrospherocytes%20%28Dense%20%26amp%3B%20No%20Central%20Pallor%29%3C/text%3E%20%3C/svg%3E",
-    titleAr: "الخلايا الكروية الوراثية (Hereditary Spherocytosis)",
-    titleEn: "Hereditary Spherocytosis & Immune Hemolysis",
-    pathologySummaryAr: "كرات دم حمراء دائرية كثيفة الصبغة صغيرة القطر وتفتقر تماماً لمساحة الشحوب المركزي (Spherocytes) مع ارتفاع ملحوظ في مؤشر تركيز الهيموجلوبين MCHC (> 36 g/dL).",
-    pathologySummaryEn: "Dense, spherical erythrocytes without central pallor (spherocytes) caused by RBC membrane defects, with elevated MCHC (> 36 g/dL) and reticulocytosis.",
-    keyDiagnosticPoints: [
-      "Microspherocytes on peripheral film (dense round cells lacking central pallor)",
-      "Elevated MCHC (> 36 g/dL - pathognomonic parameter)",
-      "Increased Osmotic Fragility and positive eosin-5-maleimide (EMA) binding test",
-      "Elevated Reticulocyte count (> 5-10%)",
-      "Negative Direct Antiglobulin Test (DAT/Coombs) differentiates from autoimmune hemolysis"
-    ],
-    associatedConditions: ["Hereditary spherocytosis (Spectrin / Ankyrin defect)", "Autoimmune Hemolytic Anemia (AIHA - Coombs positive)"],
-    differentialDiagnosis: "Autoimmune hemolytic anemia (Warm AIHA with positive direct Coombs test)."
-  },
-  {
-    id: "hem-sepsis",
-    code: "HEM_SEPSIS",
-    category: "hematology",
-    imageUrl: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2265%22%20fill%3D%22%230f172a%22%20stroke%3D%22%23881337%22%20stroke-width%3D%222%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%23f43f5e%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3ERT%20LAB%20PATHOLOGICAL%20ATLAS%3C/text%3E%20%3Ccircle%20cx%3D%22110%22%20cy%3D%2280%22%20r%3D%2216%22%20fill%3D%22%23e11d48%22/%3E%3Ccircle%20cx%3D%22110%22%20cy%3D%2280%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22155%22%20cy%3D%2275%22%20r%3D%2215%22%20fill%3D%22%23e11d48%22/%3E%3Ccircle%20cx%3D%22155%22%20cy%3D%2275%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22135%22%20cy%3D%2295%22%20r%3D%2214%22%20fill%3D%22%23e11d48%22/%3E%3Ccircle%20cx%3D%22135%22%20cy%3D%2295%22%20r%3D%224.5%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2265%22%20r%3D%2217%22%20fill%3D%22%236b21a8%22%20opacity%3D%220.6%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%22148%22%20text-anchor%3D%22middle%22%20fill%3D%22%2394a3b8%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3EMicroscopic%20Clinical%20Diagnostic%20Field%3C/text%3E%20%3C/svg%3E",
-    titleAr: "العدوى البكتيرية الشديدة ورد الفعل الابيضاضي (Bacterial Sepsis / Leukemoid Reaction)",
-    titleEn: "Bacterial Sepsis & Leukemoid Reaction (Left Shift)",
-    pathologySummaryAr: "زيادة كبيرة في عدد كرات الدم البيضاء المتعادلة مع انحراف لليسار (Shift to the Left: ظهور أشكال العصيات Band cells وخلايا Metamyelocytes) مع حبيبات سامة داكنة (Toxic Granulations) وفجوات سيتوبلازمية (Vacuoles) وأجسام دولي (Döhle bodies).",
-    pathologySummaryEn: "Neutrophilic leukocytosis with significant left shift (elevated Band forms > 10%), coarse dark toxic granulations, cytoplasmic vacuolation, and Döhle bodies.",
-    keyDiagnosticPoints: [
-      "Total Leucocytic Count (TLC) marked elevation (> 15,000 - 30,000 /µL)",
-      "High Absolute Neutrophil Count (ANC) and elevated NLR (> 5 - 15)",
-      "Toxic granulation: coarse basophilic granules in neutrophil cytoplasm",
-      "Döhle bodies: light blue cytoplasmic inclusions (ribosomal RNA remnants)",
-      "High Leukocyte Alkaline Phosphatase (LAP) score (differs from CML)"
-    ],
-    associatedConditions: ["Severe bacterial pneumonia", "Bacteremia & septic shock", "Acute abdominal peritonitis"],
-    differentialDiagnosis: "Chronic Myeloid Leukemia (distinguished by low LAP score and BCR-ABL translocation)."
-  },
-  {
-    id: "hem-mono",
-    code: "HEM_MONO",
-    category: "hematology",
-    imageUrl: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2265%22%20fill%3D%22%230f172a%22%20stroke%3D%22%23881337%22%20stroke-width%3D%222%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%23f43f5e%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3ERT%20LAB%20PATHOLOGICAL%20ATLAS%3C/text%3E%20%3Ccircle%20cx%3D%22110%22%20cy%3D%2280%22%20r%3D%2216%22%20fill%3D%22%23e11d48%22/%3E%3Ccircle%20cx%3D%22110%22%20cy%3D%2280%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22155%22%20cy%3D%2275%22%20r%3D%2215%22%20fill%3D%22%23e11d48%22/%3E%3Ccircle%20cx%3D%22155%22%20cy%3D%2275%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22135%22%20cy%3D%2295%22%20r%3D%2214%22%20fill%3D%22%23e11d48%22/%3E%3Ccircle%20cx%3D%22135%22%20cy%3D%2295%22%20r%3D%224.5%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2265%22%20r%3D%2217%22%20fill%3D%22%236b21a8%22%20opacity%3D%220.6%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%22148%22%20text-anchor%3D%22middle%22%20fill%3D%22%2394a3b8%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3EMicroscopic%20Clinical%20Diagnostic%20Field%3C/text%3E%20%3C/svg%3E",
-    titleAr: "داء وحيدات النواة الخمجي (Infectious Mononucleosis - EBV)",
-    titleEn: "Infectious Mononucleosis (Atypical Reactive Lymphocytes)",
-    pathologySummaryAr: "ارتفاع عدد كرات الدم البيضاء الليمفاوية مع ظهور خلايا ليمفاوية تحفيزية مميزة (Atypical / Downey Lymphocytes) ذات حجم كبير وسيتوبلازم واسع متعرج يحيط بكرات الدم الحمراء المجاورة (Scalloped borders).",
-    pathologySummaryEn: "Absolute lymphocytosis with prominent atypical / reactive Downey lymphocytes characterized by copious basophilic cytoplasm conforming to surrounding RBCs.",
-    keyDiagnosticPoints: [
-      "Absolute Lymphocyte Count (ALC) > 4,000 /µL with atypical lymphocytes > 10-20%",
-      "Reactive lymphocytes with scalloped borders indented by erythrocytes",
-      "Positive Paul-Bunnell / Monospot heterophile antibody test",
-      "Elevated EBV IgM / VCA titers",
-      "Mild concomitant elevation of hepatic transaminases (ALT/AST)"
-    ],
-    associatedConditions: ["Epstein-Barr Virus (EBV) infection", "Cytomegalovirus (CMV)", "Acute Viral Hepatitis"],
-    differentialDiagnosis: "Acute lymphoblastic leukemia (distinguished by uniform immature blast morphology)."
-  },
-  {
-    id: "hem-aml",
+    id: "hem-leukemia-aml",
     code: "HEM_AML",
     category: "hematology",
-    imageUrl: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2265%22%20fill%3D%22%230f172a%22%20stroke%3D%22%23881337%22%20stroke-width%3D%222%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%23f43f5e%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3ERT%20LAB%20PATHOLOGICAL%20ATLAS%3C/text%3E%20%3Ccircle%20cx%3D%22110%22%20cy%3D%2280%22%20r%3D%2216%22%20fill%3D%22%23e11d48%22/%3E%3Ccircle%20cx%3D%22110%22%20cy%3D%2280%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22155%22%20cy%3D%2275%22%20r%3D%2215%22%20fill%3D%22%23e11d48%22/%3E%3Ccircle%20cx%3D%22155%22%20cy%3D%2275%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22135%22%20cy%3D%2295%22%20r%3D%2214%22%20fill%3D%22%23e11d48%22/%3E%3Ccircle%20cx%3D%22135%22%20cy%3D%2295%22%20r%3D%224.5%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2265%22%20r%3D%2217%22%20fill%3D%22%236b21a8%22%20opacity%3D%220.6%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%22148%22%20text-anchor%3D%22middle%22%20fill%3D%22%2394a3b8%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3EMicroscopic%20Clinical%20Diagnostic%20Field%3C/text%3E%20%3C/svg%3E",
-    titleAr: "سرطان الدم النخاعي الحاد (Acute Myeloid Leukemia - AML)",
+    specialtyAr: "أمراض الدم والمناعة",
+    imageUrl: createSvgDataUri(
+      `<circle cx="150" cy="90" r="28" fill="#581c87" opacity="0.45"/>
+      <ellipse cx="148" cy="88" rx="20" ry="18" fill="#3b0764"/>
+      <circle cx="140" cy="82" r="4.5" fill="#c084fc"/>
+      <circle cx="155" cy="85" r="5" fill="#c084fc"/>
+      <line x1="135" y1="102" x2="162" y2="108" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>`,
+      "ACUTE MYELOID LEUKEMIA (AML)",
+      "Myeloblasts with Prominent Nucleoli & Auer Rods",
+      "#7e22ce",
+      "#c084fc"
+    ),
+    titleAr: "اللوكيميا النخاعية الحادة (Acute Myeloid Leukemia - AML)",
     titleEn: "Acute Myeloid Leukemia (AML)",
-    pathologySummaryAr: "وجود أرومات نخاعية غير ناضجة (Myeloblasts) تشغل مساحة واسعة مع نسبة نواة لسيتوبلازم مرتفعة (High N:C ratio) وأنوية متعددة واضحة، مع ظهور عصي آور المميزة (Auer rods) في السيتوبلازم مع نقص شديد في الصفائح الدموية وفقر دم حاد.",
-    pathologySummaryEn: "Presence of large myeloblasts with delicate chromatin, prominent nucleoli, high N:C ratio, and pathognomonic red-pink Auer rods in the cytoplasm, accompanied by severe thrombocytopenia.",
+    pathologySummaryAr: "خلايا أرومية نخاعية سرطانية (Myeloblasts) ضخمة النواة مع كروماتين رخو ونويات واضحة وسيتوبلازم قليل يحوي عصي آور الحمراء التشخيصية (Auer Rods).",
+    pathologySummaryEn: "Large myeloblasts with fine chromatin, prominent nucleoli, high N:C ratio, and diagnostic Auer rods in cytoplasm.",
     keyDiagnosticPoints: [
-      "Blasts in peripheral blood >= 20% of nucleated cells",
-      "Auer rods: crystallized peroxidase granules (pathognomonic of AML)",
-      "Severe anemia and severe thrombocytopenia (< 50,000 /µL) with hemorrhagic tendency",
-      "Myeloperoxidase (MPO) cytochemical staining positive",
-      "Flow cytometry: CD13, CD33, CD34, CD117 positive"
+      "Presence of circulating Myeloblasts (>= 20% in marrow or peripheral blood)",
+      "Pathognomonic Auer rods (crystalline fused lysosomes)",
+      "Profound pancytopenia (severe anemia, neutropenia, thrombocytopenia)",
+      "Positive myeloperoxidase (MPO) and flow cytometry (CD34, CD117, CD33)"
     ],
-    associatedConditions: ["Acute primary myeloid leukemia", "Secondary leukemic transformation from MDS", "Therapy-related AML"],
-    differentialDiagnosis: "ALL, Acute promyelocytic leukemia (APML with faggot cells and t(15;17))."
-  },
-  {
-    id: "hem-cll",
-    code: "HEM_CLL",
-    category: "hematology",
-    imageUrl: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2265%22%20fill%3D%22%230f172a%22%20stroke%3D%22%23881337%22%20stroke-width%3D%222%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%23f43f5e%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3ERT%20LAB%20PATHOLOGICAL%20ATLAS%3C/text%3E%20%3Ccircle%20cx%3D%22110%22%20cy%3D%2280%22%20r%3D%2216%22%20fill%3D%22%23e11d48%22/%3E%3Ccircle%20cx%3D%22110%22%20cy%3D%2280%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22155%22%20cy%3D%2275%22%20r%3D%2215%22%20fill%3D%22%23e11d48%22/%3E%3Ccircle%20cx%3D%22155%22%20cy%3D%2275%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22135%22%20cy%3D%2295%22%20r%3D%2214%22%20fill%3D%22%23e11d48%22/%3E%3Ccircle%20cx%3D%22135%22%20cy%3D%2295%22%20r%3D%224.5%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2265%22%20r%3D%2217%22%20fill%3D%22%236b21a8%22%20opacity%3D%220.6%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%22148%22%20text-anchor%3D%22middle%22%20fill%3D%22%2394a3b8%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3EMicroscopic%20Clinical%20Diagnostic%20Field%3C/text%3E%20%3C/svg%3E",
-    titleAr: "سرطان الدم الليمفاوي المزمن (Chronic Lymphocytic Leukemia - CLL)",
-    titleEn: "Chronic Lymphocytic Leukemia (CLL)",
-    pathologySummaryAr: "زيادة ليمفاوية شديدة ورتيبة من خلايا ليمفاوية صغيرة ناضجة المظهر مع تكتل كروماتيني نمطي (Soccer ball chromatin) ووفرة خلايا ملطخة مميزة (Smudge / Basket / Gumprecht cells) ناتجة عن هشاشة الخلايا السرطانية.",
-    pathologySummaryEn: "Monotonous proliferation of mature-appearing small lymphocytes with clumped chromatin, along with abundant fragile smudge (basket) cells.",
-    keyDiagnosticPoints: [
-      "Persistent absolute monoclonal lymphocytosis > 5,000 /µL (often > 20,000 - 100,000)",
-      "Smudge / Basket cells (Gumprecht shadows) readily visible on blood smear",
-      "Small mature lymphocytes with dense cracked/checkerboard chromatin",
-      "Flow cytometry co-expression: CD5+, CD19+, CD20 (dim), CD23+, and weak surface Ig",
-      "Gradual painless lymphadenopathy and splenomegaly"
-    ],
-    associatedConditions: ["B-cell chronic lymphocytic leukemia", "Small lymphocytic lymphoma (SLL)", "Autoimmune hemolytic anemia complication"],
-    differentialDiagnosis: "Mantle cell lymphoma, Prolymphocytic leukemia, Reactive viral lymphocytosis."
-  },
-  {
-    id: "hem-cml",
-    code: "HEM_CML",
-    category: "hematology",
-    imageUrl: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2265%22%20fill%3D%22%230f172a%22%20stroke%3D%22%23881337%22%20stroke-width%3D%222%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%23f43f5e%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3ERT%20LAB%20PATHOLOGICAL%20ATLAS%3C/text%3E%20%3Ccircle%20cx%3D%22110%22%20cy%3D%2280%22%20r%3D%2216%22%20fill%3D%22%23e11d48%22/%3E%3Ccircle%20cx%3D%22110%22%20cy%3D%2280%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22155%22%20cy%3D%2275%22%20r%3D%2215%22%20fill%3D%22%23e11d48%22/%3E%3Ccircle%20cx%3D%22155%22%20cy%3D%2275%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22135%22%20cy%3D%2295%22%20r%3D%2214%22%20fill%3D%22%23e11d48%22/%3E%3Ccircle%20cx%3D%22135%22%20cy%3D%2295%22%20r%3D%224.5%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2265%22%20r%3D%2217%22%20fill%3D%22%236b21a8%22%20opacity%3D%220.6%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%22148%22%20text-anchor%3D%22middle%22%20fill%3D%22%2394a3b8%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3EMicroscopic%20Clinical%20Diagnostic%20Field%3C/text%3E%20%3C/svg%3E",
-    titleAr: "سرطان الدم النخاعي المزمن (Chronic Myeloid Leukemia - CML)",
-    titleEn: "Chronic Myeloid Leukemia (CML)",
-    pathologySummaryAr: "زيادة هائلة في عدد كرات الدم البيضاء (غالباً > 50,000 - 200,000) مع ظهور السلسلة النخاعية المحببة بأكملها في الدم المحيطي (أرومات، طلائع نقوية، خلايا نقوية، شبه نقوية، وعصيات) مع زيادة مميزة في الخلايا القاعدية (Basophilia).",
-    pathologySummaryEn: "Dramatic leukocytosis (> 50,000 to > 200,000 /µL) displaying the full spectrum of myeloid differentiation: myeloblasts, promyelocytes, myelocytes, metamyelocytes, bands, and prominent basophilia.",
-    keyDiagnosticPoints: [
-      "Myelocyte bulge (myelocytes exceed metamyelocytes)",
-      "Marked basophilia (> 2-5%) and eosinophilia",
-      "Extremely low or absent Leukocyte Alkaline Phosphatase (LAP / NAP) score",
-      "Presence of Philadelphia Chromosome t(9;22) and BCR-ABL1 fusion transcript",
-      "Massive splenomegaly"
-    ],
-    associatedConditions: ["Chronic phase CML", "Accelerated phase / Blast crisis risk", "Myeloproliferative neoplasm (MPN)"],
-    differentialDiagnosis: "Leukemoid reaction (distinguished by high LAP score, toxic granulation, and absent BCR-ABL)."
-  },
-  {
-    id: "hem-itp",
-    code: "HEM_ITP",
-    category: "hematology",
-    imageUrl: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2265%22%20fill%3D%22%230f172a%22%20stroke%3D%22%23881337%22%20stroke-width%3D%222%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%23f43f5e%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3ERT%20LAB%20PATHOLOGICAL%20ATLAS%3C/text%3E%20%3Ccircle%20cx%3D%22110%22%20cy%3D%2280%22%20r%3D%2216%22%20fill%3D%22%23e11d48%22/%3E%3Ccircle%20cx%3D%22110%22%20cy%3D%2280%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22155%22%20cy%3D%2275%22%20r%3D%2215%22%20fill%3D%22%23e11d48%22/%3E%3Ccircle%20cx%3D%22155%22%20cy%3D%2275%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22135%22%20cy%3D%2295%22%20r%3D%2214%22%20fill%3D%22%23e11d48%22/%3E%3Ccircle%20cx%3D%22135%22%20cy%3D%2295%22%20r%3D%224.5%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2265%22%20r%3D%2217%22%20fill%3D%22%236b21a8%22%20opacity%3D%220.6%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%22148%22%20text-anchor%3D%22middle%22%20fill%3D%22%2394a3b8%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3EMicroscopic%20Clinical%20Diagnostic%20Field%3C/text%3E%20%3C/svg%3E",
-    titleAr: "نقص الصفائح المناعي والصفائح العملاقة (Immune Thrombocytopenic Purpura - ITP)",
-    titleEn: "Immune Thrombocytopenia (ITP) & Giant Platelets",
-    pathologySummaryAr: "نقص حاد في عدد الصفائح الدموية المحيطية (< 20,000 - 50,000) مع وجود صفائح دموية عملاقة نشطة (Giant / Megathrombocytes) تدل على تعويض نخاعي نشط لتعويض التكسير المناعي.",
-    pathologySummaryEn: "Marked isolated peripheral thrombocytopenia with occasional giant macrothrombocytes reflecting accelerated megakaryocytic turnover in response to immune destruction.",
-    keyDiagnosticPoints: [
-      "Isolated thrombocytopenia (< 100,000 down to < 20,000 /µL)",
-      "Normal WBC count and normal RBC morphology (unless secondary to hemorrhage)",
-      "Giant platelets (diameter exceeding that of normal erythrocytes)",
-      "Elevated MPV (Mean Platelet Volume) and elevated Immature Platelet Fraction (IPF)",
-      "Absence of schistocytes (rules out TTP/HUS/DIC)"
-    ],
-    associatedConditions: ["Primary Autoimmune ITP", "Secondary ITP (SLE, Hepatitis C, Helicobacter pylori, HIV)"],
-    differentialDiagnosis: "Thrombotic Thrombocytopenic Purpura (TTP - schistocytes present), Pseudothrombocytopenia (EDTA platelet clumping)."
+    associatedConditions: ["Bone marrow failure", "Bleeding diathesis", "Severe febrile neutropenia"],
+    differentialDiagnosis: "ALL, Leukemoid reaction, Myelodysplastic syndromes."
   },
 
   // ==========================================
-  // PATHOLOGICAL INFOGRAMS FOR OTHER LAB TESTS
+  // 2. الغدد الصماء والسكري (ENDOCRINOLOGY & DIABETES)
   // ==========================================
   {
-    id: "inf-lft",
-    code: "INF_LFT",
-    category: "biochemistry",
-    imageUrl: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%23fb923c%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3EHEPATIC%20PANEL%20%26amp%3B%20ENZYMATIC%20RADAR%3C/text%3E%20%3Cg%20transform%3D%22translate%2850%2C45%29%22%3E%20%3C%21--%20ALT/AST%20bar%20--%3E%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%2280%22%20height%3D%2214%22%20rx%3D%223%22%20fill%3D%22%231e293b%22/%3E%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%2245%22%20height%3D%2214%22%20rx%3D%223%22%20fill%3D%22%23f59e0b%22/%3E%20%3Ctext%20x%3D%2288%22%20y%3D%2211%22%20fill%3D%22%23cbd5e1%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3EALT%20/%20GPT%20%28Cytolysis%29%3C/text%3E%20%3C%21--%20AST/GOT%20bar%20--%3E%20%3Crect%20x%3D%220%22%20y%3D%2222%22%20width%3D%2280%22%20height%3D%2214%22%20rx%3D%223%22%20fill%3D%22%231e293b%22/%3E%20%3Crect%20x%3D%220%22%20y%3D%2222%22%20width%3D%2238%22%20height%3D%2214%22%20rx%3D%223%22%20fill%3D%22%23f97316%22/%3E%20%3Ctext%20x%3D%2288%22%20y%3D%2233%22%20fill%3D%22%23cbd5e1%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3EAST%20/%20GOT%20%28Mitochondrial%29%3C/text%3E%20%3C%21--%20Alk%20Phos%20bar%20--%3E%20%3Crect%20x%3D%220%22%20y%3D%2244%22%20width%3D%2280%22%20height%3D%2214%22%20rx%3D%223%22%20fill%3D%22%231e293b%22/%3E%20%3Crect%20x%3D%220%22%20y%3D%2244%22%20width%3D%2255%22%20height%3D%2214%22%20rx%3D%223%22%20fill%3D%22%2306b6d4%22/%3E%20%3Ctext%20x%3D%2288%22%20y%3D%2255%22%20fill%3D%22%23cbd5e1%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3EAlk%20Phos%20%26amp%3B%20GGT%20%28Cholestasis%29%3C/text%3E%20%3C%21--%20Bilirubin%20bar%20--%3E%20%3Crect%20x%3D%220%22%20y%3D%2266%22%20width%3D%2280%22%20height%3D%2214%22%20rx%3D%223%22%20fill%3D%22%231e293b%22/%3E%20%3Crect%20x%3D%220%22%20y%3D%2266%22%20width%3D%2225%22%20height%3D%2214%22%20rx%3D%223%22%20fill%3D%22%23eab308%22/%3E%20%3Ctext%20x%3D%2288%22%20y%3D%2277%22%20fill%3D%22%23cbd5e1%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3ETotal%20%26amp%3B%20Direct%20Bilirubin%20%28Jaundice%29%3C/text%3E%20%3C/g%3E%20%3Ctext%20x%3D%22140%22%20y%3D%22148%22%20text-anchor%3D%22middle%22%20fill%3D%22%23fdba74%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3EDe%20Ritis%20Ratio%3A%20AST%20/%20ALT%20%28%26lt%3B1%20Steatosis/Viral%20%7C%20%26gt%3B2%20Alcoholic/Cirrhosis%29%3C/text%3E%20%3C/svg%3E",
-    titleAr: "إنفوجرام تشخيص أمراض الكبد واليرقان (Liver Pathology Infogram)",
-    titleEn: "Hepatocellular Damage vs. Cholestasis Infogram",
-    pathologySummaryAr: "مخطط تفريقي سريري بين أذية الخلايا الكبدية (ارتفاع سائد في ALT و AST مثل التهابات الكبد الفيروسية والسمية) وبين ركود الصفراء والانسداد المراري (ارتفاع سائد في ALP و GGT والبيليروبين المباشر).",
-    pathologySummaryEn: "Clinical diagnostic flowchart distinguishing Hepatocellular pattern (ALT/AST predominance) from Cholestatic / Biliary Obstructive pattern (ALP/GGT and Direct Bilirubin predominance).",
-    keyDiagnosticPoints: [
-      "Hepatocellular Pattern: ALT > AST markedly elevated (> 5-10x) in viral/acute hepatitis",
-      "Alcoholic Liver Disease: AST/ALT ratio > 2.0 with elevated GGT",
-      "Cholestatic Pattern: Marked elevation of ALP (> 3x) and GGT with high Direct Bilirubin",
-      "Synthetic Liver Function: Serum Albumin and PT/INR reflect hepatic synthetic capacity",
-      "Isolated indirect hyperbilirubinemia: Gilbert syndrome or hemolytic state"
-    ],
-    associatedConditions: ["Viral Hepatitis A/B/C", "NAFLD / NASH", "Gallbladder obstruction / Cholelithiasis", "Cirrhosis"],
-    differentialDiagnosis: "Hepatic vs Post-hepatic Jaundice, Toxic drug injury vs viral hepatitis."
-  },
-  {
-    id: "inf-kft",
-    code: "INF_KFT",
-    category: "biochemistry",
-    imageUrl: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%23a78bfa%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3ERENAL%20IMPAIRMENT%20%26amp%3B%20eGFR%20STAGES%3C/text%3E%20%3C%21--%20eGFR%20Color%20Spectrum%20Bar%20--%3E%20%3Cg%20transform%3D%22translate%2840%2C50%29%22%3E%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%2240%22%20height%3D%2224%22%20fill%3D%22%2310b981%22%20rx%3D%224%22/%3E%20%3Ctext%20x%3D%2220%22%20y%3D%2216%22%20fill%3D%22%23fff%22%20font-size%3D%228%22%20font-weight%3D%22bold%22%20text-anchor%3D%22middle%22%3EG1%20%26gt%3B90%3C/text%3E%20%3Crect%20x%3D%2242%22%20y%3D%220%22%20width%3D%2240%22%20height%3D%2224%22%20fill%3D%22%2384cc16%22%20rx%3D%224%22/%3E%20%3Ctext%20x%3D%2262%22%20y%3D%2216%22%20fill%3D%22%23fff%22%20font-size%3D%228%22%20font-weight%3D%22bold%22%20text-anchor%3D%22middle%22%3EG2%2060-89%3C/text%3E%20%3Crect%20x%3D%2284%22%20y%3D%220%22%20width%3D%2240%22%20height%3D%2224%22%20fill%3D%22%23eab308%22%20rx%3D%224%22/%3E%20%3Ctext%20x%3D%22104%22%20y%3D%2216%22%20fill%3D%22%23fff%22%20font-size%3D%228%22%20font-weight%3D%22bold%22%20text-anchor%3D%22middle%22%3EG3%2030-59%3C/text%3E%20%3Crect%20x%3D%22126%22%20y%3D%220%22%20width%3D%2240%22%20height%3D%2224%22%20fill%3D%22%23f97316%22%20rx%3D%224%22/%3E%20%3Ctext%20x%3D%22146%22%20y%3D%2216%22%20fill%3D%22%23fff%22%20font-size%3D%228%22%20font-weight%3D%22bold%22%20text-anchor%3D%22middle%22%3EG4%2015-29%3C/text%3E%20%3Crect%20x%3D%22168%22%20y%3D%220%22%20width%3D%2232%22%20height%3D%2224%22%20fill%3D%22%23ef4444%22%20rx%3D%224%22/%3E%20%3Ctext%20x%3D%22184%22%20y%3D%2216%22%20fill%3D%22%23fff%22%20font-size%3D%228%22%20font-weight%3D%22bold%22%20text-anchor%3D%22middle%22%3EG5%20%26lt%3B15%3C/text%3E%20%3C/g%3E%20%3C%21--%20Creatinine%20/%20Urea%20/%20eGFR%20labels%20--%3E%20%3Cg%20transform%3D%22translate%2840%2C90%29%22%20fill%3D%22%23cbd5e1%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3E%20%3Ctext%20x%3D%220%22%20y%3D%2212%22%3E%E2%80%A2%20Normal%20G1-G2%3A%20Creatinine%20%26lt%3B%201.2%20mg/dL%3C/text%3E%20%3Ctext%20x%3D%220%22%20y%3D%2228%22%3E%E2%80%A2%20Moderate%20G3%3A%20Creatinine%201.3%20-%202.5%20mg/dL%20%28Dose%20adjustment%29%3C/text%3E%20%3Ctext%20x%3D%220%22%20y%3D%2244%22%3E%E2%80%A2%20Severe%20G4-G5%3A%20Uremia%20%26amp%3B%20Nephrology%20referral%20indicated%3C/text%3E%20%3C/g%3E%20%3C/svg%3E",
-    titleAr: "إنفوجرام القصور الكلوي ومراحل الترشيح الكبيبي (Kidney Function & eGFR Infogram)",
-    titleEn: "Kidney Disease Stages & Azotemia Differential Infogram",
-    pathologySummaryAr: "مخطط درجات القصور الكلوي المزمن (CKD Stages 1-5) المبني على معدل الترشيح الكبيبي المحسوب (eGFR) والتفريق بين القصور قبل الكلوي والكلوي وبعد الكلوي عبر نسبة اليوريا للكرياتينين.",
-    pathologySummaryEn: "Clinical infographic detailing Chronic Kidney Disease (CKD) staging (eGFR stages 1 to 5) and differential azotemia evaluation using BUN-to-Creatinine ratio and urine sediment.",
-    keyDiagnosticPoints: [
-      "Stage 1: eGFR >= 90 (normal with kidney damage) | Stage 2: eGFR 60 - 89 (mild)",
-      "Stage 3: eGFR 30 - 59 (moderate CKD) | Stage 4: eGFR 15 - 29 (severe CKD)",
-      "Stage 5: eGFR < 15 mL/min/1.73m² (End-Stage Renal Disease - ESRD)",
-      "Prerenal Azotemia: BUN/Creatinine ratio > 20:1 with high urine osmolality",
-      "Intrinsic Renal Failure: BUN/Creatinine ratio 10-15:1 with granular casts",
-      "Serum Uric Acid: Hyperuricemia leading to gouty nephropathy or nephrolithiasis"
-    ],
-    associatedConditions: ["Diabetic Nephropathy", "Hypertensive Nephrosclerosis", "Glomerulonephritis", "Acute Tubular Necrosis"],
-    differentialDiagnosis: "Prerenal dehydration vs intrinsic ATN vs postrenal obstruction."
-  },
-  {
-    id: "inf-lipid",
-    code: "INF_LIPID",
-    category: "biochemistry",
-    imageUrl: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%23ec4899%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3ELIPID%20TARGETS%20%26amp%3B%20ATHEROGENIC%20INDEX%3C/text%3E%20%3C%21--%20Artery%20cross%20section%20--%3E%20%3Cg%20transform%3D%22translate%2860%2C40%29%22%3E%20%3Ccircle%20cx%3D%2245%22%20cy%3D%2245%22%20r%3D%2240%22%20fill%3D%22%23881337%22%20stroke%3D%22%23e11d48%22%20stroke-width%3D%224%22/%3E%20%3Ccircle%20cx%3D%2245%22%20cy%3D%2245%22%20r%3D%2232%22%20fill%3D%22%23be123c%22/%3E%20%3Cpath%20d%3D%22M%2045%2C13%20A%2032%2C32%200%200%2C1%2077%2C45%20L%2060%2C45%20A%2015%2C15%200%200%2C0%2045%2C30%20Z%22%20fill%3D%22%23fbbf24%22/%3E%20%3Ccircle%20cx%3D%2245%22%20cy%3D%2245%22%20r%3D%2222%22%20fill%3D%22%23090d16%22/%3E%20%3Ctext%20x%3D%2245%22%20y%3D%2248%22%20fill%3D%22%23f43f5e%22%20font-size%3D%228%22%20font-weight%3D%22bold%22%20text-anchor%3D%22middle%22%3ELUMEN%3C/text%3E%20%3C/g%3E%20%3Cg%20transform%3D%22translate%28145%2C50%29%22%20fill%3D%22%23cbd5e1%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3E%20%3Ctext%20x%3D%220%22%20y%3D%2212%22%3E%E2%80%A2%20Total%20Chol%3A%20%26lt%3B%20200%20mg/dL%3C/text%3E%20%3Ctext%20x%3D%220%22%20y%3D%2228%22%3E%E2%80%A2%20LDL%20%28Bad%29%3A%20%26lt%3B%20100%20mg/dL%3C/text%3E%20%3Ctext%20x%3D%220%22%20y%3D%2244%22%3E%E2%80%A2%20HDL%20%28Good%29%3A%20%26gt%3B%2040-50%20mg/dL%3C/text%3E%20%3Ctext%20x%3D%220%22%20y%3D%2260%22%3E%E2%80%A2%20Triglycerides%3A%20%26lt%3B%20150%20mg/dL%3C/text%3E%20%3C/g%3E%20%3Ctext%20x%3D%22140%22%20y%3D%22148%22%20text-anchor%3D%22middle%22%20fill%3D%22%23fbcfe8%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3EAtherogenic%20Plaque%20Risk%3A%20Total%20Chol%20/%20HDL%20Ratio%3C/text%3E%20%3C/svg%3E",
-    titleAr: "إنفوجرام تصلب الشرايين ومخاطر الدهون (Atherosclerosis & Lipid Target Infogram)",
-    titleEn: "Lipid Profile & Cardiovascular Risk Infogram",
-    pathologySummaryAr: "مخطط مرئي لمراحل تكون اللويحة التصلبية الشريانية الناتجة عن أكسدة كوليسترول LDL وترسب الخلايا الرغوية (Foam cells)، مع حدود الأهداف العلاجية للدهون طبقاً للتوصيات العالمية.",
-    pathologySummaryEn: "Visual pathophysiological timeline of atherosclerosis: endothelial injury -> oxidized LDL accumulation -> macrophage foam cell formation -> fibrous cap plaque rupture.",
-    keyDiagnosticPoints: [
-      "Total Cholesterol: Desirable < 200 mg/dL | Borderline: 200-239 | High >= 240",
-      "LDL-C (Bad): Optimal < 100 mg/dL (< 70 or < 55 in very high risk CAD patients)",
-      "HDL-C (Protective): > 40 mg/dL in males, > 50 mg/dL in females",
-      "Triglycerides: Normal < 150 mg/dL | High 200-499 | Very high >= 500 (Pancreatitis risk)",
-      "Non-HDL-C: Total Cholesterol minus HDL (Comprehensive atherogenic particle estimate)"
-    ],
-    associatedConditions: ["Coronary Artery Disease (CAD)", "Metabolic Syndrome", "Familial Hypercholesterolemia"],
-    differentialDiagnosis: "Primary vs Secondary dyslipidemia (Hypothyroidism, Nephrotic syndrome, Diabetes)."
-  },
-  {
-    id: "inf-glycemic",
-    code: "INF_GLYCEMIC",
+    id: "endo-diabetes",
+    code: "ENDO_DIABETES",
     category: "endocrinology",
-    imageUrl: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%2338bdf8%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3EGLYCEMIC%20%26amp%3B%20HBA1C%20SPECTRUM%20METER%3C/text%3E%20%3C%21--%20Gauge%20Arc%20--%3E%20%3Cpath%20d%3D%22M%2060%2C110%20A%2080%2C80%200%200%2C1%20110%2C45%22%20fill%3D%22none%22%20stroke%3D%22%2310b981%22%20stroke-width%3D%2214%22/%3E%20%3Cpath%20d%3D%22M%20112%2C44%20A%2080%2C80%200%200%2C1%20168%2C44%22%20fill%3D%22none%22%20stroke%3D%22%23f59e0b%22%20stroke-width%3D%2214%22/%3E%20%3Cpath%20d%3D%22M%20170%2C45%20A%2080%2C80%200%200%2C1%20220%2C110%22%20fill%3D%22none%22%20stroke%3D%22%23ef4444%22%20stroke-width%3D%2214%22/%3E%20%3C%21--%20Gauge%20Needle%20--%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%22110%22%20r%3D%228%22%20fill%3D%22%23e2e8f0%22/%3E%20%3Cline%20x1%3D%22140%22%20y1%3D%22110%22%20x2%3D%22155%22%20y2%3D%2255%22%20stroke%3D%22%23f8fafc%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22/%3E%20%3Ctext%20x%3D%2275%22%20y%3D%22125%22%20fill%3D%22%2334d399%22%20font-size%3D%228%22%20font-family%3D%22sans-serif%22%20font-weight%3D%22bold%22%3E%26lt%3B%205.7%25%20Normal%3C/text%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2238%22%20text-anchor%3D%22middle%22%20fill%3D%22%23fbbf24%22%20font-size%3D%228%22%20font-family%3D%22sans-serif%22%20font-weight%3D%22bold%22%3E5.7%20-%206.4%25%20Pre-DM%3C/text%3E%20%3Ctext%20x%3D%22205%22%20y%3D%22125%22%20fill%3D%22%23f87171%22%20font-size%3D%228%22%20font-family%3D%22sans-serif%22%20font-weight%3D%22bold%22%3E%26gt%3B%3D%206.5%25%20Diabetic%3C/text%3E%20%3Ctext%20x%3D%22140%22%20y%3D%22148%22%20text-anchor%3D%22middle%22%20fill%3D%22%2394a3b8%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3EHOMA-IR%20/%20Insulin%20Resistance%20Target%20Gauge%3C/text%3E%20%3C/svg%3E",
-    titleAr: "إنفوجرام سكر الدم والتراكمي ومقاومة الإنسولين (Glycemic Control & HbA1c Infogram)",
-    titleEn: "Diabetes Diagnosis & 90-Day HbA1c Glycation Infogram",
-    pathologySummaryAr: "مخطط بيولوجي يوضح ارتباط الجلوكوز بهيموجلوبين كرات الدم الحمراء طوال دورة حياتها البالغة 90-120 يوماً، مع معايير الجمعية الأمريكية للسكري (ADA) لتشخيص السكري وما قبل السكري ومؤشر HOMA-IR.",
-    pathologySummaryEn: "Biological illustration of hemoglobin non-enzymatic glycation over RBC lifespan (90-120 days), with ADA diagnostic cutoffs for diabetes, prediabetes, and insulin resistance index.",
+    specialtyAr: "الغدد الصماء والسكري",
+    imageUrl: createSvgDataUri(
+      `<g fill="#0284c7">
+        <rect x="95" y="60" width="130" height="60" rx="8" fill="#082f49" stroke="#38bdf8" stroke-width="2"/>
+        <text x="160" y="85" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="bold">HbA1c &gt;= 6.5%</text>
+        <text x="160" y="105" text-anchor="middle" fill="#f87171" font-size="10" font-weight="bold">FBS &gt;= 126 mg/dL</text>
+      </g>
+      <circle cx="105" cy="50" r="10" fill="#f43f5e"/><text x="105" y="54" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">Glu</text>
+      <circle cx="215" cy="50" r="10" fill="#f43f5e"/><text x="215" y="54" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">Glu</text>`,
+      "DIABETES MELLITUS TYPE 2",
+      "Chronic Hyperglycemia, Glycated Hb & Insulin Resistance",
+      "#0284c7",
+      "#38bdf8"
+    ),
+    titleAr: "داء السكري واعتلال الأيض (Type 2 Diabetes Mellitus)",
+    titleEn: "Type 2 Diabetes Mellitus & Glycemic Control",
+    pathologySummaryAr: "ارتفاع مزمن في سكر الدم الصائم وبعد الأكل والتراكمي (HbA1c >= 6.5%) ناجم عن مقاومة الأنسجة للإنسولين ونقص نسبي في إفرازه، مع مخاطر تصلب الأوعية الدقيقة واعتلال الكلى وشبكية العين.",
+    pathologySummaryEn: "Chronic hyperglycemia with elevated fasting plasma glucose (>= 126 mg/dL) and HbA1c (>= 6.5%) due to progressive beta-cell dysfunction and insulin resistance.",
     keyDiagnosticPoints: [
-      "Normal: Fasting < 100 mg/dL | 2h PPBS < 140 mg/dL | HbA1c < 5.7%",
-      "Prediabetes: Fasting 100 - 125 | 2h PPBS 140 - 199 | HbA1c 5.7% - 6.4%",
-      "Diabetes Mellitus: Fasting >= 126 | 2h PPBS >= 200 | HbA1c >= 6.5%",
-      "HOMA-IR (Insulin Resistance): (Fasting Glucose mg/dL × Fasting Insulin µIU/mL) / 405",
-      "HOMA-IR > 2.5 indicates significant insulin resistance"
+      "Fasting Blood Sugar (FBS) >= 126 mg/dL (7.0 mmol/L)",
+      "2-Hour Postprandial Glucose (PPBS) >= 200 mg/dL",
+      "Glycated Hemoglobin (HbA1c) >= 6.5%",
+      "Elevated HOMA-IR indicating severe tissue insulin resistance",
+      "Microalbuminuria screening recommended annually"
     ],
-    associatedConditions: ["Type 1 Diabetes Mellitus", "Type 2 Diabetes Mellitus", "Gestational Diabetes", "Metabolic Syndrome"],
-    differentialDiagnosis: "Impaired Fasting Glucose vs Impaired Glucose Tolerance vs Stress Hyperglycemia."
+    associatedConditions: ["Metabolic syndrome", "Diabetic nephropathy", "Dyslipidemia & Coronary artery disease"],
+    differentialDiagnosis: "Impaired Fasting Glucose (Prediabetes), Type 1 LADA, Steroid-induced hyperglycemia."
   },
   {
-    id: "inf-thyroid",
-    code: "INF_THYROID",
+    id: "endo-hypothyroid",
+    code: "ENDO_HYPOTHYROID",
     category: "endocrinology",
-    imageUrl: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2265%22%20fill%3D%22%230f172a%22%20stroke%3D%22%23881337%22%20stroke-width%3D%222%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%23f43f5e%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3ERT%20LAB%20PATHOLOGICAL%20ATLAS%3C/text%3E%20%3Ccircle%20cx%3D%22110%22%20cy%3D%2280%22%20r%3D%2216%22%20fill%3D%22%23e11d48%22/%3E%3Ccircle%20cx%3D%22110%22%20cy%3D%2280%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22155%22%20cy%3D%2275%22%20r%3D%2215%22%20fill%3D%22%23e11d48%22/%3E%3Ccircle%20cx%3D%22155%22%20cy%3D%2275%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22135%22%20cy%3D%2295%22%20r%3D%2214%22%20fill%3D%22%23e11d48%22/%3E%3Ccircle%20cx%3D%22135%22%20cy%3D%2295%22%20r%3D%224.5%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2265%22%20r%3D%2217%22%20fill%3D%22%236b21a8%22%20opacity%3D%220.6%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%22148%22%20text-anchor%3D%22middle%22%20fill%3D%22%2394a3b8%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3EMicroscopic%20Clinical%20Diagnostic%20Field%3C/text%3E%20%3C/svg%3E",
-    titleAr: "إنفوجرام محور الغدة الدرقية والتغذية الراجعة (Thyroid HPT Axis Infogram)",
-    titleEn: "Hypothalamic-Pituitary-Thyroid (HPT) Feedback Axis",
-    pathologySummaryAr: "مخطط فسيولوجي للتغذية الراجعة السلبية لهرمونات الغدة الدرقية (FT3 و FT4) على الغدة النخامية (TSH) ومصفوفة تشخيص خمول ونشاط الغدة الأولي وتحت الإكلينيكي.",
-    pathologySummaryEn: "Physiological feedback diagram illustrating HPT axis and diagnostic matrix for Primary Hypothyroidism, Subclinical Hypothyroidism, Hyperthyroidism, and Pituitary adenoma.",
+    specialtyAr: "الغدد الصماء والسكري",
+    imageUrl: createSvgDataUri(
+      `<path d="M 130,65 C 130,50 145,55 160,75 C 175,55 190,50 190,65 C 190,95 175,115 160,110 C 145,115 130,95 130,65 Z" fill="#4338ca" stroke="#818cf8" stroke-width="2"/>
+      <rect x="110" y="125" width="100" height="20" rx="5" fill="#1e1b4b" stroke="#6366f1" stroke-width="1.5"/>
+      <text x="160" y="139" text-anchor="middle" fill="#a5b4fc" font-size="10" font-weight="bold">TSH Elevated &gt; 10</text>`,
+      "PRIMARY HYPOTHYROIDISM",
+      "Thyroid Failure: Marked TSH Elevation & Low FT4",
+      "#4338ca",
+      "#818cf8"
+    ),
+    titleAr: "خمول وقصور الغدة الدرقية (Primary Hypothyroidism)",
+    titleEn: "Primary Hypothyroidism (Hashimoto's)",
+    pathologySummaryAr: "قصور الغدة الدرقية في إفراز هرمونات الثيروكسين (FT4 و FT3) مما يحفز الغدة النخامية على إفراز نسب عالية جداً من الهرمون المنشط (TSH > 4.5 - 10 µIU/mL).",
+    pathologySummaryEn: "Decreased circulating free thyroxine (FT4) accompanied by compensatory elevation in serum thyroid-stimulating hormone (TSH).",
     keyDiagnosticPoints: [
-      "Primary Hypothyroidism: Elevated TSH with decreased Free T4 and Free T3",
-      "Subclinical Hypothyroidism: Elevated TSH with normal Free T4 (monitor Anti-TPO)",
-      "Primary Hyperthyroidism / Thyrotoxicosis: Suppressed TSH (< 0.05) with elevated FT4 / FT3",
-      "Subclinical Hyperthyroidism: Suppressed TSH with normal Free T4",
-      "Secondary (Central) Thyroid Failure: Low / Normal TSH with Low Free T4",
-      "Anti-TPO & Anti-TG antibodies: Elevated in Hashimoto thyroiditis and Graves disease"
+      "Elevated TSH (> 4.5 µIU/mL, often > 10 in overt failure)",
+      "Low Free T4 (FT4) and Low Free T3 (FT3)",
+      "Positive Anti-TPO and Anti-Thyroglobulin antibodies in Hashimoto thyroiditis",
+      "Secondary dyslipidemia (elevated LDL and Total Cholesterol)",
+      "Mild normocytic or macrocytic anemia"
     ],
-    associatedConditions: ["Hashimoto Thyroiditis", "Graves Disease", "Toxic Multinodular Goiter", "Subacute Thyroiditis"],
-    differentialDiagnosis: "Primary vs Secondary thyroid dysfunction, Euthyroid Sick Syndrome."
+    associatedConditions: ["Hashimoto's autoimmune thyroiditis", "Dyslipidemia", "Fatigue, weight gain & cold intolerance"],
+    differentialDiagnosis: "Subclinical hypothyroidism (normal FT4 with high TSH), Sick Euthyroid Syndrome."
   },
   {
-    id: "inf-urine",
-    code: "INF_URINE",
-    category: "microscopy",
-    imageUrl: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2270%22%20fill%3D%22%230f172a%22%20stroke%3D%22%230ea5e9%22%20stroke-width%3D%222%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%2338bdf8%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3EURINARY%20SEDIMENT%20%26amp%3B%20CRYSTALS%20%28400X%29%3C/text%3E%20%3C%21--%20Calcium%20Oxalate%20Envelope%20Crystal%20--%3E%20%3Cg%20transform%3D%22translate%28100%2C55%29%22%3E%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%2228%22%20height%3D%2228%22%20fill%3D%22%231e293b%22%20stroke%3D%22%2338bdf8%22%20stroke-width%3D%221.5%22/%3E%20%3Cline%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%2228%22%20y2%3D%2228%22%20stroke%3D%22%2338bdf8%22%20stroke-width%3D%221.5%22/%3E%20%3Cline%20x1%3D%2228%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%2228%22%20stroke%3D%22%2338bdf8%22%20stroke-width%3D%221.5%22/%3E%20%3C/g%3E%20%3C%21--%20Triple%20Phosphate%20Coffin%20Lid%20Prism%20--%3E%20%3Cg%20transform%3D%22translate%28150%2C70%29%22%3E%20%3Cpolygon%20points%3D%220%2C6%2018%2C0%2036%2C6%2036%2C24%2018%2C30%200%2C24%22%20fill%3D%22%230f2b38%22%20stroke%3D%22%237dd3fc%22%20stroke-width%3D%221.5%22/%3E%20%3Cline%20x1%3D%2218%22%20y1%3D%220%22%20x2%3D%2218%22%20y2%3D%2230%22%20stroke%3D%22%237dd3fc%22%20stroke-width%3D%221%22/%3E%20%3C/g%3E%20%3C%21--%20Pus%20cells%20/%20RBCs%20--%3E%20%3Ccircle%20cx%3D%22110%22%20cy%3D%22105%22%20r%3D%227%22%20fill%3D%22%23fef08a%22%20stroke%3D%22%23eab308%22%20stroke-width%3D%221%22/%3E%20%3Ccircle%20cx%3D%22125%22%20cy%3D%22110%22%20r%3D%226%22%20fill%3D%22%23fecdd3%22%20stroke%3D%22%23f43f5e%22%20stroke-width%3D%221%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%22148%22%20text-anchor%3D%22middle%22%20fill%3D%22%23bae6fd%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3EEnvelope%20Ca-Oxalate%20%26amp%3B%20Triple%20Phosphate%20Prisms%3C/text%3E%20%3C/svg%3E",
-    titleAr: "إنفوجرام الفحص المجهري لرواسب البول (Urinary Sediment Microscopy Infogram)",
-    titleEn: "Urine Microscopic Sediment Atlas Infogram",
-    pathologySummaryAr: "دليل مرئي مجهري للبلورات (أوكزالات كالسيوم، يوريك أسيد، فوسفات ثلاثي) والأسطوانات (شفافة، حبيبية، كلوية، صديدية) وخلايا الصديد والدم والظهارية.",
-    pathologySummaryEn: "Illustrated microscopic atlas of urinary sediment elements including crystals (calcium oxalate, uric acid, triple phosphate), casts (hyaline, granular, RBC, WBC casts), and cells.",
+    id: "endo-hyperthyroid",
+    code: "ENDO_HYPERTHYROID",
+    category: "endocrinology",
+    specialtyAr: "الغدد الصماء والسكري",
+    imageUrl: createSvgDataUri(
+      `<path d="M 125,60 C 125,45 145,50 160,70 C 175,50 195,45 195,60 C 195,100 175,120 160,115 C 145,120 125,100 125,60 Z" fill="#b45309" stroke="#fbbf24" stroke-width="2.5"/>
+      <circle cx="160" cy="85" r="18" fill="#fef3c7" opacity="0.3"/>
+      <text x="160" y="89" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="bold">TSH &lt; 0.01</text>`,
+      "HYPERTHYROIDISM / GRAVES' DISEASE",
+      "Thyrotoxicosis: Suppressed TSH with High FT3 & FT4",
+      "#b45309",
+      "#fbbf24"
+    ),
+    titleAr: "فرط نشاط الغدة الدرقية وداء غريفز (Hyperthyroidism)",
+    titleEn: "Hyperthyroidism & Thyrotoxicosis",
+    pathologySummaryAr: "فرط إفراز هرمونات الدرقية (FT4 و FT3) المؤدي إلى تثبيط كامل للهرمون المنبه للدرقية (TSH < 0.01 µIU/mL) مع أعراض تسارع ضربات القلب ونقص الوزن وفرط التعرق.",
+    pathologySummaryEn: "Autonomous overproduction of thyroid hormones causing undetectable TSH (< 0.01 µIU/mL) with elevated Free T4 and Free T3.",
     keyDiagnosticPoints: [
-      "Calcium Oxalate Crystals: Envelope-shaped (dihydrate) or dumbbell-shaped (monohydrate)",
-      "Uric Acid Crystals: Diamond, rosette, or rhomboid under acidic urine pH",
-      "Triple Phosphate Crystals: Coffin-lid appearance in alkaline urine (Proteus UTI)",
-      "RBC Casts: Pathognomonic of acute glomerulonephritis",
-      "WBC Casts: Differentiates acute pyelonephritis from lower cystitis",
-      "Pus Cells (Pyuria): > 5 / HPF indicates urinary tract inflammation / infection"
+      "Suppressed TSH (< 0.05 µIU/mL)",
+      "Elevated Free T4 (FT4) and Free T3 (FT3)",
+      "Positive TRAb (TSH Receptor Antibodies) in Graves' disease",
+      "Tachycardia, fine hand tremors, weight loss",
+      "Mild hypercalcemia and elevated ALP may be noted"
     ],
-    associatedConditions: ["Urinary Tract Infection (UTI)", "Urolithiasis / Kidney Stones", "Glomerulonephritis", "Interstitial Nephritis"],
-    differentialDiagnosis: "Glomerular vs Non-glomerular hematuria (Dysmorphic RBCs and RBC casts)."
+    associatedConditions: ["Graves' Disease", "Toxic Multinodular Goiter", "Thyroid Storm"],
+    differentialDiagnosis: "Subacute thyroiditis, Exogenous levothyroxine overdose."
   },
   {
-    id: "inf-stool",
-    code: "INF_STOOL",
-    category: "parasitology",
-    imageUrl: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2270%22%20fill%3D%22%230f172a%22%20stroke%3D%22%2310b981%22%20stroke-width%3D%222%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%2334d399%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3ESTOOL%20PARASITOLOGY%20%28400X%29%3C/text%3E%20%3C%21--%20Entamoeba%20Histolytica%20Cyst%20--%3E%20%3Cg%20transform%3D%22translate%28100%2C55%29%22%3E%20%3Ccircle%20cx%3D%2218%22%20cy%3D%2218%22%20r%3D%2217%22%20fill%3D%22%23064e3b%22%20stroke%3D%22%2334d399%22%20stroke-width%3D%221.5%22/%3E%20%3C%21--%204%20nuclei%20--%3E%20%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%223%22%20fill%3D%22%23ecfdf5%22%20stroke%3D%22%23059669%22%20stroke-width%3D%221%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%221%22%20fill%3D%22%23047857%22/%3E%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2212%22%20r%3D%223%22%20fill%3D%22%23ecfdf5%22%20stroke%3D%22%23059669%22%20stroke-width%3D%221%22/%3E%3Ccircle%20cx%3D%2224%22%20cy%3D%2212%22%20r%3D%221%22%20fill%3D%22%23047857%22/%3E%20%3Ccircle%20cx%3D%2212%22%20cy%3D%2224%22%20r%3D%223%22%20fill%3D%22%23ecfdf5%22%20stroke%3D%22%23059669%22%20stroke-width%3D%221%22/%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2224%22%20r%3D%221%22%20fill%3D%22%23047857%22/%3E%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2224%22%20r%3D%223%22%20fill%3D%22%23ecfdf5%22%20stroke%3D%22%23059669%22%20stroke-width%3D%221%22/%3E%3Ccircle%20cx%3D%2224%22%20cy%3D%2224%22%20r%3D%221%22%20fill%3D%22%23047857%22/%3E%20%3C%21--%20Chromatoid%20bar%20--%3E%20%3Crect%20x%3D%2210%22%20y%3D%2216%22%20width%3D%2216%22%20height%3D%223%22%20rx%3D%221.5%22%20fill%3D%22%23a7f3d0%22/%3E%20%3C/g%3E%20%3C%21--%20Giardia%20Lamblia%20Trophozoite%20--%3E%20%3Cg%20transform%3D%22translate%28155%2C60%29%22%3E%20%3Cpath%20d%3D%22M%2012%2C0%20C%2022%2C0%2024%2C14%2012%2C28%20C%200%2C14%202%2C0%2012%2C0%20Z%22%20fill%3D%22%23047857%22%20stroke%3D%22%236ee7b7%22%20stroke-width%3D%221.5%22/%3E%20%3C%21--%202%20eyes%20/%20nuclei%20--%3E%20%3Ccircle%20cx%3D%228%22%20cy%3D%2210%22%20r%3D%222.5%22%20fill%3D%22%23ecfdf5%22/%3E%3Ccircle%20cx%3D%228%22%20cy%3D%2210%22%20r%3D%221%22%20fill%3D%22%23064e3b%22/%3E%20%3Ccircle%20cx%3D%2216%22%20cy%3D%2210%22%20r%3D%222.5%22%20fill%3D%22%23ecfdf5%22/%3E%3Ccircle%20cx%3D%2216%22%20cy%3D%2210%22%20r%3D%221%22%20fill%3D%22%23064e3b%22/%3E%20%3Cpath%20d%3D%22M%2012%2C28%20L%2012%2C34%20M%208%2C24%20L%202%2C30%20M%2016%2C24%20L%2022%2C30%22%20stroke%3D%22%236ee7b7%22%20stroke-width%3D%221.2%22/%3E%20%3C/g%3E%20%3Ctext%20x%3D%22140%22%20y%3D%22148%22%20text-anchor%3D%22middle%22%20fill%3D%22%23a7f3d0%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3EE.%20Histolytica%20%284-Nuclei%20Cyst%29%20%26amp%3B%20Giardia%20Trophozoite%3C/text%3E%20%3C/svg%3E",
-    titleAr: "إنفوجرام طفيليات وبويضات البراز (Stool Parasitology & Microscopy Infogram)",
-    titleEn: "Stool Parasites, Cysts, and Occult Blood Infogram",
-    pathologySummaryAr: "مخطط مجهري لطفيليات الجهاز الهضمي: أكياس وأطوار الأميبا النشطة (Entamoeba histolytica)، طفيل الجيارديا (Giardia lamblia)، بويضات الإسكارس والدبوسية مع دلالات الدم الخفي في البراز (FOBT).",
-    pathologySummaryEn: "Microscopic diagnostic reference for intestinal protozoa: Entamoeba histolytica cysts/trophozoites, Giardia lamblia trophozoites/cysts, helminth ova, and Fecal Occult Blood significance.",
+    id: "endo-pcos",
+    code: "ENDO_PCOS",
+    category: "endocrinology",
+    specialtyAr: "الغدد الصماء والسكري",
+    imageUrl: createSvgDataUri(
+      `<ellipse cx="160" cy="90" rx="45" ry="32" fill="#831843" stroke="#f472b6" stroke-width="2"/>
+      <circle cx="130" cy="80" r="6" fill="#090d16" stroke="#f472b6" stroke-width="1.5"/>
+      <circle cx="145" cy="72" r="5" fill="#090d16" stroke="#f472b6" stroke-width="1.5"/>
+      <circle cx="165" cy="72" r="5.5" fill="#090d16" stroke="#f472b6" stroke-width="1.5"/>
+      <circle cx="185" cy="80" r="6" fill="#090d16" stroke="#f472b6" stroke-width="1.5"/>
+      <circle cx="178" cy="100" r="6" fill="#090d16" stroke="#f472b6" stroke-width="1.5"/>
+      <circle cx="140" cy="100" r="5.5" fill="#090d16" stroke="#f472b6" stroke-width="1.5"/>
+      <text x="160" y="93" text-anchor="middle" fill="#fbcfe8" font-size="9" font-weight="bold">LH:FSH &gt; 2:1</text>`,
+      "POLYCYSTIC OVARY SYNDROME (PCOS)",
+      "Follicular Arrest & Hyperandrogenemia (LH/FSH Elevation)",
+      "#831843",
+      "#f472b6"
+    ),
+    titleAr: "متلازمة تكيس المبايض (PCOS & Insulin Resistance)",
+    titleEn: "Polycystic Ovary Syndrome (PCOS)",
+    pathologySummaryAr: "اضطراب هرموني استقلابي يتميز بارتفاع نسبة هرمون LH مقارنة بـ FSH (> 2:1) مع ارتفاع هرمونات الذكورة (Total & Free Testosterone) ومقاومة الإنسولين وتعدد الحويصلات بالمبيض.",
+    pathologySummaryEn: "Endocrine disturbance with elevated LH:FSH ratio (> 2:1), elevated androgens, insulin resistance, and characteristic ovarian follicular arrest.",
     keyDiagnosticPoints: [
-      "Entamoeba histolytica: Cyst with 1-4 nuclei and central endosome; trophozoite with ingested RBCs",
-      "Giardia lamblia: Symmetrical tear-drop shaped trophozoite with two nuclei (face-like) and flagella",
-      "Ascaris lumbricoides: Corticated thick-shelled mamillated ova",
-      "Enterobius vermicularis (Pinworm): D-shaped asymmetric ova",
-      "Fecal Occult Blood Test (FOBT): Positive indicates mucosal ulceration, polyps, or colorectal neoplasia",
-      "Helicobacter pylori Stool Antigen: Sensitive non-invasive marker of active gastric infection"
+      "Reversal of LH/FSH ratio on day 2-3 of cycle (LH:FSH > 2:1)",
+      "Elevated Serum Testosterone (Total / Free) & DHEA-S",
+      "High Anti-Müllerian Hormone (AMH > 4 - 6 ng/mL)",
+      "High fasting insulin and elevated HOMA-IR index",
+      "Associated with irregular menses and hirsutism"
     ],
-    associatedConditions: ["Amebic Dysentery & colitis", "Giardiasis / Malabsorption syndrome", "Helminthic intestinal infestation", "GI Bleeding"],
-    differentialDiagnosis: "Infectious diarrhea (bacterial vs parasitic) vs Inflammatory Bowel Disease (IBD)."
+    associatedConditions: ["Anovulatory infertility", "Insulin resistance", "Metabolic syndrome"],
+    differentialDiagnosis: "Congenital Adrenal Hyperplasia (17-OHP), Hyperprolactinemia, Cushing's."
   },
   {
-    id: "inf-cardiac",
-    code: "INF_CARDIAC",
+    id: "endo-vit-d",
+    code: "ENDO_VIT_D",
+    category: "endocrinology",
+    specialtyAr: "الغدد الصماء والسكري",
+    imageUrl: createSvgDataUri(
+      `<circle cx="160" cy="85" r="38" fill="#ea580c" opacity="0.25"/>
+      <circle cx="160" cy="85" r="28" fill="#c2410c"/>
+      <text x="160" y="80" text-anchor="middle" fill="#ffedd5" font-size="11" font-weight="bold">25-OH Vit D</text>
+      <text x="160" y="96" text-anchor="middle" fill="#fed7aa" font-size="10" font-weight="bold">&lt; 20 ng/mL</text>`,
+      "VITAMIN D DEFICIENCY & OSTEOPOROSIS",
+      "Hypovitaminosis D, Secondary Hyperparathyroidism & Calcium Deficit",
+      "#c2410c",
+      "#fb923c"
+    ),
+    titleAr: "نقص فيتامين د وهشاشة العظام (Vitamin D Deficiency)",
+    titleEn: "Hypovitaminosis D & Bone Metabolism",
+    pathologySummaryAr: "انخفاض مستوى 25-هيدروكسي فيتامين د أقل من 20 ng/mL المؤدي لخلل امتصاص الكالسيوم والفوسفور واعتلال التكلس العظمي وتنشيط إفراز هرمون الجاردرقية (PTH).",
+    pathologySummaryEn: "Deficiency of 25-hydroxyvitamin D (< 20 ng/mL) resulting in impaired intestinal calcium absorption and secondary hyperparathyroidism.",
+    keyDiagnosticPoints: [
+      "Deficiency: 25(OH) Vitamin D < 20 ng/mL (< 50 nmol/L)",
+      "Insufficiency: 20 - 29 ng/mL | Optimal: 30 - 100 ng/mL",
+      "Compensatory elevation in Parathyroid Hormone (PTH)",
+      "Normal or low serum Calcium and Phosphorus",
+      "Elevated bone-specific Alkaline Phosphatase (ALP)"
+    ],
+    associatedConditions: ["Osteopenia / Osteoporosis", "Rickets / Osteomalacia", "Chronic musculoskeletal pain"],
+    differentialDiagnosis: "Primary hyperparathyroidism, Malabsorption syndrome."
+  },
+
+  // ==========================================
+  // 3. أمراض القلب والأوعية والدهون (CARDIOLOGY)
+  // ==========================================
+  {
+    id: "card-infarction",
+    code: "CARD_INFARCTION",
     category: "cardiac",
-    imageUrl: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%23ef4444%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3ECARDIAC%20BIOMARKERS%20KINETIC%20CURVE%3C/text%3E%20%3C%21--%20Timeline%20Graph%20--%3E%20%3Cg%20transform%3D%22translate%2845%2C35%29%22%3E%20%3Cline%20x1%3D%220%22%20y1%3D%2280%22%20x2%3D%22200%22%20y2%3D%2280%22%20stroke%3D%22%23475569%22%20stroke-width%3D%221.5%22/%3E%20%3Cline%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%2280%22%20stroke%3D%22%23475569%22%20stroke-width%3D%221.5%22/%3E%20%3C%21--%20Troponin%20I%20curve%20%28red%29%20--%3E%20%3Cpath%20d%3D%22M%200%2C80%20Q%2025%2C10%2060%2C35%20Q%20120%2C60%20190%2C78%22%20fill%3D%22none%22%20stroke%3D%22%23ef4444%22%20stroke-width%3D%223%22/%3E%20%3Ctext%20x%3D%2270%22%20y%3D%2230%22%20fill%3D%22%23f87171%22%20font-size%3D%228%22%20font-weight%3D%22bold%22%3ETroponin%20I%20%28Days%201-7%29%3C/text%3E%20%3C%21--%20CK-MB%20curve%20%28amber%29%20--%3E%20%3Cpath%20d%3D%22M%200%2C80%20Q%2020%2C20%2040%2C40%20Q%2080%2C75%20120%2C80%22%20fill%3D%22none%22%20stroke%3D%22%23f59e0b%22%20stroke-width%3D%222%22%20stroke-dasharray%3D%223%2C2%22/%3E%20%3Ctext%20x%3D%2245%22%20y%3D%2255%22%20fill%3D%22%23fbbf24%22%20font-size%3D%228%22%20font-weight%3D%22bold%22%3ECK-MB%20%28Hours%204-48%29%3C/text%3E%20%3C/g%3E%20%3Ctext%20x%3D%22140%22%20y%3D%22148%22%20text-anchor%3D%22middle%22%20fill%3D%22%23fca5a5%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3EAcute%20Myocardial%20Infarction%20%28AMI%29%20Biomarker%20Rise%3C/text%3E%20%3C/svg%3E",
-    titleAr: "إنفوجرام دلالات جلطة القلب ونخر عضلة القلب (Cardiac Biomarkers Infogram)",
-    titleEn: "Myocardial Infarction Biomarker Kinetic Curves Infogram",
-    pathologySummaryAr: "مخطط زمني حركي دقيق لتصاعد وهبوط دلالات النخر القلبي بعد الاحتشاء القلبي: تروبونين عالي الحساسية (hs-Troponin I)، كرياتين كيناز النطاق القلبي (CK-MB)، والميوجلوبين.",
-    pathologySummaryEn: "Kinetic timeline curves illustrating cardiac biomarker release following acute myocardial infarction: onset, peak, and normalization timeline of Troponin I vs CK-MB vs Myoglobin.",
+    specialtyAr: "القلب والأوعية الدموية",
+    imageUrl: createSvgDataUri(
+      `<path d="M 160,118 C 120,80 120,55 140,55 C 152,55 158,65 160,70 C 162,65 168,55 180,55 C 200,55 200,80 160,118 Z" fill="#991b1b" stroke="#f87171" stroke-width="2"/>
+      <path d="M 130,88 Q 145,60 160,95 T 190,85" fill="none" stroke="#fef08a" stroke-width="2.5"/>
+      <rect x="105" y="125" width="110" height="20" rx="5" fill="#450a0a" stroke="#ef4444" stroke-width="1.5"/>
+      <text x="160" y="139" text-anchor="middle" fill="#fca5a5" font-size="9.5" font-weight="bold">Troponin I &gt;&gt; 0.04 ng/mL</text>`,
+      "ACUTE MYOCARDIAL INFARCTION (AMI)",
+      "Myocardial Necrosis: Rapid Release of High-Sensitivity Troponin",
+      "#991b1b",
+      "#f87171"
+    ),
+    titleAr: "جلطة واحتشاء عضلة القلب الحاد (Acute Myocardial Infarction)",
+    titleEn: "Acute Coronary Syndrome & Troponin Elevation",
+    pathologySummaryAr: "تموت حاد وتلف في الخلايا العضلية القلبية نتيجة انسداد الشريان التاجي، مما يحرر إنزيمات القلب الحساسة وخاصة تروبونين I وتروبونين T وCK-MB بمستويات بالغة الارتفاع.",
+    pathologySummaryEn: "Myocardial cellular necrosis releasing cardiac biomarkers (High-Sensitivity Troponin I/T and CK-MB) into the bloodstream.",
     keyDiagnosticPoints: [
-      "Troponin I / T: Gold standard marker. Rises at 3-4 hours, peaks at 12-24 hours, remains elevated 7-14 days",
-      "High-Sensitivity Troponin (hs-cTnI): Detects myocardial injury within 1-2 hours of symptom onset",
-      "CK-MB: Rises at 4-6 hours, peaks at 18-24 hours, normalizes within 48-72 hours (useful for re-infarction)",
-      "BNP / NT-proBNP: Ventricular stretch biomarker for diagnosing and staging Congestive Heart Failure",
-      "LDH: Late cardiac marker, peaks at 48-72 hours, persists up to 10 days"
+      "Marked elevation of Cardiac Troponin I / T above 99th percentile URL",
+      "Dynamic rise and fall pattern of troponin over 3-6 hours",
+      "Elevated CK-MB and Total CPK in acute phase",
+      "Elevated AST and LDH in late myocardial necrosis",
+      "Immediate hospital emergency transfer indicated"
     ],
-    associatedConditions: ["Acute Myocardial Infarction (STEMI & NSTEMI)", "Acute Coronary Syndrome (ACS)", "Congestive Heart Failure (CHF)", "Myocarditis"],
-    differentialDiagnosis: "ACS vs Non-ischemic troponin elevation (PE, sepsis, renal failure, severe myocarditis)."
+    associatedConditions: ["ST-Elevation Myocardial Infarction (STEMI)", "Non-STEMI", "Coronary artery thrombosis"],
+    differentialDiagnosis: "Acute myocarditis, Pulmonary embolism, Acute heart failure."
   },
   {
-    id: "inf-coag",
-    code: "INF_COAG",
-    category: "coagulation",
-    imageUrl: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%2338bdf8%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3ECOAGULATION%20CASCADE%20CASCADE%20PATHWAY%3C/text%3E%20%3Cg%20transform%3D%22translate%2835%2C40%29%22%20font-size%3D%228%22%20font-family%3D%22sans-serif%22%20font-weight%3D%22bold%22%20text-anchor%3D%22middle%22%3E%20%3C%21--%20Extrinsic%20--%3E%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%2265%22%20height%3D%2222%22%20rx%3D%224%22%20fill%3D%22%231e3a8a%22/%3E%20%3Ctext%20x%3D%2232%22%20y%3D%2214%22%20fill%3D%22%2393c5fd%22%3EPT%20/%20INR%20%28Extrinsic%29%3C/text%3E%20%3C%21--%20Intrinsic%20--%3E%20%3Crect%20x%3D%22145%22%20y%3D%220%22%20width%3D%2265%22%20height%3D%2222%22%20rx%3D%224%22%20fill%3D%22%23581c87%22/%3E%20%3Ctext%20x%3D%22177%22%20y%3D%2214%22%20fill%3D%22%23d8b4fe%22%3EPTT%20%28Intrinsic%29%3C/text%3E%20%3C%21--%20Common%20--%3E%20%3Cpath%20d%3D%22M%2032%2C25%20L%20105%2C45%20M%20177%2C25%20L%20105%2C45%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%221.5%22/%3E%20%3Crect%20x%3D%2265%22%20y%3D%2245%22%20width%3D%2280%22%20height%3D%2224%22%20rx%3D%224%22%20fill%3D%22%23881337%22/%3E%20%3Ctext%20x%3D%22105%22%20y%3D%2260%22%20fill%3D%22%23fecdd3%22%3EFactor%20Xa%20%26amp%3B%20Thrombin%3C/text%3E%20%3Cpath%20d%3D%22M%20105%2C70%20L%20105%2C82%22%20stroke%3D%22%23e11d48%22%20stroke-width%3D%222%22/%3E%20%3Crect%20x%3D%2260%22%20y%3D%2282%22%20width%3D%2290%22%20height%3D%2220%22%20rx%3D%224%22%20fill%3D%22%23dc2626%22/%3E%20%3Ctext%20x%3D%22105%22%20y%3D%2296%22%20fill%3D%22%23ffffff%22%3EFIBRIN%20CLOT%20FORMATION%3C/text%3E%20%3C/g%3E%20%3C/svg%3E",
-    titleAr: "إنفوجرام شلال التجلط والمسار الداخلي والخارجي (Coagulation Cascade Infogram)",
-    titleEn: "Coagulation Cascade: Extrinsic (PT) vs Intrinsic (PTT) Infogram",
-    pathologySummaryAr: "مخطط تفصيلي لشلال التجلط يوضح المسار الخارجي المقاس بواسطة PT/INR (العامل السابع 7)، والمسار الداخلي المقاس بواسطة PTT (العوامل 12, 11, 9, 8) والمسار المشترك (العوامل 10, 5, 2, 1).",
-    pathologySummaryEn: "Comprehensive coagulation cascade diagram mapping the Extrinsic Pathway monitored by PT/INR, Intrinsic Pathway monitored by PTT/aPTT, and Common Pathway convergence to Fibrin clot.",
+    id: "card-dyslipidemia",
+    code: "CARD_DYSLIPIDEMIA",
+    category: "cardiac",
+    specialtyAr: "القلب والأوعية الدموية",
+    imageUrl: createSvgDataUri(
+      `<circle cx="160" cy="90" r="42" fill="#713f12" stroke="#eab308" stroke-width="2.5"/>
+      <circle cx="160" cy="90" r="28" fill="#090d16"/>
+      <text x="160" y="85" text-anchor="middle" fill="#fde047" font-size="10" font-weight="bold">LDL &gt; 160</text>
+      <text x="160" y="100" text-anchor="middle" fill="#f87171" font-size="9" font-weight="bold">TG &gt; 200</text>`,
+      "ATHEROSCLEROSIS & DYSLIPIDEMIA",
+      "Elevated Atherogenic Lipoproteins (LDL, Chol, Triglycerides)",
+      "#713f12",
+      "#eab308"
+    ),
+    titleAr: "فرط دهون الدم وتصلب الشرايين (Dyslipidemia & Atherosclerosis)",
+    titleEn: "Dyslipidemia & Coronary Risk Profile",
+    pathologySummaryAr: "ارتفاع الكوليسترول الكلي والبروتينات الدهنية منخفضة الكثافة (LDL) والدهون الثلاثية (TG) مع انخفاض الكوليسترول الحميد (HDL)، مما يؤدي لترسب اللويحات العصيدية بجدران الشرايين.",
+    pathologySummaryEn: "Elevated atherogenic lipoproteins (LDL-C, non-HDL-C, Triglycerides) and low HDL-C accelerating atherosclerotic plaque formation.",
     keyDiagnosticPoints: [
-      "Prothrombin Time (PT / INR): Evaluates Extrinsic & Common pathways (Factors VII, X, V, II, I)",
-      "Warfarin / Marivan Therapy: Monitored via INR (Target 2.0 - 3.0 for DVT/PE/AFib; 2.5 - 3.5 for Mech Valve)",
-      "Partial Thromboplastin Time (PTT / aPTT): Evaluates Intrinsic & Common pathways (Factors XII, XI, IX, VIII)",
-      "Unfractionated Heparin: Monitored via PTT (Target therapeutic ratio 1.5 - 2.5x control)",
-      "Isolated prolonged PTT: Hemophilia A (Factor VIII deficiency), Hemophilia B (Factor IX), Lupus Anticoagulant",
-      "Prolonged PT and PTT: Vitamin K deficiency, Severe liver failure, DIC, Massive transfusion"
+      "Total Cholesterol > 200 mg/dL (High risk > 240 mg/dL)",
+      "LDL Cholesterol > 130 - 160 mg/dL",
+      "Triglycerides > 150 - 200 mg/dL",
+      "Low HDL Cholesterol (< 40 mg/dL in men, < 50 mg/dL in women)",
+      "Atherogenic Ratio (Total Chol / HDL) > 4.5"
     ],
-    associatedConditions: ["Deep Vein Thrombosis (DVT) & PE", "Hemophilia A & B", "Disseminated Intravascular Coagulation (DIC)", "Liver Disease Coagulopathy"],
-    differentialDiagnosis: "Extrinsic defect vs Intrinsic defect vs Factor inhibitor vs Vitamin K antagonism."
+    associatedConditions: ["Coronary artery disease", "Hypertension", "Stroke & peripheral arterial disease"],
+    differentialDiagnosis: "Familial hypercholesterolemia, Secondary dyslipidemia (Hypothyroidism, Nephrotic syndrome)."
+  },
+  {
+    id: "card-dvt-pe",
+    code: "CARD_DVT_PE",
+    category: "cardiac",
+    specialtyAr: "القلب والأوعية الدموية",
+    imageUrl: createSvgDataUri(
+      `<rect x="110" y="55" width="100" height="70" rx="8" fill="#1e1b4b" stroke="#6366f1" stroke-width="2"/>
+      <text x="160" y="80" text-anchor="middle" fill="#a5b4fc" font-size="11" font-weight="bold">D-DIMER</text>
+      <text x="160" y="102" text-anchor="middle" fill="#f43f5e" font-size="13" font-weight="900">&gt; 0.50 µg/mL</text>`,
+      "DEEP VEIN THROMBOSIS & PULMONARY EMBOLISM",
+      "Fibrin Degradation Product: Marked D-Dimer Elevation",
+      "#312e81",
+      "#818cf8"
+    ),
+    titleAr: "جلطة الأوردة العميقة والانصمام الرئوي (DVT & Pulmonary Embolism)",
+    titleEn: "Venous Thromboembolism & D-Dimer",
+    pathologySummaryAr: "تكون خثرات دموية وريدية مع تنشيط منظومة التجلط وتحلل الفيبرين، مما يؤدي لارتفاع مشتقات التحلل وخاصة مؤشر الدي دايمر (D-Dimer > 0.5 µg/mL FEU).",
+    pathologySummaryEn: "Active venous thromboembolism triggering fibrin formation and plasmin-mediated degradation, resulting in elevated plasma D-Dimer.",
+    keyDiagnosticPoints: [
+      "Elevated Quantitative D-Dimer (> 0.5 µg/mL or 500 ng/mL FEU)",
+      "High negative predictive value: normal D-Dimer safely excludes DVT/PE in low/moderate risk",
+      "Elevated in active thrombosis, pulmonary embolism, disseminated coagulation",
+      "Requires confirmatory venous Doppler ultrasound or CT pulmonary angiography",
+      "Follow-up with prothrombin time (PT/INR) during anticoagulation"
+    ],
+    associatedConditions: ["Deep vein thrombosis (DVT)", "Pulmonary Embolism (PE)", "DIC"],
+    differentialDiagnosis: "Sepsis, pregnancy, recent surgery, malignant tumors (cause false positives)."
+  },
+
+  // ==========================================
+  // 4. الكبد والجهاز الهضمي (HEPATOLOGY & GI)
+  // ==========================================
+  {
+    id: "hep-viral",
+    code: "HEP_VIRAL_HEPATITIS",
+    category: "hepatic",
+    specialtyAr: "الكبد والجهاز الهضمي",
+    imageUrl: createSvgDataUri(
+      `<circle cx="160" cy="85" r="40" fill="#065f46" stroke="#34d399" stroke-width="2.5"/>
+      <circle cx="160" cy="85" r="28" fill="#022c22"/>
+      <text x="160" y="82" text-anchor="middle" fill="#a7f3d0" font-size="11" font-weight="bold">ALT &gt;&gt; 500</text>
+      <text x="160" y="98" text-anchor="middle" fill="#6ee7b7" font-size="9" font-weight="bold">AST &gt;&gt; 400</text>`,
+      "ACUTE VIRAL HEPATITIS (HBV / HCV)",
+      "Massive Hepatocyte Cytolysis: Marked ALT & AST Elevation",
+      "#065f46",
+      "#34d399"
+    ),
+    titleAr: "التهاب الكبد الفيروسي الحاد والمزمن (Viral Hepatitis B & C)",
+    titleEn: "Acute & Chronic Viral Hepatitis",
+    pathologySummaryAr: "أذية والتهاب النسيج الكبدي بفعل الفيروسات الكبدية (B أو C) مما يتسبب في تحرر مكثف لإنزيمات الكبد السيتوبلازمية (ALT و AST بمئات أو آلاف الوحدات) مع اليرقان.",
+    pathologySummaryEn: "Severe hepatocellular inflammation causing marked leakage of aminotransferases (ALT > AST) into circulation, accompanied by hyperbilirubinemia.",
+    keyDiagnosticPoints: [
+      "Dramatic elevation of ALT and AST (> 5-10 times upper normal limit in acute)",
+      "ALT usually exceeds AST (De Ritis ratio < 1.0)",
+      "Elevated Total and Direct Bilirubin (Hepatic Jaundice)",
+      "Positive Serological markers: HBsAg, HBcAb IgM, Anti-HCV, and PCR Viral Load",
+      "Prolonged Prothrombin Time (PT/INR) in severe hepatic insufficiency"
+    ],
+    associatedConditions: ["Hepatitis B Virus (HBV)", "Hepatitis C Virus (HCV)", "Autoimmune hepatitis"],
+    differentialDiagnosis: "Toxic/drug-induced liver injury, Alcoholic hepatitis (AST > ALT), Ischemic hepatitis."
+  },
+  {
+    id: "hep-cirrhosis",
+    code: "HEP_CIRRHOSIS",
+    category: "hepatic",
+    specialtyAr: "الكبد والجهاز الهضمي",
+    imageUrl: createSvgDataUri(
+      `<path d="M 120,60 C 130,55 190,55 200,65 C 210,85 195,115 155,120 C 125,115 110,85 120,60 Z" fill="#78350f" stroke="#d97706" stroke-width="2"/>
+      <circle cx="140" cy="80" r="5" fill="#fde68a"/><circle cx="160" cy="75" r="6" fill="#fde68a"/><circle cx="175" cy="90" r="5.5" fill="#fde68a"/>
+      <text x="160" y="140" text-anchor="middle" fill="#fde68a" font-size="9.5" font-weight="bold">Albumin &lt; 2.5 | INR &gt; 1.5</text>`,
+      "LIVER CIRRHOSIS & HEPATIC FAILURE",
+      "Hepatosynthetic Failure: Hypoalbuminemia, Coagulopathy & Ascites",
+      "#78350f",
+      "#d97706"
+    ),
+    titleAr: "تليف وتشمع الكبد وقصور وظائف التصنيع (Liver Cirrhosis)",
+    titleEn: "Liver Cirrhosis & Synthetic Failure",
+    pathologySummaryAr: "فشل في وظائف الكبد التصنيعية ناتج عن استبدال النسيج الكبدي بالألياف والعقيدات المتجددة، مؤدياً لانخفاض حاد في الألبومين وتطاول زمن النزف والسيولة (INR مرتفع) واستسقاء البطن.",
+    pathologySummaryEn: "Advanced parenchymal fibrosis causing synthetic failure (hypoalbuminemia, prolonged PT/INR) and portal hypertension.",
+    keyDiagnosticPoints: [
+      "Low Serum Albumin (< 3.0 g/dL, often < 2.5 g/dL)",
+      "Prolonged Prothrombin Time (PT) and elevated INR (> 1.3 - 1.8)",
+      "Inversion of Albumin/Globulin (A/G) ratio (< 1.0)",
+      "AST / ALT ratio (De Ritis) > 1.5 - 2.0 (reversal in cirrhosis)",
+      "Thrombocytopenia secondary to hypersplenism"
+    ],
+    associatedConditions: ["Portal hypertension", "Ascites", "Hepatic encephalopathy & esophageal varices"],
+    differentialDiagnosis: "Nephrotic syndrome, Protein-losing enteropathy, Cardiac cirrhosis."
+  },
+  {
+    id: "hep-pancreatitis",
+    code: "HEP_PANCREATITIS",
+    category: "hepatic",
+    specialtyAr: "الكبد والجهاز الهضمي",
+    imageUrl: createSvgDataUri(
+      `<rect x="110" y="60" width="100" height="65" rx="10" fill="#4c0519" stroke="#f43f5e" stroke-width="2"/>
+      <text x="160" y="85" text-anchor="middle" fill="#fda4af" font-size="11" font-weight="bold">SERUM LIPASE</text>
+      <text x="160" y="105" text-anchor="middle" fill="#fff" font-size="13" font-weight="900">&gt; 3X NORMAL</text>`,
+      "ACUTE PANCREATITIS",
+      "Pancreatic Acinar Injury: Marked Lipase & Amylase Surge",
+      "#881337",
+      "#f43f5e"
+    ),
+    titleAr: "التهاب البنكرياس الحاد (Acute Pancreatitis)",
+    titleEn: "Acute Pancreatitis (Lipase & Amylase)",
+    pathologySummaryAr: "التهاب حاد في خلايا البنكرياس يؤدي إلى التنشيط المبكر للإنزيمات الهاضمة وتحررها في مجرى الدم، مما يرفع مستويات إنزيم الليباز (Lipase) والأميليز لأكثر من 3 أضعاف المعدل الطبيعي.",
+    pathologySummaryEn: "Acute acinar cell injury releasing pancreatic digestive enzymes into serum, with Serum Lipase rising > 3x upper reference limit.",
+    keyDiagnosticPoints: [
+      "Serum Lipase elevated > 3 times upper limit (more sensitive and specific than amylase)",
+      "Serum Amylase elevated rapidly in acute episode",
+      "Elevated CRP and leukocytosis with left shift",
+      "Hypocalcemia may develop in severe necrotizing cases",
+      "Abdominal ultrasound or CT scan correlation required"
+    ],
+    associatedConditions: ["Biliary stones (gallstone pancreatitis)", "Alcoholic injury", "Hypertriglyceridemia"],
+    differentialDiagnosis: "Perforated peptic ulcer, Acute cholecystitis, Intestinal obstruction."
+  },
+  {
+    id: "hep-hpylori",
+    code: "HEP_HPYLORI",
+    category: "hepatic",
+    specialtyAr: "الكبد والجهاز الهضمي",
+    imageUrl: createSvgDataUri(
+      `<path d="M 120,90 Q 140,65 160,90 T 200,90" fill="none" stroke="#22c55e" stroke-width="4" stroke-linecap="round"/>
+      <line x1="200" y1="90" x2="215" y2="80" stroke="#86efac" stroke-width="2"/>
+      <line x1="200" y1="90" x2="218" y2="92" stroke="#86efac" stroke-width="2"/>
+      <line x1="200" y1="90" x2="214" y2="102" stroke="#86efac" stroke-width="2"/>
+      <text x="160" y="135" text-anchor="middle" fill="#86efac" font-size="10" font-weight="bold">H. Pylori Stool Ag (+)</text>`,
+      "HELICOBACTER PYLORI GASTRITIS",
+      "Gastric Mucosal Colonization, Peptic Ulceration & Urea Hydrolysis",
+      "#14532d",
+      "#22c55e"
+    ),
+    titleAr: "جرثومة المعدة والتهاب المعدة المزمن (H. Pylori Gastritis)",
+    titleEn: "Helicobacter Pylori Infection",
+    pathologySummaryAr: "استيطان بكتيريا الحلزونية البوابية (H. pylori) للغشاء المخاطي المبطن للمعدة مفرزة إنزيم اليورييز، مؤدية لالتهاب مزمن بالمعدة وقرحة الإثني عشر والمعدة وسوء الهضم.",
+    pathologySummaryEn: "Gastric mucosal colonization by helical H. pylori bacteria causing chronic active gastritis, peptic ulcers, and positive stool antigen.",
+    keyDiagnosticPoints: [
+      "Positive H. Pylori Stool Antigen (Gold standard for active infection and eradication confirmation)",
+      "Positive Urea Breath Test (UBT)",
+      "Serum H. Pylori IgG indicates past or present exposure",
+      "Complete eradication confirmation recommended 4-6 weeks after therapy",
+      "Associated with iron-deficiency anemia and dyspeptic symptoms"
+    ],
+    associatedConditions: ["Duodenal and Gastric Peptic Ulcers", "Chronic Atrophic Gastritis", "MALT Lymphoma"],
+    differentialDiagnosis: "NSAID-induced gastritis, Non-ulcer functional dyspepsia."
+  },
+
+  // ==========================================
+  // 5. الكلى والمسالك البولية (NEPHROLOGY & UROLOGY)
+  // ==========================================
+  {
+    id: "ren-aki",
+    code: "REN_AKI",
+    category: "renal",
+    specialtyAr: "الكلى والمسالك البولية",
+    imageUrl: createSvgDataUri(
+      `<path d="M 135,55 C 110,65 110,115 135,125 C 160,135 190,115 185,90 C 180,65 160,50 135,55 Z" fill="#1e1b4b" stroke="#818cf8" stroke-width="2.5"/>
+      <circle cx="160" cy="90" r="16" fill="#f43f5e"/>
+      <text x="160" y="93" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">Creat</text>
+      <text x="160" y="145" text-anchor="middle" fill="#f87171" font-size="10" font-weight="bold">Creatinine &gt;&gt; 2.5 mg/dL</text>`,
+      "ACUTE KIDNEY INJURY (AKI)",
+      "Sudden Glomerular Retention: Acute Azotemia & Oliguria",
+      "#312e81",
+      "#818cf8"
+    ),
+    titleAr: "القصور الكلوي الحاد واحتباس البولينا (Acute Kidney Injury - AKI)",
+    titleEn: "Acute Kidney Injury & Azotemia",
+    pathologySummaryAr: "تدهور مفاجئ سريع في وظائف الكلى الإخراجية خلال ساعات إلى أيام، مؤدياً لاحتباس الفضلات النيتروجينية في الدم (ارتفاع حاد في الكرياتينين والبولينا وحمض البوليك) واختلال الأملاح.",
+    pathologySummaryEn: "Abrupt decrease in kidney filtration function resulting in rapid retention of creatinine and urea nitrogen with electrolyte imbalance.",
+    keyDiagnosticPoints: [
+      "Acute rise in Serum Creatinine by >= 0.3 mg/dL within 48h, or >= 1.5x baseline",
+      "Elevated Blood Urea Nitrogen (BUN) and Blood Urea",
+      "BUN/Creatinine ratio > 20:1 suggests prerenal azotemia (dehydration/hypovolemia)",
+      "Hyperkalemia (elevated potassium) requiring urgent cardiac monitoring",
+      "Metabolic acidosis (low bicarbonate) and oliguria"
+    ],
+    associatedConditions: ["Dehydration / Sepsis", "Nephrotoxic drugs (NSAIDs, aminoglycosides, contrast)", "Acute tubular necrosis"],
+    differentialDiagnosis: "Chronic Kidney Disease (distinguished by small kidney size and chronic history)."
+  },
+  {
+    id: "ren-ckd",
+    code: "REN_CKD",
+    category: "renal",
+    specialtyAr: "الكلى والمسالك البولية",
+    imageUrl: createSvgDataUri(
+      `<rect x="100" y="60" width="120" height="60" rx="8" fill="#1e293b" stroke="#64748b" stroke-width="2"/>
+      <text x="160" y="82" text-anchor="middle" fill="#cbd5e1" font-size="10" font-weight="bold">eGFR STAGING</text>
+      <text x="160" y="102" text-anchor="middle" fill="#f59e0b" font-size="12" font-weight="900">&lt; 60 mL/min/1.73m²</text>`,
+      "CHRONIC KIDNEY DISEASE (CKD)",
+      "Progressive Glomerular Decline & Proteinuria (CKD-EPI)",
+      "#334155",
+      "#94a3b8"
+    ),
+    titleAr: "مرض الكلى المزمن ومعدل الفلترة (Chronic Kidney Disease - CKD)",
+    titleEn: "Chronic Kidney Disease & eGFR Decline",
+    pathologySummaryAr: "تراجع تدريجي دائم في معدل الفلترة الكبيبية (eGFR < 60 mL/min) لأكثر من 3 أشهر، مصحوباً بظهور الزلال البولي (Albuminuria) وفقر الدم الناتج عن نقص الإريثروبويتين واعتلال العظام.",
+    pathologySummaryEn: "Persistent kidney damage with estimated glomerular filtration rate (eGFR) < 60 mL/min/1.73m² for >= 3 months, often accompanied by albuminuria.",
+    keyDiagnosticPoints: [
+      "eGFR calculated via CKD-EPI formula (< 60 mL/min indicates Stage 3+ CKD)",
+      "Elevated persistent serum creatinine and urea",
+      "Urine Albumin-to-Creatinine Ratio (UACR) > 30 mg/g (Micro/Macroalbuminuria)",
+      "Normocytic normochromic anemia (erythropoietin deficiency)",
+      "Secondary hyperparathyroidism with high phosphorus and low calcium"
+    ],
+    associatedConditions: ["Diabetic nephropathy", "Hypertensive nephrosclerosis", "Chronic glomerulonephritis"],
+    differentialDiagnosis: "Acute reversible kidney injury, benign postural proteinuria."
+  },
+  {
+    id: "ren-uti",
+    code: "REN_UTI",
+    category: "renal",
+    specialtyAr: "الكلى والمسالك البولية",
+    imageUrl: createSvgDataUri(
+      `<circle cx="160" cy="85" r="42" fill="#7f1d1d" stroke="#ef4444" stroke-width="2"/>
+      <circle cx="140" cy="80" r="10" fill="#fee2e2"/><circle cx="140" cy="80" r="4" fill="#991b1b"/>
+      <circle cx="175" cy="78" r="11" fill="#fee2e2"/><circle cx="175" cy="78" r="4.5" fill="#991b1b"/>
+      <circle cx="155" cy="100" r="10" fill="#fee2e2"/><circle cx="155" cy="100" r="4" fill="#991b1b"/>
+      <text x="160" y="145" text-anchor="middle" fill="#fca5a5" font-size="9.5" font-weight="bold">Pus Cells &gt; 50 / HPF &amp; Nitrite (+)</text>`,
+      "URINARY TRACT INFECTION (UTI)",
+      "Active Pyuria, Nitrite Positivity & Significant Bacteriuria",
+      "#7f1d1d",
+      "#ef4444"
+    ),
+    titleAr: "التهاب المسالك البولية وصديد البول (Urinary Tract Infection - UTI)",
+    titleEn: "Urinary Tract Infection & Pyuria",
+    pathologySummaryAr: "غزو بكتيري للجهاز البولي مصحوب بظهور كثيف لخلايا الصديد والكرات البيضاء المتعددة (Pus cells > 20-50 / HPF) ووجود النتريت وبكتيريا البول مع عسر التبول وألم أسفل البطن.",
+    pathologySummaryEn: "Bacterial colonization of the urinary tract with marked pyuria (> 20-50 pus cells/HPF), positive leukocyte esterase, and positive nitrite.",
+    keyDiagnosticPoints: [
+      "Pyuria (Pus Cells / WBCs > 10 - 50+ per high power field)",
+      "Positive Chemical Leukocyte Esterase & Nitrite on urine dipstick",
+      "Abundant bacteria detected on microscopic sediment",
+      "Urine Culture and Sensitivity recommended (significant bacteriuria >= 10^5 CFU/mL)",
+      "Hematuria (microscopic red blood cells) frequently present"
+    ],
+    associatedConditions: ["Acute Cystitis", "Acute Pyelonephritis", "Prostatitis"],
+    differentialDiagnosis: "Contaminated sample, Renal tuberculosis, Non-infectious interstitial cystitis."
+  },
+  {
+    id: "ren-gout",
+    code: "REN_GOUT_URIC",
+    category: "renal",
+    specialtyAr: "الكلى والمسالك البولية",
+    imageUrl: createSvgDataUri(
+      `<polygon points="120,85 160,60 200,85 160,110" fill="#eab308" stroke="#ca8a04" stroke-width="2"/>
+      <polygon points="140,95 180,75 190,105 150,115" fill="#fef08a" stroke="#ca8a04" stroke-width="1.5"/>
+      <text x="160" y="140" text-anchor="middle" fill="#fef08a" font-size="10" font-weight="bold">Serum Uric Acid &gt; 7.5 mg/dL</text>`,
+      "HYPERURICEMIA & GOUT",
+      "Monosodium Urate Crystals & Hyperuricemic Nephrolithiasis",
+      "#854d0e",
+      "#facc15"
+    ),
+    titleAr: "ارتفاع حمض اليوريك ومرض النقرس (Hyperuricemia & Gout)",
+    titleEn: "Hyperuricemia & Gouty Arthritis",
+    pathologySummaryAr: "زيادة إنتاج أو قصور إخراج حمض اليوريك مما يؤدي لترسب بلورات اليورات في المفاصل (نوبات النقرس الحادة) والمسالك البولية مسببة حصوات اليورات الكلوية.",
+    pathologySummaryEn: "Supersaturation of body fluids with urate leading to monosodium urate crystal deposition in joints and renal interstitium.",
+    keyDiagnosticPoints: [
+      "Serum Uric Acid > 7.0 mg/dL in males, > 6.0 mg/dL in females",
+      "Presence of rhomboid / needle-shaped uric acid crystals in urine sediment",
+      "Severe acute inflammatory monoarthritis (Podagra of 1st MTP joint)",
+      "Elevated inflammatory markers (CRP, ESR) during acute attacks",
+      "Risk of radiolucent uric acid renal stones"
+    ],
+    associatedConditions: ["Acute gouty arthritis", "Uric acid nephrolithiasis", "Metabolic syndrome"],
+    differentialDiagnosis: "Pseudogout (Calcium pyrophosphate), Septic arthritis, Cellulitis."
+  },
+
+  // ==========================================
+  // 6. المناعة الذاتية والروماتيزم (IMMUNOLOGY)
+  // ==========================================
+  {
+    id: "imm-lupus",
+    code: "IMM_LUPUS_SLE",
+    category: "immunology",
+    specialtyAr: "المناعة والروماتيزم",
+    imageUrl: createSvgDataUri(
+      `<circle cx="160" cy="85" r="42" fill="#581c87" stroke="#c084fc" stroke-width="2.5"/>
+      <text x="160" y="78" text-anchor="middle" fill="#e9d5ff" font-size="11" font-weight="bold">ANA Titer 1:640</text>
+      <text x="160" y="98" text-anchor="middle" fill="#f472b6" font-size="10" font-weight="bold">Anti-dsDNA (+)</text>`,
+      "SYSTEMIC LUPUS ERYTHEMATOSUS (SLE)",
+      "Autoantibody Production: High-Titer ANA & Anti-dsDNA",
+      "#581c87",
+      "#c084fc"
+    ),
+    titleAr: "الذئبة الحمراء والمناعة الذاتية (Systemic Lupus Erythematosus - SLE)",
+    titleEn: "Systemic Lupus Erythematosus (SLE)",
+    pathologySummaryAr: "مرض مناعي ذاتي جهازي يتميز بإنتاج أجسام مضادة ضد النواة ومكونات الخلية (ANA و Anti-dsDNA) مما يؤدي لتشكل معقدات مناعية تترسب في الكلى والجلد والمفاصل والأوعية الدموية.",
+    pathologySummaryEn: "Multisystem autoimmune disease driven by pathogenic antinuclear autoantibodies (ANA, anti-dsDNA, anti-Smith) and immune complex deposition.",
+    keyDiagnosticPoints: [
+      "Positive Antinuclear Antibodies (ANA) with high titer (>= 1:160, Homogeneous/Speckled)",
+      "High Anti-dsDNA antibodies (strongly specific for SLE and correlates with nephritis)",
+      "Positive Anti-Smith (Sm) antibodies (highly specific)",
+      "Low complement levels (Consumption of C3 and C4 during active disease)",
+      "Lupus nephritis screening via proteinuria and active urine sediment"
+    ],
+    associatedConditions: ["Lupus nephritis", "Malar rash & photosensitivity", "Autoimmune hemolytic anemia & leukopenia"],
+    differentialDiagnosis: "Drug-induced lupus, Mixed connective tissue disease, Rheumatoid arthritis."
+  },
+  {
+    id: "imm-rheumatoid",
+    code: "IMM_RHEUMATOID",
+    category: "immunology",
+    specialtyAr: "المناعة والروماتيزم",
+    imageUrl: createSvgDataUri(
+      `<rect x="105" y="55" width="110" height="70" rx="8" fill="#312e81" stroke="#818cf8" stroke-width="2"/>
+      <text x="160" y="80" text-anchor="middle" fill="#c7d2fe" font-size="10" font-weight="bold">Anti-CCP &gt;&gt; 100 U</text>
+      <text x="160" y="102" text-anchor="middle" fill="#f43f5e" font-size="10" font-weight="bold">RF Latex (+)</text>`,
+      "RHEUMATOID ARTHRITIS (RA)",
+      "Synovial Autoimmunity: High Anti-CCP Antibodies & Rheumatoid Factor",
+      "#312e81",
+      "#818cf8"
+    ),
+    titleAr: "الروماتويد المفصلي (Rheumatoid Arthritis - RA)",
+    titleEn: "Rheumatoid Arthritis & Autoantibodies",
+    pathologySummaryAr: "التهاب مناعي مزمن يصيب الغشاء الزليلي المبطن للمفاصل، مصحوباً بظهور الأجسام المضادة للبيبتيد السيتروليني الحلقي (Anti-CCP) وعامل الروماتويد (RF) وارتفاع حاد في سرعة الترسيب وCRP.",
+    pathologySummaryEn: "Chronic systemic autoimmune inflammatory arthritis associated with Anti-Citrullinated Protein Antibodies (Anti-CCP) and Rheumatoid Factor.",
+    keyDiagnosticPoints: [
+      "Anti-CCP Antibodies highly positive (Specificity > 95% for Rheumatoid Arthritis)",
+      "Positive Rheumatoid Factor (RF IgM Latex / Turbidimetry)",
+      "Markedly elevated acute phase reactants: ESR and C-Reactive Protein (CRP)",
+      "Symmetrical polyarthritis affecting small joints of hands and feet with morning stiffness",
+      "Normocytic anemia of chronic disease"
+    ],
+    associatedConditions: ["Symmetrical polyarthritis", "Rheumatoid nodules", "Secondary Sjogren syndrome"],
+    differentialDiagnosis: "Osteoarthritis, Psoriatic arthritis, Systemic Lupus, Gout."
+  },
+
+  // ==========================================
+  // 7. الأمراض الصدرية والمعدية (INFECTIOUS)
+  // ==========================================
+  {
+    id: "inf-pneumonia",
+    code: "INF_PNEUMONIA_CRP",
+    category: "infectious",
+    specialtyAr: "الأمراض الصدرية والمعدية",
+    imageUrl: createSvgDataUri(
+      `<rect x="105" y="55" width="110" height="70" rx="10" fill="#450a0a" stroke="#ef4444" stroke-width="2"/>
+      <text x="160" y="80" text-anchor="middle" fill="#fecaca" font-size="10" font-weight="bold">CRP HIGH TITER</text>
+      <text x="160" y="105" text-anchor="middle" fill="#fff" font-size="14" font-weight="900">&gt; 96 mg/L</text>`,
+      "ACUTE BACTERIAL INFECTION & PNEUMONIA",
+      "Systemic Inflammatory Surge: Extreme CRP & Procalcitonin Elevation",
+      "#7f1d1d",
+      "#ef4444"
+    ),
+    titleAr: "الالتهاب البكتيري الحاد والصدري (Acute Bacterial Infection & Pneumonia)",
+    titleEn: "Severe Bacterial Infection & Acute Phase Biomarkers",
+    pathologySummaryAr: "استجابة التهابية مناعية حادة تصاحب الالتهاب الرئوي أو العدوى البكتيرية الشديدة، تسبب ارتفاعاً هائلاً في البروتين التفاعلي سي (CRP > 48-100 mg/L) ومؤشر البروكالسيتونين مع وفرة العدلات.",
+    pathologySummaryEn: "Severe acute-phase systemic reaction to bacterial infection causing exponential rise in serum CRP and Procalcitonin, with marked left shift.",
+    keyDiagnosticPoints: [
+      "Marked elevation of C-Reactive Protein (CRP > 48-100 mg/L)",
+      "Leukocytosis (WBC > 12,000 - 20,000 /µL) with Neutrophilia and toxic granulation",
+      "Elevated Procalcitonin (> 0.5 - 2.0 ng/mL strongly favors bacterial etiology)",
+      "Markedly accelerated Erythrocyte Sedimentation Rate (ESR > 50-100 mm/hr)",
+      "Blood cultures and sputum microbiological culture recommended"
+    ],
+    associatedConditions: ["Bacterial pneumonia", "Acute sepsis", "Deep tissue abscesses"],
+    differentialDiagnosis: "Viral respiratory infection (typically lower CRP, normal procalcitonin)."
+  },
+
+  // ==========================================
+  // 8. أطلس الفحص المجهري (MICROSCOPY ATLAS)
+  // ==========================================
+  {
+    id: "atlas-oxalate",
+    code: "ATLAS_URINE_OXALATE",
+    category: "microscopy",
+    specialtyAr: "أطلس الفحص المجهري",
+    imageUrl: createSvgDataUri(
+      `<rect x="125" y="60" width="70" height="70" fill="#0369a1" stroke="#38bdf8" stroke-width="2.5"/>
+      <line x1="125" y1="60" x2="195" y2="130" stroke="#bae6fd" stroke-width="2"/>
+      <line x1="195" y1="60" x2="125" y2="130" stroke="#bae6fd" stroke-width="2"/>`,
+      "CALCIUM OXALATE ENVELOPE CRYSTALS",
+      "Octahedral Envelope-shaped Crystals in Acidic / Neutral Urine",
+      "#0284c7",
+      "#38bdf8"
+    ),
+    titleAr: "أطلس البول: بلورات أكسالات الكالسيوم (Calcium Oxalate Envelope)",
+    titleEn: "Urinary Calcium Oxalate Crystals",
+    pathologySummaryAr: "بلورات ثمانية السطوح تشبه المظروف البريدي (Envelope shape) مميزة لأكسالات الكالسيوم ثنائية الهيدرات في البول الحمضي أو المتعادل، تظهر مع فرط الأكسالات أو قلة شرب الماء.",
+    pathologySummaryEn: "Colorless, highly refractive octahedral envelope-shaped crystals of calcium oxalate dihydrate found in acidic to neutral urine.",
+    keyDiagnosticPoints: [
+      "Classic envelope or dumbbell shape under polarized and light microscopy",
+      "Soluble in dilute hydrochloric acid, insoluble in acetic acid",
+      "Commonly associated with dietary oxalate intake (spinach, chocolate, tea)",
+      "Risk marker for calcium oxalate urolithiasis when present in heavy clumps",
+      "Adequate hydration (> 2.5 L water/day) recommended"
+    ],
+    associatedConditions: ["Calcium oxalate renal stones", "Dehydration", "Hyperoxaluria"],
+    differentialDiagnosis: "Triple phosphate crystals (found in alkaline urine)."
+  },
+  {
+    id: "atlas-triple-phos",
+    code: "ATLAS_URINE_TRIPLE",
+    category: "microscopy",
+    specialtyAr: "أطلس الفحص المجهري",
+    imageUrl: createSvgDataUri(
+      `<polygon points="120,65 200,65 190,125 130,125" fill="#047857" stroke="#34d399" stroke-width="2.5"/>
+      <line x1="120" y1="65" x2="190" y2="125" stroke="#a7f3d0" stroke-width="2"/>`,
+      "TRIPLE PHOSPHATE COFFIN-LID CRYSTALS",
+      "Struvite Crystals in Alkaline Urine Associated with Urease Bacteria",
+      "#047857",
+      "#34d399"
+    ),
+    titleAr: "أطلس البول: بلورات ثلاثي الفوسفات (Triple Phosphate Crystals)",
+    titleEn: "Triple Phosphate (Struvite) Crystals",
+    pathologySummaryAr: "بلورات منشورية مستطيلة تشبه غطاء التابوت (Coffin-lid appearance) مميزة لفوسفات المغنيسيوم والأمونيوم، تتكون حصراً في البول القلوي (pH > 7.5) المصاحب للبكتيريا المحللة لليوريا.",
+    pathologySummaryEn: "Three- to six-sided colorless prisms with oblique ends (coffin-lid shape) characteristic of magnesium ammonium phosphate in alkaline urine.",
+    keyDiagnosticPoints: [
+      "Classic 'coffin lid' rectangular prism morphology",
+      "Form in alkaline urine (pH > 7.0 - 8.5)",
+      "Pathognomonic marker for urease-producing bacteria (Proteus mirabilis, Klebsiella)",
+      "High propensity for large branched Staghorn calculi",
+      "Requires urine culture and appropriate antibiotic treatment"
+    ],
+    associatedConditions: ["Proteus UTI", "Staghorn renal calculi", "Alkaline urine crystalluria"],
+    differentialDiagnosis: "Uric acid crystals (restricted to acidic urine)."
+  },
+  {
+    id: "atlas-casts",
+    code: "ATLAS_URINE_CASTS",
+    category: "microscopy",
+    specialtyAr: "أطلس الفحص المجهري",
+    imageUrl: createSvgDataUri(
+      `<rect x="110" y="70" width="100" height="40" rx="8" fill="#7c2d12" stroke="#ea580c" stroke-width="2.5"/>
+      <circle cx="130" cy="90" r="4" fill="#fed7aa"/><circle cx="150" cy="85" r="5" fill="#fed7aa"/><circle cx="170" cy="92" r="4.5" fill="#fed7aa"/><circle cx="190" cy="88" r="4" fill="#fed7aa"/>`,
+      "URINARY GRANULAR & CELLULAR CASTS",
+      "Renal Tubular Casts Indicative of Active Intrinsic Nephropathy",
+      "#7c2d12",
+      "#ea580c"
+    ),
+    titleAr: "أطلس البول: الأسطوانات الكلوية الحبيبية (Urinary Granular Casts)",
+    titleEn: "Urinary Granular & Cellular Casts",
+    pathologySummaryAr: "أسطوانات كلوية أسطوانية الشكل ناتجة عن ترسب بروتين تام-هورسفول مترافقاً مع حبيبات متحللة من الخلايا الكلوية أو كرات الدم، تدل على إصابة نبيبية أو كبيبية كلوية نشطة.",
+    pathologySummaryEn: "Cylindrical proteinaceous structures formed in distal renal tubules containing degenerated cellular granules, reflecting parenchymal renal disease.",
+    keyDiagnosticPoints: [
+      "Direct indicator of intrinsic renal disease originating in the nephrons",
+      "Granular casts indicate acute tubular necrosis, glomerulonephritis, or pyelonephritis",
+      "RBC casts indicate active glomerulonephritis (nephritic syndrome)",
+      "WBC casts indicate acute pyelonephritis or interstitial nephritis",
+      "Differentiation from harmless hyaline casts (which occur with dehydration/exercise)"
+    ],
+    associatedConditions: ["Acute Tubular Necrosis (ATN)", "Glomerulonephritis", "Pyelonephritis"],
+    differentialDiagnosis: "Mucus threads, clothing fibers, hyaline exercise casts."
+  },
+  {
+    id: "atlas-amoeba",
+    code: "ATLAS_STOOL_AMOEBA",
+    category: "parasitology",
+    specialtyAr: "أطلس الفحص المجهري",
+    imageUrl: createSvgDataUri(
+      `<circle cx="160" cy="90" r="38" fill="#1e3a8a" stroke="#60a5fa" stroke-width="2.5"/>
+      <circle cx="145" cy="80" r="5" fill="#bfdbfe"/>
+      <circle cx="175" cy="80" r="5" fill="#bfdbfe"/>
+      <circle cx="145" cy="100" r="5" fill="#bfdbfe"/>
+      <circle cx="175" cy="100" r="5" fill="#bfdbfe"/>
+      <circle cx="160" cy="90" r="3" fill="#172554"/>`,
+      "ENTAMOEBA HISTOLYTICA CYST",
+      "Spherical Quadranucleate Cyst with Central Karyosome (Direct Smear)",
+      "#1e3a8a",
+      "#60a5fa"
+    ),
+    titleAr: "أطلس البراز: طفيلي الأميبا الهستوليتية (Entamoeba histolytica Cyst)",
+    titleEn: "Entamoeba Histolytica Cysts & Trophozoites",
+    pathologySummaryAr: "أكياس كروية الشكل مميزة بقطر 10-15 ميكرون تحوي 4 أنوية متماثلة مع جسيم نووي مركزي دقيق، مسببة للزحار الأميبي وقرح القولون والإسهال المخاطي المدمم.",
+    pathologySummaryEn: "Spherical quadranucleated cysts with central karyosomes characteristic of Entamoeba histolytica in wet stool mount.",
+    keyDiagnosticPoints: [
+      "Mature cyst has 4 nuclei with central pinpoint karyosome and smooth chromatoid bars",
+      "Trophozoites show directional motility and ingested RBCs (Erythrophagocytosis)",
+      "Causes amoebic dysentery, mucoid bloody stools, and abdominal cramping",
+      "Risk of extraintestinal dissemination (Amoebic Liver Abscess)",
+      "Specific anti-protozoal treatment (Metronidazole / Tinidazole) indicated"
+    ],
+    associatedConditions: ["Amoebic dysentery", "Intestinal colitis", "Amoebic liver abscess"],
+    differentialDiagnosis: "Entamoeba coli (non-pathogenic cyst with 8 nuclei and eccentric karyosome)."
+  },
+  {
+    id: "atlas-giardia",
+    code: "ATLAS_STOOL_GIARDIA",
+    category: "parasitology",
+    specialtyAr: "أطلس الفحص المجهري",
+    imageUrl: createSvgDataUri(
+      `<path d="M 160,55 C 135,55 130,85 150,115 C 158,125 162,125 170,115 C 190,85 185,55 160,55 Z" fill="#047857" stroke="#34d399" stroke-width="2.5"/>
+      <circle cx="152" cy="78" r="5" fill="#d1fae5"/><circle cx="152" cy="78" r="2.5" fill="#064e3b"/>
+      <circle cx="168" cy="78" r="5" fill="#d1fae5"/><circle cx="168" cy="78" r="2.5" fill="#064e3b"/>
+      <line x1="160" y1="65" x2="160" y2="120" stroke="#a7f3d0" stroke-width="1.5"/>`,
+      "GIARDIA LAMBLIA TROPHOZOITE",
+      "Pear-shaped Flagellate with Sucking Disc & Binucleate Appearance",
+      "#047857",
+      "#34d399"
+    ),
+    titleAr: "أطلس البراز: طفيلي الجيارديا اللامبلية (Giardia Lamblia)",
+    titleEn: "Giardia Lamblia (Trophozoite & Cyst)",
+    pathologySummaryAr: "طور خضري كمثري الشكل ذو مظهر وجه مبتسم يحوي نواتين متماثلتين وأربعة أزواج من الأسواط وقرص ماص بطني، مسبباً لسوء امتصاص الدهون والإسهال الدهني المزمن والانتفاخ.",
+    pathologySummaryEn: "Pear-shaped binucleated flagellated trophozoite with ventral sucking disc causing malabsorption, steatorrhea, and chronic diarrhea.",
+    keyDiagnosticPoints: [
+      "Trophozoite shows characteristic 'falling leaf' tumbling motility on fresh saline mount",
+      "Cysts are oval with 4 nuclei, central axostyle, and clear halo wall",
+      "Colonizes duodenal and upper jejunal mucosa inhibiting lipid absorption",
+      "Clinical presentation: greasy pale foul-smelling stools and flatulence",
+      "Treated with Metronidazole / Nitazoxanide"
+    ],
+    associatedConditions: ["Giardiasis", "Fat malabsorption & steatorrhea", "Childhood growth faltering"],
+    differentialDiagnosis: "Celiac disease, Irritable bowel syndrome, Lactose intolerance."
   }
 ];
 
-// Helper to find illustration by code or category
-// Ensure backward compatibility fields for descriptions and criteria
+// Ensure fallback properties exist
 DISEASE_ILLUSTRATIONS.forEach(item => {
-  if (!item.descriptionAr) (item as any).descriptionAr = item.pathologySummaryAr;
-  if (!item.descriptionEn) (item as any).descriptionEn = item.pathologySummaryEn;
-  if (!item.diagnosticCriteria) (item as any).diagnosticCriteria = item.keyDiagnosticPoints;
+  if (!item.descriptionAr) item.descriptionAr = item.pathologySummaryAr;
+  if (!item.descriptionEn) item.descriptionEn = item.pathologySummaryEn;
+  if (!item.diagnosticCriteria) item.diagnosticCriteria = item.keyDiagnosticPoints;
 });
 
 export function getIllustrationByCode(code: string): DiseaseIllustration | undefined {
   return DISEASE_ILLUSTRATIONS.find(item => item.code.toUpperCase() === code.toUpperCase());
 }
 
-// Auto-suggest hematological illustration based on CBC parameters
+// Auto-suggest illustration based on parameters
 export function suggestHematologicalIllustration(paramsInput: any): DiseaseIllustration {
   let params: {
     hb?: number;
@@ -439,12 +953,18 @@ export function suggestHematologicalIllustration(paramsInput: any): DiseaseIllus
     lymphocytes?: number;
     platelets?: number;
     mentzerIndex?: number;
+    fbs?: number;
+    hba1c?: number;
+    tsh?: number;
+    creat?: number;
+    alt?: number;
+    crp?: number;
   } = {};
 
   if (Array.isArray(paramsInput)) {
     paramsInput.forEach((p: any) => {
       const name = (p.name || '').toLowerCase();
-      const val = parseFloat(p.result);
+      const val = parseFloat(String(p.result).replace(/[^0-9.-]/g, ''));
       if (!isNaN(val)) {
         if (name.includes('hemo') || name.includes('hb') || name.includes('hgb')) params.hb = val;
         else if (name.includes('mcv')) params.mcv = val;
@@ -452,53 +972,65 @@ export function suggestHematologicalIllustration(paramsInput: any): DiseaseIllus
         else if (name.includes('mch')) params.mch = val;
         else if (name.includes('rdw')) params.rdw = val;
         else if (name.includes('wbc') || name.includes('leucocyte')) params.wbc = val;
-        else if (name.includes('neut')) params.neutrophils = val;
-        else if (name.includes('band') || name.includes('stab')) params.bands = val;
-        else if (name.includes('lymph')) params.lymphocytes = val;
         else if (name.includes('platelet') || name.includes('plt')) params.platelets = val;
         else if (name.includes('mentzer')) params.mentzerIndex = val;
+        else if (name.includes('hba1c') || name.includes('تراكمي')) params.hba1c = val;
+        else if (name.includes('tsh')) params.tsh = val;
+        else if (name.includes('creat') || name.includes('كرياتينين')) params.creat = val;
+        else if (name.includes('alt') || name.includes('sgpt')) params.alt = val;
+        else if (name.includes('crp')) params.crp = val;
       }
     });
   } else if (typeof paramsInput === 'object' && paramsInput !== null) {
     params = paramsInput;
   }
 
-  const { hb, mcv, rdw, wbc, bands, lymphocytes, platelets, mentzerIndex } = params;
-
-  // 1. Severe bacterial sepsis / leukemoid
-  if ((wbc && wbc > 15) || (bands && bands > 6)) {
-    return getIllustrationByCode("HEM_SEPSIS")!;
+  // 1. Inflammatory & CRP
+  if (params.crp && params.crp > 48) {
+    const inf = getIllustrationByCode("INF_PNEUMONIA_CRP");
+    if (inf) return inf;
   }
 
-  // 2. Severe isolated thrombocytopenia with giant platelets
-  if (platelets && platelets < 50 && (!wbc || (wbc >= 4 && wbc <= 11))) {
-    return getIllustrationByCode("HEM_ITP")!;
+  // 2. Diabetic profile
+  if (params.hba1c && params.hba1c >= 6.5) {
+    const dia = getIllustrationByCode("ENDO_DIABETES");
+    if (dia) return dia;
   }
 
-  // 3. Absolute lymphocytosis / Mononucleosis or CLL
-  if (wbc && wbc > 25 && lymphocytes && lymphocytes > 70) {
-    return getIllustrationByCode("HEM_CLL")!;
-  }
-  if (lymphocytes && lymphocytes > 50 && wbc && wbc >= 11 && wbc <= 20) {
-    return getIllustrationByCode("HEM_MONO")!;
+  // 3. Thyroid profile
+  if (params.tsh && params.tsh > 6.0) {
+    const th = getIllustrationByCode("ENDO_HYPOTHYROID");
+    if (th) return th;
   }
 
-  // 4. Microcytic anemia
-  if ((mcv && mcv < 80) || (hb && hb < 11)) {
-    if (mentzerIndex && mentzerIndex < 13) {
-      return getIllustrationByCode("HEM_THAL")!;
+  // 4. Renal profile
+  if (params.creat && params.creat > 2.0) {
+    const ren = getIllustrationByCode("REN_AKI");
+    if (ren) return ren;
+  }
+
+  // 5. Hepatic profile
+  if (params.alt && params.alt > 100) {
+    const hep = getIllustrationByCode("HEP_VIRAL_HEPATITIS");
+    if (hep) return hep;
+  }
+
+  // 6. Microcytic anemia
+  if ((params.mcv && params.mcv < 80) || (params.hb && params.hb < 11)) {
+    if (params.mentzerIndex && params.mentzerIndex < 13) {
+      const thal = getIllustrationByCode("HEM_THAL");
+      if (thal) return thal;
     }
-    if ((rdw && rdw > 15) || (mentzerIndex && mentzerIndex >= 13)) {
-      return getIllustrationByCode("HEM_IDA")!;
-    }
-    return getIllustrationByCode("HEM_IDA")!;
+    const ida = getIllustrationByCode("HEM_IDA");
+    if (ida) return ida;
   }
 
-  // 5. Macrocytic anemia
-  if (mcv && mcv > 100) {
-    return getIllustrationByCode("HEM_MEGALO")!;
+  // 7. Macrocytic anemia
+  if (params.mcv && params.mcv > 100) {
+    const meg = getIllustrationByCode("HEM_MEGALO");
+    if (meg) return meg;
   }
 
   // Default normal
-  return getIllustrationByCode("HEM_NORMAL")!;
+  return getIllustrationByCode("HEM_NORMAL") || DISEASE_ILLUSTRATIONS[0];
 }

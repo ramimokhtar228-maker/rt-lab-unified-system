@@ -112,7 +112,7 @@ export const InvoicePrintModal: React.FC<InvoicePrintModalProps> = ({ invoice, o
                     {labInfo?.supervisionAr || 'أطباء واستشاريو كلية طب قصر العيني'}
                   </div>
                   <p className="text-[10px] text-slate-500 font-medium">
-                    {labInfo?.sloganAr || 'التشخيص الصحيح يبدأ معنا · Accurate Diagnosis Starts With Us'}
+                    {labInfo?.sloganAr || 'التشخيص الصحيح يبدأ معنا'}
                   </p>
                   <div className="text-[11px] text-slate-600 font-semibold pt-0.5">
                     📍 {branchObj?.nameAr || invoice.branch} - {branchObj?.address || 'ميدان بهتيم برج صيدلية العزبي الدور الثالث شبرا الخيمة'}

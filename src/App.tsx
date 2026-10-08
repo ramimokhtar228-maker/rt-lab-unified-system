@@ -328,9 +328,22 @@ const AppContent: React.FC = () => {
           isOpen={smartReportModalOpen}
           onClose={() => setSmartReportModalOpen(false)}
           report={activeSmartReport}
-          onAttachToReport={(insights: string) => {
+          onAttachToReport={(analysis) => {
             if (activeSmartReport) {
               updateReport(activeSmartReport.id, {
+                smartReportEnabled: true,
+                smartReportClinicalData: analysis,
+                smartReportInterpretation: analysis.executiveSummaryAr,
+                generalComment: `${activeSmartReport.generalComment || ''}\n[التقرير الإكلينيكي الاستشاري الذكي]:\n${analysis.executiveSummaryAr}`.trim()
+              });
+            }
+            setSmartReportModalOpen(false);
+          }}
+          onApplyInsights={(insights) => {
+            if (activeSmartReport) {
+              updateReport(activeSmartReport.id, {
+                smartReportEnabled: true,
+                smartReportInterpretation: insights,
                 generalComment: `${activeSmartReport.generalComment || ''}\n${insights}`.trim()
               });
             }

@@ -262,8 +262,11 @@ interface AppContextType {
     chemists: StaffOptionItem[];
     verifiers: StaffOptionItem[];
     consultants: StaffOptionItem[];
+    financialDirectors: StaffOptionItem[];
+    hrDirectors: StaffOptionItem[];
   };
-  addStaffSignatureOption: (role: 'chemist' | 'verifier' | 'consultant', item: { name: string; title: string; license?: string }) => void;
+  addStaffSignatureOption: (role: 'chemist' | 'verifier' | 'consultant' | 'financial' | 'hr', item: { name: string; title: string; license?: string }) => void;
+  removeStaffSignatureOption: (role: 'chemist' | 'verifier' | 'consultant' | 'financial' | 'hr', idOrName: string) => void;
 
   // Security & Audit
   auditLogs: AuditLog[];
@@ -507,12 +510,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     chemists: StaffOptionItem[];
     verifiers: StaffOptionItem[];
     consultants: StaffOptionItem[];
+    financialDirectors: StaffOptionItem[];
+    hrDirectors: StaffOptionItem[];
   }>(() => {
     try {
       const saved = localStorage.getItem(STAFF_OPTIONS_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (parsed.chemists && parsed.verifiers && parsed.consultants) return parsed;
+        if (parsed.chemists && parsed.verifiers && parsed.consultants) {
+          return {
+            chemists: parsed.chemists,
+            verifiers: parsed.verifiers,
+            consultants: parsed.consultants,
+            financialDirectors: parsed.financialDirectors || INITIAL_STAFF_SIGNATURE_OPTIONS.financialDirectors,
+            hrDirectors: parsed.hrDirectors || INITIAL_STAFF_SIGNATURE_OPTIONS.hrDirectors
+          };
+        }
       }
       return INITIAL_STAFF_SIGNATURE_OPTIONS;
     } catch {
@@ -2493,7 +2506,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [logAction]);
 
   const addStaffSignatureOption = useCallback((
-    role: 'chemist' | 'verifier' | 'consultant',
+    role: 'chemist' | 'verifier' | 'consultant' | 'financial' | 'hr',
     item: { name: string; title: string; license?: string }
   ) => {
     const newItem: StaffOptionItem = {
@@ -2505,14 +2518,39 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
 
     setStaffSignatureOptions(prev => {
-      const targetKey = role === 'chemist' ? 'chemists' : role === 'verifier' ? 'verifiers' : 'consultants';
+      const targetKey = role === 'chemist' ? 'chemists' 
+        : role === 'verifier' ? 'verifiers' 
+        : role === 'consultant' ? 'consultants' 
+        : role === 'financial' ? 'financialDirectors' 
+        : 'hrDirectors';
+      const existing = prev[targetKey] || [];
       return {
         ...prev,
-        [targetKey]: [newItem, ...prev[targetKey].filter(x => x.name !== item.name)]
+        [targetKey]: [newItem, ...existing.filter(x => x.name !== item.name && x.id !== newItem.id)]
       };
     });
 
     logAction('CREATE', 'SETTINGS', `إضافة عضو جديد لطاقم الاعتماد: ${item.name} (${item.title})`);
+  }, [logAction]);
+
+  const removeStaffSignatureOption = useCallback((
+    role: 'chemist' | 'verifier' | 'consultant' | 'financial' | 'hr',
+    idOrName: string
+  ) => {
+    setStaffSignatureOptions(prev => {
+      const targetKey = role === 'chemist' ? 'chemists' 
+        : role === 'verifier' ? 'verifiers' 
+        : role === 'consultant' ? 'consultants' 
+        : role === 'financial' ? 'financialDirectors' 
+        : 'hrDirectors';
+      const existing = prev[targetKey] || [];
+      return {
+        ...prev,
+        [targetKey]: existing.filter(x => x.id !== idOrName && x.name !== idOrName)
+      };
+    });
+
+    logAction('DELETE', 'SETTINGS', `حذف اسم من طاقم الاعتماد المعملي (${role}): ${idOrName}`);
   }, [logAction]);
 
   // Backups
@@ -2782,6 +2820,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     updateStaffSignatures,
     staffSignatureOptions,
     addStaffSignatureOption,
+    removeStaffSignatureOption,
 
     auditLogs,
     logAction,

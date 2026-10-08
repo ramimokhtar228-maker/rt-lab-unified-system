@@ -461,7 +461,7 @@ export interface StaffOptionItem {
   id: string;
   name: string;
   title: string;
-  role: 'chemist' | 'verifier' | 'consultant';
+  role: 'chemist' | 'verifier' | 'consultant' | 'financial' | 'hr';
   license?: string;
 }
 
@@ -469,15 +469,33 @@ export interface LabStaffSignatures {
   labChemist: string;
   verifiedBy: string;
   pathologist: string;
+  financialDirector?: string;
+  hrDirector?: string;
   chemistTitle?: string;
   verifierTitle?: string;
   pathologistTitle?: string;
+  financialTitle?: string;
+  hrTitle?: string;
   chemistLicense?: string;
   verifierLicense?: string;
   pathologistLicense?: string;
+  financialLicense?: string;
+  hrLicense?: string;
+  showFinancialSignature?: boolean;
+  showHrSignature?: boolean;
 }
 
 export type ReportStatus = 'draft' | 'in_progress' | 'verified' | 'released';
+
+export interface SmartClinicalDataPayload {
+  executiveSummaryAr: string;
+  executiveSummaryEn: string;
+  criticalAlerts: Array<{ titleAr: string; titleEn?: string; severity: 'critical' | 'high' | 'moderate'; detail: string }>;
+  organScores: Record<string, { score: number; labelAr: string; status: 'optimal' | 'mild' | 'moderate' | 'critical' }>;
+  calculatedIndices: Array<{ nameAr: string; nameEn?: string; value: string | number; reference: string; interpretationAr: string }>;
+  differentialDiagnoses: Array<{ diseaseAr: string; diseaseEn: string; likelihood: 'high' | 'moderate' | 'possible'; rationaleAr: string }>;
+  consultantRecommendations: string[];
+}
 
 export interface LabReport {
   id: string;
@@ -498,6 +516,9 @@ export interface LabReport {
   };
   attachedIllustrations?: DiseaseIllustration[];
   invoiceId?: string;
+  smartReportEnabled?: boolean;
+  smartReportInterpretation?: string;
+  smartReportClinicalData?: SmartClinicalDataPayload;
 }
 
 export interface CatalogProfileTemplate {

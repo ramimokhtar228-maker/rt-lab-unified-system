@@ -105,25 +105,16 @@ export const RTLogo: React.FC<RTLogoProps> = ({
               RT <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-rose-400">LAB</span>
             </span>
             <span className={`rounded px-1.5 py-0.5 bg-rose-950/80 text-rose-300 border border-rose-800/60 font-bold tracking-wider ${currentSize.badge}`}>
-              LABORATORIES
+              معمل RT للتحاليل الطبية
             </span>
           </div>
 
-          <div className="flex items-center gap-1.5 text-slate-300 font-bold">
-            <span className={`${currentSize.sub}`}>معامل رامي مختار</span>
-            <span className="text-rose-500/70 text-[10px]">·</span>
-            <span className="text-rose-300/80 text-[11px] font-medium hidden sm:inline">كلية طب قصر العيني</span>
-          </div>
-
-          {/* Slogan requested explicitly by user: "التشخيص الصحيح يبدأ معنا" */}
+          {/* Slogan requested explicitly by user without any extra addition */}
           {showSlogan && (
             <div className="flex items-center gap-1.5 mt-0.5">
               <span className={`font-black tracking-wide ${currentSize.slogan} ${sloganColor} drop-shadow-xs flex items-center gap-1`}>
                 <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
                 <span>التشخيص الصحيح يبدأ معنا</span>
-              </span>
-              <span className="text-[10px] text-slate-400 font-normal hidden md:inline" dir="ltr">
-                | Accurate Diagnosis Starts With Us
               </span>
             </div>
           )}

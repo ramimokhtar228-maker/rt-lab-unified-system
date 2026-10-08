@@ -9,18 +9,28 @@ export const DEFAULT_STAFF: LabStaffSignatures = {
   labChemist: "د/ عمر فؤاد القاضي",
   verifiedBy: "أ/ سارة إبراهيم الشربيني",
   pathologist: "أ.د. رامي مختار",
+  financialDirector: "أ/ ماجد حسني الشرقاوي",
+  hrDirector: "أ/ أحمد فتحي الجمال",
   chemistTitle: "أخصائي أول كيمياء إكلينيكية وهرمونات",
   verifierTitle: "مدير العمليات وضبط الجودة الإدارية",
   pathologistTitle: "استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
+  financialTitle: "المدير المالي ورئيس الحسابات (CFO)",
+  hrTitle: "مدير الموارد البشرية وشؤون العاملين (HR)",
   chemistLicense: "EGY-SCI-88402",
   verifierLicense: "EGY-MGT-11024",
-  pathologistLicense: "EGY-MED-48201"
+  pathologistLicense: "EGY-MED-48201",
+  financialLicense: "EGY-FIN-10492",
+  hrLicense: "EGY-HR-44190",
+  showFinancialSignature: true,
+  showHrSignature: true
 };
 
 export const INITIAL_STAFF_SIGNATURE_OPTIONS: {
   chemists: StaffOptionItem[];
   verifiers: StaffOptionItem[];
   consultants: StaffOptionItem[];
+  financialDirectors: StaffOptionItem[];
+  hrDirectors: StaffOptionItem[];
 } = {
   chemists: [
     { id: 'c-1', name: 'د/ عمر فؤاد القاضي', title: 'أخصائي أول كيمياء إكلينيكية وهرمونات', role: 'chemist', license: 'EGY-SCI-88402' },
@@ -36,6 +46,14 @@ export const INITIAL_STAFF_SIGNATURE_OPTIONS: {
   consultants: [
     { id: 'p-1', name: 'أ.د. رامي مختار', title: 'استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني', role: 'consultant', license: 'EGY-MED-48201' },
     { id: 'p-2', name: 'د/ سامح عبد الرازق', title: 'استشاري أمراض الدم والباثولوجيا الإكلينيكية', role: 'consultant', license: 'EGY-MED-39108' }
+  ],
+  financialDirectors: [
+    { id: 'f-1', name: 'أ/ ماجد حسني الشرقاوي', title: 'المدير المالي ورئيس الحسابات (CFO)', role: 'financial', license: 'EGY-FIN-10492' },
+    { id: 'f-2', name: 'أ/ حسام الدين مرسي', title: 'مدير الشؤون المالية والخزينة', role: 'financial', license: 'EGY-FIN-88210' }
+  ],
+  hrDirectors: [
+    { id: 'h-1', name: 'أ/ أحمد فتحي الجمال', title: 'مدير الموارد البشرية وشؤون العاملين (HR Director)', role: 'hr', license: 'EGY-HR-44190' },
+    { id: 'h-2', name: 'أ/ نرمين سامي عبد الواحد', title: 'مسؤولة التوظيف وإدارة الأداء والموارد البشرية', role: 'hr', license: 'EGY-HR-33201' }
   ]
 };
 
@@ -43,7 +61,9 @@ export const STAFF_OPTIONS = {
   chemists: INITIAL_STAFF_SIGNATURE_OPTIONS.chemists.map(c => `${c.name} - ${c.title}`),
   verifiers: INITIAL_STAFF_SIGNATURE_OPTIONS.verifiers.map(v => `${v.name} - ${v.title}`),
   consultants: INITIAL_STAFF_SIGNATURE_OPTIONS.consultants.map(p => `${p.name} - ${p.title}`),
-  pathologists: INITIAL_STAFF_SIGNATURE_OPTIONS.consultants.map(p => `${p.name} - ${p.title}`)
+  pathologists: INITIAL_STAFF_SIGNATURE_OPTIONS.consultants.map(p => `${p.name} - ${p.title}`),
+  financialDirectors: INITIAL_STAFF_SIGNATURE_OPTIONS.financialDirectors.map(f => `${f.name} - ${f.title}`),
+  hrDirectors: INITIAL_STAFF_SIGNATURE_OPTIONS.hrDirectors.map(h => `${h.name} - ${h.title}`)
 };
 
 export const COMMON_INTERPRETATIONS: { [key: string]: string[] } = {

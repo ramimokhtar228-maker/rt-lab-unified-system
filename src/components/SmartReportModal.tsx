@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { LabReport } from '../types/lab';
-import { generateSmartClinicalAnalysis } from '../utils/smartReportEngine';
+import { generateSmartClinicalAnalysis, SmartClinicalAnalysis } from '../utils/smartReportEngine';
 import { 
   Sparkles, 
   X, 
@@ -14,21 +14,24 @@ import {
   Stethoscope, 
   FileText,
   TrendingUp,
-  Download
+  Download,
+  Check
 } from 'lucide-react';
 
 interface SmartReportModalProps {
   isOpen: boolean;
   onClose: () => void;
   report: LabReport | null;
-  onAttachToReport?: (summaryAr: string) => void;
+  onAttachToReport?: (analysis: SmartClinicalAnalysis) => void;
+  onApplyInsights?: (insights: string) => void;
 }
 
 export const SmartReportModal: React.FC<SmartReportModalProps> = ({
   isOpen,
   onClose,
   report,
-  onAttachToReport
+  onAttachToReport,
+  onApplyInsights
 }) => {
   if (!isOpen || !report) return null;
 
@@ -36,6 +39,15 @@ export const SmartReportModal: React.FC<SmartReportModalProps> = ({
 
   const handlePrintSmart = () => {
     window.print();
+  };
+
+  const handleAttach = () => {
+    if (onAttachToReport) {
+      onAttachToReport(analysis);
+    } else if (onApplyInsights) {
+      onApplyInsights(analysis.executiveSummaryAr);
+    }
+    onClose();
   };
 
   return (
@@ -51,7 +63,7 @@ export const SmartReportModal: React.FC<SmartReportModalProps> = ({
               <div className="flex items-center gap-2">
                 <h2 className="text-base sm:text-lg font-black tracking-wide">التقرير الإكلينيكي الذكي والتحليل الاستشاري</h2>
                 <span className="bg-rose-600/80 text-white text-[10px] font-bold px-2 py-0.5 rounded-full font-mono">
-                  RT AI Studio v3.0
+                  RT AI Studio v3.5
                 </span>
               </div>
               <p className="text-xs text-rose-200">
@@ -62,14 +74,14 @@ export const SmartReportModal: React.FC<SmartReportModalProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={handlePrintSmart}
-              className="px-3 py-1.5 bg-rose-800 hover:bg-rose-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors"
+              className="px-3 py-1.5 bg-rose-800 hover:bg-rose-700 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <Printer className="w-4 h-4" />
-              <span>طباعة</span>
+              <span>طباعة فورية</span>
             </button>
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+              className="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -115,6 +127,17 @@ export const SmartReportModal: React.FC<SmartReportModalProps> = ({
             </div>
           )}
 
+          {/* Executive Summary Card */}
+          <div className="bg-white rounded-xl p-4 border border-rose-200 shadow-xs space-y-2">
+            <h3 className="text-xs font-bold text-rose-950 flex items-center gap-1.5">
+              <Sparkles className="w-4 h-4 text-rose-700" />
+              <span>الخلاصة الطبية والاستشارية الشاملة:</span>
+            </h3>
+            <p className="text-xs text-slate-800 leading-relaxed font-medium bg-rose-50/40 p-3 rounded-lg border border-rose-100">
+              {analysis.executiveSummaryAr}
+            </p>
+          </div>
+
           {/* Organ Function Health Scores */}
           <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-xs space-y-3">
             <h3 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
@@ -130,7 +153,7 @@ export const SmartReportModal: React.FC<SmartReportModalProps> = ({
                 { label: 'صحة القلب والدهون', data: analysis.organScores.cardiac },
               ].map((org, idx) => {
                 const colors = {
-                  optimal: 'bg-emerald-50 border-emerald-200 text-emerald-800 progress-emerald',
+                  optimal: 'bg-emerald-50 border-emerald-200 text-emerald-800',
                   mild: 'bg-amber-50 border-amber-200 text-amber-800',
                   moderate: 'bg-orange-50 border-orange-200 text-orange-800',
                   critical: 'bg-rose-50 border-rose-200 text-rose-800'
@@ -219,25 +242,20 @@ export const SmartReportModal: React.FC<SmartReportModalProps> = ({
 
         {/* Footer Actions */}
         <div className="p-3.5 bg-slate-100 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs">
-          <div className="text-[11px] text-slate-500">
+          <div className="text-[11px] text-slate-600 font-medium">
             أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني
           </div>
           <div className="flex items-center gap-2">
-            {onAttachToReport && (
-              <button
-                onClick={() => {
-                  onAttachToReport(analysis.executiveSummaryAr);
-                  onClose();
-                }}
-                className="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl font-bold flex items-center gap-1.5 transition-colors shadow-xs"
-              >
-                <FileText className="w-4 h-4" />
-                <span>إدراج التقرير الذكي كتعليق رسمي بالتقرير</span>
-              </button>
-            )}
+            <button
+              onClick={handleAttach}
+              className="px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl font-bold flex items-center gap-2 transition-colors shadow-sm cursor-pointer"
+            >
+              <Check className="w-4 h-4" />
+              <span>اعتماد وإظهار التقرير الذكي في صفحات التقرير الطبي والطباعة والـ PDF</span>
+            </button>
             <button
               onClick={onClose}
-              className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl font-semibold transition-colors"
+              className="px-4 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl font-semibold transition-colors cursor-pointer"
             >
               إغلاق
             </button>

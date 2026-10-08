@@ -1318,7 +1318,7 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
                       <th className="p-3">المريض وبيانات الاتصال</th>
                       <th className="p-3">نوع الحجز وتفاصيل الموقع</th>
                       <th className="p-3">موعد الزيارة / الحضور</th>
-                      <th className="p-3">التحاليل المحجوزة (اختصارات)</th>
+                      <th className="p-3">التحاليل المحجوزة</th>
                       <th className="p-3">الجانب المالي</th>
                       <th className="p-3 text-center w-52">الإجراءات والتحكم</th>
                     </tr>

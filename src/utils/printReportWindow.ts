@@ -1,26 +1,35 @@
-import { LabReport, LabInfo } from '../types';
+import { LabReport, LabInfo } from '../types/lab';
 import { formatReferenceDisplay, getChartPointerPosition } from './cbcCalculator';
+import { generateSmartClinicalAnalysis } from './smartReportEngine';
 
 export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): void {
   const staff = report.staff || {
-    labChemist: "د. هبة الشناوي - كيميائية تحاليل",
+    labChemist: "د/ عمر فؤاد",
     chemistTitle: "أخصائي الكيمياء الإكلينيكية",
     chemistLicense: "EGY-SCI-88402",
-    verifiedBy: "د. مصطفى العوضي - استشاري التحاليل",
+    verifiedBy: "أ/ سارة الشربيني",
     verifierTitle: "إدارة ضبط الجودة والتشغيل",
     verifierLicense: "EGY-MGT-11024",
-    pathologist: "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
+    pathologist: "أ.د. رامي مختار",
     pathologistTitle: "استشاري الباثولوجيا الإكلينيكية - قصر العيني",
-    pathologistLicense: "EGY-MED-48201"
+    pathologistLicense: "EGY-MED-48201",
+    financialDirector: "أ/ ماجد الشرقاوي",
+    financialTitle: "المدير المالي ورئيس الحسابات (CFO)",
+    hrDirector: "أ/ أحمد الجمال",
+    hrTitle: "مدير الموارد البشرية (HR Manager)",
+    showFinancialSignature: true,
+    showHrSignature: true
   };
   const p = report.patient;
-  const totalPages = report.profiles.length;
+  const isSmartReportActive = Boolean(report.smartReportEnabled);
+  const totalPages = report.profiles.length + (isSmartReportActive ? 1 : 0);
+
   const doctorDisplay = p.referringDoctorTitle === 'Herself' || p.referringDoctorTitle === 'Himself'
     ? 'طلب فحص ذاتي (Self-Request)'
     : `${p.referringDoctorTitle} ${p.referringDoctorName}`.trim() || 'General Medical Request';
 
-  const sampleDateFormatted = new Date(p.sampleDate).toLocaleDateString('en-GB') + ' ' + new Date(p.sampleDate).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-  const reportingDateFormatted = new Date(p.reportingDate).toLocaleDateString('en-GB') + ' ' + new Date(p.reportingDate).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+  const sampleDateFormatted = new Date(p.sampleDate).toLocaleDateString('en-GB');
+  const reportingDateFormatted = new Date(p.reportingDate).toLocaleDateString('en-GB');
 
   const labNameAr = labInfo?.labNameAr || "معامل RT للتحاليل الطبية والتشخيصية";
   const labNameEn = labInfo?.labNameEn || "RT Diagnostic Laboratories";
@@ -28,7 +37,117 @@ export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): voi
   const phone = labInfo?.phone || "0244667788";
   const hotline = labInfo?.hotline || "01012345678";
   const supervisionAr = labInfo?.supervisionAr || "أطباء واستشاريو كلية طب قصر العيني - جامعة القاهرة";
-  const accreditation = labInfo?.accreditation || "ISO 15189 Certified Quality Management";
+
+  const showFin = Boolean(staff.showFinancialSignature && staff.financialDirector);
+  const showHr = Boolean(staff.showHrSignature && staff.hrDirector);
+
+  const renderSignaturesHtml = () => {
+    return `
+      <div style="display:grid; grid-template-columns: ${showFin || showHr ? 'repeat(5, 1fr)' : 'repeat(3, 1fr)'}; gap:8px; text-align:center; margin-bottom:6px;">
+        <!-- Lab CHEMIST -->
+        <div style="background:#f8fafc; padding:6px; border-radius:6px; border:1px solid #e2e8f0;">
+          <div style="font-size:9px; font-weight:800; color:#64748b; text-transform:uppercase;">Lab CHEMIST</div>
+          <div style="font-family:serif; font-style:italic; font-size:10.5px; color:#475569; padding:2px 0; font-weight:bold;">Approved / Chemist</div>
+          <div style="font-size:9.5px; font-weight:700; color:#0f172a;">${staff.labChemist || "د/ عمر فؤاد"}</div>
+          <div style="font-size:8px; color:#64748b;">${staff.chemistTitle || 'أخصائي الكيمياء الإكلينيكية'}</div>
+          ${staff.chemistLicense ? `<div style="font-size:7.5px; color:#94a3b8; font-family:monospace;">${staff.chemistLicense}</div>` : ''}
+        </div>
+
+        <!-- Verify by -->
+        <div style="background:#f8fafc; padding:6px; border-radius:6px; border:1px solid #e2e8f0;">
+          <div style="font-size:9px; font-weight:800; color:#64748b; text-transform:uppercase;">Verify by</div>
+          <div style="font-family:serif; font-style:italic; font-size:10.5px; color:#475569; padding:2px 0; font-weight:bold;">Quality Audit Verified</div>
+          <div style="font-size:9.5px; font-weight:700; color:#0f172a;">${staff.verifiedBy || "أ/ سارة الشربيني"}</div>
+          <div style="font-size:8px; color:#64748b;">${staff.verifierTitle || 'إدارة ضبط الجودة'}</div>
+          ${staff.verifierLicense ? `<div style="font-size:7.5px; color:#94a3b8; font-family:monospace;">${staff.verifierLicense}</div>` : ''}
+        </div>
+
+        <!-- Consultant Pathologist -->
+        <div style="background:#fff1f2; padding:6px; border-radius:6px; border:1px solid #fecdd3;">
+          <div style="font-size:9px; font-weight:800; color:#800000; text-transform:uppercase;">Pathologist</div>
+          <div style="padding:1px 0;">
+            <span style="display:inline-block; border:1px dashed #800000; padding:1px 6px; border-radius:3px; background:#ffffff; font-family:serif; font-style:italic; font-size:10.5px; color:#800000; font-weight:900;">
+              Prof. Dr. Rami Mokhtar
+            </span>
+          </div>
+          <div style="font-size:9.5px; font-weight:800; color:#800000;">${staff.pathologist || "أ.د. رامي مختار"}</div>
+          <div style="font-size:8px; color:#475569;">${staff.pathologistTitle || 'استشاري الباثولوجيا - قصر العيني'}</div>
+          ${staff.pathologistLicense ? `<div style="font-size:7.5px; color:#94a3b8; font-family:monospace;">${staff.pathologistLicense}</div>` : ''}
+        </div>
+
+        ${showFin ? `
+          <!-- Financial Director -->
+          <div style="background:#ecfdf5; padding:6px; border-radius:6px; border:1px solid #a7f3d0;">
+            <div style="font-size:9px; font-weight:800; color:#065f46; text-transform:uppercase;">Financial Director</div>
+            <div style="font-family:serif; font-style:italic; font-size:10.5px; color:#047857; padding:2px 0; font-weight:bold;">Financial Audit</div>
+            <div style="font-size:9.5px; font-weight:700; color:#064e3b;">${staff.financialDirector}</div>
+            <div style="font-size:8px; color:#059669;">${staff.financialTitle || 'المدير المالي ورئيس الحسابات'}</div>
+          </div>
+        ` : ''}
+
+        ${showHr ? `
+          <!-- HR Director -->
+          <div style="background:#faf5ff; padding:6px; border-radius:6px; border:1px solid #e9d5ff;">
+            <div style="font-size:9px; font-weight:800; color:#581c87; text-transform:uppercase;">HR Director</div>
+            <div style="font-family:serif; font-style:italic; font-size:10.5px; color:#6b21a8; padding:2px 0; font-weight:bold;">HR Certified</div>
+            <div style="font-size:9.5px; font-weight:700; color:#3b0764;">${staff.hrDirector}</div>
+            <div style="font-size:8px; color:#7c3aed;">${staff.hrTitle || 'مدير الموارد البشرية'}</div>
+          </div>
+        ` : ''}
+      </div>
+    `;
+  };
+
+  const renderHeaderHtml = () => {
+    return `
+      <!-- Top Official Header -->
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2.5px solid #800000; padding-bottom:10px; margin-bottom:10px;">
+        <!-- Arabic Side -->
+        <div style="text-align:right; flex:1;">
+          <h1 style="margin:0; font-size:17px; font-weight:900; color:#800000;">${labNameAr}</h1>
+          <h2 style="margin:1px 0 0 0; font-size:12px; font-weight:700; color:#0f172a;">معامل رامي مختار</h2>
+          <p style="margin:1px 0 0 0; font-size:10.5px; font-weight:600; color:#800000;">${supervisionAr}</p>
+          <p style="margin:2px 0 0 0; font-size:9px; color:#475569; font-weight:bold;">📍 ${address} | هاتف: ${phone} / ${hotline}</p>
+        </div>
+
+        <!-- Central 3D Brand Logo with STRICT rule: Underneath is strictly 'التشخيص الصحيح يبدأ معنا' without any addition -->
+        <div style="text-align:center; padding:0 14px;">
+          <div style="width:52px; height:52px; background:linear-gradient(135deg, #800000, #991b1b, #0f172a); border-radius:12px; padding:2px; display:inline-flex; align-items:center; justify-content:center; box-shadow:0 4px 6px rgba(0,0,0,0.15);">
+            <div style="width:100%; height:100%; background:#020617; border-radius:10px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#ffffff;">
+              <div style="font-weight:900; font-size:18px; line-height:1; letter-spacing:-1px;">
+                <span style="color:#f43f5e;">R</span><span style="color:#ffffff;">T</span>
+              </div>
+              <div style="font-size:6px; font-weight:900; letter-spacing:1px; color:#cbd5e1; text-transform:uppercase;">LAB</div>
+            </div>
+          </div>
+          <div style="font-size:9.5px; font-weight:900; color:#800000; margin-top:3px; white-space:nowrap;">التشخيص الصحيح يبدأ معنا</div>
+        </div>
+
+        <!-- English Side -->
+        <div style="text-align:left; flex:1;" dir="ltr">
+          <h1 style="margin:0; font-size:16px; font-weight:900; color:#800000;">${labNameEn}</h1>
+          <h2 style="margin:1px 0 0 0; font-size:11px; font-weight:700; color:#0f172a;">Rami Mokhtar Laboratories</h2>
+          <p style="margin:1px 0 0 0; font-size:10px; font-weight:600; color:#800000;">Kasr Al Ainy Faculty of Medicine Consultants</p>
+          <p style="margin:2px 0 0 0; font-size:9px; color:#475569; font-weight:bold;">Main Center: Behteem Square, El-Ezaby Tower, 3rd Fl.</p>
+        </div>
+      </div>
+
+      <!-- Patient Demographics Info Box -->
+      <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:6px; padding:8px 12px; margin-bottom:10px; font-size:11px;">
+        <div style="display:grid; grid-template-columns: 2fr 1fr 1fr; gap:6px;">
+          <div><strong style="color:#475569;">اسم المريض:</strong> <span style="font-weight:bold; font-size:12.5px; color:#0f172a;">${p.fullName}</span></div>
+          <div dir="ltr" style="text-align:right;"><strong style="color:#475569;">Lab No:</strong> <span style="font-family:monospace; font-weight:bold; color:#800000;">${p.labNumber}</span></div>
+          <div dir="ltr" style="text-align:left;"><span style="font-family:monospace; font-size:10px; background:#fff; border:1px solid #cbd5e1; padding:1px 6px; border-radius:3px;">|||| ${p.barcode}</span></div>
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1.5fr 1fr 1fr; gap:6px; margin-top:4px; padding-top:4px; border-top:1px dashed #e2e8f0; font-size:10.5px;">
+          <div><strong style="color:#475569;">السن / النوع:</strong> ${p.age} سنة / ${p.gender === 'male' ? 'ذكر' : 'أنثى'}</div>
+          <div><strong style="color:#475569;">الطبيب المعالج:</strong> ${doctorDisplay}</div>
+          <div><strong style="color:#475569;">تاريخ السحب:</strong> <span style="font-family:monospace;">${sampleDateFormatted}</span></div>
+          <div><strong style="color:#475569;">تاريخ النتيجة:</strong> <span style="font-family:monospace;">${reportingDateFormatted}</span></div>
+        </div>
+      </div>
+    `;
+  };
 
   let profilesHtml = '';
 
@@ -70,7 +189,7 @@ export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): voi
         }
 
         chartHtml = `
-          <div style="width:110px; margin:0 auto; text-align:center;">
+          <div style="width:105px; margin:0 auto; text-align:center;">
             <div style="position:relative; height:6px; background:#e2e8f0; border-radius:4px; display:flex; overflow:hidden; border:1px solid #cbd5e1;">
               <div style="width:25%; background:#fde68a;"></div>
               <div style="width:50%; background:#86efac;"></div>
@@ -79,15 +198,8 @@ export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): voi
             <div style="position:relative; height:8px; margin-top:-7px;">
               <div style="position:absolute; left:${positionPercent}%; transform:translateX(-50%); width:8px; height:8px; border-radius:50%; background:${pointerColor}; border:1.5px solid ${pointerBorder};"></div>
             </div>
-            <div style="display:flex; justify-content:space-between; font-size:7px; color:#64748b; font-family:monospace; margin-top:-2px;">
-              <span>L</span>
-              <span style="color:#059669; font-weight:bold;">NOR</span>
-              <span>H</span>
-            </div>
           </div>
         `;
-      } else if (param.flag === 'NORMAL') {
-        chartHtml = '<span style="color:#059669; font-size:10px; font-weight:600;">Within Target</span>';
       }
 
       const resultColor = isHigh ? '#9f1239' : isLow ? '#92400e' : '#0f172a';
@@ -116,133 +228,10 @@ export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): voi
       `;
     });
 
-    // Blood Film morphology section if present
-    let bloodFilmHtml = '';
-    if (profile.bloodFilmFindings) {
-      const b = profile.bloodFilmFindings;
-      bloodFilmHtml = `
-        <div style="background:#f8fafc; border:1.5px solid #cbd5e1; border-radius:6px; padding:8px 12px; margin-bottom:10px; font-size:10.5px; line-height:1.4;">
-          <div style="font-weight:800; color:#800000; margin-bottom:4px; font-size:11px; border-bottom:1px solid #e2e8f0; padding-bottom:3px;">
-            🔬 PERIPHERAL BLOOD FILM MORPHOLOGICAL EXAMINATION (فحص شريحة الدم المجهري):
-          </div>
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px 12px;">
-            ${b.rbcMorphology ? `<div><strong style="color:#0f172a;">RBC Morphology:</strong> <span style="color:#334155;">${b.rbcMorphology}</span></div>` : ''}
-            ${b.wbcMorphology ? `<div><strong style="color:#0f172a;">WBC Morphology:</strong> <span style="color:#334155;">${b.wbcMorphology}</span></div>` : ''}
-            ${b.plateletMorphology ? `<div><strong style="color:#0f172a;">Platelet Smear:</strong> <span style="color:#334155;">${b.plateletMorphology}</span></div>` : ''}
-            ${b.reticulocytesPercent ? `<div><strong style="color:#0f172a;">Reticulocytes:</strong> <span style="color:#334155;">${b.reticulocytesPercent}</span></div>` : ''}
-          </div>
-          ${b.differentialSummary ? `<div style="margin-top:4px; color:#64748b; font-size:9.5px; font-family:monospace;">${b.differentialSummary}</div>` : ''}
-        </div>
-      `;
-    }
-
-    // Pathological Illustration / Microscopic Infogram
-    let illustrationHtml = '';
-    const ill = profile.attachedIllustration;
-    if (ill) {
-      const imgHtml = ill.imageUrl 
-        ? `<img src="${ill.imageUrl}" alt="${ill.titleEn}" style="width:130px; height:80px; object-fit:cover; border-radius:6px; border:1.5px solid #800000; box-shadow:0 1px 3px rgba(0,0,0,0.15); flex-shrink:0;" />`
-        : `<div style="width:64px; height:64px; border-radius:8px; background:linear-gradient(135deg, #800000, #991b1b); color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; flex-shrink:0; font-size:9px; font-weight:bold; box-shadow:0 2px 4px rgba(0,0,0,0.1);"><span style="font-size:20px;">🔬</span><span>ATLAS</span></div>`;
-
-      illustrationHtml = `
-        <div style="background:#fff1f2; border:1.5px solid #fecdd3; border-radius:6px; padding:8px 12px; margin-bottom:10px; display:flex; align-items:center; gap:12px;">
-          ${imgHtml}
-          <div style="flex:1; font-size:10px; line-height:1.4;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
-              <strong style="color:#800000; font-size:11px;">${ill.titleAr} (${ill.titleEn})</strong>
-              <span style="background:#ffe4e6; color:#9f1239; font-size:9px; font-weight:bold; padding:1px 6px; border-radius:4px; border:1px solid #fecdd3;">Diagnostic Atlas</span>
-            </div>
-            <p style="margin:0 0 4px 0; color:#334155;">${ill.pathologySummaryAr}</p>
-            <div style="display:flex; flex-wrap:wrap; gap:6px; font-size:9px; color:#475569;">
-              ${ill.keyDiagnosticPoints.slice(0, 3).map(pt => `<span style="background:#ffffff; border:1px solid #e2e8f0; padding:1px 6px; border-radius:3px;">• ${pt}</span>`).join('')}
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
     profilesHtml += `
-      <div class="report-page" style="page-break-after: always; padding: 20px; max-width: 800px; margin: 0 auto; background: #ffffff; min-height: 1050px; display: flex; flex-direction: column; justify-content: space-between;">
+      <div class="report-page" style="page-break-after: always; padding: 20px; max-width: 820px; margin: 0 auto; background: #ffffff; min-height: 1050px; display: flex; flex-direction: column; justify-content: space-between;">
         <div>
-          <!-- Top Official Header -->
-          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2.5px solid #800000; padding-bottom:10px; margin-bottom:10px;">
-            <!-- Arabic Side -->
-            <div style="text-align:right; flex:1;">
-              <h1 style="margin:0; font-size:17px; font-weight:900; color:#800000;">${labNameAr}</h1>
-              <h2 style="margin:1px 0 0 0; font-size:12px; font-weight:700; color:#0f172a;">معامل أ.د. رامي مختار</h2>
-              <p style="margin:1px 0 0 0; font-size:10.5px; font-weight:600; color:#800000;">${supervisionAr}</p>
-              <p style="margin:2px 0 0 0; font-size:9px; color:#475569; font-weight:bold;">📍 ${address} | هاتف: ${phone} / ${hotline}</p>
-            </div>
-
-            <!-- Central 3D Brand Logo -->
-            <div style="text-align:center; padding:0 14px;">
-              <div style="width:52px; height:52px; background:linear-gradient(135deg, #800000, #991b1b, #0f172a); border-radius:12px; padding:2px; display:inline-flex; align-items:center; justify-content:center; box-shadow:0 4px 6px rgba(0,0,0,0.15);">
-                <div style="width:100%; height:100%; background:#020617; border-radius:10px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#ffffff;">
-                  <div style="font-weight:900; font-size:18px; line-height:1; letter-spacing:-1px;">
-                    <span style="color:#f43f5e;">R</span><span style="color:#ffffff;">T</span>
-                  </div>
-                  <div style="font-size:6px; font-weight:900; letter-spacing:1px; color:#cbd5e1; text-transform:uppercase;">LAB</div>
-                </div>
-              </div>
-              <div style="font-size:8px; font-weight:800; color:#800000; margin-top:2px;">${accreditation}</div>
-            </div>
-
-            <!-- English Side -->
-            <div style="text-align:left; flex:1;" dir="ltr">
-              <h1 style="margin:0; font-size:16px; font-weight:900; color:#800000;">${labNameEn}</h1>
-              <h2 style="margin:1px 0 0 0; font-size:11px; font-weight:700; color:#0f172a;">Prof. Dr. Rami Mokhtar Laboratories</h2>
-              <p style="margin:1px 0 0 0; font-size:10px; font-weight:600; color:#800000;">Kasr Al Ainy Faculty of Medicine Consultants</p>
-              <p style="margin:2px 0 0 0; font-size:9px; color:#475569; font-weight:bold;">Main Center: Behteem Square, El-Ezaby Tower, 3rd Fl.</p>
-            </div>
-          </div>
-
-          <!-- Patient Demographics Info Box -->
-          <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:6px; padding:8px 12px; margin-bottom:10px; font-size:11px;">
-            <div style="display:grid; grid-template-columns: 2fr 1fr 1fr; gap:6px 12px; align-items:center;">
-              <div>
-                <span style="color:#64748b;">اسم المريض:</span>
-                <strong style="color:#0f172a; font-size:12.5px; margin-right:4px;">${p.fullName}</strong>
-              </div>
-              <div dir="ltr" style="text-align:right;">
-                <span style="color:#64748b;">Lab No:</span>
-                <strong style="color:#800000; font-family:monospace; font-size:12.5px; margin-left:4px;">${p.labNumber}</strong>
-              </div>
-              <div dir="ltr" style="text-align:right;">
-                <span style="background:#ffffff; border:1px solid #cbd5e1; padding:2px 6px; border-radius:4px; font-family:monospace; font-size:9px;">||| | ||| ${p.barcode}</span>
-              </div>
-              <div>
-                <span style="color:#64748b;">السن / النوع:</span>
-                <strong style="margin-right:4px;">${p.age} ${p.ageUnit === 'years' ? 'سنة' : p.ageUnit === 'months' ? 'شهر' : 'يوم'} / ${p.gender === 'male' ? 'ذكر' : 'أنثى'}</strong>
-              </div>
-              <div>
-                <span style="color:#64748b;">تاريخ السحب:</span>
-                <span style="font-family:monospace; margin-right:4px; font-size:9.5px;">${sampleDateFormatted}</span>
-              </div>
-              <div>
-                <span style="color:#64748b;">تاريخ النتيجة:</span>
-                <span style="font-family:monospace; margin-right:4px; font-size:9.5px;">${reportingDateFormatted}</span>
-              </div>
-              <div>
-                <span style="color:#64748b;">الطبيب المعالج:</span>
-                <strong style="margin-right:4px;">${doctorDisplay}</strong>
-              </div>
-              <div dir="ltr" style="text-align:right;">
-                <span style="color:#64748b;">WhatsApp:</span>
-                <span style="font-family:monospace; margin-left:4px;">${p.phone}</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Official Package Banner if applied -->
-          ${report.packageApplied ? `
-            <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:5px; padding:4px 10px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; font-size:11px;">
-              <div>
-                <span style="background:#d97706; color:#ffffff; font-weight:800; padding:1px 6px; border-radius:3px; font-size:9.5px; margin-left:6px;">باقة معتمدة</span>
-                <strong style="color:#78350f;">${report.packageApplied.titleAr} (${report.packageApplied.code})</strong>
-              </div>
-              <span style="color:#92400e; font-size:10px;">معامل د. رامي مختار - فحص شامل مسرود</span>
-            </div>
-          ` : ''}
+          ${renderHeaderHtml()}
 
           <!-- Profile Title Banner -->
           <div style="background:linear-gradient(90deg, #700b0b, #0f172a); color:#ffffff; padding:6px 12px; border-radius:5px; display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -256,11 +245,11 @@ export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): voi
             </div>
           </div>
 
-          <!-- 5-Column Investigations Table -->
+          <!-- Table -->
           <div style="border:1px solid #cbd5e1; border-radius:6px; overflow:hidden; margin-bottom:8px;">
             <table style="width:100%; border-collapse:collapse; font-size:10.5px; text-align:left;" dir="ltr">
               <thead>
-                <tr style="background:#f1f5f9; color:#1e293b; font-weight:800; font-size:10px; border-bottom:1.5px solid #cbd5e1; text-transform:uppercase; letter-spacing:0.5px;">
+                <tr style="background:#f1f5f9; color:#1e293b; font-weight:800; font-size:10px; border-bottom:1.5px solid #cbd5e1; text-transform:uppercase;">
                   <th style="padding:6px 8px; width:34%;">Investigations</th>
                   <th style="padding:6px 8px; width:18%; text-align:center;">Results</th>
                   <th style="padding:6px 6px; width:16%; text-align:center;">Coloured Chart</th>
@@ -274,68 +263,133 @@ export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): voi
             </table>
           </div>
 
-          <!-- Peripheral Smear findings if CBC -->
-          ${bloodFilmHtml}
-
-          <!-- Pathological Illustration / Infogram -->
-          ${illustrationHtml}
-
-          <!-- Clinical Interpretation and Comment -->
+          <!-- Comments -->
           ${(profile.interpretation || profile.comment) ? `
             <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:5px; padding:6px 10px; margin-bottom:8px; font-size:10.5px; line-height:1.4;">
-              ${profile.interpretation ? `
-                <div><strong style="color:#800000;">Interpretation:</strong> <span style="color:#1e293b;">${profile.interpretation}</span></div>
-              ` : ''}
-              ${profile.comment ? `
-                <div style="margin-top:2px; font-size:10px; color:#64748b;"><strong style="color:#475569;">Comments:</strong> ${profile.comment}</div>
-              ` : ''}
+              ${profile.interpretation ? `<div><strong style="color:#800000;">Interpretation:</strong> ${profile.interpretation}</div>` : ''}
+              ${profile.comment ? `<div style="color:#475569; font-size:10px; margin-top:2px;"><strong>Comment:</strong> ${profile.comment}</div>` : ''}
             </div>
           ` : ''}
         </div>
 
-        <!-- Official Signatures Footer (Bottom of every profile page) -->
+        <!-- Official Signatures Footer -->
         <div style="margin-top:auto; padding-top:8px; border-top:1.5px solid #cbd5e1;">
-          <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; text-align:center; margin-bottom:6px;">
-            <!-- Lab CHEMIST -->
-            <div>
-              <div style="font-size:9.5px; font-weight:800; color:#64748b; text-transform:uppercase;">Lab CHEMIST</div>
-              <div style="font-family:serif; font-style:italic; font-size:11px; color:#475569; padding:2px 0; font-weight:bold;">Approved / Chemist</div>
-              <div style="font-size:9.5px; font-weight:700; color:#0f172a;">${staff.labChemist || "د. هبة الشناوي"}</div>
-              <div style="font-size:8px; color:#64748b;">${staff.chemistTitle || 'أخصائي الكيمياء الإكلينيكية'}</div>
-              <div style="font-size:7.5px; color:#94a3b8; font-family:monospace;">${staff.chemistLicense || 'EGY-SCI-88402'}</div>
-            </div>
-
-            <!-- Verify by -->
-            <div>
-              <div style="font-size:9.5px; font-weight:800; color:#64748b; text-transform:uppercase;">Verify by</div>
-              <div style="font-family:serif; font-style:italic; font-size:11px; color:#475569; padding:2px 0; font-weight:bold;">Quality Audit Verified</div>
-              <div style="font-size:9.5px; font-weight:700; color:#0f172a;">${staff.verifiedBy || "د. مصطفى العوضي"}</div>
-              <div style="font-size:8px; color:#64748b;">${staff.verifierTitle || 'إدارة ضبط الجودة والتشغيل'}</div>
-              <div style="font-size:7.5px; color:#94a3b8; font-family:monospace;">${staff.verifierLicense || 'EGY-MGT-11024'}</div>
-            </div>
-
-            <!-- Consultant Pathologist -->
-            <div style="border-right:1px solid #e2e8f0; padding-right:8px;">
-              <div style="font-size:9.5px; font-weight:800; color:#800000; text-transform:uppercase;">Consultant Pathologist</div>
-              <div style="padding:2px 0;">
-                <span style="display:inline-block; border:1px dashed #800000; padding:1px 8px; border-radius:4px; background:#fff1f2; font-family:serif; font-style:italic; font-size:11px; color:#800000; font-weight:900;">
-                  Prof. Dr. Rami Mokhtar
-                </span>
-              </div>
-              <div style="font-size:10px; font-weight:800; color:#800000;">${staff.pathologist || "أ.د. رامي مختار"}</div>
-              <div style="font-size:8px; color:#475569;">${staff.pathologistTitle || 'استشاري الباثولوجيا الإكلينيكية - قصر العيني'}</div>
-              <div style="font-size:7.5px; color:#94a3b8; font-family:monospace;">${staff.pathologistLicense || 'EGY-MED-48201'}</div>
-            </div>
-          </div>
-
-          <!-- Bottom Notice -->
+          ${renderSignaturesHtml()}
           <div style="font-size:8px; color:#94a3b8; text-align:center; border-top:1px dashed #e2e8f0; padding-top:4px;">
-            تم اعتماد هذا التقرير إلكترونياً بمعامل RT للتحاليل الطبية والتشخيصية • النتيجة مطابقة للمعايير الدولية ISO 15189 • كود التحقق: ${p.barcode}
+            معامل RT للتحاليل الطبية والتشخيصية • النتيجة مطابقة للمعايير الدولية ISO 15189 • كود التحقق: ${p.barcode}
           </div>
         </div>
       </div>
     `;
   });
+
+  // If Smart Report is enabled, render the dedicated Smart Clinical Report page!
+  if (isSmartReportActive) {
+    const smart = generateSmartClinicalAnalysis(report);
+    const orgs = smart.organScores;
+
+    profilesHtml += `
+      <div class="report-page" style="page-break-after: always; padding: 20px; max-width: 820px; margin: 0 auto; background: #ffffff; min-height: 1050px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          ${renderHeaderHtml()}
+
+          <!-- Smart Report Title Banner -->
+          <div style="background:linear-gradient(90deg, #800000, #0f172a); color:#ffffff; padding:8px 12px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <div>
+              <strong style="font-size:13px; display:block;">التقرير الإكلينيكي الذكي والتحليل الاستشاري التلقائي (RT Smart Clinical Report)</strong>
+              <span style="font-size:10px; color:#fecdd3;">تقييم فوري لمؤشرات الأعضاء الحيوية، والمعادلات السريرية المحسوبة، والتوصيات الاستشارية</span>
+            </div>
+            <div style="font-size:9.5px; font-family:monospace; background:rgba(0,0,0,0.3); padding:3px 8px; border-radius:4px;">
+              Page ${totalPages} of ${totalPages}
+            </div>
+          </div>
+
+          <!-- Organ Health Scores -->
+          <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:10px; margin-bottom:10px;">
+            <div style="font-weight:bold; font-size:11px; color:#0f172a; margin-bottom:6px;">مؤشرات كفاءة وسلامة الأعضاء الحيوية (Vital Organ Health Scores):</div>
+            <div style="display:grid; grid-template-columns: repeat(5, 1fr); gap:6px; text-align:center;">
+              <div style="background:#ffffff; border:1px solid #e2e8f0; padding:6px; border-radius:6px;">
+                <div style="font-size:10px; font-weight:bold; color:#475569;">وظائف الكلى</div>
+                <div style="font-size:15px; font-weight:900; color:#800000; font-family:monospace;">${orgs.renal.score}%</div>
+                <div style="font-size:9px; color:#64748b;">${orgs.renal.labelAr}</div>
+              </div>
+              <div style="background:#ffffff; border:1px solid #e2e8f0; padding:6px; border-radius:6px;">
+                <div style="font-size:10px; font-weight:bold; color:#475569;">وظائف الكبد</div>
+                <div style="font-size:15px; font-weight:900; color:#800000; font-family:monospace;">${orgs.hepatic.score}%</div>
+                <div style="font-size:9px; color:#64748b;">${orgs.hepatic.labelAr}</div>
+              </div>
+              <div style="background:#ffffff; border:1px solid #e2e8f0; padding:6px; border-radius:6px;">
+                <div style="font-size:10px; font-weight:bold; color:#475569;">الأيض والسكر</div>
+                <div style="font-size:15px; font-weight:900; color:#800000; font-family:monospace;">${orgs.metabolic.score}%</div>
+                <div style="font-size:9px; color:#64748b;">${orgs.metabolic.labelAr}</div>
+              </div>
+              <div style="background:#ffffff; border:1px solid #e2e8f0; padding:6px; border-radius:6px;">
+                <div style="font-size:10px; font-weight:bold; color:#475569;">مؤشرات الدم</div>
+                <div style="font-size:15px; font-weight:900; color:#800000; font-family:monospace;">${orgs.hematologic.score}%</div>
+                <div style="font-size:9px; color:#64748b;">${orgs.hematologic.labelAr}</div>
+              </div>
+              <div style="background:#ffffff; border:1px solid #e2e8f0; padding:6px; border-radius:6px;">
+                <div style="font-size:10px; font-weight:bold; color:#475569;">القلب والدهون</div>
+                <div style="font-size:15px; font-weight:900; color:#800000; font-family:monospace;">${orgs.cardiac.score}%</div>
+                <div style="font-size:9px; color:#64748b;">${orgs.cardiac.labelAr}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Calculated Indices if any -->
+          ${smart.calculatedIndices.length > 0 ? `
+            <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; padding:10px; margin-bottom:10px;">
+              <div style="font-weight:bold; font-size:11px; color:#0f172a; margin-bottom:6px;">المعادلات والمؤشرات الإكلينيكية المحسوبة تلقائياً:</div>
+              <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:8px;">
+                ${smart.calculatedIndices.map(idx => `
+                  <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:6px; border-radius:5px; font-size:10px;">
+                    <strong style="color:#0f172a; display:block;">${idx.nameAr}</strong>
+                    <div style="font-size:13px; font-weight:bold; color:#800000; font-family:monospace; margin:2px 0;">${idx.value}</div>
+                    <div style="color:#64748b; font-size:8.5px;">المرجع: ${idx.reference}</div>
+                    <p style="margin:3px 0 0 0; color:#334155; font-size:9.5px; line-height:1.3;">${idx.interpretationAr}</p>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          ` : ''}
+
+          <!-- Diagnostic Differential & Consultant Recommendations -->
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:8px 10px; font-size:10.5px;">
+              <strong style="color:#059669; display:block; margin-bottom:4px;">التشخيص التفريقي المقترح:</strong>
+              ${smart.differentialDiagnoses.length > 0 ? smart.differentialDiagnoses.map(d => `
+                <div style="margin-bottom:4px; padding-bottom:4px; border-bottom:1px dashed #e2e8f0;">
+                  <span style="font-weight:bold; color:#064e3b;">• ${d.diseaseAr}</span>
+                  <p style="margin:2px 0 0 0; color:#475569; font-size:9.5px;">${d.rationaleAr}</p>
+                </div>
+              `).join('') : '<p style="color:#64748b; font-size:10px;">كافة المؤشرات مستقرة؛ لا توجد شواهد لأمراض نوعية نشطة.</p>'}
+            </div>
+
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:8px 10px; font-size:10.5px;">
+              <strong style="color:#800000; display:block; margin-bottom:4px;">توصيات الاستشاري والخطوات التالية:</strong>
+              <ul style="margin:0; padding-right:16px; color:#334155; font-size:10px; line-height:1.4;">
+                ${smart.consultantRecommendations.map(r => `<li>${r}</li>`).join('')}
+              </ul>
+            </div>
+          </div>
+
+          <!-- Executive Summary -->
+          <div style="background:#fff1f2; border:1px solid #fecdd3; border-radius:6px; padding:8px 10px; font-size:11px; line-height:1.4;">
+            <strong style="color:#800000;">الخلاصة الطبية الاستشارية:</strong>
+            <p style="margin:3px 0 0 0; color:#1e293b;">${smart.executiveSummaryAr}</p>
+          </div>
+        </div>
+
+        <!-- Official Signatures Footer on Smart Report Page -->
+        <div style="margin-top:auto; padding-top:8px; border-top:1.5px solid #cbd5e1;">
+          ${renderSignaturesHtml()}
+          <div style="font-size:8px; color:#94a3b8; text-align:center; border-top:1px dashed #e2e8f0; padding-top:4px;">
+            معتمد إكلينيكياً من استشاري الباثولوجيا الإكلينيكية والكيميائية • كلية طب قصر العيني
+          </div>
+        </div>
+      </div>
+    `;
+  }
 
   const printWindow = window.open('', '_blank', 'width=950,height=1000');
   if (!printWindow) {
@@ -367,32 +421,19 @@ export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): voi
           font-size: 12.5px;
           line-height: 1.65;
           -webkit-font-smoothing: antialiased;
-          text-rendering: optimizeLegibility;
         }
         table { font-size: 12px; line-height: 1.55; }
-        th { font-weight: 800; letter-spacing: 0.01em; }
-        td { font-weight: 500; }
-        h1, h2, h3 { font-weight: 900; letter-spacing: -0.01em; line-height: 1.35; }
-        .patient-name, .report-title { font-size: 15px; font-weight: 900; }
-        .result-value { font-family: 'JetBrains Mono', 'Courier New', monospace; font-weight: 700; font-size: 12.5px; }
         @media print {
-          body {
-            background: #ffffff;
-          }
+          body { background: #ffffff; }
           .report-page {
             box-shadow: none !important;
             margin: 0 !important;
-            padding: 15mm 12mm !important;
+            padding: 12mm 10mm !important;
             page-break-after: always;
             break-after: page;
           }
-          .no-print {
-            display: none !important;
-          }
-          @page {
-            size: A4 portrait;
-            margin: 0;
-          }
+          .no-print { display: none !important; }
+          @page { size: A4 portrait; margin: 0; }
         }
         .report-page {
           box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
@@ -413,13 +454,8 @@ export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): voi
           font-size: 14px;
           cursor: pointer;
           box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-          display: flex;
-          align-items: center;
-          gap: 8px;
         }
-        .print-btn:hover {
-          background: #991b1b;
-        }
+        .print-btn:hover { background: #991b1b; }
       </style>
     </head>
     <body>
@@ -429,7 +465,6 @@ export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): voi
       ${profilesHtml}
       <script>
         window.onload = function() {
-          // Auto prompt print after render
           setTimeout(function() {
             window.print();
           }, 600);
