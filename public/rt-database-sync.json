@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-09T00:06:54.860Z",
+  "syncedAt": "2026-10-09T00:07:06.674Z",
   "reports": [
     {
       "id": "rep-1791501113004",
@@ -1481,11 +1481,13 @@
         "chemistTitle": "أخصائي كيمياء إكلينيكية وهرمونات",
         "verifierTitle": "طبيب باثولوجيا/ المدير التنفيذي",
         "pathologistTitle": "استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
-        "pathologistLicense": "EGY-MED-48201"
+        "pathologistLicense": "EGY-MED-48201",
+        "showFinancialSignature": false,
+        "showHrSignature": false
       },
       "status": "verified",
       "createdAt": "2026-10-07T19:22:07.197Z",
-      "updatedAt": "2026-10-09T00:06:49.503Z",
+      "updatedAt": "2026-10-09T00:07:01.262Z",
       "invoiceId": "inv-1791400927197",
       "packageApplied": {
         "code": "PKG-ANNUAL-WELLNESS",
