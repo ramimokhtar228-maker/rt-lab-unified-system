@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-08T14:58:29.700Z",
+  "syncedAt": "2026-10-08T15:01:18.352Z",
   "reports": [
     {
       "id": "rep-1791414844234",
@@ -132,7 +132,7 @@
         }
       ],
       "staff": {
-        "labChemist": "د/ عمر فؤاد القاضي",
+        "labChemist": " ",
         "verifiedBy": "أ/ سارة إبراهيم الشربيني",
         "pathologist": "أ.د. رامي مختار",
         "chemistTitle": "أخصائي أول كيمياء إكلينيكية وهرمونات",
@@ -144,7 +144,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T23:14:04.234Z",
-      "updatedAt": "2026-10-07T23:14:04.234Z",
+      "updatedAt": "2026-10-08T15:01:14.112Z",
       "invoiceId": "inv-1791414844235"
     },
     {
