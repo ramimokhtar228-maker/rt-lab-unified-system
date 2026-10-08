@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-08T21:38:52.140Z",
+  "syncedAt": "2026-10-08T21:38:30.972Z",
   "reports": [
     {
       "id": "rep-1791414844234",
@@ -1383,27 +1383,6 @@
       "invoiceId": "inv-1791359724811"
     },
     {
-      "createdAt": "2026-10-07T07:51:02.609Z",
-      "staff": {
-        "labChemist": "منى احمد",
-        "verifiedBy": "أ.د. رامي مختار",
-        "pathologist": "رامي مختار",
-        "financialDirector": "أ/ أحمد محمود الشناوي",
-        "hrManager": "أ/ مروان عادل الجزار",
-        "chemistTitle": "أخصائي أول كيمياء إكلينيكية وهرمونات",
-        "verifierTitle": "طبيب باثولوجى / المدير التنفيذي",
-        "pathologistTitle": "طبيب الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
-        "financialDirectorTitle": "المدير المالي ورئيس الحسابات",
-        "hrManagerTitle": "مدير الموارد البشرية وشؤون العاملين",
-        "chemistLicense": "EGY-SCI-88402",
-        "verifierLicense": "EGY-MGT-11024",
-        "pathologistLicense": "EGY-MED-48201",
-        "financialDirectorLicense": "EGY-ACC-98421",
-        "hrManagerLicense": "EGY-HR-33419",
-        "includeFinancialDirector": true,
-        "includeHrManager": false
-      },
-      "status": "verified",
       "profiles": [
         {
           "id": "prof-1791359462607-zkue",
@@ -1894,8 +1873,30 @@
           ]
         }
       ],
-      "invoiceId": "inv-1791359462609",
+      "staff": {
+        "labChemist": "منى احمد",
+        "verifiedBy": "أ.د. رامي مختار",
+        "pathologist": "رامي مختار",
+        "financialDirector": "أ/ أحمد محمود الشناوي",
+        "hrManager": "أ/ مروان عادل الجزار",
+        "chemistTitle": "أخصائي أول كيمياء إكلينيكية وهرمونات",
+        "verifierTitle": "طبيب باثولوجى / المدير التنفيذي",
+        "pathologistTitle": "طبيب الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
+        "financialDirectorTitle": "المدير المالي ورئيس الحسابات",
+        "hrManagerTitle": "مدير الموارد البشرية وشؤون العاملين",
+        "chemistLicense": "EGY-SCI-88402",
+        "verifierLicense": "EGY-MGT-11024",
+        "pathologistLicense": "EGY-MED-48201",
+        "financialDirectorLicense": "EGY-ACC-98421",
+        "hrManagerLicense": "EGY-HR-33419",
+        "includeFinancialDirector": true,
+        "includeHrManager": false
+      },
+      "reportNumber": "RT-2026-013",
       "id": "rep-1791359462609",
+      "updatedAt": "2026-10-07T22:08:28.024Z",
+      "status": "verified",
+      "invoiceId": "inv-1791359462609",
       "patient": {
         "id": "pat-1791359462605",
         "labNumber": "RT-2026-013",
@@ -1921,8 +1922,7 @@
         "discountApplied": 94,
         "paymentMethod": "cash"
       },
-      "reportNumber": "RT-2026-013",
-      "updatedAt": "2026-10-07T22:08:28.024Z",
+      "createdAt": "2026-10-07T07:51:02.609Z",
       "generalComment": ""
     },
     {
@@ -3171,9 +3171,9 @@
       },
       "reportNumber": "RT-2026-008",
       "staff": {
-        "labChemist": "د/ عمر فؤاد القاضي",
-        "verifiedBy": "أ/ سارة إبراهيم الشربيني",
-        "pathologist": "أ.د. رامي مختار"
+        "pathologist": "أ.د. رامي مختار",
+        "verifiedBy": "أ.د. رامي مختار",
+        "labChemist": "د/ عمر فؤاد القاضي"
       },
       "generalComment": "كافة الفحوصات المخبرية للمريض (أمال محمد) تقع في النطاقات الآمنة بشكل عام مع انتظام مؤشرات الأعضاء الحيوية ونشاط فسيولوجي متوازن.",
       "createdAt": "2026-10-06T11:59:36.696Z",
@@ -9399,48 +9399,48 @@
       "updatedAt": "2026-10-07T19:22:07.199Z"
     },
     {
-      "updatedAt": "2026-10-07T13:57:19.020Z",
-      "tests": [
-        {
-          "price": 190,
-          "nameEn": "Helicobacter Pylori Stool Antigen (HpSA)",
-          "textReference": "Negative (No H. Pylori antigen detected in stool)",
-          "cost": 40,
-          "unit": "Qualitative",
-          "id": "t-115",
-          "turnaroundTime": "خلال 3 ساعات",
-          "method": "Rapid Chromatographic Immunoassay / ELISA",
-          "fastingInstructions": "عينة براز طازجة، والتوقف عن المضادات الحيوية قبلها بأسبوعين",
-          "sampleType": "Fresh Stool Specimen",
-          "category": "Gastroenterology",
-          "nameAr": "جرثومة المعدة بالبراز كمي (H. Pylori Antigen in Stool)",
-          "code": "HP_STOOL_AG"
-        }
-      ],
-      "patientPhone": "01005314825",
-      "remainingAmount": 0,
       "cashierName": "أ.د. رامي مختار",
       "createdAt": "2026-10-07T13:57:19.019Z",
-      "isHomeVisit": true,
-      "syncStatus": "synced",
-      "patientName": "محمد حسن على",
-      "patientGender": "male",
-      "testsSubtotal": 190,
-      "discount": 0,
-      "id": "inv-1791381439019",
-      "patientAge": 68,
-      "barcode": "RT-10043",
       "paidAmount": 190,
-      "labNumber": "RT-2026-013",
-      "subtotal": 190,
-      "branch": "فرع القصر العيني - الرئيسي",
-      "visitFee": 0,
+      "updatedAt": "2026-10-07T13:57:19.020Z",
+      "discount": 0,
+      "tests": [
+        {
+          "category": "Gastroenterology",
+          "nameEn": "Helicobacter Pylori Stool Antigen (HpSA)",
+          "cost": 40,
+          "code": "HP_STOOL_AG",
+          "price": 190,
+          "unit": "Qualitative",
+          "textReference": "Negative (No H. Pylori antigen detected in stool)",
+          "sampleType": "Fresh Stool Specimen",
+          "id": "t-115",
+          "fastingInstructions": "عينة براز طازجة، والتوقف عن المضادات الحيوية قبلها بأسبوعين",
+          "nameAr": "جرثومة المعدة بالبراز كمي (H. Pylori Antigen in Stool)",
+          "turnaroundTime": "خلال 3 ساعات",
+          "method": "Rapid Chromatographic Immunoassay / ELISA"
+        }
+      ],
       "referringDoctor": "HIMSELF",
+      "remainingAmount": 0,
+      "patientAge": 68,
+      "paymentMethod": "cash",
+      "subtotal": 190,
+      "barcode": "RT-10043",
+      "patientGender": "male",
       "netAmount": 190,
       "paymentStatus": "paid",
+      "testsSubtotal": 190,
+      "labNumber": "RT-2026-013",
+      "visitFee": 0,
+      "visitAddress": "بهتيم",
       "invoiceNumber": "INV-2026-013",
-      "paymentMethod": "cash",
-      "visitAddress": "بهتيم"
+      "syncStatus": "synced",
+      "patientPhone": "01005314825",
+      "patientName": "محمد حسن على",
+      "branch": "فرع القصر العيني - الرئيسي",
+      "isHomeVisit": true,
+      "id": "inv-1791381439019"
     },
     {
       "cashierName": "المحاسب المالي",
@@ -12030,19 +12030,19 @@
     }
   ],
   "labInfo": {
-    "accreditation": "ISO 15189 Certified Quality Management",
-    "whatsapp": "01100874444",
     "sloganEn": "Accurate Diagnosis Starts With Us · Precision & Care",
-    "supervisionAr": "أطباء واستشاريو كلية طب قصر العيني - جامعة القاهرة",
     "mainAddress": "ميدان بهتيم برج صيدليه العزبى الدور الثالث امام الأسانسير شبرا الخيمه",
-    "labNameEn": "RT Diagnostic Laboratories",
-    "hotline": "01100046841",
     "phone": "01013242777",
     "vodafoneCash": "01100046841",
     "instapay": "ramirtlab@instapay",
     "sloganAr": "التشخيص الصحيح يبدأ معنا · دقة، سرعة، وأمان تشخيصي",
+    "whatsapp": "01100874444",
+    "accreditation": "ISO 15189 Certified Quality Management",
+    "supervisionAr": "أطباء واستشاريو كلية طب قصر العيني - جامعة القاهرة",
     "labNameAr": "معامل RT للتحاليل الطبية والتشخيصية",
-    "supervisionEn": "Kasr Al Ainy Faculty of Medicine Consultants - Cairo University"
+    "labNameEn": "RT Diagnostic Laboratories",
+    "supervisionEn": "Kasr Al Ainy Faculty of Medicine Consultants - Cairo University",
+    "hotline": "01100046841"
   },
   "testCatalog": [
     {
