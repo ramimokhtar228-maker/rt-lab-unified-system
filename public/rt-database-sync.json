@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-08T09:11:24.803Z",
+  "syncedAt": "2026-10-08T09:11:33.629Z",
   "reports": [
     {
       "id": "rep-1791414844234",
@@ -14112,36 +14112,36 @@
       "fastingInstructions": "عينة براز طازجة للأطفال"
     },
     {
-      "category": "Clinical Hematology ",
-      "price": 10,
-      "sampleType": "EDTA ",
-      "minNormal": 36,
-      "fastingInstructions": "لا يشترط الصيام",
-      "maxNormal": 49,
-      "nameAr": "هيماتوكريت ",
       "id": "test-1791282363076",
+      "price": 10,
+      "code": "HCT",
+      "sampleType": "EDTA ",
       "unit": "%",
       "turnaroundHours": 2,
-      "code": "HCT",
+      "minNormal": 36,
+      "nameAr": "هيماتوكريت ",
+      "maxNormal": 49,
+      "category": "Clinical Hematology ",
       "nameEn": "Hematocrit %",
-      "textReference": "36-49",
-      "method": "Enzymatic"
+      "fastingInstructions": "لا يشترط الصيام",
+      "method": "Enzymatic",
+      "textReference": "36-49"
     },
     {
-      "sampleType": " EDTA BLOOD ",
-      "textReference": "Male : 13.5-17.5 /Female: 12.5-15.5",
       "fastingInstructions": "لا يشترط الصيام",
-      "minNormal": 36,
-      "price": 210,
-      "maxNormal": 49,
+      "nameAr": "هبموجلوبين ",
+      "unit": "g/L",
+      "code": "HB",
       "method": "Enzymatic",
       "category": "Clinical Hematology ",
-      "unit": "g/L",
       "nameEn": "HB %",
-      "code": "HB",
-      "id": "test-1791276005667",
-      "nameAr": "هبموجلوبين ",
-      "turnaroundHours": 2
+      "sampleType": " EDTA BLOOD ",
+      "maxNormal": 49,
+      "turnaroundHours": 2,
+      "minNormal": 36,
+      "textReference": "Male : 13.5-17.5 /Female: 12.5-15.5",
+      "price": 210,
+      "id": "test-1791276005667"
     }
   ],
   "packages": [
