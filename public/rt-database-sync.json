@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-08T23:59:01.123Z",
+  "syncedAt": "2026-10-08T23:59:07.392Z",
   "reports": [
     {
       "id": "rep-1791501113004",
@@ -12958,20 +12958,11 @@
       "barcode": "RT-10061",
       "cardNumber": "RT-GOLD-10061",
       "bloodGroup": "",
-      "totalPoints": 1010,
+      "totalPoints": 505,
       "tier": "Gold",
-      "lifetimeSpent": 1010,
+      "lifetimeSpent": 505,
       "issueDate": "2026-10-08",
       "transactions": [
-        {
-          "id": "tx-1791500222408",
-          "date": "2026-10-08",
-          "type": "earn",
-          "points": 505,
-          "description": "اكتساب نقاط عن فاتورة رقم RT-2026-033",
-          "invoiceNumber": "RT-2026-033",
-          "amountEGP": 505
-        },
         {
           "id": "tx-1791499039660",
           "date": "2026-10-08",
@@ -13003,6 +12994,75 @@
           "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-031",
           "invoiceNumber": "RT-2026-031",
           "amountEGP": 233
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791501113007",
+      "patientName": "زينب عمر",
+      "phone": "01091353732",
+      "barcode": "RT-10062",
+      "cardNumber": "RT-SILVER-10062",
+      "bloodGroup": "",
+      "totalPoints": 199,
+      "tier": "Silver",
+      "lifetimeSpent": 199,
+      "issueDate": "2026-10-08",
+      "transactions": [
+        {
+          "id": "tx-1791501113007",
+          "date": "2026-10-08",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-032",
+          "invoiceNumber": "RT-2026-032",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791500920502",
+      "patientName": "مجدى احمد ربيع",
+      "phone": "01030502318",
+      "barcode": "RT-10061",
+      "cardNumber": "RT-SILVER-10061",
+      "bloodGroup": "",
+      "totalPoints": 199,
+      "tier": "Silver",
+      "lifetimeSpent": 199,
+      "issueDate": "2026-10-08",
+      "transactions": [
+        {
+          "id": "tx-1791500920502",
+          "date": "2026-10-08",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-031",
+          "invoiceNumber": "RT-2026-031",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791500705356",
+      "patientName": "عادل احمد صبيح",
+      "phone": "01112919075",
+      "barcode": "RT-10060",
+      "cardNumber": "RT-SILVER-10060",
+      "bloodGroup": "",
+      "totalPoints": 199,
+      "tier": "Silver",
+      "lifetimeSpent": 199,
+      "issueDate": "2026-10-08",
+      "transactions": [
+        {
+          "id": "tx-1791500705356",
+          "date": "2026-10-08",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-030",
+          "invoiceNumber": "RT-2026-030",
+          "amountEGP": 199
         }
       ]
     }
