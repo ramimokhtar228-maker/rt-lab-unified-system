@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-08T22:44:00.241Z",
+  "timestamp": "2026-10-08T22:44:18.877Z",
   "reportsCount": 32,
   "incomeCount": 15,
   "loyaltyProfilesCount": 17,
@@ -11527,6 +11527,16 @@
   "dailyCloseouts": [],
   "auditLogs": [
     {
+      "id": "log-1791499446945-j6m5j",
+      "timestamp": "10/9/2026, 1:44:06 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "SYNC",
+      "module": "SECURITY",
+      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
+    },
+    {
       "id": "log-1791457210805-fo8wx",
       "timestamp": "10/8/2026, 2:00:10 PM",
       "userId": "user-ceo",
@@ -12009,16 +12019,6 @@
     {
       "id": "log-1791401501865-h9tsf",
       "timestamp": "10/7/2026, 10:31:41 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "UPDATE",
-      "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1791400927196"
-    },
-    {
-      "id": "log-1791401495822-6n79r",
-      "timestamp": "10/7/2026, 10:31:35 PM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
