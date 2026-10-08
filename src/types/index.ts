@@ -278,6 +278,7 @@ export interface LoyaltyTransaction {
 }
 
 export interface PatientLoyaltyProfile {
+  id?: string;
   patientId: string;
   patientName: string;
   phone: string;
@@ -385,6 +386,7 @@ export interface Patient {
   bookingType?: 'branch' | 'home_visit';
   branchAddress?: string;
   homeAddress?: string;
+  homeContactPhone?: string;
   deliveryNotes?: string;
   appointmentDate?: string;
   appointmentTime?: string;

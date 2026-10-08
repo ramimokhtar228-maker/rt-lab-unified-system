@@ -20,6 +20,7 @@ export type SyncActionType =
   | 'UPDATE_INVENTORY'
   | 'UPDATE_CATALOG'
   | 'UPDATE_PACKAGES'
+  | 'UPDATE_PROFILES'
   | 'PING_TEST'
   | 'FULL_SYNC';
 

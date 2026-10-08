@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ComprehensivePackage, CatalogProfileTemplate, IndividualTest } from '../types/lab';
+import { useApp } from '../context/AppContext';
 import { 
   Package, 
   Plus, 
@@ -34,6 +35,7 @@ export const PackagesManager: React.FC<PackagesManagerProps> = ({
   catalogProfiles,
   individualTests
 }) => {
+  const { deletePackage } = useApp();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterPopular, setFilterPopular] = useState<boolean | null>(null);
   
@@ -98,8 +100,9 @@ export const PackagesManager: React.FC<PackagesManagerProps> = ({
   };
 
   const handleDeletePackage = (id: string, title: string) => {
-    if (confirm(`هل أنت متأكد من حذف باقة "${title}"؟`)) {
-      const updated = packages.filter(p => p.id !== id);
+    if (confirm(`هل أنت متأكد من حذف باقة "${title}" نهائياً من الكتالوج؟ لن تعود مرة أخرى بعد الحذف.`)) {
+      deletePackage(id);
+      const updated = packages.filter(p => p.id !== id && p.code !== id);
       onUpdatePackages(updated);
     }
   };

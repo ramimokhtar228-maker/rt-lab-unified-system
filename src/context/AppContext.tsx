@@ -29,6 +29,7 @@ import {
   InstrumentTransmission,
   UserRole,
   ComprehensivePackage,
+  PaymentMethod,
   LabStaffSignatures,
   StaffOptionItem
 } from '../types';
@@ -63,7 +64,23 @@ import {
   mergePackagesWithDefaults,
   mergeProfilesWithDefaults,
   runGlobalDataUpgrade,
-  MIGRATION_VERSION_KEY
+  MIGRATION_VERSION_KEY,
+  recordDeletedProfileCode,
+  recordDeletedTestCode,
+  recordDeletedReportId,
+  getDeletedReportIds,
+  recordDeletedIncomeId,
+  getDeletedIncomeIds,
+  recordDeletedPackageId,
+  getDeletedPackageIds,
+  recordDeletedLoyaltyId,
+  getDeletedLoyaltyIds,
+  recordDeletedExpenseId,
+  getDeletedExpenseIds,
+  recordDeletedInventoryId,
+  getDeletedInventoryIds,
+  DELETED_PROFILES_KEY,
+  DELETED_TESTS_KEY
 } from '../utils/upgradeSavedData';
 import { CatalogProfileTemplate } from '../types/lab';
 
@@ -113,6 +130,20 @@ interface AppContextType {
   deleteReport: (id: string) => void;
   verifyReport: (id: string) => void;
   createReportFromAdmission: (patient: Patient, selectedTests: InvoiceTestItem[], packageApplied?: any) => LabReport;
+  updateBookingAdmission: (
+    reportId: string,
+    patientUpdates: Partial<Patient>,
+    selectedTests?: InvoiceTestItem[],
+    packageApplied?: any,
+    financialUpdates?: {
+      paidAmount?: number;
+      paymentMethod?: PaymentMethod;
+      discountPercent?: number;
+      visitFee?: number;
+      netAmount?: number;
+      remainingAmount?: number;
+    }
+  ) => { updatedReport: LabReport; updatedInvoice?: IncomeRecord } | null;
 
   // Financial & Treasury (Income & Invoicing)
   incomeRecords: IncomeRecord[];
@@ -156,6 +187,7 @@ interface AppContextType {
   // Diagnostic Profile Templates
   diagnosticProfiles: CatalogProfileTemplate[];
   updateDiagnosticProfiles: (profiles: CatalogProfileTemplate[]) => void;
+  deleteDiagnosticProfile: (code: string) => void;
   resetDiagnosticProfiles: () => void;
 
   // Laboratory Instruments & Hardware Interfacing
@@ -287,14 +319,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // 4. Reports (Unified Diagnostic Worklist)
   const [reports, setReports] = useState<LabReport[]>(() => {
     try {
+      const deletedIds = getDeletedReportIds();
       const saved = localStorage.getItem(REPORTS_KEY) || localStorage.getItem('rt_lab_reports_v2');
-      if (saved) {
+      if (saved !== null) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed)) {
+          return parsed.filter(r => r && !deletedIds.has(r.id) && !deletedIds.has(r.reportNumber || ''));
+        }
       }
-      return INITIAL_REPORTS;
+      return INITIAL_REPORTS.filter(r => !deletedIds.has(r.id) && !deletedIds.has(r.reportNumber || ''));
     } catch {
-      return INITIAL_REPORTS;
+      return [];
     }
   });
 
@@ -305,14 +340,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // 5. Income & Invoices (Financial Records)
   const [incomeRecords, setIncomeRecords] = useState<IncomeRecord[]>(() => {
     try {
+      const deletedIds = getDeletedIncomeIds();
       const saved = localStorage.getItem(INCOME_KEY) || localStorage.getItem('rt_lab_income_records_v1');
-      if (saved) {
+      if (saved !== null) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed)) {
+          return parsed.filter(i => i && !deletedIds.has(i.id) && !deletedIds.has(i.invoiceNumber || ''));
+        }
       }
-      return INITIAL_INCOME_RECORDS;
+      return INITIAL_INCOME_RECORDS.filter(i => !deletedIds.has(i.id) && !deletedIds.has(i.invoiceNumber || ''));
     } catch {
-      return INITIAL_INCOME_RECORDS;
+      return [];
     }
   });
 
@@ -352,14 +390,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // 7. Loyalty Profiles
   const [loyaltyProfiles, setLoyaltyProfiles] = useState<PatientLoyaltyProfile[]>(() => {
     try {
+      const deletedIds = getDeletedLoyaltyIds();
       const saved = localStorage.getItem(LOYALTY_KEY) || localStorage.getItem('rt_lab_loyalty_profiles_v2');
-      if (saved) {
+      if (saved !== null) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed)) {
+          return parsed.filter(p => p && !deletedIds.has(p.id || '') && !deletedIds.has(p.patientId || '') && !deletedIds.has(p.phone || ''));
+        }
       }
-      return INITIAL_LOYALTY_DATA;
+      return INITIAL_LOYALTY_DATA.filter(p => !deletedIds.has((p as any).id || '') && !deletedIds.has(p.patientId || '') && !deletedIds.has(p.phone || ''));
     } catch {
-      return INITIAL_LOYALTY_DATA;
+      return [];
     }
   });
 
@@ -588,6 +629,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       // 4. Smart Deep Deduplication and Merging for Reports
       const reportMap = new Map<string, LabReport>();
+      const deletedReportIds = getDeletedReportIds();
+      const deletedIncomeIds = getDeletedIncomeIds();
 
       // Seed with existing local reports from localStorage and state
       try {
@@ -595,15 +638,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (localSaved) {
           const parsed = JSON.parse(localSaved);
           if (Array.isArray(parsed)) {
-            parsed.forEach((r: any) => { if (r && r.id) reportMap.set(r.id, r); });
+            parsed.forEach((r: any) => {
+              if (r && r.id && !deletedReportIds.has(r.id) && !deletedReportIds.has(r.reportNumber || '')) {
+                reportMap.set(r.id, r);
+              }
+            });
           }
         }
       } catch { /* ignore */ }
 
-      reports.forEach(r => { if (r && r.id) reportMap.set(r.id, r); });
+      reports.forEach(r => {
+        if (r && r.id && !deletedReportIds.has(r.id) && !deletedReportIds.has(r.reportNumber || '')) {
+          reportMap.set(r.id, r);
+        }
+      });
 
       const mergeOneReport = (r: any) => {
         if (!r || !r.id) return;
+        if (deletedReportIds.has(r.id) || (r.reportNumber && deletedReportIds.has(r.reportNumber)) || (r.patient?.barcode && deletedReportIds.has(r.patient.barcode))) {
+          return; // DO NOT restore deleted report
+        }
         const existingKey = Array.from(reportMap.keys()).find(k => {
           const cur = reportMap.get(k);
           if (!cur) return false;
@@ -645,15 +699,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (localSavedInc) {
           const parsed = JSON.parse(localSavedInc);
           if (Array.isArray(parsed)) {
-            parsed.forEach((i: any) => { if (i && i.id) incomeMap.set(i.id, i); });
+            parsed.forEach((i: any) => {
+              if (i && i.id && !deletedIncomeIds.has(i.id) && !deletedIncomeIds.has(i.invoiceNumber || '')) {
+                incomeMap.set(i.id, i);
+              }
+            });
           }
         }
       } catch { /* ignore */ }
 
-      incomeRecords.forEach(i => { if (i && i.id) incomeMap.set(i.id, i); });
+      incomeRecords.forEach(i => {
+        if (i && i.id && !deletedIncomeIds.has(i.id) && !deletedIncomeIds.has(i.invoiceNumber || '')) {
+          incomeMap.set(i.id, i);
+        }
+      });
 
       const mergeOneIncome = (i: any) => {
         if (!i || !i.id) return;
+        if (deletedIncomeIds.has(i.id) || (i.invoiceNumber && deletedIncomeIds.has(i.invoiceNumber)) || (i.barcode && deletedIncomeIds.has(i.barcode))) {
+          return; // DO NOT restore deleted invoice
+        }
         const existingKey = Array.from(incomeMap.keys()).find(k => {
           const cur = incomeMap.get(k);
           if (!cur) return false;
@@ -1020,13 +1085,25 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [logAction]);
 
   const deleteReport = useCallback((id: string) => {
+    recordDeletedReportId(id);
     const reportToDelete = reports.find(r => r.id === id);
-    setReports(prev => prev.filter(r => r.id !== id));
+    if (reportToDelete?.reportNumber) recordDeletedReportId(reportToDelete.reportNumber);
+    if (reportToDelete?.patient?.barcode) recordDeletedReportId(reportToDelete.patient.barcode);
+
+    setReports(prev => {
+      const next = prev.filter(r => r.id !== id && r.reportNumber !== id);
+      try {
+        localStorage.setItem(REPORTS_KEY, JSON.stringify(next));
+        localStorage.setItem('rt_lab_reports_v2', JSON.stringify(next));
+      } catch (e) { console.error(e); }
+      return next;
+    });
+
     realtimeSyncManager.broadcastAction('DELETE_REPORT', id);
     if (selectedReportId === id) {
       setSelectedReportId(null);
     }
-    logAction('DELETE', 'DIAGNOSTIC', `حذف التقرير الطبي للمريض ${reportToDelete?.patient.fullName || id}`);
+    logAction('DELETE', 'DIAGNOSTIC', `حذف التقرير الطبي نهائياً للمريض ${reportToDelete?.patient.fullName || id}`);
   }, [reports, selectedReportId, logAction]);
 
   const verifyReport = useCallback((id: string) => {
@@ -1081,10 +1158,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [logAction]);
 
   const deleteIncomeRecord = useCallback((id: string) => {
+    recordDeletedIncomeId(id);
     const inv = incomeRecords.find(i => i.id === id);
-    setIncomeRecords(prev => prev.filter(i => i.id !== id));
+    if (inv?.invoiceNumber) recordDeletedIncomeId(inv.invoiceNumber);
+    if (inv?.barcode) recordDeletedIncomeId(inv.barcode);
+
+    setIncomeRecords(prev => {
+      const next = prev.filter(i => i.id !== id && i.invoiceNumber !== id);
+      try {
+        localStorage.setItem(INCOME_KEY, JSON.stringify(next));
+        localStorage.setItem('rt_lab_income_records_v1', JSON.stringify(next));
+      } catch (e) { console.error(e); }
+      return next;
+    });
+
     realtimeSyncManager.broadcastAction('DELETE_INVOICE', id);
-    logAction('DELETE', 'INCOME', `حذف الفاتورة رقم ${inv?.invoiceNumber || id} للمريض ${inv?.patientName}`);
+    logAction('DELETE', 'INCOME', `حذف الفاتورة نهائياً رقم ${inv?.invoiceNumber || id} للمريض ${inv?.patientName}`);
   }, [incomeRecords, logAction]);
 
   // Test Catalog CRUD with instant real-time broadcast
@@ -1145,12 +1234,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [logAction]);
 
   const deleteCatalogTest = useCallback((code: string) => {
+    recordDeletedTestCode(code);
     setTestCatalog(prev => {
-      const next = prev.filter(t => t.code !== code);
+      const next = prev.filter(t => t.code.toUpperCase().trim() !== code.toUpperCase().trim());
       realtimeSyncManager.broadcastAction('UPDATE_CATALOG', next);
+      try {
+        localStorage.setItem(CATALOG_KEY, JSON.stringify(next));
+        localStorage.setItem('rt_lab_individual_tests_v2', JSON.stringify(next));
+      } catch (e) { console.error(e); }
       return next;
     });
-    logAction('CATALOG_UPDATE', 'CATALOG', `حذف التحليل ${code} من الكتالوج`);
+    logAction('CATALOG_UPDATE', 'CATALOG', `حذف التحليل ${code} نهائياً من الكتالوج`);
   }, [logAction]);
 
   // Packages Management CRUD
@@ -1179,13 +1273,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [logAction]);
 
   const deletePackage = useCallback((id: string) => {
+    recordDeletedPackageId(id);
+    const target = packages.find(p => p.id === id || p.code === id);
+    if (target?.code) recordDeletedPackageId(target.code);
+    if (target?.id) recordDeletedPackageId(target.id);
+
     setPackages(prev => {
-      const next = prev.filter(p => p.id !== id);
+      const next = prev.filter(p => p.id !== id && p.code !== id);
+      try {
+        localStorage.setItem(PACKAGES_KEY, JSON.stringify(next));
+      } catch (e) { console.error(e); }
       realtimeSyncManager.broadcastAction('UPDATE_PACKAGES', next);
       return next;
     });
-    logAction('DELETE', 'CATALOG', `حذف الباقة: ${id}`);
-  }, [logAction]);
+    logAction('DELETE', 'CATALOG', `حذف الباقة نهائياً: ${target?.titleAr || id}`);
+  }, [packages, logAction]);
 
   const resetPackages = useCallback(() => {
     const fullPkgs = mergePackagesWithDefaults();
@@ -1196,11 +1298,36 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const updateDiagnosticProfiles = useCallback((profiles: CatalogProfileTemplate[]) => {
     setDiagnosticProfiles(profiles);
+    realtimeSyncManager.broadcastAction('UPDATE_PROFILES', profiles);
+    try {
+      localStorage.setItem(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(profiles));
+      localStorage.setItem('rt_lab_catalog_v2', JSON.stringify(profiles));
+    } catch (e) { console.error(e); }
     logAction('CATALOG_UPDATE', 'CATALOG', `تحديث بروفايلات التحاليل الشاملة (${profiles.length} بروفايل)`);
   }, [logAction]);
 
+  const deleteDiagnosticProfile = useCallback((code: string) => {
+    recordDeletedProfileCode(code);
+    setDiagnosticProfiles(prev => {
+      const next = prev.filter(p => p.code.toUpperCase().trim() !== code.toUpperCase().trim());
+      realtimeSyncManager.broadcastAction('UPDATE_PROFILES', next);
+      try {
+        localStorage.setItem(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(next));
+        localStorage.setItem('rt_lab_catalog_v2', JSON.stringify(next));
+      } catch (e) { console.error(e); }
+      return next;
+    });
+    logAction('CATALOG_UPDATE', 'CATALOG', `حذف بروفايل التحليل ${code} نهائياً من الكتالوج`);
+  }, [logAction]);
+
   const resetDiagnosticProfiles = useCallback(() => {
+    try { localStorage.removeItem(DELETED_PROFILES_KEY); } catch {}
     setDiagnosticProfiles(LAB_CATALOG);
+    realtimeSyncManager.broadcastAction('UPDATE_PROFILES', LAB_CATALOG);
+    try {
+      localStorage.setItem(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(LAB_CATALOG));
+      localStorage.setItem('rt_lab_catalog_v2', JSON.stringify(LAB_CATALOG));
+    } catch (e) { console.error(e); }
     logAction('CATALOG_UPDATE', 'CATALOG', 'استعادة بروفايلات التحاليل الافتراضية (24 بروفايل طبي)');
   }, [logAction]);
 
@@ -1534,6 +1661,237 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return newReport;
   }, [currentUser, logAction, addNotification]);
 
+  // Re-open and Edit existing admission / booking with immediate synchronization
+  const updateBookingAdmission = useCallback((
+    reportId: string,
+    patientUpdates: Partial<Patient>,
+    selectedTests?: InvoiceTestItem[],
+    packageApplied?: any,
+    financialUpdates?: {
+      paidAmount?: number;
+      paymentMethod?: PaymentMethod;
+      discountPercent?: number;
+      visitFee?: number;
+      netAmount?: number;
+      remainingAmount?: number;
+    }
+  ): { updatedReport: LabReport; updatedInvoice?: IncomeRecord } | null => {
+    let resultingReport: LabReport | null = null;
+    let resultingInvoice: IncomeRecord | undefined = undefined;
+
+    setReports(prev => {
+      const idx = prev.findIndex(r => r.id === reportId || r.reportNumber === reportId);
+      if (idx === -1) return prev;
+
+      const current = prev[idx];
+      const mergedPatient: Patient = {
+        ...current.patient,
+        ...patientUpdates
+      };
+
+      // If selected tests or packages changed, recompute profiles while preserving any entered results
+      let updatedProfiles = current.profiles;
+      if (selectedTests && selectedTests.length > 0) {
+        const existingResultsMap = new Map<string, { result: string; flag: string; notes?: string }>();
+        current.profiles.forEach(prof => {
+          prof.parameters.forEach(p => {
+            if (p.result) existingResultsMap.set(p.name.toLowerCase().trim(), { result: p.result, flag: p.flag || 'NORMAL', notes: p.notes });
+          });
+        });
+
+        const nextGenerated: TestProfile[] = [];
+        if (packageApplied) {
+          const packageParams: TestParameter[] = [];
+          (packageApplied.includedProfiles || []).forEach((pCode: string) => {
+            const template = LAB_CATALOG.find(c => c.code.toUpperCase() === pCode.toUpperCase());
+            if (template) {
+              template.parameters.forEach((p, pidx) => {
+                const prevRes = existingResultsMap.get(p.name.toLowerCase().trim());
+                packageParams.push({
+                  ...p,
+                  id: `param-${pCode}-${pidx}`,
+                  result: prevRes?.result || '',
+                  flag: (prevRes?.flag as any) || 'NORMAL',
+                  notes: prevRes?.notes || p.notes || template.titleAr
+                });
+              });
+            }
+          });
+
+          (packageApplied.includedIndividualTestCodes || []).forEach((tCode: string, tidx: number) => {
+            const indTest = INITIAL_INDIVIDUAL_TESTS.find(t => t.code.toUpperCase() === tCode.toUpperCase())
+                         || testCatalog.find(t => t.code.toUpperCase() === tCode.toUpperCase());
+            if (indTest && !packageParams.some(ep => ep.name.toLowerCase().includes(indTest.nameEn.toLowerCase()))) {
+              const prevRes = existingResultsMap.get(indTest.nameEn.toLowerCase().trim()) || existingResultsMap.get(indTest.nameAr.toLowerCase().trim());
+              packageParams.push({
+                id: `p-pkg-${tidx}`,
+                name: `${indTest.nameAr} (${indTest.nameEn})`,
+                result: prevRes?.result || '',
+                unit: indTest.unit || '',
+                minNormal: indTest.minNormal,
+                maxNormal: indTest.maxNormal,
+                textReference: indTest.textReference || 'Normal',
+                flag: (prevRes?.flag as any) || 'NORMAL',
+                method: indTest.method || 'Automated Clinical Assay'
+              });
+            }
+          });
+
+          nextGenerated.push({
+            id: `prof-pkg-${Date.now()}`,
+            profileCode: packageApplied.code,
+            titleAr: packageApplied.titleAr,
+            titleEn: packageApplied.titleEn,
+            category: 'باقة فحوصات شاملة',
+            sampleType: packageApplied.sampleTypes?.join(' + ') || 'Serum / EDTA / Urine',
+            parameters: packageParams
+          });
+        }
+
+        selectedTests.forEach(test => {
+          const testCode = test.code.toUpperCase();
+          if (packageApplied) {
+            const inPkgProfiles = (packageApplied.includedProfiles || []).map((c: string) => c.toUpperCase());
+            const inPkgInd = (packageApplied.includedIndividualTestCodes || []).map((c: string) => c.toUpperCase());
+            if (inPkgProfiles.includes(testCode) || inPkgInd.includes(testCode)) return;
+          }
+          if (nextGenerated.some(gp => gp.profileCode.toUpperCase() === testCode)) return;
+
+          const catalogTemplate = LAB_CATALOG.find(c => 
+            c.code.toUpperCase() === testCode || 
+            c.titleEn.toLowerCase().includes(test.code.toLowerCase())
+          );
+
+          if (catalogTemplate) {
+            nextGenerated.push({
+              id: `prof-${Date.now()}-${testCode}`,
+              profileCode: catalogTemplate.code,
+              titleEn: catalogTemplate.titleEn,
+              titleAr: catalogTemplate.titleAr,
+              category: catalogTemplate.category,
+              sampleType: catalogTemplate.sampleType,
+              interpretation: catalogTemplate.defaultInterpretation || '',
+              parameters: catalogTemplate.parameters.map((p, pidx) => {
+                const prevRes = existingResultsMap.get(p.name.toLowerCase().trim());
+                return {
+                  ...p,
+                  id: `param-${pidx}`,
+                  result: prevRes?.result || '',
+                  flag: (prevRes?.flag as any) || 'NORMAL'
+                };
+              })
+            });
+          } else {
+            const richTest = INITIAL_INDIVIDUAL_TESTS.find(t => t.code.toUpperCase() === testCode) || test;
+            const prevRes = existingResultsMap.get(richTest.nameEn.toLowerCase().trim()) || existingResultsMap.get(richTest.nameAr.toLowerCase().trim());
+            nextGenerated.push({
+              id: `prof-${Date.now()}-${testCode}`,
+              profileCode: richTest.code,
+              titleEn: richTest.nameEn,
+              titleAr: richTest.nameAr,
+              category: richTest.category || 'General Diagnostic',
+              sampleType: richTest.sampleType || 'Serum',
+              parameters: [
+                {
+                  id: `p-${Date.now()}`,
+                  name: `${richTest.nameAr} (${richTest.nameEn})`,
+                  result: prevRes?.result || '',
+                  unit: richTest.unit || '',
+                  minNormal: richTest.minNormal,
+                  maxNormal: richTest.maxNormal,
+                  textReference: richTest.textReference || 'Normal',
+                  flag: (prevRes?.flag as any) || 'NORMAL',
+                  method: richTest.method || 'Automated Clinical Assay'
+                }
+              ]
+            });
+          }
+        });
+
+        if (nextGenerated.length > 0) {
+          updatedProfiles = nextGenerated;
+        }
+      }
+
+      resultingReport = {
+        ...current,
+        patient: mergedPatient,
+        profiles: updatedProfiles,
+        packageApplied: packageApplied !== undefined ? (packageApplied ? {
+          code: packageApplied.code,
+          titleAr: packageApplied.titleAr,
+          packagePrice: packageApplied.packagePrice,
+          originalPrice: packageApplied.originalPrice
+        } as any : undefined) : current.packageApplied,
+        updatedAt: new Date().toISOString()
+      };
+
+      const nextReports = [...prev];
+      nextReports[idx] = resultingReport;
+      try {
+        localStorage.setItem(REPORTS_KEY, JSON.stringify(nextReports));
+      } catch (e) { console.error(e); }
+      realtimeSyncManager.broadcastAction('UPDATE_REPORT', resultingReport);
+      return nextReports;
+    });
+
+    // Update matching invoice if present
+    setIncomeRecords(prev => {
+      const barcode = patientUpdates.barcode;
+      const labNo = patientUpdates.labNumber;
+      const targetInvoice = prev.find(inv => 
+        (resultingReport?.invoiceId && inv.id === resultingReport.invoiceId) ||
+        (inv.labNumber && labNo && inv.labNumber === labNo) ||
+        (inv.barcode && barcode && inv.barcode === barcode)
+      );
+
+      if (!targetInvoice) return prev;
+
+      const subtotal = patientUpdates.totalCost !== undefined ? patientUpdates.totalCost : targetInvoice.subtotal;
+      const discount = patientUpdates.discountApplied !== undefined ? patientUpdates.discountApplied : targetInvoice.discount;
+      const visitFee = patientUpdates.visitFee !== undefined ? patientUpdates.visitFee : targetInvoice.visitFee;
+      const netAmount = financialUpdates?.netAmount !== undefined ? financialUpdates.netAmount : Math.max(0, subtotal - discount + (visitFee || 0));
+      const paidAmount = financialUpdates?.paidAmount !== undefined ? financialUpdates.paidAmount : targetInvoice.paidAmount;
+      const remainingAmount = financialUpdates?.remainingAmount !== undefined ? financialUpdates.remainingAmount : Math.max(0, netAmount - paidAmount);
+
+      resultingInvoice = {
+        ...targetInvoice,
+        patientName: patientUpdates.fullName || targetInvoice.patientName,
+        patientPhone: patientUpdates.phone || targetInvoice.patientPhone,
+        patientAge: patientUpdates.age !== undefined ? patientUpdates.age : targetInvoice.patientAge,
+        patientGender: patientUpdates.gender || targetInvoice.patientGender,
+        visitAddress: patientUpdates.homeAddress !== undefined ? patientUpdates.homeAddress : targetInvoice.visitAddress,
+        isHomeVisit: patientUpdates.bookingType !== undefined ? patientUpdates.bookingType === 'home_visit' : targetInvoice.isHomeVisit,
+        visitFee: visitFee || 0,
+        subtotal,
+        discount,
+        netAmount,
+        paidAmount,
+        remainingAmount,
+        paymentStatus: remainingAmount <= 0 ? 'paid' : (paidAmount > 0 ? 'partial' : 'unpaid'),
+        paymentMethod: financialUpdates?.paymentMethod || targetInvoice.paymentMethod,
+        tests: selectedTests && selectedTests.length > 0 ? selectedTests : targetInvoice.tests,
+        updatedAt: new Date().toISOString()
+      };
+
+      const updatedInvoices = prev.map(inv => inv.id === targetInvoice.id ? resultingInvoice! : inv);
+      try {
+        localStorage.setItem(INCOME_KEY, JSON.stringify(updatedInvoices));
+      } catch (e) { console.error(e); }
+      realtimeSyncManager.broadcastAction('UPDATE_INVOICE', resultingInvoice);
+      return updatedInvoices;
+    });
+
+    logAction('UPDATE', 'DIAGNOSTIC', `تعديل بيانات الحجز للمريض ${patientUpdates.fullName || reportId}`);
+    addNotification({
+      title: "تم تحديث بيانات الحجز بنجاح",
+      message: `تم تعديل بيانات وفحوصات حجز المريض ${patientUpdates.fullName || ''} وتحديث الفاتورة وسجل الحالات.`,
+      type: "success"
+    });
+
+    return resultingReport ? { updatedReport: resultingReport, updatedInvoice: resultingInvoice } : null;
+  }, [testCatalog, logAction, addNotification]);
+
   // Loyalty Program Helpers
   const calculateLoyaltyTier = useCallback((points: number): LoyaltyTier => {
     if (points >= loyaltyConfig.tiers.VIP.minPoints) return 'VIP';
@@ -1776,7 +2134,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, []);
 
   const deleteLoyaltyProfile = useCallback((id: string) => {
-    setLoyaltyProfiles(prev => prev.filter(p => p.patientId !== id));
+    recordDeletedLoyaltyId(id);
+    setLoyaltyProfiles(prev => {
+      const next = prev.filter(p => p.patientId !== id && p.id !== id);
+      try { localStorage.setItem(LOYALTY_KEY, JSON.stringify(next)); } catch {}
+      return next;
+    });
   }, []);
 
   const deleteLoyaltyTransaction = useCallback((profileId: string, txId: string) => {
@@ -1822,7 +2185,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [logAction]);
 
   const deleteExpense = useCallback((id: string) => {
-    setExpenses(prev => prev.filter(e => e.id !== id));
+    recordDeletedExpenseId(id);
+    setExpenses(prev => {
+      const next = prev.filter(e => e.id !== id);
+      try { localStorage.setItem(EXPENSES_KEY, JSON.stringify(next)); } catch {}
+      return next;
+    });
     logAction('DELETE', 'EXPENSES', `حذف بند المصروف رقم ${id}`);
   }, [logAction]);
 
@@ -2318,6 +2686,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     deleteReport,
     verifyReport,
     createReportFromAdmission,
+    updateBookingAdmission,
 
     incomeRecords,
     addIncomeRecord,
@@ -2347,6 +2716,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     diagnosticProfiles,
     updateDiagnosticProfiles,
+    deleteDiagnosticProfile,
     resetDiagnosticProfiles,
 
     instruments,

@@ -57,6 +57,7 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
     diagnosticProfiles,
     updateDiagnosticProfiles,
     resetDiagnosticProfiles,
+    deleteDiagnosticProfile,
     resetCatalog,
     resetPackages,
     addCatalogTest,
@@ -97,6 +98,16 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
 
   // Profile modal states
   const [isNewProfileModalOpen, setIsNewProfileModalOpen] = useState(false);
+  const [editingProfile, setEditingProfile] = useState<CatalogProfileTemplate | null>(null);
+  const [profileFormData, setProfileFormData] = useState<Partial<CatalogProfileTemplate>>({
+    code: '',
+    titleAr: '',
+    titleEn: '',
+    category: 'Clinical Chemistry',
+    sampleType: 'Serum',
+    profilePrice: 200,
+    defaultInterpretation: ''
+  });
   const [editingProfileCode, setEditingProfileCode] = useState<string | null>(null);
   const [activeProfileForParam, setActiveProfileForParam] = useState<string | null>(null);
   const [paramToEdit, setParamToEdit] = useState<{ profileCode: string; paramIndex: number; param: TestParameter } | null>(null);
@@ -108,6 +119,7 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
   const [newProfTitleAr, setNewProfTitleAr] = useState('');
   const [newProfCategory, setNewProfCategory] = useState('Clinical Chemistry');
   const [newProfSample, setNewProfSample] = useState('Serum');
+  const [newProfPrice, setNewProfPrice] = useState<number>(200);
   const [newProfInterp, setNewProfInterp] = useState('');
 
   // Categories
@@ -254,20 +266,65 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
       titleAr: newProfTitleAr.trim() || newProfTitleEn.trim(),
       category: newProfCategory.trim() || 'General',
       sampleType: newProfSample.trim() || 'Serum',
+      profilePrice: Number(newProfPrice) || 200,
       defaultInterpretation: newProfInterp.trim() || undefined,
       parameters: []
     };
 
-    onUpdateCatalog([newTemplate, ...catalog]);
+    const nextCatalog = [newTemplate, ...catalog];
+    onUpdateCatalog(nextCatalog);
+    updateDiagnosticProfiles(nextCatalog);
     setExpandedCode(cleanCode);
     setNewProfCode('');
     setNewProfTitleEn('');
     setNewProfTitleAr('');
+    setNewProfPrice(200);
     setIsNewProfileModalOpen(false);
   };
 
+  const handleOpenEditProfile = (profile: CatalogProfileTemplate) => {
+    setEditingProfile(profile);
+    setProfileFormData({
+      code: profile.code,
+      titleAr: profile.titleAr,
+      titleEn: profile.titleEn,
+      category: profile.category,
+      sampleType: profile.sampleType,
+      profilePrice: profile.profilePrice || 200,
+      defaultInterpretation: profile.defaultInterpretation || ''
+    });
+  };
+
+  const handleSaveProfile = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!profileFormData.titleAr?.trim() || !profileFormData.titleEn?.trim()) {
+      alert('يرجى كتابة اسم البروفايل بالعربي وبالإنجليزي');
+      return;
+    }
+
+    const updatedCatalog = catalog.map(p => {
+      if (p.code === editingProfile?.code) {
+        return {
+          ...p,
+          titleAr: profileFormData.titleAr!.trim(),
+          titleEn: profileFormData.titleEn!.trim(),
+          category: profileFormData.category || p.category,
+          sampleType: profileFormData.sampleType || p.sampleType,
+          profilePrice: Number(profileFormData.profilePrice) || p.profilePrice || 200,
+          defaultInterpretation: profileFormData.defaultInterpretation
+        };
+      }
+      return p;
+    });
+
+    onUpdateCatalog(updatedCatalog);
+    updateDiagnosticProfiles(updatedCatalog);
+    setEditingProfile(null);
+  };
+
   const handleDeleteProfile = (code: string) => {
-    if (confirm(`هل أنت متأكد من حذف بروفايل (${code}) وجميع عناصره من الكتالوج؟`)) {
+    if (confirm(`هل أنت متأكد من حذف بروفايل (${code}) وجميع عناصره نهائياً من الكتالوج؟ لن يعود مرة أخرى بعد الحذف.`)) {
+      deleteDiagnosticProfile(code);
       onUpdateCatalog(catalog.filter(c => c.code !== code));
     }
   };
@@ -572,17 +629,34 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
                             ({template.titleEn})
                           </span>
                         </div>
-                        <div className="flex items-center gap-2 text-[11px] text-slate-500 mt-0.5">
+                        <div className="flex items-center gap-2 text-[11px] text-slate-500 mt-0.5 flex-wrap">
                           <span>{template.category}</span>
                           <span>·</span>
                           <span>{template.sampleType}</span>
                           <span>·</span>
                           <span className="text-rose-900 font-bold">{template.parameters.length} معيار قياس</span>
+                          <span>·</span>
+                          <span className="bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded-md font-bold text-xs inline-flex items-center gap-1">
+                            <Tag className="w-3 h-3 text-emerald-600" />
+                            <span>السعر: {template.profilePrice ? `${template.profilePrice} ج.م` : '200 ج.م'}</span>
+                          </span>
                         </div>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-2">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleOpenEditProfile(template);
+                        }}
+                        className="flex items-center gap-1 px-3 py-1.5 bg-rose-50 text-rose-900 hover:bg-rose-100 border border-rose-200 text-xs font-bold rounded-lg shadow-xs transition-colors"
+                        title="تعديل بيانات وتسعير البروفايل"
+                      >
+                        <Edit2 className="w-3.5 h-3.5" />
+                        <span>تعديل وتسعير</span>
+                      </button>
+
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
@@ -936,6 +1010,32 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
                 </div>
               </div>
 
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">سعر البروفايل (جنيه مصري) *</label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    min="0"
+                    required
+                    value={newProfPrice}
+                    onChange={(e) => setNewProfPrice(Number(e.target.value))}
+                    className="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg font-bold text-emerald-800 pr-3"
+                  />
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-xs">ج.م</span>
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">التشخيص والتعليق الافتراضي (اختياري)</label>
+                <textarea
+                  rows={2}
+                  value={newProfInterp}
+                  onChange={(e) => setNewProfInterp(e.target.value)}
+                  placeholder="ملاحظات سريرية تظهر تلقائياً في التقرير..."
+                  className="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs"
+                />
+              </div>
+
               <div className="flex items-center justify-end gap-2 pt-3 border-t">
                 <button
                   type="button"
@@ -949,6 +1049,139 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
                   className="px-4 py-2 bg-rose-900 hover:bg-rose-800 text-white font-bold rounded-lg shadow-sm"
                 >
                   إنشاء البروفايل
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: EDIT & PRICE DIAGNOSTIC PROFILE */}
+      {editingProfile && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4 text-xs">
+            <div className="flex items-center justify-between border-b pb-3">
+              <div className="flex items-center gap-2">
+                <div className="p-2 bg-rose-50 rounded-xl text-rose-900 font-mono font-bold">
+                  {editingProfile.code}
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900">
+                    تعديل بيانات وتسعير البروفايل الطبي
+                  </h3>
+                  <p className="text-[11px] text-slate-500">
+                    تحديث السعر والمعلومات لكافة الفواتير والتقارير الطبية
+                  </p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setEditingProfile(null)}
+                className="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveProfile} className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">اسم البروفايل (عربي) *</label>
+                  <input
+                    type="text"
+                    required
+                    value={profileFormData.titleAr || ''}
+                    onChange={(e) => setProfileFormData({ ...profileFormData, titleAr: e.target.value })}
+                    className="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg font-bold"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">اسم البروفايل (English) *</label>
+                  <input
+                    type="text"
+                    required
+                    dir="ltr"
+                    value={profileFormData.titleEn || ''}
+                    onChange={(e) => setProfileFormData({ ...profileFormData, titleEn: e.target.value })}
+                    className="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg font-bold"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">سعر البروفايل (جنيه مصري) *</label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      min="0"
+                      required
+                      value={profileFormData.profilePrice !== undefined ? profileFormData.profilePrice : 200}
+                      onChange={(e) => setProfileFormData({ ...profileFormData, profilePrice: Number(e.target.value) })}
+                      className="w-full p-2 bg-emerald-50 border border-emerald-300 text-emerald-900 rounded-lg font-black text-sm pr-3"
+                    />
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-emerald-700 font-bold text-xs">ج.م</span>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">كود البروفايل (Code)</label>
+                  <input
+                    type="text"
+                    disabled
+                    value={profileFormData.code || ''}
+                    className="w-full p-2 bg-slate-100 border border-slate-200 text-slate-500 rounded-lg font-mono font-bold cursor-not-allowed"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">القسم / التخصص</label>
+                  <input
+                    type="text"
+                    value={profileFormData.category || ''}
+                    onChange={(e) => setProfileFormData({ ...profileFormData, category: e.target.value })}
+                    className="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">نوع العينة</label>
+                  <input
+                    type="text"
+                    value={profileFormData.sampleType || ''}
+                    onChange={(e) => setProfileFormData({ ...profileFormData, sampleType: e.target.value })}
+                    className="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">التشخيص والتعليق الافتراضي</label>
+                <textarea
+                  rows={2}
+                  value={profileFormData.defaultInterpretation || ''}
+                  onChange={(e) => setProfileFormData({ ...profileFormData, defaultInterpretation: e.target.value })}
+                  placeholder="ملاحظات سريرية تظهر تلقائياً في التقرير..."
+                  className="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg text-xs"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-3 border-t">
+                <button
+                  type="button"
+                  onClick={() => setEditingProfile(null)}
+                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg"
+                >
+                  إلغاء
+                </button>
+                <button
+                  type="submit"
+                  className="flex items-center gap-1.5 px-5 py-2 bg-rose-900 hover:bg-rose-800 text-white font-bold rounded-lg shadow-sm transition-all"
+                >
+                  <Save className="w-4 h-4" />
+                  <span>حفظ التعديلات والتسعير</span>
                 </button>
               </div>
             </form>

@@ -5,14 +5,218 @@ import { runAutomaticCalculations } from './calculator';
 
 export const MIGRATION_VERSION_KEY = 'rt_lab_migration_v9_booking_sync_fix_2026';
 
+export const DELETED_PROFILES_KEY = 'rt_lab_deleted_profile_codes_v1';
+export const DELETED_TESTS_KEY = 'rt_lab_deleted_test_codes_v1';
+export const DELETED_REPORTS_KEY = 'rt_lab_deleted_report_ids_v1';
+export const DELETED_INCOMES_KEY = 'rt_lab_deleted_income_ids_v1';
+export const DELETED_PACKAGES_KEY = 'rt_lab_deleted_package_ids_v1';
+export const DELETED_LOYALTY_KEY = 'rt_lab_deleted_loyalty_ids_v1';
+export const DELETED_EXPENSES_KEY = 'rt_lab_deleted_expense_ids_v1';
+export const DELETED_INVENTORY_KEY = 'rt_lab_deleted_inventory_ids_v1';
+
+export function getDeletedProfileCodes(): Set<string> {
+  const set = new Set<string>();
+  if (typeof window !== 'undefined') {
+    try {
+      const raw = localStorage.getItem(DELETED_PROFILES_KEY);
+      if (raw) {
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr)) arr.forEach((c: string) => set.add(c.toUpperCase().trim()));
+      }
+    } catch {}
+  }
+  return set;
+}
+
+export function getDeletedTestCodes(): Set<string> {
+  const set = new Set<string>();
+  if (typeof window !== 'undefined') {
+    try {
+      const raw = localStorage.getItem(DELETED_TESTS_KEY);
+      if (raw) {
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr)) arr.forEach((c: string) => set.add(c.toUpperCase().trim()));
+      }
+    } catch {}
+  }
+  return set;
+}
+
+export function getDeletedReportIds(): Set<string> {
+  const set = new Set<string>();
+  if (typeof window !== 'undefined') {
+    try {
+      const raw = localStorage.getItem(DELETED_REPORTS_KEY);
+      if (raw) {
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr)) arr.forEach((c: string) => set.add(c.trim()));
+      }
+    } catch {}
+  }
+  return set;
+}
+
+export function getDeletedIncomeIds(): Set<string> {
+  const set = new Set<string>();
+  if (typeof window !== 'undefined') {
+    try {
+      const raw = localStorage.getItem(DELETED_INCOMES_KEY);
+      if (raw) {
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr)) arr.forEach((c: string) => set.add(c.trim()));
+      }
+    } catch {}
+  }
+  return set;
+}
+
+export function getDeletedPackageIds(): Set<string> {
+  const set = new Set<string>();
+  if (typeof window !== 'undefined') {
+    try {
+      const raw = localStorage.getItem(DELETED_PACKAGES_KEY);
+      if (raw) {
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr)) arr.forEach((c: string) => set.add(c.toUpperCase().trim()));
+      }
+    } catch {}
+  }
+  return set;
+}
+
+export function getDeletedLoyaltyIds(): Set<string> {
+  const set = new Set<string>();
+  if (typeof window !== 'undefined') {
+    try {
+      const raw = localStorage.getItem(DELETED_LOYALTY_KEY);
+      if (raw) {
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr)) arr.forEach((c: string) => set.add(c.trim()));
+      }
+    } catch {}
+  }
+  return set;
+}
+
+export function getDeletedExpenseIds(): Set<string> {
+  const set = new Set<string>();
+  if (typeof window !== 'undefined') {
+    try {
+      const raw = localStorage.getItem(DELETED_EXPENSES_KEY);
+      if (raw) {
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr)) arr.forEach((c: string) => set.add(c.trim()));
+      }
+    } catch {}
+  }
+  return set;
+}
+
+export function getDeletedInventoryIds(): Set<string> {
+  const set = new Set<string>();
+  if (typeof window !== 'undefined') {
+    try {
+      const raw = localStorage.getItem(DELETED_INVENTORY_KEY);
+      if (raw) {
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr)) arr.forEach((c: string) => set.add(c.trim()));
+      }
+    } catch {}
+  }
+  return set;
+}
+
+export function recordDeletedProfileCode(code: string): void {
+  if (typeof window !== 'undefined' && code) {
+    try {
+      const set = getDeletedProfileCodes();
+      set.add(code.toUpperCase().trim());
+      localStorage.setItem(DELETED_PROFILES_KEY, JSON.stringify(Array.from(set)));
+    } catch {}
+  }
+}
+
+export function recordDeletedTestCode(code: string): void {
+  if (typeof window !== 'undefined' && code) {
+    try {
+      const set = getDeletedTestCodes();
+      set.add(code.toUpperCase().trim());
+      localStorage.setItem(DELETED_TESTS_KEY, JSON.stringify(Array.from(set)));
+    } catch {}
+  }
+}
+
+export function recordDeletedReportId(id: string): void {
+  if (typeof window !== 'undefined' && id) {
+    try {
+      const set = getDeletedReportIds();
+      set.add(id.trim());
+      localStorage.setItem(DELETED_REPORTS_KEY, JSON.stringify(Array.from(set)));
+    } catch {}
+  }
+}
+
+export function recordDeletedIncomeId(id: string): void {
+  if (typeof window !== 'undefined' && id) {
+    try {
+      const set = getDeletedIncomeIds();
+      set.add(id.trim());
+      localStorage.setItem(DELETED_INCOMES_KEY, JSON.stringify(Array.from(set)));
+    } catch {}
+  }
+}
+
+export function recordDeletedPackageId(id: string): void {
+  if (typeof window !== 'undefined' && id) {
+    try {
+      const set = getDeletedPackageIds();
+      set.add(id.toUpperCase().trim());
+      localStorage.setItem(DELETED_PACKAGES_KEY, JSON.stringify(Array.from(set)));
+    } catch {}
+  }
+}
+
+export function recordDeletedLoyaltyId(id: string): void {
+  if (typeof window !== 'undefined' && id) {
+    try {
+      const set = getDeletedLoyaltyIds();
+      set.add(id.trim());
+      localStorage.setItem(DELETED_LOYALTY_KEY, JSON.stringify(Array.from(set)));
+    } catch {}
+  }
+}
+
+export function recordDeletedExpenseId(id: string): void {
+  if (typeof window !== 'undefined' && id) {
+    try {
+      const set = getDeletedExpenseIds();
+      set.add(id.trim());
+      localStorage.setItem(DELETED_EXPENSES_KEY, JSON.stringify(Array.from(set)));
+    } catch {}
+  }
+}
+
+export function recordDeletedInventoryId(id: string): void {
+  if (typeof window !== 'undefined' && id) {
+    try {
+      const set = getDeletedInventoryIds();
+      set.add(id.trim());
+      localStorage.setItem(DELETED_INVENTORY_KEY, JSON.stringify(Array.from(set)));
+    } catch {}
+  }
+}
+
 /**
  * Merges any existing test catalog with the full default catalog (142 tests)
  * Preserves user modifications to prices/names, but guarantees all 142 tests are present
  * with rich medical reference data, units, turnaround times, and sample types.
+ * Respects deleted tests so they never resurrect.
  */
 export function mergeCatalogWithDefaults(savedCatalog?: InvoiceTestItem[]): InvoiceTestItem[] {
+  const deletedCodes = getDeletedTestCodes();
+
   if (!Array.isArray(savedCatalog) || savedCatalog.length === 0) {
-    return [...INITIAL_INDIVIDUAL_TESTS];
+    return INITIAL_INDIVIDUAL_TESTS.filter(t => !deletedCodes.has(t.code.toUpperCase().trim()));
   }
 
   const savedMap = new Map<string, InvoiceTestItem>();
@@ -22,16 +226,19 @@ export function mergeCatalogWithDefaults(savedCatalog?: InvoiceTestItem[]): Invo
     }
   });
 
-  // Guarantee every test from INITIAL_INDIVIDUAL_TESTS is present
-  const merged: InvoiceTestItem[] = INITIAL_INDIVIDUAL_TESTS.map(defTest => {
+  const merged: InvoiceTestItem[] = [];
+
+  // Guarantee every non-deleted test from INITIAL_INDIVIDUAL_TESTS is present
+  INITIAL_INDIVIDUAL_TESTS.forEach(defTest => {
     const codeKey = defTest.code.toUpperCase().trim();
+    if (deletedCodes.has(codeKey)) return;
+
     const existing = savedMap.get(codeKey);
     if (existing) {
       savedMap.delete(codeKey);
-      return {
+      merged.push({
         ...defTest,
         ...existing,
-        // Ensure clinical reference and metadata are preserved if existing lacked them
         nameAr: existing.nameAr || defTest.nameAr,
         nameEn: existing.nameEn || defTest.nameEn,
         sampleType: existing.sampleType || defTest.sampleType,
@@ -45,14 +252,15 @@ export function mergeCatalogWithDefaults(savedCatalog?: InvoiceTestItem[]): Invo
         category: existing.category || defTest.category,
         unit: existing.unit || defTest.unit,
         method: existing.method || defTest.method
-      };
+      });
     }
-    return { ...defTest };
   });
 
-  // Append custom user-created tests
+  // Append custom user-created tests (excluding deleted ones)
   savedMap.forEach(customTest => {
-    merged.push(customTest);
+    if (!deletedCodes.has(customTest.code.toUpperCase().trim())) {
+      merged.push(customTest);
+    }
   });
 
   return merged;
@@ -60,47 +268,66 @@ export function mergeCatalogWithDefaults(savedCatalog?: InvoiceTestItem[]): Invo
 
 /**
  * Merges any existing packages with the 15 comprehensive default packages
+ * Respects deleted packages so they never resurrect.
  */
 export function mergePackagesWithDefaults(savedPackages?: ComprehensivePackage[]): ComprehensivePackage[] {
+  const deletedPackageIds = getDeletedPackageIds();
+
   if (!Array.isArray(savedPackages) || savedPackages.length === 0) {
-    return [...INITIAL_PACKAGES];
+    return INITIAL_PACKAGES.filter(p => {
+      const key = (p.code || p.id || '').toUpperCase().trim();
+      const idKey = (p.id || '').toUpperCase().trim();
+      return !deletedPackageIds.has(key) && !deletedPackageIds.has(idKey);
+    });
   }
 
   const savedMap = new Map<string, ComprehensivePackage>();
   savedPackages.forEach(pkg => {
     if (pkg) {
       const key = (pkg.code || pkg.id || '').toUpperCase().trim();
-      if (key) savedMap.set(key, pkg);
+      const idKey = (pkg.id || '').toUpperCase().trim();
+      if (key && !deletedPackageIds.has(key) && !deletedPackageIds.has(idKey)) {
+        savedMap.set(key, pkg);
+      }
     }
   });
 
-  const merged: ComprehensivePackage[] = INITIAL_PACKAGES.map(defPkg => {
+  const merged: ComprehensivePackage[] = [];
+
+  INITIAL_PACKAGES.forEach(defPkg => {
     const key = (defPkg.code || defPkg.id || '').toUpperCase().trim();
-    const existing = savedMap.get(key);
+    const idKey = (defPkg.id || '').toUpperCase().trim();
+    if (deletedPackageIds.has(key) || deletedPackageIds.has(idKey)) return;
+
+    const existing = savedMap.get(key) || savedMap.get(idKey);
     if (existing) {
       savedMap.delete(key);
-      return {
+      savedMap.delete(idKey);
+      merged.push({
         ...defPkg,
         ...existing,
-        nameAr: (existing as any).nameAr || (existing as any).titleAr || defPkg.titleAr,
-        titleAr: existing.titleAr || defPkg.titleAr,
+        titleAr: existing.titleAr || (existing as any).nameAr || defPkg.titleAr,
         titleEn: existing.titleEn || defPkg.titleEn,
         packagePrice: typeof existing.packagePrice === 'number' && existing.packagePrice > 0 ? existing.packagePrice : defPkg.packagePrice,
         originalPrice: typeof existing.originalPrice === 'number' && existing.originalPrice > 0 ? existing.originalPrice : defPkg.originalPrice,
+        discountPercentage: typeof existing.discountPercentage === 'number' ? existing.discountPercentage : defPkg.discountPercentage,
         includedProfiles: Array.isArray(existing.includedProfiles) && existing.includedProfiles.length > 0 
           ? existing.includedProfiles 
           : defPkg.includedProfiles,
         includedIndividualTestCodes: Array.isArray(existing.includedIndividualTestCodes) && existing.includedIndividualTestCodes.length > 0 
           ? existing.includedIndividualTestCodes 
           : defPkg.includedIndividualTestCodes
-      };
+      });
     }
-    return { ...defPkg };
   });
 
-  // Append custom packages
+  // Append custom packages (excluding deleted)
   savedMap.forEach(customPkg => {
-    merged.push(customPkg);
+    const key = (customPkg.code || customPkg.id || '').toUpperCase().trim();
+    const idKey = (customPkg.id || '').toUpperCase().trim();
+    if (!deletedPackageIds.has(key) && !deletedPackageIds.has(idKey)) {
+      merged.push(customPkg);
+    }
   });
 
   return merged;
@@ -108,10 +335,13 @@ export function mergePackagesWithDefaults(savedPackages?: ComprehensivePackage[]
 
 /**
  * Merges any existing diagnostic profiles with 24 default profiles
+ * Respects deleted profiles and user parameter deletions/edits.
  */
 export function mergeProfilesWithDefaults(savedProfiles?: CatalogProfileTemplate[]): CatalogProfileTemplate[] {
+  const deletedCodes = getDeletedProfileCodes();
+
   if (!Array.isArray(savedProfiles) || savedProfiles.length === 0) {
-    return [...LAB_CATALOG];
+    return LAB_CATALOG.filter(p => !deletedCodes.has(p.code.toUpperCase().trim()));
   }
 
   const savedMap = new Map<string, CatalogProfileTemplate>();
@@ -119,28 +349,35 @@ export function mergeProfilesWithDefaults(savedProfiles?: CatalogProfileTemplate
     if (p && p.code) savedMap.set(p.code.toUpperCase().trim(), p);
   });
 
-  const merged: CatalogProfileTemplate[] = LAB_CATALOG.map(defProf => {
+  const merged: CatalogProfileTemplate[] = [];
+
+  LAB_CATALOG.forEach(defProf => {
     const key = defProf.code.toUpperCase().trim();
+    if (deletedCodes.has(key)) return; // DO NOT resurrect deleted profile
+
     const existing = savedMap.get(key);
     if (existing) {
       savedMap.delete(key);
-      return {
+      merged.push({
         ...defProf,
         ...existing,
         titleAr: existing.titleAr || defProf.titleAr,
         titleEn: existing.titleEn || defProf.titleEn,
         category: existing.category || defProf.category,
         sampleType: existing.sampleType || defProf.sampleType,
-        parameters: existing.parameters && existing.parameters.length >= defProf.parameters.length
-          ? existing.parameters
-          : defProf.parameters
-      };
+        profilePrice: existing.profilePrice !== undefined ? existing.profilePrice : defProf.profilePrice,
+        defaultInterpretation: existing.defaultInterpretation !== undefined ? existing.defaultInterpretation : defProf.defaultInterpretation,
+        // CRITICAL: Respect user parameters exactly as saved (no length comparison forcing defaults back)
+        parameters: Array.isArray(existing.parameters) ? existing.parameters : defProf.parameters
+      });
     }
-    return { ...defProf };
   });
 
+  // Append custom user-created profiles (excluding deleted ones)
   savedMap.forEach(customProf => {
-    merged.push(customProf);
+    if (!deletedCodes.has(customProf.code.toUpperCase().trim())) {
+      merged.push(customProf);
+    }
   });
 
   return merged;
