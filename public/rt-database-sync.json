@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-08T22:38:37.051Z",
+  "syncedAt": "2026-10-08T22:38:42.632Z",
   "reports": [
     {
       "id": "rep-1791414844234",
@@ -13473,12 +13473,12 @@
       "nameAr": "جرثومة المعدة بالبراز كمي (H. Pylori Antigen in Stool)",
       "nameEn": "Helicobacter Pylori Stool Antigen (HpSA)",
       "category": "Gastroenterology",
-      "price": 190,
+      "price": 777,
       "cost": 40,
       "sampleType": "Fresh Stool Specimen",
       "turnaroundTime": "خلال 3 ساعات",
-      "unit": "Qualitative",
-      "textReference": "Negative (No H. Pylori antigen detected in stool)",
+      "unit": "ng/ml",
+      "textReference": "Negative  : 0.0 – 0.9  Equivocal   : 0.9 – 1.1  Positive  : > 1.1",
       "method": "Rapid Chromatographic Immunoassay / ELISA",
       "fastingInstructions": "عينة براز طازجة، والتوقف عن المضادات الحيوية قبلها بأسبوعين"
     },
