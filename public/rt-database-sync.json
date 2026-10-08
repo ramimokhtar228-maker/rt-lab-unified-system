@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-09T00:02:20.810Z",
+  "syncedAt": "2026-10-09T00:03:51.640Z",
   "reports": [
     {
       "id": "rep-1791501113004",
@@ -1475,19 +1475,19 @@
         }
       ],
       "staff": {
-        "labChemist": "مني احمد ",
+        "labChemist": "د/ آية محمود الباز",
         "verifiedBy": "أ.د. رامي مختار",
         "pathologist": " رامي مختار",
-        "chemistTitle": "أخصائي أول كيمياء إكلينيكية وهرمونات",
+        "chemistTitle": "أخصائية أمراض الدم والمناعة والمزارع",
         "verifierTitle": "طبيب باثولوجى",
         "pathologistTitle": "طبيب  الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
-        "chemistLicense": "EGY-SCI-88402",
+        "chemistLicense": "EGY-SCI-91204",
         "verifierLicense": "EGY-MGT-11024",
         "pathologistLicense": "EGY-MED-48201"
       },
       "status": "verified",
       "createdAt": "2026-10-07T19:22:07.197Z",
-      "updatedAt": "2026-10-07T22:08:21.409Z",
+      "updatedAt": "2026-10-09T00:03:46.489Z",
       "invoiceId": "inv-1791400927197",
       "packageApplied": {
         "code": "PKG-ANNUAL-WELLNESS",
