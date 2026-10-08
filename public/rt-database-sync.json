@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-08T21:50:09.279Z",
+  "syncedAt": "2026-10-08T21:50:27.097Z",
   "reports": [
     {
       "id": "rep-1791414844234",
@@ -140,11 +140,12 @@
         "pathologistTitle": "طبيب الباثولوجيا الإكلينيكية والكيميائية",
         "chemistLicense": "EGY-SCI-26101",
         "verifierLicense": "EGY-MED-120111",
-        "pathologistLicense": "EGY-MED-48201"
+        "pathologistLicense": "EGY-MED-48201",
+        "showFinancialSignature": true
       },
       "status": "draft",
       "createdAt": "2026-10-07T23:14:04.234Z",
-      "updatedAt": "2026-10-08T21:50:04.997Z",
+      "updatedAt": "2026-10-08T21:50:22.783Z",
       "invoiceId": "inv-1791414844235"
     },
     {
