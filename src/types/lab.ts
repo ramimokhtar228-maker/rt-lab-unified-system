@@ -53,6 +53,7 @@ export interface InvoiceTestItem {
   cost?: number;
   sampleType?: string;
   turnaroundTime?: string;
+  turnaroundHours?: number;
   unit?: string;
   minNormal?: number;
   maxNormal?: number;
@@ -424,7 +425,9 @@ export interface DiseaseIllustration {
   code: string;
   titleAr: string;
   titleEn: string;
-  category: 'hematology' | 'biochemistry' | 'microscopy' | 'endocrinology' | 'cardiac' | 'coagulation' | 'parasitology' | 'pathology';
+  category: 'hematology' | 'biochemistry' | 'microscopy' | 'endocrinology' | 'cardiac' | 'coagulation' | 'parasitology' | 'pathology' | 'hepatic' | 'renal' | 'immunology' | 'infectious';
+  specialtyAr?: string;
+  specialtyEn?: string;
   imageUrl?: string;
   svgBadge?: string;
   pathologySummaryAr: string;
@@ -491,7 +494,7 @@ export interface SmartClinicalDataPayload {
   executiveSummaryAr: string;
   executiveSummaryEn: string;
   criticalAlerts: Array<{ titleAr: string; titleEn?: string; severity: 'critical' | 'high' | 'moderate'; detail: string }>;
-  organScores: Record<string, { score: number; labelAr: string; status: 'optimal' | 'mild' | 'moderate' | 'critical' }>;
+  organScores: Record<string, { score: number; labelAr: string; status: 'optimal' | 'mild' | 'moderate' | 'critical' | 'not_tested'; tested?: boolean; summaryAr?: string }>;
   calculatedIndices: Array<{ nameAr: string; nameEn?: string; value: string | number; reference: string; interpretationAr: string }>;
   differentialDiagnoses: Array<{ diseaseAr: string; diseaseEn: string; likelihood: 'high' | 'moderate' | 'possible'; rationaleAr: string }>;
   consultantRecommendations: string[];

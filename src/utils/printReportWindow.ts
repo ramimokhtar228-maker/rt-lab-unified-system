@@ -263,6 +263,39 @@ export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): voi
             </table>
           </div>
 
+          <!-- Blood Film Morphology section if present -->
+          ${profile.bloodFilmFindings ? `
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:6px 10px; margin-bottom:8px; font-size:10px;">
+              <strong style="color:#800000; font-size:10.5px; display:block; margin-bottom:3px;">🔬 فحص شريحة الدم المجهري (Peripheral Blood Film Morphology):</strong>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; color:#334155;">
+                ${profile.bloodFilmFindings.rbcMorphology ? `<div><strong>RBC Morphology:</strong> ${profile.bloodFilmFindings.rbcMorphology}</div>` : ''}
+                ${profile.bloodFilmFindings.wbcMorphology ? `<div><strong>WBC Morphology:</strong> ${profile.bloodFilmFindings.wbcMorphology}</div>` : ''}
+                ${profile.bloodFilmFindings.plateletMorphology ? `<div><strong>Platelets:</strong> ${profile.bloodFilmFindings.plateletMorphology}</div>` : ''}
+                ${profile.bloodFilmFindings.differentialSummary ? `<div><strong>Differential:</strong> ${profile.bloodFilmFindings.differentialSummary}</div>` : ''}
+              </div>
+            </div>
+          ` : ''}
+
+          <!-- Attached Disease Illustration / Atlas Diagram if present -->
+          ${profile.attachedIllustration ? `
+            <div style="background:linear-gradient(135deg, #fff1f2 0%, #f8fafc 100%); border:1px solid #fecdd3; border-radius:6px; padding:8px 10px; margin-bottom:8px; display:flex; gap:12px; align-items:center;" dir="rtl">
+              ${profile.attachedIllustration.imageUrl ? `
+                <div style="width:170px; height:96px; flex-shrink:0; border-radius:6px; overflow:hidden; border:1.5px solid #881337; background:#090d16; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+                  <img src="${profile.attachedIllustration.imageUrl}" alt="${profile.attachedIllustration.titleEn}" style="width:100%; height:100%; object-fit:contain; display:block;" />
+                </div>
+              ` : ''}
+              <div style="flex:1; text-align:right;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:3px;">
+                  <strong style="color:#800000; font-size:11px;">🔬 أطلس التشخيص الطبي: ${profile.attachedIllustration.titleAr}</strong>
+                  <span style="font-size:9.5px; color:#64748b; font-style:italic;" dir="ltr">(${profile.attachedIllustration.titleEn})</span>
+                </div>
+                <p style="margin:0; color:#334155; font-size:10px; line-height:1.4;">
+                  ${profile.attachedIllustration.pathologySummaryAr || profile.attachedIllustration.descriptionAr || ''}
+                </p>
+              </div>
+            </div>
+          ` : ''}
+
           <!-- Comments -->
           ${(profile.interpretation || profile.comment) ? `
             <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:5px; padding:6px 10px; margin-bottom:8px; font-size:10.5px; line-height:1.4;">
@@ -308,29 +341,29 @@ export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): voi
           <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:10px; margin-bottom:10px;">
             <div style="font-weight:bold; font-size:11px; color:#0f172a; margin-bottom:6px;">مؤشرات كفاءة وسلامة الأعضاء الحيوية (Vital Organ Health Scores):</div>
             <div style="display:grid; grid-template-columns: repeat(5, 1fr); gap:6px; text-align:center;">
-              <div style="background:#ffffff; border:1px solid #e2e8f0; padding:6px; border-radius:6px;">
+              <div style="background:#ffffff; border:1px solid #e2e8f0; padding:6px; border-radius:6px; ${orgs.renal.status === 'not_tested' ? 'opacity:0.6;' : ''}">
                 <div style="font-size:10px; font-weight:bold; color:#475569;">وظائف الكلى</div>
-                <div style="font-size:15px; font-weight:900; color:#800000; font-family:monospace;">${orgs.renal.score}%</div>
+                <div style="font-size:15px; font-weight:900; color:#800000; font-family:monospace;">${orgs.renal.status === 'not_tested' ? '—' : `${orgs.renal.score}%`}</div>
                 <div style="font-size:9px; color:#64748b;">${orgs.renal.labelAr}</div>
               </div>
-              <div style="background:#ffffff; border:1px solid #e2e8f0; padding:6px; border-radius:6px;">
+              <div style="background:#ffffff; border:1px solid #e2e8f0; padding:6px; border-radius:6px; ${orgs.hepatic.status === 'not_tested' ? 'opacity:0.6;' : ''}">
                 <div style="font-size:10px; font-weight:bold; color:#475569;">وظائف الكبد</div>
-                <div style="font-size:15px; font-weight:900; color:#800000; font-family:monospace;">${orgs.hepatic.score}%</div>
+                <div style="font-size:15px; font-weight:900; color:#800000; font-family:monospace;">${orgs.hepatic.status === 'not_tested' ? '—' : `${orgs.hepatic.score}%`}</div>
                 <div style="font-size:9px; color:#64748b;">${orgs.hepatic.labelAr}</div>
               </div>
-              <div style="background:#ffffff; border:1px solid #e2e8f0; padding:6px; border-radius:6px;">
+              <div style="background:#ffffff; border:1px solid #e2e8f0; padding:6px; border-radius:6px; ${orgs.metabolic.status === 'not_tested' ? 'opacity:0.6;' : ''}">
                 <div style="font-size:10px; font-weight:bold; color:#475569;">الأيض والسكر</div>
-                <div style="font-size:15px; font-weight:900; color:#800000; font-family:monospace;">${orgs.metabolic.score}%</div>
+                <div style="font-size:15px; font-weight:900; color:#800000; font-family:monospace;">${orgs.metabolic.status === 'not_tested' ? '—' : `${orgs.metabolic.score}%`}</div>
                 <div style="font-size:9px; color:#64748b;">${orgs.metabolic.labelAr}</div>
               </div>
-              <div style="background:#ffffff; border:1px solid #e2e8f0; padding:6px; border-radius:6px;">
+              <div style="background:#ffffff; border:1px solid #e2e8f0; padding:6px; border-radius:6px; ${orgs.hematologic.status === 'not_tested' ? 'opacity:0.6;' : ''}">
                 <div style="font-size:10px; font-weight:bold; color:#475569;">مؤشرات الدم</div>
-                <div style="font-size:15px; font-weight:900; color:#800000; font-family:monospace;">${orgs.hematologic.score}%</div>
+                <div style="font-size:15px; font-weight:900; color:#800000; font-family:monospace;">${orgs.hematologic.status === 'not_tested' ? '—' : `${orgs.hematologic.score}%`}</div>
                 <div style="font-size:9px; color:#64748b;">${orgs.hematologic.labelAr}</div>
               </div>
-              <div style="background:#ffffff; border:1px solid #e2e8f0; padding:6px; border-radius:6px;">
+              <div style="background:#ffffff; border:1px solid #e2e8f0; padding:6px; border-radius:6px; ${orgs.cardiac.status === 'not_tested' ? 'opacity:0.6;' : ''}">
                 <div style="font-size:10px; font-weight:bold; color:#475569;">القلب والدهون</div>
-                <div style="font-size:15px; font-weight:900; color:#800000; font-family:monospace;">${orgs.cardiac.score}%</div>
+                <div style="font-size:15px; font-weight:900; color:#800000; font-family:monospace;">${orgs.cardiac.status === 'not_tested' ? '—' : `${orgs.cardiac.score}%`}</div>
                 <div style="font-size:9px; color:#64748b;">${orgs.cardiac.labelAr}</div>
               </div>
             </div>

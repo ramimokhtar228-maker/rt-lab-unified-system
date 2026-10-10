@@ -542,21 +542,34 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
                       {profile.titleAr}
                     </h4>
                   </div>
-                  <div className="text-[11px] text-slate-300 font-mono">
-                    Sample: <strong className="text-white">{profile.sampleType || 'Serum / Whole Blood'}</strong>
+                  <div className="flex items-center gap-3">
+                    {onOpenIllustrationsModal && (
+                      <button
+                        type="button"
+                        onClick={() => onOpenIllustrationsModal(profile.id)}
+                        className="no-print text-[11px] bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/40 px-2.5 py-1 rounded-md font-bold flex items-center gap-1 transition cursor-pointer"
+                        title="إرفاق أو تغيير رسم الأطلس الطبي لهذا التحليل"
+                      >
+                        <Sparkles className="w-3 h-3 text-amber-300" />
+                        <span>{profile.attachedIllustration ? 'تغيير رسم الأطلس' : 'إرفاق رسم أطلس'}</span>
+                      </button>
+                    )}
+                    <div className="text-[11px] text-slate-300 font-mono">
+                      Sample: <strong className="text-white">{profile.sampleType || 'Serum / Whole Blood'}</strong>
+                    </div>
                   </div>
                 </div>
 
-                {/* Parameters Table */}
-                <div className="border border-slate-200 border-t-0 rounded-b-lg overflow-hidden mb-4">
-                  <table className="w-full text-right text-xs">
+                {/* Parameters Table: Standard LTR Medical Order */}
+                <div className="border border-slate-200 border-t-0 rounded-b-lg overflow-hidden mb-4" dir="ltr">
+                  <table className="w-full text-left text-xs border-collapse" dir="ltr">
                     <thead className="bg-slate-100 text-slate-700 font-extrabold text-[11px] border-b border-slate-200">
                       <tr>
-                        <th className="py-2.5 px-3 text-left w-1/3">Test Name (اسم الفحص)</th>
-                        <th className="py-2.5 px-3 text-center w-1/5">Result (النتيجة)</th>
-                        <th className="py-2.5 px-2 text-center w-1/6">Visual Range</th>
-                        <th className="py-2.5 px-2 text-center w-20">Flag (الحالة)</th>
-                        <th className="py-2.5 px-3 text-left w-1/4">Reference Range (المدى الطبيعي)</th>
+                        <th className="py-2.5 px-3 text-left w-[34%]">Investigations (اسم الفحص)</th>
+                        <th className="py-2.5 px-3 text-center w-[18%]">Results (النتيجة)</th>
+                        <th className="py-2.5 px-2 text-center w-[16%]">Coloured Chart</th>
+                        <th className="py-2.5 px-2 text-center w-[12%]">Flag (الحالة)</th>
+                        <th className="py-2.5 px-3 text-left w-[20%]">Reference Range (المدى الطبيعي)</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 font-medium">
@@ -585,7 +598,7 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
                                 {param.result || '—'}
                               </strong>
                               {param.unit && (
-                                <span className="text-[10px] text-slate-500 font-normal mr-1"> {param.unit}</span>
+                                <span className="text-[10px] text-slate-500 font-normal ml-1"> {param.unit}</span>
                               )}
                             </td>
                             <td className="py-2 px-1 text-center">
@@ -635,31 +648,53 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
                   </div>
                 )}
 
-                {/* Attached Disease Illustration if any */}
+                {/* Attached Disease Illustration / Atlas Diagram if any */}
                 {profile.attachedIllustration ? (
-                  <div className="bg-gradient-to-r from-rose-50/60 to-slate-50 border border-rose-200/80 rounded-xl p-3.5 mb-4 text-xs">
-                    <div className="flex flex-col sm:flex-row items-center gap-3">
+                  <div className="bg-gradient-to-r from-rose-50/70 to-slate-50 border border-rose-200/90 rounded-xl p-3.5 mb-4 text-xs shadow-2xs">
+                    <div className="flex flex-col sm:flex-row items-center gap-3.5">
                       {profile.attachedIllustration.imageUrl ? (
-                        <div className="w-36 h-22 shrink-0 rounded-lg overflow-hidden border-2 border-rose-900/60 bg-slate-950 shadow-md relative flex items-center justify-center">
+                        <div className="w-44 h-26 shrink-0 rounded-lg overflow-hidden border-2 border-rose-900/60 bg-slate-950 shadow-md relative flex items-center justify-center p-1">
                           <img
                             src={profile.attachedIllustration.imageUrl}
                             alt={profile.attachedIllustration.titleEn}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-contain"
                           />
                         </div>
                       ) : null}
-                      <div className="flex-1 space-y-0.5 text-right">
+                      <div className="flex-1 space-y-1 text-right">
                         <div className="flex items-center justify-between">
                           <span className="font-bold text-rose-950 text-xs">
-                            {profile.attachedIllustration.titleAr}
+                            🔬 أطلس التشخيص الطبي: {profile.attachedIllustration.titleAr}
                           </span>
                           <span className="text-[10px] text-slate-500 font-serif italic" dir="ltr">
                             ({profile.attachedIllustration.titleEn})
                           </span>
                         </div>
                         <p className="text-[10.5px] text-slate-700 leading-snug">
-                          {profile.attachedIllustration.descriptionAr}
+                          {profile.attachedIllustration.pathologySummaryAr || profile.attachedIllustration.descriptionAr}
                         </p>
+                        {onOpenIllustrationsModal && (
+                          <div className="no-print pt-1 flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => onOpenIllustrationsModal(profile.id)}
+                              className="text-[10px] text-rose-800 hover:text-rose-950 font-bold underline cursor-pointer"
+                            >
+                              تغيير رسم الأطلس
+                            </button>
+                            <span className="text-slate-300">|</span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const nextProfiles = report.profiles.map(pr => pr.id === profile.id ? { ...pr, attachedIllustration: undefined } : pr);
+                                updateReport(report.id, { profiles: nextProfiles });
+                              }}
+                              className="text-[10px] text-red-600 hover:text-red-800 font-bold cursor-pointer"
+                            >
+                              إزالة الرسم
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -768,19 +803,28 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
                     { label: 'الأيض والسكر', data: smartAnalysis.organScores.metabolic },
                     { label: 'مؤشرات الدم', data: smartAnalysis.organScores.hematologic },
                     { label: 'صحة القلب والدهون', data: smartAnalysis.organScores.cardiac },
-                  ].map((org, i) => (
-                    <div key={i} className="bg-white p-2.5 rounded-lg border border-slate-200 text-center space-y-1">
-                      <div className="text-[10.5px] font-bold text-slate-700">{org.label}</div>
-                      <div className="text-lg font-black font-mono text-rose-900">{org.data.score}%</div>
-                      <div className="text-[9.5px] font-semibold text-slate-600">{org.data.labelAr}</div>
-                      <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
-                        <div 
-                          className={`h-full ${org.data.status === 'optimal' ? 'bg-emerald-500' : org.data.status === 'critical' ? 'bg-rose-600' : 'bg-amber-500'}`}
-                          style={{ width: `${org.data.score}%` }}
-                        />
+                  ].map((org, i) => {
+                    const isTested = org.data.status !== 'not_tested';
+                    return (
+                      <div key={i} className={`p-2.5 rounded-lg border text-center space-y-1 ${isTested ? 'bg-white border-slate-200' : 'bg-slate-100/70 border-slate-200 opacity-60'}`}>
+                        <div className="text-[10.5px] font-bold text-slate-700">{org.label}</div>
+                        <div className="text-lg font-black font-mono text-rose-900">
+                          {isTested ? `${org.data.score}%` : '—'}
+                        </div>
+                        <div className="text-[9.5px] font-semibold text-slate-600">{org.data.labelAr}</div>
+                        <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                          {isTested ? (
+                            <div 
+                              className={`h-full ${org.data.status === 'optimal' ? 'bg-emerald-500' : org.data.status === 'critical' ? 'bg-rose-600' : 'bg-amber-500'}`}
+                              style={{ width: `${org.data.score}%` }}
+                            />
+                          ) : (
+                            <div className="h-full bg-slate-300 w-0" />
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 

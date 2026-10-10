@@ -5,16 +5,22 @@ export interface DiseaseIllustrationExtended extends DiseaseIllustration {
   specialtyEn?: string;
 }
 
-// Helper to generate SVG Data URI
+// Helper to generate SVG Data URI with universal Base64 encoding
 function createSvgDataUri(innerSvg: string, title: string, subtitle: string, borderColor = '#e11d48', titleColor = '#fb7185'): string {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" width="100%" height="100%">
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" width="320" height="180">
     <rect width="320" height="180" rx="14" fill="#090d16"/>
     <circle cx="160" cy="90" r="76" fill="#0b1329" stroke="${borderColor}" stroke-width="2.5"/>
-    <text x="160" y="24" text-anchor="middle" fill="${titleColor}" font-size="10.5" font-weight="900" font-family="'Cairo', sans-serif">${title}</text>
+    <text x="160" y="24" text-anchor="middle" fill="${titleColor}" font-size="10.5" font-weight="900" font-family="'Cairo', system-ui, -apple-system, sans-serif">${title}</text>
     ${innerSvg}
-    <text x="160" y="170" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="'Cairo', sans-serif">${subtitle}</text>
+    <text x="160" y="170" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="'Cairo', system-ui, -apple-system, sans-serif">${subtitle}</text>
   </svg>`;
-  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+  try {
+    if (typeof btoa === 'function') {
+      const utf8 = encodeURIComponent(svg).replace(/%([0-9A-F]{2})/g, (_, p1) => String.fromCharCode(parseInt(p1, 16)));
+      return `data:image/svg+xml;base64,${btoa(utf8)}`;
+    }
+  } catch {}
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
 
 export const DISEASE_ILLUSTRATIONS: DiseaseIllustration[] = [
@@ -961,10 +967,28 @@ export function suggestHematologicalIllustration(paramsInput: any): DiseaseIllus
     crp?: number;
   } = {};
 
+  let urineFinding = '';
+  let stoolFinding = '';
+  let isLipidProfile = false;
+  let isLiverProfile = false;
+  let isRenalProfile = false;
+
   if (Array.isArray(paramsInput)) {
     paramsInput.forEach((p: any) => {
       const name = (p.name || '').toLowerCase();
+      const resStr = String(p.result || '').toLowerCase();
       const val = parseFloat(String(p.result).replace(/[^0-9.-]/g, ''));
+      
+      // Check qualitative urine/stool text findings
+      if (name.includes('oxalate') || resStr.includes('oxalate')) urineFinding = 'oxalate';
+      else if (name.includes('triple') || resStr.includes('triple')) urineFinding = 'triple';
+      else if (name.includes('cast') || resStr.includes('cast')) urineFinding = 'casts';
+      else if (name.includes('amoeba') || resStr.includes('amoeba') || resStr.includes('histolytica')) stoolFinding = 'amoeba';
+      else if (name.includes('giardia') || resStr.includes('giardia')) stoolFinding = 'giardia';
+      else if (name.includes('cholesterol') || name.includes('triglyceride') || name.includes('lipid')) isLipidProfile = true;
+      else if (name.includes('alt') || name.includes('ast') || name.includes('bilirubin')) isLiverProfile = true;
+      else if (name.includes('urea') || name.includes('creat')) isRenalProfile = true;
+
       if (!isNaN(val)) {
         if (name.includes('hemo') || name.includes('hb') || name.includes('hgb')) params.hb = val;
         else if (name.includes('mcv')) params.mcv = val;
@@ -985,37 +1009,52 @@ export function suggestHematologicalIllustration(paramsInput: any): DiseaseIllus
     params = paramsInput;
   }
 
-  // 1. Inflammatory & CRP
+  // 1. Urine atlas findings
+  if (urineFinding === 'oxalate') return getIllustrationByCode("ATLAS_URINE_OXALATE") || DISEASE_ILLUSTRATIONS[0];
+  if (urineFinding === 'triple') return getIllustrationByCode("ATLAS_URINE_TRIPLE") || DISEASE_ILLUSTRATIONS[0];
+  if (urineFinding === 'casts') return getIllustrationByCode("ATLAS_URINE_CASTS") || DISEASE_ILLUSTRATIONS[0];
+
+  // 2. Stool atlas findings
+  if (stoolFinding === 'amoeba') return getIllustrationByCode("ATLAS_STOOL_AMOEBA") || DISEASE_ILLUSTRATIONS[0];
+  if (stoolFinding === 'giardia') return getIllustrationByCode("ATLAS_STOOL_GIARDIA") || DISEASE_ILLUSTRATIONS[0];
+
+  // 3. Inflammatory & CRP
   if (params.crp && params.crp > 48) {
     const inf = getIllustrationByCode("INF_PNEUMONIA_CRP");
     if (inf) return inf;
   }
 
-  // 2. Diabetic profile
+  // 4. Diabetic profile
   if (params.hba1c && params.hba1c >= 6.5) {
     const dia = getIllustrationByCode("ENDO_DIABETES");
     if (dia) return dia;
   }
 
-  // 3. Thyroid profile
+  // 5. Thyroid profile
   if (params.tsh && params.tsh > 6.0) {
     const th = getIllustrationByCode("ENDO_HYPOTHYROID");
     if (th) return th;
   }
 
-  // 4. Renal profile
-  if (params.creat && params.creat > 2.0) {
-    const ren = getIllustrationByCode("REN_AKI");
+  // 6. Renal profile
+  if ((params.creat && params.creat > 1.4) || isRenalProfile) {
+    const ren = getIllustrationByCode("REN_AKI") || getIllustrationByCode("INFOGRAM_KFT");
     if (ren) return ren;
   }
 
-  // 5. Hepatic profile
-  if (params.alt && params.alt > 100) {
-    const hep = getIllustrationByCode("HEP_VIRAL_HEPATITIS");
+  // 7. Hepatic profile
+  if ((params.alt && params.alt > 55) || isLiverProfile) {
+    const hep = getIllustrationByCode("HEP_VIRAL_HEPATITIS") || getIllustrationByCode("INFOGRAM_LFT");
     if (hep) return hep;
   }
 
-  // 6. Microcytic anemia
+  // 8. Lipid profile
+  if (isLipidProfile) {
+    const lip = getIllustrationByCode("INFOGRAM_LIPID");
+    if (lip) return lip;
+  }
+
+  // 9. Microcytic anemia
   if ((params.mcv && params.mcv < 80) || (params.hb && params.hb < 11)) {
     if (params.mentzerIndex && params.mentzerIndex < 13) {
       const thal = getIllustrationByCode("HEM_THAL");
@@ -1025,12 +1064,12 @@ export function suggestHematologicalIllustration(paramsInput: any): DiseaseIllus
     if (ida) return ida;
   }
 
-  // 7. Macrocytic anemia
+  // 10. Macrocytic anemia
   if (params.mcv && params.mcv > 100) {
     const meg = getIllustrationByCode("HEM_MEGALO");
     if (meg) return meg;
   }
 
-  // Default normal
+  // Default normal blood smear
   return getIllustrationByCode("HEM_NORMAL") || DISEASE_ILLUSTRATIONS[0];
 }

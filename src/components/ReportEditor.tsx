@@ -1055,13 +1055,13 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                     <img
                       src={currentProfile.attachedIllustration.imageUrl}
                       alt={currentProfile.attachedIllustration.titleEn}
-                      className="w-16 h-12 rounded object-cover border border-amber-300 shadow-2xs"
+                      className="w-20 h-14 rounded object-contain bg-slate-950 border border-amber-300 shadow-2xs p-0.5"
                     />
                   )}
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-amber-950 text-sm">
-                        {currentProfile.attachedIllustration.titleAr}
+                        🔬 {currentProfile.attachedIllustration.titleAr}
                       </span>
                       <span className="text-slate-500 font-serif italic text-xs">
                         ({currentProfile.attachedIllustration.titleEn})
@@ -1071,7 +1071,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                       </span>
                     </div>
                     <p className="text-[11px] text-slate-700 mt-0.5">
-                      {currentProfile.attachedIllustration.descriptionAr}
+                      {currentProfile.attachedIllustration.pathologySummaryAr || currentProfile.attachedIllustration.descriptionAr}
                     </p>
                   </div>
                 </div>
@@ -1179,7 +1179,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                 Investigations / results / coloured chart / flags / references
             */}
             <div className="overflow-x-auto rounded-xl border border-slate-200 shadow-2xs">
-              <table className="w-full text-right border-collapse" dir="ltr">
+              <table className="w-full text-left border-collapse" dir="ltr">
                 <thead>
                   <tr className="bg-gradient-to-r from-red-950 via-slate-900 to-slate-900 text-white text-xs font-bold uppercase tracking-wider">
                     <th className="py-2.5 px-3 text-left w-10">#</th>
