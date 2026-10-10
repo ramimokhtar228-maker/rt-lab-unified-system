@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-10T20:33:06.147Z",
+  "syncedAt": "2026-10-10T20:33:19.316Z",
   "reports": [
     {
       "id": "rep-1791501113004",
@@ -1354,8 +1354,8 @@
               "method": "CHOD-PAP",
               "textReference": "",
               "id": "param-0-1791414844233-zhr",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "266",
+              "flag": "HIGH"
             },
             {
               "name": "Serum Triglycerides",
@@ -1455,7 +1455,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T23:14:04.234Z",
-      "updatedAt": "2026-10-10T20:33:02.069Z",
+      "updatedAt": "2026-10-10T20:33:15.222Z",
       "invoiceId": "inv-1791414844235"
     },
     {
