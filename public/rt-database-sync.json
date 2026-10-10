@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-10T20:40:48.504Z",
+  "syncedAt": "2026-10-10T20:41:17.030Z",
   "reports": [
     {
       "id": "rep-1791500705350",
@@ -313,7 +313,40 @@
               "result": "154",
               "flag": "HIGH"
             }
-          ]
+          ],
+          "attachedIllustration": {
+            "id": "endo-diabetes",
+            "code": "ENDO_DIABETES",
+            "category": "endocrinology",
+            "specialtyAr": "الغدد الصماء والسكري",
+            "imageUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgMTgwIiB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCI+CiAgICA8cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgcng9IjE0IiBmaWxsPSIjMDkwZDE2Ii8+CiAgICA8Y2lyY2xlIGN4PSIxNjAiIGN5PSI5MCIgcj0iNzYiIGZpbGw9IiMwYjEzMjkiIHN0cm9rZT0iIzAyODRjNyIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzOGJkZjgiIGZvbnQtc2l6ZT0iMTAuNSIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1mYW1pbHk9IidDYWlybycsIHN5c3RlbS11aSwgLWFwcGxlLXN5c3RlbSwgc2Fucy1zZXJpZiI+RElBQkVURVMgTUVMTElUVVMgVFlQRSAyPC90ZXh0PgogICAgPGcgZmlsbD0iIzAyODRjNyI+CiAgICAgICAgPHJlY3QgeD0iOTUiIHk9IjYwIiB3aWR0aD0iMTMwIiBoZWlnaHQ9IjYwIiByeD0iOCIgZmlsbD0iIzA4MmY0OSIgc3Ryb2tlPSIjMzhiZGY4IiBzdHJva2Utd2lkdGg9IjIiLz4KICAgICAgICA8dGV4dCB4PSIxNjAiIHk9Ijg1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMzhiZGY4IiBmb250LXNpemU9IjEyIiBmb250LXdlaWdodD0iYm9sZCI+SGJBMWMgJmd0Oz0gNi41JTwvdGV4dD4KICAgICAgICA8dGV4dCB4PSIxNjAiIHk9IjEwNSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2Y4NzE3MSIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiPkZCUyAmZ3Q7PSAxMjYgbWcvZEw8L3RleHQ+CiAgICAgIDwvZz4KICAgICAgPGNpcmNsZSBjeD0iMTA1IiBjeT0iNTAiIHI9IjEwIiBmaWxsPSIjZjQzZjVlIi8+PHRleHQgeD0iMTA1IiB5PSI1NCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2ZmZiIgZm9udC1zaXplPSI5IiBmb250LXdlaWdodD0iYm9sZCI+R2x1PC90ZXh0PgogICAgICA8Y2lyY2xlIGN4PSIyMTUiIGN5PSI1MCIgcj0iMTAiIGZpbGw9IiNmNDNmNWUiLz48dGV4dCB4PSIyMTUiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjkiIGZvbnQtd2VpZ2h0PSJib2xkIj5HbHU8L3RleHQ+CiAgICA8dGV4dCB4PSIxNjAiIHk9IjE3MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzk0YTNiOCIgZm9udC1zaXplPSI5IiBmb250LWZhbWlseT0iJ0NhaXJvJywgc3lzdGVtLXVpLCAtYXBwbGUtc3lzdGVtLCBzYW5zLXNlcmlmIj5DaHJvbmljIEh5cGVyZ2x5Y2VtaWEsIEdseWNhdGVkIEhiICYgSW5zdWxpbiBSZXNpc3RhbmNlPC90ZXh0PgogIDwvc3ZnPg==",
+            "titleAr": "داء السكري واعتلال الأيض (Type 2 Diabetes Mellitus)",
+            "titleEn": "Type 2 Diabetes Mellitus & Glycemic Control",
+            "pathologySummaryAr": "ارتفاع مزمن في سكر الدم الصائم وبعد الأكل والتراكمي (HbA1c >= 6.5%) ناجم عن مقاومة الأنسجة للإنسولين ونقص نسبي في إفرازه، مع مخاطر تصلب الأوعية الدقيقة واعتلال الكلى وشبكية العين.",
+            "pathologySummaryEn": "Chronic hyperglycemia with elevated fasting plasma glucose (>= 126 mg/dL) and HbA1c (>= 6.5%) due to progressive beta-cell dysfunction and insulin resistance.",
+            "keyDiagnosticPoints": [
+              "Fasting Blood Sugar (FBS) >= 126 mg/dL (7.0 mmol/L)",
+              "2-Hour Postprandial Glucose (PPBS) >= 200 mg/dL",
+              "Glycated Hemoglobin (HbA1c) >= 6.5%",
+              "Elevated HOMA-IR indicating severe tissue insulin resistance",
+              "Microalbuminuria screening recommended annually"
+            ],
+            "associatedConditions": [
+              "Metabolic syndrome",
+              "Diabetic nephropathy",
+              "Dyslipidemia & Coronary artery disease"
+            ],
+            "differentialDiagnosis": "Impaired Fasting Glucose (Prediabetes), Type 1 LADA, Steroid-induced hyperglycemia.",
+            "descriptionAr": "ارتفاع مزمن في سكر الدم الصائم وبعد الأكل والتراكمي (HbA1c >= 6.5%) ناجم عن مقاومة الأنسجة للإنسولين ونقص نسبي في إفرازه، مع مخاطر تصلب الأوعية الدقيقة واعتلال الكلى وشبكية العين.",
+            "descriptionEn": "Chronic hyperglycemia with elevated fasting plasma glucose (>= 126 mg/dL) and HbA1c (>= 6.5%) due to progressive beta-cell dysfunction and insulin resistance.",
+            "diagnosticCriteria": [
+              "Fasting Blood Sugar (FBS) >= 126 mg/dL (7.0 mmol/L)",
+              "2-Hour Postprandial Glucose (PPBS) >= 200 mg/dL",
+              "Glycated Hemoglobin (HbA1c) >= 6.5%",
+              "Elevated HOMA-IR indicating severe tissue insulin resistance",
+              "Microalbuminuria screening recommended annually"
+            ]
+          }
         }
       ],
       "staff": {
@@ -331,7 +364,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-08T23:05:05.350Z",
-      "updatedAt": "2026-10-10T20:40:44.412Z",
+      "updatedAt": "2026-10-10T20:41:12.933Z",
       "invoiceId": "inv-1791500705351",
       "smartReportEnabled": true,
       "smartReportClinicalData": {
