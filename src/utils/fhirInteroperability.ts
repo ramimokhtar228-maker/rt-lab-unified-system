@@ -101,7 +101,7 @@ export function generateFhirR4Bundle(report: LabReport, labName = 'RT Clinical L
             coding: [
               {
                 system: 'http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation',
-                code: param.flag === 'HIGH' ? 'H' : param.flag === 'LOW' ? 'L' : param.flag === 'PANIC' ? 'HH' : 'N',
+                code: param.flag === 'HIGH' ? 'H' : param.flag === 'LOW' ? 'L' : (param.flag === 'PANIC_HIGH' || param.flag === 'PANIC_LOW') ? 'HH' : param.flag === 'ABNORMAL' ? 'A' : 'N',
                 display: param.flag || 'Normal'
               }
             ]
@@ -177,7 +177,7 @@ export function generateFhirR4Bundle(report: LabReport, labName = 'RT Clinical L
         value: report.reportNumber
       }
     ],
-    status: report.status === 'completed' ? 'final' : 'partial',
+    status: (report.status === 'released' || report.status === 'verified') ? 'final' : 'partial',
     category: [
       {
         coding: [
@@ -243,7 +243,7 @@ export function generateHl7v2Message(report: LabReport, labName = 'RTLAB'): stri
   report.profiles.forEach(prof => {
     (prof.parameters || []).forEach(param => {
       const loinc = getLoincForParameter(param.name);
-      const flag = param.flag === 'HIGH' ? 'H' : param.flag === 'LOW' ? 'L' : param.flag === 'PANIC' ? 'HH' : 'N';
+      const flag = param.flag === 'HIGH' ? 'H' : param.flag === 'LOW' ? 'L' : (param.flag === 'PANIC_HIGH' || param.flag === 'PANIC_LOW') ? 'HH' : param.flag === 'ABNORMAL' ? 'A' : 'N';
       const ref = param.textReference || `${param.minNormal || ''}-${param.maxNormal || ''}`;
       obxLines.push(
         `OBX|${obxIndex}|NM|${loinc.code}^${param.name}^LN||${param.result}|${param.unit || ''}|${ref}|${flag}|||F|||${timeStr}`
