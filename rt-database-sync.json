@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-10T10:20:02.244Z",
+  "syncedAt": "2026-10-10T14:10:53.864Z",
   "reports": [
     {
       "id": "rep-1791501113004",
@@ -16,8 +16,8 @@
         "gender": "female",
         "referringDoctorTitle": "Dr.",
         "referringDoctorName": "HERSELF",
-        "sampleDate": "2026-10-07",
-        "reportingDate": "2026-10-07",
+        "sampleDate": "2026-10-06T10:26:00.000Z",
+        "reportingDate": "2026-10-10T10:24:00.000Z",
         "fastingHours": 12,
         "bookingType": "home_visit",
         "homeAddress": "م. نصر",
@@ -296,7 +296,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-08T23:11:53.004Z",
-      "updatedAt": "2026-10-08T23:11:53.004Z",
+      "updatedAt": "2026-10-10T10:24:16.672Z",
       "invoiceId": "inv-1791501113004"
     },
     {
@@ -312,9 +312,9 @@
         "ageUnit": "years",
         "gender": "male",
         "referringDoctorTitle": "Dr.",
-        "referringDoctorName": "HERSELF",
-        "sampleDate": "2026-10-07",
-        "reportingDate": "2026-10-07",
+        "referringDoctorName": "HIMSELF ",
+        "sampleDate": "2026-10-07T09:26:00.000Z",
+        "reportingDate": "2026-10-10T10:20:00.000Z",
         "fastingHours": 12,
         "bookingType": "branch",
         "visitFee": 0,
@@ -350,8 +350,8 @@
               "method": "CHOD-PAP",
               "textReference": "",
               "id": "param-LIPID-0-1791500705345-28z",
-              "result": "",
-              "flag": "NORMAL",
+              "result": "241",
+              "flag": "HIGH",
               "notes": "دهون الدم الشاملة مع المؤشرات الحسابية"
             },
             {
@@ -363,8 +363,8 @@
               "method": "GPO-PAP",
               "textReference": "",
               "id": "param-LIPID-1-1791500705346-663",
-              "result": "",
-              "flag": "NORMAL",
+              "result": "166",
+              "flag": "HIGH",
               "notes": "دهون الدم الشاملة مع المؤشرات الحسابية"
             },
             {
@@ -375,7 +375,7 @@
               "method": "Direct Accelerator",
               "textReference": "",
               "id": "param-LIPID-2-1791500705346-4w5",
-              "result": "",
+              "result": "43",
               "flag": "NORMAL",
               "notes": "دهون الدم الشاملة مع المؤشرات الحسابية"
             },
@@ -384,33 +384,33 @@
               "unit": "mg/dL",
               "minNormal": 0,
               "maxNormal": 100,
-              "notes": "Friedewald Formula: Total Chol - HDL - (TG / 5)",
+              "notes": "Friedewald Formula: TC - HDL - (TG/5)",
               "textReference": "",
               "id": "param-LIPID-3-1791500705346-cfg",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "165",
+              "flag": "HIGH"
             },
             {
               "name": "VLDL - Cholesterol",
               "unit": "mg/dL",
               "minNormal": 5,
               "maxNormal": 30,
-              "notes": "Auto-calculated: Triglycerides / 5",
+              "notes": "Calculated: Triglycerides / 5",
               "textReference": "",
               "id": "param-LIPID-4-1791500705346-ott",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "33",
+              "flag": "HIGH"
             },
             {
               "name": "Non-HDL Cholesterol",
               "unit": "mg/dL",
               "minNormal": 0,
               "maxNormal": 130,
-              "notes": "Auto-calculated: Total Chol - HDL",
+              "notes": "Calculated: Total Cholesterol - HDL",
               "textReference": "",
               "id": "param-LIPID-5-1791500705346-j5u",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "198",
+              "flag": "HIGH"
             },
             {
               "name": "Total Chol / HDL Ratio",
@@ -418,26 +418,15 @@
               "minNormal": 0,
               "maxNormal": 4.5,
               "textReference": "< 4.5 Desirable",
-              "notes": "Auto-calculated: Total Chol / HDL",
+              "notes": "Desirable < 4.5",
               "id": "param-LIPID-6-1791500705346-3ed",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "LDL / HDL Ratio",
-              "unit": "Ratio",
-              "minNormal": 0,
-              "maxNormal": 3,
-              "textReference": "< 3.0 Desirable",
-              "id": "param-LIPID-7-1791500705346-xlo",
-              "result": "",
-              "flag": "NORMAL",
-              "notes": "دهون الدم الشاملة مع المؤشرات الحسابية"
+              "result": "5.6",
+              "flag": "HIGH"
             },
             {
               "id": "p-pkg-0-1791500705347-njo",
               "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
-              "result": "",
+              "result": "37.77",
               "unit": "ng/mL",
               "minNormal": 30,
               "maxNormal": 100,
@@ -449,7 +438,7 @@
             {
               "id": "p-pkg-1-1791500705347-x8m",
               "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
-              "result": "",
+              "result": "4.22",
               "unit": "mg/dL",
               "minNormal": 3.5,
               "maxNormal": 7.2,
@@ -459,21 +448,9 @@
               "notes": "فحوصات وفيتامينات إضافية للباقة"
             },
             {
-              "id": "p-pkg-2-1791500705347-f3g",
-              "name": "سكر الدم الصائم (FBS) (Fasting Blood Sugar)",
-              "result": "",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 100,
-              "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
-              "flag": "NORMAL",
-              "method": "Hexokinase / GOD-PAP",
-              "notes": "فحوصات وفيتامينات إضافية للباقة"
-            },
-            {
               "id": "p-pkg-3-1791500705347-4hu",
               "name": "كرياتينين بالدم (Serum Creatinine) (Serum Creatinine)",
-              "result": "",
+              "result": "0.87",
               "unit": "mg/dL",
               "minNormal": 0.6,
               "maxNormal": 1.2,
@@ -485,7 +462,7 @@
             {
               "id": "p-pkg-4-1791500705347-nl7",
               "name": "بولينا بالدم (Blood Urea) (Blood Urea)",
-              "result": "",
+              "result": "25",
               "unit": "mg/dL",
               "minNormal": 15,
               "maxNormal": 45,
@@ -497,7 +474,7 @@
             {
               "id": "p-pkg-5-1791500705347-yvc",
               "name": "الكالسيوم الكلي (Total Serum Calcium) (Total Serum Calcium)",
-              "result": "",
+              "result": "9.0",
               "unit": "mg/dL",
               "minNormal": 8.6,
               "maxNormal": 10.3,
@@ -509,7 +486,7 @@
             {
               "id": "p-pkg-6-1791500705347-hth",
               "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
-              "result": "",
+              "result": "35",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 41,
@@ -521,7 +498,7 @@
             {
               "id": "p-pkg-7-1791500705347-fub",
               "name": "إنزيم كبد AST / SGOT (Aspartate Aminotransferase (AST / SGOT))",
-              "result": "",
+              "result": "28",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 40,
@@ -533,28 +510,61 @@
             {
               "id": "p-pkg-8-1791500705347-wjk",
               "name": "هبموجلوبين  (HB %)",
-              "result": "",
+              "result": "14.80",
               "unit": "g/L",
               "minNormal": 36,
               "maxNormal": 49,
               "textReference": "Male : 13.5-17.5 /Female: 12.5-15.5",
-              "flag": "NORMAL",
+              "flag": "LOW",
               "method": "Enzymatic",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
             },
             {
               "id": "p-pkg-9-1791500705348-dcq",
               "name": "هيماتوكريت  (Hematocrit %)",
-              "result": "",
+              "result": "48.44",
               "unit": "%",
               "minNormal": 36,
               "maxNormal": 49,
               "textReference": "36-49",
               "flag": "NORMAL",
               "method": "Enzymatic",
-              "notes": "فحوصات وفيتامينات إضافية للباقة"
+              "notes": "Calculated (HGB × 3)"
             }
-          ]
+          ],
+          "attachedIllustration": {
+            "id": "endo-diabetes",
+            "code": "ENDO_DIABETES",
+            "category": "endocrinology",
+            "specialtyAr": "الغدد الصماء والسكري",
+            "imageUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgMTgwIiB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCI+CiAgICA8cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgcng9IjE0IiBmaWxsPSIjMDkwZDE2Ii8+CiAgICA8Y2lyY2xlIGN4PSIxNjAiIGN5PSI5MCIgcj0iNzYiIGZpbGw9IiMwYjEzMjkiIHN0cm9rZT0iIzAyODRjNyIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzOGJkZjgiIGZvbnQtc2l6ZT0iMTAuNSIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1mYW1pbHk9IidDYWlybycsIHN5c3RlbS11aSwgLWFwcGxlLXN5c3RlbSwgc2Fucy1zZXJpZiI+RElBQkVURVMgTUVMTElUVVMgVFlQRSAyPC90ZXh0PgogICAgPGcgZmlsbD0iIzAyODRjNyI+CiAgICAgICAgPHJlY3QgeD0iOTUiIHk9IjYwIiB3aWR0aD0iMTMwIiBoZWlnaHQ9IjYwIiByeD0iOCIgZmlsbD0iIzA4MmY0OSIgc3Ryb2tlPSIjMzhiZGY4IiBzdHJva2Utd2lkdGg9IjIiLz4KICAgICAgICA8dGV4dCB4PSIxNjAiIHk9Ijg1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMzhiZGY4IiBmb250LXNpemU9IjEyIiBmb250LXdlaWdodD0iYm9sZCI+SGJBMWMgJmd0Oz0gNi41JTwvdGV4dD4KICAgICAgICA8dGV4dCB4PSIxNjAiIHk9IjEwNSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2Y4NzE3MSIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiPkZCUyAmZ3Q7PSAxMjYgbWcvZEw8L3RleHQ+CiAgICAgIDwvZz4KICAgICAgPGNpcmNsZSBjeD0iMTA1IiBjeT0iNTAiIHI9IjEwIiBmaWxsPSIjZjQzZjVlIi8+PHRleHQgeD0iMTA1IiB5PSI1NCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2ZmZiIgZm9udC1zaXplPSI5IiBmb250LXdlaWdodD0iYm9sZCI+R2x1PC90ZXh0PgogICAgICA8Y2lyY2xlIGN4PSIyMTUiIGN5PSI1MCIgcj0iMTAiIGZpbGw9IiNmNDNmNWUiLz48dGV4dCB4PSIyMTUiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjkiIGZvbnQtd2VpZ2h0PSJib2xkIj5HbHU8L3RleHQ+CiAgICA8dGV4dCB4PSIxNjAiIHk9IjE3MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzk0YTNiOCIgZm9udC1zaXplPSI5IiBmb250LWZhbWlseT0iJ0NhaXJvJywgc3lzdGVtLXVpLCAtYXBwbGUtc3lzdGVtLCBzYW5zLXNlcmlmIj5DaHJvbmljIEh5cGVyZ2x5Y2VtaWEsIEdseWNhdGVkIEhiICYgSW5zdWxpbiBSZXNpc3RhbmNlPC90ZXh0PgogIDwvc3ZnPg==",
+            "titleAr": "داء السكري واعتلال الأيض (Type 2 Diabetes Mellitus)",
+            "titleEn": "Type 2 Diabetes Mellitus & Glycemic Control",
+            "pathologySummaryAr": "ارتفاع مزمن في سكر الدم الصائم وبعد الأكل والتراكمي (HbA1c >= 6.5%) ناجم عن مقاومة الأنسجة للإنسولين ونقص نسبي في إفرازه، مع مخاطر تصلب الأوعية الدقيقة واعتلال الكلى وشبكية العين.",
+            "pathologySummaryEn": "Chronic hyperglycemia with elevated fasting plasma glucose (>= 126 mg/dL) and HbA1c (>= 6.5%) due to progressive beta-cell dysfunction and insulin resistance.",
+            "keyDiagnosticPoints": [
+              "Fasting Blood Sugar (FBS) >= 126 mg/dL (7.0 mmol/L)",
+              "2-Hour Postprandial Glucose (PPBS) >= 200 mg/dL",
+              "Glycated Hemoglobin (HbA1c) >= 6.5%",
+              "Elevated HOMA-IR indicating severe tissue insulin resistance",
+              "Microalbuminuria screening recommended annually"
+            ],
+            "associatedConditions": [
+              "Metabolic syndrome",
+              "Diabetic nephropathy",
+              "Dyslipidemia & Coronary artery disease"
+            ],
+            "differentialDiagnosis": "Impaired Fasting Glucose (Prediabetes), Type 1 LADA, Steroid-induced hyperglycemia.",
+            "descriptionAr": "ارتفاع مزمن في سكر الدم الصائم وبعد الأكل والتراكمي (HbA1c >= 6.5%) ناجم عن مقاومة الأنسجة للإنسولين ونقص نسبي في إفرازه، مع مخاطر تصلب الأوعية الدقيقة واعتلال الكلى وشبكية العين.",
+            "descriptionEn": "Chronic hyperglycemia with elevated fasting plasma glucose (>= 126 mg/dL) and HbA1c (>= 6.5%) due to progressive beta-cell dysfunction and insulin resistance.",
+            "diagnosticCriteria": [
+              "Fasting Blood Sugar (FBS) >= 126 mg/dL (7.0 mmol/L)",
+              "2-Hour Postprandial Glucose (PPBS) >= 200 mg/dL",
+              "Glycated Hemoglobin (HbA1c) >= 6.5%",
+              "Elevated HOMA-IR indicating severe tissue insulin resistance",
+              "Microalbuminuria screening recommended annually"
+            ]
+          }
         },
         {
           "id": "prof-1791500705350-qgdl",
@@ -575,30 +585,8 @@
               "method": "Hexokinase",
               "textReference": "",
               "id": "param-0-1791500705350-zj9",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "2 Hours Post-Prandial Glucose",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 140,
-              "panicHigh": 450,
-              "method": "Hexokinase",
-              "textReference": "",
-              "id": "param-1-1791500705350-iob",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Random Blood Glucose",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 140,
-              "textReference": "",
-              "id": "param-2-1791500705350-59s",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "157",
+              "flag": "HIGH"
             },
             {
               "name": "HbA1c (Glycated Hemoglobin)",
@@ -608,8 +596,8 @@
               "textReference": "< 5.7% Normal, 5.7 - 6.4% Pre-Diabetes, ≥ 6.5% Diabetes",
               "method": "HPLC / Turbidimetric",
               "id": "param-3-1791500705350-qhy",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "6.99",
+              "flag": "HIGH"
             },
             {
               "name": "Estimated Average Glucose (eAG)",
@@ -617,10 +605,10 @@
               "minNormal": 68,
               "maxNormal": 114,
               "textReference": "80 - 120 mg/dL",
-              "notes": "Auto-calculated: (28.7 × HbA1c) - 46.7",
+              "notes": "Calculated: (28.7 × HbA1c) - 46.7",
               "id": "param-4-1791500705350-tvp",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "154",
+              "flag": "HIGH"
             }
           ]
         }
@@ -638,8 +626,183 @@
       },
       "status": "draft",
       "createdAt": "2026-10-08T23:05:05.350Z",
-      "updatedAt": "2026-10-08T23:05:05.350Z",
-      "invoiceId": "inv-1791500705351"
+      "updatedAt": "2026-10-10T14:10:49.687Z",
+      "invoiceId": "inv-1791500705351",
+      "smartReportEnabled": true,
+      "smartReportClinicalData": {
+        "reportId": "rep-1791500705350",
+        "patientName": "عادل احمد صبيح",
+        "age": 70,
+        "gender": "male",
+        "executiveSummaryAr": "أظهر التقييم المخبري الشامل للمريض (عادل احمد صبيح) وجود (10) فحوصات خارج المعدل الطبيعي، أبرزها: Total Serum Cholesterol (241 mg/dL)، Serum Triglycerides (166 mg/dL)، LDL - Cholesterol (Calculated) (165 mg/dL)، VLDL - Cholesterol (33 mg/dL). تم ربط هذه المؤشرات وحساب المعدلات السريرية بدقة وتضمين التشخيصات التفريقية والتوصيات الواجب اتباعها أدناه.",
+        "executiveSummaryEn": "Laboratory profile reveals 10 parameter(s) outside standard reference intervals (Total Serum Cholesterol, Serum Triglycerides, LDL - Cholesterol (Calculated)). Organ health status and evidence-based clinical recommendations are provided below.",
+        "criticalAlerts": [],
+        "organScores": {
+          "renal": {
+            "score": 100,
+            "labelAr": "كفاءة ممتازة ومستقرة",
+            "status": "optimal",
+            "tested": true,
+            "summaryAr": "كافة مؤشرات وظائف الكلى والمسالك تقع ضمن المعدلات الفسيولوجية الطبيعية المتوازنة."
+          },
+          "hepatic": {
+            "score": 100,
+            "labelAr": "كفاءة ممتازة ومستقرة",
+            "status": "optimal",
+            "tested": true,
+            "summaryAr": "كافة مؤشرات وظائف الكبد والمرارة تقع ضمن المعدلات الفسيولوجية الطبيعية المتوازنة."
+          },
+          "metabolic": {
+            "score": 65,
+            "labelAr": "انخفاض وظيفي متوسط",
+            "status": "moderate",
+            "tested": true,
+            "summaryAr": "تأثر وظيفي متوسط يستوجب استشارة طبية تخصصية ومتابعة دقيقة لمؤشرات التمثيل الغذائي والسكر."
+          },
+          "hematologic": {
+            "score": 100,
+            "labelAr": "كفاءة ممتازة ومستقرة",
+            "status": "optimal",
+            "tested": true,
+            "summaryAr": "كافة مؤشرات صحة الدم والصفائح تقع ضمن المعدلات الفسيولوجية الطبيعية المتوازنة."
+          },
+          "cardiac": {
+            "score": 65,
+            "labelAr": "انخفاض وظيفي متوسط",
+            "status": "moderate",
+            "tested": true,
+            "summaryAr": "تأثر وظيفي متوسط يستوجب استشارة طبية تخصصية ومتابعة دقيقة لمؤشرات صحة القلب والشرايين والدهون."
+          }
+        },
+        "calculatedIndices": [
+          {
+            "nameAr": "معدل الترشيح الكبيبي التقريبي (Estimated GFR)",
+            "nameEn": "eGFR (CKD-EPI Formula)",
+            "value": "87 mL/min/1.73m²",
+            "reference": "> 90 mL/min",
+            "interpretationAr": "تصنيف وظائف الكلى: المرحلة G2 (انخفاض وظيفي كلوي طفيف)"
+          },
+          {
+            "nameAr": "نسبة بولينا الدم إلى الكرياتينين (BUN / Creatinine Ratio)",
+            "nameEn": "BUN / Creatinine Ratio",
+            "value": 13.4,
+            "reference": "10.0 - 20.0",
+            "interpretationAr": "النسبة طبيعية (10 - 20)."
+          },
+          {
+            "nameAr": "نسبة دي ريتيس لإنزيمات الكبد (De Ritis Ratio)",
+            "nameEn": "AST / ALT Ratio",
+            "value": 0.8,
+            "reference": "0.8 - 1.2 Optimal",
+            "interpretationAr": "نسبة دي ريتيس < 1.0: شائعة في الكبد الدهني (NAFLD/NASH) أو التهاب الكبد الفيروسي المزمن."
+          },
+          {
+            "nameAr": "متوسط السكر المقدر لثلاثة أشهر (Estimated Avg Glucose - eAG)",
+            "nameEn": "eAG (ADAG Equation)",
+            "value": "154 mg/dL",
+            "reference": "< 117 mg/dL Non-diabetic",
+            "interpretationAr": "يعادل متوسط السكر التراكمي 6.99% متوسط قراءات يومية تقريبية تبلغ 154 mg/dL على مدار الـ 90 يوماً الماضية."
+          },
+          {
+            "nameAr": "مؤشر مخاطر تصلب الشرايين (Atherogenic Risk Index)",
+            "nameEn": "Total Cholesterol / HDL Ratio",
+            "value": 5.6,
+            "reference": "< 4.5 Optimal",
+            "interpretationAr": "مخاطر مرتفعة لتصلب الشرايين التاجية وضيق الأوعية."
+          },
+          {
+            "nameAr": "نسبة الدهون الثلاثية إلى النافعة (TG / HDL Ratio)",
+            "nameEn": "Triglycerides / HDL Ratio",
+            "value": 3.86,
+            "reference": "< 2.0 Ideal | > 3.0 High Risk",
+            "interpretationAr": "ارتفاع النسبة يُشير لمقاومة الإنسولين وكثافة جسيمات الكولسترول الضار (Small Dense LDL)."
+          }
+        ],
+        "differentialDiagnoses": [
+          {
+            "diseaseAr": "ارتشاح دهني كبدي (Hepatic Steatosis / Fatty Liver)",
+            "diseaseEn": "Non-Alcoholic Fatty Liver Disease (NAFLD)",
+            "likelihood": "moderate",
+            "rationaleAr": "ارتفاع إنزيم ALT أكثر من AST مع نسبة دي ريتيس = 0.8 (< 1.0)."
+          },
+          {
+            "diseaseAr": "داء السكري من النوع الثاني (Type 2 Diabetes Mellitus)",
+            "diseaseEn": "Type 2 Diabetes Mellitus",
+            "likelihood": "high",
+            "rationaleAr": "تأكيد تشخيص السكري بناءً على قراءات الجلوكوز (صائم=- | بعد الأكل=- | التراكمي=6.99%)."
+          }
+        ],
+        "consultantRecommendations": [
+          "المتابعة الفورية مع استشاري الغدد الصماء والسكري لضبط العلاج الدوائي ونظام غذائي محسوب السعرات.",
+          "يوصى باتباع نظام غذائي خافض للدهون المشبعة واستشارة طبيب القلب لتقييم الحاجة لعلاجات الستاتين (Statins)."
+        ],
+        "abnormalParametersCount": 10,
+        "totalParametersCount": 19,
+        "flaggedList": [
+          {
+            "name": "Total Serum Cholesterol",
+            "result": "241",
+            "unit": "mg/dL",
+            "flag": "HIGH"
+          },
+          {
+            "name": "Serum Triglycerides",
+            "result": "166",
+            "unit": "mg/dL",
+            "flag": "HIGH"
+          },
+          {
+            "name": "LDL - Cholesterol (Calculated)",
+            "result": "165",
+            "unit": "mg/dL",
+            "flag": "HIGH"
+          },
+          {
+            "name": "VLDL - Cholesterol",
+            "result": "33",
+            "unit": "mg/dL",
+            "flag": "HIGH"
+          },
+          {
+            "name": "Non-HDL Cholesterol",
+            "result": "198",
+            "unit": "mg/dL",
+            "flag": "HIGH"
+          },
+          {
+            "name": "Total Chol / HDL Ratio",
+            "result": "5.6",
+            "unit": "Ratio",
+            "flag": "HIGH"
+          },
+          {
+            "name": "هبموجلوبين  (HB %)",
+            "result": "14.80",
+            "unit": "g/L",
+            "flag": "LOW"
+          },
+          {
+            "name": "Fasting Blood Glucose",
+            "result": "157",
+            "unit": "mg/dL",
+            "flag": "HIGH"
+          },
+          {
+            "name": "HbA1c (Glycated Hemoglobin)",
+            "result": "6.99",
+            "unit": "%",
+            "flag": "HIGH"
+          },
+          {
+            "name": "Estimated Average Glucose (eAG)",
+            "result": "154",
+            "unit": "mg/dL",
+            "flag": "HIGH"
+          }
+        ]
+      },
+      "smartReportInterpretation": "أظهر التقييم المخبري الشامل للمريض (عادل احمد صبيح) وجود (10) فحوصات خارج المعدل الطبيعي، أبرزها: Total Serum Cholesterol (241 mg/dL)، Serum Triglycerides (166 mg/dL)، LDL - Cholesterol (Calculated) (165 mg/dL)، VLDL - Cholesterol (33 mg/dL). تم ربط هذه المؤشرات وحساب المعدلات السريرية بدقة وتضمين التشخيصات التفريقية والتوصيات الواجب اتباعها أدناه.",
+      "generalComment": "[التقرير الإكلينيكي الاستشاري الذكي]:\nكافة الفحوصات المخبرية للمريض (عادل احمد صبيح) تقع في النطاقات الآمنة بشكل عام مع انتظام مؤشرات الأعضاء الحيوية ونشاط فسيولوجي متوازن."
     },
     {
       "id": "rep-1791500222390",
