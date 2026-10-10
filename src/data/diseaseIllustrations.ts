@@ -1,4 +1,5 @@
 import { DiseaseIllustration } from '../types/lab';
+import { createSafeSvgDataUri } from '../utils/atlasImageUtils';
 
 export interface DiseaseIllustrationExtended extends DiseaseIllustration {
   specialtyAr?: string;
@@ -14,13 +15,7 @@ function createSvgDataUri(innerSvg: string, title: string, subtitle: string, bor
     ${innerSvg}
     <text x="160" y="170" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="'Cairo', system-ui, -apple-system, sans-serif">${subtitle}</text>
   </svg>`;
-  try {
-    if (typeof btoa === 'function') {
-      const utf8 = encodeURIComponent(svg).replace(/%([0-9A-F]{2})/g, (_, p1) => String.fromCharCode(parseInt(p1, 16)));
-      return `data:image/svg+xml;base64,${btoa(utf8)}`;
-    }
-  } catch {}
-  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+  return createSafeSvgDataUri(svg);
 }
 
 export const DISEASE_ILLUSTRATIONS: DiseaseIllustration[] = [

@@ -375,6 +375,9 @@ export interface Patient {
   sampleDate: string;
   reportingDate: string;
   clinicalHistory?: string;
+  chronicConditions?: string[];
+  currentMedications?: string[];
+  allergies?: string[];
   fastingHours?: number;
   nationalId?: string;
   bloodGroup?: string;

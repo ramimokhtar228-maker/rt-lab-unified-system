@@ -14,7 +14,8 @@ import {
   Package,
   Users2,
   BookOpen,
-  ShieldCheck
+  ShieldCheck,
+  Microscope
 } from 'lucide-react';
 
 interface NavItem {
@@ -66,6 +67,14 @@ export const Navigation: React.FC = () => {
       id: 'diagnostic_editor',
       labelAr: 'إدخال النتائج والتشخيص',
       icon: FileCheck2,
+      group: 'medical'
+    },
+    {
+      id: 'clinical_atlas',
+      labelAr: 'الأطلس المجهري والسريري',
+      icon: Microscope,
+      badge: '30 شريحة',
+      badgeColor: 'bg-rose-700',
       group: 'medical'
     },
     {

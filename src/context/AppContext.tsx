@@ -299,6 +299,25 @@ interface AppContextType {
   setIsBarcodeScannerOpen: (open: boolean) => void;
   isLabInfoModalOpen: boolean;
   setIsLabInfoModalOpen: (open: boolean) => void;
+  isDoctorCriticalAlertModalOpen: boolean;
+  setIsDoctorCriticalAlertModalOpen: (open: boolean) => void;
+  isEhrModalOpen: boolean;
+  setIsEhrModalOpen: (open: boolean) => void;
+  isBiomarkersModalOpen: boolean;
+  setIsBiomarkersModalOpen: (open: boolean) => void;
+  isWearablesModalOpen: boolean;
+  setIsWearablesModalOpen: (open: boolean) => void;
+  isMobilePortalModalOpen: boolean;
+  setIsMobilePortalModalOpen: (open: boolean) => void;
+  isDoctorShareModalOpen: boolean;
+  setIsDoctorShareModalOpen: (open: boolean) => void;
+  isHistoricalPortalModalOpen: boolean;
+  setIsHistoricalPortalModalOpen: (open: boolean) => void;
+  isSupportModalOpen: boolean;
+  setIsSupportModalOpen: (open: boolean) => void;
+  isSecurityModalOpen: boolean;
+  setIsSecurityModalOpen: (open: boolean) => void;
+  toggleLanguage: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -317,7 +336,27 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [isPatientFormOpen, setIsPatientFormOpen] = useState(false);
   const [isBarcodeScannerOpen, setIsBarcodeScannerOpen] = useState(false);
   const [isLabInfoModalOpen, setIsLabInfoModalOpen] = useState(false);
+  const [isDoctorCriticalAlertModalOpen, setIsDoctorCriticalAlertModalOpen] = useState(false);
+  const [isEhrModalOpen, setIsEhrModalOpen] = useState(false);
+  const [isBiomarkersModalOpen, setIsBiomarkersModalOpen] = useState(false);
+  const [isWearablesModalOpen, setIsWearablesModalOpen] = useState(false);
+  const [isMobilePortalModalOpen, setIsMobilePortalModalOpen] = useState(false);
+  const [isDoctorShareModalOpen, setIsDoctorShareModalOpen] = useState(false);
+  const [isHistoricalPortalModalOpen, setIsHistoricalPortalModalOpen] = useState(false);
+  const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
+  const [isSecurityModalOpen, setIsSecurityModalOpen] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState<IncomeRecord | null>(null);
+
+  const toggleLanguage = useCallback(() => {
+    setLanguage(prev => {
+      const next = prev === 'ar' ? 'en' : 'ar';
+      if (typeof document !== 'undefined') {
+        document.documentElement.dir = next === 'ar' ? 'rtl' : 'ltr';
+        document.documentElement.lang = next;
+      }
+      return next;
+    });
+  }, []);
 
   // 4. Reports (Unified Diagnostic Worklist)
   const [reports, setReports] = useState<LabReport[]>(() => {
@@ -2847,7 +2886,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     isBarcodeScannerOpen,
     setIsBarcodeScannerOpen,
     isLabInfoModalOpen,
-    setIsLabInfoModalOpen
+    setIsLabInfoModalOpen,
+    isDoctorCriticalAlertModalOpen,
+    setIsDoctorCriticalAlertModalOpen,
+    isEhrModalOpen,
+    setIsEhrModalOpen,
+    isBiomarkersModalOpen,
+    setIsBiomarkersModalOpen,
+    isWearablesModalOpen,
+    setIsWearablesModalOpen,
+    isMobilePortalModalOpen,
+    setIsMobilePortalModalOpen,
+    isDoctorShareModalOpen,
+    setIsDoctorShareModalOpen,
+    isHistoricalPortalModalOpen,
+    setIsHistoricalPortalModalOpen,
+    isSupportModalOpen,
+    setIsSupportModalOpen,
+    isSecurityModalOpen,
+    setIsSecurityModalOpen,
+    toggleLanguage
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

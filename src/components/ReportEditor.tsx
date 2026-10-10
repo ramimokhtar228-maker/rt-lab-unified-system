@@ -9,6 +9,7 @@ import { QuickResultPicker } from './QuickResultPicker';
 import { ParameterEditModal } from './ParameterEditModal';
 import { AddParameterModal } from './AddParameterModal';
 import { StaffSignaturesPicker } from './StaffSignaturesPicker';
+import { ClinicalAtlasImage } from './ClinicalAtlasImage';
 import { useApp } from '../context/AppContext';
 import { 
   Plus, 
@@ -39,7 +40,8 @@ import {
   Clock,
   Search,
   Eye,
-  ListFilter
+  ListFilter,
+  Stethoscope
 } from 'lucide-react';
 
 interface ReportEditorProps {
@@ -69,7 +71,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
   onOpenIllustrationsModal,
   onOpenSmartReport
 }) => {
-  const { packages, applyPackageToReport } = useApp();
+  const { packages, applyPackageToReport, setIsDoctorShareModalOpen } = useApp();
   const [activeProfileTab, setActiveProfileTab] = useState<string>(report.profiles[0]?.id || '');
   const [modalParamToEdit, setModalParamToEdit] = useState<TestParameter | null>(null);
   const [modalParamProfileId, setModalParamProfileId] = useState<string>('');
@@ -444,6 +446,17 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
           >
             <Share2 className="w-3.5 h-3.5" />
             <span>واتساب</span>
+          </button>
+
+          {/* Doctor Direct Share */}
+          <button
+            type="button"
+            onClick={() => setIsDoctorShareModalOpen(true)}
+            className="flex items-center gap-1 px-3 py-1.5 bg-blue-700 hover:bg-blue-600 text-white text-xs font-bold rounded-lg transition-all cursor-pointer"
+            title="مشاركة التقرير فوراً مع الطبيب المعالج عبر واتساب ورمز QR"
+          >
+            <Stethoscope className="w-3.5 h-3.5 text-blue-200" />
+            <span>مشاركة الطبيب</span>
           </button>
 
           {/* Export PPTX */}
@@ -1051,13 +1064,14 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
             {currentProfile.attachedIllustration && (
               <div className="bg-amber-50/70 border border-amber-200 rounded-xl p-3 flex items-center justify-between gap-3 text-xs">
                 <div className="flex items-center gap-3">
-                  {currentProfile.attachedIllustration.imageUrl && (
-                    <img
-                      src={currentProfile.attachedIllustration.imageUrl}
-                      alt={currentProfile.attachedIllustration.titleEn}
-                      className="w-20 h-14 rounded object-contain bg-slate-950 border border-amber-300 shadow-2xs p-0.5"
+                  <div className="w-24 h-16 shrink-0 rounded-lg overflow-hidden border border-amber-300 bg-slate-950 shadow-2xs">
+                    <ClinicalAtlasImage
+                      illustration={currentProfile.attachedIllustration}
+                      className="w-full h-full"
+                      allowZoom={true}
+                      showReticle={false}
                     />
-                  )}
+                  </div>
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-amber-950 text-sm">

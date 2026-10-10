@@ -25,6 +25,16 @@ import { PatientInvoiceModal } from './components/PatientInvoiceModal';
 import { TestCatalogModal } from './components/TestCatalogModal';
 import { ManualTestModal } from './components/ManualTestModal';
 import { OfflineIndicator } from './components/OfflineIndicator';
+import { ClinicalAtlasModule } from './components/ClinicalAtlasModule';
+import { DoctorCriticalAlertModal } from './components/DoctorCriticalAlertModal';
+import { EHRInteroperabilityModal } from './components/EHRInteroperabilityModal';
+import { BiomarkersDashboardModal } from './components/BiomarkersDashboardModal';
+import { WearablesSyncModal } from './components/WearablesSyncModal';
+import { PatientMobilePortalModal } from './components/PatientMobilePortalModal';
+import { DoctorShareModal } from './components/DoctorShareModal';
+import { PatientHistoricalPortalModal } from './components/PatientHistoricalPortalModal';
+import { SupportCenterModal } from './components/SupportCenterModal';
+import { SecurityComplianceModal } from './components/SecurityComplianceModal';
 import {
   LabReport,
   ReportStatus,
@@ -69,7 +79,26 @@ const AppContent: React.FC = () => {
     addCatalogTest,
     deleteCatalogTest,
     forceSyncCatalog,
-    applyPackageToReport
+    applyPackageToReport,
+    isDoctorCriticalAlertModalOpen,
+    setIsDoctorCriticalAlertModalOpen,
+    isEhrModalOpen,
+    setIsEhrModalOpen,
+    isBiomarkersModalOpen,
+    setIsBiomarkersModalOpen,
+    isWearablesModalOpen,
+    setIsWearablesModalOpen,
+    isMobilePortalModalOpen,
+    setIsMobilePortalModalOpen,
+    isDoctorShareModalOpen,
+    setIsDoctorShareModalOpen,
+    isHistoricalPortalModalOpen,
+    setIsHistoricalPortalModalOpen,
+    isSupportModalOpen,
+    setIsSupportModalOpen,
+    isSecurityModalOpen,
+    setIsSecurityModalOpen,
+    toggleLanguage
   } = useApp();
 
   const [archiveSearch, setArchiveSearch] = useState('');
@@ -294,6 +323,7 @@ const AppContent: React.FC = () => {
                 onUpdateIndividualTests={() => {}}
               />
             )}
+            {activeTab === 'clinical_atlas' && <ClinicalAtlasModule />}
             {activeTab === 'audit_settings' && <SettingsBackupModule />}
           </>
         )}
@@ -328,6 +358,8 @@ const AppContent: React.FC = () => {
           isOpen={smartReportModalOpen}
           onClose={() => setSmartReportModalOpen(false)}
           report={activeSmartReport}
+          onOpenDoctorCritical={() => setIsDoctorCriticalAlertModalOpen(true)}
+          onOpenEHR={() => setIsEhrModalOpen(true)}
           onAttachToReport={(analysis) => {
             if (activeSmartReport) {
               updateReport(activeSmartReport.id, {
@@ -444,6 +476,93 @@ const AppContent: React.FC = () => {
               updateReport(currentReport.id, { profiles: updatedProfiles });
             }
             setManualTestModalOpen(false);
+          }}
+        />
+      )}
+
+      {/* 10. Doctor Critical Values & Emergency Alert Modal */}
+      {isDoctorCriticalAlertModalOpen && currentReport && (
+        <DoctorCriticalAlertModal
+          isOpen={isDoctorCriticalAlertModalOpen}
+          onClose={() => setIsDoctorCriticalAlertModalOpen(false)}
+          report={currentReport}
+        />
+      )}
+
+      {/* 11. International EHR / HL7 FHIR Interoperability Modal */}
+      {isEhrModalOpen && currentReport && (
+        <EHRInteroperabilityModal
+          isOpen={isEhrModalOpen}
+          onClose={() => setIsEhrModalOpen(false)}
+          report={currentReport}
+        />
+      )}
+
+      {/* 12. Interactive Vital Biomarkers Dashboard Modal */}
+      {isBiomarkersModalOpen && currentReport && (
+        <BiomarkersDashboardModal
+          isOpen={isBiomarkersModalOpen}
+          onClose={() => setIsBiomarkersModalOpen(false)}
+          report={currentReport}
+          historicalReports={reports}
+        />
+      )}
+
+      {/* 13. Wearable Medical Devices Telemetry Modal */}
+      {isWearablesModalOpen && currentReport && (
+        <WearablesSyncModal
+          isOpen={isWearablesModalOpen}
+          onClose={() => setIsWearablesModalOpen(false)}
+          report={currentReport}
+        />
+      )}
+
+      {/* 14. Mobile Patient Portal Companion View Modal */}
+      {isMobilePortalModalOpen && currentReport && (
+        <PatientMobilePortalModal
+          isOpen={isMobilePortalModalOpen}
+          onClose={() => setIsMobilePortalModalOpen(false)}
+          report={currentReport}
+        />
+      )}
+
+      {/* 15. Instant Doctor Report Sharing Modal */}
+      {isDoctorShareModalOpen && currentReport && (
+        <DoctorShareModal
+          isOpen={isDoctorShareModalOpen}
+          onClose={() => setIsDoctorShareModalOpen(false)}
+          report={currentReport}
+          labInfo={labInfo}
+        />
+      )}
+
+      {/* 16. Secure Historical Patient Records Portal Modal */}
+      {isHistoricalPortalModalOpen && (
+        <PatientHistoricalPortalModal
+          isOpen={isHistoricalPortalModalOpen}
+          onClose={() => setIsHistoricalPortalModalOpen(false)}
+          reports={reports}
+          initialPatientId={currentReport?.patient.labNumber}
+          onSelectReport={handleSelectReport}
+        />
+      )}
+
+      {/* 17. 24/7 Clinical & Technical Support Modal */}
+      {isSupportModalOpen && (
+        <SupportCenterModal
+          isOpen={isSupportModalOpen}
+          onClose={() => setIsSupportModalOpen(false)}
+        />
+      )}
+
+      {/* 18. End-to-End Encryption & Security Compliance Center Modal */}
+      {isSecurityModalOpen && (
+        <SecurityComplianceModal
+          isOpen={isSecurityModalOpen}
+          onClose={() => setIsSecurityModalOpen(false)}
+          reports={reports}
+          onRestoreReports={(restored) => {
+            restored.forEach(r => addReport(r));
           }}
         />
       )}

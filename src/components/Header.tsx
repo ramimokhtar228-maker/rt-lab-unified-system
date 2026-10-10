@@ -13,10 +13,20 @@ import {
   Calendar,
   Layers,
   ChevronDown,
-  X
+  X,
+  Globe,
+  Activity,
+  Watch,
+  Smartphone,
+  Headphones,
+  ShieldCheck,
+  AlertTriangle,
+  FolderArchive,
+  Languages
 } from 'lucide-react';
 import { RTLogo } from './RTLogo';
 import { PWAInstallButton } from './PWAInstallButton';
+import { detectPanicValues } from '../utils/criticalAlertEngine';
 
 export const Header: React.FC = () => {
   const {
@@ -35,12 +45,25 @@ export const Header: React.FC = () => {
     syncUnifiedDataToGitHub,
     fetchAllDevicesData,
     isDeviceSyncing,
-    lastDeviceSyncAt,
-    githubConfig
+    githubConfig,
+    setIsDoctorCriticalAlertModalOpen,
+    setIsEhrModalOpen,
+    setIsBiomarkersModalOpen,
+    setIsWearablesModalOpen,
+    setIsMobilePortalModalOpen,
+    setIsHistoricalPortalModalOpen,
+    setIsSupportModalOpen,
+    setIsSecurityModalOpen,
+    toggleLanguage,
+    language
   } = useApp();
 
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [syncStatusMsg, setSyncStatusMsg] = useState<string | null>(null);
+
+  const hasAnyPanicValues = React.useMemo(() => {
+    return reports.some(r => detectPanicValues(r).length > 0);
+  }, [reports]);
 
   const todayStr = new Date().toISOString().split('T')[0];
   const todayIncome = incomeRecords.filter(r => r.createdAt.startsWith(todayStr));
@@ -113,23 +136,113 @@ export const Header: React.FC = () => {
             {/* PWA Install Button */}
             <PWAInstallButton variant="header" />
 
+            {/* Critical Panic Alerts Doctor Button */}
+            <button
+              onClick={() => setIsDoctorCriticalAlertModalOpen(true)}
+              title="نظام تنبيهات الطوارئ الفوري للأطباء (Panic Values Alert)"
+              className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl font-bold text-xs shadow-sm transition-all cursor-pointer active:scale-95 ${
+                hasAnyPanicValues
+                  ? 'bg-red-600 hover:bg-red-500 text-white animate-pulse ring-2 ring-red-400'
+                  : 'bg-slate-800 hover:bg-slate-700 text-red-300 border border-red-900/50'
+              }`}
+            >
+              <AlertTriangle className="w-4 h-4 text-red-400" />
+              <span className="hidden sm:inline">إنذار الأطباء الحرِج</span>
+              {hasAnyPanicValues && (
+                <span className="w-2 h-2 rounded-full bg-white animate-ping"></span>
+              )}
+            </button>
+
             {/* Quick Action: New Patient Admission */}
             <button
               onClick={() => setIsPatientFormOpen(true)}
               className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-rose-700 hover:bg-rose-600 text-white font-bold text-xs shadow-lg shadow-rose-900/30 transition-all cursor-pointer active:scale-95"
             >
               <PlusCircle className="w-4 h-4" />
-              <span>تسجيل مريض وحجز</span>
+              <span>تسجيل مريض</span>
+            </button>
+
+            {/* Biomarkers Trend Dashboard */}
+            <button
+              onClick={() => setIsBiomarkersModalOpen(true)}
+              title="لوحة تحكم الرسوم البيانية المتطورة للبيانات الحيوية"
+              className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-rose-300 border border-slate-700 transition-colors cursor-pointer"
+            >
+              <Activity className="w-4 h-4" />
+            </button>
+
+            {/* Wearable Medical Devices IoT */}
+            <button
+              onClick={() => setIsWearablesModalOpen(true)}
+              title="مزامنة الأجهزة الطبية القابلة للارتداء (Apple Health & Dexcom CGM)"
+              className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-slate-700 transition-colors cursor-pointer"
+            >
+              <Watch className="w-4 h-4" />
+            </button>
+
+            {/* Patient Mobile Portal Companion */}
+            <button
+              onClick={() => setIsMobilePortalModalOpen(true)}
+              title="تطبيق الجوال لمراقبة الصحة للمرضى"
+              className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-300 border border-slate-700 transition-colors cursor-pointer"
+            >
+              <Smartphone className="w-4 h-4" />
+            </button>
+
+            {/* Historical Patient Records */}
+            <button
+              onClick={() => setIsHistoricalPortalModalOpen(true)}
+              title="البوابة الإلكترونية الآمنة للسجلات التاريخية"
+              className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 transition-colors cursor-pointer"
+            >
+              <FolderArchive className="w-4 h-4" />
+            </button>
+
+            {/* International EHR / HL7 FHIR */}
+            <button
+              onClick={() => setIsEhrModalOpen(true)}
+              title="التكامل مع السجلات الصحية الإلكترونية الدولية (HL7 FHIR R4)"
+              className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-blue-300 border border-slate-700 transition-colors cursor-pointer"
+            >
+              <Globe className="w-4 h-4" />
+            </button>
+
+            {/* Security & End-to-End Encryption */}
+            <button
+              onClick={() => setIsSecurityModalOpen(true)}
+              title="التشفير الكامل وأمن معلومات المرضى (AES-256-GCM / HIPAA)"
+              className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-indigo-300 border border-slate-700 transition-colors cursor-pointer"
+            >
+              <ShieldCheck className="w-4 h-4" />
+            </button>
+
+            {/* 24/7 Clinical & Technical Support */}
+            <button
+              onClick={() => setIsSupportModalOpen(true)}
+              title="الدعم الفني والاستشاري 24/7"
+              className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-teal-300 border border-slate-700 transition-colors cursor-pointer"
+            >
+              <Headphones className="w-4 h-4" />
+            </button>
+
+            {/* Language Switcher */}
+            <button
+              onClick={toggleLanguage}
+              title="تبديل لغة الواجهة (العربية / English)"
+              className="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-mono text-xs font-bold transition-colors cursor-pointer flex items-center gap-1"
+            >
+              <Languages className="w-3.5 h-3.5 text-slate-400" />
+              <span>{language === 'ar' ? 'EN' : 'عربي'}</span>
             </button>
 
             {/* Quick Action: Lab Info & Branches Edit */}
             <button
               onClick={() => setIsLabInfoModalOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-blue-900/80 hover:bg-blue-800 text-blue-200 border border-blue-700/60 font-bold text-xs shadow-sm transition-all cursor-pointer active:scale-95"
+              className="hidden xl:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-blue-900/80 hover:bg-blue-800 text-blue-200 border border-blue-700/60 font-bold text-xs shadow-sm transition-all cursor-pointer active:scale-95"
               title="تعديل بيانات المعمل، الفروع، التوقيعات، الهواتف، والاعتماد"
             >
               <Building2 className="w-4 h-4 text-blue-300" />
-              <span>بيانات المعمل والفروع</span>
+              <span>بيانات المعمل</span>
             </button>
 
             {/* Quick Action: Barcode Scanner */}

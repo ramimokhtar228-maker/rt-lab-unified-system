@@ -1,6 +1,7 @@
 import { LabReport, LabInfo } from '../types/lab';
 import { formatReferenceDisplay, getChartPointerPosition } from './cbcCalculator';
 import { generateSmartClinicalAnalysis } from './smartReportEngine';
+import { cleanAtlasImageUrl } from './atlasImageUtils';
 
 export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): void {
   const staff = report.staff || {
@@ -281,7 +282,7 @@ export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): voi
             <div style="background:linear-gradient(135deg, #fff1f2 0%, #f8fafc 100%); border:1px solid #fecdd3; border-radius:6px; padding:8px 10px; margin-bottom:8px; display:flex; gap:12px; align-items:center;" dir="rtl">
               ${profile.attachedIllustration.imageUrl ? `
                 <div style="width:170px; height:96px; flex-shrink:0; border-radius:6px; overflow:hidden; border:1.5px solid #881337; background:#090d16; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
-                  <img src="${profile.attachedIllustration.imageUrl}" alt="${profile.attachedIllustration.titleEn}" style="width:100%; height:100%; object-fit:contain; display:block;" />
+                  <img src="${cleanAtlasImageUrl(profile.attachedIllustration.imageUrl)}" alt="${profile.attachedIllustration.titleEn}" style="width:100%; height:100%; object-fit:contain; display:block;" />
                 </div>
               ` : ''}
               <div style="flex:1; text-align:right;">

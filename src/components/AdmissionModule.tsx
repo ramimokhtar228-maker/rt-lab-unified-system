@@ -1748,14 +1748,44 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
               </div>
 
               <div className="sm:col-span-2">
-                <label className="block text-xs font-bold text-slate-700 mb-1">التاريخ المرضي / ملاحظات التشخيص:</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  التاريخ المرضي والأدوية المتناولة (Clinical History & Chronic Diseases):
+                </label>
                 <input
                   type="text"
                   value={clinicalHistory}
                   onChange={(e) => setClinicalHistory(e.target.value)}
-                  placeholder="مثال: مريض سكر وضغط، يعاني من إجهاد وشحوب..."
+                  placeholder="مثال: مريض سكر وضغط يتناول ميتفورمين وكونكور، يعاني من إجهاد وشحوب..."
                   className="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl p-2.5 focus:ring-2 focus:ring-rose-500 focus:outline-none"
                 />
+                {/* Quick Medical History Chips */}
+                <div className="flex flex-wrap items-center gap-1.5 mt-2">
+                  <span className="text-[10px] text-slate-400 font-bold">إضافة سريعة:</span>
+                  {[
+                    'السكري (Diabetes)',
+                    'ارتفاع ضغط الدم (HTN)',
+                    'قصور وظائف الكلى (CKD)',
+                    'أمراض القلب والشرايين (IHD)',
+                    'ميتفورمين (Metformin)',
+                    'مخفضات كوليسترول (Statins)',
+                    'أدوية سيولة (Warfarin/Aspirin)',
+                    'خمول الغدة الدرقية (Hypothyroid)'
+                  ].map((tag, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => {
+                        const next = clinicalHistory.trim()
+                          ? `${clinicalHistory.trim()}، ${tag}`
+                          : tag;
+                        setClinicalHistory(next);
+                      }}
+                      className="text-[10px] bg-slate-100 hover:bg-rose-50 hover:text-rose-900 text-slate-700 border border-slate-200 px-2 py-0.5 rounded-lg transition cursor-pointer"
+                    >
+                      + {tag}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

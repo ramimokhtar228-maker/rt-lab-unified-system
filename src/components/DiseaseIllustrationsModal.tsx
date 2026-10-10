@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { DiseaseIllustration } from '../types/lab';
 import { DISEASE_ILLUSTRATIONS } from '../data/diseaseIllustrations';
+import { ClinicalAtlasImage } from './ClinicalAtlasImage';
 import { 
   X, 
   Search, 
@@ -235,34 +236,46 @@ export const DiseaseIllustrationsModal: React.FC<DiseaseIllustrationsModalProps>
                 <div
                   key={item.id}
                   onClick={() => setPreviewItem(item)}
-                  className={`p-3 rounded-xl border cursor-pointer transition relative text-right ${
+                  className={`p-3 rounded-xl border cursor-pointer transition relative text-right flex gap-3 items-center ${
                     isPreview
                       ? 'bg-rose-950/40 border-rose-500/80 ring-1 ring-rose-500/50'
                       : 'bg-slate-800/50 border-slate-700/60 hover:bg-slate-800 hover:border-slate-600'
                   }`}
                 >
-                  <div className="flex items-start justify-between gap-2 mb-1">
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-700/80 text-rose-300">
-                      {item.code}
-                    </span>
-                    <div className="flex items-center gap-1">
-                      {isSuggested && (
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1">
-                          <Sparkles className="w-2.5 h-2.5" /> مقترح
-                        </span>
-                      )}
-                      {isSelected && (
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
-                          <Check className="w-2.5 h-2.5" /> مضاف للتقرير
-                        </span>
-                      )}
-                    </div>
+                  {/* Thumbnail Image */}
+                  <div className="w-16 h-14 shrink-0 rounded-lg overflow-hidden border border-rose-800/50 bg-slate-950">
+                    <ClinicalAtlasImage
+                      illustration={item}
+                      className="w-full h-full"
+                      allowZoom={false}
+                      showReticle={false}
+                    />
                   </div>
-                  <h4 className="font-bold text-sm text-white mb-0.5">{item.titleAr}</h4>
-                  <div className="text-xs text-slate-400 font-sans" dir="ltr">{item.titleEn}</div>
-                  <p className="text-[11px] text-slate-400 line-clamp-2 mt-1.5 leading-relaxed">
-                    {item.pathologySummaryAr}
-                  </p>
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-2 mb-1">
+                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-700/80 text-rose-300">
+                        {item.code}
+                      </span>
+                      <div className="flex items-center gap-1">
+                        {isSuggested && (
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1">
+                            <Sparkles className="w-2.5 h-2.5" /> مقترح
+                          </span>
+                        )}
+                        {isSelected && (
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
+                            <Check className="w-2.5 h-2.5" /> مضاف للتقرير
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <h4 className="font-bold text-sm text-white mb-0.5 truncate">{item.titleAr}</h4>
+                    <div className="text-xs text-slate-400 font-sans truncate" dir="ltr">{item.titleEn}</div>
+                    <p className="text-[11px] text-slate-400 line-clamp-1 mt-1 leading-relaxed">
+                      {item.pathologySummaryAr}
+                    </p>
+                  </div>
                 </div>
               );
             })}
@@ -279,7 +292,7 @@ export const DiseaseIllustrationsModal: React.FC<DiseaseIllustrationsModalProps>
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full bg-rose-500 animate-pulse"></div>
                       <span className="text-xs font-mono font-bold text-rose-400">
-                        HIGH RESOLUTION CLINICAL INFOGRAM
+                        HIGH RESOLUTION CLINICAL INFOGRAM & ATLAS
                       </span>
                     </div>
                     <span className="text-xs bg-slate-800 text-slate-300 px-2.5 py-1 rounded-md border border-slate-700 font-mono">
@@ -290,15 +303,15 @@ export const DiseaseIllustrationsModal: React.FC<DiseaseIllustrationsModalProps>
                   <h3 className="text-lg font-black text-white">{previewItem.titleAr}</h3>
                   <div className="text-sm font-semibold text-rose-300 mb-3" dir="ltr">{previewItem.titleEn}</div>
 
-                  {/* Actual High-Resolution Vector Illustration */}
-                  {previewItem.imageUrl && (
-                    <div className="w-full h-52 rounded-xl overflow-hidden border-2 border-rose-800/60 bg-slate-950 flex items-center justify-center my-3 shadow-lg group relative">
-                      <img src={previewItem.imageUrl} alt={previewItem.titleEn} className="w-full h-full object-contain" />
-                      <span className="absolute top-2 left-2 bg-black/75 text-rose-300 text-[10px] font-mono px-2 py-0.5 rounded border border-rose-500/30">
-                        RT Optical Zoom Atlas
-                      </span>
-                    </div>
-                  )}
+                  {/* High-Resolution Optical Vector View with Zoom */}
+                  <div className="my-3">
+                    <ClinicalAtlasImage
+                      illustration={previewItem}
+                      className="w-full h-56 rounded-xl border-2 border-rose-800/60"
+                      showReticle={true}
+                      allowZoom={true}
+                    />
+                  </div>
 
                   {/* Microscopic and Clinical Field Simulation Graphic */}
                   <div className="my-3 p-3.5 rounded-lg bg-slate-900/90 border border-rose-800/30 flex items-center gap-3">

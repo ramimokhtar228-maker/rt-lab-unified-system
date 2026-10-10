@@ -9,6 +9,7 @@ import { downloadReportPDF } from '../utils/pdfExport';
 import { openPrintReportWindow } from '../utils/printReportWindow';
 import { useApp } from '../context/AppContext';
 import { generateSmartClinicalAnalysis } from '../utils/smartReportEngine';
+import { ClinicalAtlasImage } from './ClinicalAtlasImage';
 import { 
   Printer, 
   Share2, 
@@ -46,7 +47,7 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
   onOpenIllustrationsModal,
   onOpenSmartReport
 }) => {
-  const { labInfo, updateReport } = useApp();
+  const { labInfo, updateReport, setIsDoctorShareModalOpen } = useApp();
   const p = report.patient;
   const staff = report.staff || {
     labChemist: "د. هبة الشناوي",
@@ -445,6 +446,16 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
             <span>تنبيه واتساب</span>
           </button>
 
+          {/* Doctor Share Direct */}
+          <button
+            onClick={() => setIsDoctorShareModalOpen(true)}
+            className="flex items-center gap-1.5 px-3.5 py-2 bg-blue-700 hover:bg-blue-600 text-white text-xs font-bold rounded-lg shadow-sm transition-all cursor-pointer"
+            title="مشاركة التقرير الطبي فوراً مع الطبيب المعالج عبر واتساب ورمز QR السريع"
+          >
+            <Stethoscope className="w-3.5 h-3.5 text-blue-200" />
+            <span>مشاركة الطبيب</span>
+          </button>
+
           {/* PowerPoint (.pptx) Export */}
           <button
             onClick={handlePPTX}
@@ -603,9 +614,9 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
                             </td>
                             <td className="py-2 px-1 text-center">
                               <ColouredRangeChart
-                                result={param.result}
-                                min={param.minNormal}
-                                max={param.maxNormal}
+                                resultStr={param.result}
+                                minNormal={param.minNormal}
+                                maxNormal={param.maxNormal}
                                 flag={param.flag}
                               />
                             </td>
@@ -652,15 +663,14 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
                 {profile.attachedIllustration ? (
                   <div className="bg-gradient-to-r from-rose-50/70 to-slate-50 border border-rose-200/90 rounded-xl p-3.5 mb-4 text-xs shadow-2xs">
                     <div className="flex flex-col sm:flex-row items-center gap-3.5">
-                      {profile.attachedIllustration.imageUrl ? (
-                        <div className="w-44 h-26 shrink-0 rounded-lg overflow-hidden border-2 border-rose-900/60 bg-slate-950 shadow-md relative flex items-center justify-center p-1">
-                          <img
-                            src={profile.attachedIllustration.imageUrl}
-                            alt={profile.attachedIllustration.titleEn}
-                            className="w-full h-full object-contain"
-                          />
-                        </div>
-                      ) : null}
+                      <div className="w-48 h-28 shrink-0 rounded-lg overflow-hidden border-2 border-rose-900/60 bg-slate-950 shadow-md">
+                        <ClinicalAtlasImage
+                          illustration={profile.attachedIllustration}
+                          className="w-full h-full"
+                          allowZoom={true}
+                          showReticle={true}
+                        />
+                      </div>
                       <div className="flex-1 space-y-1 text-right">
                         <div className="flex items-center justify-between">
                           <span className="font-bold text-rose-950 text-xs">

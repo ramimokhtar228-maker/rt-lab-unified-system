@@ -2,6 +2,7 @@ import { LabReport, TestProfile, TestParameter, CatalogProfileTemplate, Comprehe
 import { LAB_CATALOG, DEFAULT_STAFF, INITIAL_INDIVIDUAL_TESTS, INITIAL_LAB_INFO, INITIAL_PACKAGES } from '../data/labCatalog';
 import { DISEASE_ILLUSTRATIONS, suggestHematologicalIllustration } from '../data/diseaseIllustrations';
 import { runAutomaticCalculations } from './calculator';
+import { cleanAtlasImageUrl } from './atlasImageUtils';
 
 export const MIGRATION_VERSION_KEY = 'rt_lab_migration_v9_booking_sync_fix_2026';
 
@@ -486,6 +487,9 @@ export function upgradeSingleReport(report: LabReport): LabReport {
       if (!attachedIll) {
         attachedIll = suggestHematologicalIllustration(updatedParams);
       }
+      if (attachedIll && attachedIll.imageUrl) {
+        attachedIll = { ...attachedIll, imageUrl: cleanAtlasImageUrl(attachedIll.imageUrl) };
+      }
 
       // Blood film findings
       const bloodFilm = prof.bloodFilmFindings || {
@@ -512,6 +516,9 @@ export function upgradeSingleReport(report: LabReport): LabReport {
       let attachedIll = prof.attachedIllustration;
       if (!attachedIll) {
         attachedIll = getInfogramForProfile(prof.profileCode, prof.titleEn) || undefined;
+      }
+      if (attachedIll && attachedIll.imageUrl) {
+        attachedIll = { ...attachedIll, imageUrl: cleanAtlasImageUrl(attachedIll.imageUrl) };
       }
 
       // Run auto calculations if relevant (e.g. Lipid, LFT, KFT, HOMA-IR)
