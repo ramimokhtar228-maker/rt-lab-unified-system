@@ -1,304 +1,7 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-10T20:35:18.815Z",
+  "syncedAt": "2026-10-10T20:36:53.429Z",
   "reports": [
-    {
-      "id": "rep-1791501113004",
-      "reportNumber": "RT-2026-032",
-      "patient": {
-        "id": "pat-1791501113000",
-        "labNumber": "RT-2026-032",
-        "barcode": "RT-10062",
-        "fullName": "زينب عمر",
-        "phone": "01091353732",
-        "age": 53,
-        "ageUnit": "years",
-        "gender": "female",
-        "referringDoctorTitle": "Dr.",
-        "referringDoctorName": "HERSELF",
-        "sampleDate": "2026-10-06T10:26:00.000Z",
-        "reportingDate": "2026-10-10T10:24:00.000Z",
-        "fastingHours": 12,
-        "bookingType": "home_visit",
-        "homeAddress": "م. نصر",
-        "visitFee": 0,
-        "appointmentDate": "2026-10-07",
-        "appointmentTime": "09:00",
-        "deliveryNotes": "",
-        "testsSubtotal": 349,
-        "totalCost": 349,
-        "discountApplied": 0,
-        "paymentMethod": "cash",
-        "assignedPackageId": "pkg-1"
-      },
-      "packageApplied": {
-        "code": "PKG-ANNUAL-WELLNESS",
-        "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
-        "packagePrice": 199,
-        "originalPrice": 2900
-      },
-      "profiles": [
-        {
-          "id": "prof-pkg-1791501113003",
-          "profileCode": "PKG-ANNUAL-WELLNESS",
-          "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
-          "titleEn": "Comprehensive Annual Wellness Package",
-          "category": "باقة فحوصات شاملة",
-          "sampleType": "Serum + EDTA Whole Blood + Clean Urine",
-          "interpretation": "جميع تحاليل وفحوصات الباقة الشاملة تم تقييمها وتدقيقها طبقاً للمعدلات المرجعية المعتمدة دولياً.",
-          "parameters": [
-            {
-              "name": "Total Serum Cholesterol",
-              "unit": "mg/dL",
-              "minNormal": 120,
-              "maxNormal": 200,
-              "method": "CHOD-PAP",
-              "textReference": "",
-              "id": "param-LIPID-0-1791501113000-1wf",
-              "result": "",
-              "flag": "NORMAL",
-              "notes": "دهون الدم الشاملة مع المؤشرات الحسابية"
-            },
-            {
-              "name": "Serum Triglycerides",
-              "unit": "mg/dL",
-              "minNormal": 40,
-              "maxNormal": 150,
-              "panicHigh": 500,
-              "method": "GPO-PAP",
-              "textReference": "",
-              "id": "param-LIPID-1-1791501113000-do0",
-              "result": "",
-              "flag": "NORMAL",
-              "notes": "دهون الدم الشاملة مع المؤشرات الحسابية"
-            },
-            {
-              "name": "HDL - Cholesterol (Good)",
-              "unit": "mg/dL",
-              "minNormal": 40,
-              "maxNormal": 65,
-              "method": "Direct Accelerator",
-              "textReference": "",
-              "id": "param-LIPID-2-1791501113000-d10",
-              "result": "",
-              "flag": "NORMAL",
-              "notes": "دهون الدم الشاملة مع المؤشرات الحسابية"
-            },
-            {
-              "name": "LDL - Cholesterol (Calculated)",
-              "unit": "mg/dL",
-              "minNormal": 0,
-              "maxNormal": 100,
-              "notes": "Friedewald Formula: Total Chol - HDL - (TG / 5)",
-              "textReference": "",
-              "id": "param-LIPID-3-1791501113000-5gb",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "VLDL - Cholesterol",
-              "unit": "mg/dL",
-              "minNormal": 5,
-              "maxNormal": 30,
-              "notes": "Auto-calculated: Triglycerides / 5",
-              "textReference": "",
-              "id": "param-LIPID-4-1791501113000-m5i",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Non-HDL Cholesterol",
-              "unit": "mg/dL",
-              "minNormal": 0,
-              "maxNormal": 130,
-              "notes": "Auto-calculated: Total Chol - HDL",
-              "textReference": "",
-              "id": "param-LIPID-5-1791501113001-wfr",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Total Chol / HDL Ratio",
-              "unit": "Ratio",
-              "minNormal": 0,
-              "maxNormal": 4.5,
-              "textReference": "< 4.5 Desirable",
-              "notes": "Auto-calculated: Total Chol / HDL",
-              "id": "param-LIPID-6-1791501113001-j1w",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "LDL / HDL Ratio",
-              "unit": "Ratio",
-              "minNormal": 0,
-              "maxNormal": 3,
-              "textReference": "< 3.0 Desirable",
-              "id": "param-LIPID-7-1791501113001-z39",
-              "result": "",
-              "flag": "NORMAL",
-              "notes": "دهون الدم الشاملة مع المؤشرات الحسابية"
-            },
-            {
-              "id": "p-pkg-0-1791501113001-082",
-              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
-              "result": "",
-              "unit": "ng/mL",
-              "minNormal": 30,
-              "maxNormal": 100,
-              "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
-              "flag": "NORMAL",
-              "method": "CLIA (Chemiluminescence Immunoassay)",
-              "notes": "فحوصات وفيتامينات إضافية للباقة"
-            },
-            {
-              "id": "p-pkg-1-1791501113001-8ts",
-              "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
-              "result": "",
-              "unit": "mg/dL",
-              "minNormal": 3.5,
-              "maxNormal": 7.2,
-              "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
-              "flag": "NORMAL",
-              "method": "Uricase / POD Enzymatic Colorimetric",
-              "notes": "فحوصات وفيتامينات إضافية للباقة"
-            },
-            {
-              "id": "p-pkg-2-1791501113001-shn",
-              "name": "سكر الدم الصائم (FBS) (Fasting Blood Sugar)",
-              "result": "",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 100,
-              "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
-              "flag": "NORMAL",
-              "method": "Hexokinase / GOD-PAP",
-              "notes": "فحوصات وفيتامينات إضافية للباقة"
-            },
-            {
-              "id": "p-pkg-3-1791501113001-cky",
-              "name": "كرياتينين بالدم (Serum Creatinine) (Serum Creatinine)",
-              "result": "",
-              "unit": "mg/dL",
-              "minNormal": 0.6,
-              "maxNormal": 1.2,
-              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.1 mg/dL",
-              "flag": "NORMAL",
-              "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
-              "notes": "فحوصات وفيتامينات إضافية للباقة"
-            },
-            {
-              "id": "p-pkg-4-1791501113001-1nx",
-              "name": "بولينا بالدم (Blood Urea) (Blood Urea)",
-              "result": "",
-              "unit": "mg/dL",
-              "minNormal": 15,
-              "maxNormal": 45,
-              "textReference": "15 - 45 mg/dL",
-              "flag": "NORMAL",
-              "method": "Urease / GLDH Enzymatic Kinetic",
-              "notes": "فحوصات وفيتامينات إضافية للباقة"
-            },
-            {
-              "id": "p-pkg-5-1791501113001-55v",
-              "name": "الكالسيوم الكلي (Total Serum Calcium) (Total Serum Calcium)",
-              "result": "",
-              "unit": "mg/dL",
-              "minNormal": 8.6,
-              "maxNormal": 10.3,
-              "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
-              "flag": "NORMAL",
-              "method": "Arsenazo III / CPC Photometric",
-              "notes": "فحوصات وفيتامينات إضافية للباقة"
-            },
-            {
-              "id": "p-pkg-6-1791501113001-qco",
-              "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
-              "result": "",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 41,
-              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
-              "flag": "NORMAL",
-              "method": "IFCC Kinetic UV without Pyridoxal Phosphate",
-              "notes": "فحوصات وفيتامينات إضافية للباقة"
-            },
-            {
-              "id": "p-pkg-7-1791501113001-4tx",
-              "name": "إنزيم كبد AST / SGOT (Aspartate Aminotransferase (AST / SGOT))",
-              "result": "",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 40,
-              "textReference": "Adult Males: < 40 U/L | Adult Females: < 32 U/L",
-              "flag": "NORMAL",
-              "method": "IFCC Kinetic UV",
-              "notes": "فحوصات وفيتامينات إضافية للباقة"
-            },
-            {
-              "id": "p-pkg-8-1791501113002-srj",
-              "name": "هبموجلوبين  (HB %)",
-              "result": "",
-              "unit": "g/L",
-              "minNormal": 36,
-              "maxNormal": 49,
-              "textReference": "Male : 13.5-17.5 /Female: 12.5-15.5",
-              "flag": "NORMAL",
-              "method": "Enzymatic",
-              "notes": "فحوصات وفيتامينات إضافية للباقة"
-            },
-            {
-              "id": "p-pkg-9-1791501113003-tcc",
-              "name": "هيماتوكريت  (Hematocrit %)",
-              "result": "",
-              "unit": "%",
-              "minNormal": 36,
-              "maxNormal": 49,
-              "textReference": "36-49",
-              "flag": "NORMAL",
-              "method": "Enzymatic",
-              "notes": "فحوصات وفيتامينات إضافية للباقة"
-            }
-          ]
-        },
-        {
-          "id": "prof-1791501113004-pi6y",
-          "profileCode": "TSH",
-          "titleEn": "Thyroid Stimulating Hormone (TSH)",
-          "titleAr": "الهرمون المنشط للغدة الدرقية (TSH Ultrasensitive)",
-          "category": "Thyroid",
-          "sampleType": "Serum",
-          "parameters": [
-            {
-              "id": "p-1791501113004-xvv",
-              "name": "الهرمون المنشط للغدة الدرقية (TSH Ultrasensitive) (Thyroid Stimulating Hormone (TSH))",
-              "result": "",
-              "unit": "uIU/mL",
-              "minNormal": 0.35,
-              "maxNormal": 4.94,
-              "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
-              "flag": "NORMAL",
-              "method": "CLIA (3rd Generation Chemiluminescence)"
-            }
-          ]
-        }
-      ],
-      "staff": {
-        "labChemist": "مني احمد",
-        "verifiedBy": "رحاب علي عبدالحميد",
-        "pathologist": " رامي مختار",
-        "chemistTitle": "أخصائي أول كيمياء إكلينيكية وهرمونات",
-        "verifierTitle": "طبيب باثولوجى / المدير التنفيذى ",
-        "pathologistTitle": "طبيب الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
-        "chemistLicense": "EGY-SCI-88402",
-        "verifierLicense": "EGY-MGT-11024",
-        "pathologistLicense": "EGY-MED-48201"
-      },
-      "status": "draft",
-      "createdAt": "2026-10-08T23:11:53.004Z",
-      "updatedAt": "2026-10-10T10:24:16.672Z",
-      "invoiceId": "inv-1791501113004"
-    },
     {
       "id": "rep-1791500705350",
       "reportNumber": "RT-2026-030",
@@ -1307,6 +1010,298 @@
       "createdAt": "2026-10-08T22:57:02.391Z",
       "updatedAt": "2026-10-08T22:57:02.391Z",
       "invoiceId": "inv-1791500222391"
+    },
+    {
+      "id": "rep-1791414844234",
+      "reportNumber": "RT-2026-032",
+      "patient": {
+        "id": "pat-1791414844229",
+        "labNumber": "RT-2026-032",
+        "barcode": "RT-10062",
+        "fullName": "جيهان  عبد الفتاح",
+        "phone": "0 10 22231270",
+        "age": 47,
+        "ageUnit": "years",
+        "gender": "female",
+        "referringDoctorTitle": "Dr.",
+        "referringDoctorName": "PROF. DR",
+        "sampleDate": "2026-10-08T09:33:00.000Z",
+        "reportingDate": "2026-10-10T20:32:00.000Z",
+        "fastingHours": 10,
+        "bookingType": "home_visit",
+        "homeAddress": "١١ شارع محمد كامل. بيجام. شبرا الخيمة. بجوار مسجد السلام",
+        "visitFee": 45,
+        "appointmentDate": "2026-10-08",
+        "appointmentTime": "11:00",
+        "deliveryNotes": "",
+        "testsSubtotal": 250,
+        "totalCost": 282,
+        "discountApplied": 13,
+        "paymentMethod": "cash"
+      },
+      "packageApplied": {
+        "code": "PKG-ANNUAL-WELLNESS",
+        "titleAr": "باقة الفحص الدوري الشامل (Wellness Plus)",
+        "packagePrice": 199,
+        "originalPrice": 2900
+      },
+      "profiles": [
+        {
+          "id": "prof-1791414844233-2hwo",
+          "profileCode": "LIPID",
+          "titleEn": "Lipid Profile",
+          "titleAr": "دهون الدم الشاملة مع المؤشرات الحسابية",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum (12h Fasting)",
+          "interpretation": "Hypercholesterolemia with elevated LDL-C. Cardiovascular risk evaluation and dietary modification recommended.",
+          "parameters": [
+            {
+              "name": "Total Serum Cholesterol",
+              "unit": "mg/dL",
+              "minNormal": 120,
+              "maxNormal": 200,
+              "method": "CHOD-PAP",
+              "textReference": "",
+              "id": "param-0-1791414844233-zhr",
+              "result": "266",
+              "flag": "HIGH"
+            },
+            {
+              "name": "Serum Triglycerides",
+              "unit": "mg/dL",
+              "minNormal": 40,
+              "maxNormal": 150,
+              "panicHigh": 500,
+              "method": "GPO-PAP",
+              "textReference": "",
+              "id": "param-1-1791414844233-2u3",
+              "result": "142",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "HDL - Cholesterol (Good)",
+              "unit": "mg/dL",
+              "minNormal": 40,
+              "maxNormal": 65,
+              "method": "Direct Accelerator",
+              "textReference": "",
+              "id": "param-2-1791414844233-5sc",
+              "result": "49",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "LDL - Cholesterol (Calculated)",
+              "unit": "mg/dL",
+              "minNormal": 0,
+              "maxNormal": 100,
+              "notes": "Friedewald Formula: TC - HDL - (TG/5)",
+              "textReference": "",
+              "id": "param-3-1791414844233-7o1",
+              "result": "189",
+              "flag": "HIGH"
+            },
+            {
+              "name": "VLDL - Cholesterol",
+              "unit": "mg/dL",
+              "minNormal": 5,
+              "maxNormal": 30,
+              "notes": "Calculated: Triglycerides / 5",
+              "textReference": "",
+              "id": "param-4-1791414844233-pbq",
+              "result": "28",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Non-HDL Cholesterol",
+              "unit": "mg/dL",
+              "minNormal": 0,
+              "maxNormal": 130,
+              "notes": "Calculated: Total Cholesterol - HDL",
+              "textReference": "",
+              "id": "param-5-1791414844233-xiu",
+              "result": "217",
+              "flag": "HIGH"
+            },
+            {
+              "name": "Total Chol / HDL Ratio",
+              "unit": "Ratio",
+              "minNormal": 0,
+              "maxNormal": 4.5,
+              "textReference": "< 4.5 Desirable",
+              "notes": "Desirable < 4.5",
+              "id": "param-6-1791414844233-aua",
+              "result": "5.4",
+              "flag": "HIGH"
+            },
+            {
+              "name": "LDL / HDL Ratio",
+              "unit": "Ratio",
+              "minNormal": 0,
+              "maxNormal": 3,
+              "textReference": "< 3.0 Desirable",
+              "id": "param-7-1791414844234-wn2",
+              "result": "3.85",
+              "flag": "HIGH"
+            }
+          ],
+          "attachedIllustration": {
+            "id": "card-dyslipidemia",
+            "code": "CARD_DYSLIPIDEMIA",
+            "category": "cardiac",
+            "specialtyAr": "القلب والأوعية الدموية",
+            "imageUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgMTgwIiB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCI+CiAgICA8cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgcng9IjE0IiBmaWxsPSIjMDkwZDE2Ii8+CiAgICA8Y2lyY2xlIGN4PSIxNjAiIGN5PSI5MCIgcj0iNzYiIGZpbGw9IiMwYjEzMjkiIHN0cm9rZT0iIzcxM2YxMiIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNlYWIzMDgiIGZvbnQtc2l6ZT0iMTAuNSIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1mYW1pbHk9IidDYWlybycsIHN5c3RlbS11aSwgLWFwcGxlLXN5c3RlbSwgc2Fucy1zZXJpZiI+QVRIRVJPU0NMRVJPU0lTICYgRFlTTElQSURFTUlBPC90ZXh0PgogICAgPGNpcmNsZSBjeD0iMTYwIiBjeT0iOTAiIHI9IjQyIiBmaWxsPSIjNzEzZjEyIiBzdHJva2U9IiNlYWIzMDgiIHN0cm9rZS13aWR0aD0iMi41Ii8+CiAgICAgIDxjaXJjbGUgY3g9IjE2MCIgY3k9IjkwIiByPSIyOCIgZmlsbD0iIzA5MGQxNiIvPgogICAgICA8dGV4dCB4PSIxNjAiIHk9Ijg1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZmRlMDQ3IiBmb250LXNpemU9IjEwIiBmb250LXdlaWdodD0iYm9sZCI+TERMICZndDsgMTYwPC90ZXh0PgogICAgICA8dGV4dCB4PSIxNjAiIHk9IjEwMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2Y4NzE3MSIgZm9udC1zaXplPSI5IiBmb250LXdlaWdodD0iYm9sZCI+VEcgJmd0OyAyMDA8L3RleHQ+CiAgICA8dGV4dCB4PSIxNjAiIHk9IjE3MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzk0YTNiOCIgZm9udC1zaXplPSI5IiBmb250LWZhbWlseT0iJ0NhaXJvJywgc3lzdGVtLXVpLCAtYXBwbGUtc3lzdGVtLCBzYW5zLXNlcmlmIj5FbGV2YXRlZCBBdGhlcm9nZW5pYyBMaXBvcHJvdGVpbnMgKExETCwgQ2hvbCwgVHJpZ2x5Y2VyaWRlcyk8L3RleHQ+CiAgPC9zdmc+",
+            "titleAr": "فرط دهون الدم وتصلب الشرايين (Dyslipidemia & Atherosclerosis)",
+            "titleEn": "Dyslipidemia & Coronary Risk Profile",
+            "pathologySummaryAr": "ارتفاع الكوليسترول الكلي والبروتينات الدهنية منخفضة الكثافة (LDL) والدهون الثلاثية (TG) مع انخفاض الكوليسترول الحميد (HDL)، مما يؤدي لترسب اللويحات العصيدية بجدران الشرايين.",
+            "pathologySummaryEn": "Elevated atherogenic lipoproteins (LDL-C, non-HDL-C, Triglycerides) and low HDL-C accelerating atherosclerotic plaque formation.",
+            "keyDiagnosticPoints": [
+              "Total Cholesterol > 200 mg/dL (High risk > 240 mg/dL)",
+              "LDL Cholesterol > 130 - 160 mg/dL",
+              "Triglycerides > 150 - 200 mg/dL",
+              "Low HDL Cholesterol (< 40 mg/dL in men, < 50 mg/dL in women)",
+              "Atherogenic Ratio (Total Chol / HDL) > 4.5"
+            ],
+            "associatedConditions": [
+              "Coronary artery disease",
+              "Hypertension",
+              "Stroke & peripheral arterial disease"
+            ],
+            "differentialDiagnosis": "Familial hypercholesterolemia, Secondary dyslipidemia (Hypothyroidism, Nephrotic syndrome).",
+            "descriptionAr": "ارتفاع الكوليسترول الكلي والبروتينات الدهنية منخفضة الكثافة (LDL) والدهون الثلاثية (TG) مع انخفاض الكوليسترول الحميد (HDL)، مما يؤدي لترسب اللويحات العصيدية بجدران الشرايين.",
+            "descriptionEn": "Elevated atherogenic lipoproteins (LDL-C, non-HDL-C, Triglycerides) and low HDL-C accelerating atherosclerotic plaque formation.",
+            "diagnosticCriteria": [
+              "Total Cholesterol > 200 mg/dL (High risk > 240 mg/dL)",
+              "LDL Cholesterol > 130 - 160 mg/dL",
+              "Triglycerides > 150 - 200 mg/dL",
+              "Low HDL Cholesterol (< 40 mg/dL in men, < 50 mg/dL in women)",
+              "Atherogenic Ratio (Total Chol / HDL) > 4.5"
+            ]
+          }
+        }
+      ],
+      "staff": {
+        "labChemist": "منى احمد",
+        "verifiedBy": "رحاب عبدالحميد",
+        "pathologist": "  رامي مختار",
+        "chemistTitle": "أخصائي كيمياء إكلينيكية وهرمونات",
+        "verifierTitle": "طبيب باثولوجى / المدير التنفيذى",
+        "pathologistTitle": "طبيب الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
+        "chemistLicense": "EGY-SCI-26101",
+        "verifierLicense": "EGY-MED-120111",
+        "pathologistLicense": "EGY-MED-48201",
+        "showFinancialSignature": false,
+        "financialDirector": "",
+        "financialTitle": "المدير المالي ورئيس الحسابات (CFO)",
+        "financialLicense": "EGY-FIN-10492",
+        "showHrSignature": false
+      },
+      "status": "draft",
+      "createdAt": "2026-10-07T23:14:04.234Z",
+      "updatedAt": "2026-10-10T20:35:14.725Z",
+      "invoiceId": "inv-1791414844235",
+      "smartReportEnabled": true,
+      "smartReportClinicalData": {
+        "reportId": "rep-1791414844234",
+        "patientName": "جيهان  عبد الفتاح",
+        "age": 47,
+        "gender": "female",
+        "executiveSummaryAr": "أظهر التقييم المخبري الشامل للمريض (جيهان  عبد الفتاح) وجود (5) فحوصات خارج المعدل الطبيعي، أبرزها: Total Serum Cholesterol (266 mg/dL)، LDL - Cholesterol (Calculated) (189 mg/dL)، Non-HDL Cholesterol (217 mg/dL)، Total Chol / HDL Ratio (5.4 Ratio). تم ربط هذه المؤشرات وحساب المعدلات السريرية بدقة وتضمين التشخيصات التفريقية والتوصيات الواجب اتباعها أدناه.",
+        "executiveSummaryEn": "Laboratory profile reveals 5 parameter(s) outside standard reference intervals (Total Serum Cholesterol, LDL - Cholesterol (Calculated), Non-HDL Cholesterol). Organ health status and evidence-based clinical recommendations are provided below.",
+        "criticalAlerts": [],
+        "organScores": {
+          "renal": {
+            "score": 0,
+            "labelAr": "لم تطلب بالفحص",
+            "status": "not_tested",
+            "tested": false,
+            "summaryAr": "لم يتضمن هذا الطلب فحوصات مخبرية مخصصة لتقييم وظائف الكلى والمسالك."
+          },
+          "hepatic": {
+            "score": 0,
+            "labelAr": "لم تطلب بالفحص",
+            "status": "not_tested",
+            "tested": false,
+            "summaryAr": "لم يتضمن هذا الطلب فحوصات مخبرية مخصصة لتقييم وظائف الكبد والمرارة."
+          },
+          "metabolic": {
+            "score": 0,
+            "labelAr": "لم تطلب بالفحص",
+            "status": "not_tested",
+            "tested": false,
+            "summaryAr": "لم يتضمن هذا الطلب فحوصات مخبرية مخصصة لتقييم التمثيل الغذائي والسكر."
+          },
+          "hematologic": {
+            "score": 0,
+            "labelAr": "لم تطلب بالفحص",
+            "status": "not_tested",
+            "tested": false,
+            "summaryAr": "لم يتضمن هذا الطلب فحوصات مخبرية مخصصة لتقييم صحة الدم والصفائح."
+          },
+          "cardiac": {
+            "score": 80,
+            "labelAr": "تأثر وظيفي طفيف",
+            "status": "mild",
+            "tested": true,
+            "summaryAr": "توجد انحرافات مخبرية طفيفة في فحوصات صحة القلب والشرايين والدهون يوصى بمتابعتها دورياً."
+          }
+        },
+        "calculatedIndices": [
+          {
+            "nameAr": "مؤشر مخاطر تصلب الشرايين (Atherogenic Risk Index)",
+            "nameEn": "Total Cholesterol / HDL Ratio",
+            "value": 5.43,
+            "reference": "< 4.5 Optimal",
+            "interpretationAr": "مخاطر قلبية ووعائية معتدلة."
+          },
+          {
+            "nameAr": "نسبة الدهون الثلاثية إلى النافعة (TG / HDL Ratio)",
+            "nameEn": "Triglycerides / HDL Ratio",
+            "value": 2.9,
+            "reference": "< 2.0 Ideal | > 3.0 High Risk",
+            "interpretationAr": "نسبة مقبولة."
+          }
+        ],
+        "differentialDiagnoses": [],
+        "consultantRecommendations": [
+          "يوصى باتباع نظام غذائي خافض للدهون المشبعة واستشارة طبيب القلب لتقييم الحاجة لعلاجات الستاتين (Statins)."
+        ],
+        "abnormalParametersCount": 5,
+        "totalParametersCount": 8,
+        "flaggedList": [
+          {
+            "name": "Total Serum Cholesterol",
+            "result": "266",
+            "unit": "mg/dL",
+            "flag": "HIGH"
+          },
+          {
+            "name": "LDL - Cholesterol (Calculated)",
+            "result": "189",
+            "unit": "mg/dL",
+            "flag": "HIGH"
+          },
+          {
+            "name": "Non-HDL Cholesterol",
+            "result": "217",
+            "unit": "mg/dL",
+            "flag": "HIGH"
+          },
+          {
+            "name": "Total Chol / HDL Ratio",
+            "result": "5.4",
+            "unit": "Ratio",
+            "flag": "HIGH"
+          },
+          {
+            "name": "LDL / HDL Ratio",
+            "result": "3.85",
+            "unit": "Ratio",
+            "flag": "HIGH"
+          }
+        ]
+      },
+      "smartReportInterpretation": "أظهر التقييم المخبري الشامل للمريض (جيهان  عبد الفتاح) وجود (5) فحوصات خارج المعدل الطبيعي، أبرزها: Total Serum Cholesterol (266 mg/dL)، LDL - Cholesterol (Calculated) (189 mg/dL)، Non-HDL Cholesterol (217 mg/dL)، Total Chol / HDL Ratio (5.4 Ratio). تم ربط هذه المؤشرات وحساب المعدلات السريرية بدقة وتضمين التشخيصات التفريقية والتوصيات الواجب اتباعها أدناه.",
+      "generalComment": "[التقرير الإكلينيكي الاستشاري الذكي]:\nأظهر التقييم المخبري الشامل للمريض (جيهان  عبد الفتاح) وجود (5) فحوصات خارج المعدل الطبيعي، أبرزها: Total Serum Cholesterol (266 mg/dL)، LDL - Cholesterol (Calculated) (189 mg/dL)، Non-HDL Cholesterol (217 mg/dL)، Total Chol / HDL Ratio (5.4 Ratio). تم ربط هذه المؤشرات وحساب المعدلات السريرية بدقة وتضمين التشخيصات التفريقية والتوصيات الواجب اتباعها أدناه."
     },
     {
       "id": "rep-1791414844234",
