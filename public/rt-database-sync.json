@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-10T20:38:29.121Z",
+  "syncedAt": "2026-10-10T20:40:16.853Z",
   "reports": [
     {
       "id": "rep-1791500705350",
@@ -213,7 +213,7 @@
             {
               "id": "p-pkg-8-1791500705347-wjk",
               "name": "هبموجلوبين  (HB %)",
-              "result": "14.80",
+              "result": "14.88",
               "unit": "g/L",
               "minNormal": 36,
               "maxNormal": 49,
@@ -329,7 +329,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-08T23:05:05.350Z",
-      "updatedAt": "2026-10-10T14:10:49.687Z",
+      "updatedAt": "2026-10-10T20:40:12.731Z",
       "invoiceId": "inv-1791500705351",
       "smartReportEnabled": true,
       "smartReportClinicalData": {
