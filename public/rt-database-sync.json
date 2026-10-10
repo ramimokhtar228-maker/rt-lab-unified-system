@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-10T21:12:23.228Z",
+  "syncedAt": "2026-10-10T21:12:42.917Z",
   "reports": [
     {
       "id": "rep-1791500705350",
@@ -3633,7 +3633,7 @@
         "visitFee": 0
       },
       "id": "rep-1791286741642",
-      "status": "in_progress",
+      "status": "released",
       "profiles": [
         {
           "titleAr": "دهون الدم الشاملة مع المؤشرات الحسابية",
@@ -3884,7 +3884,7 @@
       ],
       "invoiceId": "inv-1791286741643",
       "reportNumber": "RT-2026-006",
-      "updatedAt": "2026-10-07T07:57:46.985Z",
+      "updatedAt": "2026-10-10T21:12:38.748Z",
       "createdAt": "2026-10-06T11:39:01.642Z",
       "packageApplied": {
         "originalPrice": 2900,
