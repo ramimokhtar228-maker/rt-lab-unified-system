@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-10T20:34:17.305Z",
+  "syncedAt": "2026-10-10T20:34:28.025Z",
   "reports": [
     {
       "id": "rep-1791501113004",
@@ -1443,7 +1443,7 @@
         "pathologist": "  رامي مختار",
         "chemistTitle": "أخصائي كيمياء إكلينيكية وهرمونات",
         "verifierTitle": "طبيب باثولوجى / المدير التنفيذى",
-        "pathologistTitle": "استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
+        "pathologistTitle": "طبيب الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
         "chemistLicense": "EGY-SCI-26101",
         "verifierLicense": "EGY-MED-120111",
         "pathologistLicense": "EGY-MED-48201",
@@ -1455,7 +1455,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T23:14:04.234Z",
-      "updatedAt": "2026-10-10T20:34:13.220Z",
+      "updatedAt": "2026-10-10T20:34:23.948Z",
       "invoiceId": "inv-1791414844235"
     },
     {
