@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-10T20:35:06.703Z",
+  "syncedAt": "2026-10-10T20:35:18.815Z",
   "reports": [
     {
       "id": "rep-1791501113004",
@@ -1488,8 +1488,111 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T23:14:04.234Z",
-      "updatedAt": "2026-10-10T20:35:02.606Z",
-      "invoiceId": "inv-1791414844235"
+      "updatedAt": "2026-10-10T20:35:14.725Z",
+      "invoiceId": "inv-1791414844235",
+      "smartReportEnabled": true,
+      "smartReportClinicalData": {
+        "reportId": "rep-1791414844234",
+        "patientName": "جيهان  عبد الفتاح",
+        "age": 47,
+        "gender": "female",
+        "executiveSummaryAr": "أظهر التقييم المخبري الشامل للمريض (جيهان  عبد الفتاح) وجود (5) فحوصات خارج المعدل الطبيعي، أبرزها: Total Serum Cholesterol (266 mg/dL)، LDL - Cholesterol (Calculated) (189 mg/dL)، Non-HDL Cholesterol (217 mg/dL)، Total Chol / HDL Ratio (5.4 Ratio). تم ربط هذه المؤشرات وحساب المعدلات السريرية بدقة وتضمين التشخيصات التفريقية والتوصيات الواجب اتباعها أدناه.",
+        "executiveSummaryEn": "Laboratory profile reveals 5 parameter(s) outside standard reference intervals (Total Serum Cholesterol, LDL - Cholesterol (Calculated), Non-HDL Cholesterol). Organ health status and evidence-based clinical recommendations are provided below.",
+        "criticalAlerts": [],
+        "organScores": {
+          "renal": {
+            "score": 0,
+            "labelAr": "لم تطلب بالفحص",
+            "status": "not_tested",
+            "tested": false,
+            "summaryAr": "لم يتضمن هذا الطلب فحوصات مخبرية مخصصة لتقييم وظائف الكلى والمسالك."
+          },
+          "hepatic": {
+            "score": 0,
+            "labelAr": "لم تطلب بالفحص",
+            "status": "not_tested",
+            "tested": false,
+            "summaryAr": "لم يتضمن هذا الطلب فحوصات مخبرية مخصصة لتقييم وظائف الكبد والمرارة."
+          },
+          "metabolic": {
+            "score": 0,
+            "labelAr": "لم تطلب بالفحص",
+            "status": "not_tested",
+            "tested": false,
+            "summaryAr": "لم يتضمن هذا الطلب فحوصات مخبرية مخصصة لتقييم التمثيل الغذائي والسكر."
+          },
+          "hematologic": {
+            "score": 0,
+            "labelAr": "لم تطلب بالفحص",
+            "status": "not_tested",
+            "tested": false,
+            "summaryAr": "لم يتضمن هذا الطلب فحوصات مخبرية مخصصة لتقييم صحة الدم والصفائح."
+          },
+          "cardiac": {
+            "score": 80,
+            "labelAr": "تأثر وظيفي طفيف",
+            "status": "mild",
+            "tested": true,
+            "summaryAr": "توجد انحرافات مخبرية طفيفة في فحوصات صحة القلب والشرايين والدهون يوصى بمتابعتها دورياً."
+          }
+        },
+        "calculatedIndices": [
+          {
+            "nameAr": "مؤشر مخاطر تصلب الشرايين (Atherogenic Risk Index)",
+            "nameEn": "Total Cholesterol / HDL Ratio",
+            "value": 5.43,
+            "reference": "< 4.5 Optimal",
+            "interpretationAr": "مخاطر قلبية ووعائية معتدلة."
+          },
+          {
+            "nameAr": "نسبة الدهون الثلاثية إلى النافعة (TG / HDL Ratio)",
+            "nameEn": "Triglycerides / HDL Ratio",
+            "value": 2.9,
+            "reference": "< 2.0 Ideal | > 3.0 High Risk",
+            "interpretationAr": "نسبة مقبولة."
+          }
+        ],
+        "differentialDiagnoses": [],
+        "consultantRecommendations": [
+          "يوصى باتباع نظام غذائي خافض للدهون المشبعة واستشارة طبيب القلب لتقييم الحاجة لعلاجات الستاتين (Statins)."
+        ],
+        "abnormalParametersCount": 5,
+        "totalParametersCount": 8,
+        "flaggedList": [
+          {
+            "name": "Total Serum Cholesterol",
+            "result": "266",
+            "unit": "mg/dL",
+            "flag": "HIGH"
+          },
+          {
+            "name": "LDL - Cholesterol (Calculated)",
+            "result": "189",
+            "unit": "mg/dL",
+            "flag": "HIGH"
+          },
+          {
+            "name": "Non-HDL Cholesterol",
+            "result": "217",
+            "unit": "mg/dL",
+            "flag": "HIGH"
+          },
+          {
+            "name": "Total Chol / HDL Ratio",
+            "result": "5.4",
+            "unit": "Ratio",
+            "flag": "HIGH"
+          },
+          {
+            "name": "LDL / HDL Ratio",
+            "result": "3.85",
+            "unit": "Ratio",
+            "flag": "HIGH"
+          }
+        ]
+      },
+      "smartReportInterpretation": "أظهر التقييم المخبري الشامل للمريض (جيهان  عبد الفتاح) وجود (5) فحوصات خارج المعدل الطبيعي، أبرزها: Total Serum Cholesterol (266 mg/dL)، LDL - Cholesterol (Calculated) (189 mg/dL)، Non-HDL Cholesterol (217 mg/dL)، Total Chol / HDL Ratio (5.4 Ratio). تم ربط هذه المؤشرات وحساب المعدلات السريرية بدقة وتضمين التشخيصات التفريقية والتوصيات الواجب اتباعها أدناه.",
+      "generalComment": "[التقرير الإكلينيكي الاستشاري الذكي]:\nأظهر التقييم المخبري الشامل للمريض (جيهان  عبد الفتاح) وجود (5) فحوصات خارج المعدل الطبيعي، أبرزها: Total Serum Cholesterol (266 mg/dL)، LDL - Cholesterol (Calculated) (189 mg/dL)، Non-HDL Cholesterol (217 mg/dL)، Total Chol / HDL Ratio (5.4 Ratio). تم ربط هذه المؤشرات وحساب المعدلات السريرية بدقة وتضمين التشخيصات التفريقية والتوصيات الواجب اتباعها أدناه."
     },
     {
       "id": "rep-1791359724810",
