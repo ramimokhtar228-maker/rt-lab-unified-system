@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-10T22:06:42.065Z",
+  "syncedAt": "2026-10-10T22:06:48.228Z",
   "reports": [
     {
       "id": "rep-1791663303781",
@@ -13780,6 +13780,29 @@
           "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-030",
           "invoiceNumber": "RT-2026-030",
           "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791663303872",
+      "patientName": "يوستينا عماد",
+      "phone": "01204282609",
+      "barcode": "RT-10064",
+      "cardNumber": "RT-GOLD-10064",
+      "bloodGroup": "",
+      "totalPoints": 540,
+      "tier": "Gold",
+      "lifetimeSpent": 540,
+      "issueDate": "2026-10-10",
+      "transactions": [
+        {
+          "id": "tx-1791663303872",
+          "date": "2026-10-10",
+          "type": "earn",
+          "points": 540,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-034",
+          "invoiceNumber": "RT-2026-034",
+          "amountEGP": 540
         }
       ]
     }
