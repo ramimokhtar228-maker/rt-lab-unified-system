@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-10T20:34:37.278Z",
+  "syncedAt": "2026-10-10T20:35:06.703Z",
   "reports": [
     {
       "id": "rep-1791501113004",
@@ -1434,7 +1434,40 @@
               "result": "3.85",
               "flag": "HIGH"
             }
-          ]
+          ],
+          "attachedIllustration": {
+            "id": "card-dyslipidemia",
+            "code": "CARD_DYSLIPIDEMIA",
+            "category": "cardiac",
+            "specialtyAr": "القلب والأوعية الدموية",
+            "imageUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgMTgwIiB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCI+CiAgICA8cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgcng9IjE0IiBmaWxsPSIjMDkwZDE2Ii8+CiAgICA8Y2lyY2xlIGN4PSIxNjAiIGN5PSI5MCIgcj0iNzYiIGZpbGw9IiMwYjEzMjkiIHN0cm9rZT0iIzcxM2YxMiIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNlYWIzMDgiIGZvbnQtc2l6ZT0iMTAuNSIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1mYW1pbHk9IidDYWlybycsIHN5c3RlbS11aSwgLWFwcGxlLXN5c3RlbSwgc2Fucy1zZXJpZiI+QVRIRVJPU0NMRVJPU0lTICYgRFlTTElQSURFTUlBPC90ZXh0PgogICAgPGNpcmNsZSBjeD0iMTYwIiBjeT0iOTAiIHI9IjQyIiBmaWxsPSIjNzEzZjEyIiBzdHJva2U9IiNlYWIzMDgiIHN0cm9rZS13aWR0aD0iMi41Ii8+CiAgICAgIDxjaXJjbGUgY3g9IjE2MCIgY3k9IjkwIiByPSIyOCIgZmlsbD0iIzA5MGQxNiIvPgogICAgICA8dGV4dCB4PSIxNjAiIHk9Ijg1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZmRlMDQ3IiBmb250LXNpemU9IjEwIiBmb250LXdlaWdodD0iYm9sZCI+TERMICZndDsgMTYwPC90ZXh0PgogICAgICA8dGV4dCB4PSIxNjAiIHk9IjEwMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2Y4NzE3MSIgZm9udC1zaXplPSI5IiBmb250LXdlaWdodD0iYm9sZCI+VEcgJmd0OyAyMDA8L3RleHQ+CiAgICA8dGV4dCB4PSIxNjAiIHk9IjE3MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzk0YTNiOCIgZm9udC1zaXplPSI5IiBmb250LWZhbWlseT0iJ0NhaXJvJywgc3lzdGVtLXVpLCAtYXBwbGUtc3lzdGVtLCBzYW5zLXNlcmlmIj5FbGV2YXRlZCBBdGhlcm9nZW5pYyBMaXBvcHJvdGVpbnMgKExETCwgQ2hvbCwgVHJpZ2x5Y2VyaWRlcyk8L3RleHQ+CiAgPC9zdmc+",
+            "titleAr": "فرط دهون الدم وتصلب الشرايين (Dyslipidemia & Atherosclerosis)",
+            "titleEn": "Dyslipidemia & Coronary Risk Profile",
+            "pathologySummaryAr": "ارتفاع الكوليسترول الكلي والبروتينات الدهنية منخفضة الكثافة (LDL) والدهون الثلاثية (TG) مع انخفاض الكوليسترول الحميد (HDL)، مما يؤدي لترسب اللويحات العصيدية بجدران الشرايين.",
+            "pathologySummaryEn": "Elevated atherogenic lipoproteins (LDL-C, non-HDL-C, Triglycerides) and low HDL-C accelerating atherosclerotic plaque formation.",
+            "keyDiagnosticPoints": [
+              "Total Cholesterol > 200 mg/dL (High risk > 240 mg/dL)",
+              "LDL Cholesterol > 130 - 160 mg/dL",
+              "Triglycerides > 150 - 200 mg/dL",
+              "Low HDL Cholesterol (< 40 mg/dL in men, < 50 mg/dL in women)",
+              "Atherogenic Ratio (Total Chol / HDL) > 4.5"
+            ],
+            "associatedConditions": [
+              "Coronary artery disease",
+              "Hypertension",
+              "Stroke & peripheral arterial disease"
+            ],
+            "differentialDiagnosis": "Familial hypercholesterolemia, Secondary dyslipidemia (Hypothyroidism, Nephrotic syndrome).",
+            "descriptionAr": "ارتفاع الكوليسترول الكلي والبروتينات الدهنية منخفضة الكثافة (LDL) والدهون الثلاثية (TG) مع انخفاض الكوليسترول الحميد (HDL)، مما يؤدي لترسب اللويحات العصيدية بجدران الشرايين.",
+            "descriptionEn": "Elevated atherogenic lipoproteins (LDL-C, non-HDL-C, Triglycerides) and low HDL-C accelerating atherosclerotic plaque formation.",
+            "diagnosticCriteria": [
+              "Total Cholesterol > 200 mg/dL (High risk > 240 mg/dL)",
+              "LDL Cholesterol > 130 - 160 mg/dL",
+              "Triglycerides > 150 - 200 mg/dL",
+              "Low HDL Cholesterol (< 40 mg/dL in men, < 50 mg/dL in women)",
+              "Atherogenic Ratio (Total Chol / HDL) > 4.5"
+            ]
+          }
         }
       ],
       "staff": {
@@ -1455,7 +1488,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T23:14:04.234Z",
-      "updatedAt": "2026-10-10T20:34:33.212Z",
+      "updatedAt": "2026-10-10T20:35:02.606Z",
       "invoiceId": "inv-1791414844235"
     },
     {
