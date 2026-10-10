@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-10T20:32:59.466Z",
+  "syncedAt": "2026-10-10T20:33:06.147Z",
   "reports": [
     {
       "id": "rep-1791501113004",
@@ -1323,7 +1323,7 @@
         "referringDoctorTitle": "Dr.",
         "referringDoctorName": "PROF. DR",
         "sampleDate": "2026-10-08T09:33:00.000Z",
-        "reportingDate": "2026-10-08",
+        "reportingDate": "2026-10-10T20:32:00.000Z",
         "fastingHours": 10,
         "bookingType": "home_visit",
         "homeAddress": "١١ شارع محمد كامل. بيجام. شبرا الخيمة. بجوار مسجد السلام",
@@ -1455,7 +1455,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T23:14:04.234Z",
-      "updatedAt": "2026-10-10T20:32:55.372Z",
+      "updatedAt": "2026-10-10T20:33:02.069Z",
       "invoiceId": "inv-1791414844235"
     },
     {
