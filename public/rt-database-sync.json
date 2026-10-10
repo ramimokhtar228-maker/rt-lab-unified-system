@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-10T14:10:42.788Z",
+  "syncedAt": "2026-10-10T14:10:53.864Z",
   "reports": [
     {
       "id": "rep-1791501113004",
@@ -626,7 +626,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-08T23:05:05.350Z",
-      "updatedAt": "2026-10-10T14:01:06.429Z",
+      "updatedAt": "2026-10-10T14:10:49.687Z",
       "invoiceId": "inv-1791500705351",
       "smartReportEnabled": true,
       "smartReportClinicalData": {
@@ -634,79 +634,174 @@
         "patientName": "عادل احمد صبيح",
         "age": 70,
         "gender": "male",
-        "executiveSummaryAr": "كافة الفحوصات المخبرية للمريض (عادل احمد صبيح) تقع في النطاقات الآمنة بشكل عام مع انتظام مؤشرات الأعضاء الحيوية ونشاط فسيولوجي متوازن.",
-        "executiveSummaryEn": "Overall lab findings are within acceptable physiological limits with stable organ biomarkers.",
+        "executiveSummaryAr": "أظهر التقييم المخبري الشامل للمريض (عادل احمد صبيح) وجود (10) فحوصات خارج المعدل الطبيعي، أبرزها: Total Serum Cholesterol (241 mg/dL)، Serum Triglycerides (166 mg/dL)، LDL - Cholesterol (Calculated) (165 mg/dL)، VLDL - Cholesterol (33 mg/dL). تم ربط هذه المؤشرات وحساب المعدلات السريرية بدقة وتضمين التشخيصات التفريقية والتوصيات الواجب اتباعها أدناه.",
+        "executiveSummaryEn": "Laboratory profile reveals 10 parameter(s) outside standard reference intervals (Total Serum Cholesterol, Serum Triglycerides, LDL - Cholesterol (Calculated)). Organ health status and evidence-based clinical recommendations are provided below.",
         "criticalAlerts": [],
         "organScores": {
           "renal": {
-            "score": 95,
-            "labelAr": "ممتاز ومستقر",
-            "status": "optimal"
+            "score": 100,
+            "labelAr": "كفاءة ممتازة ومستقرة",
+            "status": "optimal",
+            "tested": true,
+            "summaryAr": "كافة مؤشرات وظائف الكلى والمسالك تقع ضمن المعدلات الفسيولوجية الطبيعية المتوازنة."
           },
           "hepatic": {
-            "score": 95,
-            "labelAr": "ممتاز ومستقر",
-            "status": "optimal"
+            "score": 100,
+            "labelAr": "كفاءة ممتازة ومستقرة",
+            "status": "optimal",
+            "tested": true,
+            "summaryAr": "كافة مؤشرات وظائف الكبد والمرارة تقع ضمن المعدلات الفسيولوجية الطبيعية المتوازنة."
           },
           "metabolic": {
-            "score": 60,
-            "labelAr": "انخفاض متوسط",
-            "status": "moderate"
+            "score": 65,
+            "labelAr": "انخفاض وظيفي متوسط",
+            "status": "moderate",
+            "tested": true,
+            "summaryAr": "تأثر وظيفي متوسط يستوجب استشارة طبية تخصصية ومتابعة دقيقة لمؤشرات التمثيل الغذائي والسكر."
           },
           "hematologic": {
-            "score": 95,
-            "labelAr": "ممتاز ومستقر",
-            "status": "optimal"
+            "score": 100,
+            "labelAr": "كفاءة ممتازة ومستقرة",
+            "status": "optimal",
+            "tested": true,
+            "summaryAr": "كافة مؤشرات صحة الدم والصفائح تقع ضمن المعدلات الفسيولوجية الطبيعية المتوازنة."
           },
           "cardiac": {
             "score": 65,
-            "labelAr": "انخفاض متوسط",
-            "status": "moderate"
+            "labelAr": "انخفاض وظيفي متوسط",
+            "status": "moderate",
+            "tested": true,
+            "summaryAr": "تأثر وظيفي متوسط يستوجب استشارة طبية تخصصية ومتابعة دقيقة لمؤشرات صحة القلب والشرايين والدهون."
           }
         },
         "calculatedIndices": [
           {
             "nameAr": "معدل الترشيح الكبيبي التقريبي (Estimated GFR)",
-            "nameEn": "eGFR (CKD-EPI)",
+            "nameEn": "eGFR (CKD-EPI Formula)",
             "value": "87 mL/min/1.73m²",
             "reference": "> 90 mL/min",
-            "interpretationAr": "المرحلة الكلوية: G2 (انخفاض وظيفي كلوي طفيف)"
+            "interpretationAr": "تصنيف وظائف الكلى: المرحلة G2 (انخفاض وظيفي كلوي طفيف)"
           },
           {
-            "nameAr": "نسبة دي ريتيس لأنزيمات الكبد (De Ritis Ratio)",
+            "nameAr": "نسبة بولينا الدم إلى الكرياتينين (BUN / Creatinine Ratio)",
+            "nameEn": "BUN / Creatinine Ratio",
+            "value": 13.4,
+            "reference": "10.0 - 20.0",
+            "interpretationAr": "النسبة طبيعية (10 - 20)."
+          },
+          {
+            "nameAr": "نسبة دي ريتيس لإنزيمات الكبد (De Ritis Ratio)",
             "nameEn": "AST / ALT Ratio",
             "value": 0.8,
-            "reference": "0.8 - 1.2",
-            "interpretationAr": "نسبة دي ريتيس < 1.0: شائعة في الكبد الدهني (NAFLD/NASH) أو التهاب الكبد الفيروسي الأولي."
+            "reference": "0.8 - 1.2 Optimal",
+            "interpretationAr": "نسبة دي ريتيس < 1.0: شائعة في الكبد الدهني (NAFLD/NASH) أو التهاب الكبد الفيروسي المزمن."
           },
           {
-            "nameAr": "مؤشر تصلب الشرايين (Atherogenic Risk Index)",
+            "nameAr": "متوسط السكر المقدر لثلاثة أشهر (Estimated Avg Glucose - eAG)",
+            "nameEn": "eAG (ADAG Equation)",
+            "value": "154 mg/dL",
+            "reference": "< 117 mg/dL Non-diabetic",
+            "interpretationAr": "يعادل متوسط السكر التراكمي 6.99% متوسط قراءات يومية تقريبية تبلغ 154 mg/dL على مدار الـ 90 يوماً الماضية."
+          },
+          {
+            "nameAr": "مؤشر مخاطر تصلب الشرايين (Atherogenic Risk Index)",
             "nameEn": "Total Cholesterol / HDL Ratio",
             "value": 5.6,
             "reference": "< 4.5 Optimal",
-            "interpretationAr": "مخاطر مرتفعة لتصلب الشرايين التاجية وأمراض القلب."
+            "interpretationAr": "مخاطر مرتفعة لتصلب الشرايين التاجية وضيق الأوعية."
+          },
+          {
+            "nameAr": "نسبة الدهون الثلاثية إلى النافعة (TG / HDL Ratio)",
+            "nameEn": "Triglycerides / HDL Ratio",
+            "value": 3.86,
+            "reference": "< 2.0 Ideal | > 3.0 High Risk",
+            "interpretationAr": "ارتفاع النسبة يُشير لمقاومة الإنسولين وكثافة جسيمات الكولسترول الضار (Small Dense LDL)."
           }
         ],
         "differentialDiagnoses": [
           {
-            "diseaseAr": "ارتشاح دهني كبدي (Hepatic Steatosis / NAFLD)",
-            "diseaseEn": "Non-Alcoholic Fatty Liver Disease",
+            "diseaseAr": "ارتشاح دهني كبدي (Hepatic Steatosis / Fatty Liver)",
+            "diseaseEn": "Non-Alcoholic Fatty Liver Disease (NAFLD)",
             "likelihood": "moderate",
-            "rationaleAr": "ارتفاع إنزيم ALT أكثر من AST مع نسبة دي ريتيس = 0.8."
+            "rationaleAr": "ارتفاع إنزيم ALT أكثر من AST مع نسبة دي ريتيس = 0.8 (< 1.0)."
           },
           {
             "diseaseAr": "داء السكري من النوع الثاني (Type 2 Diabetes Mellitus)",
             "diseaseEn": "Type 2 Diabetes Mellitus",
             "likelihood": "high",
-            "rationaleAr": "ارتفاع في قراءات السكر (الصائم=- | بعد الأكل=- | التراكمي=6.99%)."
+            "rationaleAr": "تأكيد تشخيص السكري بناءً على قراءات الجلوكوز (صائم=- | بعد الأكل=- | التراكمي=6.99%)."
           }
         ],
         "consultantRecommendations": [
-          "متابعة سكر الدم الصائم وبعد الأكل دورياً، والمتابعة مع استشاري الغدد الصماء وضبط النظام الغذائي.",
-          "يوصى بحمية خافضة للدهون المشبعة واستشارة الطبيب لتقييم الحاجة لعلاجات الستاتين (Statins)."
+          "المتابعة الفورية مع استشاري الغدد الصماء والسكري لضبط العلاج الدوائي ونظام غذائي محسوب السعرات.",
+          "يوصى باتباع نظام غذائي خافض للدهون المشبعة واستشارة طبيب القلب لتقييم الحاجة لعلاجات الستاتين (Statins)."
+        ],
+        "abnormalParametersCount": 10,
+        "totalParametersCount": 19,
+        "flaggedList": [
+          {
+            "name": "Total Serum Cholesterol",
+            "result": "241",
+            "unit": "mg/dL",
+            "flag": "HIGH"
+          },
+          {
+            "name": "Serum Triglycerides",
+            "result": "166",
+            "unit": "mg/dL",
+            "flag": "HIGH"
+          },
+          {
+            "name": "LDL - Cholesterol (Calculated)",
+            "result": "165",
+            "unit": "mg/dL",
+            "flag": "HIGH"
+          },
+          {
+            "name": "VLDL - Cholesterol",
+            "result": "33",
+            "unit": "mg/dL",
+            "flag": "HIGH"
+          },
+          {
+            "name": "Non-HDL Cholesterol",
+            "result": "198",
+            "unit": "mg/dL",
+            "flag": "HIGH"
+          },
+          {
+            "name": "Total Chol / HDL Ratio",
+            "result": "5.6",
+            "unit": "Ratio",
+            "flag": "HIGH"
+          },
+          {
+            "name": "هبموجلوبين  (HB %)",
+            "result": "14.80",
+            "unit": "g/L",
+            "flag": "LOW"
+          },
+          {
+            "name": "Fasting Blood Glucose",
+            "result": "157",
+            "unit": "mg/dL",
+            "flag": "HIGH"
+          },
+          {
+            "name": "HbA1c (Glycated Hemoglobin)",
+            "result": "6.99",
+            "unit": "%",
+            "flag": "HIGH"
+          },
+          {
+            "name": "Estimated Average Glucose (eAG)",
+            "result": "154",
+            "unit": "mg/dL",
+            "flag": "HIGH"
+          }
         ]
       },
-      "smartReportInterpretation": "كافة الفحوصات المخبرية للمريض (عادل احمد صبيح) تقع في النطاقات الآمنة بشكل عام مع انتظام مؤشرات الأعضاء الحيوية ونشاط فسيولوجي متوازن.",
+      "smartReportInterpretation": "أظهر التقييم المخبري الشامل للمريض (عادل احمد صبيح) وجود (10) فحوصات خارج المعدل الطبيعي، أبرزها: Total Serum Cholesterol (241 mg/dL)، Serum Triglycerides (166 mg/dL)، LDL - Cholesterol (Calculated) (165 mg/dL)، VLDL - Cholesterol (33 mg/dL). تم ربط هذه المؤشرات وحساب المعدلات السريرية بدقة وتضمين التشخيصات التفريقية والتوصيات الواجب اتباعها أدناه.",
       "generalComment": "[التقرير الإكلينيكي الاستشاري الذكي]:\nكافة الفحوصات المخبرية للمريض (عادل احمد صبيح) تقع في النطاقات الآمنة بشكل عام مع انتظام مؤشرات الأعضاء الحيوية ونشاط فسيولوجي متوازن."
     },
     {
