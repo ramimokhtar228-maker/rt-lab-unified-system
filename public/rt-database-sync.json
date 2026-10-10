@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-10T10:58:09.167Z",
+  "syncedAt": "2026-10-10T10:58:13.648Z",
   "reports": [
     {
       "reportNumber": "RT-2026-032",
@@ -13119,6 +13119,236 @@
         }
       ],
       "lifetimeSpent": 682
+    },
+    {
+      "patientId": "pat-loyalty-1791501113007",
+      "patientName": "زينب عمر",
+      "phone": "01091353732",
+      "barcode": "RT-10062",
+      "cardNumber": "RT-SILVER-10062",
+      "bloodGroup": "",
+      "totalPoints": 199,
+      "tier": "Silver",
+      "lifetimeSpent": 199,
+      "issueDate": "2026-10-08",
+      "transactions": [
+        {
+          "id": "tx-1791501113007",
+          "date": "2026-10-08",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-032",
+          "invoiceNumber": "RT-2026-032",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791500920502",
+      "patientName": "مجدى احمد ربيع",
+      "phone": "01030502318",
+      "barcode": "RT-10061",
+      "cardNumber": "RT-SILVER-10061",
+      "bloodGroup": "",
+      "totalPoints": 199,
+      "tier": "Silver",
+      "lifetimeSpent": 199,
+      "issueDate": "2026-10-08",
+      "transactions": [
+        {
+          "id": "tx-1791500920502",
+          "date": "2026-10-08",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-031",
+          "invoiceNumber": "RT-2026-031",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791500705356",
+      "patientName": "عادل احمد صبيح",
+      "phone": "01112919075",
+      "barcode": "RT-10060",
+      "cardNumber": "RT-SILVER-10060",
+      "bloodGroup": "",
+      "totalPoints": 199,
+      "tier": "Silver",
+      "lifetimeSpent": 199,
+      "issueDate": "2026-10-08",
+      "transactions": [
+        {
+          "id": "tx-1791500705356",
+          "date": "2026-10-08",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-030",
+          "invoiceNumber": "RT-2026-030",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791499039660",
+      "patientName": "مني كرم هاشم",
+      "phone": "01113748875",
+      "barcode": "RT-10061",
+      "cardNumber": "RT-GOLD-10061",
+      "bloodGroup": "",
+      "totalPoints": 505,
+      "tier": "Gold",
+      "lifetimeSpent": 505,
+      "issueDate": "2026-10-08",
+      "transactions": [
+        {
+          "id": "tx-1791499039660",
+          "date": "2026-10-08",
+          "type": "earn",
+          "points": 505,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-031",
+          "invoiceNumber": "RT-2026-031",
+          "amountEGP": 505
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791498479900",
+      "patientName": "فاطمة احمد عبدالله",
+      "phone": "01010135898",
+      "barcode": "RT-10061",
+      "cardNumber": "RT-SILVER-10061",
+      "bloodGroup": "",
+      "totalPoints": 233,
+      "tier": "Silver",
+      "lifetimeSpent": 233,
+      "issueDate": "2026-10-08",
+      "transactions": [
+        {
+          "id": "tx-1791498479900",
+          "date": "2026-10-08",
+          "type": "earn",
+          "points": 233,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-031",
+          "invoiceNumber": "RT-2026-031",
+          "amountEGP": 233
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791414459348",
+      "patientName": "جيهان عبدالفتاح",
+      "phone": "01022231270",
+      "barcode": "RT-10062",
+      "cardNumber": "RT-SILVER-10062",
+      "bloodGroup": "",
+      "totalPoints": 333,
+      "tier": "Silver",
+      "lifetimeSpent": 333,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1791414459348",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 333,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-032",
+          "invoiceNumber": "RT-2026-032",
+          "amountEGP": 333
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791381439613",
+      "patientName": "محمد حسن على",
+      "phone": "01005314825",
+      "barcode": "RT-10043",
+      "cardNumber": "RT-SILVER-10043",
+      "bloodGroup": "",
+      "totalPoints": 190,
+      "tier": "Silver",
+      "lifetimeSpent": 190,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1791381439613",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 190,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-013",
+          "invoiceNumber": "RT-2026-013",
+          "amountEGP": 190
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791359724840",
+      "patientName": "فيرا ممدوح عبدالمسيح",
+      "phone": "01221502703",
+      "barcode": "RT-10044",
+      "cardNumber": "RT-SILVER-10044",
+      "bloodGroup": "",
+      "totalPoints": 498,
+      "tier": "Silver",
+      "lifetimeSpent": 498,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1791359724840",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 498,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-014",
+          "invoiceNumber": "RT-2026-014",
+          "amountEGP": 498
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791359462638",
+      "patientName": "حبيبه مجدى محمد",
+      "phone": "01148879943",
+      "barcode": "RT-10043",
+      "cardNumber": "RT-GOLD-10043",
+      "bloodGroup": "",
+      "totalPoints": 1026,
+      "tier": "Gold",
+      "lifetimeSpent": 1026,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1791359462638",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 1026,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-013",
+          "invoiceNumber": "RT-2026-013",
+          "amountEGP": 1026
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791400927210",
+      "patientName": "جيهان عبدالفتاح",
+      "phone": "01099999098",
+      "barcode": "RT-10061",
+      "cardNumber": "RT-SILVER-10061",
+      "bloodGroup": "",
+      "totalPoints": 184,
+      "tier": "Silver",
+      "lifetimeSpent": 184,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1791400927211",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 184,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-031",
+          "invoiceNumber": "RT-2026-031",
+          "amountEGP": 184
+        }
+      ]
     }
   ],
   "inventory": [
@@ -13330,7 +13560,7 @@
       "nameAr": "سكر عشوائي (RBS)",
       "nameEn": "Random Blood Sugar",
       "category": "Diabetes",
-      "price": 50,
+      "price": 88,
       "cost": 10,
       "sampleType": "Serum / Plasma",
       "turnaroundTime": "فوري (30 دقيقة)",
@@ -13347,7 +13577,7 @@
       "nameAr": "السكر التراكمي (HbA1c)",
       "nameEn": "Glycated Hemoglobin (HbA1c)",
       "category": "Diabetes",
-      "price": 180,
+      "price": 400,
       "cost": 35,
       "sampleType": "EDTA Whole Blood",
       "turnaroundTime": "خلال ساعتين",
@@ -13364,7 +13594,7 @@
       "nameAr": "إنسولين صائم (Fasting Insulin)",
       "nameEn": "Fasting Serum Insulin",
       "category": "Diabetes",
-      "price": 260,
+      "price": 530,
       "cost": 65,
       "sampleType": "Serum",
       "turnaroundTime": "خلال 24 ساعة",
@@ -13381,7 +13611,7 @@
       "nameAr": "سي ببتيد صائم (C-Peptide Fasting)",
       "nameEn": "Fasting C-Peptide",
       "category": "Diabetes",
-      "price": 290,
+      "price": 900,
       "cost": 75,
       "sampleType": "Serum",
       "turnaroundTime": "خلال 24 ساعة",
@@ -13398,7 +13628,7 @@
       "nameAr": "مقاومة الإنسولين الحسابية (HOMA-IR)",
       "nameEn": "HOMA-IR Insulin Resistance",
       "category": "Diabetes",
-      "price": 330,
+      "price": 770,
       "cost": 75,
       "sampleType": "Serum + Fluoride Plasma",
       "turnaroundTime": "خلال 24 ساعة",
@@ -13415,7 +13645,7 @@
       "nameAr": "صورة دم كاملة تفصيلية (CBC with Diff)",
       "nameEn": "Complete Blood Count with Differential",
       "category": "Hematology",
-      "price": 180,
+      "price": 411,
       "cost": 30,
       "sampleType": "EDTA Whole Blood",
       "turnaroundTime": "فوري (ساعة)",
@@ -13432,7 +13662,7 @@
       "nameAr": "سرعة ترسيب الدم (ESR)",
       "nameEn": "Erythrocyte Sedimentation Rate",
       "category": "Hematology",
-      "price": 70,
+      "price": 188,
       "cost": 15,
       "sampleType": "Citrated Whole Blood (1:4)",
       "turnaroundTime": "ساعتان",
@@ -13449,14 +13679,14 @@
       "nameAr": "زمن ونسبة البروثرومبين (PT & INR)",
       "nameEn": "Prothrombin Time & INR",
       "category": "Coagulation",
-      "price": 130,
+      "price": 290,
       "cost": 25,
       "sampleType": "Sodium Citrate 3.2% Plasma",
       "turnaroundTime": "خلال ساعتين",
       "unit": "Seconds / Ratio",
       "minNormal": 11,
-      "maxNormal": 13.5,
-      "textReference": "PT: 11.0 - 13.5 sec | INR: 0.85 - 1.15 (Warfarin Target: 2.0 - 3.0)",
+      "maxNormal": 14,
+      "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.4 (Warfarin Target: 2.0 - 3.0)",
       "method": "Optical Clotting Detection Analyzer",
       "fastingInstructions": "لا يشترط صيام (يُفضل تسجيل جرعة مضادات التجلط)"
     },
@@ -13466,14 +13696,14 @@
       "nameAr": "زمن الثرومبوبلاستين الجزئي (APTT)",
       "nameEn": "Activated Partial Thromboplastin Time",
       "category": "Coagulation",
-      "price": 130,
+      "price": 312,
       "cost": 25,
       "sampleType": "Sodium Citrate 3.2% Plasma",
       "turnaroundTime": "خلال ساعتين",
       "unit": "Seconds",
       "minNormal": 26,
-      "maxNormal": 36,
-      "textReference": "26.0 - 36.0 Seconds (Control: 30.0 sec)",
+      "maxNormal": 45,
+      "textReference": "26.0 - 45.0 Seconds (Control: 30.0 sec)",
       "method": "Photo-Optical Coagulometer",
       "fastingInstructions": "لا يشترط صيام"
     },
@@ -13483,7 +13713,7 @@
       "nameAr": "دي دايمر كمي بالدم (D-Dimer Quantitative)",
       "nameEn": "D-Dimer Quantitative Assay",
       "category": "Coagulation",
-      "price": 320,
+      "price": 589,
       "cost": 75,
       "sampleType": "Citrate Plasma",
       "turnaroundTime": "خلال ساعتين",
@@ -13500,7 +13730,7 @@
       "nameAr": "فصيلة الدم وعامل ريسس (ABO & Rh Group)",
       "nameEn": "ABO & Rh Blood Grouping",
       "category": "Hematology",
-      "price": 60,
+      "price": 222,
       "cost": 15,
       "sampleType": "EDTA Whole Blood",
       "turnaroundTime": "فوري (ساعة)",
@@ -13515,7 +13745,7 @@
       "nameAr": "عد الخلايا الشبكية بالدم (Reticulocyte Count)",
       "nameEn": "Reticulocyte Count %",
       "category": "Hematology",
-      "price": 90,
+      "price": 312,
       "cost": 15,
       "sampleType": "EDTA Whole Blood",
       "turnaroundTime": "خلال 3 ساعات",
@@ -13532,7 +13762,7 @@
       "nameAr": "زمن النزف وزمن التجلط (BT & CT)",
       "nameEn": "Bleeding Time & Clotting Time",
       "category": "Coagulation",
-      "price": 80,
+      "price": 220,
       "cost": 10,
       "sampleType": "Capillary Whole Blood",
       "turnaroundTime": "فوري (30 دقيقة)",
@@ -13549,7 +13779,7 @@
       "nameAr": "نشاط بروتين سي للتجلط (Protein C Activity)",
       "nameEn": "Protein C Chromogenic Activity",
       "category": "Coagulation",
-      "price": 520,
+      "price": 988,
       "cost": 140,
       "sampleType": "Citrate Plasma",
       "turnaroundTime": "24-48 ساعة",
@@ -13566,7 +13796,7 @@
       "nameAr": "بروتين إس الحر للتجلط (Protein S Free Antigen)",
       "nameEn": "Protein S Free Antigen",
       "category": "Coagulation",
-      "price": 520,
+      "price": 877,
       "cost": 140,
       "sampleType": "Citrate Plasma",
       "turnaroundTime": "24-48 ساعة",
@@ -13583,7 +13813,7 @@
       "nameAr": "مضاد الثرومبين 3 (Antithrombin III Activity)",
       "nameEn": "Antithrombin III Activity",
       "category": "Coagulation",
-      "price": 480,
+      "price": 988,
       "cost": 120,
       "sampleType": "Citrate Plasma",
       "turnaroundTime": "24-48 ساعة",
@@ -13600,7 +13830,7 @@
       "nameAr": "كرياتينين بالدم (Serum Creatinine)",
       "nameEn": "Serum Creatinine",
       "category": "Kidney Function",
-      "price": 88,
+      "price": 188,
       "cost": 12,
       "sampleType": "Serum",
       "turnaroundTime": "فوري (ساعة)",
@@ -13617,7 +13847,7 @@
       "nameAr": "بولينا بالدم (Blood Urea)",
       "nameEn": "Blood Urea",
       "category": "Kidney Function",
-      "price": 88,
+      "price": 188,
       "cost": 12,
       "sampleType": "Serum",
       "turnaroundTime": "فوري (ساعة)",
@@ -13634,7 +13864,7 @@
       "nameAr": "نيتروجين بولينا الدم (Blood Urea Nitrogen BUN)",
       "nameEn": "Blood Urea Nitrogen (BUN)",
       "category": "Kidney Function",
-      "price": 88,
+      "price": 200,
       "cost": 12,
       "sampleType": "Serum",
       "turnaroundTime": "فوري (ساعة)",
@@ -13651,14 +13881,14 @@
       "nameAr": "حمض البوليك والنقرس (Serum Uric Acid)",
       "nameEn": "Serum Uric Acid",
       "category": "Kidney Function",
-      "price": 88,
+      "price": 188,
       "cost": 12,
       "sampleType": "Serum",
       "turnaroundTime": "فوري (ساعة)",
       "unit": "mg/dL",
       "minNormal": 3.5,
-      "maxNormal": 7.2,
-      "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
+      "maxNormal": 6.2,
+      "textReference": "Males: 3.5 - 6.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
       "method": "Uricase / POD Enzymatic Colorimetric",
       "fastingInstructions": "صيام من 4 إلى 8 ساعات يفضل"
     },
@@ -13668,7 +13898,7 @@
       "nameAr": "صوديوم بالدم (Serum Sodium Na+)",
       "nameEn": "Serum Sodium (Na+)",
       "category": "Electrolytes",
-      "price": 110,
+      "price": 277,
       "cost": 20,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
@@ -13685,7 +13915,7 @@
       "nameAr": "بوتاسيوم بالدم (Serum Potassium K+)",
       "nameEn": "Serum Potassium (K+)",
       "category": "Electrolytes",
-      "price": 110,
+      "price": 310,
       "cost": 20,
       "sampleType": "Non-hemolyzed Serum",
       "turnaroundTime": "خلال ساعتين",
@@ -13702,7 +13932,7 @@
       "nameAr": "كلوريد بالدم (Serum Chloride Cl-)",
       "nameEn": "Serum Chloride (Cl-)",
       "category": "Electrolytes",
-      "price": 110,
+      "price": 700,
       "cost": 20,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
@@ -13719,7 +13949,7 @@
       "nameAr": "الكالسيوم الكلي (Total Serum Calcium)",
       "nameEn": "Total Serum Calcium",
       "category": "Minerals & Bone",
-      "price": 110,
+      "price": 297,
       "cost": 15,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
@@ -13736,7 +13966,7 @@
       "nameAr": "الكالسيوم المتأين الحر (Ionized Calcium Ca++)",
       "nameEn": "Ionized Calcium (Ca++)",
       "category": "Minerals & Bone",
-      "price": 150,
+      "price": 488,
       "cost": 30,
       "sampleType": "Serum (Anaerobic collection)",
       "turnaroundTime": "خلال ساعتين",
@@ -13753,7 +13983,7 @@
       "nameAr": "الفوسفور غير العضوي (Serum Phosphorus)",
       "nameEn": "Serum Inorganic Phosphorus",
       "category": "Minerals & Bone",
-      "price": 110,
+      "price": 233,
       "cost": 15,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
@@ -13770,7 +14000,7 @@
       "nameAr": "الماغنيسيوم بالدم (Serum Magnesium)",
       "nameEn": "Serum Magnesium",
       "category": "Minerals & Bone",
-      "price": 120,
+      "price": 400,
       "cost": 18,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
@@ -13787,7 +14017,7 @@
       "nameAr": "زلال دقيق بالبول كمي ونسبة ACR",
       "nameEn": "Microalbumin / Creatinine Ratio (ACR)",
       "category": "Kidney Function",
-      "price": 190,
+      "price": 422,
       "cost": 40,
       "sampleType": "Random Morning Urine",
       "turnaroundTime": "خلال 3 ساعات",
@@ -13804,7 +14034,7 @@
       "nameAr": "بروتين بول 24 ساعة (24h Urine Protein)",
       "nameEn": "24-Hour Urine Protein Excretion",
       "category": "Kidney Function",
-      "price": 190,
+      "price": 400,
       "cost": 40,
       "sampleType": "24-Hour Urine Collection",
       "turnaroundTime": "خلال 24 ساعة",
@@ -13821,14 +14051,14 @@
       "nameAr": "إنزيم كبد ALT / SGPT",
       "nameEn": "Alanine Aminotransferase (ALT / SGPT)",
       "category": "Liver Function",
-      "price": 88,
+      "price": 188,
       "cost": 12,
       "sampleType": "Serum",
       "turnaroundTime": "فوري (ساعة)",
       "unit": "U/L",
       "minNormal": 0,
       "maxNormal": 41,
-      "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
+      "textReference": "Adult Males: < 41 U/L | Adult Females: < 38 U/L",
       "method": "IFCC Kinetic UV without Pyridoxal Phosphate",
       "fastingInstructions": "لا يشترط صيام"
     },
@@ -13838,14 +14068,14 @@
       "nameAr": "إنزيم كبد AST / SGOT",
       "nameEn": "Aspartate Aminotransferase (AST / SGOT)",
       "category": "Liver Function",
-      "price": 88,
+      "price": 188,
       "cost": 12,
       "sampleType": "Serum",
       "turnaroundTime": "فوري (ساعة)",
       "unit": "U/L",
       "minNormal": 0,
       "maxNormal": 40,
-      "textReference": "Adult Males: < 40 U/L | Adult Females: < 32 U/L",
+      "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
       "method": "IFCC Kinetic UV",
       "fastingInstructions": "لا يشترط صيام"
     },
@@ -13855,7 +14085,7 @@
       "nameAr": "الصفراء الكلية بالدم (Total Bilirubin)",
       "nameEn": "Total Bilirubin",
       "category": "Liver Function",
-      "price": 88,
+      "price": 122,
       "cost": 12,
       "sampleType": "Serum (Protected from light)",
       "turnaroundTime": "فوري (ساعة)",
@@ -13872,7 +14102,7 @@
       "nameAr": "الصفراء المباشرة (Direct Bilirubin)",
       "nameEn": "Direct Bilirubin",
       "category": "Liver Function",
-      "price": 88,
+      "price": 122,
       "cost": 12,
       "sampleType": "Serum (Protected from light)",
       "turnaroundTime": "فوري (ساعة)",
@@ -13889,7 +14119,7 @@
       "nameAr": "الزلال بالدم (Serum Albumin)",
       "nameEn": "Serum Albumin",
       "category": "Liver Function",
-      "price": 88,
+      "price": 211,
       "cost": 12,
       "sampleType": "Serum",
       "turnaroundTime": "فوري (ساعة)",
@@ -13906,7 +14136,7 @@
       "nameAr": "البروتين الكلي بالدم (Total Protein)",
       "nameEn": "Total Serum Protein",
       "category": "Liver Function",
-      "price": 88,
+      "price": 211,
       "cost": 12,
       "sampleType": "Serum",
       "turnaroundTime": "فوري (ساعة)",
@@ -13923,7 +14153,7 @@
       "nameAr": "إنزيم الفوسفاتيز القلوي (Alkaline Phosphatase ALP)",
       "nameEn": "Alkaline Phosphatase (ALP)",
       "category": "Liver Function",
-      "price": 90,
+      "price": 222,
       "cost": 15,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
@@ -13940,7 +14170,7 @@
       "nameAr": "إنزيم جاما جي تي (Gamma-Glutamyl Transferase GGT)",
       "nameEn": "Gamma-GT (GGT)",
       "category": "Liver Function",
-      "price": 110,
+      "price": 344,
       "cost": 20,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
@@ -13957,7 +14187,7 @@
       "nameAr": "إنزيم لاكتات ديهيدروجينيز (Serum LDH)",
       "nameEn": "Lactate Dehydrogenase (LDH)",
       "category": "Biochemistry",
-      "price": 120,
+      "price": 420,
       "cost": 20,
       "sampleType": "Non-hemolyzed Serum",
       "turnaroundTime": "خلال ساعتين",
@@ -13974,7 +14204,7 @@
       "nameAr": "إنزيم الأميليز للبنكرياس (Serum Amylase)",
       "nameEn": "Serum Amylase",
       "category": "Pancreas",
-      "price": 130,
+      "price": 411,
       "cost": 25,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
@@ -13991,7 +14221,7 @@
       "nameAr": "إنزيم الليبيز النوعي للبنكرياس (Serum Lipase)",
       "nameEn": "Serum Lipase",
       "category": "Pancreas",
-      "price": 160,
+      "price": 411,
       "cost": 35,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
@@ -14008,7 +14238,7 @@
       "nameAr": "الكولسترول الكلي (Total Cholesterol)",
       "nameEn": "Total Cholesterol",
       "category": "Lipid Profile",
-      "price": 88,
+      "price": 260,
       "cost": 12,
       "sampleType": "Serum",
       "turnaroundTime": "فوري (ساعة)",
@@ -14025,7 +14255,7 @@
       "nameAr": "الدهون الثلاثية (Serum Triglycerides)",
       "nameEn": "Serum Triglycerides",
       "category": "Lipid Profile",
-      "price": 88,
+      "price": 260,
       "cost": 12,
       "sampleType": "Serum",
       "turnaroundTime": "فوري (ساعة)",
@@ -14042,7 +14272,7 @@
       "nameAr": "الكولسترول النافع عالي الكثافة (HDL)",
       "nameEn": "HDL Cholesterol",
       "category": "Lipid Profile",
-      "price": 90,
+      "price": 260,
       "cost": 15,
       "sampleType": "Serum",
       "turnaroundTime": "فوري (ساعة)",
@@ -14059,7 +14289,7 @@
       "nameAr": "الكولسترول الضار منخفض الكثافة (LDL Direct)",
       "nameEn": "LDL Direct Cholesterol",
       "category": "Lipid Profile",
-      "price": 90,
+      "price": 900,
       "cost": 15,
       "sampleType": "Serum",
       "turnaroundTime": "فوري (ساعة)",
@@ -14076,7 +14306,7 @@
       "nameAr": "تروبونين عالي الحساسية لعضلة القلب (hs-Troponin I)",
       "nameEn": "High-Sensitivity Troponin I",
       "category": "Cardiac",
-      "price": 360,
+      "price": 988,
       "cost": 90,
       "sampleType": "Serum / Heparin Plasma",
       "turnaroundTime": "فوري (ساعة)",
@@ -14093,7 +14323,7 @@
       "nameAr": "إنزيم القلب CK-MB كمي بالدم",
       "nameEn": "Creatine Kinase-MB Mass",
       "category": "Cardiac",
-      "price": 180,
+      "price": 533,
       "cost": 40,
       "sampleType": "Serum",
       "turnaroundTime": "فوري (ساعة)",
@@ -14110,7 +14340,7 @@
       "nameAr": "إنزيم العضلات والقلب الكلي (CPK Total)",
       "nameEn": "Total Creatine Kinase (CPK)",
       "category": "Cardiac",
-      "price": 120,
+      "price": 500,
       "cost": 20,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
@@ -14127,7 +14357,7 @@
       "nameAr": "ميوجلوبين بالدم لعضلة القلب (Serum Myoglobin)",
       "nameEn": "Serum Myoglobin",
       "category": "Cardiac",
-      "price": 290,
+      "price": 900,
       "cost": 70,
       "sampleType": "Serum",
       "turnaroundTime": "خلال ساعتين",
@@ -15224,12 +15454,12 @@
       "nameAr": "جرثومة المعدة بالبراز كمي (H. Pylori Antigen in Stool)",
       "nameEn": "Helicobacter Pylori Stool Antigen (HpSA)",
       "category": "Gastroenterology",
-      "price": 190,
+      "price": 777,
       "cost": 40,
       "sampleType": "Fresh Stool Specimen",
       "turnaroundTime": "خلال 3 ساعات",
-      "unit": "Qualitative",
-      "textReference": "Negative (No H. Pylori antigen detected in stool)",
+      "unit": "ng/ml",
+      "textReference": "Negative  : 0.0 – 0.9  Equivocal   : 0.9 – 1.1  Positive  : > 1.1",
       "method": "Rapid Chromatographic Immunoassay / ELISA",
       "fastingInstructions": "عينة براز طازجة، والتوقف عن المضادات الحيوية قبلها بأسبوعين"
     },
@@ -15655,6 +15885,38 @@
       "textReference": "Negative for Rotavirus & Adenovirus Antigens",
       "method": "Immunochromatographic Duo Rapid Test",
       "fastingInstructions": "عينة براز طازجة للأطفال"
+    },
+    {
+      "id": "test-1791282363076",
+      "price": 10,
+      "code": "HCT",
+      "sampleType": "EDTA ",
+      "unit": "%",
+      "turnaroundHours": 2,
+      "minNormal": 36,
+      "nameAr": "هيماتوكريت ",
+      "maxNormal": 49,
+      "category": "Clinical Hematology ",
+      "nameEn": "Hematocrit %",
+      "fastingInstructions": "لا يشترط الصيام",
+      "method": "Enzymatic",
+      "textReference": "36-49"
+    },
+    {
+      "fastingInstructions": "لا يشترط الصيام",
+      "nameAr": "هبموجلوبين ",
+      "unit": "g/L",
+      "code": "HB",
+      "method": "Enzymatic",
+      "category": "Clinical Hematology ",
+      "nameEn": "HB %",
+      "sampleType": " EDTA BLOOD ",
+      "maxNormal": 49,
+      "turnaroundHours": 2,
+      "minNormal": 36,
+      "textReference": "Male : 13.5-17.5 /Female: 12.5-15.5",
+      "price": 210,
+      "id": "test-1791276005667"
     }
   ],
   "packages": [
@@ -15666,28 +15928,31 @@
       "descriptionAr": "الفحص الأكثر طلباً للاطمئنان على الصحة العامة، وظائف الأعضاء الحيوية، مستويات السكر والدهون وصورة الدم الكاملة.",
       "targetAudience": "للرجال والنساء فوق 25 عاماً للتقييم الصحي السنوي الدوري",
       "includedProfiles": [
-        "CBC",
-        "GLYCEMIC",
-        "LIPID",
-        "LFT",
-        "KFT",
-        "URINE"
+        "LIPID"
       ],
       "includedIndividualTestCodes": [
         "VIT_D",
-        "TSH",
-        "URIC"
+        "URIC",
+        "GLU_F",
+        "CREAT",
+        "UREA",
+        "CALCIUM_TOTAL",
+        "ALT",
+        "AST",
+        "HB",
+        "HCT"
       ],
-      "originalPrice": 1650,
-      "packagePrice": 950,
-      "discountPercentage": 42,
+      "originalPrice": 2900,
+      "packagePrice": 199,
+      "discountPercentage": 93,
       "fastingRequired": "صيام من 10 إلى 12 ساعة (يُسمح بشرب الماء فقط)",
       "sampleTypes": [
         "Serum",
         "EDTA Whole Blood",
         "Clean Urine"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة الفحص الدوري الشامل (Wellness Plus)"
     },
     {
       "id": "pkg-2",
@@ -15717,7 +15982,8 @@
         "Serum",
         "EDTA Whole Blood"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة صحة الرجل والبروستاتا الشاملة"
     },
     {
       "id": "pkg-3",
@@ -15747,7 +16013,8 @@
         "EDTA Whole Blood",
         "Clean Urine"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة صحة المرأة والهرمونات الحيوية"
     },
     {
       "id": "pkg-4",
@@ -15781,7 +16048,8 @@
         "EDTA Whole Blood",
         "Morning Urine"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة متابعة السكر والوقاية من المضاعفات"
     },
     {
       "id": "pkg-5",
@@ -15811,7 +16079,8 @@
         "Serum",
         "EDTA Whole Blood"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة الفحص الطبي الشامل لما قبل الزواج"
     },
     {
       "id": "pkg-6",
@@ -15846,7 +16115,8 @@
         "Serum",
         "Citrate Plasma"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "باقة وظائف الكبد والفيروسات الكبدية الكاملة"
     },
     {
       "id": "pkg-7",
@@ -15879,7 +16149,8 @@
         "Serum",
         "Fresh Urine"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "باقة وظائف الكلى والأملاح والنقرس"
     },
     {
       "id": "pkg-8",
@@ -15912,7 +16183,8 @@
         "Serum",
         "Citrate Plasma"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "باقة صحة القلب والدهون وتصلب الشرايين"
     },
     {
       "id": "pkg-9",
@@ -15944,7 +16216,8 @@
         "Serum",
         "EDTA Whole Blood"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة الفيتامينات والمعادن والطاقة الحيوية"
     },
     {
       "id": "pkg-10",
@@ -15982,7 +16255,8 @@
         "Fresh Urine",
         "Stool Specimen"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة كبار السن التنفيذية الشاملة (Golden Age)"
     },
     {
       "id": "pkg-11",
@@ -16015,7 +16289,8 @@
         "Serum",
         "EDTA Whole Blood"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة تشخيص تساقط الشعر والأنيميا والهرمونات"
     },
     {
       "id": "pkg-12",
@@ -16050,7 +16325,8 @@
         "Serum",
         "EDTA Whole Blood"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "باقة الرياضيين واللياقة وبناء الأجسام"
     },
     {
       "id": "pkg-13",
@@ -16082,7 +16358,8 @@
         "Fresh Urine",
         "Stool Specimen"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "باقة صحة ونمو الأطفال والديدان وفقر الدم"
     },
     {
       "id": "pkg-14",
@@ -16113,7 +16390,8 @@
         "EDTA Whole Blood",
         "Fresh Stool Specimen"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "باقة الجهاز الهضمي والقولون وجرثومة المعدة"
     },
     {
       "id": "pkg-15",
@@ -16162,7 +16440,8 @@
         "Fresh Urine",
         "Stool"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "باقة الفحص الشامل الملكية VIP د. رامي مختار (32 فحص شامل)"
     }
   ]
 }
