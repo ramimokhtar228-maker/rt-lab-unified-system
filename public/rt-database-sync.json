@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-10T21:12:04.363Z",
+  "syncedAt": "2026-10-10T21:12:13.312Z",
   "reports": [
     {
       "id": "rep-1791500705350",
@@ -720,9 +720,9 @@
         "financialLicense": "EGY-FIN-10492",
         "showHrSignature": false
       },
-      "status": "draft",
+      "status": "released",
       "createdAt": "2026-10-07T23:14:04.234Z",
-      "updatedAt": "2026-10-10T20:35:14.725Z",
+      "updatedAt": "2026-10-10T21:12:09.150Z",
       "invoiceId": "inv-1791414844235",
       "smartReportEnabled": true,
       "smartReportClinicalData": {
