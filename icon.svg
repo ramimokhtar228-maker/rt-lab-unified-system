@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="50%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#881337"/>
+    </linearGradient>
+    <linearGradient id="flaskGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f43f5e"/>
+      <stop offset="100%" stop-color="#be123c"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background rounded squircle -->
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)"/>
+  <rect x="8" y="8" width="496" height="496" rx="120" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="4"/>
+
+  <!-- Pulse / Heartbeat Grid glow -->
+  <path d="M 96 256 L 180 256 L 208 190 L 244 320 L 276 220 L 296 270 L 320 256 L 416 256" 
+        fill="none" stroke="rgba(244,63,94,0.35)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Stylized Laboratory Flask -->
+  <g transform="translate(156, 120)" filter="url(#glow)">
+    <!-- Flask Neck -->
+    <rect x="82" y="16" width="36" height="56" rx="6" fill="#e2e8f0" opacity="0.9"/>
+    <rect x="76" y="8" width="48" height="12" rx="4" fill="#cbd5e1"/>
+    
+    <!-- Flask Body -->
+    <path d="M 82 72 L 20 200 C 10 220 25 240 50 240 L 150 240 C 175 240 190 220 180 200 L 118 72 Z" 
+          fill="none" stroke="#f8fafc" stroke-width="12" stroke-linejoin="round" stroke-linecap="round"/>
+    
+    <!-- Liquid inside Flask -->
+    <path d="M 44 185 Q 70 175 100 185 T 156 185 L 146 230 C 144 234 140 236 135 236 L 65 236 C 60 236 56 234 54 230 Z" 
+          fill="url(#redGrad)" opacity="0.92"/>
+
+    <!-- Bubbles in liquid -->
+    <circle cx="85" cy="205" r="7" fill="#ffffff" opacity="0.8"/>
+    <circle cx="115" cy="215" r="5" fill="#ffffff" opacity="0.7"/>
+    <circle cx="102" cy="195" r="4" fill="#ffffff" opacity="0.6"/>
+  </g>
+
+  <!-- RT Monogram -->
+  <g transform="translate(180, 395)">
+    <text x="76" y="42" font-family="'Cairo', system-ui, -apple-system, sans-serif" font-weight="900" font-size="52" fill="#ffffff" text-anchor="middle" letter-spacing="4">
+      RT LAB
+    </text>
+    <text x="76" y="68" font-family="'Cairo', system-ui, -apple-system, sans-serif" font-weight="700" font-size="16" fill="#f43f5e" text-anchor="middle" letter-spacing="3">
+      UNIFIED SYSTEM
+    </text>
+  </g>
+</svg>
