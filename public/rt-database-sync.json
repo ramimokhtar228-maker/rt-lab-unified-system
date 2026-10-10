@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-10T20:34:00.282Z",
+  "syncedAt": "2026-10-10T20:34:12.442Z",
   "reports": [
     {
       "id": "rep-1791501113004",
@@ -1440,10 +1440,10 @@
       "staff": {
         "labChemist": "منى احمد",
         "verifiedBy": "رحاب عبدالحميد",
-        "pathologist": "رحاب علي",
+        "pathologist": "أ.د. رامي مختار",
         "chemistTitle": "أخصائي كيمياء إكلينيكية وهرمونات",
         "verifierTitle": "طبيب باثولوجى / المدير التنفيذى",
-        "pathologistTitle": "طبيب الباثولوجيا الإكلينيكية والكيميائية",
+        "pathologistTitle": "استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
         "chemistLicense": "EGY-SCI-26101",
         "verifierLicense": "EGY-MED-120111",
         "pathologistLicense": "EGY-MED-48201",
@@ -1455,7 +1455,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T23:14:04.234Z",
-      "updatedAt": "2026-10-10T20:33:56.180Z",
+      "updatedAt": "2026-10-10T20:34:08.335Z",
       "invoiceId": "inv-1791414844235"
     },
     {
