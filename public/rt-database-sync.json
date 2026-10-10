@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-10T20:33:51.305Z",
+  "syncedAt": "2026-10-10T20:34:00.282Z",
   "reports": [
     {
       "id": "rep-1791501113004",
@@ -1344,7 +1344,7 @@
           "titleAr": "دهون الدم الشاملة مع المؤشرات الحسابية",
           "category": "Clinical Chemistry",
           "sampleType": "Serum (12h Fasting)",
-          "interpretation": "Lipid ratios demonstrate favorable cardiovascular risk stratification.",
+          "interpretation": "Hypercholesterolemia with elevated LDL-C. Cardiovascular risk evaluation and dietary modification recommended.",
           "parameters": [
             {
               "name": "Total Serum Cholesterol",
@@ -1455,7 +1455,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-07T23:14:04.234Z",
-      "updatedAt": "2026-10-10T20:33:47.222Z",
+      "updatedAt": "2026-10-10T20:33:56.180Z",
       "invoiceId": "inv-1791414844235"
     },
     {
