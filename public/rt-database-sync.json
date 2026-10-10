@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-10T14:00:31.643Z",
+  "syncedAt": "2026-10-10T14:01:10.575Z",
   "reports": [
     {
       "id": "rep-1791501113004",
@@ -537,7 +537,7 @@
             "code": "ENDO_DIABETES",
             "category": "endocrinology",
             "specialtyAr": "الغدد الصماء والسكري",
-            "imageUrl": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20180%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%0A%20%20%20%20%3Crect%20width%3D%22320%22%20height%3D%22180%22%20rx%3D%2214%22%20fill%3D%22%23090d16%22%2F%3E%0A%20%20%20%20%3Ccircle%20cx%3D%22160%22%20cy%3D%2290%22%20r%3D%2276%22%20fill%3D%22%230b1329%22%20stroke%3D%22%230284c7%22%20stroke-width%3D%222.5%22%2F%3E%0A%20%20%20%20%3Ctext%20x%3D%22160%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%2338bdf8%22%20font-size%3D%2210.5%22%20font-weight%3D%22900%22%20font-family%3D%22'Cairo'%2C%20sans-serif%22%3EDIABETES%20MELLITUS%20TYPE%202%3C%2Ftext%3E%0A%20%20%20%20%3Cg%20fill%3D%22%230284c7%22%3E%0A%20%20%20%20%20%20%20%20%3Crect%20x%3D%2295%22%20y%3D%2260%22%20width%3D%22130%22%20height%3D%2260%22%20rx%3D%228%22%20fill%3D%22%23082f49%22%20stroke%3D%22%2338bdf8%22%20stroke-width%3D%222%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Ctext%20x%3D%22160%22%20y%3D%2285%22%20text-anchor%3D%22middle%22%20fill%3D%22%2338bdf8%22%20font-size%3D%2212%22%20font-weight%3D%22bold%22%3EHbA1c%20%26gt%3B%3D%206.5%25%3C%2Ftext%3E%0A%20%20%20%20%20%20%20%20%3Ctext%20x%3D%22160%22%20y%3D%22105%22%20text-anchor%3D%22middle%22%20fill%3D%22%23f87171%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%3EFBS%20%26gt%3B%3D%20126%20mg%2FdL%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fg%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22105%22%20cy%3D%2250%22%20r%3D%2210%22%20fill%3D%22%23f43f5e%22%2F%3E%3Ctext%20x%3D%22105%22%20y%3D%2254%22%20text-anchor%3D%22middle%22%20fill%3D%22%23fff%22%20font-size%3D%229%22%20font-weight%3D%22bold%22%3EGlu%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22215%22%20cy%3D%2250%22%20r%3D%2210%22%20fill%3D%22%23f43f5e%22%2F%3E%3Ctext%20x%3D%22215%22%20y%3D%2254%22%20text-anchor%3D%22middle%22%20fill%3D%22%23fff%22%20font-size%3D%229%22%20font-weight%3D%22bold%22%3EGlu%3C%2Ftext%3E%0A%20%20%20%20%3Ctext%20x%3D%22160%22%20y%3D%22170%22%20text-anchor%3D%22middle%22%20fill%3D%22%2394a3b8%22%20font-size%3D%229%22%20font-family%3D%22'Cairo'%2C%20sans-serif%22%3EChronic%20Hyperglycemia%2C%20Glycated%20Hb%20%26%20Insulin%20Resistance%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E",
+            "imageUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgMTgwIiB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCI+CiAgICA8cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgcng9IjE0IiBmaWxsPSIjMDkwZDE2Ii8+CiAgICA8Y2lyY2xlIGN4PSIxNjAiIGN5PSI5MCIgcj0iNzYiIGZpbGw9IiMwYjEzMjkiIHN0cm9rZT0iIzAyODRjNyIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzOGJkZjgiIGZvbnQtc2l6ZT0iMTAuNSIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1mYW1pbHk9IidDYWlybycsIHN5c3RlbS11aSwgLWFwcGxlLXN5c3RlbSwgc2Fucy1zZXJpZiI+RElBQkVURVMgTUVMTElUVVMgVFlQRSAyPC90ZXh0PgogICAgPGcgZmlsbD0iIzAyODRjNyI+CiAgICAgICAgPHJlY3QgeD0iOTUiIHk9IjYwIiB3aWR0aD0iMTMwIiBoZWlnaHQ9IjYwIiByeD0iOCIgZmlsbD0iIzA4MmY0OSIgc3Ryb2tlPSIjMzhiZGY4IiBzdHJva2Utd2lkdGg9IjIiLz4KICAgICAgICA8dGV4dCB4PSIxNjAiIHk9Ijg1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMzhiZGY4IiBmb250LXNpemU9IjEyIiBmb250LXdlaWdodD0iYm9sZCI+SGJBMWMgJmd0Oz0gNi41JTwvdGV4dD4KICAgICAgICA8dGV4dCB4PSIxNjAiIHk9IjEwNSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2Y4NzE3MSIgZm9udC1zaXplPSIxMCIgZm9udC13ZWlnaHQ9ImJvbGQiPkZCUyAmZ3Q7PSAxMjYgbWcvZEw8L3RleHQ+CiAgICAgIDwvZz4KICAgICAgPGNpcmNsZSBjeD0iMTA1IiBjeT0iNTAiIHI9IjEwIiBmaWxsPSIjZjQzZjVlIi8+PHRleHQgeD0iMTA1IiB5PSI1NCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2ZmZiIgZm9udC1zaXplPSI5IiBmb250LXdlaWdodD0iYm9sZCI+R2x1PC90ZXh0PgogICAgICA8Y2lyY2xlIGN4PSIyMTUiIGN5PSI1MCIgcj0iMTAiIGZpbGw9IiNmNDNmNWUiLz48dGV4dCB4PSIyMTUiIHk9IjU0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjkiIGZvbnQtd2VpZ2h0PSJib2xkIj5HbHU8L3RleHQ+CiAgICA8dGV4dCB4PSIxNjAiIHk9IjE3MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzk0YTNiOCIgZm9udC1zaXplPSI5IiBmb250LWZhbWlseT0iJ0NhaXJvJywgc3lzdGVtLXVpLCAtYXBwbGUtc3lzdGVtLCBzYW5zLXNlcmlmIj5DaHJvbmljIEh5cGVyZ2x5Y2VtaWEsIEdseWNhdGVkIEhiICYgSW5zdWxpbiBSZXNpc3RhbmNlPC90ZXh0PgogIDwvc3ZnPg==",
             "titleAr": "داء السكري واعتلال الأيض (Type 2 Diabetes Mellitus)",
             "titleEn": "Type 2 Diabetes Mellitus & Glycemic Control",
             "pathologySummaryAr": "ارتفاع مزمن في سكر الدم الصائم وبعد الأكل والتراكمي (HbA1c >= 6.5%) ناجم عن مقاومة الأنسجة للإنسولين ونقص نسبي في إفرازه، مع مخاطر تصلب الأوعية الدقيقة واعتلال الكلى وشبكية العين.",
@@ -626,7 +626,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-08T23:05:05.350Z",
-      "updatedAt": "2026-10-10T10:28:43.993Z",
+      "updatedAt": "2026-10-10T14:01:06.429Z",
       "invoiceId": "inv-1791500705351",
       "smartReportEnabled": true,
       "smartReportClinicalData": {
