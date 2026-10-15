@@ -1,0 +1,6 @@
+{
+  "name": "RT-Lab Unified Clinical Laboratory System",
+  "description": "Next-generation Clinical Laboratory Information and Reporting System with professional medical reports, CBC 20-parameter differential, blood film morphology, historical trend delta tracking, critical value alerts, and HL7 FHIR compliance.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
