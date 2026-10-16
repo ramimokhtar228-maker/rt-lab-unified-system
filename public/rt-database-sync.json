@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T13:58:25.341Z",
+  "syncedAt": "2026-10-16T13:58:41.974Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -878,6 +878,10 @@
               "result": "1.4",
               "flag": "NORMAL"
             }
+          ],
+          "interpretations": [
+            "Automated hematological indices and differential leucocytic count evaluated according to WHO standards.",
+            "Mild microcytic hypochromic anemia, iron deficiency picture is suggested. Serum Ferritin is recommended."
           ]
         },
         {
@@ -1059,7 +1063,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-16T13:58:21.497Z",
+      "updatedAt": "2026-10-16T13:58:28.343Z",
       "invoiceId": "inv-1791921893782"
     },
     {
