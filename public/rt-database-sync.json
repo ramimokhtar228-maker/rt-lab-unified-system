@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:52:11.395Z",
+  "syncedAt": "2026-10-16T15:52:17.362Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -903,17 +903,6 @@
           "interpretation": "Liver enzymes and synthetic hepatic markers are within normal reference ranges.",
           "parameters": [
             {
-              "name": "Prothrombin Time & INR (Prothrombin Time & INR)",
-              "unit": "Seconds / Ratio",
-              "minNormal": 11,
-              "maxNormal": 14,
-              "method": "Optical Clotting Detection Analyzer",
-              "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)",
-              "id": "param-1792066884186-0",
-              "result": "13",
-              "flag": "NORMAL"
-            },
-            {
               "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
               "unit": "U/L",
               "minNormal": 0,
@@ -1051,7 +1040,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-16T15:52:08.669Z",
+      "updatedAt": "2026-10-16T15:52:13.179Z",
       "invoiceId": "inv-1791921893782"
     },
     {
