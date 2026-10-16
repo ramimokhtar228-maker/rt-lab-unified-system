@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:23:04.259Z",
+  "syncedAt": "2026-10-16T14:23:13.055Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3073,13 +3073,13 @@
             {
               "id": "param-1792160533603",
               "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
-              "result": "",
+              "result": "25.55",
               "unit": "ng/mL",
               "minNormal": 30,
               "maxNormal": 100,
               "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
               "method": "CLIA (Chemiluminescence Immunoassay)",
-              "flag": ""
+              "flag": "LOW"
             }
           ]
         },
@@ -3139,7 +3139,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:22:57.034Z",
+      "updatedAt": "2026-10-16T14:23:10.176Z",
       "invoiceId": "inv-1791735202176"
     },
     {
