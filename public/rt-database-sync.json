@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:25:42.562Z",
+  "syncedAt": "2026-10-16T14:25:50.489Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3263,8 +3263,8 @@
               "maxNormal": 8,
               "textReference": "2 - 8 %",
               "id": "param-1792160624241-19",
-              "result": "0",
-              "flag": "LOW"
+              "result": "03",
+              "flag": "NORMAL"
             },
             {
               "name": "Eosinophils %",
@@ -3273,8 +3273,8 @@
               "maxNormal": 6,
               "textReference": "1 - 6 %",
               "id": "param-1792160624241-20",
-              "result": "",
-              "flag": ""
+              "result": "02",
+              "flag": "NORMAL"
             },
             {
               "name": "Basophils %",
@@ -3283,8 +3283,8 @@
               "maxNormal": 1,
               "textReference": "0 - 1 %",
               "id": "param-1792160624241-21",
-              "result": "",
-              "flag": ""
+              "result": "00",
+              "flag": "NORMAL"
             },
             {
               "name": "Metamyelocytes %",
@@ -3346,8 +3346,8 @@
               "notes": "Auto-calculated: (WBC × Mono%) / 100",
               "textReference": "0.2 - 0.8 x10^3/µL",
               "id": "param-1792160624241-27",
-              "result": "0",
-              "flag": "LOW"
+              "result": "0.2",
+              "flag": "NORMAL"
             },
             {
               "name": "Absolute Eosinophils (AEC)",
@@ -3357,8 +3357,8 @@
               "notes": "Auto-calculated: (WBC × Eos%) / 100",
               "textReference": "0.04 - 0.44 x10^3/µL",
               "id": "param-1792160624241-28",
-              "result": "",
-              "flag": ""
+              "result": "0.1",
+              "flag": "NORMAL"
             },
             {
               "name": "Absolute Basophils (ABC)",
@@ -3368,8 +3368,8 @@
               "notes": "Auto-calculated: (WBC × Baso%) / 100",
               "textReference": "0.01 - 0.1 x10^3/µL",
               "id": "param-1792160624241-29",
-              "result": "",
-              "flag": ""
+              "result": "0",
+              "flag": "LOW"
             },
             {
               "name": "NLR (Neutrophil/Lymphocyte)",
@@ -3456,7 +3456,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:25:40.299Z",
+      "updatedAt": "2026-10-16T14:25:47.260Z",
       "invoiceId": "inv-1791735202176"
     },
     {
