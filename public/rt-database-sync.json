@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T13:34:38.574Z",
+  "syncedAt": "2026-10-16T13:34:53.916Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -1670,6 +1670,84 @@
               "flag": ""
             }
           ]
+        },
+        {
+          "id": "prof-1792157691139-kwct",
+          "profileCode": "KFT",
+          "titleEn": "Kidney Function Profile",
+          "titleAr": "Kidney Function Profile",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum",
+          "interpretation": "Renal biomarkers indicate adequate glomerular filtration and nitrogenous clearance.",
+          "parameters": [
+            {
+              "name": "Serum Creatinine",
+              "unit": "mg/dL",
+              "minNormal": 0.6,
+              "maxNormal": 1.2,
+              "panicHigh": 4,
+              "method": "Enzymatic / Jaffe Kinetic",
+              "textReference": "",
+              "id": "param-1792157691139-0",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "Blood Urea",
+              "unit": "mg/dL",
+              "minNormal": 15,
+              "maxNormal": 45,
+              "panicHigh": 120,
+              "method": "Urease-GLDH",
+              "textReference": "",
+              "id": "param-1792157691139-1",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "Blood Urea Nitrogen (BUN)",
+              "unit": "mg/dL",
+              "minNormal": 7,
+              "maxNormal": 20,
+              "textReference": "",
+              "id": "param-1792157691139-2",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "BUN / Creatinine Ratio",
+              "unit": "Ratio",
+              "minNormal": 10,
+              "maxNormal": 20,
+              "notes": "Auto-calculated: BUN / Creatinine",
+              "textReference": "",
+              "id": "param-1792157691139-3",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "Serum Uric Acid",
+              "unit": "mg/dL",
+              "minNormal": 3.5,
+              "maxNormal": 7.2,
+              "method": "Uricase-PAP",
+              "textReference": "",
+              "id": "param-1792157691139-4",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "eGFR (CKD-EPI)",
+              "unit": "mL/min/1.73m²",
+              "minNormal": 90,
+              "maxNormal": 120,
+              "notes": "Auto-calculated: CKD-EPI Formula",
+              "textReference": "",
+              "id": "param-1792157691139-5",
+              "result": "",
+              "flag": ""
+            }
+          ]
         }
       ],
       "staff": {
@@ -1685,7 +1763,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-16T13:31:59.823Z",
-      "updatedAt": "2026-10-16T13:34:36.289Z",
+      "updatedAt": "2026-10-16T13:34:51.139Z",
       "invoiceId": "inv-1792157519823"
     },
     {
