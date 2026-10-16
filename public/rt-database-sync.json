@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:20:30.245Z",
+  "syncedAt": "2026-10-16T15:20:43.773Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -21747,7 +21747,7 @@
       "nameAr": "Direct Coombs Test (DAT)",
       "nameEn": "Direct Coombs Test (DAT)",
       "category": "Hematology",
-      "price": 150,
+      "price": 460,
       "cost": 40,
       "sampleType": "EDTA Whole Blood",
       "turnaroundTime": "Within 3 hours",
