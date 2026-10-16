@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:27:53.196Z",
+  "syncedAt": "2026-10-16T14:27:58.885Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3013,7 +3013,8 @@
         "totalCost": 612,
         "discountApplied": 2303,
         "paymentMethod": "cash",
-        "clinicalHistory": "ميتفورمين (Metformin)"
+        "clinicalHistory": " ",
+        "clinicalDiagnosis": " "
       },
       "profiles": [
         {
@@ -3401,7 +3402,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:27:51.040Z",
+      "updatedAt": "2026-10-16T14:27:56.706Z",
       "invoiceId": "inv-1791735202176"
     },
     {
