@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:57:09.663Z",
+  "syncedAt": "2026-10-16T15:57:20.478Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -1014,36 +1014,14 @@
               "flag": "NORMAL"
             },
             {
-              "name": "Serum Globulin",
-              "unit": "g/dL",
-              "minNormal": 2.3,
-              "maxNormal": 3.5,
-              "notes": "Auto-calculated: Total Protein - Albumin",
-              "textReference": "",
-              "id": "param-1792166170282-8",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "A/G Ratio",
-              "unit": "Ratio",
-              "minNormal": 1.2,
-              "maxNormal": 2.2,
-              "notes": "Auto-calculated: Albumin / Globulin",
-              "textReference": "",
-              "id": "param-1792166170282-9",
-              "result": "",
-              "flag": ""
-            },
-            {
               "name": "G.G.T",
               "unit": "U/L",
               "minNormal": 9,
               "maxNormal": 48,
               "textReference": "",
               "id": "param-1792166170282-10",
-              "result": "",
-              "flag": ""
+              "result": "31",
+              "flag": "NORMAL"
             },
             {
               "name": "AST/ALT Ratio (De Ritis)",
@@ -1080,7 +1058,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-16T15:57:03.979Z",
+      "updatedAt": "2026-10-16T15:57:12.628Z",
       "invoiceId": "inv-1791921893782"
     },
     {
