@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:19:21.249Z",
+  "syncedAt": "2026-10-16T15:19:31.669Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -21522,7 +21522,7 @@
       "nameAr": "HIV-1 RNA Quantitative Viral Load PCR",
       "nameEn": "HIV-1 RNA Quantitative Viral Load PCR",
       "category": "Molecular & PCR",
-      "price": 850,
+      "price": 1455,
       "cost": 220,
       "sampleType": "EDTA Plasma",
       "turnaroundTime": "48-72 hours",
