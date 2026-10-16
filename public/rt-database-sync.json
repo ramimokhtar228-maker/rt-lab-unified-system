@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:19:58.178Z",
+  "syncedAt": "2026-10-16T15:20:10.985Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -21715,7 +21715,7 @@
       "nameAr": "G6PD Quantitative",
       "nameEn": "G6PD Quantitative",
       "category": "Hematology",
-      "price": 250,
+      "price": 750,
       "cost": 60,
       "sampleType": "EDTA Whole Blood",
       "turnaroundTime": "Within 24 hours",
