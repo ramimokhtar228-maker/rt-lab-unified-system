@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:17:49.756Z",
+  "syncedAt": "2026-10-16T15:17:56.551Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -21319,7 +21319,7 @@
       "nameAr": "Complete Stool Examination & Parasitology",
       "nameEn": "Complete Stool Examination & Parasitology",
       "category": "Urinalysis & Parasitology",
-      "price": 70,
+      "price": 138,
       "cost": 15,
       "sampleType": "Fresh Stool Specimen",
       "turnaroundTime": "Immediate (1 hour)",
