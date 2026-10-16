@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T08:41:06.248Z",
+  "syncedAt": "2026-10-16T08:41:37.877Z",
   "reports": [
     {
       "id": "rep-001",
@@ -3779,7 +3779,8 @@
         "EDTA Whole Blood",
         "Clean Urine"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "Comprehensive Annual Wellness Package"
     },
     {
       "id": "pkg-2",
@@ -3809,7 +3810,8 @@
         "Serum",
         "EDTA Whole Blood"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "Men Executive Health & Prostate Screening"
     },
     {
       "id": "pkg-3",
@@ -3839,7 +3841,8 @@
         "EDTA Whole Blood",
         "Clean Urine"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "Women Vital Health & Hormone Balance"
     },
     {
       "id": "pkg-4",
@@ -3873,7 +3876,8 @@
         "EDTA Whole Blood",
         "Morning Urine"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "Comprehensive Diabetes & Lipid Complication Care"
     },
     {
       "id": "pkg-5",
@@ -3903,7 +3907,8 @@
         "Serum",
         "EDTA Whole Blood"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "Pre-Marital Comprehensive Health Screening"
     },
     {
       "id": "pkg-6",
@@ -3938,7 +3943,8 @@
         "Serum",
         "Citrate Plasma"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "Complete Hepatic Profile & Viral Screen"
     },
     {
       "id": "pkg-7",
@@ -3971,7 +3977,8 @@
         "Serum",
         "Fresh Urine"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "Renal Function, Gout & Electrolytes Panel"
     },
     {
       "id": "pkg-8",
@@ -4004,7 +4011,8 @@
         "Serum",
         "Citrate Plasma"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "Cardiovascular Risk & Lipid Profile Panel"
     },
     {
       "id": "pkg-9",
@@ -4036,7 +4044,8 @@
         "Serum",
         "EDTA Whole Blood"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "Vitamins, Minerals & Vital Energy Panel"
     },
     {
       "id": "pkg-10",
@@ -4074,7 +4083,8 @@
         "Fresh Urine",
         "Stool Specimen"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "Golden Age Senior Comprehensive Panel"
     },
     {
       "id": "pkg-11",
@@ -4107,7 +4117,8 @@
         "Serum",
         "EDTA Whole Blood"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "Hair Loss, Anemia & Micronutrient Panel"
     },
     {
       "id": "pkg-12",
@@ -4142,7 +4153,8 @@
         "Serum",
         "EDTA Whole Blood"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "Athletes & Fitness Performance Panel"
     },
     {
       "id": "pkg-13",
@@ -4174,7 +4186,8 @@
         "Fresh Urine",
         "Stool Specimen"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "Pediatric Health, Growth & Parasitology Checkup"
     },
     {
       "id": "pkg-14",
@@ -4205,7 +4218,8 @@
         "EDTA Whole Blood",
         "Fresh Stool Specimen"
       ],
-      "isPopular": false
+      "isPopular": false,
+      "nameAr": "Gastrointestinal, Celiac & H. Pylori Panel"
     },
     {
       "id": "pkg-15",
@@ -4254,7 +4268,8 @@
         "Fresh Urine",
         "Stool"
       ],
-      "isPopular": true
+      "isPopular": true,
+      "nameAr": "Prof. Dr. Rami Mokhtar Royal VIP Platinum Panel"
     }
   ]
 }
