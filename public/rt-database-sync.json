@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T13:44:21.671Z",
+  "syncedAt": "2026-10-16T13:44:30.010Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -482,7 +482,7 @@
       "staff": {
         "labChemist": "مني احمد",
         "verifiedBy": "رحاب على ",
-        "pathologist": "Prof. Dr. Rami Mokhtar",
+        "pathologist": "را",
         "chemistTitle": "Senior Clinical Chemist - Hormones",
         "verifierTitle": "طبيب باثولوجي / المدير التنفيذي",
         "pathologistTitle": "طبيب الباثولوجيا الاكلينيكية والكيميائية كلية طب قصر العيني",
@@ -493,7 +493,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-16T13:31:59.823Z",
-      "updatedAt": "2026-10-16T13:44:19.567Z",
+      "updatedAt": "2026-10-16T13:44:27.428Z",
       "invoiceId": "inv-1792157519823"
     },
     {
