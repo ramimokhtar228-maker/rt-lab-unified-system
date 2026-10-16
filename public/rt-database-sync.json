@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:07:40.970Z",
+  "syncedAt": "2026-10-16T15:10:41.747Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -1027,25 +1027,27 @@
           "interpretation": "Ferritin, Serum Iron, and TIBC provide comprehensive evaluation of body iron stores.",
           "parameters": [
             {
-              "name": "Serum Iron",
-              "unit": "µg/dL",
-              "minNormal": 20,
-              "maxNormal": 100,
-              "method": "Ferene / Colorimetric",
+              "name": "Serum Iron (Serum Iron)",
+              "unit": "ug/dL",
+              "minNormal": 60,
+              "maxNormal": 170,
+              "method": "Ferrozine / Ferene Colorimetric",
               "id": "param-1792066933779-0",
               "result": "34",
-              "flag": "NORMAL"
+              "flag": "NORMAL",
+              "textReference": "Males: 65 - 175 ug/dL | Females: 50 - 170 ug/dL"
             },
             {
-              "name": "Serum Ferritin",
+              "name": "Serum Ferritin Level (Serum Ferritin Level)",
               "unit": "ng/mL",
-              "minNormal": 12,
-              "maxNormal": 100,
+              "minNormal": 30,
+              "maxNormal": 400,
               "panicLow": 10,
-              "method": "CLIA / Immunoturbidimetry",
+              "method": "CLIA (Chemiluminescence Immunoassay)",
               "id": "param-1792066933779-4",
               "result": "45",
-              "flag": "NORMAL"
+              "flag": "NORMAL",
+              "textReference": "Adult Males: 30 - 400 ng/mL | Adult Females: 15 - 150 ng/mL"
             }
           ]
         }
@@ -1071,7 +1073,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-16T15:00:58.430Z",
+      "updatedAt": "2026-10-16T15:08:26.236Z",
       "invoiceId": "inv-1791921893782"
     },
     {
@@ -1191,7 +1193,7 @@
           "parameters": [
             {
               "id": "p-1791919687675-44c",
-              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
               "result": "28.88",
               "unit": "ng/mL",
               "minNormal": 30,
@@ -1224,7 +1226,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T19:28:07.675Z",
-      "updatedAt": "2026-10-16T15:04:12.768Z",
+      "updatedAt": "2026-10-16T15:08:49.235Z",
       "invoiceId": "inv-1791919687676"
     },
     {
@@ -1482,7 +1484,7 @@
           "parameters": [
             {
               "id": "p-1791836921717-nlq",
-              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
               "result": "28.90",
               "unit": "ng/mL",
               "minNormal": 30,
@@ -1515,7 +1517,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-12T20:28:41.717Z",
-      "updatedAt": "2026-10-12T21:14:15.867Z",
+      "updatedAt": "2026-10-16T15:08:49.235Z",
       "invoiceId": "inv-1791836921717",
       "generalComment": "FOR FOLLOW UP  S.Ca, ALP, PH4 , PTH RECOMMENDED "
     },
@@ -1651,7 +1653,7 @@
             },
             {
               "id": "p-pkg-0-1791833506659-yrz",
-              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
               "result": "21.11",
               "unit": "ng/mL",
               "minNormal": 30,
@@ -1879,7 +1881,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-12T19:31:46.660Z",
-      "updatedAt": "2026-10-16T15:03:46.325Z",
+      "updatedAt": "2026-10-16T15:08:49.235Z",
       "invoiceId": "inv-1791833506660",
       "smartReportEnabled": true,
       "smartReportClinicalData": {
@@ -2175,7 +2177,7 @@
             },
             {
               "id": "p-pkg-0-1791833372302-v9o",
-              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
               "result": "36.66",
               "unit": "ng/mL",
               "minNormal": 30,
@@ -2461,7 +2463,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-12T19:29:32.306Z",
-      "updatedAt": "2026-10-16T15:01:58.669Z",
+      "updatedAt": "2026-10-16T15:08:49.235Z",
       "invoiceId": "inv-1791833372306",
       "smartReportEnabled": true,
       "smartReportClinicalData": {
@@ -3427,7 +3429,7 @@
       },
       "status": "in_progress",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T15:03:46.325Z",
+      "updatedAt": "2026-10-16T15:08:49.235Z",
       "invoiceId": "inv-1791735202176"
     },
     {
@@ -3932,7 +3934,7 @@
           "parameters": [
             {
               "id": "param-1792074186123",
-              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
               "result": "36.11",
               "unit": "ng/mL",
               "minNormal": 30,
@@ -3943,7 +3945,7 @@
             },
             {
               "id": "param-1792074210306",
-              "name": "فيتامين ب12 بالدم (Vitamin B12 Level) (Vitamin B12 Cyanocobalamin)",
+              "name": "Vitamin B12 Cyanocobalamin (Vitamin B12 Cyanocobalamin)",
               "result": "422",
               "unit": "pg/mL",
               "minNormal": 211,
@@ -3992,7 +3994,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-11T15:57:30.501Z",
-      "updatedAt": "2026-10-16T15:03:46.326Z",
+      "updatedAt": "2026-10-16T15:08:57.490Z",
       "invoiceId": "inv-1791734250501"
     },
     {
@@ -4067,7 +4069,7 @@
           "parameters": [
             {
               "id": "param-1792052615820",
-              "name": "الزنك بالدم (Serum Zinc Level) (Serum Zinc Level)",
+              "name": "Serum Zinc Level (Serum Zinc Level)",
               "result": "89",
               "unit": "ug/dL",
               "minNormal": 70,
@@ -4078,7 +4080,7 @@
             },
             {
               "id": "param-1792052671650",
-              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
               "result": "21.77",
               "unit": "ng/mL",
               "minNormal": 30,
@@ -4089,7 +4091,7 @@
             },
             {
               "id": "param-1792052689583",
-              "name": "فيتامين ب12 بالدم (Vitamin B12 Level) (Vitamin B12 Cyanocobalamin)",
+              "name": "Vitamin B12 Cyanocobalamin (Vitamin B12 Cyanocobalamin)",
               "result": "344",
               "unit": "pg/mL",
               "minNormal": 211,
@@ -4437,7 +4439,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-11T15:38:48.875Z",
-      "updatedAt": "2026-10-16T15:00:39.594Z",
+      "updatedAt": "2026-10-16T15:10:02.039Z",
       "invoiceId": "inv-1791733128875"
     },
     {
@@ -4584,7 +4586,7 @@
             },
             {
               "id": "p-pkg-0-1791501113001-082",
-              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
               "result": "",
               "unit": "ng/mL",
               "minNormal": 30,
@@ -4740,7 +4742,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-08T23:11:53.004Z",
-      "updatedAt": "2026-10-16T15:03:46.326Z",
+      "updatedAt": "2026-10-16T15:08:49.235Z",
       "invoiceId": "inv-1791501113004"
     },
     {
@@ -4873,7 +4875,7 @@
             },
             {
               "id": "p-pkg-0-1791500705347-njo",
-              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
               "result": "37.77",
               "unit": "ng/mL",
               "minNormal": 30,
@@ -5153,7 +5155,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-08T23:05:05.350Z",
-      "updatedAt": "2026-10-16T15:01:58.669Z",
+      "updatedAt": "2026-10-16T15:08:49.236Z",
       "invoiceId": "inv-1791500705351",
       "smartReportEnabled": true,
       "smartReportClinicalData": {
@@ -6515,7 +6517,7 @@
           "parameters": [
             {
               "id": "p-1791359724809-9fy",
-              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
               "result": "24.88",
               "unit": "ng/mL",
               "minNormal": 30,
@@ -6560,7 +6562,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-07T07:55:24.810Z",
-      "updatedAt": "2026-10-16T14:59:23.334Z",
+      "updatedAt": "2026-10-16T15:08:49.236Z",
       "invoiceId": "inv-1791359724811"
     },
     {
@@ -6813,7 +6815,7 @@
               "flag": "NORMAL"
             },
             {
-              "name": "الحديد الكلي بالدم (Serum Iron) (Serum Iron)",
+              "name": "Serum Iron (Serum Iron)",
               "unit": "ug/dL",
               "minNormal": 60,
               "maxNormal": 170,
@@ -6836,7 +6838,7 @@
               "flag": "NORMAL"
             },
             {
-              "name": "مخزون الحديد بالدم (Serum Ferritin) (Serum Ferritin Level)",
+              "name": "Serum Ferritin Level (Serum Ferritin Level)",
               "unit": "ng/mL",
               "minNormal": 30,
               "maxNormal": 400,
@@ -6938,7 +6940,7 @@
           "parameters": [
             {
               "id": "p-1791359462609-82g",
-              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
               "result": "34.77",
               "unit": "ng/mL",
               "minNormal": 30,
@@ -6963,7 +6965,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-07T07:51:02.609Z",
-      "updatedAt": "2026-10-16T14:59:23.334Z",
+      "updatedAt": "2026-10-16T15:08:49.236Z",
       "invoiceId": "inv-1791359462609",
       "generalComment": ""
     },
@@ -7097,7 +7099,7 @@
             },
             {
               "id": "p-pkg-0-1791358565021-syd",
-              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
               "result": "19.55",
               "unit": "ng/mL",
               "minNormal": 30,
@@ -7253,7 +7255,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-07T07:36:05.025Z",
-      "updatedAt": "2026-10-16T15:03:46.328Z",
+      "updatedAt": "2026-10-16T15:08:49.236Z",
       "invoiceId": "inv-1791358565025"
     },
     {
@@ -7386,7 +7388,7 @@
             },
             {
               "id": "p-pkg-0-1791321555659-tq7",
-              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
               "result": "20.0",
               "unit": "ng/mL",
               "minNormal": 30,
@@ -7542,7 +7544,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-06T21:19:15.663Z",
-      "updatedAt": "2026-10-16T15:03:46.328Z",
+      "updatedAt": "2026-10-16T15:08:49.236Z",
       "invoiceId": "inv-1791321555664"
     },
     {
@@ -7686,7 +7688,7 @@
             },
             {
               "id": "p-pkg-0-1791306270691-vjp",
-              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
               "result": "26.77",
               "unit": "ng/mL",
               "minNormal": 30,
@@ -7820,7 +7822,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-06T17:04:30.693Z",
-      "updatedAt": "2026-10-16T15:02:05.558Z",
+      "updatedAt": "2026-10-16T15:08:49.236Z",
       "invoiceId": "inv-1791306270694"
     },
     {
@@ -8201,7 +8203,7 @@
       },
       "generalComment": "كافة الفحوصات المخبرية للمريض (أمال محمد) تقع في النطاقات الآمنة بشكل عام مع انتظام مؤشرات الأعضاء الحيوية ونشاط فسيولوجي متوازن.",
       "createdAt": "2026-10-06T11:59:36.696Z",
-      "updatedAt": "2026-10-16T15:03:46.329Z",
+      "updatedAt": "2026-10-16T15:08:49.236Z",
       "status": "verified",
       "profiles": [
         {
@@ -8311,7 +8313,7 @@
               "minNormal": 30,
               "id": "p-pkg-0-1791287976694",
               "result": "20.00",
-              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
               "unit": "ng/mL",
               "flag": "LOW",
               "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
@@ -8562,7 +8564,7 @@
         "packagePrice": 199
       },
       "status": "verified",
-      "updatedAt": "2026-10-16T15:03:46.329Z",
+      "updatedAt": "2026-10-16T15:08:49.236Z",
       "createdAt": "2026-10-06T11:48:51.555Z",
       "reportNumber": "RT-2026-007",
       "patient": {
@@ -8696,7 +8698,7 @@
               "maxNormal": 100,
               "id": "p-pkg-0-1791287331552",
               "unit": "ng/mL",
-              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
               "method": "CLIA (Chemiluminescence Immunoassay)",
               "flag": "NORMAL",
               "result": "43",
@@ -9052,7 +9054,7 @@
               "method": "CLIA (Chemiluminescence Immunoassay)",
               "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
               "unit": "ng/mL",
-              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
               "flag": "NORMAL"
             }
           ]
@@ -9266,7 +9268,7 @@
       ],
       "invoiceId": "inv-1791286741643",
       "reportNumber": "RT-2026-006",
-      "updatedAt": "2026-10-16T15:01:58.670Z",
+      "updatedAt": "2026-10-16T15:08:49.236Z",
       "createdAt": "2026-10-06T11:39:01.642Z",
       "packageApplied": {
         "originalPrice": 2900,
@@ -9386,7 +9388,7 @@
               "maxNormal": 100,
               "minNormal": 30,
               "method": "CLIA (Chemiluminescence Immunoassay)",
-              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
               "unit": "ng/mL",
               "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
               "flag": "NORMAL"
@@ -9637,7 +9639,7 @@
       "reportNumber": "RT-2026-005",
       "id": "rep-1791285435316",
       "createdAt": "2026-10-06T11:17:15.316Z",
-      "updatedAt": "2026-10-16T15:01:58.670Z"
+      "updatedAt": "2026-10-16T15:08:49.237Z"
     },
     {
       "updatedAt": "2026-10-16T14:59:23.336Z",
@@ -10428,7 +10430,7 @@
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-6113 - تم التسميع آلياً من منظومة الفواتير",
       "createdAt": "2026-10-04T20:18:44.663Z",
-      "updatedAt": "2026-10-11T15:33:04.332Z",
+      "updatedAt": "2026-10-16T15:08:10.717Z",
       "profiles": [
         {
           "id": "prof-inc-1791145124663-1",
@@ -10460,7 +10462,7 @@
           "parameters": [
             {
               "id": "p-1791153336571",
-              "name": "مخزون الحديد بالدم (Serum Ferritin) (Serum Ferritin Level)",
+              "name": "Serum Ferritin Level (Serum Ferritin Level)",
               "result": "",
               "unit": "ng/mL",
               "flag": "",
@@ -10966,7 +10968,7 @@
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-5104 - تم التسميع آلياً من منظومة الفواتير",
       "createdAt": "2026-10-04T15:14:27.915Z",
-      "updatedAt": "2026-10-16T14:59:23.337Z",
+      "updatedAt": "2026-10-16T15:08:26.240Z",
       "profiles": [
         {
           "id": "prof-inc-1791126867915-1",
@@ -11209,7 +11211,7 @@
             },
             {
               "id": "p-1791126867919",
-              "name": "الحديد الكلي بالدم (Serum Iron) (Serum Iron)",
+              "name": "Serum Iron (Serum Iron)",
               "result": "",
               "unit": "ug/dL",
               "flag": "",
@@ -11784,7 +11786,7 @@
       },
       "generalComment": " ",
       "createdAt": "2026-10-04T14:50:55.998Z",
-      "updatedAt": "2026-10-16T15:03:46.331Z",
+      "updatedAt": "2026-10-16T15:08:49.237Z",
       "profiles": [
         {
           "id": "prof-pkg-1791408346561",
@@ -11894,7 +11896,7 @@
             },
             {
               "id": "p-pkg-0-1791408346560-9en",
-              "name": "فيتامين د 25 هيدروكسي (25-OH Vitamin D Total) (25-Hydroxy Vitamin D Total)",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
               "result": "19.11",
               "unit": "ng/mL",
               "minNormal": 30,
@@ -20370,7 +20372,7 @@
       "nameAr": "Luteinizing Hormone (LH)",
       "nameEn": "Luteinizing Hormone (LH)",
       "category": "Fertility & Hormones",
-      "price": 180,
+      "price": 533,
       "cost": 40,
       "sampleType": "Serum",
       "turnaroundTime": "Within 2 hours",
@@ -20387,7 +20389,7 @@
       "nameAr": "Serum Prolactin",
       "nameEn": "Serum Prolactin",
       "category": "Fertility & Hormones",
-      "price": 180,
+      "price": 544,
       "cost": 40,
       "sampleType": "Serum",
       "turnaroundTime": "Within 2 hours",
@@ -20404,7 +20406,7 @@
       "nameAr": "Total Testosterone",
       "nameEn": "Total Testosterone",
       "category": "Fertility & Hormones",
-      "price": 220,
+      "price": 547,
       "cost": 50,
       "sampleType": "Serum",
       "turnaroundTime": "Within 2 hours",
@@ -20421,7 +20423,7 @@
       "nameAr": "Free Testosterone",
       "nameEn": "Free Testosterone",
       "category": "Fertility & Hormones",
-      "price": 340,
+      "price": 600,
       "cost": 85,
       "sampleType": "Serum",
       "turnaroundTime": "Within 24 hours",
@@ -20489,7 +20491,7 @@
       "nameAr": "Dehydroepiandrosterone Sulfate (DHEA-S)",
       "nameEn": "Dehydroepiandrosterone Sulfate (DHEA-S)",
       "category": "Fertility & Hormones",
-      "price": 290,
+      "price": 988,
       "cost": 70,
       "sampleType": "Serum",
       "turnaroundTime": "Within 24 hours",
@@ -20521,7 +20523,7 @@
       "nameAr": "Beta-hCG Total Quantitative",
       "nameEn": "Beta-hCG Total Quantitative",
       "category": "Fertility & Hormones",
-      "price": 240,
+      "price": 488,
       "cost": 55,
       "sampleType": "Serum",
       "turnaroundTime": "Within 2 hours",
@@ -20538,7 +20540,7 @@
       "nameAr": "Serum Ferritin Level",
       "nameEn": "Serum Ferritin Level",
       "category": "Anemia & Vitamins",
-      "price": 220,
+      "price": 400,
       "cost": 45,
       "sampleType": "Serum",
       "turnaroundTime": "Within 2 hours",
@@ -20555,7 +20557,7 @@
       "nameAr": "Serum Iron",
       "nameEn": "Serum Iron",
       "category": "Anemia & Vitamins",
-      "price": 110,
+      "price": 388,
       "cost": 20,
       "sampleType": "Serum (Morning sample)",
       "turnaroundTime": "Within 2 hours",
@@ -20572,7 +20574,7 @@
       "nameAr": "Total Iron Binding Capacity (TIBC)",
       "nameEn": "Total Iron Binding Capacity (TIBC)",
       "category": "Anemia & Vitamins",
-      "price": 110,
+      "price": 365,
       "cost": 20,
       "sampleType": "Serum",
       "turnaroundTime": "Within 2 hours",
@@ -20589,7 +20591,7 @@
       "nameAr": "25-Hydroxy Vitamin D Total",
       "nameEn": "25-Hydroxy Vitamin D Total",
       "category": "Anemia & Vitamins",
-      "price": 360,
+      "price": 911,
       "cost": 85,
       "sampleType": "Serum (Protected from light)",
       "turnaroundTime": "Within 2 hours",
@@ -20606,7 +20608,7 @@
       "nameAr": "Vitamin B12 Cyanocobalamin",
       "nameEn": "Vitamin B12 Cyanocobalamin",
       "category": "Anemia & Vitamins",
-      "price": 290,
+      "price": 1100,
       "cost": 70,
       "sampleType": "Serum",
       "turnaroundTime": "Within 2 hours",
@@ -20623,7 +20625,7 @@
       "nameAr": "Serum Folic Acid (Folate)",
       "nameEn": "Serum Folic Acid (Folate)",
       "category": "Anemia & Vitamins",
-      "price": 290,
+      "price": 980,
       "cost": 70,
       "sampleType": "Serum",
       "turnaroundTime": "Within 2 hours",
@@ -20640,7 +20642,7 @@
       "nameAr": "Serum Zinc Level",
       "nameEn": "Serum Zinc Level",
       "category": "Anemia & Vitamins",
-      "price": 280,
+      "price": 456,
       "cost": 65,
       "sampleType": "Trace-element free Serum",
       "turnaroundTime": "Within 24 hours",
