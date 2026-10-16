@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:01:19.534Z",
+  "syncedAt": "2026-10-16T15:02:07.283Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -19827,7 +19827,7 @@
       "nameAr": "Gamma-GT (GGT)",
       "nameEn": "Gamma-GT (GGT)",
       "category": "Liver Function",
-      "price": 110,
+      "price": 366,
       "cost": 20,
       "sampleType": "Serum",
       "turnaroundTime": "Within 2 hours",
@@ -19844,7 +19844,7 @@
       "nameAr": "Lactate Dehydrogenase (LDH)",
       "nameEn": "Lactate Dehydrogenase (LDH)",
       "category": "Biochemistry",
-      "price": 120,
+      "price": 400,
       "cost": 20,
       "sampleType": "Non-hemolyzed Serum",
       "turnaroundTime": "Within 2 hours",
@@ -19861,7 +19861,7 @@
       "nameAr": "Serum Amylase",
       "nameEn": "Serum Amylase",
       "category": "Pancreas",
-      "price": 130,
+      "price": 344,
       "cost": 25,
       "sampleType": "Serum",
       "turnaroundTime": "Within 2 hours",
@@ -19878,7 +19878,7 @@
       "nameAr": "Serum Lipase",
       "nameEn": "Serum Lipase",
       "category": "Pancreas",
-      "price": 160,
+      "price": 322,
       "cost": 35,
       "sampleType": "Serum",
       "turnaroundTime": "Within 2 hours",
