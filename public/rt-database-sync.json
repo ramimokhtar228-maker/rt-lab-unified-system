@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:19:40.222Z",
+  "syncedAt": "2026-10-16T15:19:58.178Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -21698,7 +21698,7 @@
       "nameAr": "Oral Glucose Tolerance Test (75 g, 2 h)",
       "nameEn": "Oral Glucose Tolerance Test (75 g, 2 h)",
       "category": "Diabetes",
-      "price": 250,
+      "price": 500,
       "cost": 40,
       "sampleType": "Fluoride Plasma",
       "turnaroundTime": "Within 3 hours",
