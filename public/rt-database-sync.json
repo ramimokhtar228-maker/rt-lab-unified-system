@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T13:43:19.732Z",
+  "syncedAt": "2026-10-16T13:43:36.202Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -481,7 +481,7 @@
       ],
       "staff": {
         "labChemist": "مني احمد",
-        "verifiedBy": "Sara Ibrahim El-Sherbiny",
+        "verifiedBy": "رحاب على ",
         "pathologist": "Prof. Dr. Rami Mokhtar",
         "chemistTitle": "Senior Clinical Chemist - Hormones",
         "verifierTitle": "Operations & Quality Manager",
@@ -493,7 +493,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-16T13:31:59.823Z",
-      "updatedAt": "2026-10-16T13:43:17.782Z",
+      "updatedAt": "2026-10-16T13:43:34.640Z",
       "invoiceId": "inv-1792157519823"
     },
     {
