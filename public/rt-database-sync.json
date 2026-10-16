@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:22:57.200Z",
+  "syncedAt": "2026-10-16T14:23:04.259Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3059,36 +3059,6 @@
               "id": "param-1792160444949-2",
               "result": "",
               "flag": ""
-            },
-            {
-              "name": "Total Thyroxine (TT4)",
-              "unit": "µg/dL",
-              "minNormal": 5.1,
-              "maxNormal": 14.1,
-              "textReference": "",
-              "id": "param-1792160444949-4",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "Anti-TPO (Thyroid Peroxidase Ab)",
-              "unit": "IU/mL",
-              "minNormal": 0,
-              "maxNormal": 34,
-              "textReference": "< 34.0 IU/mL",
-              "id": "param-1792160444949-5",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "Anti-Thyroglobulin (Anti-TG)",
-              "unit": "IU/mL",
-              "minNormal": 0,
-              "maxNormal": 115,
-              "textReference": "< 115.0 IU/mL",
-              "id": "param-1792160444949-6",
-              "result": "",
-              "flag": ""
             }
           ]
         },
@@ -3169,7 +3139,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:22:55.118Z",
+      "updatedAt": "2026-10-16T14:22:57.034Z",
       "invoiceId": "inv-1791735202176"
     },
     {
