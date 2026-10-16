@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:26:22.393Z",
+  "syncedAt": "2026-10-16T14:26:28.911Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3383,27 +3383,6 @@
               "flag": "NORMAL"
             },
             {
-              "name": "PLR (Platelet/Lymphocyte)",
-              "unit": "Ratio",
-              "minNormal": 100,
-              "maxNormal": 150,
-              "notes": "Auto-calculated: PLT / ALC",
-              "textReference": "100 - 150",
-              "id": "param-1792160624241-31",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "Reticulocyte Count %",
-              "unit": "%",
-              "minNormal": 0.5,
-              "maxNormal": 2.5,
-              "textReference": "0.5 - 2.5 %",
-              "id": "param-1792160624241-32",
-              "result": "",
-              "flag": ""
-            },
-            {
               "name": "RPI (Reticulocyte Production Index)",
               "unit": "Index",
               "minNormal": 1,
@@ -3456,7 +3435,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:26:19.842Z",
+      "updatedAt": "2026-10-16T14:26:26.774Z",
       "invoiceId": "inv-1791735202176"
     },
     {
