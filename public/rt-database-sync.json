@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:18:54.421Z",
+  "syncedAt": "2026-10-16T15:19:07.455Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2754,7 +2754,7 @@
           "parameters": [
             {
               "id": "p-1791819654844",
-              "name": "بي سي آر فيروس سي كمي وحمل الفيروس (HCV Viral Load PCR) (HCV RNA Quantitative Real-Time PCR)",
+              "name": "HCV RNA Quantitative Real-Time PCR (HCV RNA Quantitative Real-Time PCR)",
               "result": "",
               "unit": "IU/mL",
               "minNormal": 0,
@@ -3008,7 +3008,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-16T15:00:58.431Z",
+      "updatedAt": "2026-10-16T15:19:04.640Z",
       "invoiceId": "inv-1791819003027"
     },
     {
@@ -21488,7 +21488,7 @@
       "nameAr": "HCV RNA Quantitative Real-Time PCR",
       "nameEn": "HCV RNA Quantitative Real-Time PCR",
       "category": "Molecular & PCR",
-      "price": 650,
+      "price": 1100,
       "cost": 160,
       "sampleType": "EDTA Plasma",
       "turnaroundTime": "24-48 hours",
