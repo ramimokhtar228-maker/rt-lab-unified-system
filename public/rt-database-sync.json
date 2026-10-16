@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:53:12.981Z",
+  "syncedAt": "2026-10-16T14:54:05.620Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3452,7 +3452,7 @@
           "parameters": [
             {
               "id": "param-1792073788518",
-              "name": "مقاومة الإنسولين الحسابية (HOMA-IR) (HOMA-IR Insulin Resistance)",
+              "name": "HOMA-IR Insulin Resistance (HOMA-IR Insulin Resistance)",
               "result": "2.11",
               "unit": "Index",
               "minNormal": 0.5,
@@ -3965,7 +3965,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-11T15:57:30.501Z",
-      "updatedAt": "2026-10-16T14:52:30.067Z",
+      "updatedAt": "2026-10-16T14:52:54.444Z",
       "invoiceId": "inv-1791734250501"
     },
     {
@@ -19231,7 +19231,7 @@
       "nameAr": "HOMA-IR Insulin Resistance",
       "nameEn": "HOMA-IR Insulin Resistance",
       "category": "Diabetes",
-      "price": 330,
+      "price": 700,
       "cost": 75,
       "sampleType": "Serum + Fluoride Plasma",
       "turnaroundTime": "Within 24 hours",
@@ -19248,7 +19248,7 @@
       "nameAr": "Complete Blood Count with Differential",
       "nameEn": "Complete Blood Count with Differential",
       "category": "Hematology",
-      "price": 180,
+      "price": 400,
       "cost": 30,
       "sampleType": "EDTA Whole Blood",
       "turnaroundTime": "Immediate (1 hour)",
@@ -19265,14 +19265,14 @@
       "nameAr": "Erythrocyte Sedimentation Rate",
       "nameEn": "Erythrocyte Sedimentation Rate",
       "category": "Hematology",
-      "price": 70,
+      "price": 188,
       "cost": 15,
       "sampleType": "Citrated Whole Blood (1:4)",
       "turnaroundTime": "2 hours",
       "unit": "mm/1st hr",
       "minNormal": 0,
       "maxNormal": 15,
-      "textReference": "Males: < 15 mm/1st hr | Females: < 20 mm/1st hr (Higher with age)",
+      "textReference": "Males: < 20  mm/1st hr | Females: < 30  mm/1st hr (Higher with age)",
       "method": "Modified Westergren Automated Method",
       "fastingInstructions": "No fasting required"
     },
