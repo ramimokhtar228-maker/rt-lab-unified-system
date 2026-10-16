@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T17:06:42.368Z",
+  "syncedAt": "2026-10-16T17:50:52.652Z",
   "reports": [
     {
       "id": "rep-001",
@@ -1274,6 +1274,130 @@
           }
         },
         {
+          "id": "prof-1792066884186-0zdm",
+          "profileCode": "LFT",
+          "titleEn": "Liver Function Profile (LFT)",
+          "titleAr": "وظائف الكبد والإنزيمات الشاملة",
+          "category": "Clinical Chemistry & Hepatology",
+          "sampleType": "Serum (مصل الدم)",
+          "interpretation": "Liver enzymes and synthetic hepatic markers are within normal reference ranges.",
+          "attachedIllustration": {
+            "id": "hep-viral",
+            "code": "HEP_VIRAL_HEPATITIS",
+            "titleAr": "التهاب الكبد الفيروسي الحاد والمزمن (Viral Hepatitis B & C)",
+            "titleEn": "Acute & Chronic Viral Hepatitis",
+            "category": "hepatic",
+            "imageUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgMTgwIiB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCI+CiAgICA8cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgcng9IjE0IiBmaWxsPSIjMDkwZDE2Ii8+CiAgICA8Y2lyY2xlIGN4PSIxNjAiIGN5PSI5MCIgcj0iNzYiIGZpbGw9IiMwYjEzMjkiIHN0cm9rZT0iIzA2NWY0NiIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzNGQzOTkiIGZvbnQtc2l6ZT0iMTAuNSIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1mYW1pbHk9IidDYWlybycsIHN5c3RlbS11aSwgLWFwcGxlLXN5c3RlbSwgc2Fucy1zZXJpZiI+QUNVVEUgVklSQUwgSEVQQVRJVElTIChIQlYgLyBIQ1YpPC90ZXh0PgogICAgPGNpcmNsZSBjeD0iMTYwIiBjeT0iODUiIHI9IjQwIiBmaWxsPSIjMDY1ZjQ2IiBzdHJva2U9IiMzNGQzOTkiIHN0cm9rZS13aWR0aD0iMi41Ii8+CiAgICAgIDxjaXJjbGUgY3g9IjE2MCIgY3k9Ijg1IiByPSIyOCIgZmlsbD0iIzAyMmMyMiIvPgogICAgICA8dGV4dCB4PSIxNjAiIHk9IjgyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjYTdmM2QwIiBmb250LXNpemU9IjExIiBmb250LXdlaWdodD0iYm9sZCI+QUxUICZndDsmZ3Q7IDUwMDwvdGV4dD4KICAgICAgPHRleHQgeD0iMTYwIiB5PSI5OCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzZlZTdiNyIgZm9udC1zaXplPSI5IiBmb250LXdlaWdodD0iYm9sZCI+QVNUICZndDsmZ3Q7IDQwMDwvdGV4dD4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMTcwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTRhM2I4IiBmb250LXNpemU9IjkiIGZvbnQtZmFtaWx5PSInQ2Fpcm8nLCBzeXN0ZW0tdWksIC1hcHBsZS1zeXN0ZW0sIHNhbnMtc2VyaWYiPk1hc3NpdmUgSGVwYXRvY3l0ZSBDeXRvbHlzaXM6IE1hcmtlZCBBTFQgJiBBU1QgRWxldmF0aW9uPC90ZXh0PgogIDwvc3ZnPg==",
+            "pathologySummaryAr": "أذية والتهاب النسيج الكبدي بفعل الفيروسات الكبدية (B أو C) مما يتسبب في تحرر مكثف لإنزيمات الكبد السيتوبلازمية (ALT و AST بمئات أو آلاف الوحدات) مع اليرقان."
+          },
+          "parameters": [
+            {
+              "name": "Prothrombin Time & INR (Prothrombin Time & INR)",
+              "unit": "Seconds / Ratio",
+              "minNormal": 11,
+              "maxNormal": 14,
+              "method": "Optical Clotting Detection Analyzer",
+              "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)",
+              "id": "param-1792066884186-0",
+              "result": "13",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 40,
+              "method": "IFCC Kinetic UV",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
+              "id": "param-1792066884186-1",
+              "result": "26",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Alkaline Phosphatase (ALP) (Alkaline Phosphatase (ALP))",
+              "unit": "U/L",
+              "textReference": "Adults: 40 - 130 U/L (Higher during childhood growth & pregnancy)",
+              "id": "param-1792066884186-2",
+              "result": "103",
+              "flag": "NORMAL",
+              "minNormal": 40,
+              "maxNormal": 130,
+              "method": "p-NPP Kinetic DEA buffer"
+            },
+            {
+              "name": "G.G.T",
+              "unit": "U/L",
+              "minNormal": 9,
+              "maxNormal": 48,
+              "textReference": "",
+              "id": "param-1792066884187-10",
+              "result": "21",
+              "flag": "NORMAL"
+            }
+          ],
+          "interpretations": [
+            "Liver enzymes and synthetic hepatic markers are within normal reference ranges."
+          ]
+        },
+        {
+          "id": "prof-1792066910604-ijue",
+          "profileCode": "RFT",
+          "titleEn": "Renal Function Profile (RFT / KFT)",
+          "titleAr": "وظائف الكلى والأملاح البولية",
+          "category": "Clinical Chemistry & Nephrology",
+          "sampleType": "Serum / Urine",
+          "interpretation": "Serum Creatinine, Urea, Uric Acid, and eGFR reflect glomerular filtration rate and nitrogenous waste clearance.",
+          "parameters": [
+            {
+              "name": "Serum Creatinine (Serum Creatinine)",
+              "unit": "mg/dL",
+              "minNormal": 0.6,
+              "maxNormal": 1.4,
+              "panicHigh": 4,
+              "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
+              "id": "param-1792066910604-0",
+              "result": "0.71",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Blood Urea (Blood Urea)",
+              "unit": "mg/dL",
+              "minNormal": 15,
+              "maxNormal": 45,
+              "panicHigh": 120,
+              "method": "Urease / GLDH Enzymatic Kinetic",
+              "textReference": "15 - 45 mg/dL",
+              "id": "param-1792066910604-1",
+              "result": "18",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Blood Urea (Blood Urea)",
+              "unit": "mg/dL",
+              "minNormal": 15,
+              "maxNormal": 45,
+              "textReference": "15 - 45 mg/dL",
+              "id": "param-1792066910604-2",
+              "result": "8.41",
+              "flag": "NORMAL",
+              "method": "Urease / GLDH Enzymatic Kinetic"
+            },
+            {
+              "name": "Serum Creatinine (Serum Creatinine)",
+              "unit": "mg/dL",
+              "minNormal": 0.6,
+              "maxNormal": 1.4,
+              "notes": "Normal: 10 - 20",
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
+              "id": "param-1792066910604-3",
+              "result": "11.8",
+              "flag": "NORMAL",
+              "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)"
+            }
+          ]
+        },
+        {
           "id": "prof-1792066933779-itzk",
           "profileCode": "IRON_PROFILE",
           "titleEn": "Iron Status & Ferritin Workup",
@@ -1306,115 +1430,6 @@
               "textReference": "Adult Males: 30 - 400 ng/mL | Adult Females: 15 - 150 ng/mL"
             }
           ]
-        },
-        {
-          "id": "prof-1792165765207-10hc",
-          "profileCode": "KFT",
-          "titleEn": "Kidney Function Profile",
-          "titleAr": "Kidney Function Profile",
-          "category": "Clinical Chemistry",
-          "sampleType": "Serum",
-          "interpretation": "Renal biomarkers indicate adequate glomerular filtration and nitrogenous clearance.",
-          "parameters": [
-            {
-              "name": "Serum Creatinine",
-              "unit": "mg/dL",
-              "minNormal": 0.6,
-              "maxNormal": 1.2,
-              "panicHigh": 4,
-              "method": "Enzymatic / Jaffe Kinetic",
-              "textReference": "",
-              "id": "param-1792165765208-0",
-              "result": "0.88",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Blood Urea",
-              "unit": "mg/dL",
-              "minNormal": 15,
-              "maxNormal": 45,
-              "panicHigh": 120,
-              "method": "Urease-GLDH",
-              "textReference": "",
-              "id": "param-1792165765208-1",
-              "result": "18",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Blood Urea Nitrogen (BUN)",
-              "unit": "mg/dL",
-              "minNormal": 7,
-              "maxNormal": 20,
-              "textReference": "",
-              "id": "param-1792165765208-2",
-              "result": "8.41",
-              "flag": "NORMAL"
-            }
-          ]
-        },
-        {
-          "id": "prof-1792166170281-4jui",
-          "profileCode": "LFT",
-          "titleEn": "Liver Function Tests (LFT)",
-          "titleAr": "Liver Function Tests (LFT)",
-          "category": "Clinical Chemistry",
-          "sampleType": "Serum",
-          "interpretation": "Enzyme activities and synthetic hepatic markers are within normal limits.",
-          "parameters": [
-            {
-              "name": "ALT (SGPT)",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 45,
-              "method": "IFCC UV with P5P",
-              "textReference": "",
-              "id": "param-1792166170281-0",
-              "result": "23",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "AST (SGOT)",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 40,
-              "method": "IFCC UV with P5P",
-              "textReference": "",
-              "id": "param-1792166170282-1",
-              "result": "26",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Alkaline Phosphatase (ALP)",
-              "unit": "U/L",
-              "minNormal": 40,
-              "maxNormal": 130,
-              "textReference": "",
-              "id": "param-1792166170282-2",
-              "result": "103",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "G.G.T",
-              "unit": "U/L",
-              "minNormal": 9,
-              "maxNormal": 48,
-              "textReference": "",
-              "id": "param-1792166170282-10",
-              "result": "31",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "AST/ALT Ratio (De Ritis)",
-              "unit": "Ratio",
-              "minNormal": 0.6,
-              "maxNormal": 1.1,
-              "notes": "Normal < 1.0 (Elevated > 2.0 in alcoholic liver disease/cirrhosis)",
-              "textReference": "",
-              "id": "param-1792166170282-11",
-              "result": "1.1",
-              "flag": "NORMAL"
-            }
-          ]
         }
       ],
       "staff": {
@@ -1438,7 +1453,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-16T15:57:12.628Z",
+      "updatedAt": "2026-10-16T15:35:17.808Z",
       "invoiceId": "inv-1791921893782"
     },
     {
@@ -19011,48 +19026,659 @@
   "expenses": [],
   "loyaltyProfiles": [
     {
-      "patientId": "pat-001",
-      "patientName": "أحمد محمود إبراهيم",
-      "phone": "01012345678",
-      "barcode": "RT-10029",
-      "cardNumber": "RT-SILVER-10029",
-      "bloodGroup": "A+",
-      "totalPoints": 252,
-      "tier": "Silver",
-      "lifetimeSpent": 252,
-      "issueDate": "2026-10-16",
+      "patientId": "pat-loyalty-1791735202177",
+      "patientName": "مي محمود احمد",
+      "phone": "01013242777",
+      "barcode": "RT-10064",
+      "cardNumber": "RT-GOLD-10064",
+      "bloodGroup": "",
+      "totalPoints": 600,
+      "tier": "Gold",
+      "lifetimeSpent": 600,
+      "issueDate": "2026-10-11",
       "transactions": [
         {
-          "id": "tx-l-1",
-          "date": "2026-10-16",
+          "id": "tx-1791735202178",
+          "date": "2026-10-11",
           "type": "earn",
-          "points": 252,
-          "description": "نقاط فاتورة تحاليل CBC رقم INV-2026-001",
-          "invoiceNumber": "INV-2026-001",
-          "amountEGP": 252
+          "points": 600,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-034",
+          "invoiceNumber": "RT-2026-034",
+          "amountEGP": 600
         }
       ]
     },
     {
-      "patientId": "pat-002",
-      "patientName": "منى عادل عبد الرحمن",
-      "phone": "01198765432",
-      "barcode": "RT-10030",
-      "cardNumber": "RT-GOLD-10030",
-      "bloodGroup": "O+",
-      "totalPoints": 682,
-      "tier": "Gold",
-      "lifetimeSpent": 682,
-      "issueDate": "2026-10-16",
+      "patientId": "pat-loyalty-1791734250503",
+      "patientName": "دعاء مصطفى ابراهيم محمود",
+      "phone": "01003540455",
+      "barcode": "RT-10063",
+      "cardNumber": "RT-GOLD-10063",
+      "bloodGroup": "",
+      "totalPoints": 1563,
+      "tier": "Platinum",
+      "lifetimeSpent": 1563,
+      "issueDate": "2026-10-11",
       "transactions": [
         {
-          "id": "tx-l-2",
-          "date": "2026-10-16",
+          "id": "tx-1791734735433",
+          "date": "2026-10-11",
           "type": "earn",
-          "points": 342,
+          "points": 433,
+          "description": "اكتساب نقاط عن فاتورة رقم RT-2026-034",
+          "invoiceNumber": "RT-2026-034",
+          "amountEGP": 433
+        },
+        {
+          "id": "tx-1791734250503",
+          "date": "2026-10-11",
+          "type": "earn",
+          "points": 1130,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-033",
+          "invoiceNumber": "RT-2026-033",
+          "amountEGP": 1130
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791733128878",
+      "patientName": "داليا عبده حسين زهران",
+      "phone": "01117552241",
+      "barcode": "RT-10062",
+      "cardNumber": "RT-GOLD-10062",
+      "bloodGroup": "",
+      "totalPoints": 740,
+      "tier": "Gold",
+      "lifetimeSpent": 740,
+      "issueDate": "2026-10-11",
+      "transactions": [
+        {
+          "id": "tx-1791733128878",
+          "date": "2026-10-11",
+          "type": "earn",
+          "points": 740,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-032",
+          "invoiceNumber": "RT-2026-032",
+          "amountEGP": 740
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791501113007",
+      "patientName": "زينب عمر",
+      "phone": "01091353732",
+      "barcode": "RT-10062",
+      "cardNumber": "RT-SILVER-10062",
+      "bloodGroup": "",
+      "totalPoints": 199,
+      "tier": "Silver",
+      "lifetimeSpent": 199,
+      "issueDate": "2026-10-08",
+      "transactions": [
+        {
+          "id": "tx-1791501113007",
+          "date": "2026-10-08",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-032",
+          "invoiceNumber": "RT-2026-032",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791500920502",
+      "patientName": "مجدى احمد ربيع",
+      "phone": "01030502318",
+      "barcode": "RT-10061",
+      "cardNumber": "RT-SILVER-10061",
+      "bloodGroup": "",
+      "totalPoints": 199,
+      "tier": "Silver",
+      "lifetimeSpent": 199,
+      "issueDate": "2026-10-08",
+      "transactions": [
+        {
+          "id": "tx-1791500920502",
+          "date": "2026-10-08",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-031",
+          "invoiceNumber": "RT-2026-031",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791500705356",
+      "patientName": "عادل احمد صبيح",
+      "phone": "01112919075",
+      "barcode": "RT-10060",
+      "cardNumber": "RT-SILVER-10060",
+      "bloodGroup": "",
+      "totalPoints": 199,
+      "tier": "Silver",
+      "lifetimeSpent": 199,
+      "issueDate": "2026-10-08",
+      "transactions": [
+        {
+          "id": "tx-1791500705356",
+          "date": "2026-10-08",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-030",
+          "invoiceNumber": "RT-2026-030",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791499039660",
+      "patientName": "مني كرم هاشم",
+      "phone": "01113748875",
+      "barcode": "RT-10061",
+      "cardNumber": "RT-GOLD-10061",
+      "bloodGroup": "",
+      "totalPoints": 505,
+      "tier": "Gold",
+      "lifetimeSpent": 505,
+      "issueDate": "2026-10-08",
+      "transactions": [
+        {
+          "id": "tx-1791499039660",
+          "date": "2026-10-08",
+          "type": "earn",
+          "points": 505,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-031",
+          "invoiceNumber": "RT-2026-031",
+          "amountEGP": 505
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791498479900",
+      "patientName": "فاطمة احمد عبدالله",
+      "phone": "01010135898",
+      "barcode": "RT-10061",
+      "cardNumber": "RT-SILVER-10061",
+      "bloodGroup": "",
+      "totalPoints": 233,
+      "tier": "Silver",
+      "lifetimeSpent": 233,
+      "issueDate": "2026-10-08",
+      "transactions": [
+        {
+          "id": "tx-1791498479900",
+          "date": "2026-10-08",
+          "type": "earn",
+          "points": 233,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-031",
+          "invoiceNumber": "RT-2026-031",
+          "amountEGP": 233
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791414459348",
+      "patientName": "جيهان عبدالفتاح",
+      "phone": "01022231270",
+      "barcode": "RT-10062",
+      "cardNumber": "RT-SILVER-10062",
+      "bloodGroup": "",
+      "totalPoints": 333,
+      "tier": "Silver",
+      "lifetimeSpent": 333,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1791414459348",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 333,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-032",
+          "invoiceNumber": "RT-2026-032",
+          "amountEGP": 333
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791381439613",
+      "patientName": "محمد حسن على",
+      "phone": "01005314825",
+      "barcode": "RT-10043",
+      "cardNumber": "RT-SILVER-10043",
+      "bloodGroup": "",
+      "totalPoints": 190,
+      "tier": "Silver",
+      "lifetimeSpent": 190,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1791381439613",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 190,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-013",
+          "invoiceNumber": "RT-2026-013",
+          "amountEGP": 190
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791359724840",
+      "patientName": "فيرا ممدوح عبدالمسيح",
+      "phone": "01221502703",
+      "barcode": "RT-10044",
+      "cardNumber": "RT-SILVER-10044",
+      "bloodGroup": "",
+      "totalPoints": 498,
+      "tier": "Silver",
+      "lifetimeSpent": 498,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1791359724840",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 498,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-014",
+          "invoiceNumber": "RT-2026-014",
+          "amountEGP": 498
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791359462638",
+      "patientName": "حبيبه مجدى محمد",
+      "phone": "01148879943",
+      "barcode": "RT-10043",
+      "cardNumber": "RT-GOLD-10043",
+      "bloodGroup": "",
+      "totalPoints": 1026,
+      "tier": "Gold",
+      "lifetimeSpent": 1026,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1791359462638",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 1026,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-013",
+          "invoiceNumber": "RT-2026-013",
+          "amountEGP": 1026
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791358565055",
+      "patientName": "كوثر ابراهيم",
+      "phone": "01095920078",
+      "barcode": "RT-10042",
+      "cardNumber": "RT-SILVER-10042",
+      "bloodGroup": "",
+      "totalPoints": 199,
+      "tier": "Silver",
+      "lifetimeSpent": 199,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1791358565055",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-012",
+          "invoiceNumber": "RT-2026-012",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791321555676",
+      "patientName": "مروة عبدالفتاح ابراهيم",
+      "phone": "01065490430",
+      "barcode": "RT-10041",
+      "cardNumber": "RT-SILVER-10041",
+      "bloodGroup": "",
+      "totalPoints": 199,
+      "tier": "Silver",
+      "lifetimeSpent": 199,
+      "issueDate": "2026-10-06",
+      "transactions": [
+        {
+          "id": "tx-1791321555676",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-011",
+          "invoiceNumber": "RT-2026-011",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791305504358",
+      "patientName": "ٌٍّّرجاء حسن ابراهيم",
+      "phone": "01124485444",
+      "barcode": "RT-10039",
+      "cardNumber": "RT-SILVER-10039",
+      "bloodGroup": "",
+      "totalPoints": 422,
+      "tier": "Silver",
+      "lifetimeSpent": 422,
+      "issueDate": "2026-10-06",
+      "transactions": [
+        {
+          "id": "tx-1791320477694",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 171,
+          "description": "اكتساب نقاط عن فاتورة رقم RT-2026-011",
+          "invoiceNumber": "RT-2026-011",
+          "amountEGP": 171
+        },
+        {
+          "id": "tx-1791305504358",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 251,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-009",
+          "invoiceNumber": "RT-2026-009",
+          "amountEGP": 251
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791287976704",
+      "patientName": "أمال محمد",
+      "phone": "01555108312",
+      "barcode": "RT-10038",
+      "cardNumber": "RT-SILVER-10038",
+      "bloodGroup": "",
+      "totalPoints": 199,
+      "tier": "Silver",
+      "lifetimeSpent": 199,
+      "issueDate": "2026-10-06",
+      "transactions": [
+        {
+          "id": "tx-1791287976704",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-008",
+          "invoiceNumber": "RT-2026-008",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791287331564",
+      "patientName": "شريف عادل",
+      "phone": "01100",
+      "barcode": "RT-10037",
+      "cardNumber": "RT-SILVER-10037",
+      "bloodGroup": "",
+      "totalPoints": 199,
+      "tier": "Silver",
+      "lifetimeSpent": 199,
+      "issueDate": "2026-10-06",
+      "transactions": [
+        {
+          "id": "tx-1791287331564",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-007",
+          "invoiceNumber": "RT-2026-007",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791286375210",
+      "patientName": "نورا سعيد حلمى",
+      "phone": "01228439288",
+      "barcode": "RT-10036",
+      "cardNumber": "RT-SILVER-10036",
+      "bloodGroup": "",
+      "totalPoints": 398,
+      "tier": "Silver",
+      "lifetimeSpent": 398,
+      "issueDate": "2026-10-06",
+      "transactions": [
+        {
+          "id": "tx-1791286741651",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط عن فاتورة رقم RT-2026-006",
+          "invoiceNumber": "RT-2026-006",
+          "amountEGP": 199
+        },
+        {
+          "id": "tx-1791286375210",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-006",
+          "invoiceNumber": "RT-2026-006",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791285435325",
+      "patientName": "محمد صلاح الدين عبدة",
+      "phone": "01004359187",
+      "barcode": "RT-10035",
+      "cardNumber": "RT-GOLD-10035",
+      "bloodGroup": "",
+      "totalPoints": 599,
+      "tier": "Gold",
+      "lifetimeSpent": 599,
+      "issueDate": "2026-10-06",
+      "transactions": [
+        {
+          "id": "tx-1791285435325",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-005",
+          "invoiceNumber": "RT-2026-005",
+          "amountEGP": 599
+        }
+      ]
+    },
+    {
+      "tier": "Gold",
+      "patientId": "pat-loyalty-1791284141343",
+      "totalPoints": 745,
+      "barcode": "RT-10034",
+      "cardNumber": "RT-GOLD-10034",
+      "phone": "01277489467",
+      "patientName": "مريم عوض الكريم",
+      "lifetimeSpent": 745,
+      "issueDate": "2026-10-06",
+      "transactions": [
+        {
+          "id": "tx-1791306270704",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط عن فاتورة رقم RT-2026-010",
+          "invoiceNumber": "RT-2026-010",
+          "amountEGP": 199
+        },
+        {
+          "amountEGP": 546,
+          "points": 546,
+          "id": "tx-1791284141343",
+          "type": "earn",
+          "invoiceNumber": "RT-2026-004",
+          "date": "2026-10-06",
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-004"
+        }
+      ],
+      "bloodGroup": ""
+    },
+    {
+      "lifetimeSpent": 252,
+      "transactions": [
+        {
+          "amountEGP": 252,
+          "points": 252,
+          "id": "tx-l-1",
+          "description": "نقاط فاتورة تحاليل CBC رقم INV-2026-001",
+          "date": "2026-10-06",
+          "invoiceNumber": "INV-2026-001",
+          "type": "earn"
+        }
+      ],
+      "patientName": "أحمد محمود إبراهيم",
+      "phone": "01012345678",
+      "tier": "Silver",
+      "issueDate": "2026-10-06",
+      "patientId": "pat-001",
+      "cardNumber": "RT-SILVER-10029",
+      "totalPoints": 252,
+      "barcode": "RT-10029",
+      "bloodGroup": "A+"
+    },
+    {
+      "phone": "01198765432",
+      "patientName": "منى عادل عبد الرحمن",
+      "cardNumber": "RT-GOLD-10030",
+      "bloodGroup": "O+",
+      "issueDate": "2026-10-06",
+      "tier": "Gold",
+      "barcode": "RT-10030",
+      "patientId": "pat-002",
+      "totalPoints": 682,
+      "transactions": [
+        {
           "description": "نقاط فاتورة تحاليل السكر والكلى INV-2026-002",
+          "points": 342,
+          "id": "tx-l-2",
           "invoiceNumber": "INV-2026-002",
-          "amountEGP": 342
+          "date": "2026-10-06",
+          "amountEGP": 342,
+          "type": "earn"
+        }
+      ],
+      "lifetimeSpent": 682
+    },
+    {
+      "patientId": "pat-loyalty-1791400927210",
+      "patientName": "جيهان عبدالفتاح",
+      "phone": "01099999098",
+      "barcode": "RT-10061",
+      "cardNumber": "RT-SILVER-10061",
+      "bloodGroup": "",
+      "totalPoints": 184,
+      "tier": "Silver",
+      "lifetimeSpent": 184,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1791400927211",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 184,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-031",
+          "invoiceNumber": "RT-2026-031",
+          "amountEGP": 184
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791663303872",
+      "patientName": "يوستينا عماد",
+      "phone": "01204282609",
+      "barcode": "RT-10064",
+      "cardNumber": "RT-GOLD-10064",
+      "bloodGroup": "",
+      "totalPoints": 540,
+      "tier": "Gold",
+      "lifetimeSpent": 540,
+      "issueDate": "2026-10-10",
+      "transactions": [
+        {
+          "id": "tx-1791663303872",
+          "date": "2026-10-10",
+          "type": "earn",
+          "points": 540,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-034",
+          "invoiceNumber": "RT-2026-034",
+          "amountEGP": 540
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791819003070",
+      "patientName": "منى محمود احمد",
+      "phone": "01005750607",
+      "barcode": "RT-9827361849",
+      "cardNumber": "RT-GOLD-9827361849",
+      "bloodGroup": "",
+      "totalPoints": 1301,
+      "tier": "Gold",
+      "lifetimeSpent": 1301,
+      "issueDate": "2026-10-12",
+      "transactions": [
+        {
+          "id": "tx-1791819003070",
+          "date": "2026-10-12",
+          "type": "earn",
+          "points": 1301,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-8982",
+          "invoiceNumber": "RT-2026-8982",
+          "amountEGP": 1301
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791836921765",
+      "patientName": "سلمي محمد",
+      "phone": "01155939560",
+      "barcode": "RT-9827361852",
+      "cardNumber": "RT-SILVER-9827361852",
+      "bloodGroup": "",
+      "totalPoints": 306,
+      "tier": "Silver",
+      "lifetimeSpent": 306,
+      "issueDate": "2026-10-12",
+      "transactions": [
+        {
+          "id": "tx-1791836921765",
+          "date": "2026-10-12",
+          "type": "earn",
+          "points": 306,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-8985",
+          "invoiceNumber": "RT-2026-8985",
+          "amountEGP": 306
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791839634484",
+      "patientName": "أشرف غانم",
+      "phone": "01100304890",
+      "barcode": "RT-9827361853",
+      "cardNumber": "RT-SILVER-9827361853",
+      "bloodGroup": "",
+      "totalPoints": 480,
+      "tier": "Silver",
+      "lifetimeSpent": 480,
+      "issueDate": "2026-10-12",
+      "transactions": [
+        {
+          "id": "tx-1791839634484",
+          "date": "2026-10-12",
+          "type": "earn",
+          "points": 480,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-8986",
+          "invoiceNumber": "RT-2026-8986",
+          "amountEGP": 480
         }
       ]
     }
@@ -19212,18 +19838,18 @@
   ],
   "labInfo": {
     "labNameAr": "معامل RT للتحاليل الطبية والتشخيصية",
-    "labNameEn": "RT Diagnostic Laboratories",
-    "sloganAr": "التشخيص الصحيح يبدأ معنا · دقة، سرعة، وأمان تشخيصي",
-    "sloganEn": "Accurate Diagnosis Starts With Us",
-    "supervisionAr": "أطباء واستشاريو كلية طب قصر العيني",
+    "vodafoneCash": "01100046841",
+    "whatsapp": "01100874444",
+    "hotline": "01100046841",
+    "instapay": "ramirtlab@instapay",
+    "mainAddress": "ميدان بهتيم برج صيدليه العزبى الدور الثالث امام الأسانسير شبرا الخيمه",
+    "phone": "01013242777",
     "supervisionEn": "Kasr Al Ainy Faculty of Medicine Consultants",
     "accreditation": "ISO 15189 Certified Quality Management",
-    "hotline": "01012345678",
-    "phone": "0244667788",
-    "whatsapp": "01012345678",
-    "mainAddress": "ميدان بهتيم برج صيدليه العزبى الدور الثالث امام الأسانسير شبرا الخيمه",
-    "instapay": "ramirtlab@instapay",
-    "vodafoneCash": "01098765432"
+    "sloganEn": "Accurate Diagnosis Starts With Us",
+    "labNameEn": "RT Diagnostic Laboratories",
+    "sloganAr": "التشخيص الصحيح يبدأ معنا · دقة، سرعة، وأمان تشخيصي",
+    "supervisionAr": "أطباء واستشاريو كلية طب قصر العيني"
   },
   "testCatalog": [
     {
