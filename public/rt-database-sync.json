@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:25:32.962Z",
+  "syncedAt": "2026-10-16T14:25:42.562Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3243,8 +3243,8 @@
               "notes": "Auto-calculated: Segmented% + Band%",
               "textReference": "40 - 70 %",
               "id": "param-1792160624241-17",
-              "result": "",
-              "flag": ""
+              "result": "65",
+              "flag": "NORMAL"
             },
             {
               "name": "Lymphocytes %",
@@ -3253,8 +3253,8 @@
               "maxNormal": 45,
               "textReference": "20 - 45 %",
               "id": "param-1792160624241-18",
-              "result": "",
-              "flag": ""
+              "result": "30",
+              "flag": "NORMAL"
             },
             {
               "name": "Monocytes %",
@@ -3263,8 +3263,8 @@
               "maxNormal": 8,
               "textReference": "2 - 8 %",
               "id": "param-1792160624241-19",
-              "result": "",
-              "flag": ""
+              "result": "0",
+              "flag": "LOW"
             },
             {
               "name": "Eosinophils %",
@@ -3332,11 +3332,11 @@
               "unit": "x10^3/µL",
               "minNormal": 1,
               "maxNormal": 4,
-              "notes": "Auto-calculated: (WBC × Lymph%) / 100",
+              "notes": "Calculated: (WBC × Lymph%) / 100",
               "textReference": "1.0 - 4.0 x10^3/µL",
               "id": "param-1792160624241-26",
-              "result": "",
-              "flag": ""
+              "result": "2",
+              "flag": "NORMAL"
             },
             {
               "name": "Absolute Monocytes (AMC)",
@@ -3346,8 +3346,8 @@
               "notes": "Auto-calculated: (WBC × Mono%) / 100",
               "textReference": "0.2 - 0.8 x10^3/µL",
               "id": "param-1792160624241-27",
-              "result": "",
-              "flag": ""
+              "result": "0",
+              "flag": "LOW"
             },
             {
               "name": "Absolute Eosinophils (AEC)",
@@ -3376,11 +3376,11 @@
               "unit": "Ratio",
               "minNormal": 0.8,
               "maxNormal": 2.5,
-              "notes": "Auto-calculated: Neut% / Lymph%",
+              "notes": "Normal target < 2.5",
               "textReference": "0.8 - 2.5 (Inflammatory Index)",
               "id": "param-1792160624241-30",
-              "result": "",
-              "flag": ""
+              "result": "2",
+              "flag": "NORMAL"
             },
             {
               "name": "PLR (Platelet/Lymphocyte)",
@@ -3456,7 +3456,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:25:27.946Z",
+      "updatedAt": "2026-10-16T14:25:40.299Z",
       "invoiceId": "inv-1791735202176"
     },
     {
