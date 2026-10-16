@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:26:44.103Z",
+  "syncedAt": "2026-10-16T14:26:49.951Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3111,7 +3111,7 @@
           "titleAr": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
           "category": "Hematology",
           "sampleType": "EDTA Whole Blood",
-          "interpretation": "Microscopic evaluation and complete differential indices assessed according to international hematology criteria.",
+          "interpretation": "Blood indices are within acceptable physiological limits.",
           "parameters": [
             {
               "name": "Hemoglobin (Hb)",
@@ -3384,7 +3384,6 @@
             }
           ],
           "interpretations": [
-            "Microscopic evaluation and complete differential indices assessed according to international hematology criteria.",
             "Blood indices are within acceptable physiological limits."
           ]
         }
@@ -3402,7 +3401,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:26:42.001Z",
+      "updatedAt": "2026-10-16T14:26:45.399Z",
       "invoiceId": "inv-1791735202176"
     },
     {
