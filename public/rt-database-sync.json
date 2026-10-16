@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:27:56.453Z",
+  "syncedAt": "2026-10-16T15:34:00.073Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -22750,21 +22750,22 @@
       "descriptionAr": "The most requested general health check: vital organ function, glucose, lipids and a complete blood count.",
       "targetAudience": "Adults over 25 for an annual health check",
       "includedProfiles": [
-        "CBC",
         "GLYCEMIC",
         "LIPID",
         "LFT",
-        "KFT",
-        "URINE"
+        "KFT"
       ],
       "includedIndividualTestCodes": [
         "VIT_D",
         "TSH",
-        "URIC"
+        "HCT_632",
+        "HB_727",
+        "CALCIUM_TOTAL",
+        "ESR"
       ],
-      "originalPrice": 1650,
-      "packagePrice": 950,
-      "discountPercentage": 42,
+      "originalPrice": 5000,
+      "packagePrice": 521,
+      "discountPercentage": 90,
       "fastingRequired": "Fasting 10-12 hours (water only)",
       "sampleTypes": [
         "Serum",
