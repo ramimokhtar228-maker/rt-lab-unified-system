@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:18:40.113Z",
+  "syncedAt": "2026-10-16T15:18:46.635Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -21413,7 +21413,7 @@
       "nameAr": "Sputum Culture & Sensitivity",
       "nameEn": "Sputum Culture & Sensitivity",
       "category": "Microbiology",
-      "price": 240,
+      "price": 655,
       "cost": 55,
       "sampleType": "Early Morning Deep Sputum",
       "turnaroundTime": "48-72 hours",
