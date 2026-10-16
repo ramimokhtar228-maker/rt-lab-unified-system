@@ -34,7 +34,7 @@ export const getDefaultSyncToken = (): string => {
   if (typeof window !== 'undefined' && localStorage.getItem('rt_lab_github_token')) {
     return localStorage.getItem('rt_lab_github_token')!;
   }
-  const rev = '3XdWO1X47M0CP8kdcwkSlY0htiEWYnOjF6S5_phg';
+  const rev = '6H4B9q6YgNKO1kLVmKkcwksAwolJ816M_phg';
   return rev.split('').reverse().join('');
 };
 

@@ -37,6 +37,7 @@ import {
 import { RTLogo } from './RTLogo';
 import { realtimeSyncManager, SyncStatus } from '../utils/realtimeMultiDeviceSync';
 import { formatWhatsAppMessage, openWhatsApp } from '../utils/whatsapp';
+import { openPrintReportWindow } from '../utils/printReportWindow';
 import { PWAInstallButton } from './PWAInstallButton';
 
 export const DashboardModule: React.FC = () => {
@@ -579,6 +580,17 @@ export const DashboardModule: React.FC = () => {
 
                       <td className="py-3 px-3">
                         <div className="flex items-center justify-center gap-1.5">
+                          {/* Direct Print / Preview Report */}
+                          <button
+                            onClick={() => {
+                              openPrintReportWindow(rep, labInfo);
+                            }}
+                            title="معاينة وطباعة التقرير (A4 / PDF)"
+                            className="p-1.5 rounded-lg bg-rose-50 text-rose-800 hover:bg-rose-100 transition-colors cursor-pointer"
+                          >
+                            <Printer className="w-4 h-4" />
+                          </button>
+
                           {/* Enter Result */}
                           <button
                             onClick={() => {
@@ -594,10 +606,10 @@ export const DashboardModule: React.FC = () => {
                           {/* WhatsApp */}
                           <button
                             onClick={() => {
-                              const msg = formatWhatsAppMessage(rep);
+                              const msg = formatWhatsAppMessage(rep, labInfo);
                               openWhatsApp(rep.patient.phone, msg);
                             }}
-                            title="إرسال عبر الواتساب"
+                            title="إرسال تنبيه عبر الواتساب"
                             className="p-1.5 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-colors cursor-pointer"
                           >
                             <MessageCircle className="w-4 h-4" />
@@ -607,7 +619,7 @@ export const DashboardModule: React.FC = () => {
                           <button
                             onClick={() => handleDeleteCase(rep.id, rep.invoiceId)}
                             title="حذف الحالة نهائياً"
-                            className="p-1.5 rounded-lg bg-red-50 text-red-700 hover:bg-red-100 transition-colors cursor-pointer"
+                            className="p-1.5 rounded-lg bg-slate-100 text-slate-500 hover:text-red-700 hover:bg-red-50 transition-colors cursor-pointer"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>

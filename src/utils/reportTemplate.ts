@@ -843,17 +843,20 @@ function pageHtml(report: LabReport, profile: TestProfile, idx: number, total: n
 
     ${interpretationsHtml}
     ${commentsHtml}
-    ${atlasHtml}
-    ${recommendationsHtml}
 
-    ${general ? `<div class="rt-note plain"><h4>Diagnostic Note</h4><p>${esc(general)}</p></div>` : ''}
+    ${general ? `<div class="rt-note plain"><h4>Clinical Diagnostic Note</h4><p>${esc(general)}</p></div>` : ''}
 
     <div class="rt-spacer"></div>
 
     ${signatureBlock(report)}
 
+    <div style="margin-top: 3mm; padding-top: 2mm; border-top: 1px dashed #cbd5e1; font-size: 8.5px; color: #64748b; display: flex; justify-content: space-between; align-items: center;">
+      <span>• The analytical results relate solely to the specimen received and tested. Clinical correlation is recommended.</span>
+      <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #1e3a8a;">RT LAB VERIFIED REPORT</span>
+    </div>
+
     <footer class="rt-foot">
-      <span>Report ID: ${esc(report.reportNumber)}  •  Page ${idx + 1} of ${total}</span>
+      <span>Lab ID: ${esc(report.reportNumber)} • Sample Barcode: ${esc(p.barcode || p.labNumber)} • Page ${idx + 1} of ${total}</span>
       <span class="end">${idx === total - 1 ? '— END OF LABORATORY REPORT —' : 'CONTINUED ON NEXT PAGE'}</span>
     </footer>
   </section>`;

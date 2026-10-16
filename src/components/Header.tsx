@@ -68,22 +68,9 @@ export const Header: React.FC = () => {
           <div className="flex items-center gap-3">
             <div
               onClick={() => setActiveTab('dashboard')}
-              className="cursor-pointer flex items-center gap-3 group"
+              className="cursor-pointer flex items-center gap-2 group hover:opacity-95 transition-opacity"
             >
-              <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-rose-700 to-rose-950 flex items-center justify-center p-2 shadow-lg shadow-rose-900/40 border border-rose-600/50 group-hover:scale-105 transition-transform">
-                <RTLogo className="w-full h-full text-white" />
-              </div>
-              <div className="leading-tight">
-                <div className="flex items-center gap-2">
-                  <span className="font-black text-lg text-white tracking-wide">معامل RT</span>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-900/80 text-rose-200 border border-rose-700/60 font-mono">
-                    UNIFIED ERP & LIS
-                  </span>
-                </div>
-                <div className="text-xs text-rose-300 font-bold">
-                  معامل رامي مختار <span className="text-slate-400 font-normal">| أطباء كلية طب قصر العيني</span>
-                </div>
-              </div>
+              <RTLogo size="md" variant="full" showSlogan={false} />
             </div>
           </div>
 
