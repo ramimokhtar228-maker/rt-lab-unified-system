@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T13:33:21.154Z",
+  "syncedAt": "2026-10-16T13:33:45.462Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -1461,6 +1461,74 @@
               "flag": ""
             }
           ]
+        },
+        {
+          "id": "prof-1792157623439-7ex0",
+          "profileCode": "GLYCEMIC",
+          "titleEn": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "titleAr": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "category": "Clinical Chemistry",
+          "sampleType": "Fluoride Plasma & EDTA Blood",
+          "interpretation": "Glycemic parameters evaluated according to ADA guidelines.",
+          "parameters": [
+            {
+              "name": "Fasting Blood Glucose",
+              "unit": "mg/dL",
+              "minNormal": 70,
+              "maxNormal": 99,
+              "panicLow": 50,
+              "panicHigh": 400,
+              "method": "Hexokinase",
+              "textReference": "",
+              "id": "param-1792157623439-0",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "2 Hours Post-Prandial Glucose",
+              "unit": "mg/dL",
+              "minNormal": 70,
+              "maxNormal": 140,
+              "panicHigh": 450,
+              "method": "Hexokinase",
+              "textReference": "",
+              "id": "param-1792157623439-1",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "Random Blood Glucose",
+              "unit": "mg/dL",
+              "minNormal": 70,
+              "maxNormal": 140,
+              "textReference": "",
+              "id": "param-1792157623439-2",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "HbA1c (Glycated Hemoglobin)",
+              "unit": "%",
+              "minNormal": 4,
+              "maxNormal": 5.6,
+              "textReference": "< 5.7% Normal, 5.7 - 6.4% Pre-Diabetes, ≥ 6.5% Diabetes",
+              "method": "HPLC / Turbidimetric",
+              "id": "param-1792157623439-3",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "Estimated Average Glucose (eAG)",
+              "unit": "mg/dL",
+              "minNormal": 68,
+              "maxNormal": 114,
+              "textReference": "80 - 120 mg/dL",
+              "notes": "Auto-calculated: (28.7 × HbA1c) - 46.7",
+              "id": "param-1792157623439-4",
+              "result": "",
+              "flag": ""
+            }
+          ]
         }
       ],
       "staff": {
@@ -1476,7 +1544,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-16T13:31:59.823Z",
-      "updatedAt": "2026-10-16T13:33:18.294Z",
+      "updatedAt": "2026-10-16T13:33:43.439Z",
       "invoiceId": "inv-1792157519823"
     },
     {
