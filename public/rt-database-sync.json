@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:19:07.455Z",
+  "syncedAt": "2026-10-16T15:19:21.249Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -21505,7 +21505,7 @@
       "nameAr": "HBV DNA Quantitative Real-Time PCR",
       "nameEn": "HBV DNA Quantitative Real-Time PCR",
       "category": "Molecular & PCR",
-      "price": 650,
+      "price": 1400,
       "cost": 160,
       "sampleType": "EDTA Plasma",
       "turnaroundTime": "24-48 hours",
