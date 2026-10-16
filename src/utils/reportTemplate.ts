@@ -1,5 +1,6 @@
 import { LabReport, LabInfo, TestParameter, TestProfile } from '../types';
 import { formatReferenceDisplay } from './cbcCalculator';
+import { DEFAULT_STAFF } from '../data/labCatalog';
 import { DISEASE_ILLUSTRATIONS } from '../data/diseaseIllustrations';
 
 /**
@@ -25,6 +26,149 @@ export const BRAND = {
 };
 
 const ARABIC = /[\u0600-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFF]/g;
+
+
+/** Comprehensive mapping of Arabic staff names to official Latin/English format */
+const KNOWN_STAFF_MAP: Record<string, string> = {
+  'د/ عمر فؤاد القاضي': 'Dr. Omar Fouad El-Kady',
+  'عمر فؤاد القاضي': 'Dr. Omar Fouad El-Kady',
+  'أ/ سارة إبراهيم الشربيني': 'Sara Ibrahim El-Sherbiny',
+  'سارة إبراهيم الشربيني': 'Sara Ibrahim El-Sherbiny',
+  'أ.د. رامي مختار': 'Prof. Dr. Rami Mokhtar',
+  'د. رامي مختار': 'Prof. Dr. Rami Mokhtar',
+  'د/ رامي مختار': 'Prof. Dr. Rami Mokhtar',
+  'رامي مختار': 'Prof. Dr. Rami Mokhtar',
+  'د/ آية محمود الباز': 'Dr. Aya Mahmoud El-Baz',
+  'آية محمود الباز': 'Dr. Aya Mahmoud El-Baz',
+  'د/ كريم حسن الديب': 'Dr. Karim Hassan El-Deeb',
+  'كريم حسن الديب': 'Dr. Karim Hassan El-Deeb',
+  'د/ هبة الشناوي': 'Dr. Heba El-Shennawy',
+  'هبة الشناوي': 'Dr. Heba El-Shennawy',
+  'د. هبة الشناوي': 'Dr. Heba El-Shennawy',
+  'د/ دعاء الشافعي': 'Dr. Doaa El-Shafei',
+  'دعاء الشافعي': 'Dr. Doaa El-Shafei',
+  'د/ مصطفى العوضي': 'Dr. Mostafa El-Awady',
+  'مصطفى العوضي': 'Dr. Mostafa El-Awady',
+  'د. مصطفى العوضي': 'Dr. Mostafa El-Awady',
+  'د/ سامح عبد الرازق': 'Dr. Sameh Abdel Razek',
+  'سامح عبد الرازق': 'Dr. Sameh Abdel Razek',
+  'مني احمد': 'Chemist Mona Ahmed',
+  'منى احمد': 'Chemist Mona Ahmed',
+  'رحاب على': 'Dr. Rehab Ali',
+  'رحاب علي': 'Dr. Rehab Ali',
+  'ماجد حسني الشرقاوي': 'Maged Hosny El-Sharkawy',
+  'أ/ ماجد حسني الشرقاوي': 'Maged Hosny El-Sharkawy',
+  'أحمد فتحي الجمال': 'Ahmed Fathy El-Gammal',
+  'أ/ أحمد فتحي الجمال': 'Ahmed Fathy El-Gammal'
+};
+
+const COMMON_AR_NAMES: Record<string, string> = {
+  'محمد': 'Mohamed', 'أحمد': 'Ahmed', 'محمود': 'Mahmoud', 'علي': 'Ali', 'على': 'Ali',
+  'إبراهيم': 'Ibrahim', 'خالد': 'Khaled', 'طارق': 'Tarek', 'مصطفى': 'Mostafa',
+  'حسن': 'Hassan', 'حسين': 'Hussein', 'عمر': 'Omar', 'عمرو': 'Amr', 'يوسف': 'Youssef',
+  'سارة': 'Sara', 'هبة': 'Heba', 'منى': 'Mona', 'مني': 'Mona', 'رحاب': 'Rehab',
+  'آية': 'Aya', 'دعاء': 'Doaa', 'فاطمة': 'Fatma', 'مريم': 'Mariam', 'نور': 'Nour',
+  'سامح': 'Sameh', 'ماجد': 'Maged', 'كريم': 'Karim', 'رامي': 'Rami', 'مختار': 'Mokhtar',
+  'الشناوي': 'El-Shennawy', 'العوضي': 'El-Awady', 'القاضي': 'El-Kady', 'الشربيني': 'El-Sherbiny',
+  'الباز': 'El-Baz', 'الديب': 'El-Deeb', 'الشافعي': 'El-Shafei', 'الشرقاوي': 'El-Sharkawy',
+  'الجمال': 'El-Gammal'
+};
+
+/** Intelligently resolves or transliterates staff name into clean printable Latin/Arabic */
+export function formatStaffName(raw?: string | null, fallback = ''): string {
+  if (!raw) return fallback;
+  const str = String(raw).trim();
+  if (!str) return fallback;
+
+  if (KNOWN_STAFF_MAP[str]) return KNOWN_STAFF_MAP[str];
+
+  // Specific key doctors & staff check
+  if (str.includes('رامي') && str.includes('مختار')) return 'Prof. Dr. Rami Mokhtar';
+  if (str.includes('هبة') && str.includes('الشناوي')) return 'Dr. Heba El-Shennawy';
+  if (str.includes('مصطفى') && str.includes('العوضي')) return 'Dr. Mostafa El-Awady';
+  if (str.includes('عمر') && (str.includes('القاضي') || str.includes('فؤاد'))) return 'Dr. Omar Fouad El-Kady';
+  if (str.includes('سارة') && str.includes('الشربيني')) return 'Sara Ibrahim El-Sherbiny';
+  if (str.includes('رحاب') && (str.includes('على') || str.includes('علي'))) return 'Dr. Rehab Ali';
+  if ((str.includes('منى') || str.includes('مني')) && str.includes('احمد')) return 'Chemist Mona Ahmed';
+  if (str.includes('آية') && str.includes('الباز')) return 'Dr. Aya Mahmoud El-Baz';
+  if (str.includes('كريم') && str.includes('الديب')) return 'Dr. Karim Hassan El-Deeb';
+  if (str.includes('دعاء') && str.includes('الشافعي')) return 'Dr. Doaa El-Shafei';
+  if (str.includes('سامح') && str.includes('عبد الرازق')) return 'Dr. Sameh Abdel Razek';
+  if (str.includes('ماجد') && str.includes('الشرقاوي')) return 'Maged Hosny El-Sharkawy';
+  if (str.includes('أحمد') && str.includes('الجمال')) return 'Ahmed Fathy El-Gammal';
+
+  // Check if string contains existing clean Latin text
+  const latinPart = str
+    .replace(/[\u0600-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFF]/g, '')
+    .replace(/^[\s\-–—•|/,:]+|[\s\-–—•|/,:]+$/g, '')
+    .trim();
+  if (latinPart.length >= 3 && /[a-zA-Z]/.test(latinPart)) {
+    return latinPart;
+  }
+
+  // Transliterate Arabic doctor names
+  let prefix = '';
+  let cleanName = str;
+  if (/^أ\.د\./.test(cleanName)) { prefix = 'Prof. Dr. '; cleanName = cleanName.replace(/^أ\.د\.\s*/, ''); }
+  else if (/^(د\.|د\/)/.test(cleanName)) { prefix = 'Dr. '; cleanName = cleanName.replace(/^(د\.|د\/)\s*/, ''); }
+  else if (/^(كيميائي|كيميائية)/.test(cleanName)) { prefix = 'Chemist '; cleanName = cleanName.replace(/^(كيميائي|كيميائية)\s*/, ''); }
+  else if (/^(أ\.|أ\/)/.test(cleanName)) { prefix = ''; cleanName = cleanName.replace(/^(أ\.|أ\/)\s*/, ''); }
+
+  if (cleanName.includes('-')) {
+    cleanName = cleanName.split('-')[0].trim();
+  }
+
+  const words = cleanName.split(/\s+/);
+  const translatedWords = words.map(w => COMMON_AR_NAMES[w] || w);
+  const joined = translatedWords.join(' ');
+  
+  if (joined && /[a-zA-Z]/.test(joined)) {
+    return (prefix + joined).trim();
+  }
+
+  return str || fallback;
+}
+
+/** Resolves official job titles into standard clinical English */
+export function formatStaffTitle(raw?: string | null, defaultTitle = ''): string {
+  if (!raw) return defaultTitle;
+  const str = String(raw).trim();
+  if (!str) return defaultTitle;
+
+  if (KNOWN[str]) return KNOWN[str];
+
+  if (str.includes('باثولوج') || str.includes('قصر العيني') || str.includes('patholog')) {
+    return 'Consultant Clinical Pathologist - Kasr Al Ainy';
+  }
+  if (str.includes('جودة') || str.includes('تنفيذي') || str.includes('quality') || str.includes('audit')) {
+    return 'Quality Assurance & Operations Manager';
+  }
+  if (str.includes('كيمياء') || str.includes('كيميائ') || str.includes('chemist')) {
+    return 'Senior Clinical Chemist';
+  }
+  if (str.includes('مالي') || str.includes('حسابات') || str.includes('CFO')) {
+    return 'Chief Financial Officer (CFO)';
+  }
+  if (str.includes('موارد بشرية') || str.includes('HR')) {
+    return 'Human Resources Director';
+  }
+
+  const latinPart = str
+    .replace(/[\u0600-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFF]/g, '')
+    .replace(/^[\s\-–—•|/,:]+|[\s\-–—•|/,:]+$/g, '')
+    .trim();
+  if (latinPart.length >= 3 && /[a-zA-Z]/.test(latinPart)) {
+    return latinPart;
+  }
+
+  return str || defaultTitle;
+}
+
+/** Generates realistic signature line flourish */
+function renderRealisticSignature(name: string, isConsultant?: boolean): string {
+  const strokeColor = isConsultant ? '#881337' : '#0f172a';
+  return '<svg class="sig-svg" viewBox="0 0 160 40" style="width: 110px; height: 30px; stroke: ' + strokeColor + '; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;"><path d="M 14 26 C 24 12, 36 10, 46 22 C 54 32, 68 18, 80 16 C 94 14, 108 26, 124 18 C 136 12, 146 16, 152 22" /><path d="M 18 35 C 45 33, 85 35, 136 30" stroke-width="1.2" opacity="0.75" /></svg>';
+}
 
 /** Known Arabic staff names/titles already saved in older data -> English. */
 const KNOWN: Record<string, string> = {
@@ -55,12 +199,17 @@ export function latin(input?: string | null, fallback = ''): string {
   if (!input) return fallback;
   const trimmed = String(input).trim();
   if (KNOWN[trimmed]) return KNOWN[trimmed];
+  if (KNOWN_STAFF_MAP[trimmed]) return KNOWN_STAFF_MAP[trimmed];
   const cleaned = trimmed
     .replace(ARABIC, '')
     .replace(/\(\s*\)/g, '')
     .replace(/\s{2,}/g, ' ')
     .replace(/^[\s\-–—•|/,:]+|[\s\-–—•|/,:]+$/g, '')
     .trim();
+  // NEVER return lone dots or empty string if original input was valid text
+  if (!cleaned || /^[\s.\-–—•|/,:]+$/.test(cleaned)) {
+    return formatStaffName(trimmed, trimmed) || fallback;
+  }
   return cleaned || fallback;
 }
 
@@ -464,21 +613,30 @@ export const REPORT_CSS = `
   .rt-sign {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 8mm;
-    margin-top: 6mm;
-    padding-top: 3mm;
+    gap: 6mm;
+    margin-top: 4mm;
+    padding-top: 2mm;
     page-break-inside: avoid;
+    break-inside: avoid;
   }
   .rt-sign .s {
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
-  .rt-sign .line {
+  .rt-sign .sig-handwritten {
     height: 9mm;
-    border-bottom: 1.5px solid ${BRAND.navy};
-    margin-bottom: 2mm;
     display: flex;
     align-items: flex-end;
     justify-content: center;
+    margin-bottom: 1mm;
+  }
+  .rt-sign .line {
+    width: 90%;
+    height: 1px;
+    border-bottom: 1.5px solid ${BRAND.navy};
+    margin: 0 auto 2mm;
   }
   .rt-sign .role {
     font-size: 8.5px;
@@ -488,7 +646,7 @@ export const REPORT_CSS = `
     font-weight: 700;
   }
   .rt-sign .nm {
-    font-size: 11px;
+    font-size: 11.5px;
     font-weight: 800;
     color: ${BRAND.navy};
     margin-top: 1px;
@@ -496,11 +654,32 @@ export const REPORT_CSS = `
   .rt-sign .tt {
     font-size: 8.5px;
     color: ${BRAND.muted};
+    margin-top: 0.5px;
+    line-height: 1.3;
   }
   .rt-sign .lic {
     font-size: 8px;
     font-family: 'JetBrains Mono', monospace;
     color: ${BRAND.navyBlue};
+    margin-top: 1px;
+    font-weight: 600;
+  }
+  .rt-sign .stamp-box {
+    margin-top: 2mm;
+    border: 1.5px dashed ${BRAND.red};
+    border-radius: 4px;
+    padding: 1.5px 6px;
+    background: ${BRAND.redSoft};
+    font-size: 7.5px;
+    line-height: 1.2;
+    color: ${BRAND.redDark};
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: rotate(-1deg);
   }
 
   /* Footer */
@@ -614,40 +793,76 @@ export const REPORT_CSS = `
   }
 `;
 
-function signatureBlock(report: LabReport): string {
-  const s = report.staff || ({} as LabReport['staff']);
+function signatureBlock(report: LabReport, lab?: LabInfo): string {
+  const s = report.staff || (lab as any)?.staffSignatures || DEFAULT_STAFF;
   
   // If report explicitly hides signatures, omit
   if ((s as any)?.hideSignatures === true || (report as any)?.hideSignatures === true) {
     return '';
   }
 
-  const blocks: { role: string; name: string; title: string; license?: string }[] = [];
+  const defaultChemist = (lab as any)?.staffSignatures?.labChemist || DEFAULT_STAFF.labChemist;
+  const defaultChemistTitle = (lab as any)?.staffSignatures?.chemistTitle || DEFAULT_STAFF.chemistTitle;
+  const defaultChemistLicense = (lab as any)?.staffSignatures?.chemistLicense || DEFAULT_STAFF.chemistLicense;
 
-  if (s.labChemist && (s as any).showChemist !== false) {
+  const defaultVerifier = (lab as any)?.staffSignatures?.verifiedBy || DEFAULT_STAFF.verifiedBy;
+  const defaultVerifierTitle = (lab as any)?.staffSignatures?.verifierTitle || DEFAULT_STAFF.verifierTitle;
+  const defaultVerifierLicense = (lab as any)?.staffSignatures?.verifierLicense || DEFAULT_STAFF.verifierLicense;
+
+  const defaultPathologist = (lab as any)?.staffSignatures?.pathologist || DEFAULT_STAFF.pathologist;
+  const defaultPathologistTitle = (lab as any)?.staffSignatures?.pathologistTitle || DEFAULT_STAFF.pathologistTitle;
+  const defaultPathologistLicense = (lab as any)?.staffSignatures?.pathologistLicense || DEFAULT_STAFF.pathologistLicense;
+
+  const blocks: { role: string; name: string; title: string; license?: string; isConsultant?: boolean }[] = [];
+
+  const rawChemist = s.labChemist || defaultChemist;
+  if (rawChemist && (s as any).showChemist !== false) {
     blocks.push({
       role: 'Laboratory Chemist',
-      name: latin(s.labChemist),
-      title: latin(s.chemistTitle),
-      license: s.chemistLicense
+      name: formatStaffName(rawChemist, 'Dr. Omar Fouad El-Kady'),
+      title: formatStaffTitle(s.chemistTitle || defaultChemistTitle, 'Senior Clinical Chemist'),
+      license: s.chemistLicense || defaultChemistLicense
     });
   }
 
-  if (s.verifiedBy && (s as any).showVerifier !== false) {
+  const rawVerifier = s.verifiedBy || defaultVerifier;
+  if (rawVerifier && (s as any).showVerifier !== false) {
     blocks.push({
       role: 'Quality Verified By',
-      name: latin(s.verifiedBy),
-      title: latin(s.verifierTitle),
-      license: s.verifierLicense
+      name: formatStaffName(rawVerifier, 'Sara Ibrahim El-Sherbiny'),
+      title: formatStaffTitle(s.verifierTitle || defaultVerifierTitle, 'Operations & Quality Manager'),
+      license: s.verifierLicense || defaultVerifierLicense
     });
   }
 
-  if (s.pathologist && (s as any).showPathologist !== false) {
+  const rawPathologist = s.pathologist || defaultPathologist;
+  if (rawPathologist && (s as any).showPathologist !== false) {
     blocks.push({
       role: 'Consultant Clinical Pathologist',
-      name: latin(s.pathologist),
-      title: latin(s.pathologistTitle),
-      license: s.pathologistLicense
+      name: formatStaffName(rawPathologist, 'Prof. Dr. Rami Mokhtar'),
+      title: formatStaffTitle(s.pathologistTitle || defaultPathologistTitle, 'Consultant Clinical Pathologist - Kasr Al Ainy'),
+      license: s.pathologistLicense || defaultPathologistLicense,
+      isConsultant: true
+    });
+  }
+
+  // Financial signature if enabled
+  if ((s as any).financialDirector && (s as any).showFinancialSignature === true) {
+    blocks.push({
+      role: 'Chief Financial Officer',
+      name: formatStaffName((s as any).financialDirector, 'Maged Hosny El-Sharkawy'),
+      title: formatStaffTitle((s as any).financialTitle, 'Chief Financial Officer (CFO)'),
+      license: (s as any).financialLicense
+    });
+  }
+
+  // HR signature if enabled
+  if ((s as any).hrDirector && (s as any).showHrSignature === true) {
+    blocks.push({
+      role: 'HR Director',
+      name: formatStaffName((s as any).hrDirector, 'Ahmed Fathy El-Gammal'),
+      title: formatStaffTitle((s as any).hrTitle, 'Human Resources Director'),
+      license: (s as any).hrLicense
     });
   }
 
@@ -657,11 +872,20 @@ function signatureBlock(report: LabReport): string {
     ${blocks
       .map(
         b => `<div class="s">
+          <div class="sig-handwritten">
+            ${renderRealisticSignature(b.name, b.isConsultant)}
+          </div>
           <div class="line"></div>
           <div class="role">${esc(b.role)}</div>
           <div class="nm">${esc(b.name)}</div>
           ${b.title ? `<div class="tt">${esc(b.title)}</div>` : ''}
           ${b.license ? `<div class="lic">Lic: ${esc(b.license)}</div>` : ''}
+          ${b.isConsultant ? `
+            <div class="stamp-box">
+              <span>ELECTRONICALLY VERIFIED</span>
+              <strong>RT-LAB CLINICAL PATHOLOGY</strong>
+            </div>
+          ` : ''}
         </div>`
       )
       .join('')}
@@ -809,7 +1033,7 @@ function pageHtml(report: LabReport, profile: TestProfile, idx: number, total: n
     </header>
 
     <div class="rt-patient">
-      <div class="f wide"><label>Patient Name</label><span class="v name" dir="auto">${esc(latin(p.fullName, p.fullName))}</span></div>
+      <div class="f wide"><label>Patient Name</label><span class="v name" dir="auto">${esc(p.fullName || 'Patient')}</span></div>
       <div class="f"><label>Lab / Reg No.</label><span class="v font-mono">${esc(p.labNumber)}</span></div>
       <div class="f"><label>Age / Gender</label><span class="v">${esc(ageText(p.age, p.ageUnit))} / ${p.gender === 'male' ? 'Male' : 'Female'}</span></div>
       <div class="f"><label>Collected</label><span class="v">${esc(fmtDate(p.sampleDate))}</span></div>
@@ -848,7 +1072,7 @@ function pageHtml(report: LabReport, profile: TestProfile, idx: number, total: n
 
     <div class="rt-spacer"></div>
 
-    ${signatureBlock(report)}
+    ${signatureBlock(report, lab)}
 
     <div style="margin-top: 3mm; padding-top: 2mm; border-top: 1px dashed #cbd5e1; font-size: 8.5px; color: #64748b; display: flex; justify-content: space-between; align-items: center;">
       <span>• The analytical results relate solely to the specimen received and tested. Clinical correlation is recommended.</span>

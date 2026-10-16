@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { LabStaffSignatures, StaffOptionItem } from '../types/lab';
+import { DEFAULT_STAFF } from '../data/labCatalog';
 import { useApp } from '../context/AppContext';
 import { UserCheck, Plus, Check, ShieldCheck, Award, X, Trash2, Edit2, Eye, EyeOff } from 'lucide-react';
 
@@ -9,9 +10,10 @@ interface StaffSignaturesPickerProps {
 }
 
 export const StaffSignaturesPicker: React.FC<StaffSignaturesPickerProps> = ({
-  signatures,
+  signatures: rawSignatures,
   onChange
 }) => {
+  const signatures = rawSignatures || DEFAULT_STAFF;
   const {
     staffSignatureOptions,
     addStaffSignatureOption,

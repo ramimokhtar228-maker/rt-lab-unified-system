@@ -192,11 +192,10 @@ export function getInfogramForProfile(profileCode: string, titleEn: string): any
 export function upgradeSingleReport(report: LabReport): LabReport {
   const updatedReport: LabReport = { ...report };
 
-  // 1. Upgrade staff signatures
+  // 1. Upgrade staff signatures preserving existing titles and licenses
   updatedReport.staff = {
-    labChemist: DEFAULT_STAFF.labChemist,
-    verifiedBy: DEFAULT_STAFF.verifiedBy,
-    pathologist: DEFAULT_STAFF.pathologist
+    ...DEFAULT_STAFF,
+    ...report.staff
   };
 
   // 2. Check and upgrade profiles

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import { DEFAULT_STAFF } from '../data/labCatalog';
 import { LabReport, TestProfile } from '../types/lab';
 import { formatReferenceDisplay } from '../utils/calculator';
 import { ColouredRangeChart } from './ColouredRangeChart';
@@ -47,26 +48,24 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
   const { labInfo } = useApp();
   const p = report.patient;
   const totalPages = report.profiles.length;
-  const staff = report.staff || {
-    labChemist: "د. هبة الشناوي - كيميائية تحاليل",
-    chemistTitle: "أخصائي الكيمياء الإكلينيكية",
-    chemistLicense: "EGY-SCI-88402",
-    verifiedBy: "د. مصطفى العوضي - استشاري التحاليل",
-    verifierTitle: "إدارة ضبط الجودة والتشغيل",
-    verifierLicense: "EGY-MGT-11024",
-    pathologist: "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
-    pathologistTitle: "استشاري الباثولوجيا الإكلينيكية - قصر العيني",
-    pathologistLicense: "EGY-MED-48201"
-  };
+  const safeReport = useMemo<LabReport>(() => ({
+    ...report,
+    staff: {
+      ...DEFAULT_STAFF,
+      ...labInfo?.staffSignatures,
+      ...report.staff
+    }
+  }), [report, labInfo]);
+  const staff = safeReport.staff;
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   const handleDownloadPDF = async () => {
     try {
       setIsGeneratingPDF(true);
-      await downloadReportPDF(report, labInfo);
+      await downloadReportPDF(safeReport, labInfo);
     } catch (err) {
       console.error('Failed to generate PDF:', err);
-      openPrintReportWindow(report, labInfo);
+      openPrintReportWindow(safeReport, labInfo);
     } finally {
       setIsGeneratingPDF(false);
     }
@@ -74,19 +73,19 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
 
   const handlePrint = () => {
     try {
-      openPrintReportWindow(report, labInfo);
+      openPrintReportWindow(safeReport, labInfo);
     } catch {
       window.print();
     }
   };
 
   const handleWhatsApp = () => {
-    const msg = formatWhatsAppMessage(report, labInfo);
+    const msg = formatWhatsAppMessage(safeReport, labInfo);
     openWhatsApp(p.phone, msg);
   };
 
   const handlePPTX = async () => {
-    await exportReportToPPTX(report, labInfo);
+    await exportReportToPPTX(safeReport, labInfo);
   };
 
   const formatDoctorDisplay = () => {
@@ -197,7 +196,7 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
       */}
       <div className="overflow-x-auto rounded-xl bg-slate-200 p-3 print:p-0">
         <style>{REPORT_CSS}</style>
-        <div className="rt-root" dangerouslySetInnerHTML={{ __html: buildReportPages(report, labInfo) }} />
+        <div className="rt-root" dangerouslySetInnerHTML={{ __html: buildReportPages(safeReport, labInfo) }} />
       </div>
     </div>
   );
