@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:50:44.553Z",
+  "syncedAt": "2026-10-16T15:52:11.395Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -901,15 +901,6 @@
           "category": "Clinical Chemistry & Hepatology",
           "sampleType": "Serum (مصل الدم)",
           "interpretation": "Liver enzymes and synthetic hepatic markers are within normal reference ranges.",
-          "attachedIllustration": {
-            "id": "hep-viral",
-            "code": "HEP_VIRAL_HEPATITIS",
-            "titleAr": "التهاب الكبد الفيروسي الحاد والمزمن (Viral Hepatitis B & C)",
-            "titleEn": "Acute & Chronic Viral Hepatitis",
-            "category": "hepatic",
-            "imageUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgMTgwIiB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCI+CiAgICA8cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgcng9IjE0IiBmaWxsPSIjMDkwZDE2Ii8+CiAgICA8Y2lyY2xlIGN4PSIxNjAiIGN5PSI5MCIgcj0iNzYiIGZpbGw9IiMwYjEzMjkiIHN0cm9rZT0iIzA2NWY0NiIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzNGQzOTkiIGZvbnQtc2l6ZT0iMTAuNSIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1mYW1pbHk9IidDYWlybycsIHN5c3RlbS11aSwgLWFwcGxlLXN5c3RlbSwgc2Fucy1zZXJpZiI+QUNVVEUgVklSQUwgSEVQQVRJVElTIChIQlYgLyBIQ1YpPC90ZXh0PgogICAgPGNpcmNsZSBjeD0iMTYwIiBjeT0iODUiIHI9IjQwIiBmaWxsPSIjMDY1ZjQ2IiBzdHJva2U9IiMzNGQzOTkiIHN0cm9rZS13aWR0aD0iMi41Ii8+CiAgICAgIDxjaXJjbGUgY3g9IjE2MCIgY3k9Ijg1IiByPSIyOCIgZmlsbD0iIzAyMmMyMiIvPgogICAgICA8dGV4dCB4PSIxNjAiIHk9IjgyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjYTdmM2QwIiBmb250LXNpemU9IjExIiBmb250LXdlaWdodD0iYm9sZCI+QUxUICZndDsmZ3Q7IDUwMDwvdGV4dD4KICAgICAgPHRleHQgeD0iMTYwIiB5PSI5OCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzZlZTdiNyIgZm9udC1zaXplPSI5IiBmb250LXdlaWdodD0iYm9sZCI+QVNUICZndDsmZ3Q7IDQwMDwvdGV4dD4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMTcwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTRhM2I4IiBmb250LXNpemU9IjkiIGZvbnQtZmFtaWx5PSInQ2Fpcm8nLCBzeXN0ZW0tdWksIC1hcHBsZS1zeXN0ZW0sIHNhbnMtc2VyaWYiPk1hc3NpdmUgSGVwYXRvY3l0ZSBDeXRvbHlzaXM6IE1hcmtlZCBBTFQgJiBBU1QgRWxldmF0aW9uPC90ZXh0PgogIDwvc3ZnPg==",
-            "pathologySummaryAr": "أذية والتهاب النسيج الكبدي بفعل الفيروسات الكبدية (B أو C) مما يتسبب في تحرر مكثف لإنزيمات الكبد السيتوبلازمية (ALT و AST بمئات أو آلاف الوحدات) مع اليرقان."
-          },
           "parameters": [
             {
               "name": "Prothrombin Time & INR (Prothrombin Time & INR)",
@@ -1035,28 +1026,6 @@
               "id": "param-1792165765208-2",
               "result": "8.41",
               "flag": "NORMAL"
-            },
-            {
-              "name": "Serum Uric Acid",
-              "unit": "mg/dL",
-              "minNormal": 3.5,
-              "maxNormal": 7.2,
-              "method": "Uricase-PAP",
-              "textReference": "",
-              "id": "param-1792165765208-4",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "eGFR (CKD-EPI)",
-              "unit": "mL/min/1.73m²",
-              "minNormal": 90,
-              "maxNormal": 120,
-              "notes": "Auto-calculated: CKD-EPI Formula",
-              "textReference": "",
-              "id": "param-1792165765208-5",
-              "result": "",
-              "flag": ""
             }
           ]
         }
@@ -1082,7 +1051,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-16T15:50:39.644Z",
+      "updatedAt": "2026-10-16T15:52:08.669Z",
       "invoiceId": "inv-1791921893782"
     },
     {
