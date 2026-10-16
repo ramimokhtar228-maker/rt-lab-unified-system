@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:16:38.562Z",
+  "syncedAt": "2026-10-16T15:16:53.606Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -21212,14 +21212,14 @@
       "nameAr": "H. Pylori Serum Antibodies (IgG & IgM)",
       "nameEn": "H. Pylori Serum Antibodies (IgG & IgM)",
       "category": "Gastroenterology",
-      "price": 180,
+      "price": 444,
       "cost": 40,
       "sampleType": "Serum",
       "turnaroundTime": "Within 2 hours",
       "unit": "U/mL",
       "minNormal": 0,
       "maxNormal": 0.9,
-      "textReference": "Negative: < 0.90 U/mL | Positive: >= 1.10 U/mL",
+      "textReference": "Negative  : 0.0 – 0.9  Equivocal   : 0.9 – 1.1  Positive  : > 1.1",
       "method": "ELISA / Rapid Serology",
       "fastingInstructions": "No fasting required"
     },
