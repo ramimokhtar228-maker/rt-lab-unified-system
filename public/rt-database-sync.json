@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:56:12.854Z",
+  "syncedAt": "2026-10-16T15:56:41.835Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -989,8 +989,8 @@
               "method": "IFCC UV with P5P",
               "textReference": "",
               "id": "param-1792166170281-0",
-              "result": "",
-              "flag": ""
+              "result": "23",
+              "flag": "NORMAL"
             },
             {
               "name": "AST (SGOT)",
@@ -1135,7 +1135,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-16T15:56:10.282Z",
+      "updatedAt": "2026-10-16T15:56:38.123Z",
       "invoiceId": "inv-1791921893782"
     },
     {
