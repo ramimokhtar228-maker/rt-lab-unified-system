@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:35:20.149Z",
+  "syncedAt": "2026-10-16T15:36:45.211Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -19265,38 +19265,6 @@
   },
   "testCatalog": [
     {
-      "id": "test-1792164472194",
-      "code": "HCT_632",
-      "nameEn": "Hematocrit %",
-      "nameAr": "نسبه الهيماتوكريت",
-      "category": "Clinical hematology",
-      "sampleType": "EDTA BLOOD",
-      "unit": "%",
-      "minNormal": 37,
-      "maxNormal": 49,
-      "textReference": "37-49",
-      "method": "Enzymatic",
-      "fastingInstructions": "لا يشترط الصيام",
-      "turnaroundHours": 2,
-      "price": 20
-    },
-    {
-      "id": "test-1792164310191",
-      "code": "HB_727",
-      "nameEn": "Hemoglobin %",
-      "nameAr": "نسبه هيموجلوبين",
-      "category": "Clinical hematology ",
-      "sampleType": "EDTA BLOOD",
-      "unit": "g/dL",
-      "minNormal": 12.5,
-      "maxNormal": 16.5,
-      "textReference": "MALE : 13.5-17.5    /.    FEMALE : 12.5-16.5",
-      "method": "Enzymatic",
-      "fastingInstructions": "لا يشترط الصيام",
-      "turnaroundHours": 2,
-      "price": 200
-    },
-    {
       "id": "t-1",
       "code": "GLU_F",
       "nameAr": "Fasting Blood Sugar",
@@ -22448,7 +22416,7 @@
       "nameAr": "Lupus Anticoagulant Screen & Confirm",
       "nameEn": "Lupus Anticoagulant Screen & Confirm",
       "category": "Hematology",
-      "price": 700,
+      "price": 480,
       "cost": 120,
       "sampleType": "Double-Centrifuged Citrate Plasma",
       "turnaroundTime": "24-48 hours",
@@ -22456,8 +22424,7 @@
       "maxNormal": 1.2,
       "textReference": "Negative: Normalized Ratio < 1.20 | Moderate: 1.20 - 1.35 | Strong: > 1.35",
       "method": "dRVVT (Screen & Confirm)",
-      "fastingInstructions": "Patient must avoid oral anticoagulants for 48 hours if clinically permitted",
-      "minNormal": 0.8
+      "fastingInstructions": "Patient must avoid oral anticoagulants for 48 hours if clinically permitted"
     },
     {
       "id": "t-193",
@@ -22499,7 +22466,7 @@
       "nameAr": "Antithrombin III Functional Activity",
       "nameEn": "Antithrombin III Functional Activity",
       "category": "Hematology",
-      "price": 1200,
+      "price": 420,
       "cost": 105,
       "sampleType": "Citrate Plasma",
       "turnaroundTime": "Within 24 hours",
@@ -22591,16 +22558,14 @@
       "nameAr": "Serum Calcitonin",
       "nameEn": "Serum Calcitonin",
       "category": "Tumor Markers",
-      "price": 1300,
+      "price": 450,
       "cost": 115,
       "sampleType": "Serum (Frozen)",
       "turnaroundTime": "24-48 hours",
       "unit": "pg/mL",
       "textReference": "Male: < 18.2 pg/mL | Female: < 11.5 pg/mL",
       "method": "CLIA",
-      "fastingInstructions": "Overnight fasting required",
-      "minNormal": 0,
-      "maxNormal": 8.4
+      "fastingInstructions": "Overnight fasting required"
     },
     {
       "id": "t-202",
@@ -22608,7 +22573,7 @@
       "nameAr": "Chromogranin A (CgA)",
       "nameEn": "Chromogranin A (CgA)",
       "category": "Tumor Markers",
-      "price": 1300,
+      "price": 550,
       "cost": 140,
       "sampleType": "Serum (Frozen)",
       "turnaroundTime": "3 days",
@@ -22616,8 +22581,7 @@
       "maxNormal": 100,
       "textReference": "Normal: < 100 ng/mL",
       "method": "ELISA",
-      "fastingInstructions": "Fasting 8 hours; discontinue PPIs for 2 weeks if approved by physician",
-      "minNormal": 27
+      "fastingInstructions": "Fasting 8 hours; discontinue PPIs for 2 weeks if approved by physician"
     },
     {
       "id": "t-203",
@@ -22671,7 +22635,7 @@
       "nameAr": "Urine Culture & Sensitivity (Antibiogram)",
       "nameEn": "Urine Culture & Sensitivity (Antibiogram)",
       "category": "Microbiology",
-      "price": 388,
+      "price": 240,
       "cost": 55,
       "sampleType": "Clean-Catch Midstream Urine in Sterile Cup",
       "turnaroundTime": "48 hours",
@@ -22739,6 +22703,38 @@
       "textReference": "Target Not Detected (Sensitivity: 10 IU/mL)",
       "method": "Real-Time TaqMan PCR",
       "fastingInstructions": "No fasting required"
+    },
+    {
+      "id": "test-1792164472194",
+      "code": "HCT_632",
+      "nameEn": "Hematocrit %",
+      "nameAr": "نسبه الهيماتوكريت",
+      "category": "Clinical hematology",
+      "sampleType": "EDTA BLOOD",
+      "unit": "%",
+      "minNormal": 37,
+      "maxNormal": 49,
+      "textReference": "37-49",
+      "method": "Enzymatic",
+      "fastingInstructions": "لا يشترط الصيام",
+      "turnaroundHours": 2,
+      "price": 20
+    },
+    {
+      "id": "test-1792164310191",
+      "code": "HB_727",
+      "nameEn": "Hemoglobin %",
+      "nameAr": "نسبه هيموجلوبين",
+      "category": "Clinical hematology ",
+      "sampleType": "EDTA BLOOD",
+      "unit": "g/dL",
+      "minNormal": 12.5,
+      "maxNormal": 16.5,
+      "textReference": "MALE : 13.5-17.5    /.    FEMALE : 12.5-16.5",
+      "method": "Enzymatic",
+      "fastingInstructions": "لا يشترط الصيام",
+      "turnaroundHours": 2,
+      "price": 200
     }
   ],
   "packages": [
