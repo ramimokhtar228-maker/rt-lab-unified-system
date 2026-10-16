@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T13:34:53.916Z",
+  "syncedAt": "2026-10-16T13:35:10.538Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -1472,19 +1472,6 @@
           "interpretation": "Glycemic parameters evaluated according to ADA guidelines.",
           "parameters": [
             {
-              "name": "Fasting Blood Glucose",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 99,
-              "panicLow": 50,
-              "panicHigh": 400,
-              "method": "Hexokinase",
-              "textReference": "",
-              "id": "param-1792157623439-0",
-              "result": "",
-              "flag": ""
-            },
-            {
               "name": "2 Hours Post-Prandial Glucose",
               "unit": "mg/dL",
               "minNormal": 70,
@@ -1763,7 +1750,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-16T13:31:59.823Z",
-      "updatedAt": "2026-10-16T13:34:51.139Z",
+      "updatedAt": "2026-10-16T13:35:07.509Z",
       "invoiceId": "inv-1792157519823"
     },
     {
