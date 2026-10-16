@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:25:26.922Z",
+  "syncedAt": "2026-10-16T14:25:32.962Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3232,8 +3232,8 @@
               "maxNormal": 5,
               "textReference": "0 - 5 % (Left Shift if > 6%)",
               "id": "param-1792160624241-16",
-              "result": "",
-              "flag": ""
+              "result": "05",
+              "flag": "NORMAL"
             },
             {
               "name": "Total Neutrophils %",
@@ -3456,7 +3456,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:25:23.908Z",
+      "updatedAt": "2026-10-16T14:25:27.946Z",
       "invoiceId": "inv-1791735202176"
     },
     {
