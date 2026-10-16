@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:59:19.536Z",
+  "syncedAt": "2026-10-16T15:00:34.180Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -243,14 +243,15 @@
               "flag": "NORMAL"
             },
             {
-              "name": "Blast Cells %",
-              "unit": "%",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "unit": "U/L",
               "minNormal": 0,
-              "maxNormal": 0,
-              "textReference": "0 % (Absent in normal blood)",
+              "maxNormal": 40,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "id": "param-1792157598294-24",
               "result": "00",
-              "flag": "NORMAL"
+              "flag": "NORMAL",
+              "method": "IFCC Kinetic UV"
             },
             {
               "name": "Absolute Neutrophils (ANC)",
@@ -376,24 +377,24 @@
               "flag": "NORMAL"
             },
             {
-              "name": "AST (SGOT)",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 40,
-              "method": "IFCC UV with P5P",
-              "textReference": "",
+              "method": "IFCC Kinetic UV",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "id": "param-1792157676289-1",
               "result": "33",
               "flag": "NORMAL"
             },
             {
-              "name": "Total Bilirubin",
+              "name": "Total Bilirubin (Total Bilirubin)",
               "unit": "mg/dL",
               "minNormal": 0.2,
               "maxNormal": 1.2,
               "panicHigh": 5,
-              "method": "Jendrassik-Grof",
-              "textReference": "",
+              "method": "Diazo / DPD Colorimetric Method",
+              "textReference": "Adults: 0.2 - 1.2 mg/dL",
               "id": "param-1792157676289-3",
               "result": "0.84",
               "flag": "NORMAL"
@@ -425,7 +426,7 @@
               "minNormal": 0,
               "maxNormal": 41,
               "notes": "Normal < 1.0 (Elevated > 2.0 in alcoholic liver disease/cirrhosis)",
-              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
+              "textReference": "Adult Males: < 41 U/L | Adult Females: < 38  U/L",
               "id": "param-1792157676289-11",
               "result": "1.6",
               "flag": "HIGH",
@@ -494,7 +495,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-16T13:31:59.823Z",
-      "updatedAt": "2026-10-16T14:59:03.623Z",
+      "updatedAt": "2026-10-16T15:00:24.524Z",
       "invoiceId": "inv-1792157519823"
     },
     {
@@ -804,14 +805,15 @@
               "flag": "NORMAL"
             },
             {
-              "name": "Blast Cells %",
-              "unit": "%",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "unit": "U/L",
               "minNormal": 0,
-              "maxNormal": 0,
-              "textReference": "0 % (Absent in normal blood)",
+              "maxNormal": 40,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "id": "param-1792066821076-24",
               "result": "00",
-              "flag": "NORMAL"
+              "flag": "NORMAL",
+              "method": "IFCC Kinetic UV"
             },
             {
               "name": "Absolute Neutrophils (ANC)",
@@ -919,12 +921,12 @@
               "flag": "NORMAL"
             },
             {
-              "name": "AST (SGOT)",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 40,
-              "method": "IFCC UV with P5P",
-              "textReference": "",
+              "method": "IFCC Kinetic UV",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "id": "param-1792066884186-1",
               "result": "26",
               "flag": "NORMAL"
@@ -1064,7 +1066,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-16T14:58:06.017Z",
+      "updatedAt": "2026-10-16T14:59:23.332Z",
       "invoiceId": "inv-1791921893782"
     },
     {
@@ -1301,12 +1303,12 @@
               "flag": "NORMAL"
             },
             {
-              "name": "AST (SGOT)",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 40,
-              "method": "IFCC UV with P5P",
-              "textReference": "",
+              "method": "IFCC Kinetic UV",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "id": "param-1792065347978-1",
               "result": "27",
               "flag": "NORMAL"
@@ -1317,7 +1319,7 @@
               "minNormal": 0,
               "maxNormal": 41,
               "notes": "Normal < 1.0 (Elevated > 2.0 in alcoholic liver disease/cirrhosis)",
-              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
+              "textReference": "Adult Males: < 41 U/L | Adult Females: < 38  U/L",
               "id": "param-1792065347978-11",
               "result": "1.3",
               "flag": "HIGH",
@@ -1401,7 +1403,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-12T21:13:54.435Z",
-      "updatedAt": "2026-10-16T14:59:03.623Z",
+      "updatedAt": "2026-10-16T14:59:32.422Z",
       "invoiceId": "inv-1791839634435"
     },
     {
@@ -1664,14 +1666,14 @@
             },
             {
               "id": "p-pkg-2-1791833506659-272",
-              "name": "سكر الدم الصائم (FBS) (Fasting Blood Sugar)",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
               "result": "105",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 100,
-              "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 40,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "flag": "HIGH",
-              "method": "Hexokinase / GOD-PAP",
+              "method": "IFCC Kinetic UV",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
             },
             {
@@ -1724,12 +1726,12 @@
             },
             {
               "id": "p-pkg-7-1791833506659-wej",
-              "name": "إنزيم كبد AST / SGOT (Aspartate Aminotransferase (AST / SGOT))",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
               "result": "28",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 40,
-              "textReference": "Adult Males: < 40 U/L | Adult Females: < 32 U/L",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "flag": "NORMAL",
               "method": "IFCC Kinetic UV",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
@@ -1868,7 +1870,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-12T19:31:46.660Z",
-      "updatedAt": "2026-10-16T14:57:35.161Z",
+      "updatedAt": "2026-10-16T14:59:23.332Z",
       "invoiceId": "inv-1791833506660",
       "smartReportEnabled": true,
       "smartReportClinicalData": {
@@ -2232,12 +2234,12 @@
             },
             {
               "id": "p-pkg-7-1791833372303-me9",
-              "name": "إنزيم كبد AST / SGOT (Aspartate Aminotransferase (AST / SGOT))",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
               "result": "44",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 40,
-              "textReference": "Adult Males: < 40 U/L | Adult Females: < 32 U/L",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "flag": "HIGH",
               "method": "IFCC Kinetic UV",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
@@ -2344,14 +2346,14 @@
           },
           "parameters": [
             {
-              "name": "Fasting Blood Glucose",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 99,
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 40,
               "panicLow": 50,
               "panicHigh": 400,
-              "method": "Hexokinase",
-              "textReference": "",
+              "method": "IFCC Kinetic UV",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "id": "param-0-1791833372306-3au",
               "result": "213",
               "flag": "HIGH"
@@ -2446,7 +2448,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-12T19:29:32.306Z",
-      "updatedAt": "2026-10-16T14:57:35.161Z",
+      "updatedAt": "2026-10-16T14:59:23.332Z",
       "invoiceId": "inv-1791833372306",
       "smartReportEnabled": true,
       "smartReportClinicalData": {
@@ -3317,14 +3319,15 @@
               "flag": "NORMAL"
             },
             {
-              "name": "Blast Cells %",
-              "unit": "%",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "unit": "U/L",
               "minNormal": 0,
-              "maxNormal": 0,
-              "textReference": "0 % (Absent in normal blood)",
+              "maxNormal": 40,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "id": "param-1792160624241-24",
               "result": "00",
-              "flag": "NORMAL"
+              "flag": "NORMAL",
+              "method": "IFCC Kinetic UV"
             },
             {
               "name": "Absolute Neutrophils (ANC)",
@@ -3411,7 +3414,7 @@
       },
       "status": "in_progress",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:28:44.422Z",
+      "updatedAt": "2026-10-16T14:59:23.333Z",
       "invoiceId": "inv-1791735202176"
     },
     {
@@ -3673,14 +3676,15 @@
               "flag": "NORMAL"
             },
             {
-              "name": "Blast Cells %",
-              "unit": "%",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "unit": "U/L",
               "minNormal": 0,
-              "maxNormal": 0,
-              "textReference": "0 % (Absent in normal blood)",
+              "maxNormal": 40,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "id": "param-1792073819268-24",
               "result": "00",
-              "flag": "NORMAL"
+              "flag": "NORMAL",
+              "method": "IFCC Kinetic UV"
             },
             {
               "name": "Absolute Neutrophils (ANC)",
@@ -3969,7 +3973,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-11T15:57:30.501Z",
-      "updatedAt": "2026-10-16T14:52:54.444Z",
+      "updatedAt": "2026-10-16T14:59:23.333Z",
       "invoiceId": "inv-1791734250501"
     },
     {
@@ -4320,14 +4324,15 @@
               "flag": "NORMAL"
             },
             {
-              "name": "Blast Cells %",
-              "unit": "%",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "unit": "U/L",
               "minNormal": 0,
-              "maxNormal": 0,
-              "textReference": "0 % (Absent in normal blood)",
+              "maxNormal": 40,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "id": "param-1792054941163-24",
               "result": "00",
-              "flag": "NORMAL"
+              "flag": "NORMAL",
+              "method": "IFCC Kinetic UV"
             },
             {
               "name": "Absolute Neutrophils (ANC)",
@@ -4413,7 +4418,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-11T15:38:48.875Z",
-      "updatedAt": "2026-10-16T14:57:35.162Z",
+      "updatedAt": "2026-10-16T14:59:23.333Z",
       "invoiceId": "inv-1791733128875"
     },
     {
@@ -4579,14 +4584,14 @@
             },
             {
               "id": "p-pkg-2-1791501113001-shn",
-              "name": "سكر الدم الصائم (FBS) (Fasting Blood Sugar)",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
               "result": "",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 100,
-              "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 40,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "flag": "NORMAL",
-              "method": "Hexokinase / GOD-PAP",
+              "method": "IFCC Kinetic UV",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
             },
             {
@@ -4639,12 +4644,12 @@
             },
             {
               "id": "p-pkg-7-1791501113001-4tx",
-              "name": "إنزيم كبد AST / SGOT (Aspartate Aminotransferase (AST / SGOT))",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
               "result": "",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 40,
-              "textReference": "Adult Males: < 40 U/L | Adult Females: < 32 U/L",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "flag": "NORMAL",
               "method": "IFCC Kinetic UV",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
@@ -4711,7 +4716,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-08T23:11:53.004Z",
-      "updatedAt": "2026-10-16T14:57:35.162Z",
+      "updatedAt": "2026-10-16T14:59:23.333Z",
       "invoiceId": "inv-1791501113004"
     },
     {
@@ -4912,12 +4917,12 @@
             },
             {
               "id": "p-pkg-7-1791500705347-fub",
-              "name": "إنزيم كبد AST / SGOT (Aspartate Aminotransferase (AST / SGOT))",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
               "result": "28",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 40,
-              "textReference": "Adult Males: < 40 U/L | Adult Females: < 32 U/L",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "flag": "NORMAL",
               "method": "IFCC Kinetic UV",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
@@ -5024,14 +5029,14 @@
           },
           "parameters": [
             {
-              "name": "Fasting Blood Glucose",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 99,
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 40,
               "panicLow": 50,
               "panicHigh": 400,
-              "method": "Hexokinase",
-              "textReference": "",
+              "method": "IFCC Kinetic UV",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "id": "param-0-1791500705350-zj9",
               "result": "157",
               "flag": "HIGH"
@@ -5120,7 +5125,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-08T23:05:05.350Z",
-      "updatedAt": "2026-10-16T14:57:35.162Z",
+      "updatedAt": "2026-10-16T14:59:23.333Z",
       "invoiceId": "inv-1791500705351",
       "smartReportEnabled": true,
       "smartReportClinicalData": {
@@ -5901,14 +5906,15 @@
               "minNormal": 0.8
             },
             {
-              "maxNormal": 0,
+              "maxNormal": 40,
               "result": "00",
               "flag": "NORMAL",
-              "name": "Blast Cells %",
-              "textReference": "0 % (Absent in normal blood)",
-              "unit": "%",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
+              "unit": "U/L",
               "minNormal": 0,
-              "id": "param-24-1791400927196-wnt"
+              "id": "param-24-1791400927196-wnt",
+              "method": "IFCC Kinetic UV"
             }
           ]
         }
@@ -5926,7 +5932,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-07T19:22:07.197Z",
-      "updatedAt": "2026-10-09T00:07:01.262Z",
+      "updatedAt": "2026-10-16T14:59:23.334Z",
       "invoiceId": "inv-1791400927197",
       "packageApplied": {
         "originalPrice": 2900,
@@ -6341,14 +6347,15 @@
               "flag": "NORMAL"
             },
             {
-              "name": "Blast Cells %",
-              "unit": "%",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "unit": "U/L",
               "minNormal": 0,
-              "maxNormal": 0,
-              "textReference": "0 % (Absent in normal blood)",
+              "maxNormal": 40,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "id": "param-24-1791359724809-iwb",
               "result": "00",
-              "flag": "NORMAL"
+              "flag": "NORMAL",
+              "method": "IFCC Kinetic UV"
             },
             {
               "name": "Glycated Hemoglobin (HbA1c) (Glycated Hemoglobin (HbA1c))",
@@ -6405,14 +6412,14 @@
           },
           "parameters": [
             {
-              "name": "Fasting Blood Glucose",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 99,
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 40,
               "panicLow": 50,
               "panicHigh": 400,
-              "method": "Hexokinase",
-              "textReference": "",
+              "method": "IFCC Kinetic UV",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "id": "param-0-1791359724809-nrq",
               "result": "338",
               "flag": "HIGH"
@@ -6520,7 +6527,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-07T07:55:24.810Z",
-      "updatedAt": "2026-10-16T14:57:35.162Z",
+      "updatedAt": "2026-10-16T14:59:23.334Z",
       "invoiceId": "inv-1791359724811"
     },
     {
@@ -6808,14 +6815,15 @@
               "flag": "NORMAL"
             },
             {
-              "name": "Blast Cells %",
-              "unit": "%",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "unit": "U/L",
               "minNormal": 0,
-              "maxNormal": 0,
-              "textReference": "0 % (Absent in normal blood)",
+              "maxNormal": 40,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "id": "param-24-1791359462608-jr3",
               "result": "00",
-              "flag": "NORMAL"
+              "flag": "NORMAL",
+              "method": "IFCC Kinetic UV"
             }
           ]
         },
@@ -6922,7 +6930,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-07T07:51:02.609Z",
-      "updatedAt": "2026-10-16T14:58:17.920Z",
+      "updatedAt": "2026-10-16T14:59:23.334Z",
       "invoiceId": "inv-1791359462609",
       "generalComment": ""
     },
@@ -7076,14 +7084,14 @@
             },
             {
               "id": "p-pkg-2-1791358565021-4so",
-              "name": "سكر الدم الصائم (FBS) (Fasting Blood Sugar)",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
               "result": "88",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 100,
-              "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 40,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "flag": "NORMAL",
-              "method": "Hexokinase / GOD-PAP",
+              "method": "IFCC Kinetic UV",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
             },
             {
@@ -7136,12 +7144,12 @@
             },
             {
               "id": "p-pkg-7-1791358565022-zpp",
-              "name": "إنزيم كبد AST / SGOT (Aspartate Aminotransferase (AST / SGOT))",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
               "result": "27",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 40,
-              "textReference": "Adult Males: < 40 U/L | Adult Females: < 32 U/L",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "flag": "NORMAL",
               "method": "IFCC Kinetic UV",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
@@ -7208,7 +7216,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-07T07:36:05.025Z",
-      "updatedAt": "2026-10-16T14:57:35.162Z",
+      "updatedAt": "2026-10-16T14:59:23.334Z",
       "invoiceId": "inv-1791358565025"
     },
     {
@@ -7361,14 +7369,14 @@
             },
             {
               "id": "p-pkg-2-1791321555660-23s",
-              "name": "سكر الدم الصائم (FBS) (Fasting Blood Sugar)",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
               "result": "100",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 100,
-              "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 40,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "flag": "NORMAL",
-              "method": "Hexokinase / GOD-PAP",
+              "method": "IFCC Kinetic UV",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
             },
             {
@@ -7421,12 +7429,12 @@
             },
             {
               "id": "p-pkg-7-1791321555660-t67",
-              "name": "إنزيم كبد AST / SGOT (Aspartate Aminotransferase (AST / SGOT))",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
               "result": "33",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 40,
-              "textReference": "Adult Males: < 40 U/L | Adult Females: < 32 U/L",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "flag": "NORMAL",
               "method": "IFCC Kinetic UV",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
@@ -7493,7 +7501,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-06T21:19:15.663Z",
-      "updatedAt": "2026-10-16T14:57:35.162Z",
+      "updatedAt": "2026-10-16T14:59:23.334Z",
       "invoiceId": "inv-1791321555664"
     },
     {
@@ -7656,14 +7664,14 @@
             },
             {
               "id": "p-pkg-2-1791306270691-n2k",
-              "name": "سكر الدم الصائم (FBS) (Fasting Blood Sugar)",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
               "result": "97",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 100,
-              "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 40,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "flag": "NORMAL",
-              "method": "Hexokinase / GOD-PAP",
+              "method": "IFCC Kinetic UV",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
             },
             {
@@ -7716,12 +7724,12 @@
             },
             {
               "id": "p-pkg-7-1791306270691-gmu",
-              "name": "إنزيم كبد AST / SGOT (Aspartate Aminotransferase (AST / SGOT))",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
               "result": "32",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 40,
-              "textReference": "Adult Males: < 40 U/L | Adult Females: < 32 U/L",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "flag": "NORMAL",
               "method": "IFCC Kinetic UV",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
@@ -7766,7 +7774,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-06T17:04:30.693Z",
-      "updatedAt": "2026-10-16T14:57:35.162Z",
+      "updatedAt": "2026-10-16T14:59:23.335Z",
       "invoiceId": "inv-1791306270694"
     },
     {
@@ -8103,14 +8111,15 @@
               "flag": "NORMAL"
             },
             {
-              "name": "Blast Cells %",
-              "unit": "%",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "unit": "U/L",
               "minNormal": 0,
-              "maxNormal": 0,
-              "textReference": "0 % (Absent in normal blood)",
+              "maxNormal": 40,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "id": "param-24-1791305504342-fqa",
               "result": "00",
-              "flag": "NORMAL"
+              "flag": "NORMAL",
+              "method": "IFCC Kinetic UV"
             }
           ]
         }
@@ -8128,7 +8137,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-06T16:51:44.343Z",
-      "updatedAt": "2026-10-07T07:58:07.661Z",
+      "updatedAt": "2026-10-16T14:59:23.335Z",
       "invoiceId": "inv-1791305504343"
     },
     {
@@ -8146,7 +8155,7 @@
       },
       "generalComment": "كافة الفحوصات المخبرية للمريض (أمال محمد) تقع في النطاقات الآمنة بشكل عام مع انتظام مؤشرات الأعضاء الحيوية ونشاط فسيولوجي متوازن.",
       "createdAt": "2026-10-06T11:59:36.696Z",
-      "updatedAt": "2026-10-16T14:57:35.162Z",
+      "updatedAt": "2026-10-16T14:59:23.335Z",
       "status": "verified",
       "profiles": [
         {
@@ -8332,15 +8341,15 @@
           },
           "parameters": [
             {
-              "minNormal": 70,
-              "maxNormal": 100,
+              "minNormal": 0,
+              "maxNormal": 40,
               "id": "p-pkg-2-1791287976694",
               "result": "98",
-              "method": "Hexokinase / GOD-PAP",
+              "method": "IFCC Kinetic UV",
               "flag": "NORMAL",
-              "name": "سكر الدم الصائم (FBS) (Fasting Blood Sugar)",
-              "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
-              "unit": "mg/dL"
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
+              "unit": "U/L"
             }
           ]
         },
@@ -8379,10 +8388,10 @@
               "method": "IFCC Kinetic UV",
               "minNormal": 0,
               "flag": "NORMAL",
-              "textReference": "Adult Males: < 40 U/L | Adult Females: < 32 U/L",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "maxNormal": 40,
               "unit": "U/L",
-              "name": "إنزيم كبد AST / SGOT (Aspartate Aminotransferase (AST / SGOT))"
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))"
             }
           ]
         },
@@ -8503,7 +8512,7 @@
         "packagePrice": 199
       },
       "status": "verified",
-      "updatedAt": "2026-10-16T14:57:35.162Z",
+      "updatedAt": "2026-10-16T14:59:23.335Z",
       "createdAt": "2026-10-06T11:48:51.555Z",
       "reportNumber": "RT-2026-007",
       "patient": {
@@ -8715,13 +8724,13 @@
             {
               "id": "p-pkg-2-1791287331552",
               "flag": "HIGH",
-              "name": "سكر الدم الصائم (FBS) (Fasting Blood Sugar)",
-              "maxNormal": 100,
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "maxNormal": 40,
+              "unit": "U/L",
+              "minNormal": 0,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "result": "109",
-              "method": "Hexokinase / GOD-PAP"
+              "method": "IFCC Kinetic UV"
             }
           ]
         },
@@ -8758,9 +8767,9 @@
               "method": "IFCC Kinetic UV",
               "flag": "NORMAL",
               "result": "30",
-              "name": "إنزيم كبد AST / SGOT (Aspartate Aminotransferase (AST / SGOT))",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
               "unit": "U/L",
-              "textReference": "Adult Males: < 40 U/L | Adult Females: < 32 U/L",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "maxNormal": 40,
               "minNormal": 0,
               "id": "p-pkg-7-1791287331553"
@@ -9097,12 +9106,12 @@
             {
               "maxNormal": 40,
               "minNormal": 0,
-              "textReference": "Adult Males: < 40 U/L | Adult Females: < 32 U/L",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "id": "p-pkg-7-1791286741640",
               "flag": "NORMAL",
               "result": "30",
               "method": "IFCC Kinetic UV",
-              "name": "إنزيم كبد AST / SGOT (Aspartate Aminotransferase (AST / SGOT))",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
               "unit": "U/L"
             }
           ]
@@ -9126,16 +9135,16 @@
           },
           "parameters": [
             {
-              "textReference": "",
-              "maxNormal": 99,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
+              "maxNormal": 40,
               "flag": "HIGH",
-              "minNormal": 70,
-              "unit": "mg/dL",
-              "name": "Fasting Blood Glucose",
+              "minNormal": 0,
+              "unit": "U/L",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
               "id": "param-0-1791286741642-1va",
               "panicHigh": 400,
               "panicLow": 50,
-              "method": "Hexokinase",
+              "method": "IFCC Kinetic UV",
               "result": "238"
             },
             {
@@ -9199,7 +9208,7 @@
       ],
       "invoiceId": "inv-1791286741643",
       "reportNumber": "RT-2026-006",
-      "updatedAt": "2026-10-16T14:57:35.163Z",
+      "updatedAt": "2026-10-16T14:59:23.336Z",
       "createdAt": "2026-10-06T11:39:01.642Z",
       "packageApplied": {
         "originalPrice": 2900,
@@ -9429,9 +9438,9 @@
             {
               "unit": "U/L",
               "method": "IFCC Kinetic UV",
-              "name": "إنزيم كبد AST / SGOT (Aspartate Aminotransferase (AST / SGOT))",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
               "result": "31",
-              "textReference": "Adult Males: < 40 U/L | Adult Females: < 32 U/L",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "flag": "NORMAL",
               "id": "p-pkg-7-1791285435310",
               "minNormal": 0,
@@ -9458,14 +9467,14 @@
           },
           "parameters": [
             {
-              "textReference": "",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "id": "param-1791285625999-0",
               "panicLow": 50,
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "name": "Fasting Blood Glucose",
-              "maxNormal": 99,
-              "method": "Hexokinase",
+              "unit": "U/L",
+              "minNormal": 0,
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "maxNormal": 40,
+              "method": "IFCC Kinetic UV",
               "panicHigh": 400,
               "flag": "HIGH",
               "result": "210"
@@ -9566,10 +9575,10 @@
       "reportNumber": "RT-2026-005",
       "id": "rep-1791285435316",
       "createdAt": "2026-10-06T11:17:15.316Z",
-      "updatedAt": "2026-10-16T14:57:35.163Z"
+      "updatedAt": "2026-10-16T14:59:23.336Z"
     },
     {
-      "updatedAt": "2026-10-16T14:57:45.505Z",
+      "updatedAt": "2026-10-16T14:59:23.336Z",
       "createdAt": "2026-10-06T10:55:41.332Z",
       "reportNumber": "RT-2026-004",
       "profiles": [
@@ -9817,10 +9826,11 @@
               "result": "00",
               "minNormal": 0,
               "id": "param-24-1791284141331-zd5",
-              "textReference": "0 % (Absent in normal blood)",
-              "maxNormal": 0,
-              "unit": "%",
-              "name": "Blast Cells %"
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
+              "maxNormal": 40,
+              "unit": "U/L",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "method": "IFCC Kinetic UV"
             },
             {
               "result": "5.22",
@@ -9943,7 +9953,7 @@
       },
       "generalComment": "طلب فحص مالي رقم INV-2026-0910 - تم التسميع آلياً من منظومة الفواتير",
       "createdAt": "2026-10-04T22:10:37.342Z",
-      "updatedAt": "2026-10-12T20:50:55.070Z",
+      "updatedAt": "2026-10-16T14:59:23.337Z",
       "profiles": [
         {
           "id": "prof-inc-1791151837342-1",
@@ -10278,14 +10288,15 @@
               "flag": ""
             },
             {
-              "name": "Blast Cells %",
-              "unit": "%",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "unit": "U/L",
               "minNormal": 0,
-              "maxNormal": 0,
-              "textReference": "0 % (Absent in normal blood)",
+              "maxNormal": 40,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "id": "p-mig-24-1791157347953",
               "result": "00",
-              "flag": "NORMAL"
+              "flag": "NORMAL",
+              "method": "IFCC Kinetic UV"
             }
           ]
         },
@@ -10430,7 +10441,7 @@
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-8226 - تم التسميع آلياً من منظومة الفواتير",
       "createdAt": "2026-10-04T15:16:43.337Z",
-      "updatedAt": "2026-10-16T14:54:54.634Z",
+      "updatedAt": "2026-10-16T14:59:23.337Z",
       "profiles": [
         {
           "id": "prof-inc-1791127003337-1",
@@ -10849,14 +10860,15 @@
               "flag": ""
             },
             {
-              "name": "Blast Cells %",
-              "unit": "%",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "unit": "U/L",
               "minNormal": 0,
-              "maxNormal": 0,
-              "textReference": "0 % (Absent in normal blood)",
+              "maxNormal": 40,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "id": "p-mig-24-1791157348011",
               "result": "",
-              "flag": ""
+              "flag": "",
+              "method": "IFCC Kinetic UV"
             }
           ]
         }
@@ -10892,7 +10904,7 @@
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-5104 - تم التسميع آلياً من منظومة الفواتير",
       "createdAt": "2026-10-04T15:14:27.915Z",
-      "updatedAt": "2026-10-16T14:58:17.921Z",
+      "updatedAt": "2026-10-16T14:59:23.337Z",
       "profiles": [
         {
           "id": "prof-inc-1791126867915-1",
@@ -11145,14 +11157,15 @@
               "method": "Ferrozine / Ferene Colorimetric"
             },
             {
-              "name": "Blast Cells %",
-              "unit": "%",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "unit": "U/L",
               "minNormal": 0,
-              "maxNormal": 0,
-              "textReference": "0 % (Absent in normal blood)",
+              "maxNormal": 40,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "id": "p-mig-24-1791157348029",
               "result": "",
-              "flag": ""
+              "flag": "",
+              "method": "IFCC Kinetic UV"
             }
           ]
         },
@@ -11249,7 +11262,7 @@
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-1493 - تم التسميع آلياً من منظومة الفواتير",
       "createdAt": "2026-10-04T15:05:26.278Z",
-      "updatedAt": "2026-10-16T14:57:35.163Z",
+      "updatedAt": "2026-10-16T14:59:23.337Z",
       "profiles": [
         {
           "id": "prof-inc-1791126326278-1",
@@ -11491,14 +11504,15 @@
               "flag": "NORMAL"
             },
             {
-              "name": "Blast Cells %",
-              "unit": "%",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "unit": "U/L",
               "minNormal": 0,
-              "maxNormal": 0,
-              "textReference": "0 % (Absent in normal blood)",
+              "maxNormal": 40,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "id": "p-mig-24-1791157348057",
               "result": "",
-              "flag": ""
+              "flag": "",
+              "method": "IFCC Kinetic UV"
             },
             {
               "id": "p-1791126326280",
@@ -11708,7 +11722,7 @@
       },
       "generalComment": " ",
       "createdAt": "2026-10-04T14:50:55.998Z",
-      "updatedAt": "2026-10-16T14:57:35.163Z",
+      "updatedAt": "2026-10-16T14:59:23.337Z",
       "profiles": [
         {
           "id": "prof-pkg-1791408346561",
@@ -11837,14 +11851,14 @@
             },
             {
               "id": "p-pkg-2-1791408346560-chg",
-              "name": "سكر الدم الصائم (FBS) (Fasting Blood Sugar)",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
               "result": "88",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 100,
-              "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 40,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "flag": "NORMAL",
-              "method": "Hexokinase / GOD-PAP",
+              "method": "IFCC Kinetic UV",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
             },
             {
@@ -11897,12 +11911,12 @@
             },
             {
               "id": "p-pkg-7-1791408346560-0v0",
-              "name": "إنزيم كبد AST / SGOT (Aspartate Aminotransferase (AST / SGOT))",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
               "result": "27",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 40,
-              "textReference": "Adult Males: < 40 U/L | Adult Females: < 32 U/L",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "flag": "NORMAL",
               "method": "IFCC Kinetic UV",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
@@ -12483,13 +12497,13 @@
             {
               "result": "119",
               "id": "param-1791187761770-f12k",
-              "name": "سكر الدم الصائم (FBS) (Fasting Blood Sugar)",
-              "unit": "mg/dL",
-              "method": "Hexokinase / GOD-PAP",
-              "minNormal": 70,
-              "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "unit": "U/L",
+              "method": "IFCC Kinetic UV",
+              "minNormal": 0,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "flag": "HIGH",
-              "maxNormal": 100
+              "maxNormal": 40
             }
           ]
         },
@@ -12521,12 +12535,13 @@
             {
               "flag": "",
               "id": "p-mig-24-1791292960687",
-              "maxNormal": 0,
+              "maxNormal": 40,
               "minNormal": 0,
-              "name": "Blast Cells %",
-              "textReference": "0 % (Absent in normal blood)",
-              "unit": "%",
-              "result": ""
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
+              "unit": "U/L",
+              "result": "",
+              "method": "IFCC Kinetic UV"
             },
             {
               "minNormal": 4,
@@ -12959,10 +12974,11 @@
               "maxNormal": 40,
               "minNormal": 0,
               "result": "20",
-              "name": "AST (SGOT)",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
               "unit": "U/L",
               "flag": "NORMAL",
-              "method": "IFCC UV with P5P"
+              "method": "IFCC Kinetic UV",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L"
             }
           ]
         },
@@ -13072,7 +13088,7 @@
         "packagePrice": 199
       },
       "createdAt": "2026-10-04T14:22:02.634Z",
-      "updatedAt": "2026-10-16T14:57:35.163Z",
+      "updatedAt": "2026-10-16T14:59:23.338Z",
       "status": "verified",
       "generalComment": "طلب فحص مالي رقم RT-BK-5873 - تم التسميع آلياً من منظومة الفواتير",
       "staff": {
@@ -13119,7 +13135,7 @@
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-8097 - تم التسميع آلياً من منظومة الفواتير",
       "createdAt": "2026-10-04T14:16:24.421Z",
-      "updatedAt": "2026-10-16T14:59:03.626Z",
+      "updatedAt": "2026-10-16T14:59:32.426Z",
       "profiles": [
         {
           "id": "prof-inc-1791123384421-12",
@@ -13161,16 +13177,17 @@
           },
           "parameters": [
             {
-              "name": "Fasting Blood Glucose",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 99,
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 40,
               "panicLow": 50,
               "panicHigh": 400,
-              "method": "Hexokinase",
+              "method": "IFCC Kinetic UV",
               "id": "param-1791150830231-0",
               "result": "107",
-              "flag": "HIGH"
+              "flag": "HIGH",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L"
             },
             {
               "name": "Estimated Average Glucose (eAG)",
@@ -13215,14 +13232,15 @@
               "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)"
             },
             {
-              "name": "AST (SGOT)",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 40,
-              "method": "IFCC UV with P5P",
+              "method": "IFCC Kinetic UV",
               "id": "param-1791150889294-1",
               "result": "36",
-              "flag": "NORMAL"
+              "flag": "NORMAL",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L"
             },
             {
               "name": "Alanine Aminotransferase (ALT / SGPT) (Alanine Aminotransferase (ALT / SGPT))",
@@ -13233,7 +13251,7 @@
               "id": "param-1791150889294-11",
               "result": "1.2",
               "flag": "HIGH",
-              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
+              "textReference": "Adult Males: < 41 U/L | Adult Females: < 38  U/L",
               "method": "IFCC Kinetic UV without Pyridoxal Phosphate"
             }
           ]
@@ -13496,7 +13514,7 @@
       },
       "generalComment": "",
       "createdAt": "2026-10-03T23:04:19.875Z",
-      "updatedAt": "2026-10-16T14:54:54.635Z",
+      "updatedAt": "2026-10-16T14:59:23.338Z",
       "profiles": [
         {
           "id": "prof-1791068659875",
@@ -13913,14 +13931,15 @@
               "flag": ""
             },
             {
-              "name": "Blast Cells %",
-              "unit": "%",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "unit": "U/L",
               "minNormal": 0,
-              "maxNormal": 0,
-              "textReference": "0 % (Absent in normal blood)",
+              "maxNormal": 40,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
               "id": "p-mig-24-1791157348122",
               "result": "",
-              "flag": ""
+              "flag": "",
+              "method": "IFCC Kinetic UV"
             }
           ]
         }
@@ -14194,15 +14213,16 @@
           "parameters": [
             {
               "id": "p-g1",
-              "name": "Fasting Blood Glucose",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
               "result": "148",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 105,
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 40,
               "panicLow": 50,
               "panicHigh": 400,
               "flag": "HIGH",
-              "method": "Hexokinase"
+              "method": "IFCC Kinetic UV",
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L"
             },
             {
               "id": "p-g3",
@@ -14302,7 +14322,7 @@
       "generalComment": "يرجى مراجعة الطبيب المعالج لتعديل جرعات العلاج الغذائي والدوائي.",
       "status": "verified",
       "createdAt": "2026-10-16T08:41:01.806Z",
-      "updatedAt": "2026-10-16T14:57:00.228Z",
+      "updatedAt": "2026-10-16T14:59:23.339Z",
       "invoiceId": "inv-002"
     }
   ],
@@ -19690,7 +19710,7 @@
       "unit": "U/L",
       "minNormal": 0,
       "maxNormal": 41,
-      "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
+      "textReference": "Adult Males: < 41 U/L | Adult Females: < 38  U/L",
       "method": "IFCC Kinetic UV without Pyridoxal Phosphate",
       "fastingInstructions": "No fasting required"
     },
@@ -19700,14 +19720,14 @@
       "nameAr": "Aspartate Aminotransferase (AST / SGOT)",
       "nameEn": "Aspartate Aminotransferase (AST / SGOT)",
       "category": "Liver Function",
-      "price": 88,
+      "price": 188,
       "cost": 12,
       "sampleType": "Serum",
       "turnaroundTime": "Immediate (1 hour)",
       "unit": "U/L",
       "minNormal": 0,
       "maxNormal": 40,
-      "textReference": "Adult Males: < 40 U/L | Adult Females: < 32 U/L",
+      "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
       "method": "IFCC Kinetic UV",
       "fastingInstructions": "No fasting required"
     },
@@ -19717,7 +19737,7 @@
       "nameAr": "Total Bilirubin",
       "nameEn": "Total Bilirubin",
       "category": "Liver Function",
-      "price": 88,
+      "price": 122,
       "cost": 12,
       "sampleType": "Serum (Protected from light)",
       "turnaroundTime": "Immediate (1 hour)",
