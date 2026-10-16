@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:23:56.243Z",
+  "syncedAt": "2026-10-16T14:24:02.197Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3123,7 +3123,7 @@
               "method": "Automated SLS-Hb",
               "textReference": "M: 13.0 - 17.5 | F: 12.0 - 15.5 g/dL",
               "id": "param-1792160624241-0",
-              "result": "12.",
+              "result": "12.39",
               "flag": "NORMAL"
             },
             {
@@ -3178,7 +3178,7 @@
               "notes": "Calculated: (HGB × 100) / HCT",
               "textReference": "32.0 - 36.0 g/dL",
               "id": "param-1792160624241-5",
-              "result": "400",
+              "result": "413",
               "flag": "HIGH"
             },
             {
@@ -3515,7 +3515,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:23:54.079Z",
+      "updatedAt": "2026-10-16T14:23:57.523Z",
       "invoiceId": "inv-1791735202176"
     },
     {
