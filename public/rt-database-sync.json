@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:00:57.556Z",
+  "syncedAt": "2026-10-16T15:01:19.534Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -934,12 +934,15 @@
               "flag": "NORMAL"
             },
             {
-              "name": "Alkaline Phosphatase (ALP)",
+              "name": "Alkaline Phosphatase (ALP) (Alkaline Phosphatase (ALP))",
               "unit": "U/L",
-              "textReference": "< 1 year M, F 80–580  1–16 years M, F 100–400",
+              "textReference": "Adults: 40 - 130 U/L (Higher during childhood growth & pregnancy)",
               "id": "param-1792066884186-2",
               "result": "103",
-              "flag": "NORMAL"
+              "flag": "NORMAL",
+              "minNormal": 40,
+              "maxNormal": 130,
+              "method": "p-NPP Kinetic DEA buffer"
             },
             {
               "name": "G.G.T",
@@ -1068,7 +1071,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-16T14:59:23.332Z",
+      "updatedAt": "2026-10-16T15:00:58.430Z",
       "invoiceId": "inv-1791921893782"
     },
     {
@@ -2719,14 +2722,14 @@
             },
             {
               "id": "p-1791819654844",
-              "name": "ألفا فيتو بروتين - أورام الكبد (AFP) (Alpha-Fetoprotein (AFP))",
+              "name": "Alkaline Phosphatase (ALP) (Alkaline Phosphatase (ALP))",
               "result": "",
-              "unit": "ng/mL",
-              "minNormal": 0,
-              "maxNormal": 7,
-              "textReference": "< 7.0 ng/mL (Non-pregnant Adults)",
+              "unit": "U/L",
+              "minNormal": 40,
+              "maxNormal": 130,
+              "textReference": "Adults: 40 - 130 U/L (Higher during childhood growth & pregnancy)",
               "flag": "NORMAL",
-              "method": "CLIA (Chemiluminescence Immunoassay)"
+              "method": "p-NPP Kinetic DEA buffer"
             }
           ]
         },
@@ -2995,7 +2998,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-16T15:00:31.712Z",
+      "updatedAt": "2026-10-16T15:00:58.431Z",
       "invoiceId": "inv-1791819003027"
     },
     {
@@ -19807,7 +19810,7 @@
       "nameAr": "Alkaline Phosphatase (ALP)",
       "nameEn": "Alkaline Phosphatase (ALP)",
       "category": "Liver Function",
-      "price": 90,
+      "price": 233,
       "cost": 15,
       "sampleType": "Serum",
       "turnaroundTime": "Within 2 hours",
