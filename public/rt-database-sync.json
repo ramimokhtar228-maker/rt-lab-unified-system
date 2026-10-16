@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:20:51.715Z",
+  "syncedAt": "2026-10-16T15:20:57.998Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -21777,7 +21777,7 @@
       "nameAr": "Fibrinogen (Clauss)",
       "nameEn": "Fibrinogen (Clauss)",
       "category": "Coagulation",
-      "price": 180,
+      "price": 888,
       "cost": 45,
       "sampleType": "Citrated Plasma",
       "turnaroundTime": "Within 3 hours",
