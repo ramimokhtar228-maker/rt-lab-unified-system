@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:22:50.224Z",
+  "syncedAt": "2026-10-16T14:22:57.200Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3061,16 +3061,6 @@
               "flag": ""
             },
             {
-              "name": "Total Triiodothyronine (TT3)",
-              "unit": "ng/mL",
-              "minNormal": 0.8,
-              "maxNormal": 2,
-              "textReference": "",
-              "id": "param-1792160444949-3",
-              "result": "",
-              "flag": ""
-            },
-            {
               "name": "Total Thyroxine (TT4)",
               "unit": "µg/dL",
               "minNormal": 5.1,
@@ -3179,7 +3169,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:22:48.020Z",
+      "updatedAt": "2026-10-16T14:22:55.118Z",
       "invoiceId": "inv-1791735202176"
     },
     {
