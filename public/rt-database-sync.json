@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:20:10.985Z",
+  "syncedAt": "2026-10-16T15:20:30.245Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -21732,7 +21732,7 @@
       "nameAr": "Hemoglobin Electrophoresis (HPLC)",
       "nameEn": "Hemoglobin Electrophoresis (HPLC)",
       "category": "Hematology",
-      "price": 450,
+      "price": 900,
       "cost": 120,
       "sampleType": "EDTA Whole Blood",
       "turnaroundTime": "24-48 hours",
