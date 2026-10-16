@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T13:36:17.057Z",
+  "syncedAt": "2026-10-16T13:37:55.494Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -1084,8 +1084,8 @@
               "method": "Automated SLS-Hb",
               "textReference": "M: 13.0 - 17.5 | F: 12.0 - 15.5 g/dL",
               "id": "param-1792157598294-0",
-              "result": "",
-              "flag": ""
+              "result": "14.48",
+              "flag": "NORMAL"
             },
             {
               "name": "R.B.Cs Count",
@@ -1095,52 +1095,52 @@
               "method": "Electrical Impedance",
               "textReference": "M: 4.5 - 5.9 | F: 4.0 - 5.2",
               "id": "param-1792157598294-1",
-              "result": "",
-              "flag": ""
+              "result": "5.11",
+              "flag": "NORMAL"
             },
             {
               "name": "Hematocrit (PCV)",
               "unit": "%",
               "minNormal": 36,
               "maxNormal": 48,
-              "notes": "Auto-calculated: Hb × 3",
+              "notes": "Calculated (HGB × 3)",
               "textReference": "M: 40 - 52% | F: 36 - 48%",
               "id": "param-1792157598294-2",
-              "result": "",
-              "flag": ""
+              "result": "49.00",
+              "flag": "HIGH"
             },
             {
               "name": "M.C.V",
               "unit": "fL",
               "minNormal": 80,
               "maxNormal": 98,
-              "notes": "Auto-calculated: (PCV × 10) / RBC",
+              "notes": "Calculated: (HCT × 10) / RBC",
               "textReference": "80.0 - 98.0 fL",
               "id": "param-1792157598294-3",
-              "result": "",
-              "flag": ""
+              "result": "95.9",
+              "flag": "NORMAL"
             },
             {
               "name": "M.C.H",
               "unit": "pg",
               "minNormal": 27,
               "maxNormal": 33,
-              "notes": "Auto-calculated: (Hb × 10) / RBC",
+              "notes": "Calculated: (HGB × 10) / RBC",
               "textReference": "27.0 - 33.0 pg",
               "id": "param-1792157598294-4",
-              "result": "",
-              "flag": ""
+              "result": "28.3",
+              "flag": "NORMAL"
             },
             {
               "name": "M.C.H.C",
               "unit": "g/dL",
               "minNormal": 32,
               "maxNormal": 36,
-              "notes": "Auto-calculated: (Hb × 100) / PCV",
+              "notes": "Calculated: (HGB × 100) / HCT",
               "textReference": "32.0 - 36.0 g/dL",
               "id": "param-1792157598294-5",
-              "result": "",
-              "flag": ""
+              "result": "29.6",
+              "flag": "LOW"
             },
             {
               "name": "R.D.W-CV",
@@ -1149,8 +1149,8 @@
               "maxNormal": 14.5,
               "textReference": "11.5 - 14.5 %",
               "id": "param-1792157598294-6",
-              "result": "",
-              "flag": ""
+              "result": "13",
+              "flag": "NORMAL"
             },
             {
               "name": "R.D.W-SD",
@@ -1165,11 +1165,11 @@
             {
               "name": "Mentzer Index (MCV/RBC)",
               "unit": "Ratio",
-              "notes": "<13 Thalassemia Trait | >13 Iron Deficiency",
+              "notes": "Mentzer > 13: Suggestive of Iron Deficiency Anemia",
               "textReference": "> 13 Iron Def. | < 13 Thalassemia",
               "id": "param-1792157598294-8",
-              "result": "",
-              "flag": ""
+              "result": "18.8",
+              "flag": "NORMAL"
             },
             {
               "name": "Green & King Index",
@@ -1512,7 +1512,7 @@
               "method": "IFCC UV with P5P",
               "textReference": "",
               "id": "param-1792157676289-0",
-              "result": "2",
+              "result": "20",
               "flag": "NORMAL"
             },
             {
@@ -1523,18 +1523,8 @@
               "method": "IFCC UV with P5P",
               "textReference": "",
               "id": "param-1792157676289-1",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "Alkaline Phosphatase (ALP)",
-              "unit": "U/L",
-              "minNormal": 40,
-              "maxNormal": 130,
-              "textReference": "",
-              "id": "param-1792157676289-2",
-              "result": "",
-              "flag": ""
+              "result": "33",
+              "flag": "NORMAL"
             },
             {
               "name": "Total Bilirubin",
@@ -1545,8 +1535,8 @@
               "method": "Jendrassik-Grof",
               "textReference": "",
               "id": "param-1792157676289-3",
-              "result": "",
-              "flag": ""
+              "result": "0.84",
+              "flag": "NORMAL"
             },
             {
               "name": "Direct Bilirubin",
@@ -1555,84 +1545,30 @@
               "maxNormal": 0.3,
               "textReference": "",
               "id": "param-1792157676289-4",
-              "result": "",
-              "flag": ""
+              "result": "0.13",
+              "flag": "NORMAL"
             },
             {
               "name": "Indirect Bilirubin",
               "unit": "mg/dL",
               "minNormal": 0.1,
               "maxNormal": 0.9,
-              "notes": "Auto-calculated: Total - Direct",
+              "notes": "Calculated: Total Bilirubin - Direct Bilirubin",
               "textReference": "",
               "id": "param-1792157676289-5",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "Total Serum Proteins",
-              "unit": "g/dL",
-              "minNormal": 6.4,
-              "maxNormal": 8.3,
-              "method": "Biuret",
-              "textReference": "",
-              "id": "param-1792157676289-6",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "Serum Albumin",
-              "unit": "g/dL",
-              "minNormal": 3.5,
-              "maxNormal": 5.2,
-              "method": "Bromocresol Green (BCG)",
-              "textReference": "",
-              "id": "param-1792157676289-7",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "Serum Globulin",
-              "unit": "g/dL",
-              "minNormal": 2.3,
-              "maxNormal": 3.5,
-              "notes": "Auto-calculated: Total Protein - Albumin",
-              "textReference": "",
-              "id": "param-1792157676289-8",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "A/G Ratio",
-              "unit": "Ratio",
-              "minNormal": 1.2,
-              "maxNormal": 2.2,
-              "notes": "Auto-calculated: Albumin / Globulin",
-              "textReference": "",
-              "id": "param-1792157676289-9",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "G.G.T",
-              "unit": "U/L",
-              "minNormal": 9,
-              "maxNormal": 48,
-              "textReference": "",
-              "id": "param-1792157676289-10",
-              "result": "",
-              "flag": ""
+              "result": "0.7",
+              "flag": "NORMAL"
             },
             {
               "name": "AST/ALT Ratio (De Ritis)",
               "unit": "Ratio",
               "minNormal": 0.6,
               "maxNormal": 1.1,
-              "notes": "Auto-calculated: AST / ALT",
+              "notes": "Normal < 1.0 (Elevated > 2.0 in alcoholic liver disease/cirrhosis)",
               "textReference": "",
               "id": "param-1792157676289-11",
-              "result": "",
-              "flag": ""
+              "result": "1.6",
+              "flag": "HIGH"
             }
           ]
         },
@@ -1696,7 +1632,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-16T13:31:59.823Z",
-      "updatedAt": "2026-10-16T13:36:03.084Z",
+      "updatedAt": "2026-10-16T13:37:27.695Z",
       "invoiceId": "inv-1792157519823"
     },
     {
