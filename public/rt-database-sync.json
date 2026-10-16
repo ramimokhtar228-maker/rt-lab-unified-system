@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:26:28.911Z",
+  "syncedAt": "2026-10-16T14:26:37.729Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3381,43 +3381,6 @@
               "id": "param-1792160624241-30",
               "result": "2",
               "flag": "NORMAL"
-            },
-            {
-              "name": "RPI (Reticulocyte Production Index)",
-              "unit": "Index",
-              "minNormal": 1,
-              "maxNormal": 3,
-              "textReference": "> 2.0 indicates adequate marrow response",
-              "id": "param-1792160624241-33",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "RBC Morphology",
-              "unit": "/HPF",
-              "textReference": "Normocytic normochromic, no anisopoikilocytosis",
-              "method": "Leishman Stain Microscopy",
-              "id": "param-1792160624241-34",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "WBC Morphology",
-              "unit": "pH Units",
-              "textReference": "Mature differential, no toxic granules, vacuoles, or blasts",
-              "method": "Leishman Stain Microscopy",
-              "id": "param-1792160624242-35",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "Platelet Morphology",
-              "unit": "pH Units",
-              "textReference": "Adequate on smear, normal aggregation, no giant forms",
-              "method": "Leishman Stain Microscopy",
-              "id": "param-1792160624242-36",
-              "result": "",
-              "flag": ""
             }
           ]
         }
@@ -3435,7 +3398,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:26:26.774Z",
+      "updatedAt": "2026-10-16T14:26:29.610Z",
       "invoiceId": "inv-1791735202176"
     },
     {
