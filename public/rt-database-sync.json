@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T13:38:27.508Z",
+  "syncedAt": "2026-10-16T13:39:56.339Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -1204,8 +1204,8 @@
               "notes": "Auto-calculated: Segmented% + Band%",
               "textReference": "40 - 70 %",
               "id": "param-1792157598294-17",
-              "result": "",
-              "flag": ""
+              "result": "53",
+              "flag": "NORMAL"
             },
             {
               "name": "Lymphocytes %",
@@ -1214,8 +1214,8 @@
               "maxNormal": 45,
               "textReference": "20 - 45 %",
               "id": "param-1792157598294-18",
-              "result": "",
-              "flag": ""
+              "result": "40",
+              "flag": "NORMAL"
             },
             {
               "name": "Monocytes %",
@@ -1224,8 +1224,8 @@
               "maxNormal": 8,
               "textReference": "2 - 8 %",
               "id": "param-1792157598294-19",
-              "result": "",
-              "flag": ""
+              "result": "05",
+              "flag": "NORMAL"
             },
             {
               "name": "Eosinophils %",
@@ -1234,8 +1234,8 @@
               "maxNormal": 6,
               "textReference": "1 - 6 %",
               "id": "param-1792157598294-20",
-              "result": "",
-              "flag": ""
+              "result": "02",
+              "flag": "NORMAL"
             },
             {
               "name": "Basophils %",
@@ -1244,8 +1244,8 @@
               "maxNormal": 1,
               "textReference": "0 - 1 %",
               "id": "param-1792157598294-21",
-              "result": "",
-              "flag": ""
+              "result": "00",
+              "flag": "NORMAL"
             },
             {
               "name": "Metamyelocytes %",
@@ -1254,8 +1254,8 @@
               "maxNormal": 0,
               "textReference": "0 % (Absent in normal blood)",
               "id": "param-1792157598294-22",
-              "result": "",
-              "flag": ""
+              "result": "00",
+              "flag": "NORMAL"
             },
             {
               "name": "Myelocytes %",
@@ -1293,11 +1293,11 @@
               "unit": "x10^3/µL",
               "minNormal": 1,
               "maxNormal": 4,
-              "notes": "Auto-calculated: (WBC × Lymph%) / 100",
+              "notes": "Calculated: (WBC × Lymph%) / 100",
               "textReference": "1.0 - 4.0 x10^3/µL",
               "id": "param-1792157598294-26",
-              "result": "",
-              "flag": ""
+              "result": "3",
+              "flag": "NORMAL"
             },
             {
               "name": "Absolute Monocytes (AMC)",
@@ -1307,8 +1307,8 @@
               "notes": "Auto-calculated: (WBC × Mono%) / 100",
               "textReference": "0.2 - 0.8 x10^3/µL",
               "id": "param-1792157598294-27",
-              "result": "",
-              "flag": ""
+              "result": "0.4",
+              "flag": "NORMAL"
             },
             {
               "name": "Absolute Eosinophils (AEC)",
@@ -1318,8 +1318,8 @@
               "notes": "Auto-calculated: (WBC × Eos%) / 100",
               "textReference": "0.04 - 0.44 x10^3/µL",
               "id": "param-1792157598294-28",
-              "result": "",
-              "flag": ""
+              "result": "0.1",
+              "flag": "NORMAL"
             },
             {
               "name": "Absolute Basophils (ABC)",
@@ -1329,19 +1329,19 @@
               "notes": "Auto-calculated: (WBC × Baso%) / 100",
               "textReference": "0.01 - 0.1 x10^3/µL",
               "id": "param-1792157598294-29",
-              "result": "",
-              "flag": ""
+              "result": "0",
+              "flag": "LOW"
             },
             {
               "name": "NLR (Neutrophil/Lymphocyte)",
               "unit": "Ratio",
               "minNormal": 0.8,
               "maxNormal": 2.5,
-              "notes": "Auto-calculated: Neut% / Lymph%",
+              "notes": "Normal target < 2.5",
               "textReference": "0.8 - 2.5 (Inflammatory Index)",
               "id": "param-1792157598294-30",
-              "result": "",
-              "flag": ""
+              "result": "1.2",
+              "flag": "NORMAL"
             },
             {
               "name": "PLR (Platelet/Lymphocyte)",
@@ -1573,7 +1573,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-16T13:31:59.823Z",
-      "updatedAt": "2026-10-16T13:38:03.661Z",
+      "updatedAt": "2026-10-16T13:38:39.460Z",
       "invoiceId": "inv-1792157519823"
     },
     {
