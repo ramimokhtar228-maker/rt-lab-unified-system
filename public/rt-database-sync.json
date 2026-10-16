@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:20:57.998Z",
+  "syncedAt": "2026-10-16T15:21:04.415Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -6827,15 +6827,16 @@
               "notes": "Calculated: TIBC - Serum Iron"
             },
             {
-              "name": "Transferrin Saturation (TSAT)",
-              "unit": "%",
-              "minNormal": 20,
-              "maxNormal": 50,
-              "textReference": "20 - 50 %",
+              "name": "Transferrin (Transferrin)",
+              "unit": "mg/dL",
+              "minNormal": 200,
+              "maxNormal": 360,
+              "textReference": "Normal: 200 - 360 mg/dL",
               "notes": "Calculated: (Iron / TIBC) × 100%",
               "id": "param-3-1791359462609-0ws",
               "result": "26",
-              "flag": "NORMAL"
+              "flag": "NORMAL",
+              "method": "Immunoturbidimetry"
             },
             {
               "name": "Serum Ferritin Level (Serum Ferritin Level)",
@@ -6965,7 +6966,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-07T07:51:02.609Z",
-      "updatedAt": "2026-10-16T15:08:49.236Z",
+      "updatedAt": "2026-10-16T15:21:01.763Z",
       "invoiceId": "inv-1791359462609",
       "generalComment": ""
     },
@@ -21794,7 +21795,7 @@
       "nameAr": "Transferrin",
       "nameEn": "Transferrin",
       "category": "Anemia & Vitamins",
-      "price": 200,
+      "price": 777,
       "cost": 50,
       "sampleType": "Serum",
       "turnaroundTime": "Within 24 hours",
