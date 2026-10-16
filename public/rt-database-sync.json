@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:18:46.635Z",
+  "syncedAt": "2026-10-16T15:18:54.421Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -21473,7 +21473,7 @@
       "nameAr": "HCV RNA Qualitative Real-Time PCR",
       "nameEn": "HCV RNA Qualitative Real-Time PCR",
       "category": "Molecular & PCR",
-      "price": 450,
+      "price": 577,
       "cost": 110,
       "sampleType": "EDTA Plasma (Separated within 4 hours)",
       "turnaroundTime": "24-48 hours",
