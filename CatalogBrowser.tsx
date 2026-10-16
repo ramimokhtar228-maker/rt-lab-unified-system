@@ -14,6 +14,7 @@ import {
   Trash2, 
   RotateCcw, 
   CheckCircle, 
+  Check,
   X, 
   Save, 
   Sparkles,
