@@ -9,27 +9,36 @@ export const db = databaseId ? getFirestore(app, databaseId) : getFirestore(app)
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 
+export const isFirebaseConfigured = Boolean(
+  firebaseConfig &&
+  firebaseConfig.apiKey &&
+  !firebaseConfig.apiKey.includes('Dummy') &&
+  firebaseConfig.projectId &&
+  firebaseConfig.projectId !== 'rt-lab-unified' &&
+  !firebaseConfig.projectId.includes('dummy')
+);
+
 // Enable offline persistence for seamless offline work
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && isFirebaseConfigured) {
   enableIndexedDbPersistence(db).catch((err) => {
     if (err.code === 'failed-precondition') {
-      // Multiple tabs open, persistence can only be enabled in one tab at a time.
       console.warn('Firestore persistence enabled in another tab');
     } else if (err.code === 'unimplemented') {
-      // The current browser does not support all of the features required to enable persistence
       console.warn('Firestore persistence not supported in this browser');
     }
   });
 }
 
-// Validate Connection to Firestore on boot as required
+// Validate Connection to Firestore on boot only if configured
 export async function testConnection() {
+  if (!isFirebaseConfigured) return;
   try {
     await getDocFromServer(doc(db, 'test', 'connection'));
-  } catch (error) {
-    if (error instanceof Error && error.message.includes('the client is offline')) {
-      console.error("Please check your Firebase configuration.");
-    }
+  } catch {
+    console.warn("Firestore running in offline mode.");
   }
 }
-testConnection();
+
+if (isFirebaseConfigured) {
+  testConnection();
+}

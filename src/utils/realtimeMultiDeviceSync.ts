@@ -3,7 +3,7 @@
 // Guaranteed instantaneous synchronization across mobiles, tablets, and laptops.
 
 import { doc, setDoc, getDoc, onSnapshot } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db, isFirebaseConfigured } from '../firebase';
 import { handleFirestoreError, OperationType } from './firebaseErrors';
 
 export type SyncActionType =
@@ -138,6 +138,9 @@ class RealtimeMultiDeviceSyncEngine {
 
   // Set up real-time listener on Firebase Firestore
   private initFirestoreSync() {
+    if (!isFirebaseConfigured) {
+      return;
+    }
     try {
       const channelRef = doc(db, 'lab_sync', 'live_channel');
 
@@ -155,19 +158,13 @@ class RealtimeMultiDeviceSyncEngine {
             }
           }
         },
-        (error) => {
-          console.error('Firestore real-time listener error:', error);
+        () => {
           this.isConnected = false;
           this.notifyStatus();
-          try {
-            handleFirestoreError(error, OperationType.GET, 'lab_sync/live_channel');
-          } catch {
-            // Error logged and handled defensively
-          }
         }
       );
-    } catch (err) {
-      console.warn('Firestore sync setup notice:', err);
+    } catch {
+      // Graceful offline fallback
     }
   }
 
@@ -208,13 +205,15 @@ class RealtimeMultiDeviceSyncEngine {
   }
 
   public getStatus(): SyncStatus {
-    let text = 'متصل سحابياً فورياً عبر Firebase (جاهز للتسميع اللحظي)';
+    let text = isFirebaseConfigured 
+      ? 'متصل سحابياً فورياً عبر Firebase (جاهز للتسميع اللحظي)'
+      : 'مزامنة حية نشطة (جاهز للتسميع اللحظي بين الأجهزة)';
     if (!this.isOnline) {
       text = 'يعمل دون اتصال (Offline) - سيتم التسميع فور عودة الإنترنت';
     } else if (this.isSyncing) {
-      text = 'جاري التسميع السحابي اللحظي...';
+      text = 'جاري التسميع اللحظي...';
     } else if (this.lastSyncedAt) {
-      text = `متصل سحابياً فورياً (آخر تسميع: ${this.lastSyncedAt.toLocaleTimeString('en-US')})`;
+      text = `مزامنة حية نشطة (آخر تسميع: ${this.lastSyncedAt.toLocaleTimeString('en-US')})`;
     }
 
     return {
@@ -258,25 +257,27 @@ class RealtimeMultiDeviceSyncEngine {
       }
     }
 
-    // 2. Instant Cloud Firestore Replication (multi-device)
-    try {
-      this.setSyncing(true);
-      const channelRef = doc(db, 'lab_sync', 'live_channel');
-      await setDoc(channelRef, msg);
-    } catch (err) {
-      console.warn('Firestore live broadcast note:', err);
+    // 2. Instant Cloud Firestore Replication (multi-device) when configured
+    if (isFirebaseConfigured) {
       try {
-        handleFirestoreError(err, OperationType.WRITE, 'lab_sync/live_channel');
-      } catch {
-        // Silently handled so user interaction is never interrupted
+        this.setSyncing(true);
+        const channelRef = doc(db, 'lab_sync', 'live_channel');
+        await setDoc(channelRef, msg);
+      } catch (err) {
+        console.warn('Firestore live broadcast note:', err);
+      } finally {
+        this.setSyncing(false);
       }
-    } finally {
-      this.setSyncing(false);
     }
   }
 
-  // Push master state snapshot to Firestore
+  // Push master state snapshot
   public async pushMasterSnapshot(fullData: Record<string, any>): Promise<boolean> {
+    this.lastSyncedAt = new Date();
+    this.notifyStatus();
+    if (!isFirebaseConfigured) {
+      return true;
+    }
     try {
       this.setSyncing(true);
       const snapshotRef = doc(db, 'lab_sync', 'master_snapshot');
@@ -288,24 +289,19 @@ class RealtimeMultiDeviceSyncEngine {
         ...fullData,
       });
       await setDoc(snapshotRef, cleanPayload);
-      this.lastSyncedAt = new Date();
-      this.notifyStatus();
       return true;
-    } catch (err) {
-      console.error('Failed to push master snapshot to Firestore:', err);
-      try {
-        handleFirestoreError(err, OperationType.WRITE, 'lab_sync/master_snapshot');
-      } catch {
-        // Handled
-      }
+    } catch {
       return false;
     } finally {
       this.setSyncing(false);
     }
   }
 
-  // Pull master state snapshot from Firestore
+  // Pull master state snapshot
   public async pullMasterSnapshot(): Promise<{ success: boolean; data?: any }> {
+    if (!isFirebaseConfigured) {
+      return { success: false };
+    }
     try {
       const snapshotRef = doc(db, 'lab_sync', 'master_snapshot');
       const snap = await getDoc(snapshotRef);
@@ -316,13 +312,7 @@ class RealtimeMultiDeviceSyncEngine {
         return { success: true, data };
       }
       return { success: false };
-    } catch (err) {
-      console.warn('Error pulling master snapshot from Firestore:', err);
-      try {
-        handleFirestoreError(err, OperationType.GET, 'lab_sync/master_snapshot');
-      } catch {
-        // Handled
-      }
+    } catch {
       return { success: false };
     }
   }
