@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:26:37.729Z",
+  "syncedAt": "2026-10-16T14:26:44.103Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3382,6 +3382,10 @@
               "result": "2",
               "flag": "NORMAL"
             }
+          ],
+          "interpretations": [
+            "Microscopic evaluation and complete differential indices assessed according to international hematology criteria.",
+            "Blood indices are within acceptable physiological limits."
           ]
         }
       ],
@@ -3398,7 +3402,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:26:29.610Z",
+      "updatedAt": "2026-10-16T14:26:42.001Z",
       "invoiceId": "inv-1791735202176"
     },
     {
