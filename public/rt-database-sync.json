@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:16:53.606Z",
+  "syncedAt": "2026-10-16T15:17:02.317Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -21229,7 +21229,7 @@
       "nameAr": "Widal Agglutination Test (Typhoid & Paratyphoid)",
       "nameEn": "Widal Agglutination Test (Typhoid & Paratyphoid)",
       "category": "Infectious & Viral",
-      "price": 90,
+      "price": 600,
       "cost": 20,
       "sampleType": "Serum",
       "turnaroundTime": "Within 2 hours",
