@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T13:48:15.879Z",
+  "syncedAt": "2026-10-16T13:48:52.996Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -482,18 +482,18 @@
       "staff": {
         "labChemist": "مني احمد",
         "verifiedBy": "رحاب على ",
-        "pathologist": "رام",
+        "pathologist": "رامى مختار",
         "chemistTitle": "Senior Clinical Chemist - Hormones",
         "verifierTitle": "طبيب باثولوجي / المدير التنفيذي",
         "pathologistTitle": "طبيب الباثولوجيا الاكلينيكية والكيميائية كلية طب قصر العيني",
         "chemistLicense": "EGY-SCI-88402",
         "verifierLicense": "EGY-MGT-11024",
         "pathologistLicense": "EGY-MED-48201",
-        "hideSignatures": false
+        "hideSignatures": true
       },
       "status": "draft",
       "createdAt": "2026-10-16T13:31:59.823Z",
-      "updatedAt": "2026-10-16T13:44:29.620Z",
+      "updatedAt": "2026-10-16T13:48:26.052Z",
       "invoiceId": "inv-1792157519823"
     },
     {
