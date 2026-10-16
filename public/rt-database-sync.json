@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:43:14.201Z",
+  "syncedAt": "2026-10-16T15:48:07.989Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -993,17 +993,6 @@
               "flag": "NORMAL"
             },
             {
-              "name": "Blood Urea (Blood Urea)",
-              "unit": "mg/dL",
-              "minNormal": 15,
-              "maxNormal": 45,
-              "textReference": "15 - 45 mg/dL",
-              "id": "param-1792066910604-2",
-              "result": "8.41",
-              "flag": "NORMAL",
-              "method": "Urease / GLDH Enzymatic Kinetic"
-            },
-            {
               "name": "Serum Creatinine (Serum Creatinine)",
               "unit": "mg/dL",
               "minNormal": 0.6,
@@ -1073,7 +1062,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-16T15:35:17.808Z",
+      "updatedAt": "2026-10-16T15:48:04.783Z",
       "invoiceId": "inv-1791921893782"
     },
     {
