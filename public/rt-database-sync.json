@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:18:22.419Z",
+  "syncedAt": "2026-10-16T15:18:32.252Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -21383,7 +21383,7 @@
       "nameAr": "Urine Culture & Sensitivity (Antibiogram)",
       "nameEn": "Urine Culture & Sensitivity (Antibiogram)",
       "category": "Microbiology",
-      "price": 240,
+      "price": 388,
       "cost": 55,
       "sampleType": "Clean-Catch Midstream Urine in Sterile Cup",
       "turnaroundTime": "48 hours",
@@ -22638,7 +22638,7 @@
       "nameAr": "Urine Culture & Sensitivity (Antibiogram)",
       "nameEn": "Urine Culture & Sensitivity (Antibiogram)",
       "category": "Microbiology",
-      "price": 240,
+      "price": 388,
       "cost": 55,
       "sampleType": "Clean-Catch Midstream Urine in Sterile Cup",
       "turnaroundTime": "48 hours",
