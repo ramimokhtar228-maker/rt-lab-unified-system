@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:18:32.252Z",
+  "syncedAt": "2026-10-16T15:18:40.113Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -21398,7 +21398,7 @@
       "nameAr": "Stool Culture & Antimicrobial Sensitivity",
       "nameEn": "Stool Culture & Antimicrobial Sensitivity",
       "category": "Microbiology",
-      "price": 240,
+      "price": 410,
       "cost": 55,
       "sampleType": "Sterile Fresh Stool",
       "turnaroundTime": "48-72 hours",
