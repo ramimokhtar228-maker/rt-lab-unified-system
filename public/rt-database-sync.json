@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:24:02.197Z",
+  "syncedAt": "2026-10-16T14:24:10.252Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3134,8 +3134,8 @@
               "method": "Electrical Impedance",
               "textReference": "M: 4.5 - 5.9 | F: 4.0 - 5.2",
               "id": "param-1792160624241-1",
-              "result": "",
-              "flag": ""
+              "result": "4.220",
+              "flag": "NORMAL"
             },
             {
               "name": "Hematocrit (PCV)",
@@ -3153,22 +3153,22 @@
               "unit": "fL",
               "minNormal": 80,
               "maxNormal": 98,
-              "notes": "Auto-calculated: (PCV × 10) / RBC",
+              "notes": "Calculated: (HCT × 10) / RBC",
               "textReference": "80.0 - 98.0 fL",
               "id": "param-1792160624241-3",
-              "result": "",
-              "flag": ""
+              "result": "7.1",
+              "flag": "LOW"
             },
             {
               "name": "M.C.H",
               "unit": "pg",
               "minNormal": 27,
               "maxNormal": 33,
-              "notes": "Auto-calculated: (Hb × 10) / RBC",
+              "notes": "Calculated: (HGB × 10) / RBC",
               "textReference": "27.0 - 33.0 pg",
               "id": "param-1792160624241-4",
-              "result": "",
-              "flag": ""
+              "result": "29.4",
+              "flag": "NORMAL"
             },
             {
               "name": "M.C.H.C",
@@ -3204,11 +3204,11 @@
             {
               "name": "Mentzer Index (MCV/RBC)",
               "unit": "Ratio",
-              "notes": "<13 Thalassemia Trait | >13 Iron Deficiency",
+              "notes": "Mentzer < 13: Suggestive of Beta Thalassemia Trait",
               "textReference": "> 13 Iron Def. | < 13 Thalassemia",
               "id": "param-1792160624241-8",
-              "result": "",
-              "flag": ""
+              "result": "1.7",
+              "flag": "NORMAL"
             },
             {
               "name": "Green & King Index",
@@ -3515,7 +3515,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:23:57.523Z",
+      "updatedAt": "2026-10-16T14:24:07.045Z",
       "invoiceId": "inv-1791735202176"
     },
     {
