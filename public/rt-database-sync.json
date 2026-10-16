@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:22:16.295Z",
+  "syncedAt": "2026-10-16T14:22:32.348Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3122,6 +3122,27 @@
               "flag": ""
             }
           ]
+        },
+        {
+          "id": "prof-indiv-1792160550593",
+          "profileCode": "INDIVIDUAL",
+          "titleEn": "Individual Diagnostic Investigations",
+          "titleAr": "تحاليل منفردة ومحددة",
+          "category": "Anemia & Vitamins",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "param-1792160550594",
+              "name": "Serum Ferritin Level (Serum Ferritin Level)",
+              "result": "",
+              "unit": "ng/mL",
+              "minNormal": 30,
+              "maxNormal": 400,
+              "textReference": "Adult Males: 30 - 400 ng/mL | Adult Females: 15 - 150 ng/mL",
+              "method": "CLIA (Chemiluminescence Immunoassay)",
+              "flag": ""
+            }
+          ]
         }
       ],
       "staff": {
@@ -3137,7 +3158,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:22:13.603Z",
+      "updatedAt": "2026-10-16T14:22:30.594Z",
       "invoiceId": "inv-1791735202176"
     },
     {
