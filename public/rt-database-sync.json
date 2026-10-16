@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:52:19.328Z",
+  "syncedAt": "2026-10-16T14:53:12.981Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -332,12 +332,12 @@
           "interpretation": "Glycemic parameters evaluated according to ADA guidelines.",
           "parameters": [
             {
-              "name": "HbA1c (Glycated Hemoglobin)",
+              "name": "Glycated Hemoglobin (HbA1c) (Glycated Hemoglobin (HbA1c))",
               "unit": "%",
               "minNormal": 4,
               "maxNormal": 5.6,
-              "textReference": "< 5.7% Normal, 5.7 - 6.4% Pre-Diabetes, ≥ 6.5% Diabetes",
-              "method": "HPLC / Turbidimetric",
+              "textReference": "Normal: < 5.7 % | Pre-diabetic: 5.7 - 6.4 % | Diabetic: >= 6.5 %",
+              "method": "HPLC / Ion-Exchange Automated Analyzer (NGSP Certified)",
               "id": "param-1792157623439-3",
               "result": "5.40",
               "flag": "NORMAL"
@@ -493,7 +493,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-16T13:31:59.823Z",
-      "updatedAt": "2026-10-16T13:55:45.257Z",
+      "updatedAt": "2026-10-16T14:52:30.066Z",
       "invoiceId": "inv-1792157519823"
     },
     {
@@ -2408,12 +2408,12 @@
           },
           "parameters": [
             {
-              "name": "HbA1c (Glycated Hemoglobin)",
+              "name": "Glycated Hemoglobin (HbA1c) (Glycated Hemoglobin (HbA1c))",
               "unit": "%",
               "minNormal": 4,
               "maxNormal": 5.6,
-              "textReference": "< 5.7% Normal, 5.7 - 6.4% Pre-Diabetes, ≥ 6.5% Diabetes",
-              "method": "HPLC / Turbidimetric",
+              "textReference": "Normal: < 5.7 % | Pre-diabetic: 5.7 - 6.4 % | Diabetic: >= 6.5 %",
+              "method": "HPLC / Ion-Exchange Automated Analyzer (NGSP Certified)",
               "id": "param-3-1791833372306-4kv",
               "result": "10.37",
               "flag": "HIGH"
@@ -2442,7 +2442,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-12T19:29:32.306Z",
-      "updatedAt": "2026-10-12T21:14:21.610Z",
+      "updatedAt": "2026-10-16T14:52:30.066Z",
       "invoiceId": "inv-1791833372306",
       "smartReportEnabled": true,
       "smartReportClinicalData": {
@@ -2665,183 +2665,302 @@
         "totalCost": 656,
         "discountApplied": 2285,
         "paymentMethod": "cash",
-        "clinicalDiagnosis": "HTN, COAGULOPATHY, HEPATITIS",
-        "clinicalHistory": "HTN, COAGULOPATHY, HEPATITIS"
+        "clinicalDiagnosis": "HTN, COAGU",
+        "clinicalHistory": "HTN, COAGU"
       },
       "profiles": [
         {
-          "id": "prof-1792161065664-fngs",
+          "id": "prof-1791819654843-BIL_T",
           "profileCode": "LFT",
-          "titleEn": "Liver Function Tests (LFT)",
-          "titleAr": "Liver Function Tests (LFT)",
-          "category": "Clinical Chemistry",
-          "sampleType": "Serum",
-          "interpretation": "Enzyme activities and synthetic hepatic markers are within normal limits.",
+          "titleEn": "Liver Function Profile (LFT)",
+          "titleAr": "وظائف الكبد والإنزيمات الشاملة",
+          "category": "Clinical Chemistry & Hepatology",
+          "sampleType": "Serum (مصل الدم)",
+          "interpretation": "Hepatic transaminases (ALT, AST), Bilirubin, and Albumin assess hepatocellular integrity and synthetic capacity.",
+          "attachedIllustration": {
+            "id": "hep-viral",
+            "code": "HEP_VIRAL_HEPATITIS",
+            "titleAr": "التهاب الكبد الفيروسي الحاد والمزمن (Viral Hepatitis B & C)",
+            "titleEn": "Acute & Chronic Viral Hepatitis",
+            "category": "hepatic",
+            "imageUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgMTgwIiB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCI+CiAgICA8cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgcng9IjE0IiBmaWxsPSIjMDkwZDE2Ii8+CiAgICA8Y2lyY2xlIGN4PSIxNjAiIGN5PSI5MCIgcj0iNzYiIGZpbGw9IiMwYjEzMjkiIHN0cm9rZT0iIzA2NWY0NiIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzNGQzOTkiIGZvbnQtc2l6ZT0iMTAuNSIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1mYW1pbHk9IidDYWlybycsIHN5c3RlbS11aSwgLWFwcGxlLXN5c3RlbSwgc2Fucy1zZXJpZiI+QUNVVEUgVklSQUwgSEVQQVRJVElTIChIQlYgLyBIQ1YpPC90ZXh0PgogICAgPGNpcmNsZSBjeD0iMTYwIiBjeT0iODUiIHI9IjQwIiBmaWxsPSIjMDY1ZjQ2IiBzdHJva2U9IiMzNGQzOTkiIHN0cm9rZS13aWR0aD0iMi41Ii8+CiAgICAgIDxjaXJjbGUgY3g9IjE2MCIgY3k9Ijg1IiByPSIyOCIgZmlsbD0iIzAyMmMyMiIvPgogICAgICA8dGV4dCB4PSIxNjAiIHk9IjgyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjYTdmM2QwIiBmb250LXNpemU9IjExIiBmb250LXdlaWdodD0iYm9sZCI+QUxUICZndDsmZ3Q7IDUwMDwvdGV4dD4KICAgICAgPHRleHQgeD0iMTYwIiB5PSI5OCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzZlZTdiNyIgZm9udC1zaXplPSI5IiBmb250LXdlaWdodD0iYm9sZCI+QVNUICZndDsmZ3Q7IDQwMDwvdGV4dD4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMTcwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTRhM2I4IiBmb250LXNpemU9IjkiIGZvbnQtZmFtaWx5PSInQ2Fpcm8nLCBzeXN0ZW0tdWksIC1hcHBsZS1zeXN0ZW0sIHNhbnMtc2VyaWYiPk1hc3NpdmUgSGVwYXRvY3l0ZSBDeXRvbHlzaXM6IE1hcmtlZCBBTFQgJiBBU1QgRWxldmF0aW9uPC90ZXh0PgogIDwvc3ZnPg==",
+            "pathologySummaryAr": "أذية والتهاب النسيج الكبدي بفعل الفيروسات الكبدية (B أو C) مما يتسبب في تحرر مكثف لإنزيمات الكبد السيتوبلازمية (ALT و AST بمئات أو آلاف الوحدات) مع اليرقان."
+          },
           "parameters": [
             {
-              "name": "ALT (SGPT)",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 45,
-              "method": "IFCC UV with P5P",
-              "textReference": "",
-              "id": "param-1792161065664-0",
-              "result": "33",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "AST (SGOT)",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 40,
-              "method": "IFCC UV with P5P",
-              "textReference": "",
-              "id": "param-1792161065664-1",
-              "result": "38",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Total Bilirubin",
-              "unit": "mg/dL",
-              "minNormal": 0.2,
-              "maxNormal": 1.2,
-              "panicHigh": 5,
-              "method": "Jendrassik-Grof",
-              "textReference": "",
-              "id": "param-1792161065664-3",
-              "result": "1.39",
-              "flag": "HIGH"
-            },
-            {
-              "name": "Direct Bilirubin",
+              "id": "p-1791819654844",
+              "name": "الصفراء المباشرة (Direct Bilirubin) (Direct Bilirubin)",
+              "result": "",
               "unit": "mg/dL",
               "minNormal": 0,
               "maxNormal": 0.3,
-              "textReference": "",
-              "id": "param-1792161065664-4",
-              "result": "0.33",
-              "flag": "HIGH"
+              "textReference": "0.0 - 0.3 mg/dL",
+              "flag": "NORMAL",
+              "method": "Diazo without Accelerator"
             },
             {
-              "name": "Indirect Bilirubin",
-              "unit": "mg/dL",
-              "minNormal": 0.1,
-              "maxNormal": 0.9,
-              "notes": "Calculated: Total Bilirubin - Direct Bilirubin",
-              "textReference": "",
-              "id": "param-1792161065664-5",
-              "result": "1.1",
-              "flag": "HIGH"
+              "id": "p-1791819654844",
+              "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
+              "result": "",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 41,
+              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
+              "flag": "NORMAL",
+              "method": "IFCC Kinetic UV without Pyridoxal Phosphate"
             },
             {
-              "name": "Serum Albumin",
-              "unit": "g/dL",
-              "minNormal": 3.5,
-              "maxNormal": 5.2,
-              "method": "Bromocresol Green (BCG)",
-              "textReference": "",
-              "id": "param-1792161065664-7",
-              "result": "3.87",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "AST/ALT Ratio (De Ritis)",
-              "unit": "Ratio",
-              "minNormal": 0.6,
-              "maxNormal": 1.1,
-              "notes": "Normal < 1.0 (Elevated > 2.0 in alcoholic liver disease/cirrhosis)",
-              "textReference": "",
-              "id": "param-1792161065664-11",
-              "result": "1.1",
-              "flag": "NORMAL"
-            }
-          ],
-          "interpretations": [
-            "Enzyme activities and synthetic hepatic markers are within normal limits.",
-            "Mild  elevatedBilirubin, correlation with viral hepatitis serology and abdominal ultrasound is advised."
-          ]
-        },
-        {
-          "id": "prof-indiv-1792161113084",
-          "profileCode": "INDIVIDUAL",
-          "titleEn": "Individual Diagnostic Investigations",
-          "titleAr": "تحاليل منفردة ومحددة",
-          "category": "Tumor Markers",
-          "sampleType": "Serum",
-          "parameters": [
-            {
-              "id": "param-1792161113084",
-              "name": "Alpha-Fetoprotein (AFP) (Alpha-Fetoprotein (AFP))",
-              "result": "2.88",
+              "id": "p-1791819654844",
+              "name": "ألفا فيتو بروتين - أورام الكبد (AFP) (Alpha-Fetoprotein (AFP))",
+              "result": "",
               "unit": "ng/mL",
               "minNormal": 0,
               "maxNormal": 7,
               "textReference": "< 7.0 ng/mL (Non-pregnant Adults)",
-              "method": "CLIA (Chemiluminescence Immunoassay)",
-              "flag": "NORMAL"
+              "flag": "NORMAL",
+              "method": "CLIA (Chemiluminescence Immunoassay)"
             }
           ]
         },
         {
-          "id": "prof-1792161137388-6pye",
-          "profileCode": "COAG",
-          "titleEn": "Coagulation & Hemostasis Profile",
-          "titleAr": "Coagulation & Hemostasis Profile",
-          "category": "Hematology & Hemostasis",
-          "sampleType": "Sodium Citrate Plasma (9:1 ratio)",
-          "interpretation": "Hemostatic integrity confirmed; extrinsic and intrinsic pathways within normal reference limits.",
+          "id": "prof-1791819654844-PCR_HCV_QUANT",
+          "profileCode": "SEROLOGY",
+          "titleEn": "Serology, Immunology & Viral Screening",
+          "titleAr": "الفحوصات السيرولوجية والمناعية والفيروسات",
+          "category": "Immunology & Serology",
+          "sampleType": "Serum (مصل الدم)",
+          "interpretation": "Specific antibodies and viral antigens detected by electrochemiluminescence assay.",
           "parameters": [
             {
-              "name": "Prothrombin Time (PT)",
-              "unit": "Seconds",
-              "minNormal": 11,
-              "maxNormal": 13.5,
-              "method": "Optical Coagulometer",
-              "textReference": "",
-              "id": "param-1792161137388-0",
-              "result": "13.99",
-              "flag": "HIGH"
-            },
-            {
-              "name": "Prothrombin Activity / Conc.",
-              "unit": "%",
-              "minNormal": 70,
-              "maxNormal": 120,
-              "textReference": "",
-              "id": "param-1792161137388-1",
-              "result": "88.00",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "INR (International Normalized Ratio)",
-              "unit": "Ratio",
-              "minNormal": 0.85,
-              "maxNormal": 1.15,
-              "textReference": "0.85 - 1.15 (Warfarin Target: 2.0 - 3.0)",
-              "panicHigh": 4.5,
-              "id": "param-1792161137388-2",
-              "result": "1.1",
-              "flag": "NORMAL"
-            }
-          ]
-        },
-        {
-          "id": "prof-indiv-1792161174716",
-          "profileCode": "INDIVIDUAL",
-          "titleEn": "Individual Diagnostic Investigations",
-          "titleAr": "تحاليل منفردة ومحددة",
-          "category": "Molecular & PCR",
-          "sampleType": "EDTA Plasma",
-          "parameters": [
-            {
-              "id": "param-1792161174716",
-              "name": "HCV RNA Quantitative Real-Time PCR (HCV RNA Quantitative Real-Time PCR)",
-              "result": "Less than 16",
+              "id": "p-1791819654844",
+              "name": "بي سي آر فيروس سي كمي وحمل الفيروس (HCV Viral Load PCR) (HCV RNA Quantitative Real-Time PCR)",
+              "result": "",
               "unit": "IU/mL",
               "minNormal": 0,
               "maxNormal": 15,
               "textReference": "Target Not Detected (< 15 IU/mL)",
-              "method": "Real-Time RT-PCR Automated Viral Extraction & Amplification",
+              "flag": "NORMAL",
+              "method": "Real-Time RT-PCR Automated Viral Extraction & Amplification"
+            }
+          ]
+        },
+        {
+          "id": "prof-1791819654844-ALBUMIN",
+          "profileCode": "RFT",
+          "titleEn": "Renal Function Profile (RFT / KFT)",
+          "titleAr": "وظائف الكلى والأملاح البولية",
+          "category": "Clinical Chemistry & Nephrology",
+          "sampleType": "Serum / Urine",
+          "interpretation": "Serum Creatinine, Urea, Uric Acid, and eGFR reflect glomerular filtration rate and nitrogenous waste clearance.",
+          "attachedIllustration": {
+            "id": "ren-aki",
+            "code": "REN_AKI",
+            "titleAr": "القصور الكلوي الحاد واحتباس البولينا (Acute Kidney Injury - AKI)",
+            "titleEn": "Acute Kidney Injury & Azotemia",
+            "category": "renal",
+            "imageUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgMTgwIiB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCI+CiAgICA8cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgcng9IjE0IiBmaWxsPSIjMDkwZDE2Ii8+CiAgICA8Y2lyY2xlIGN4PSIxNjAiIGN5PSI5MCIgcj0iNzYiIGZpbGw9IiMwYjEzMjkiIHN0cm9rZT0iIzMxMmU4MSIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM4MThjZjgiIGZvbnQtc2l6ZT0iMTAuNSIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1mYW1pbHk9IidDYWlybycsIHN5c3RlbS11aSwgLWFwcGxlLXN5c3RlbSwgc2Fucy1zZXJpZiI+QUNVVEUgS0lETkVZIElOSlVSWSAoQUtJKTwvdGV4dD4KICAgIDxwYXRoIGQ9Ik0gMTM1LDU1IEMgMTEwLDY1IDExMCwxMTUgMTM1LDEyNSBDIDE2MCwxMzUgMTkwLDExNSAxODUsOTAgQyAxODAsNjUgMTYwLDUwIDEzNSw1NSBaIiBmaWxsPSIjMWUxYjRiIiBzdHJva2U9IiM4MThjZjgiIHN0cm9rZS13aWR0aD0iMi41Ii8+CiAgICAgIDxjaXJjbGUgY3g9IjE2MCIgY3k9IjkwIiByPSIxNiIgZmlsbD0iI2Y0M2Y1ZSIvPgogICAgICA8dGV4dCB4PSIxNjAiIHk9IjkzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjkiIGZvbnQtd2VpZ2h0PSJib2xkIj5DcmVhdDwvdGV4dD4KICAgICAgPHRleHQgeD0iMTYwIiB5PSIxNDUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNmODcxNzEiIGZvbnQtc2l6ZT0iMTAiIGZvbnQtd2VpZ2h0PSJib2xkIj5DcmVhdGluaW5lICZndDsmZ3Q7IDIuNSBtZy9kTDwvdGV4dD4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMTcwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTRhM2I4IiBmb250LXNpemU9IjkiIGZvbnQtZmFtaWx5PSInQ2Fpcm8nLCBzeXN0ZW0tdWksIC1hcHBsZS1zeXN0ZW0sIHNhbnMtc2VyaWYiPlN1ZGRlbiBHbG9tZXJ1bGFyIFJldGVudGlvbjogQWN1dGUgQXpvdGVtaWEgJiBPbGlndXJpYTwvdGV4dD4KICA8L3N2Zz4=",
+            "pathologySummaryAr": "تدهور مفاجئ سريع في وظائف الكلى الإخراجية خلال ساعات إلى أيام، مؤدياً لاحتباس الفضلات النيتروجينية في الدم (ارتفاع حاد في الكرياتينين والبولينا وحمض البوليك) واختلال الأملاح."
+          },
+          "parameters": [
+            {
+              "name": "Protein/Creatinine Ratio (UPCR)",
+              "unit": "mg/mg",
+              "minNormal": 0,
+              "maxNormal": 0.2,
+              "method": "Enzymatic / Jaffe",
+              "textReference": "< 0.2 mg/mg",
+              "id": "param-4",
+              "result": "",
+              "flag": "NORMAL",
+              "notes": "Auto-calculated: (Microalbumin / Urine Creatinine) × 100"
+            },
+            {
+              "name": "Total Urine Protein",
+              "unit": "mg/dL",
+              "minNormal": 0,
+              "maxNormal": 15,
+              "textReference": "",
+              "id": "param-3",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Nitrofurantoin (Macrodantin)",
+              "unit": "Susceptibility (MIC / Disc)",
+              "textReference": "Sensitive / Resistant",
+              "id": "param-16",
+              "result": "",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-1791819654845-PT",
+          "profileCode": "CULTURE",
+          "titleEn": "Culture & Antimicrobial Susceptibility (C&S)",
+          "titleAr": "مزرعة ميكروبية واختبار حساسية المضادات الحيوية",
+          "category": "General Diagnostic",
+          "sampleType": "Serum",
+          "interpretation": "Significant bacterial pathogen isolated. Antimicrobial susceptibility profile detailed below.",
+          "parameters": [
+            {
+              "name": "Specimen Type",
+              "unit": "Clinical Protocol",
+              "textReference": "Urine / Swab / Blood",
+              "id": "param-0",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Gram Stain Examination",
+              "unit": "Clinical Protocol",
+              "textReference": "Direct Smear",
+              "id": "param-1",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Colony Count",
+              "unit": "CFU/mL",
+              "textReference": "> 100,000 CFU/mL (Significant)",
+              "id": "param-2",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Isolated Pathogen",
+              "unit": "Clinical Protocol",
+              "textReference": "Escherichia coli (E. coli)",
+              "id": "param-3",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Amoxicillin / Clavulanate (Augmentin)",
+              "unit": "Susceptibility (MIC / Disc)",
+              "textReference": "Sensitive / Resistant",
+              "id": "param-4",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Piperacillin / Tazobactam (Tazocin)",
+              "unit": "Susceptibility (MIC / Disc)",
+              "textReference": "Sensitive / Resistant",
+              "id": "param-5",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Cefuroxime (Zinnat)",
+              "unit": "Susceptibility (MIC / Disc)",
+              "textReference": "Sensitive / Resistant",
+              "id": "param-6",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Ceftriaxone (Rocephin)",
+              "unit": "pH Units",
+              "textReference": "Sensitive / Resistant",
+              "id": "param-7",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Ceftazidime (Fortum)",
+              "unit": "Susceptibility (MIC / Disc)",
+              "textReference": "Sensitive / Resistant",
+              "id": "param-8",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Cefepime (Maxipime)",
+              "unit": "Susceptibility (MIC / Disc)",
+              "textReference": "Sensitive / Resistant",
+              "id": "param-9",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Meropenem (Meronem)",
+              "unit": "Susceptibility (MIC / Disc)",
+              "textReference": "Sensitive / Resistant",
+              "id": "param-10",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Imipenem (Tienam)",
+              "unit": "Susceptibility (MIC / Disc)",
+              "textReference": "Sensitive / Resistant",
+              "id": "param-11",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Amikacin (Amikin)",
+              "unit": "Susceptibility (MIC / Disc)",
+              "textReference": "Sensitive / Resistant",
+              "id": "param-12",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Gentamicin (Garamycin)",
+              "unit": "Susceptibility (MIC / Disc)",
+              "textReference": "Sensitive / Resistant",
+              "id": "param-13",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Ciprofloxacin (Cipro)",
+              "unit": "Susceptibility (MIC / Disc)",
+              "textReference": "Sensitive / Resistant",
+              "id": "param-14",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Levofloxacin (Tavanic)",
+              "unit": "Susceptibility (MIC / Disc)",
+              "textReference": "Sensitive / Resistant",
+              "id": "param-15",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Fosfomycin (Monuril)",
+              "unit": "Susceptibility (MIC / Disc)",
+              "textReference": "Sensitive / Resistant",
+              "id": "param-17",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Trimethoprim / Sulfamethoxazole",
+              "unit": "Susceptibility (MIC / Disc)",
+              "textReference": "Sensitive / Resistant",
+              "id": "param-18",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Vancomycin (for Gram +ve)",
+              "unit": "Susceptibility (MIC / Disc)",
+              "textReference": "Sensitive / Resistant",
+              "id": "param-19",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Colistin (Colimycin)",
+              "unit": "Susceptibility (MIC / Disc)",
+              "textReference": "Sensitive / Resistant",
+              "id": "param-20",
+              "result": "",
               "flag": "NORMAL"
             }
           ]
@@ -2868,7 +2987,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-16T14:36:49.739Z",
+      "updatedAt": "2026-10-16T14:29:57.839Z",
       "invoiceId": "inv-1791819003027"
     },
     {
@@ -3846,7 +3965,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-11T15:57:30.501Z",
-      "updatedAt": "2026-10-16T13:53:13.745Z",
+      "updatedAt": "2026-10-16T14:52:30.067Z",
       "invoiceId": "inv-1791734250501"
     },
     {
@@ -4969,12 +5088,12 @@
           },
           "parameters": [
             {
-              "name": "HbA1c (Glycated Hemoglobin)",
+              "name": "Glycated Hemoglobin (HbA1c) (Glycated Hemoglobin (HbA1c))",
               "unit": "%",
               "minNormal": 4,
               "maxNormal": 5.6,
-              "textReference": "< 5.7% Normal, 5.7 - 6.4% Pre-Diabetes, ≥ 6.5% Diabetes",
-              "method": "HPLC / Turbidimetric",
+              "textReference": "Normal: < 5.7 % | Pre-diabetic: 5.7 - 6.4 % | Diabetic: >= 6.5 %",
+              "method": "HPLC / Ion-Exchange Automated Analyzer (NGSP Certified)",
               "id": "param-3-1791500705350-qhy",
               "result": "6.99",
               "flag": "HIGH"
@@ -4997,7 +5116,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-08T23:05:05.350Z",
-      "updatedAt": "2026-10-12T21:14:32.941Z",
+      "updatedAt": "2026-10-16T14:52:30.067Z",
       "invoiceId": "inv-1791500705351",
       "smartReportEnabled": true,
       "smartReportClinicalData": {
@@ -6228,12 +6347,12 @@
               "flag": "NORMAL"
             },
             {
-              "name": "HbA1c (Glycated Hemoglobin)",
+              "name": "Glycated Hemoglobin (HbA1c) (Glycated Hemoglobin (HbA1c))",
               "unit": "%",
               "minNormal": 4,
               "maxNormal": 5.6,
-              "textReference": "< 5.7% Normal, 5.7 - 6.4% Pre-Diabetes, ≥ 6.5% Diabetes",
-              "method": "HPLC / Turbidimetric",
+              "textReference": "Normal: < 5.7 % | Pre-diabetic: 5.7 - 6.4 % | Diabetic: >= 6.5 %",
+              "method": "HPLC / Ion-Exchange Automated Analyzer (NGSP Certified)",
               "id": "param-3-1791359724809-7z0",
               "result": "10.98",
               "flag": "HIGH"
@@ -6397,7 +6516,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-07T07:55:24.810Z",
-      "updatedAt": "2026-10-11T15:31:17.354Z",
+      "updatedAt": "2026-10-16T14:52:30.067Z",
       "invoiceId": "inv-1791359724811"
     },
     {
@@ -9061,12 +9180,12 @@
             },
             {
               "maxNormal": 5.6,
-              "name": "HbA1c (Glycated Hemoglobin)",
+              "name": "Glycated Hemoglobin (HbA1c) (Glycated Hemoglobin (HbA1c))",
               "minNormal": 4,
               "unit": "%",
               "flag": "HIGH",
-              "textReference": "< 5.7% Normal, 5.7 - 6.4% Pre-Diabetes, ≥ 6.5% Diabetes",
-              "method": "HPLC / Turbidimetric",
+              "textReference": "Normal: < 5.7 % | Pre-diabetic: 5.7 - 6.4 % | Diabetic: >= 6.5 %",
+              "method": "HPLC / Ion-Exchange Automated Analyzer (NGSP Certified)",
               "id": "param-3-1791286741642-06z",
               "result": "7.88"
             }
@@ -9075,7 +9194,7 @@
       ],
       "invoiceId": "inv-1791286741643",
       "reportNumber": "RT-2026-006",
-      "updatedAt": "2026-10-12T21:14:41.532Z",
+      "updatedAt": "2026-10-16T14:52:30.069Z",
       "createdAt": "2026-10-06T11:39:01.642Z",
       "packageApplied": {
         "originalPrice": 2900,
@@ -9395,10 +9514,10 @@
               "minNormal": 4,
               "maxNormal": 5.6,
               "unit": "%",
-              "name": "HbA1c (Glycated Hemoglobin)",
+              "name": "Glycated Hemoglobin (HbA1c) (Glycated Hemoglobin (HbA1c))",
               "flag": "HIGH",
-              "method": "HPLC / Turbidimetric",
-              "textReference": "< 5.7% Normal, 5.7 - 6.4% Pre-Diabetes, ≥ 6.5% Diabetes",
+              "method": "HPLC / Ion-Exchange Automated Analyzer (NGSP Certified)",
+              "textReference": "Normal: < 5.7 % | Pre-diabetic: 5.7 - 6.4 % | Diabetic: >= 6.5 %",
               "result": "6.33",
               "id": "param-1791285625999-3"
             }
@@ -9442,10 +9561,10 @@
       "reportNumber": "RT-2026-005",
       "id": "rep-1791285435316",
       "createdAt": "2026-10-06T11:17:15.316Z",
-      "updatedAt": "2026-10-11T15:31:17.355Z"
+      "updatedAt": "2026-10-16T14:52:30.069Z"
     },
     {
-      "updatedAt": "2026-10-13T20:17:48.150Z",
+      "updatedAt": "2026-10-16T14:52:30.069Z",
       "createdAt": "2026-10-06T10:55:41.332Z",
       "reportNumber": "RT-2026-004",
       "profiles": [
@@ -9700,11 +9819,11 @@
             },
             {
               "result": "5.22",
-              "name": "HbA1c (Glycated Hemoglobin)",
-              "textReference": "< 5.7% Normal, 5.7 - 6.4% Pre-Diabetes, ≥ 6.5% Diabetes",
+              "name": "Glycated Hemoglobin (HbA1c) (Glycated Hemoglobin (HbA1c))",
+              "textReference": "Normal: < 5.7 % | Pre-diabetic: 5.7 - 6.4 % | Diabetic: >= 6.5 %",
               "unit": "%",
               "minNormal": 4,
-              "method": "HPLC / Turbidimetric",
+              "method": "HPLC / Ion-Exchange Automated Analyzer (NGSP Certified)",
               "flag": "NORMAL",
               "maxNormal": 5.6,
               "id": "param-3-1791284141332-820"
@@ -11118,7 +11237,7 @@
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-1493 - تم التسميع آلياً من منظومة الفواتير",
       "createdAt": "2026-10-04T15:05:26.278Z",
-      "updatedAt": "2026-10-13T20:17:48.179Z",
+      "updatedAt": "2026-10-16T14:52:30.070Z",
       "profiles": [
         {
           "id": "prof-inc-1791126326278-1",
@@ -11371,11 +11490,14 @@
             },
             {
               "id": "p-1791126326280",
-              "name": "السكر التراكمي (HbA1c HPLC) (Glycated Hemoglobin HbA1c)",
+              "name": "Glycated Hemoglobin (HbA1c) (Glycated Hemoglobin (HbA1c))",
               "result": "",
-              "unit": "",
+              "unit": "%",
               "flag": "",
-              "textReference": "قيد الفحص المخبري"
+              "textReference": "Normal: < 5.7 % | Pre-diabetic: 5.7 - 6.4 % | Diabetic: >= 6.5 %",
+              "minNormal": 4,
+              "maxNormal": 5.6,
+              "method": "HPLC / Ion-Exchange Automated Analyzer (NGSP Certified)"
             }
           ]
         },
@@ -11931,7 +12053,7 @@
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-1432 - تم التسميع آلياً من منظومة الفواتير",
       "createdAt": "2026-10-04T14:41:58.128Z",
-      "updatedAt": "2026-10-07T22:08:57.488Z",
+      "updatedAt": "2026-10-16T14:52:30.070Z",
       "profiles": [
         {
           "id": "prof-inc-1791124918128-1",
@@ -11963,11 +12085,14 @@
           "parameters": [
             {
               "id": "p-1791127225584",
-              "name": "السكر التراكمي (HbA1c HPLC) (Glycated Hemoglobin HbA1c)",
+              "name": "Glycated Hemoglobin (HbA1c) (Glycated Hemoglobin (HbA1c))",
               "result": "",
-              "unit": "",
+              "unit": "%",
               "flag": "",
-              "textReference": "قيد الفحص المخبري"
+              "textReference": "Normal: < 5.7 % | Pre-diabetic: 5.7 - 6.4 % | Diabetic: >= 6.5 %",
+              "minNormal": 4,
+              "maxNormal": 5.6,
+              "method": "HPLC / Ion-Exchange Automated Analyzer (NGSP Certified)"
             }
           ]
         }
@@ -12078,7 +12203,7 @@
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-9242 - تم التسميع آلياً من منظومة الفواتير",
       "createdAt": "2026-10-04T14:35:32.954Z",
-      "updatedAt": "2026-10-07T22:09:19.105Z",
+      "updatedAt": "2026-10-16T14:52:30.070Z",
       "profiles": [
         {
           "id": "prof-inc-1791124532954-1",
@@ -12091,11 +12216,14 @@
           "parameters": [
             {
               "id": "p-1791124532956",
-              "name": "السكر التراكمي (HbA1c HPLC) (Glycated Hemoglobin HbA1c)",
+              "name": "Glycated Hemoglobin (HbA1c) (Glycated Hemoglobin (HbA1c))",
               "result": "",
-              "unit": "",
+              "unit": "%",
               "flag": "",
-              "textReference": "قيد الفحص المخبري"
+              "textReference": "Normal: < 5.7 % | Pre-diabetic: 5.7 - 6.4 % | Diabetic: >= 6.5 %",
+              "minNormal": 4,
+              "maxNormal": 5.6,
+              "method": "HPLC / Ion-Exchange Automated Analyzer (NGSP Certified)"
             }
           ]
         },
@@ -12150,7 +12278,7 @@
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-5752 - تم التسميع آلياً من منظومة الفواتير",
       "createdAt": "2026-10-04T14:28:04.105Z",
-      "updatedAt": "2026-10-07T22:09:21.714Z",
+      "updatedAt": "2026-10-16T14:52:30.070Z",
       "profiles": [
         {
           "id": "prof-inc-1791124084105-1",
@@ -12182,11 +12310,14 @@
           "parameters": [
             {
               "id": "p-1791127204552",
-              "name": "السكر التراكمي (HbA1c HPLC) (Glycated Hemoglobin HbA1c)",
+              "name": "Glycated Hemoglobin (HbA1c) (Glycated Hemoglobin (HbA1c))",
               "result": "",
-              "unit": "",
+              "unit": "%",
               "flag": "",
-              "textReference": "قيد الفحص المخبري"
+              "textReference": "Normal: < 5.7 % | Pre-diabetic: 5.7 - 6.4 % | Diabetic: >= 6.5 %",
+              "minNormal": 4,
+              "maxNormal": 5.6,
+              "method": "HPLC / Ion-Exchange Automated Analyzer (NGSP Certified)"
             }
           ]
         }
@@ -12383,14 +12514,14 @@
               "result": ""
             },
             {
-              "minNormal": 4.5,
-              "maxNormal": 5.7,
-              "method": "HPLC Certified",
+              "minNormal": 4,
+              "maxNormal": 5.6,
+              "method": "HPLC / Ion-Exchange Automated Analyzer (NGSP Certified)",
               "id": "param-1791187828049",
               "result": "5.44",
               "unit": "%",
-              "name": "السكر التراكمي (HbA1c HPLC) (Glycated Hemoglobin HbA1c)",
-              "textReference": "Normal: 4.5 - 5.7% | Pre-diabetic: 5.7 - 6.4% | Diabetic: >= 6.5%",
+              "name": "Glycated Hemoglobin (HbA1c) (Glycated Hemoglobin (HbA1c))",
+              "textReference": "Normal: < 5.7 % | Pre-diabetic: 5.7 - 6.4 % | Diabetic: >= 6.5 %",
               "flag": "NORMAL"
             },
             {
@@ -12922,7 +13053,7 @@
         "packagePrice": 199
       },
       "createdAt": "2026-10-04T14:22:02.634Z",
-      "updatedAt": "2026-10-07T07:57:18.284Z",
+      "updatedAt": "2026-10-16T14:52:30.071Z",
       "status": "verified",
       "generalComment": "طلب فحص مالي رقم RT-BK-5873 - تم التسميع آلياً من منظومة الفواتير",
       "staff": {
@@ -12969,7 +13100,7 @@
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-8097 - تم التسميع آلياً من منظومة الفواتير",
       "createdAt": "2026-10-04T14:16:24.421Z",
-      "updatedAt": "2026-10-07T22:09:23.720Z",
+      "updatedAt": "2026-10-16T14:52:30.071Z",
       "profiles": [
         {
           "id": "prof-inc-1791123384421-12",
@@ -13095,12 +13226,12 @@
           "interpretation": "Automated hematological indices and differential leucocytic count evaluated according to WHO standards.",
           "parameters": [
             {
-              "name": "HbA1c (Glycated Hemoglobin)",
+              "name": "Glycated Hemoglobin (HbA1c) (Glycated Hemoglobin (HbA1c))",
               "unit": "%",
               "minNormal": 4,
               "maxNormal": 5.6,
-              "textReference": "< 5.7% Normal, 5.7 - 6.4% Pre-Diabetes, ≥ 6.5% Diabetes",
-              "method": "HPLC / Turbidimetric",
+              "textReference": "Normal: < 5.7 % | Pre-diabetic: 5.7 - 6.4 % | Diabetic: >= 6.5 %",
+              "method": "HPLC / Ion-Exchange Automated Analyzer (NGSP Certified)",
               "id": "param-1791150830231-3",
               "result": "5.54",
               "flag": "NORMAL"
@@ -13768,6 +13899,382 @@
           ]
         }
       ]
+    },
+    {
+      "id": "rep-001",
+      "reportNumber": "RT-2026-001",
+      "patient": {
+        "id": "pat-001",
+        "labNumber": "RT-2026-001",
+        "barcode": "RT-10029",
+        "fullName": "أحمد محمود إبراهيم",
+        "age": 34,
+        "ageUnit": "years",
+        "gender": "male",
+        "phone": "01012345678",
+        "referringDoctorTitle": "Dr.",
+        "referringDoctorName": "د. طارق المنشاوي",
+        "sampleDate": "2026-10-16",
+        "reportingDate": "2026-10-16",
+        "clinicalHistory": "إرهاق عام وشحوب مستمر وصداع عند المجهود",
+        "fastingHours": 0,
+        "nationalId": "29005120101993",
+        "bloodGroup": "A+",
+        "loyaltyPoints": 120,
+        "loyaltyCardIssued": true,
+        "loyaltyCardNumber": "RT-SILVER-10029",
+        "testsSubtotal": 280,
+        "totalCost": 280,
+        "discountApplied": 28,
+        "paymentMethod": "cash"
+      },
+      "profiles": [
+        {
+          "id": "prof-cbc-1",
+          "profileCode": "CBC",
+          "titleEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+          "titleAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
+          "category": "Hematology",
+          "sampleType": "EDTA Whole Blood",
+          "interpretation": "Automated hematological indices and differential leucocytic count evaluated according to WHO standards.",
+          "attachedIllustration": {
+            "id": "hem-normal",
+            "code": "HEM_NORMAL",
+            "category": "hematology",
+            "imageUrl": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%20160%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%20%3Crect%20width%3D%22280%22%20height%3D%22160%22%20rx%3D%2212%22%20fill%3D%22%23090d16%22/%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2270%22%20fill%3D%22%230f172a%22%20stroke%3D%22%23881337%22%20stroke-width%3D%222%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%2224%22%20text-anchor%3D%22middle%22%20fill%3D%22%23f43f5e%22%20font-size%3D%2210%22%20font-weight%3D%22bold%22%20font-family%3D%22sans-serif%22%3ENORMAL%20BLOOD%20SMEAR%20%281000X%29%3C/text%3E%20%3C%21--%20Normal%20RBCs%20with%201/3%20central%20pallor%20--%3E%20%3Cg%20fill%3D%22%23e11d48%22%3E%20%3Ccircle%20cx%3D%22105%22%20cy%3D%2265%22%20r%3D%2216%22/%3E%3Ccircle%20cx%3D%22105%22%20cy%3D%2265%22%20r%3D%225.5%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22145%22%20cy%3D%2255%22%20r%3D%2215%22/%3E%3Ccircle%20cx%3D%22145%22%20cy%3D%2255%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22170%22%20cy%3D%2280%22%20r%3D%2216%22/%3E%3Ccircle%20cx%3D%22170%22%20cy%3D%2280%22%20r%3D%225.5%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%22130%22%20cy%3D%22105%22%20r%3D%2216%22/%3E%3Ccircle%20cx%3D%22130%22%20cy%3D%22105%22%20r%3D%225.5%22%20fill%3D%22%23fecdd3%22/%3E%20%3Ccircle%20cx%3D%2295%22%20cy%3D%2298%22%20r%3D%2215%22/%3E%3Ccircle%20cx%3D%2295%22%20cy%3D%2298%22%20r%3D%225%22%20fill%3D%22%23fecdd3%22/%3E%20%3C/g%3E%20%3C%21--%20Neutrophil%20--%3E%20%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2217%22%20fill%3D%22%23fbcfe8%22%20opacity%3D%220.4%22/%3E%20%3Cellipse%20cx%3D%22135%22%20cy%3D%2276%22%20rx%3D%224%22%20ry%3D%225%22%20fill%3D%22%236b21a8%22/%3E%20%3Cellipse%20cx%3D%22145%22%20cy%3D%2277%22%20rx%3D%224%22%20ry%3D%224%22%20fill%3D%22%236b21a8%22/%3E%20%3Cellipse%20cx%3D%22139%22%20cy%3D%2286%22%20rx%3D%224.5%22%20ry%3D%223.5%22%20fill%3D%22%236b21a8%22/%3E%20%3C%21--%20Platelets%20--%3E%20%3Ccircle%20cx%3D%22120%22%20cy%3D%2260%22%20r%3D%222.5%22%20fill%3D%22%2338bdf8%22/%3E%20%3Ccircle%20cx%3D%22160%22%20cy%3D%22100%22%20r%3D%222.5%22%20fill%3D%22%2338bdf8%22/%3E%20%3Ccircle%20cx%3D%22163%22%20cy%3D%2297%22%20r%3D%222%22%20fill%3D%22%2338bdf8%22/%3E%20%3Ctext%20x%3D%22140%22%20y%3D%22148%22%20text-anchor%3D%22middle%22%20fill%3D%22%2394a3b8%22%20font-size%3D%229%22%20font-family%3D%22sans-serif%22%3ENormocytic%20Normochromic%20Erythrocytes%3C/text%3E%20%3C/svg%3E",
+            "titleAr": "شريحة دم محيطي طبيعية (Normal Peripheral Blood Smear)",
+            "titleEn": "Normal Peripheral Blood Smear",
+            "pathologySummaryAr": "كرات دم حمراء طبيعية الحجم ومتساوية الصبغ (Normocytic Normochromic) مع مساحة شحوب مركزي طبيعية تعادل ثلث قطر الخلية، مع توزيع طبيعي لكرات الدم البيضاء والصفائح الدموية.",
+            "pathologySummaryEn": "Normocytic, normochromic erythrocytes with normal central pallor (~1/3 diameter). Adequate platelets and normal differential leucocytic morphology.",
+            "keyDiagnosticPoints": [
+              "MCV: 80 - 98 fL | MCH: 27 - 33 pg | MCHC: 32 - 36 g/dL",
+              "RBCs: uniform size and biconcave disc shape",
+              "WBC differential within normal reference intervals",
+              "Platelets: 150 - 450 x10^3/µL with normal granular appearance"
+            ],
+            "associatedConditions": [
+              "Physiological Baseline",
+              "Healthy Reference",
+              "Routine Wellness"
+            ],
+            "differentialDiagnosis": "No cytopenias or dysplastic features identified.",
+            "descriptionAr": "كرات دم حمراء طبيعية الحجم ومتساوية الصبغ (Normocytic Normochromic) مع مساحة شحوب مركزي طبيعية تعادل ثلث قطر الخلية، مع توزيع طبيعي لكرات الدم البيضاء والصفائح الدموية.",
+            "descriptionEn": "Normocytic, normochromic erythrocytes with normal central pallor (~1/3 diameter). Adequate platelets and normal differential leucocytic morphology.",
+            "diagnosticCriteria": [
+              "MCV: 80 - 98 fL | MCH: 27 - 33 pg | MCHC: 32 - 36 g/dL",
+              "RBCs: uniform size and biconcave disc shape",
+              "WBC differential within normal reference intervals",
+              "Platelets: 150 - 450 x10^3/µL with normal granular appearance"
+            ]
+          },
+          "bloodFilmFindings": {
+            "rbcMorphology": "Moderate anisopoikilocytosis, microcytes, hypochromic cells with prominent central pallor, occasional pencil / cigar-shaped cells.",
+            "wbcMorphology": "Normal leucocyte count with normal differential distribution. No immature myeloid precursors or toxic granulations.",
+            "plateletMorphology": "Mild reactive thrombocytosis. Adequate granular morphology, no platelet clumps seen.",
+            "differentialSummary": "Neutrophils: 62% | Lymphocytes: 29% | Monocytes: 6% | Eosinophils: 2% | Basophils: 1%"
+          },
+          "parameters": [
+            {
+              "id": "p-1",
+              "name": "Hemoglobin (Hb)",
+              "result": "8.6",
+              "unit": "g/dL",
+              "minNormal": 13,
+              "maxNormal": 17,
+              "panicLow": 7,
+              "panicHigh": 20,
+              "flag": "LOW",
+              "method": "SLS Hemoglobin Method"
+            },
+            {
+              "id": "p-2",
+              "name": "RBC Count",
+              "result": "3.80",
+              "unit": "x10^6/µL",
+              "minNormal": 4.5,
+              "maxNormal": 5.9,
+              "flag": "LOW",
+              "method": "Electrical Impedance"
+            },
+            {
+              "id": "p-3",
+              "name": "Hematocrit (Hct / PCV)",
+              "result": "27.2",
+              "unit": "%",
+              "minNormal": 40,
+              "maxNormal": 52,
+              "flag": "LOW",
+              "method": "Calculated"
+            },
+            {
+              "id": "p-4",
+              "name": "MCV",
+              "result": "71.5",
+              "unit": "fL",
+              "minNormal": 80,
+              "maxNormal": 98,
+              "flag": "LOW",
+              "method": "Direct Measurement"
+            },
+            {
+              "id": "p-5",
+              "name": "MCH",
+              "result": "22.6",
+              "unit": "pg",
+              "minNormal": 27,
+              "maxNormal": 33,
+              "flag": "LOW",
+              "method": "Calculated"
+            },
+            {
+              "id": "p-6",
+              "name": "MCHC",
+              "result": "31.6",
+              "unit": "g/dL",
+              "minNormal": 32,
+              "maxNormal": 36,
+              "flag": "LOW",
+              "method": "Calculated"
+            },
+            {
+              "id": "p-7",
+              "name": "RDW-CV",
+              "result": "17.8",
+              "unit": "%",
+              "minNormal": 11.5,
+              "maxNormal": 14.5,
+              "flag": "HIGH",
+              "method": "Calculated"
+            },
+            {
+              "id": "p-8",
+              "name": "Total Leucocytic Count (TLC / WBC)",
+              "result": "6.8",
+              "unit": "x10^3/µL",
+              "minNormal": 4,
+              "maxNormal": 11,
+              "flag": "NORMAL",
+              "method": "Electrical Impedance / Flow Cytometry"
+            },
+            {
+              "id": "p-9",
+              "name": "Platelet Count",
+              "result": "410",
+              "unit": "x10^3/µL",
+              "minNormal": 150,
+              "maxNormal": 450,
+              "flag": "NORMAL",
+              "method": "Electrical Impedance"
+            },
+            {
+              "id": "p-10",
+              "name": "Neutrophils %",
+              "result": "62",
+              "unit": "%",
+              "minNormal": 40,
+              "maxNormal": 75,
+              "flag": "NORMAL"
+            },
+            {
+              "id": "p-11",
+              "name": "Lymphocytes %",
+              "result": "29",
+              "unit": "%",
+              "minNormal": 20,
+              "maxNormal": 45,
+              "flag": "NORMAL"
+            },
+            {
+              "id": "p-12",
+              "name": "Monocytes %",
+              "result": "6",
+              "unit": "%",
+              "minNormal": 2,
+              "maxNormal": 10,
+              "flag": "NORMAL"
+            },
+            {
+              "id": "p-13",
+              "name": "Eosinophils %",
+              "result": "2",
+              "unit": "%",
+              "minNormal": 1,
+              "maxNormal": 6,
+              "flag": "NORMAL"
+            },
+            {
+              "id": "p-14",
+              "name": "Basophils %",
+              "result": "1",
+              "unit": "%",
+              "minNormal": 0,
+              "maxNormal": 2,
+              "flag": "NORMAL"
+            }
+          ]
+        }
+      ],
+      "staff": {
+        "labChemist": "د. هبة الشناوي - كيميائية تحاليل",
+        "verifiedBy": "د. مصطفى العوضي - استشاري التحاليل",
+        "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
+        "chemistTitle": "كيميائية طبية أولى",
+        "verifierTitle": "أخصائي باثولوجيا إكلينيكية",
+        "pathologistTitle": "استشاري الباثولوجيا الإكلينيكية - قصر العيني"
+      },
+      "generalComment": "الحالة تتماشى مع فقر الدم بعوز الحديد. يرجى المتابعة بطلب مخزون الحديد (Serum Ferritin).",
+      "status": "verified",
+      "createdAt": "2026-10-16T08:41:01.805Z",
+      "updatedAt": "2026-10-16T08:41:01.805Z",
+      "invoiceId": "inv-001"
+    },
+    {
+      "id": "rep-002",
+      "reportNumber": "RT-2026-002",
+      "patient": {
+        "id": "pat-002",
+        "labNumber": "RT-2026-002",
+        "barcode": "RT-10030",
+        "fullName": "منى عادل عبد الرحمن",
+        "age": 48,
+        "ageUnit": "years",
+        "gender": "female",
+        "phone": "01198765432",
+        "referringDoctorTitle": "Prof. Dr.",
+        "referringDoctorName": "أ.د. خالد الببلاوي - استشاري السكر والغدد",
+        "sampleDate": "2026-10-16",
+        "reportingDate": "2026-10-16",
+        "clinicalHistory": "متابعة دورية لمرض السكري من النوع الثاني وارتفاع ضغط الدم",
+        "fastingHours": 12,
+        "nationalId": "27608140102844",
+        "bloodGroup": "O+",
+        "loyaltyPoints": 340,
+        "loyaltyCardIssued": true,
+        "loyaltyCardNumber": "RT-GOLD-10030",
+        "testsSubtotal": 380,
+        "totalCost": 380,
+        "discountApplied": 38,
+        "paymentMethod": "visa"
+      },
+      "profiles": [
+        {
+          "id": "prof-gly-2",
+          "profileCode": "GLYCEMIC",
+          "titleEn": "Glycemic Status & Diabetes Profile",
+          "titleAr": "فحوصات السكر والتراكمي ومقاومة الإنسولين",
+          "category": "Metabolism & Diabetes",
+          "sampleType": "Fluoride / EDTA / Serum",
+          "interpretation": "Glycated hemoglobin (HbA1c), Glucose, and Insulin levels monitor glycemic control and metabolic resistance.",
+          "parameters": [
+            {
+              "id": "p-g1",
+              "name": "Fasting Blood Glucose",
+              "result": "148",
+              "unit": "mg/dL",
+              "minNormal": 70,
+              "maxNormal": 105,
+              "panicLow": 50,
+              "panicHigh": 400,
+              "flag": "HIGH",
+              "method": "Hexokinase"
+            },
+            {
+              "id": "p-g3",
+              "name": "Estimated Average Glucose (eAG)",
+              "result": "180",
+              "unit": "mg/dL",
+              "minNormal": 70,
+              "maxNormal": 126,
+              "flag": "HIGH",
+              "method": "Calculated from HbA1c"
+            }
+          ]
+        },
+        {
+          "id": "prof-gly-2",
+          "profileCode": "CBC",
+          "titleEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+          "titleAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
+          "category": "Hematology",
+          "sampleType": "EDTA Whole Blood",
+          "interpretation": "Automated hematological indices and differential leucocytic count evaluated according to WHO standards.",
+          "parameters": [
+            {
+              "id": "p-g2",
+              "name": "Glycated Hemoglobin (HbA1c) (Glycated Hemoglobin (HbA1c))",
+              "result": "7.9",
+              "unit": "%",
+              "minNormal": 4,
+              "maxNormal": 5.6,
+              "panicLow": 3.5,
+              "panicHigh": 14,
+              "flag": "HIGH",
+              "method": "HPLC / Ion-Exchange Automated Analyzer (NGSP Certified)",
+              "textReference": "Normal: < 5.7 % | Pre-diabetic: 5.7 - 6.4 % | Diabetic: >= 6.5 %"
+            }
+          ]
+        },
+        {
+          "id": "prof-kft-2",
+          "profileCode": "RFT",
+          "titleEn": "Renal Function Profile (RFT / KFT)",
+          "titleAr": "وظائف الكلى والأملاح البولية",
+          "category": "Clinical Chemistry & Nephrology",
+          "sampleType": "Serum / Urine",
+          "interpretation": "Serum Creatinine, Urea, Uric Acid, and eGFR reflect glomerular filtration rate and nitrogenous waste clearance.",
+          "attachedIllustration": {
+            "id": "ren-aki",
+            "code": "REN_AKI",
+            "titleAr": "القصور الكلوي الحاد واحتباس البولينا (Acute Kidney Injury - AKI)",
+            "titleEn": "Acute Kidney Injury & Azotemia",
+            "category": "renal",
+            "imageUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgMTgwIiB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCI+CiAgICA8cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgcng9IjE0IiBmaWxsPSIjMDkwZDE2Ii8+CiAgICA8Y2lyY2xlIGN4PSIxNjAiIGN5PSI5MCIgcj0iNzYiIGZpbGw9IiMwYjEzMjkiIHN0cm9rZT0iIzMxMmU4MSIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM4MThjZjgiIGZvbnQtc2l6ZT0iMTAuNSIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1mYW1pbHk9IidDYWlybycsIHN5c3RlbS11aSwgLWFwcGxlLXN5c3RlbSwgc2Fucy1zZXJpZiI+QUNVVEUgS0lETkVZIElOSlVSWSAoQUtJKTwvdGV4dD4KICAgIDxwYXRoIGQ9Ik0gMTM1LDU1IEMgMTEwLDY1IDExMCwxMTUgMTM1LDEyNSBDIDE2MCwxMzUgMTkwLDExNSAxODUsOTAgQyAxODAsNjUgMTYwLDUwIDEzNSw1NSBaIiBmaWxsPSIjMWUxYjRiIiBzdHJva2U9IiM4MThjZjgiIHN0cm9rZS13aWR0aD0iMi41Ii8+CiAgICAgIDxjaXJjbGUgY3g9IjE2MCIgY3k9IjkwIiByPSIxNiIgZmlsbD0iI2Y0M2Y1ZSIvPgogICAgICA8dGV4dCB4PSIxNjAiIHk9IjkzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjkiIGZvbnQtd2VpZ2h0PSJib2xkIj5DcmVhdDwvdGV4dD4KICAgICAgPHRleHQgeD0iMTYwIiB5PSIxNDUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNmODcxNzEiIGZvbnQtc2l6ZT0iMTAiIGZvbnQtd2VpZ2h0PSJib2xkIj5DcmVhdGluaW5lICZndDsmZ3Q7IDIuNSBtZy9kTDwvdGV4dD4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMTcwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTRhM2I4IiBmb250LXNpemU9IjkiIGZvbnQtZmFtaWx5PSInQ2Fpcm8nLCBzeXN0ZW0tdWksIC1hcHBsZS1zeXN0ZW0sIHNhbnMtc2VyaWYiPlN1ZGRlbiBHbG9tZXJ1bGFyIFJldGVudGlvbjogQWN1dGUgQXpvdGVtaWEgJiBPbGlndXJpYTwvdGV4dD4KICA8L3N2Zz4=",
+            "pathologySummaryAr": "تدهور مفاجئ سريع في وظائف الكلى الإخراجية خلال ساعات إلى أيام، مؤدياً لاحتباس الفضلات النيتروجينية في الدم (ارتفاع حاد في الكرياتينين والبولينا وحمض البوليك) واختلال الأملاح."
+          },
+          "parameters": [
+            {
+              "id": "p-k1",
+              "name": "Serum Creatinine",
+              "result": "0.82",
+              "unit": "mg/dL",
+              "minNormal": 0.5,
+              "maxNormal": 1.1,
+              "flag": "NORMAL",
+              "method": "Enzymatic Spectrophotometry"
+            },
+            {
+              "id": "p-k2",
+              "name": "Blood Urea",
+              "result": "28",
+              "unit": "mg/dL",
+              "minNormal": 15,
+              "maxNormal": 45,
+              "flag": "NORMAL",
+              "method": "GLDH Coupled"
+            },
+            {
+              "id": "p-k3",
+              "name": "Serum Uric Acid",
+              "result": "4.9",
+              "unit": "mg/dL",
+              "minNormal": 2.6,
+              "maxNormal": 6,
+              "flag": "NORMAL",
+              "method": "Uricase Colorimetric"
+            }
+          ]
+        }
+      ],
+      "staff": {
+        "labChemist": "د. هبة الشناوي - كيميائية تحاليل",
+        "verifiedBy": "د. مصطفى العوضي - استشاري التحاليل",
+        "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
+      },
+      "generalComment": "يرجى مراجعة الطبيب المعالج لتعديل جرعات العلاج الغذائي والدوائي.",
+      "status": "verified",
+      "createdAt": "2026-10-16T08:41:01.806Z",
+      "updatedAt": "2026-10-16T14:52:30.071Z",
+      "invoiceId": "inv-002"
     }
   ],
   "incomeRecords": [
@@ -18656,7 +19163,7 @@
       "nameAr": "Random Blood Sugar",
       "nameEn": "Random Blood Sugar",
       "category": "Diabetes",
-      "price": 88,
+      "price": 50,
       "cost": 10,
       "sampleType": "Serum / Plasma",
       "turnaroundTime": "Immediate (30 min)",
@@ -18673,7 +19180,7 @@
       "nameAr": "Glycated Hemoglobin (HbA1c)",
       "nameEn": "Glycated Hemoglobin (HbA1c)",
       "category": "Diabetes",
-      "price": 180,
+      "price": 377,
       "cost": 35,
       "sampleType": "EDTA Whole Blood",
       "turnaroundTime": "Within 2 hours",
@@ -18690,7 +19197,7 @@
       "nameAr": "Fasting Serum Insulin",
       "nameEn": "Fasting Serum Insulin",
       "category": "Diabetes",
-      "price": 260,
+      "price": 466,
       "cost": 65,
       "sampleType": "Serum",
       "turnaroundTime": "Within 24 hours",
@@ -18707,7 +19214,7 @@
       "nameAr": "Fasting C-Peptide",
       "nameEn": "Fasting C-Peptide",
       "category": "Diabetes",
-      "price": 290,
+      "price": 888,
       "cost": 75,
       "sampleType": "Serum",
       "turnaroundTime": "Within 24 hours",
