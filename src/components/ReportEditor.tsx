@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { LabReport, TestProfile, TestParameter, LabStaffSignatures, ReportStatus, ComprehensivePackage } from '../types/lab';
+import { LabReport, TestProfile, TestParameter, LabStaffSignatures, ReportStatus, ComprehensivePackage, DiseaseIllustration } from '../types/lab';
 import { calculateFlag, formatReferenceDisplay, runAutomaticCalculations } from '../utils/calculator';
 import { COMMON_INTERPRETATIONS, STAFF_OPTIONS } from '../data/labCatalog';
-import { suggestHematologicalIllustration } from '../data/diseaseIllustrations';
+import { suggestHematologicalIllustration, DISEASE_ILLUSTRATIONS } from '../data/diseaseIllustrations';
 import { ColouredRangeChart } from './ColouredRangeChart';
 import { FlagBadge } from './FlagBadge';
 import { QuickResultPicker } from './QuickResultPicker';
 import { ParameterEditModal } from './ParameterEditModal';
 import { AddParameterModal } from './AddParameterModal';
 import { StaffSignaturesPicker } from './StaffSignaturesPicker';
+import { DiseaseIllustrationsModal } from './DiseaseIllustrationsModal';
 import { useApp } from '../context/AppContext';
 import { 
   Plus, 
@@ -80,6 +81,123 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
   const [packageSearchTerm, setPackageSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'tabs' | 'all'>('tabs');
   const [activationSuccessAlert, setActivationSuccessAlert] = useState<string | null>(null);
+  const [isIllustrationsModalOpen, setIsIllustrationsModalOpen] = useState(false);
+  const [profileForIllustration, setProfileForIllustration] = useState<string>('');
+  const [manualRecommendInput, setManualRecommendInput] = useState<string>('');
+
+  // Curated Catalog for Follow-up Investigations
+  const RECOMMENDED_INVESTIGATIONS_CATALOG = [
+    {
+      category: 'Immunology & Autoimmune (المناعة والأجسام المضادة)',
+      tests: ['ANA (Antinuclear Antibodies IFA)', 'Anti-dsDNA', 'Rheumatoid Factor (RF Quantitative)', 'Anti-CCP', 'Total IgE', 'C3 & C4 Complement', 'Anti-TPO Antibodies', 'Anti-Thyroglobulin', 'CRP (High Sensitivity Quantitative)', 'ESR (Erythrocyte Sedimentation Rate)']
+    },
+    {
+      category: 'Hematology & Anemia (أمراض الدم والأنيميا)',
+      tests: ['Serum Ferritin', 'Serum Iron & TIBC', 'Complete Blood Count (CBC)', 'Reticulocyte Count', 'Hemoglobin Electrophoresis', 'Vitamin B12', 'Serum Folate', 'Peripheral Blood Smear Examination', 'Coombs Test (Direct DAT)', 'G6PD Quantitative Assay']
+    },
+    {
+      category: 'Biochemistry & Metabolic (الكيمياء والتمثيل الغذائي)',
+      tests: ['HbA1c Glycated Hemoglobin', 'Lipid Profile (Chol, HDL, LDL, Trig)', 'Liver Function Panel (ALT, AST, Bilirubin, Albumin)', 'Kidney Function Panel (Creatinine, Urea, eGFR, Uric Acid)', 'Serum Electrolytes (Na, K, Cl)', 'Microalbumin / Creatinine Ratio', '24-Hour Urinary Protein', 'Cardiac Troponin I', 'Serum Amylase & Lipase']
+    },
+    {
+      category: 'Endocrinology & Hormones (الغدد والهرمونات)',
+      tests: ['TSH (Thyroid Stimulating Hormone)', 'Free T3', 'Free T4', 'Fasting Insulin & HOMA-IR', 'Vitamin D (25-OH)', 'Serum Morning Cortisol', 'Total & Free Testosterone', 'Serum Prolactin', 'Beta-hCG Quantitative']
+    },
+    {
+      category: 'Microbiology & Serology (الميكروبيولوجي والمزارع)',
+      tests: ['Urine Culture & Sensitivity', 'Stool Analysis & Occult Blood', 'H. Pylori Antigen (Stool)', 'Viral Hepatitis Screening (HBsAg, HCV Ab)', 'Blood Culture & Sensitivity']
+    }
+  ];
+
+  // Helper for multiple clinical interpretations
+  const handleAddInterpretation = (profileId: string) => {
+    const prof = report.profiles.find(p => p.id === profileId);
+    if (!prof) return;
+    const currentList = prof.interpretations && prof.interpretations.length > 0 
+      ? [...prof.interpretations] 
+      : (prof.interpretation ? [prof.interpretation] : ['']);
+    currentList.push('');
+    handleUpdateProfile(profileId, { interpretations: currentList });
+  };
+
+  const handleUpdateInterpretationIndex = (profileId: string, index: number, val: string) => {
+    const prof = report.profiles.find(p => p.id === profileId);
+    if (!prof) return;
+    const currentList = prof.interpretations && prof.interpretations.length > 0 
+      ? [...prof.interpretations] 
+      : (prof.interpretation ? [prof.interpretation] : ['']);
+    currentList[index] = val;
+    handleUpdateProfile(profileId, { interpretations: currentList, interpretation: currentList[0] || '' });
+  };
+
+  const handleDeleteInterpretationIndex = (profileId: string, index: number) => {
+    const prof = report.profiles.find(p => p.id === profileId);
+    if (!prof) return;
+    const baseList = prof.interpretations && prof.interpretations.length > 0 
+      ? [...prof.interpretations] 
+      : (prof.interpretation ? [prof.interpretation] : []);
+    const currentList = baseList.filter((_, i) => i !== index);
+    handleUpdateProfile(profileId, { interpretations: currentList, interpretation: currentList[0] || '' });
+  };
+
+  // Helper for multiple technical comments
+  const handleAddComment = (profileId: string) => {
+    const prof = report.profiles.find(p => p.id === profileId);
+    if (!prof) return;
+    const currentList = prof.comments && prof.comments.length > 0 
+      ? [...prof.comments] 
+      : (prof.comment ? [prof.comment] : ['']);
+    currentList.push('');
+    handleUpdateProfile(profileId, { comments: currentList });
+  };
+
+  const handleUpdateCommentIndex = (profileId: string, index: number, val: string) => {
+    const prof = report.profiles.find(p => p.id === profileId);
+    if (!prof) return;
+    const currentList = prof.comments && prof.comments.length > 0 
+      ? [...prof.comments] 
+      : (prof.comment ? [prof.comment] : ['']);
+    currentList[index] = val;
+    handleUpdateProfile(profileId, { comments: currentList, comment: currentList[0] || '' });
+  };
+
+  const handleDeleteCommentIndex = (profileId: string, index: number) => {
+    const prof = report.profiles.find(p => p.id === profileId);
+    if (!prof) return;
+    const baseList = prof.comments && prof.comments.length > 0 
+      ? [...prof.comments] 
+      : (prof.comment ? [prof.comment] : []);
+    const currentList = baseList.filter((_, i) => i !== index);
+    handleUpdateProfile(profileId, { comments: currentList, comment: currentList[0] || '' });
+  };
+
+  // Helper for recommended follow-up investigations
+  const handleToggleRecommendedTest = (profileId: string, testName: string) => {
+    const prof = report.profiles.find(p => p.id === profileId);
+    if (!prof) return;
+    const current = prof.recommendedTests || [];
+    const exists = current.includes(testName);
+    const updated = exists ? current.filter(t => t !== testName) : [...current, testName];
+    handleUpdateProfile(profileId, { recommendedTests: updated });
+  };
+
+  const handleAddManualRecommendedTest = (profileId: string) => {
+    if (!manualRecommendInput.trim()) return;
+    const prof = report.profiles.find(p => p.id === profileId);
+    if (!prof) return;
+    const current = prof.recommendedTests || [];
+    if (!current.includes(manualRecommendInput.trim())) {
+      handleUpdateProfile(profileId, { recommendedTests: [...current, manualRecommendInput.trim()] });
+    }
+    setManualRecommendInput('');
+  };
+
+  const handleRemoveRecommendedTest = (profileId: string, testName: string) => {
+    const prof = report.profiles.find(p => p.id === profileId);
+    if (!prof) return;
+    const current = prof.recommendedTests || [];
+    handleUpdateProfile(profileId, { recommendedTests: current.filter(t => t !== testName) });
+  };
 
   // Activate & Verify Report
   const handleActivateReport = () => {
@@ -506,6 +624,14 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                 <span>تاريخ السحب: <strong className="font-mono text-slate-700">{report.patient.sampleDate ? new Date(report.patient.sampleDate).toLocaleDateString('en-GB') : 'غير محدد'}</strong></span>
                 <span>•</span>
                 <span>الهاتف: <strong className="font-mono text-slate-700">{report.patient.phone}</strong></span>
+                {(report.patient.clinicalDiagnosis || report.patient.clinicalHistory) && (
+                  <>
+                    <span>•</span>
+                    <span className="bg-rose-50 text-rose-900 border border-rose-200 px-2 py-0.5 rounded font-bold">
+                      التشخيص: {report.patient.clinicalDiagnosis || report.patient.clinicalHistory}
+                    </span>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -708,27 +834,52 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                 />
               </div>
 
-              {/* Clinical History / Notes */}
-              <div className="space-y-1 lg:col-span-2">
+              {/* Clinical Diagnosis / Indication */}
+              <div className="space-y-1 lg:col-span-4 bg-rose-50/50 p-3 rounded-xl border border-rose-200">
                 <div className="flex items-center justify-between">
-                  <label className="font-bold text-slate-700">التشخيص والملاحظات السريرية:</label>
-                  {report.patient.clinicalHistory && (
+                  <label className="font-bold text-rose-950 flex items-center gap-1.5">
+                    <span>التشخيص الإكلينيكي بالتقرير (Clinical Diagnosis / Indication):</span>
+                    <span className="text-[10px] text-rose-700 font-semibold">(يظهر في هيدر التقرير المطبوع)</span>
+                  </label>
+                  {(report.patient.clinicalDiagnosis || report.patient.clinicalHistory) && (
                     <button
                       type="button"
-                      onClick={() => handleUpdatePatient({ clinicalHistory: '' })}
-                      className="text-[11px] text-red-600 hover:text-red-800 font-bold"
+                      onClick={() => handleUpdatePatient({ clinicalDiagnosis: '', clinicalHistory: '' })}
+                      className="text-[11px] text-red-600 hover:text-red-800 font-bold cursor-pointer"
                     >
-                      حذف الملاحظات
+                      حذف التشخيص
                     </button>
                   )}
                 </div>
                 <input
                   type="text"
-                  placeholder="ملاحظات سريرية أو تشخيصية تظهر بالتقرير (اختياري)"
-                  value={report.patient.clinicalHistory || ''}
-                  onChange={(e) => handleUpdatePatient({ clinicalHistory: e.target.value })}
-                  className="w-full px-3 py-1.5 rounded-lg border border-slate-300 focus:border-rose-600 focus:outline-none"
+                  placeholder="مثال: Microcytic Hypochromic Anemia, Type 2 Diabetes Mellitus, Dyslipidemia, Routine Wellness..."
+                  value={report.patient.clinicalDiagnosis || report.patient.clinicalHistory || ''}
+                  onChange={(e) => handleUpdatePatient({ clinicalDiagnosis: e.target.value, clinicalHistory: e.target.value })}
+                  className="w-full px-3 py-1.5 rounded-lg border border-slate-300 focus:border-rose-600 focus:outline-none font-bold text-slate-900 bg-white"
                 />
+                <div className="flex items-center gap-1.5 flex-wrap pt-1">
+                  <span className="text-[10px] text-slate-500 font-semibold">اقتراحات سريعة:</span>
+                  {[
+                    'Microcytic Hypochromic Anemia',
+                    'Iron Deficiency Anemia (IDA)',
+                    'Beta Thalassemia Trait',
+                    'Type 2 Diabetes Mellitus (T2DM)',
+                    'Dyslipidemia & Atherosclerosis Risk',
+                    'Thyroid Dysfunction (Hypo/Hyperthyroidism)',
+                    'Suspected Bacterial Sepsis',
+                    'Routine Comprehensive Health Checkup'
+                  ].map((diag) => (
+                    <button
+                      key={diag}
+                      type="button"
+                      onClick={() => handleUpdatePatient({ clinicalDiagnosis: diag, clinicalHistory: diag })}
+                      className="text-[10px] bg-white hover:bg-rose-100 text-rose-900 border border-rose-200 px-2 py-0.5 rounded cursor-pointer transition-colors"
+                    >
+                      + {diag}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -1366,56 +1517,307 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
               </button>
             </div>
 
-            {/* Clinical Interpretation & Comments */}
-            <div className="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-rose-950 font-bold text-xs">
-                  <MessageSquare className="w-4 h-4 text-rose-700" />
-                  <span>التشخيص والتعليق الإكلينيكي المعتمد (Clinical Interpretation):</span>
-                </div>
-                {currentProfile.interpretation && (
-                  <button
-                    type="button"
-                    onClick={() => handleUpdateProfile(currentProfile.id, { interpretation: '' })}
-                    className="text-red-600 hover:text-red-800 text-xs font-bold flex items-center gap-1 cursor-pointer"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                    <span>حذف التعليق الإكلينيكي</span>
-                  </button>
-                )}
-              </div>
+            {/* 1. Multiple Clinical Interpretations Section */}
+            {(() => {
+              const currentInterps = currentProfile.interpretations && currentProfile.interpretations.length > 0
+                ? currentProfile.interpretations
+                : (currentProfile.interpretation ? [currentProfile.interpretation] : ['']);
 
-              <div>
-                <textarea
-                  rows={2}
-                  value={currentProfile.interpretation || ''}
-                  onChange={(e) => handleUpdateProfile(currentProfile.id, { interpretation: e.target.value })}
-                  placeholder="اكتب التفسير التشخيصي للنتائج (يظهر في تقرير المريض المطبوع)..."
-                  className="w-full text-xs p-3 rounded-lg border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-600"
-                />
-              </div>
+              const currentComms = currentProfile.comments && currentProfile.comments.length > 0
+                ? currentProfile.comments
+                : (currentProfile.comment ? [currentProfile.comment] : []);
 
-              {/* Quick Interpretation Snippets */}
-              {COMMON_INTERPRETATIONS[currentProfile.profileCode] && (
-                <div className="space-y-1.5">
-                  <div className="text-[11px] font-semibold text-slate-500">
-                    عبارات تشخيصية استرشادية جاهزة للاختيار:
-                  </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {COMMON_INTERPRETATIONS[currentProfile.profileCode].map((text, i) => (
+              const attachedAtlas = currentProfile.attachedIllustration ||
+                (currentProfile.selectedIllustrationId ? DISEASE_ILLUSTRATIONS.find(d => d.id === currentProfile.selectedIllustrationId) : undefined);
+
+              const currentRecs = currentProfile.recommendedTests || [];
+
+              return (
+                <div className="space-y-4">
+                  {/* Clinical Interpretations (Multiple) */}
+                  <div className="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-rose-950 font-bold text-xs">
+                        <MessageSquare className="w-4 h-4 text-rose-700" />
+                        <span>التشخيص والتعليقات الإكلينيكية المعتمدة (Clinical Interpretations):</span>
+                        <span className="text-[10px] bg-rose-100 text-rose-900 px-2 py-0.5 rounded-full font-bold">
+                          {currentInterps.filter(t => Boolean(t.trim())).length} تعليق
+                        </span>
+                      </div>
                       <button
-                        key={i}
                         type="button"
-                        onClick={() => handleUpdateProfile(currentProfile.id, { interpretation: text })}
-                        className="text-[11px] bg-white hover:bg-rose-50 text-slate-700 hover:text-rose-900 border border-slate-200 px-2.5 py-1 rounded-md text-right transition-colors"
+                        onClick={() => handleAddInterpretation(currentProfile.id)}
+                        className="flex items-center gap-1 text-xs font-bold bg-rose-900 hover:bg-rose-800 text-white px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
                       >
-                        • {text.slice(0, 60)}...
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>+ إضافة تفسير تشخيصي إضافي</span>
                       </button>
-                    ))}
+                    </div>
+
+                    <div className="space-y-3">
+                      {currentInterps.map((text, idx) => (
+                        <div key={idx} className="bg-white p-3 rounded-lg border border-slate-200 space-y-1.5 shadow-xs">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[11px] font-bold text-rose-900">
+                              تفسير تشخيصي #{idx + 1} (Clinical Interpretation #{idx + 1}):
+                            </span>
+                            {currentInterps.length > 1 && (
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteInterpretationIndex(currentProfile.id, idx)}
+                                className="text-red-500 hover:text-red-700 text-xs flex items-center gap-1 cursor-pointer"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                                <span>حذف هذا التفسير</span>
+                              </button>
+                            )}
+                          </div>
+                          <textarea
+                            rows={2}
+                            value={text}
+                            onChange={(e) => handleUpdateInterpretationIndex(currentProfile.id, idx, e.target.value)}
+                            placeholder="اكتب التفسير التشخيصي للنتائج (يظهر في تقرير المريض المطبوع)..."
+                            className="w-full text-xs p-2.5 rounded-lg border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-600"
+                          />
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Quick Interpretation Snippets */}
+                    {COMMON_INTERPRETATIONS[currentProfile.profileCode] && (
+                      <div className="space-y-1 pt-1 border-t border-slate-200">
+                        <div className="text-[11px] font-semibold text-slate-500">
+                          عبارات تشخيصية استرشادية جاهزة للاختيار:
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {COMMON_INTERPRETATIONS[currentProfile.profileCode].map((snippet, i) => (
+                            <button
+                              key={i}
+                              type="button"
+                              onClick={() => {
+                                const currentList = currentProfile.interpretations && currentProfile.interpretations.length > 0
+                                  ? [...currentProfile.interpretations]
+                                  : (currentProfile.interpretation ? [currentProfile.interpretation] : []);
+                                if (currentList.length === 0 || (currentList.length === 1 && !currentList[0].trim())) {
+                                  handleUpdateProfile(currentProfile.id, { interpretations: [snippet], interpretation: snippet });
+                                } else {
+                                  handleUpdateProfile(currentProfile.id, { interpretations: [...currentList, snippet] });
+                                }
+                              }}
+                              className="text-[11px] bg-white hover:bg-rose-50 text-slate-700 hover:text-rose-900 border border-slate-200 px-2.5 py-1 rounded-md text-right transition-colors cursor-pointer"
+                            >
+                              + {snippet.slice(0, 55)}...
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* 2. Technical / Specimen Comments (Multiple) */}
+                  <div className="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-slate-800 font-bold text-xs">
+                        <BookOpen className="w-4 h-4 text-blue-700" />
+                        <span>ملاحظات فنية ومخبرية حول العينة (Technical Notes):</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleAddComment(currentProfile.id)}
+                        className="flex items-center gap-1 text-xs font-bold bg-blue-900 hover:bg-blue-800 text-white px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>+ إضافة ملاحظة فنية</span>
+                      </button>
+                    </div>
+
+                    {currentComms.length > 0 ? (
+                      <div className="space-y-2">
+                        {currentComms.map((text, idx) => (
+                          <div key={idx} className="bg-white p-2.5 rounded-lg border border-slate-200 space-y-1 shadow-xs">
+                            <div className="flex items-center justify-between">
+                              <span className="text-[11px] font-bold text-blue-900">ملاحظة فنية #{idx + 1}:</span>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteCommentIndex(currentProfile.id, idx)}
+                                className="text-red-500 hover:text-red-700 text-xs flex items-center gap-1 cursor-pointer"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                                <span>حذف</span>
+                              </button>
+                            </div>
+                            <textarea
+                              rows={1}
+                              value={text}
+                              onChange={(e) => handleUpdateCommentIndex(currentProfile.id, idx, e.target.value)}
+                              placeholder="ملاحظات فنية (مثل: تم تأكيد النتيجة بإعادة الفحص، عينة غير مصلوبة، إلخ)..."
+                              className="w-full text-xs p-2 rounded-lg border border-slate-300 bg-white focus:outline-none focus:ring-1 focus:ring-blue-500"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-[11px] text-slate-400">
+                        لا توجد ملاحظات فنية حالياً. اضغط على الزر أعلاه لإضافة أي ملاحظة مخبرية.
+                      </div>
+                    )}
+                  </div>
+
+                  {/* 3. Medical Atlas & Infographic Selector */}
+                  <div className="bg-rose-50/60 rounded-xl p-4 border border-rose-200 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-rose-950 font-bold text-xs">
+                        <Microscope className="w-4 h-4 text-rose-700" />
+                        <span>الأطلس الطبي والإنفوجرافيك التشخيصي (Diagnostic Medical Atlas):</span>
+                        <span className="text-[10px] text-rose-600 font-semibold">(يظهر كشريحة / رسم توضيحي بالتقرير المطبوع)</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setProfileForIllustration(currentProfile.id);
+                          setIsIllustrationsModalOpen(true);
+                        }}
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-rose-900 to-rose-700 hover:from-rose-800 hover:to-rose-600 text-white rounded-lg text-xs font-bold shadow-xs transition-all cursor-pointer"
+                      >
+                        <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                        <span>{attachedAtlas ? 'تغيير رسم الأطلس' : 'اختيار رسم / إنفوجرافيك من الأطلس'}</span>
+                      </button>
+                    </div>
+
+                    {attachedAtlas ? (
+                      <div className="bg-white p-3 rounded-xl border border-rose-200 flex items-start gap-4 shadow-xs">
+                        <div className="w-32 h-20 rounded-lg overflow-hidden bg-slate-950 shrink-0 border border-slate-300 flex items-center justify-center">
+                          <img src={attachedAtlas.imageUrl || ''} alt={attachedAtlas.titleEn} className="w-full h-full object-cover" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between gap-2">
+                            <h4 className="text-xs font-extrabold text-rose-950">{attachedAtlas.titleEn}</h4>
+                            <button
+                              type="button"
+                              onClick={() => handleUpdateProfile(currentProfile.id, { selectedIllustrationId: undefined, attachedIllustration: undefined })}
+                              className="text-red-600 hover:text-red-800 text-xs font-bold flex items-center gap-1 cursor-pointer"
+                            >
+                              <X className="w-3.5 h-3.5" />
+                              <span>إلغاء الرسم من هذا التقرير</span>
+                            </button>
+                          </div>
+                          <p className="text-[11px] text-slate-700 mt-1 leading-relaxed">{attachedAtlas.pathologySummaryEn}</p>
+                          <div className="text-[10px] text-slate-500 mt-1 font-mono">
+                            الكود: {attachedAtlas.code} | الفئة: {attachedAtlas.category}
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-[11px] text-slate-500 bg-white/70 p-3 rounded-lg border border-dashed border-rose-300 flex items-center justify-between">
+                        <span>لم يتم إرفاق إنفوجرافيك بعد. يمكنك اختيار رسم مجهري أو إنفوجرام يشرح نتيجة المريض بوضوح.</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setProfileForIllustration(currentProfile.id);
+                            setIsIllustrationsModalOpen(true);
+                          }}
+                          className="text-xs font-bold text-rose-800 hover:text-rose-950 underline cursor-pointer"
+                        >
+                          تصفح الأطلس الطبي الآن
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* 4. Recommended Follow-up Investigations (قائمة التحاليل المقترحة للمتابعة) */}
+                  <div className="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-3">
+                    <div className="flex items-center justify-between flex-wrap gap-2">
+                      <div className="flex items-center gap-2 text-slate-900 font-bold text-xs">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-700" />
+                        <span>فحوصات مقترحة للمتابعة (Recommended Follow-up Investigations):</span>
+                        <span className="text-[10px] bg-slate-200 text-slate-800 px-2 py-0.5 rounded-full font-bold">
+                          {currentRecs.length} فحص مختار
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Active Selected Badges */}
+                    {currentRecs.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 p-2 bg-white rounded-lg border border-emerald-200">
+                        {currentRecs.map((testName, i) => (
+                          <span
+                            key={i}
+                            className="inline-flex items-center gap-1.5 text-[11px] font-bold bg-emerald-50 text-emerald-900 border border-emerald-300 px-2.5 py-1 rounded-md"
+                          >
+                            <span>{testName}</span>
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveRecommendedTest(currentProfile.id, testName)}
+                              className="text-emerald-700 hover:text-red-700 cursor-pointer"
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Manual Custom Test Adder */}
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        placeholder="إضافة أي تحليل مقترح يدوي (Manual Investigation)..."
+                        value={manualRecommendInput}
+                        onChange={(e) => setManualRecommendInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            handleAddManualRecommendedTest(currentProfile.id);
+                          }
+                        }}
+                        className="flex-1 text-xs px-3 py-1.5 rounded-lg border border-slate-300 bg-white focus:outline-none focus:border-emerald-600"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleAddManualRecommendedTest(currentProfile.id)}
+                        className="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold cursor-pointer transition-colors"
+                      >
+                        + إضافة للتقرير
+                      </button>
+                    </div>
+
+                    {/* Categorized Test Selector Pills */}
+                    <div className="space-y-2 pt-1 border-t border-slate-200">
+                      <span className="text-[10px] font-bold text-slate-500 block">
+                        اختر تحاليل مقترحة من الكتالوج الطبي والمناعي المعتمد:
+                      </span>
+                      <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                        {RECOMMENDED_INVESTIGATIONS_CATALOG.map((group, gIdx) => (
+                          <div key={gIdx} className="space-y-1">
+                            <span className="text-[10px] font-extrabold text-slate-700 block">{group.category}</span>
+                            <div className="flex flex-wrap gap-1">
+                              {group.tests.map((testName, tIdx) => {
+                                const isSelected = currentRecs.includes(testName);
+                                return (
+                                  <button
+                                    key={tIdx}
+                                    type="button"
+                                    onClick={() => handleToggleRecommendedTest(currentProfile.id, testName)}
+                                    className={`text-[10px] px-2 py-0.5 rounded-md font-bold transition-colors cursor-pointer border ${
+                                      isSelected
+                                        ? 'bg-emerald-700 text-white border-emerald-800'
+                                        : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100 hover:text-slate-900'
+                                    }`}
+                                  >
+                                    {isSelected ? '✓ ' : '+ '}
+                                    {testName}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              )}
-            </div>
+              );
+            })()}
           </div>
         ))}
       </div>
@@ -1603,6 +2005,28 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
           </div>
         </div>
       )}
+
+      {/* Disease Illustrations & Medical Atlas Modal */}
+      <DiseaseIllustrationsModal
+        isOpen={isIllustrationsModalOpen}
+        onClose={() => {
+          setIsIllustrationsModalOpen(false);
+          setProfileForIllustration('');
+        }}
+        selectedIllustrationId={
+          report.profiles.find(p => p.id === profileForIllustration)?.selectedIllustrationId
+        }
+        onSelectIllustration={(illustration) => {
+          if (profileForIllustration) {
+            handleUpdateProfile(profileForIllustration, {
+              selectedIllustrationId: illustration.id,
+              attachedIllustration: illustration
+            });
+          }
+          setIsIllustrationsModalOpen(false);
+          setProfileForIllustration('');
+        }}
+      />
     </div>
   );
 };

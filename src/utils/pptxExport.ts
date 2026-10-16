@@ -65,12 +65,18 @@ export async function exportReportToPPTX(report: LabReport, labInfo?: LabInfo): 
     cover.addText(label.toUpperCase(), { x, y, w: 4, h: 0.25, fontSize: 8.5, bold: true, color: MUTED, fontFace: FONT, charSpacing: 1.5 });
     cover.addText(value || '—', { x, y: y + 0.22, w: 4, h: 0.4, fontSize: 14, bold: true, color: INK, fontFace: FONT });
   };
+  const diag = latin(p.clinicalDiagnosis || p.clinicalHistory || '');
   field('Patient Name', latin(p.fullName, p.fullName), 1.0, 2.25);
   field('Lab / Reg No.', p.labNumber, 5.4, 2.25);
   field('Age / Gender', `${age} / ${sex}`, 1.0, 3.15);
   field('Collection Date', collected, 5.4, 3.15);
-  field('Report Number', report.reportNumber, 1.0, 4.0);
-  field('Diagnostic Panels', `${report.profiles.length} profile${report.profiles.length > 1 ? 's' : ''}`, 5.4, 4.0);
+  if (diag) {
+    field('Clinical Diagnosis', diag, 1.0, 4.0);
+    field('Report Number', report.reportNumber, 5.4, 4.0);
+  } else {
+    field('Report Number', report.reportNumber, 1.0, 4.0);
+    field('Diagnostic Panels', `${report.profiles.length} profile${report.profiles.length > 1 ? 's' : ''}`, 5.4, 4.0);
+  }
 
   // Result slides: STRICT Test / result / unit / flags / references
   chunks.forEach((c, idx) => {
@@ -112,11 +118,29 @@ export async function exportReportToPPTX(report: LabReport, labInfo?: LabInfo): 
     });
 
     if (c.last) {
-      const note = [latin(c.profile.interpretation), latin(c.profile.comment)].filter(Boolean).join('\n');
-      if (note) {
+      const notes: string[] = [];
+      if (c.profile.interpretation) notes.push(latin(c.profile.interpretation));
+      if (c.profile.interpretations && Array.isArray(c.profile.interpretations)) {
+        c.profile.interpretations.forEach((t: string) => {
+          const l = latin(t);
+          if (l && !notes.includes(l)) notes.push(l);
+        });
+      }
+      if (c.profile.comment) notes.push(latin(c.profile.comment));
+      if (c.profile.comments && Array.isArray(c.profile.comments)) {
+        c.profile.comments.forEach((t: string) => {
+          const l = latin(t);
+          if (l && !notes.includes(l)) notes.push(l);
+        });
+      }
+      if (c.profile.recommendedTests && c.profile.recommendedTests.length > 0) {
+        notes.push(`Recommended Follow-up: ${c.profile.recommendedTests.map((t: string) => latin(t)).join(', ')}`);
+      }
+
+      if (notes.length > 0) {
         s.addText([
-          { text: 'CLINICAL INTERPRETATION / COMMENT\n', options: { bold: true, fontSize: 8.5, color: RED, charSpacing: 1.5 } },
-          { text: note, options: { fontSize: 10, color: INK } }
+          { text: 'CLINICAL INTERPRETATION & RECOMMENDATIONS\n', options: { bold: true, fontSize: 8.5, color: RED, charSpacing: 1.5 } },
+          { text: notes.join('\n• '), options: { fontSize: 9.5, color: INK } }
         ], {
           x: 0.5, y: 4.2, w: 9.0, h: 0.95, fontFace: FONT, fill: { color: 'FFF1F2' }, valign: 'top', margin: 6, fit: 'shrink'
         });

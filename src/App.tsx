@@ -1,478 +1,470 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { AppProvider, useApp } from './context/AppContext';
+import { Header } from './components/Header';
+import { Navigation } from './components/Navigation';
+import { DashboardModule } from './components/DashboardModule';
+import { AdmissionModule } from './components/AdmissionModule';
+import { WorklistModule } from './components/WorklistModule';
+import { ReportEditor } from './components/ReportEditor';
+import { ReportViewerPrint } from './components/ReportViewerPrint';
+import { ArchiveTable } from './components/ArchiveTable';
+import { IncomeModule } from './components/IncomeModule';
+import { ExpenseAndProfitModule } from './components/ExpenseAndProfitModule';
+import { LoyaltyModule } from './components/LoyaltyModule';
+import { LabToLabModule } from './components/LabToLabModule';
+import { InventoryModule } from './components/InventoryModule';
+import { HRModule } from './components/HRModule';
+import { CatalogBrowser } from './components/CatalogBrowser';
+import { SettingsBackupModule } from './components/SettingsBackupModule';
+import { BarcodeScannerModal } from './components/BarcodeScannerModal';
+import { RoleLoginModal } from './components/RoleLoginModal';
+import { SmartReportModal } from './components/SmartReportModal';
+import { DiseaseIllustrationsModal } from './components/DiseaseIllustrationsModal';
+import { LabInfoEditModal } from './components/LabInfoEditModal';
+import { PatientInvoiceModal } from './components/PatientInvoiceModal';
+import { TestCatalogModal } from './components/TestCatalogModal';
+import { ManualTestModal } from './components/ManualTestModal';
+import { OfflineIndicator } from './components/OfflineIndicator';
 import {
-  INITIAL_PATIENTS,
-  INITIAL_REPORTS,
-  INITIAL_SETTINGS
-} from './data/initialData';
-import { LabReport, LabSettings, Patient, UserRole } from './types/laboratory';
-import { TopNav } from './components/TopNav';
-import { Dashboard } from './components/Dashboard';
-import { ReportViewer } from './components/ReportViewer';
-import { ResultEntryModal } from './components/ResultEntryModal';
-import { HistoricalTrendModal } from './components/HistoricalTrendModal';
-import { CriticalAlertBanner } from './components/CriticalAlertBanner';
-import { CloudSyncModal } from './components/CloudSyncModal';
-import { PatientDirectory } from './components/PatientDirectory';
-import { LabSettingsView } from './components/LabSettingsView';
+  LabReport,
+  ReportStatus,
+  TestProfile,
+  CatalogProfileTemplate,
+  IndividualTest,
+  LabStaffSignatures,
+  TestParameter
+} from './types';
+import { LAB_CATALOG, INITIAL_INDIVIDUAL_TESTS, DEFAULT_STAFF } from './data/labCatalog';
+import { exportReportToPPTX } from './utils/pptxExport';
+import { formatWhatsAppMessage, openWhatsApp } from './utils/whatsapp';
+import { X, FlaskConical, PlusCircle } from 'lucide-react';
 
-export default function App() {
-  // Navigation view state
-  const [currentView, setCurrentView] = useState<'DASHBOARD' | 'REPORTS' | 'PATIENTS' | 'ALERTS' | 'SETTINGS'>('DASHBOARD');
+const AppContent: React.FC = () => {
+  const {
+    activeTab,
+    setActiveTab,
+    reports,
+    selectedReport,
+    selectedReportId,
+    setSelectedReportId,
+    updateReport,
+    deleteReport,
+    addReport,
+    exportBackup,
+    importBackup,
+    isPatientFormOpen,
+    setIsPatientFormOpen,
+    isLabInfoModalOpen,
+    setIsLabInfoModalOpen,
+    labInfo,
+    updateLabInfo,
+    staffSignatures,
+    updateStaffSignatures,
+    testCatalog,
+    packages,
+    diagnosticProfiles,
+    updateDiagnosticProfiles,
+    resetDiagnosticProfiles,
+    updateCatalogTest,
+    addCatalogTest,
+    deleteCatalogTest,
+    forceSyncCatalog,
+    applyPackageToReport
+  } = useApp();
 
-  // Dark mode state
-  const [darkMode, setDarkMode] = useState<boolean>(() => {
-    if (typeof window !== 'undefined') {
-      return (
-        localStorage.getItem('rtlab_theme') === 'dark' ||
-        (!localStorage.getItem('rtlab_theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)
-      );
-    }
-    return false;
-  });
+  const [archiveSearch, setArchiveSearch] = useState('');
+  const [smartReportModalOpen, setSmartReportModalOpen] = useState(false);
+  const [activeSmartReport, setActiveSmartReport] = useState<LabReport | null>(null);
+  const [illustrationsModalOpen, setIllustrationsModalOpen] = useState(false);
+  const [activeProfileIdForIllustration, setActiveProfileIdForIllustration] = useState<string | null>(null);
+  const [patientInvoiceModalReport, setPatientInvoiceModalReport] = useState<LabReport | null>(null);
+  const [catalogModalOpen, setCatalogModalOpen] = useState(false);
+  const [manualTestModalOpen, setManualTestModalOpen] = useState(false);
+  const [isPrintPreviewActive, setIsPrintPreviewActive] = useState(false);
 
-  // Role state (RBAC)
-  const [userRole, setUserRole] = useState<UserRole>('PATHOLOGIST');
-
-  // Reactive Clinical Data loaded from localStorage or seeded
-  const [reports, setReports] = useState<LabReport[]>(() => {
-    try {
-      const stored = localStorage.getItem('rtlab_reports_v2');
-      if (stored) return JSON.parse(stored);
-    } catch {
-      // Fallback
-    }
-    return INITIAL_REPORTS;
-  });
-
-  const [patients, setPatients] = useState<Patient[]>(() => {
-    try {
-      const stored = localStorage.getItem('rtlab_patients_v2');
-      if (stored) return JSON.parse(stored);
-    } catch {
-      // Fallback
-    }
-    return INITIAL_PATIENTS;
-  });
-
-  const [settings, setSettings] = useState<LabSettings>(() => {
-    try {
-      const stored = localStorage.getItem('rtlab_settings_v2');
-      if (stored) return JSON.parse(stored);
-    } catch {
-      // Fallback
-    }
-    return INITIAL_SETTINGS;
-  });
-
-  // Selected report for viewing
-  const [selectedReportId, setSelectedReportId] = useState<string | null>(reports[0]?.id || null);
-
-  // Modals state
-  const [isEntryModalOpen, setIsEntryModalOpen] = useState<boolean>(false);
-  const [reportToEdit, setReportToEdit] = useState<LabReport | null>(null);
-  const [entryDefaultPanel, setEntryDefaultPanel] = useState<string>('CBC');
-
-  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState<boolean>(false);
-  const [historyTargetMrn, setHistoryTargetMrn] = useState<string>('');
-  const [historyTargetTest, setHistoryTargetTest] = useState<string | undefined>(undefined);
-
-  const [isSyncModalOpen, setIsSyncModalOpen] = useState<boolean>(false);
-  const [cloudSyncing, setCloudSyncing] = useState<boolean>(false);
-
-  // Sync dark mode class on HTML element
-  useEffect(() => {
-    const root = document.documentElement;
-    if (darkMode) {
-      root.classList.add('dark');
-      localStorage.setItem('rtlab_theme', 'dark');
-    } else {
-      root.classList.remove('dark');
-      localStorage.setItem('rtlab_theme', 'light');
-    }
-  }, [darkMode]);
-
-  // Persist reports & patients to localStorage
-  useEffect(() => {
-    try {
-      localStorage.setItem('rtlab_reports_v2', JSON.stringify(reports));
-    } catch (e) {
-      console.warn('LocalStorage save failed', e);
-    }
-  }, [reports]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('rtlab_patients_v2', JSON.stringify(patients));
-    } catch (e) {
-      console.warn('LocalStorage save failed', e);
-    }
-  }, [patients]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('rtlab_settings_v2', JSON.stringify(settings));
-    } catch (e) {
-      console.warn('LocalStorage save failed', e);
-    }
-  }, [settings]);
-
-  // Heartbeat simulated cloud sync
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCloudSyncing(true);
-      setTimeout(() => setCloudSyncing(false), 800);
-    }, 45000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Filter unnotified critical reports
-  const unnotifiedCriticalReports = reports.filter(
-    (r) => r.criticalAlertActive && !r.criticalCallLog
-  );
-
-  const activeReport = reports.find((r) => r.id === selectedReportId) || reports[0];
-
-  // Actions
-  const handleOpenNewReport = (panelCode: string = 'CBC') => {
-    setReportToEdit(null);
-    setEntryDefaultPanel(panelCode);
-    setIsEntryModalOpen(true);
+  // Handlers for ReportEditor & Archive
+  const handleSelectReport = (report: LabReport) => {
+    setSelectedReportId(report.id);
+    setIsPrintPreviewActive(false);
+    setActiveTab('diagnostic_editor');
   };
 
-  const handleEditReport = (rep: LabReport) => {
-    setReportToEdit(rep);
-    setEntryDefaultPanel(rep.panelCode);
-    setIsEntryModalOpen(true);
+  const handlePrintReport = (report: LabReport) => {
+    setSelectedReportId(report.id);
+    setIsPrintPreviewActive(true);
   };
 
-  const handleSaveReport = (newOrUpdatedReport: LabReport) => {
-    setReports((prev) => {
-      const idx = prev.findIndex((r) => r.id === newOrUpdatedReport.id);
-      if (idx >= 0) {
-        const copy = [...prev];
-        copy[idx] = newOrUpdatedReport;
-        return copy;
+  const handleDuplicateReport = (report: LabReport) => {
+    const nextLabNum = `RT-2026-${String(reports.length + 1).padStart(3, '0')}`;
+    const duplicated: LabReport = {
+      ...report,
+      id: `rep-${Date.now()}`,
+      reportNumber: nextLabNum,
+      patient: {
+        ...report.patient,
+        id: `pat-${Date.now()}`,
+        labNumber: nextLabNum,
+        barcode: `RT-${10030 + reports.length + 1}`
+      },
+      status: 'draft',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    addReport(duplicated);
+  };
+
+  const handleBackupDatabase = async () => {
+    await exportBackup();
+  };
+
+  const handleRestoreDatabase = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      const content = event.target?.result as string;
+      if (content) {
+        await importBackup(content);
       }
-      return [newOrUpdatedReport, ...prev];
-    });
+    };
+    reader.readAsText(file);
+  };
 
-    // Also update patient list if not present
-    setPatients((prev) => {
-      const exists = prev.some((p) => p.mrn === newOrUpdatedReport.patient.mrn);
-      if (!exists) {
-        return [newOrUpdatedReport.patient, ...prev];
+  const handleBulkDelete = (reportIds: string[]) => {
+    reportIds.forEach(id => deleteReport(id));
+  };
+
+  const handleBulkUpdateStatus = (reportIds: string[], status: ReportStatus) => {
+    reportIds.forEach(id => updateReport(id, { status }));
+  };
+
+  // Open illustrations modal for profile
+  const handleOpenIllustrations = (profileId: string) => {
+    setActiveProfileIdForIllustration(profileId);
+    setIllustrationsModalOpen(true);
+  };
+
+  const handleAttachIllustration = (illustration: any) => {
+    if (!selectedReport || !activeProfileIdForIllustration) return;
+    const updatedProfiles = selectedReport.profiles.map(prof => {
+      if (prof.id === activeProfileIdForIllustration) {
+        return { ...prof, attachedIllustration: illustration };
       }
-      return prev;
+      return prof;
     });
-
-    setSelectedReportId(newOrUpdatedReport.id);
-    setCurrentView('REPORTS');
+    updateReport(selectedReport.id, { profiles: updatedProfiles });
+    setIllustrationsModalOpen(false);
   };
 
-  const handleApproveReport = (reportId: string) => {
-    setReports((prev) =>
-      prev.map((r) =>
-        r.id === reportId
-          ? {
-              ...r,
-              status: 'APPROVED',
-              verifiedBy: settings.directorName || 'د. رامي مختار',
-              verifiedTitle: settings.directorTitle,
-              updatedAt: new Date().toISOString(),
-            }
-          : r
-      )
-    );
-  };
-
-  const handleLogCriticalCall = (
-    reportId: string,
-    logData: { notifiedTo: string; department: string; readBackConfirmed: boolean; notes?: string }
-  ) => {
-    const nowStr = new Date().toISOString().replace('T', ' ').slice(0, 16);
-    setReports((prev) =>
-      prev.map((r) =>
-        r.id === reportId
-          ? {
-              ...r,
-              criticalCallLog: {
-                notifiedAt: nowStr,
-                notifiedTo: logData.notifiedTo,
-                notifiedBy: userRole === 'PATHOLOGIST' ? 'د. استشاري المعمل' : 'أخصائي التحاليل',
-                departmentOrClinic: logData.department,
-                readBackConfirmed: logData.readBackConfirmed,
-                notes: logData.notes,
-              },
-            }
-          : r
-      )
-    );
-  };
-
-  const handleOpenHistoryTrend = (patientMrn: string, testCode?: string) => {
-    setHistoryTargetMrn(patientMrn);
-    setHistoryTargetTest(testCode);
-    setIsHistoryModalOpen(true);
-  };
-
-  const historyPatientName =
-    patients.find((p) => p.mrn === historyTargetMrn)?.fullName || 'المريض';
+  // Current active report fallback
+  const currentReport = selectedReport || reports[0];
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors">
-      {/* Top Navigation */}
-      <TopNav
-        currentView={currentView}
-        onNavigate={setCurrentView}
-        userRole={userRole}
-        onChangeRole={setUserRole}
-        darkMode={darkMode}
-        onToggleDarkMode={() => setDarkMode(!darkMode)}
-        onNewReport={() => handleOpenNewReport('CBC')}
-        criticalAlertsCount={unnotifiedCriticalReports.length}
-        cloudSyncing={cloudSyncing}
-        onOpenSyncModal={() => setIsSyncModalOpen(true)}
-      />
+    <div className="min-h-screen bg-slate-100 flex flex-col text-slate-900 font-sans selection:bg-rose-900 selection:text-white">
+      {/* Top Header */}
+      <Header />
 
-      {/* Critical Panic Value Alert Banner (Technician Real-Time Notifications) */}
-      <CriticalAlertBanner
-        unnotifiedReports={unnotifiedCriticalReports}
-        onLogCall={handleLogCriticalCall}
-        onViewReport={(rep) => {
-          setSelectedReportId(rep.id);
-          setCurrentView('REPORTS');
-        }}
-        currentUserName={
-          userRole === 'PATHOLOGIST' ? 'د. رامي مختار (Consultant)' : 'أخصائي التحاليل الطبية'
-        }
-      />
+      {/* Main Navigation Tabs */}
+      <Navigation />
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
-        {/* VIEW 1: DASHBOARD */}
-        {currentView === 'DASHBOARD' && (
-          <Dashboard
-            reports={reports}
-            patients={patients}
-            onSelectReport={(rep) => {
-              setSelectedReportId(rep.id);
-              setCurrentView('REPORTS');
-            }}
-            onNewReport={handleOpenNewReport}
-            onOpenHistoryTrend={handleOpenHistoryTrend}
-            onViewAllReports={() => setCurrentView('REPORTS')}
-          />
-        )}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Full-page Print Preview if active */}
+        {isPrintPreviewActive && currentReport ? (
+          <div className="space-y-4">
+            <ReportViewerPrint
+              report={currentReport}
+              onBackToEdit={() => setIsPrintPreviewActive(false)}
+              onOpenInvoice={() => setPatientInvoiceModalReport(currentReport)}
+              onOpenLabInfoModal={() => setIsLabInfoModalOpen(true)}
+              onOpenIllustrationsModal={(pId) => handleOpenIllustrations(pId)}
+              onOpenSmartReport={() => {
+                setActiveSmartReport(currentReport);
+                setSmartReportModalOpen(true);
+              }}
+            />
+          </div>
+        ) : (
+          <>
+            {activeTab === 'dashboard' && <DashboardModule />}
+            {activeTab === 'admission' && <AdmissionModule />}
+            {activeTab === 'worklist' && <WorklistModule />}
 
-        {/* VIEW 2: REPORTS & VIEWER (The primary requested clinical report) */}
-        {currentView === 'REPORTS' && (
-          <div className="space-y-6">
-            {/* Quick selector of active report if multiple */}
-            <div className="no-print bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3 shadow-xs flex items-center justify-between flex-wrap gap-3">
-              <div className="flex items-center gap-2 text-xs">
-                <span className="font-bold text-slate-700 dark:text-slate-300">التقرير المعروض حالياً:</span>
-                <select
-                  value={selectedReportId || ''}
-                  onChange={(e) => setSelectedReportId(e.target.value)}
-                  className="bg-slate-100 dark:bg-slate-800 border-none rounded-xl px-3 py-1.5 font-bold text-teal-800 dark:text-teal-300"
-                >
-                  {reports.map((r) => (
-                    <option key={r.id} value={r.id}>
-                      {r.reportNumber} — {r.patient.fullName} ({r.panelNameAr})
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => handleOpenNewReport('CBC')}
-                  className="px-3 py-1.5 text-xs font-semibold text-teal-700 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/40 hover:bg-teal-100 rounded-xl"
-                >
-                  + إدراج فحص جديد
-                </button>
-              </div>
-            </div>
-
-            {activeReport ? (
-              <ReportViewer
-                report={activeReport}
-                settings={settings}
-                onEditReport={handleEditReport}
-                onOpenHistoryTrend={handleOpenHistoryTrend}
-                onApproveReport={handleApproveReport}
-                onBackToList={() => setCurrentView('DASHBOARD')}
-                userRole={userRole}
-              />
-            ) : (
-              <div className="text-center py-16 text-slate-400 text-sm">
-                لا توجد تقارير حالياً. اضغط على "+ فحص معملي جديد" للبدء.
-              </div>
+            {/* Diagnostic Report Editor */}
+            {activeTab === 'diagnostic_editor' && (
+              currentReport ? (
+                <div className="space-y-4">
+                  <ReportEditor
+                    report={currentReport}
+                    onUpdateReport={(updated) => updateReport(updated.id, updated)}
+                    onSaveToArchive={() => setActiveTab('reports_archive')}
+                    onPrintPreview={() => setIsPrintPreviewActive(true)}
+                    onSendWhatsApp={() => {
+                      const msg = formatWhatsAppMessage(currentReport, labInfo);
+                      openWhatsApp(currentReport.patient.phone, msg);
+                    }}
+                    onExportPPTX={() => exportReportToPPTX(currentReport, labInfo)}
+                    onOpenCatalog={() => setCatalogModalOpen(true)}
+                    onOpenManualTest={() => setManualTestModalOpen(true)}
+                    onOpenInvoice={() => setPatientInvoiceModalReport(currentReport)}
+                    onOpenIllustrationsModal={(pId) => handleOpenIllustrations(pId)}
+                    onOpenSmartReport={() => {
+                      setActiveSmartReport(currentReport);
+                      setSmartReportModalOpen(true);
+                    }}
+                  />
+                </div>
+              ) : (
+                <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 space-y-4 max-w-md mx-auto my-12">
+                  <FlaskConical className="w-12 h-12 text-slate-400 mx-auto" />
+                  <h3 className="font-bold text-slate-800 text-lg">لم يتم تحديد تقرير حالي</h3>
+                  <p className="text-xs text-slate-500">اختر عينة من قائمة عمل المعمل أو سجل مريضاً جديداً للبدء في إدخال النتائج.</p>
+                  <button
+                    onClick={() => setIsPatientFormOpen(true)}
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-rose-900 text-white font-bold text-xs"
+                  >
+                    <PlusCircle className="w-4 h-4" />
+                    <span>تسجيل مريض وحجز تحاليل</span>
+                  </button>
+                </div>
+              )
             )}
-          </div>
-        )}
 
-        {/* VIEW 3: PATIENT DIRECTORY & EMR */}
-        {currentView === 'PATIENTS' && (
-          <PatientDirectory
-            patients={patients}
-            reports={reports}
-            onSelectReport={(rep) => {
-              setSelectedReportId(rep.id);
-              setCurrentView('REPORTS');
-            }}
-            onOpenHistoryTrend={handleOpenHistoryTrend}
-            onNewReportForPatient={(p) => {
-              setReportToEdit(null);
-              setEntryDefaultPanel('CBC');
-              setIsEntryModalOpen(true);
-            }}
-          />
-        )}
+            {/* Archive & Reports Table */}
+            {activeTab === 'reports_archive' && (
+              <ArchiveTable
+                reports={reports}
+                searchTerm={archiveSearch}
+                setSearchTerm={setArchiveSearch}
+                onSelectReport={handleSelectReport}
+                onPrintReport={handlePrintReport}
+                onDeleteReport={(id) => deleteReport(id)}
+                onDuplicateReport={handleDuplicateReport}
+                onBackupDatabase={handleBackupDatabase}
+                onRestoreDatabase={handleRestoreDatabase}
+                onNewPatientClick={() => setIsPatientFormOpen(true)}
+                onOpenInvoice={(rep) => setPatientInvoiceModalReport(rep)}
+                onOpenSmartReport={(rep) => {
+                  setActiveSmartReport(rep);
+                  setSmartReportModalOpen(true);
+                }}
+                onBulkDeleteReports={handleBulkDelete}
+                onBulkUpdateStatus={handleBulkUpdateStatus}
+              />
+            )}
 
-        {/* VIEW 4: CRITICAL ALERTS LOG */}
-        {currentView === 'ALERTS' && (
-          <div className="space-y-6">
-            <div>
-              <h1 className="text-xl font-bold text-slate-900 dark:text-white">
-                سجل إبلاغ وتوثيق القيم الحرجة (Critical / Panic Values Audit Log)
-              </h1>
-              <p className="text-xs text-slate-500">
-                توثيق معتمد وفق معايير الجودة الدولية ISO 15189 للمكالمات الهاتفية الطارئة
-              </p>
-            </div>
+            {/* Financial Modules */}
+            {activeTab === 'financial_income' && <IncomeModule />}
+            {activeTab === 'expenses_profit' && <ExpenseAndProfitModule />}
+            {activeTab === 'loyalty' && <LoyaltyModule />}
+            {activeTab === 'lab_to_lab' && <LabToLabModule />}
 
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-xs">
-              <table className="w-full text-right text-xs">
-                <thead>
-                  <tr className="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 font-bold uppercase text-[11px]">
-                    <th className="py-3 px-4">رقم التقرير والمريض</th>
-                    <th className="py-3 px-4">الفحوصات الحرجة</th>
-                    <th className="py-3 px-4">حالة الإبلاغ</th>
-                    <th className="py-3 px-4">توقيت الإبلاغ والمستلم</th>
-                    <th className="py-3 px-4 text-center">الإجراء</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                  {reports
-                    .filter((r) => r.criticalAlertActive)
-                    .map((rep) => {
-                      const criticalResults = rep.results.filter(
-                        (r) => r.flag === 'CRITICAL_LOW' || r.flag === 'CRITICAL_HIGH'
-                      );
-
-                      return (
-                        <tr key={rep.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40">
-                          <td className="py-3 px-4">
-                            <span className="font-bold text-slate-900 dark:text-white block">
-                              {rep.patient.fullName}
-                            </span>
-                            <span className="font-mono text-teal-700 dark:text-teal-400 text-[11px]">
-                              {rep.reportNumber} · {rep.patient.mrn}
-                            </span>
-                          </td>
-
-                          <td className="py-3 px-4">
-                            <div className="space-y-0.5">
-                              {criticalResults.map((c, i) => (
-                                <div key={i} className="font-mono text-rose-600 font-bold text-[11px]">
-                                  {c.testNameEn}: {c.value} {c.unit} ({c.flag})
-                                </div>
-                              ))}
-                            </div>
-                          </td>
-
-                          <td className="py-3 px-4">
-                            {rep.criticalCallLog ? (
-                              <span className="inline-block px-2.5 py-1 text-[11px] font-bold text-emerald-700 bg-emerald-100 dark:bg-emerald-950/60 dark:text-emerald-300 rounded-lg">
-                                تم التبليغ والتأكيد بالعكس
-                              </span>
-                            ) : (
-                              <span className="inline-block px-2.5 py-1 text-[11px] font-bold text-rose-700 bg-rose-100 dark:bg-rose-950/60 dark:text-rose-300 rounded-lg animate-pulse">
-                                معلق — يتطلب الاتصال فوراً
-                              </span>
-                            )}
-                          </td>
-
-                          <td className="py-3 px-4 text-[11px]">
-                            {rep.criticalCallLog ? (
-                              <div>
-                                <span className="font-bold text-slate-800 dark:text-slate-200 block">
-                                  {rep.criticalCallLog.notifiedTo}
-                                </span>
-                                <span className="text-slate-400 font-mono">
-                                  {rep.criticalCallLog.notifiedAt} بواسطة {rep.criticalCallLog.notifiedBy}
-                                </span>
-                              </div>
-                            ) : (
-                              <span className="text-slate-400">-</span>
-                            )}
-                          </td>
-
-                          <td className="py-3 px-4 text-center">
-                            <button
-                              onClick={() => {
-                                setSelectedReportId(rep.id);
-                                setCurrentView('REPORTS');
-                              }}
-                              className="px-3 py-1.5 text-xs font-semibold text-teal-700 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/50 hover:bg-teal-100 rounded-xl"
-                            >
-                              عرض التقرير
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-
-        {/* VIEW 5: LAB SETTINGS */}
-        {currentView === 'SETTINGS' && (
-          <LabSettingsView settings={settings} onUpdateSettings={setSettings} />
+            {/* Admin Modules */}
+            {activeTab === 'inventory' && <InventoryModule />}
+            {activeTab === 'hr' && <HRModule />}
+            {activeTab === 'catalog' && (
+              <CatalogBrowser
+                catalog={diagnosticProfiles}
+                onUpdateCatalog={updateDiagnosticProfiles}
+                onResetCatalog={resetDiagnosticProfiles}
+                onSelectProfileForNewCase={(template: CatalogProfileTemplate) => {
+                  if (currentReport) {
+                    const newProfile: TestProfile = {
+                      id: `prof-${Date.now()}`,
+                      profileCode: template.code,
+                      titleEn: template.titleEn,
+                      titleAr: template.titleAr,
+                      category: template.category,
+                      sampleType: template.sampleType,
+                      interpretation: template.defaultInterpretation || '',
+                      parameters: template.parameters.map((p, idx) => ({
+                        ...p,
+                        id: `p-${Date.now()}-${idx}`,
+                        result: '',
+                        flag: 'NORMAL'
+                      }))
+                    };
+                    updateReport(currentReport.id, {
+                      profiles: [...currentReport.profiles, newProfile]
+                    });
+                    setActiveTab('diagnostic_editor');
+                  }
+                }}
+                individualTests={testCatalog as any}
+                onUpdateIndividualTests={() => {}}
+              />
+            )}
+            {activeTab === 'audit_settings' && <SettingsBackupModule />}
+          </>
         )}
       </main>
 
-      {/* MODALS */}
-      {/* 1. Fast Result Entry & Morphology Modal */}
-      <ResultEntryModal
-        isOpen={isEntryModalOpen}
-        onClose={() => setIsEntryModalOpen(false)}
-        onSaveReport={handleSaveReport}
-        existingReport={reportToEdit}
-        patients={patients}
-        allReports={reports}
-        defaultPanelCode={entryDefaultPanel}
-        currentUserName={
-          userRole === 'PATHOLOGIST' ? 'د. رامي مختار (Consultant)' : 'أخصائي التحاليل الطبية'
-        }
-      />
+      {/* Global Modals */}
 
-      {/* 2. Automated Patient Historical Trend Modal (Delta Track) */}
-      <HistoricalTrendModal
-        isOpen={isHistoryModalOpen}
-        onClose={() => setIsHistoryModalOpen(false)}
-        patientMrn={historyTargetMrn}
-        patientName={historyPatientName}
-        reports={reports}
-        initialTestCode={historyTargetTest || 'HGB'}
-      />
+      {/* 1. New Patient Admission Modal */}
+      {isPatientFormOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 max-w-4xl w-full max-h-[92vh] overflow-y-auto p-6 relative">
+            <button
+              onClick={() => setIsPatientFormOpen(false)}
+              className="absolute left-6 top-6 p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 transition-colors cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <AdmissionModule isModal onSuccess={() => setIsPatientFormOpen(false)} />
+          </div>
+        </div>
+      )}
 
-      {/* 3. Cloud Synchronization & Backup Modal */}
-      <CloudSyncModal
-        isOpen={isSyncModalOpen}
-        onClose={() => setIsSyncModalOpen(false)}
-        reports={reports}
-        patients={patients}
-        settings={settings}
-        onRestoreData={(data) => {
-          if (data.reports) setReports(data.reports);
-          if (data.patients) setPatients(data.patients);
-          if (data.settings) setSettings(data.settings);
-        }}
-      />
+      {/* 2. Barcode Scanner Modal */}
+      <BarcodeScannerModal />
+
+      {/* 3. Role-Based Login Modal */}
+      <RoleLoginModal />
+
+      {/* 4. Smart Report Modal */}
+      {smartReportModalOpen && activeSmartReport && (
+        <SmartReportModal
+          isOpen={smartReportModalOpen}
+          onClose={() => setSmartReportModalOpen(false)}
+          report={activeSmartReport}
+          onAttachToReport={(insights: string) => {
+            if (activeSmartReport) {
+              updateReport(activeSmartReport.id, {
+                generalComment: `${activeSmartReport.generalComment || ''}\n${insights}`.trim()
+              });
+            }
+            setSmartReportModalOpen(false);
+          }}
+        />
+      )}
+
+      {/* 5. Disease Illustrations Modal */}
+      {illustrationsModalOpen && (
+        <DiseaseIllustrationsModal
+          isOpen={illustrationsModalOpen}
+          onClose={() => setIllustrationsModalOpen(false)}
+          onSelectIllustration={handleAttachIllustration}
+        />
+      )}
+
+      {/* 6. Lab Info & Branches Edit Modal */}
+      {isLabInfoModalOpen && (
+        <LabInfoEditModal
+          isOpen={isLabInfoModalOpen}
+          onClose={() => setIsLabInfoModalOpen(false)}
+          labInfo={labInfo}
+          onUpdateLabInfo={updateLabInfo}
+          staffSignatures={staffSignatures}
+          onUpdateStaffSignatures={updateStaffSignatures}
+        />
+      )}
+
+      {/* 7. Patient Invoice Modal */}
+      {patientInvoiceModalReport && (
+        <PatientInvoiceModal
+          isOpen={!!patientInvoiceModalReport}
+          onClose={() => setPatientInvoiceModalReport(null)}
+          report={patientInvoiceModalReport}
+          onUpdateReport={(updatedReport: LabReport) => {
+            updateReport(updatedReport.id, updatedReport);
+          }}
+        />
+      )}
+
+      {/* 8. Test Catalog Modal */}
+      {catalogModalOpen && (
+        <TestCatalogModal
+          isOpen={catalogModalOpen}
+          onClose={() => setCatalogModalOpen(false)}
+          catalog={diagnosticProfiles}
+          individualTests={testCatalog as any}
+          packages={packages}
+          existingProfileCodes={currentReport ? currentReport.profiles.map(p => p.profileCode) : []}
+          onAddProfile={(newProf: TestProfile) => {
+            if (currentReport) {
+              updateReport(currentReport.id, {
+                profiles: [...currentReport.profiles, newProf]
+              });
+            }
+            setCatalogModalOpen(false);
+          }}
+          onApplyPackage={(pkg) => {
+            if (currentReport) {
+              applyPackageToReport(currentReport.id, pkg);
+            }
+            setCatalogModalOpen(false);
+          }}
+        />
+      )}
+
+      {/* 9. Manual Test / Custom Profile Modal */}
+      {manualTestModalOpen && currentReport && (
+        <ManualTestModal
+          isOpen={manualTestModalOpen}
+          onClose={() => setManualTestModalOpen(false)}
+          profiles={currentReport ? currentReport.profiles : []}
+          onAddManualTest={(
+            targetProfileId: string | 'new',
+            testParam: TestParameter,
+            newProfileInfo?: { titleEn: string; titleAr: string; category: string }
+          ) => {
+            if (!currentReport) return;
+            if (targetProfileId === 'new' && newProfileInfo) {
+              const newProf: TestProfile = {
+                id: `prof-${Date.now()}`,
+                profileCode: newProfileInfo.titleEn.substring(0, 5).toUpperCase(),
+                titleEn: newProfileInfo.titleEn,
+                titleAr: newProfileInfo.titleAr,
+                category: newProfileInfo.category,
+                sampleType: 'Serum',
+                parameters: [testParam]
+              };
+              updateReport(currentReport.id, { profiles: [...currentReport.profiles, newProf] });
+            } else {
+              const updatedProfiles = currentReport.profiles.map(prof => {
+                if (prof.id === targetProfileId) {
+                  return { ...prof, parameters: [...prof.parameters, testParam] };
+                }
+                return prof;
+              });
+              updateReport(currentReport.id, { profiles: updatedProfiles });
+            }
+            setManualTestModalOpen(false);
+          }}
+        />
+      )}
+
+      {/* Offline Connectivity Notification */}
+      <OfflineIndicator />
+
+      {/* Footer with RT Lab Identity */}
+      <footer className="bg-white border-t border-slate-200 py-4 text-xs text-slate-500 print:hidden mt-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="font-black text-rose-900">منظومة معامل RT الطبية والمالية الموحدة</span>
+            <span aria-hidden="true">·</span>
+            <span className="font-bold text-slate-800">معامل رامي مختار</span>
+            <span aria-hidden="true">·</span>
+            <span className="font-semibold text-blue-900">أطباء كلية طب قصر العيني</span>
+          </div>
+          <div className="flex items-center gap-4 text-slate-400 font-mono text-[11px]">
+            <span>ISO 15189 Certified</span>
+            <span>·</span>
+            <span>LIS Hardware Connected</span>
+            <span>·</span>
+            <span>التشخيص الصحيح يبدأ معنا</span>
+          </div>
+        </div>
+      </footer>
     </div>
+  );
+};
+
+export default function App() {
+  return (
+    <AppProvider>
+      <AppContent />
+    </AppProvider>
   );
 }

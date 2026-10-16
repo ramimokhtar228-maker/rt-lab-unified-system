@@ -371,6 +371,7 @@ export interface Patient {
   referringDoctorName: string;
   sampleDate: string;
   reportingDate: string;
+  clinicalDiagnosis?: string;
   clinicalHistory?: string;
   fastingHours?: number;
   nationalId?: string;
@@ -444,6 +445,10 @@ export interface TestProfile {
   parameters: TestParameter[];
   interpretation?: string;
   comment?: string;
+  interpretations?: string[];
+  comments?: string[];
+  recommendedTests?: string[];
+  selectedIllustrationId?: string;
   attachedIllustration?: DiseaseIllustration;
   bloodFilmFindings?: {
     rbcMorphology?: string;

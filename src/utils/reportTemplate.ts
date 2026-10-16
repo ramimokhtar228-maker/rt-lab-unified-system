@@ -1,5 +1,6 @@
 import { LabReport, LabInfo, TestParameter, TestProfile } from '../types';
 import { formatReferenceDisplay } from './cbcCalculator';
+import { DISEASE_ILLUSTRATIONS } from '../data/diseaseIllustrations';
 
 /**
  * Single source of truth for the patient-facing report.
@@ -518,6 +519,99 @@ export const REPORT_CSS = `
     font-weight: 800;
     letter-spacing: 0.06em;
   }
+
+  /* Recommended Follow-up Investigations */
+  .rt-rec {
+    margin-top: 3.5mm;
+    padding: 3mm 4mm;
+    border-radius: 6px;
+    background: #f8fafc;
+    border: 1px dashed ${BRAND.navyBlue};
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .rt-rec h4 {
+    margin: 0 0 2mm;
+    font-size: 9.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: ${BRAND.navyBlue};
+    font-weight: 800;
+  }
+  .rt-rec-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .rt-rec-badge {
+    font-size: 9.5px;
+    font-weight: 700;
+    color: ${BRAND.navy};
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    padding: 2.5px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.02em;
+  }
+  .rt-rec-disclaimer {
+    margin-top: 2mm;
+    font-size: 8px;
+    color: ${BRAND.muted};
+    font-style: italic;
+  }
+
+  /* Medical Atlas & Diagnostic Infographic Card */
+  .rt-atlas {
+    margin-top: 3.5mm;
+    padding: 3mm 4mm;
+    border-radius: 6px;
+    background: ${BRAND.redSoft};
+    border: 1px solid #fecdd3;
+    border-left: 3.5px solid ${BRAND.red};
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .rt-atlas-img {
+    width: 140px;
+    height: 80px;
+    flex-shrink: 0;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e2e8f0;
+  }
+  .rt-atlas-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .rt-atlas-content {
+    flex: 1;
+    min-width: 0;
+  }
+  .rt-atlas-title {
+    font-size: 11px;
+    font-weight: 800;
+    color: ${BRAND.red};
+    margin-bottom: 2px;
+  }
+  .rt-atlas-desc {
+    font-size: 9.5px;
+    line-height: 1.45;
+    color: ${BRAND.ink};
+  }
+  .rt-atlas-points {
+    margin-top: 3px;
+    font-size: 8.5px;
+    color: #475569;
+    font-weight: 600;
+  }
 `;
 
 function signatureBlock(report: LabReport): string {
@@ -601,10 +695,43 @@ function pageHtml(report: LabReport, profile: TestProfile, idx: number, total: n
       ? 'Self request'
       : latin(`${p.referringDoctorTitle || ''} ${p.referringDoctorName || ''}`, 'Self request');
 
-  const interpretation = latin(profile.interpretation);
-  const comment = latin(profile.comment);
+  const diagnosis = latin(p.clinicalDiagnosis || p.clinicalHistory || '');
+
+  // Gather multiple clinical interpretations
+  const allInterpretations: string[] = [];
+  if (profile.interpretation && profile.interpretation.trim()) {
+    allInterpretations.push(profile.interpretation.trim());
+  }
+  if (profile.interpretations && Array.isArray(profile.interpretations)) {
+    profile.interpretations.forEach(t => {
+      if (t && t.trim() && !allInterpretations.includes(t.trim())) {
+        allInterpretations.push(t.trim());
+      }
+    });
+  }
+
+  // Gather multiple technical comments
+  const allComments: string[] = [];
+  if (profile.comment && profile.comment.trim()) {
+    allComments.push(profile.comment.trim());
+  }
+  if (profile.comments && Array.isArray(profile.comments)) {
+    profile.comments.forEach(t => {
+      if (t && t.trim() && !allComments.includes(t.trim())) {
+        allComments.push(t.trim());
+      }
+    });
+  }
+
   const general = idx === total - 1 ? latin(report.generalComment) : '';
   const bf = profile.bloodFilmFindings;
+
+  // Attached medical atlas / infographic
+  const illustration = profile.attachedIllustration || 
+    (profile.selectedIllustrationId ? DISEASE_ILLUSTRATIONS.find(d => d.id === profile.selectedIllustrationId) : undefined);
+
+  // Recommended follow-up tests
+  const recommendedTests = (profile.recommendedTests || []).filter(t => Boolean(t && t.trim()));
 
   const film = bf
     ? `<div class="rt-film">
@@ -612,6 +739,53 @@ function pageHtml(report: LabReport, profile: TestProfile, idx: number, total: n
         ${bf.wbcMorphology ? `<div><b>WBC Morphology:</b> ${esc(latin(bf.wbcMorphology))}</div>` : ''}
         ${bf.plateletMorphology ? `<div><b>Platelets:</b> ${esc(latin(bf.plateletMorphology))}</div>` : ''}
         ${bf.reticulocytesPercent ? `<div><b>Reticulocytes:</b> ${esc(latin(bf.reticulocytesPercent))}</div>` : ''}
+      </div>`
+    : '';
+
+  // Render interpretations HTML
+  const interpretationsHtml = allInterpretations
+    .map((interp, i) => `
+      <div class="rt-note">
+        <h4>Clinical Interpretation ${allInterpretations.length > 1 ? `#${i + 1}` : ''}</h4>
+        <p>${esc(latin(interp))}</p>
+      </div>
+    `)
+    .join('');
+
+  // Render comments HTML
+  const commentsHtml = allComments
+    .map((comm, i) => `
+      <div class="rt-note plain">
+        <h4>Technical Note ${allComments.length > 1 ? `#${i + 1}` : ''}</h4>
+        <p>${esc(latin(comm))}</p>
+      </div>
+    `)
+    .join('');
+
+  // Render infographic HTML if attached
+  const atlasHtml = illustration
+    ? `<div class="rt-atlas">
+        <div class="rt-atlas-img">
+          <img src="${illustration.imageUrl || ''}" alt="${esc(illustration.titleEn)}" />
+        </div>
+        <div class="rt-atlas-content">
+          <div class="rt-atlas-title">${esc(illustration.titleEn)}</div>
+          <div class="rt-atlas-desc">${esc(illustration.pathologySummaryEn)}</div>
+          ${illustration.keyDiagnosticPoints && illustration.keyDiagnosticPoints.length > 0 
+            ? `<div class="rt-atlas-points">• ${esc(illustration.keyDiagnosticPoints.slice(0, 2).join(' • '))}</div>` 
+            : ''}
+        </div>
+      </div>`
+    : '';
+
+  // Render recommended tests HTML
+  const recommendationsHtml = recommendedTests.length > 0
+    ? `<div class="rt-rec">
+        <h4>Recommended Follow-up Investigations</h4>
+        <div class="rt-rec-tags">
+          ${recommendedTests.map(t => `<span class="rt-rec-badge">${esc(latin(t))}</span>`).join('')}
+        </div>
+        <div class="rt-rec-disclaimer">Suggested according to analytical profiles. Please correlate clinically with treating physician.</div>
       </div>`
     : '';
 
@@ -641,6 +815,7 @@ function pageHtml(report: LabReport, profile: TestProfile, idx: number, total: n
       <div class="f"><label>Collected</label><span class="v">${esc(fmtDate(p.sampleDate))}</span></div>
       <div class="f"><label>Reported</label><span class="v">${esc(fmtDate(p.reportingDate))}</span></div>
       <div class="f wide"><label>Referred By</label><span class="v">${esc(doctor)}</span></div>
+      ${diagnosis ? `<div class="f wide" style="grid-column: span 2;"><label>Clinical Diagnosis / Indication</label><span class="v" style="color: ${BRAND.red}; font-weight: 700;">${esc(diagnosis)}</span></div>` : ''}
     </div>
 
     <div class="rt-title">
@@ -666,8 +841,11 @@ function pageHtml(report: LabReport, profile: TestProfile, idx: number, total: n
 
     ${film}
 
-    ${interpretation ? `<div class="rt-note"><h4>Clinical Interpretation</h4><p>${esc(interpretation)}</p></div>` : ''}
-    ${comment ? `<div class="rt-note plain"><h4>Technical Comment</h4><p>${esc(comment)}</p></div>` : ''}
+    ${interpretationsHtml}
+    ${commentsHtml}
+    ${atlasHtml}
+    ${recommendationsHtml}
+
     ${general ? `<div class="rt-note plain"><h4>Diagnostic Note</h4><p>${esc(general)}</p></div>` : ''}
 
     <div class="rt-spacer"></div>
