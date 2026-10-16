@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:57:00.305Z",
+  "syncedAt": "2026-10-16T15:57:09.663Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -1014,49 +1014,6 @@
               "flag": "NORMAL"
             },
             {
-              "name": "Direct Bilirubin",
-              "unit": "mg/dL",
-              "minNormal": 0,
-              "maxNormal": 0.3,
-              "textReference": "",
-              "id": "param-1792166170282-4",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "Indirect Bilirubin",
-              "unit": "mg/dL",
-              "minNormal": 0.1,
-              "maxNormal": 0.9,
-              "notes": "Auto-calculated: Total - Direct",
-              "textReference": "",
-              "id": "param-1792166170282-5",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "Total Serum Proteins",
-              "unit": "g/dL",
-              "minNormal": 6.4,
-              "maxNormal": 8.3,
-              "method": "Biuret",
-              "textReference": "",
-              "id": "param-1792166170282-6",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "Serum Albumin",
-              "unit": "g/dL",
-              "minNormal": 3.5,
-              "maxNormal": 5.2,
-              "method": "Bromocresol Green (BCG)",
-              "textReference": "",
-              "id": "param-1792166170282-7",
-              "result": "",
-              "flag": ""
-            },
-            {
               "name": "Serum Globulin",
               "unit": "g/dL",
               "minNormal": 2.3,
@@ -1123,7 +1080,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-16T15:56:55.218Z",
+      "updatedAt": "2026-10-16T15:57:03.979Z",
       "invoiceId": "inv-1791921893782"
     },
     {
