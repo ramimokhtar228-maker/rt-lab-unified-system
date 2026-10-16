@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:20:43.773Z",
+  "syncedAt": "2026-10-16T15:20:51.715Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -21762,7 +21762,7 @@
       "nameAr": "Indirect Coombs Test (IAT)",
       "nameEn": "Indirect Coombs Test (IAT)",
       "category": "Hematology",
-      "price": 150,
+      "price": 466,
       "cost": 40,
       "sampleType": "Serum",
       "turnaroundTime": "Within 3 hours",
