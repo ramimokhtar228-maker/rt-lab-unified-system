@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:15:09.675Z",
+  "syncedAt": "2026-10-16T15:16:38.562Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -6000,12 +6000,12 @@
           "interpretation": "Microscopic and chemical stool parameters evaluate digestive tract flora and pathogen carriage.",
           "parameters": [
             {
-              "textReference": "Negative (No H. Pylori antigen detected in stool)",
+              "textReference": "Negative  : 0.0 – 0.9  Equivocal   : 0.9 – 1.1  Positive  : > 1.1",
               "flag": "NORMAL",
-              "name": "جرثومة المعدة بالبراز كمي (H. Pylori Antigen in Stool) (Helicobacter Pylori Stool Antigen (HpSA))",
+              "name": "Helicobacter Pylori Stool Antigen (HpSA) (Helicobacter Pylori Stool Antigen (HpSA))",
               "id": "p-1791381439019-gbs",
               "result": "Negative ",
-              "unit": "Qualitative",
+              "unit": "ng/ml",
               "method": "Rapid Chromatographic Immunoassay / ELISA"
             }
           ]
@@ -6038,7 +6038,7 @@
         "age": 68
       },
       "reportNumber": "RT-2026-013",
-      "updatedAt": "2026-10-12T21:14:37.501Z",
+      "updatedAt": "2026-10-16T15:16:35.751Z",
       "createdAt": "2026-10-07T13:57:19.019Z",
       "id": "rep-1791381439019",
       "generalComment": "كافة الفحوصات المخبرية للمريض (محمد حسن على) تقع في النطاقات الآمنة بشكل عام مع انتظام مؤشرات الأعضاء الحيوية ونشاط فسيولوجي متوازن.",
@@ -6539,7 +6539,7 @@
           "parameters": [
             {
               "id": "p-1791359724810-wi0",
-              "name": "جرثومة المعدة بالبراز كمي (H. Pylori Antigen in Stool) (Helicobacter Pylori Stool Antigen (HpSA))",
+              "name": "Helicobacter Pylori Stool Antigen (HpSA) (Helicobacter Pylori Stool Antigen (HpSA))",
               "result": "NEGATIVE 0.54",
               "unit": "ng/ml",
               "textReference": "Negative  : 0.0 – 0.9  Equivocal   : 0.9 – 1.1  Positive  : > 1.1",
@@ -6562,7 +6562,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-07T07:55:24.810Z",
-      "updatedAt": "2026-10-16T15:08:49.236Z",
+      "updatedAt": "2026-10-16T15:16:35.751Z",
       "invoiceId": "inv-1791359724811"
     },
     {
@@ -21197,12 +21197,12 @@
       "nameAr": "Helicobacter Pylori Stool Antigen (HpSA)",
       "nameEn": "Helicobacter Pylori Stool Antigen (HpSA)",
       "category": "Gastroenterology",
-      "price": 190,
+      "price": 777,
       "cost": 40,
       "sampleType": "Fresh Stool Specimen",
       "turnaroundTime": "Within 3 hours",
-      "unit": "Qualitative",
-      "textReference": "Negative (No H. Pylori antigen detected in stool)",
+      "unit": "ng/ml",
+      "textReference": "Negative  : 0.0 – 0.9  Equivocal   : 0.9 – 1.1  Positive  : > 1.1",
       "method": "Rapid Chromatographic Immunoassay / ELISA",
       "fastingInstructions": "Fresh stool sample; stop antibiotics 2 weeks before"
     },
