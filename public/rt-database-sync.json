@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:54:20.175Z",
+  "syncedAt": "2026-10-16T15:54:57.205Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -1029,13 +1029,13 @@
             {
               "id": "param-1792166055645",
               "name": "Alanine Aminotransferase (ALT / SGPT) (Alanine Aminotransferase (ALT / SGPT))",
-              "result": "",
+              "result": "23",
               "unit": "U/L",
               "minNormal": 0,
               "maxNormal": 41,
               "textReference": "Adult Males: < 41 U/L | Adult Females: < 38  U/L",
               "method": "IFCC Kinetic UV without Pyridoxal Phosphate",
-              "flag": ""
+              "flag": "NORMAL"
             }
           ]
         }
@@ -1061,7 +1061,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-16T15:54:15.645Z",
+      "updatedAt": "2026-10-16T15:54:44.829Z",
       "invoiceId": "inv-1791921893782"
     },
     {
