@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:17:24.607Z",
+  "syncedAt": "2026-10-16T15:17:31.414Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -21274,7 +21274,7 @@
       "nameAr": "Rubella Virus Antibodies (IgG & IgM)",
       "nameEn": "Rubella Virus Antibodies (IgG & IgM)",
       "category": "TORCH & Pregnancy",
-      "price": 260,
+      "price": 1200,
       "cost": 60,
       "sampleType": "Serum",
       "turnaroundTime": "Within 24 hours",
