@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T13:43:36.202Z",
+  "syncedAt": "2026-10-16T13:43:57.586Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -484,7 +484,7 @@
         "verifiedBy": "رحاب على ",
         "pathologist": "Prof. Dr. Rami Mokhtar",
         "chemistTitle": "Senior Clinical Chemist - Hormones",
-        "verifierTitle": "Operations & Quality Manager",
+        "verifierTitle": "طبيب باثولوجي / المدير التنفيذي",
         "pathologistTitle": "Consultant Clinical Pathologist - Kasr Al Ainy",
         "chemistLicense": "EGY-SCI-88402",
         "verifierLicense": "EGY-MGT-11024",
@@ -493,7 +493,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-16T13:31:59.823Z",
-      "updatedAt": "2026-10-16T13:43:34.640Z",
+      "updatedAt": "2026-10-16T13:43:55.748Z",
       "invoiceId": "inv-1792157519823"
     },
     {
