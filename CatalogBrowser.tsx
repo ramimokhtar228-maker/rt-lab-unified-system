@@ -76,9 +76,10 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
     ? (testCatalog as unknown as IndividualTest[])
     : individualTests;
 
-  // Individual test modal state
   const [isTestModalOpen, setIsTestModalOpen] = useState(false);
   const [editingTest, setEditingTest] = useState<IndividualTest | null>(null);
+  const [editingPriceCode, setEditingPriceCode] = useState<string | null>(null);
+  const [tempPriceValue, setTempPriceValue] = useState<string>('');
   const [testFormData, setTestFormData] = useState<Partial<IndividualTest>>({
     code: '',
     nameEn: '',
@@ -195,25 +196,39 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
     }
   };
 
+  const handleSaveInlinePrice = (code: string) => {
+    const num = parseFloat(tempPriceValue);
+    if (!isNaN(num) && num >= 0) {
+      updateCatalogTest(code, { price: num });
+      if (onUpdateIndividualTests) {
+        onUpdateIndividualTests(activeTests.map(t => t.code === code ? { ...t, price: num } : t));
+      }
+    }
+    setEditingPriceCode(null);
+  };
+
   const handleSaveTest = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!testFormData.code?.trim() || !testFormData.nameEn?.trim() || !testFormData.nameAr?.trim()) {
-      alert('يرجى كتابة رمز التحليل، واسمه بالإنجليزي والعربي.');
+    if (!testFormData.code?.trim() || !testFormData.nameEn?.trim()) {
+      alert('يرجى كتابة رمز التحليل واسمه الطبي بالإنجليزي.');
       return;
     }
 
+    const cleanNameEn = testFormData.nameEn.trim();
+    const cleanNameAr = testFormData.nameAr?.trim() || cleanNameEn;
+
     if (editingTest) {
-      updateCatalogTest(editingTest.code, testFormData);
+      updateCatalogTest(editingTest.code, { ...testFormData, nameEn: cleanNameEn, nameAr: cleanNameAr });
       const updated = activeTests.map(t => 
-        t.id === editingTest.id ? { ...t, ...testFormData } as IndividualTest : t
+        t.id === editingTest.id ? { ...t, ...testFormData, nameEn: cleanNameEn, nameAr: cleanNameAr } as IndividualTest : t
       );
       onUpdateIndividualTests(updated);
     } else {
       const newTest: IndividualTest = {
         id: `test-${Date.now()}`,
         code: testFormData.code.trim().toUpperCase(),
-        nameEn: testFormData.nameEn.trim(),
-        nameAr: testFormData.nameAr.trim(),
+        nameEn: cleanNameEn,
+        nameAr: cleanNameAr,
         category: testFormData.category || 'General',
         sampleType: testFormData.sampleType || 'Serum',
         unit: testFormData.unit || '',
@@ -223,7 +238,7 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
         panicHigh: testFormData.panicHigh !== undefined ? Number(testFormData.panicHigh) : undefined,
         textReference: testFormData.textReference?.trim() || undefined,
         method: testFormData.method?.trim() || undefined,
-        fastingInstructions: testFormData.fastingInstructions?.trim() || 'لا يشترط الصيام',
+        fastingInstructions: testFormData.fastingInstructions?.trim() || 'No fasting required',
         turnaroundHours: Number(testFormData.turnaroundHours) || 2,
         price: Number(testFormData.price) || 80
       };
@@ -464,17 +479,55 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
                     <span className="text-[11px] font-mono font-bold text-rose-900 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded">
                       {test.code}
                     </span>
-                    <span className="text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 font-mono">
-                      {test.price} ج.م
-                    </span>
+
+                    {editingPriceCode === test.code ? (
+                      <div className="flex items-center gap-1">
+                        <input
+                          type="number"
+                          value={tempPriceValue}
+                          onChange={(e) => setTempPriceValue(e.target.value)}
+                          onKeyDown={(e) => { if (e.key === 'Enter') handleSaveInlinePrice(test.code); }}
+                          className="w-20 px-1.5 py-0.5 text-xs font-mono font-bold border border-emerald-500 rounded bg-white text-slate-900 focus:outline-none"
+                          autoFocus
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleSaveInlinePrice(test.code)}
+                          className="p-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded cursor-pointer"
+                          title="حفظ السعر"
+                        >
+                          <Check className="w-3 h-3" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setEditingPriceCode(null)}
+                          className="p-1 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded cursor-pointer"
+                          title="إلغاء"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </div>
+                    ) : (
+                      <span
+                        onClick={() => {
+                          setEditingPriceCode(test.code);
+                          setTempPriceValue(String(test.price));
+                        }}
+                        className="text-[11px] font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-200 font-mono cursor-pointer transition flex items-center gap-1 group/p"
+                        title="اضغط لتعديل سعر هذا الفحص فورياً"
+                      >
+                        <span>{test.price} EGP</span>
+                        <Edit2 className="w-2.5 h-2.5 text-emerald-600 opacity-60 group-hover/p:opacity-100" />
+                      </span>
+                    )}
                   </div>
 
                   <div>
-                    <h4 className="text-sm font-black text-slate-900">
-                      {test.nameAr}
+                    <h4 className="text-sm font-black text-slate-900 font-mono tracking-tight" dir="ltr">
+                      {test.nameEn || test.nameAr}
                     </h4>
-                    <p className="text-xs text-slate-500 font-medium" dir="ltr">
-                      {test.nameEn}
+                    <p className="text-[11px] text-slate-400 font-mono mt-0.5" dir="ltr">
+                      Category: <span className="text-slate-600 font-medium">{test.category}</span>
                     </p>
                   </div>
 

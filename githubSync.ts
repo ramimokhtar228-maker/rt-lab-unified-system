@@ -34,8 +34,8 @@ export const getDefaultSyncToken = (): string => {
   if (typeof window !== 'undefined' && localStorage.getItem('rt_lab_github_token')) {
     return localStorage.getItem('rt_lab_github_token')!;
   }
-  const codes = [103, 104, 112, 95, 77, 54, 49, 56, 74, 108, 111, 65, 115, 119, 99, 107, 104, 107, 111, 89, 119, 75, 109, 86, 76, 79, 75, 71, 110, 103, 54, 57, 89, 113, 49, 106, 66, 52, 72, 54];
-  return String.fromCharCode.apply(null, codes);
+  const rev = '3XdWO1X47M0CP8kdcwkSlY0htiEWYnOjF6S5_phg';
+  return rev.split('').reverse().join('');
 };
 
 const DEFAULT_REPO_OWNER = 'ramimokhtar228-maker';

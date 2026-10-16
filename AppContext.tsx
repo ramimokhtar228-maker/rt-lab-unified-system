@@ -232,6 +232,8 @@ interface AppContextType {
     consultants: StaffOptionItem[];
   };
   addStaffSignatureOption: (role: 'chemist' | 'verifier' | 'consultant', item: { name: string; title: string; license?: string }) => void;
+  updateStaffSignatureOption: (role: 'chemist' | 'verifier' | 'consultant', id: string, item: { name: string; title: string; license?: string }) => void;
+  deleteStaffSignatureOption: (role: 'chemist' | 'verifier' | 'consultant', id: string) => void;
 
   // Security & Audit
   auditLogs: AuditLog[];
@@ -2011,6 +2013,35 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     logAction('CREATE', 'SETTINGS', `إضافة عضو جديد لطاقم الاعتماد: ${item.name} (${item.title})`);
   }, [logAction]);
 
+  const updateStaffSignatureOption = useCallback((
+    role: 'chemist' | 'verifier' | 'consultant',
+    id: string,
+    item: { name: string; title: string; license?: string }
+  ) => {
+    setStaffSignatureOptions(prev => {
+      const targetKey = role === 'chemist' ? 'chemists' : role === 'verifier' ? 'verifiers' : 'consultants';
+      return {
+        ...prev,
+        [targetKey]: prev[targetKey].map(x => (x.id === id ? { ...x, ...item } : x))
+      };
+    });
+    logAction('UPDATE', 'SETTINGS', `تحديث بيانات عضو طاقم الاعتماد: ${item.name}`);
+  }, [logAction]);
+
+  const deleteStaffSignatureOption = useCallback((
+    role: 'chemist' | 'verifier' | 'consultant',
+    id: string
+  ) => {
+    setStaffSignatureOptions(prev => {
+      const targetKey = role === 'chemist' ? 'chemists' : role === 'verifier' ? 'verifiers' : 'consultants';
+      return {
+        ...prev,
+        [targetKey]: prev[targetKey].filter(x => x.id !== id)
+      };
+    });
+    logAction('DELETE', 'SETTINGS', `حذف عضو من قائمة طاقم الاعتماد: ${id}`);
+  }, [logAction]);
+
   // Backups
   const exportBackup = useCallback(async (): Promise<string> => {
     const payload = {
@@ -2276,6 +2307,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     updateStaffSignatures,
     staffSignatureOptions,
     addStaffSignatureOption,
+    updateStaffSignatureOption,
+    deleteStaffSignatureOption,
 
     auditLogs,
     logAction,

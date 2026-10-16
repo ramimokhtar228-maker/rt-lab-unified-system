@@ -1183,11 +1183,11 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                 <thead>
                   <tr className="bg-gradient-to-r from-red-950 via-slate-900 to-slate-900 text-white text-xs font-bold uppercase tracking-wider">
                     <th className="py-2.5 px-3 text-left w-10">#</th>
-                    <th className="py-2.5 px-3 text-left">Investigations</th>
-                    <th className="py-2.5 px-3 text-center w-48">Results & Options</th>
-                    <th className="py-2.5 px-3 text-center w-36">Coloured Chart</th>
+                    <th className="py-2.5 px-3 text-left">Test</th>
+                    <th className="py-2.5 px-3 text-center w-44">Result</th>
+                    <th className="py-2.5 px-3 text-center w-28">Unit</th>
                     <th className="py-2.5 px-3 text-center w-28">Flags</th>
-                    <th className="py-2.5 px-3 text-left w-48">References</th>
+                    <th className="py-2.5 px-3 text-left w-52">References</th>
                     <th className="py-2.5 px-2 text-center w-28">Actions</th>
                   </tr>
                 </thead>
@@ -1213,7 +1213,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                             {pIdx + 1}
                           </td>
 
-                          {/* 1. Investigations */}
+                          {/* 1. Test */}
                           <td className="py-2.5 px-3 text-left">
                             <div>
                               <input
@@ -1229,10 +1229,9 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                             </div>
                           </td>
 
-                          {/* 2. Results & Clinical Prefill Picker */}
+                          {/* 2. Result & Quick Selector */}
                           <td className="py-2.5 px-3 text-center">
                             <div className="flex items-center justify-center gap-1.5">
-                              {/* Quick clinical pre-fill options (Colors, Transparency, Nil, +, etc.) */}
                               <QuickResultPicker
                                 paramName={param.name}
                                 currentValue={param.result}
@@ -1252,23 +1251,17 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                                     : 'bg-slate-50 text-slate-900 border-slate-300 focus:bg-white focus:border-rose-600'
                                 } focus:outline-none focus:ring-2 focus:ring-rose-500/20`}
                               />
-
-                              {param.unit && (
-                                <span className="text-xs text-slate-500 font-medium">
-                                  {param.unit}
-                                </span>
-                              )}
                             </div>
                           </td>
 
-                          {/* 3. Coloured chart */}
-                          <td className="py-2 px-2 text-center">
-                            <ColouredRangeChart
-                              resultStr={param.result}
-                              minNormal={param.minNormal}
-                              maxNormal={param.maxNormal}
-                              flag={param.flag}
-                              textReference={param.textReference}
+                          {/* 3. Unit */}
+                          <td className="py-2.5 px-2 text-center">
+                            <input
+                              type="text"
+                              value={param.unit || ''}
+                              onChange={(e) => handleUpdateParameter(currentProfile.id, param.id, { unit: e.target.value })}
+                              placeholder="Unit"
+                              className="w-24 text-center font-mono text-xs text-slate-700 bg-slate-50 hover:bg-white border border-slate-200 rounded px-1.5 py-1 focus:bg-white focus:outline-none focus:ring-1 focus:ring-rose-500"
                             />
                           </td>
 
