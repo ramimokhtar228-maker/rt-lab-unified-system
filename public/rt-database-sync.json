@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T13:40:46.490Z",
+  "syncedAt": "2026-10-16T13:41:07.015Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -77,12 +77,12 @@
               "name": "Hematocrit (PCV)",
               "unit": "%",
               "minNormal": 36,
-              "maxNormal": 48,
+              "maxNormal": 55,
               "notes": "Calculated (HGB × 3)",
               "textReference": "M: 40 - 52% | F: 36 - 48%",
               "id": "param-1792157598294-2",
               "result": "49.00",
-              "flag": "HIGH"
+              "flag": "NORMAL"
             },
             {
               "name": "M.C.V",
@@ -491,7 +491,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-16T13:31:59.823Z",
-      "updatedAt": "2026-10-16T13:40:37.040Z",
+      "updatedAt": "2026-10-16T13:41:00.241Z",
       "invoiceId": "inv-1792157519823"
     },
     {
