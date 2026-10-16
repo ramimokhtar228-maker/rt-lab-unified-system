@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T12:29:56.378Z",
+  "syncedAt": "2026-10-16T12:33:26.291Z",
   "reports": [
     {
       "id": "rep-001",
@@ -3238,7 +3238,7 @@
           "titleAr": "فحوصات السكر والتراكمي ومقاومة الإنسولين",
           "category": "Metabolism & Diabetes",
           "sampleType": "Fluoride / EDTA / Serum",
-          "interpretation": "Glycated hemoglobin (HbA1c), Glucose, and Insulin levels monitor glycemic control and metabolic resistance.",
+          "interpretation": " ",
           "parameters": [
             {
               "id": "param-1792073788518",
@@ -3251,6 +3251,9 @@
               "method": "Calculated: (Fasting Glucose x Fasting Insulin) / 405",
               "flag": "HIGH"
             }
+          ],
+          "interpretations": [
+            " "
           ]
         },
         {
@@ -3737,7 +3740,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T15:57:30.501Z",
-      "updatedAt": "2026-10-15T14:25:42.778Z",
+      "updatedAt": "2026-10-16T12:33:22.276Z",
       "invoiceId": "inv-1791734250501"
     },
     {
