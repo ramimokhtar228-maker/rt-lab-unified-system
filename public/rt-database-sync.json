@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:54:05.620Z",
+  "syncedAt": "2026-10-16T14:55:12.177Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -365,12 +365,12 @@
           "interpretation": "Enzyme activities and synthetic hepatic markers are within normal limits.",
           "parameters": [
             {
-              "name": "ALT (SGPT)",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 45,
-              "method": "IFCC UV with P5P",
-              "textReference": "",
+              "name": "Prothrombin Time & INR (Prothrombin Time & INR)",
+              "unit": "Seconds / Ratio",
+              "minNormal": 11,
+              "maxNormal": 14,
+              "method": "Optical Clotting Detection Analyzer",
+              "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)",
               "id": "param-1792157676289-0",
               "result": "20",
               "flag": "NORMAL"
@@ -493,7 +493,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-16T13:31:59.823Z",
-      "updatedAt": "2026-10-16T14:52:30.066Z",
+      "updatedAt": "2026-10-16T14:54:14.598Z",
       "invoiceId": "inv-1792157519823"
     },
     {
@@ -907,12 +907,12 @@
           },
           "parameters": [
             {
-              "name": "ALT (SGPT)",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 45,
-              "method": "IFCC UV with P5P",
-              "textReference": "",
+              "name": "Prothrombin Time & INR (Prothrombin Time & INR)",
+              "unit": "Seconds / Ratio",
+              "minNormal": 11,
+              "maxNormal": 14,
+              "method": "Optical Clotting Detection Analyzer",
+              "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)",
               "id": "param-1792066884186-0",
               "result": "13",
               "flag": "NORMAL"
@@ -1061,7 +1061,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-16T14:02:25.127Z",
+      "updatedAt": "2026-10-16T14:54:14.599Z",
       "invoiceId": "inv-1791921893782"
     },
     {
@@ -1287,12 +1287,12 @@
           },
           "parameters": [
             {
-              "name": "ALT (SGPT)",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 45,
-              "method": "IFCC UV with P5P",
-              "textReference": "",
+              "name": "Prothrombin Time & INR (Prothrombin Time & INR)",
+              "unit": "Seconds / Ratio",
+              "minNormal": 11,
+              "maxNormal": 14,
+              "method": "Optical Clotting Detection Analyzer",
+              "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)",
               "id": "param-1792065347978-0",
               "result": "21",
               "flag": "NORMAL"
@@ -1397,7 +1397,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-12T21:13:54.435Z",
-      "updatedAt": "2026-10-15T11:57:10.370Z",
+      "updatedAt": "2026-10-16T14:54:14.599Z",
       "invoiceId": "inv-1791839634435"
     },
     {
@@ -1708,14 +1708,14 @@
             },
             {
               "id": "p-pkg-6-1791833506659-0uu",
-              "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
+              "name": "Prothrombin Time & INR (Prothrombin Time & INR)",
               "result": "32",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 41,
-              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
+              "unit": "Seconds / Ratio",
+              "minNormal": 11,
+              "maxNormal": 14,
+              "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)",
               "flag": "NORMAL",
-              "method": "IFCC Kinetic UV without Pyridoxal Phosphate",
+              "method": "Optical Clotting Detection Analyzer",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
             },
             {
@@ -1864,7 +1864,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-12T19:31:46.660Z",
-      "updatedAt": "2026-10-12T21:14:18.627Z",
+      "updatedAt": "2026-10-16T14:54:14.599Z",
       "invoiceId": "inv-1791833506660",
       "smartReportEnabled": true,
       "smartReportClinicalData": {
@@ -2216,14 +2216,14 @@
             },
             {
               "id": "p-pkg-6-1791833372303-524",
-              "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
+              "name": "Prothrombin Time & INR (Prothrombin Time & INR)",
               "result": "50",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 41,
-              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
+              "unit": "Seconds / Ratio",
+              "minNormal": 11,
+              "maxNormal": 14,
+              "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)",
               "flag": "HIGH",
-              "method": "IFCC Kinetic UV without Pyridoxal Phosphate",
+              "method": "Optical Clotting Detection Analyzer",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
             },
             {
@@ -2442,7 +2442,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-12T19:29:32.306Z",
-      "updatedAt": "2026-10-16T14:52:30.066Z",
+      "updatedAt": "2026-10-16T14:54:14.599Z",
       "invoiceId": "inv-1791833372306",
       "smartReportEnabled": true,
       "smartReportClinicalData": {
@@ -2700,14 +2700,14 @@
             },
             {
               "id": "p-1791819654844",
-              "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
+              "name": "Prothrombin Time & INR (Prothrombin Time & INR)",
               "result": "",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 41,
-              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
+              "unit": "Seconds / Ratio",
+              "minNormal": 11,
+              "maxNormal": 14,
+              "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)",
               "flag": "NORMAL",
-              "method": "IFCC Kinetic UV without Pyridoxal Phosphate"
+              "method": "Optical Clotting Detection Analyzer"
             },
             {
               "id": "p-1791819654844",
@@ -2987,7 +2987,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-16T14:29:57.839Z",
+      "updatedAt": "2026-10-16T14:54:14.599Z",
       "invoiceId": "inv-1791819003027"
     },
     {
@@ -4623,14 +4623,14 @@
             },
             {
               "id": "p-pkg-6-1791501113001-qco",
-              "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
+              "name": "Prothrombin Time & INR (Prothrombin Time & INR)",
               "result": "",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 41,
-              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
+              "unit": "Seconds / Ratio",
+              "minNormal": 11,
+              "maxNormal": 14,
+              "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)",
               "flag": "NORMAL",
-              "method": "IFCC Kinetic UV without Pyridoxal Phosphate",
+              "method": "Optical Clotting Detection Analyzer",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
             },
             {
@@ -4707,7 +4707,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-08T23:11:53.004Z",
-      "updatedAt": "2026-10-12T21:14:30.681Z",
+      "updatedAt": "2026-10-16T14:54:14.600Z",
       "invoiceId": "inv-1791501113004"
     },
     {
@@ -4896,14 +4896,14 @@
             },
             {
               "id": "p-pkg-6-1791500705347-hth",
-              "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
+              "name": "Prothrombin Time & INR (Prothrombin Time & INR)",
               "result": "35",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 41,
-              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
+              "unit": "Seconds / Ratio",
+              "minNormal": 11,
+              "maxNormal": 14,
+              "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)",
               "flag": "NORMAL",
-              "method": "IFCC Kinetic UV without Pyridoxal Phosphate",
+              "method": "Optical Clotting Detection Analyzer",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
             },
             {
@@ -5116,7 +5116,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-08T23:05:05.350Z",
-      "updatedAt": "2026-10-16T14:52:30.067Z",
+      "updatedAt": "2026-10-16T14:54:14.600Z",
       "invoiceId": "inv-1791500705351",
       "smartReportEnabled": true,
       "smartReportClinicalData": {
@@ -7119,14 +7119,14 @@
             },
             {
               "id": "p-pkg-6-1791358565022-z24",
-              "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
+              "name": "Prothrombin Time & INR (Prothrombin Time & INR)",
               "result": "14",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 41,
-              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
+              "unit": "Seconds / Ratio",
+              "minNormal": 11,
+              "maxNormal": 14,
+              "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)",
               "flag": "NORMAL",
-              "method": "IFCC Kinetic UV without Pyridoxal Phosphate",
+              "method": "Optical Clotting Detection Analyzer",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
             },
             {
@@ -7203,7 +7203,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-07T07:36:05.025Z",
-      "updatedAt": "2026-10-12T20:50:55.068Z",
+      "updatedAt": "2026-10-16T14:54:14.601Z",
       "invoiceId": "inv-1791358565025"
     },
     {
@@ -7404,14 +7404,14 @@
             },
             {
               "id": "p-pkg-6-1791321555660-4bx",
-              "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
+              "name": "Prothrombin Time & INR (Prothrombin Time & INR)",
               "result": "21",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 41,
-              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
+              "unit": "Seconds / Ratio",
+              "minNormal": 11,
+              "maxNormal": 14,
+              "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)",
               "flag": "NORMAL",
-              "method": "IFCC Kinetic UV without Pyridoxal Phosphate",
+              "method": "Optical Clotting Detection Analyzer",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
             },
             {
@@ -7488,7 +7488,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-06T21:19:15.663Z",
-      "updatedAt": "2026-10-12T20:50:55.068Z",
+      "updatedAt": "2026-10-16T14:54:14.601Z",
       "invoiceId": "inv-1791321555664"
     },
     {
@@ -7699,14 +7699,14 @@
             },
             {
               "id": "p-pkg-6-1791306270691-v4a",
-              "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
+              "name": "Prothrombin Time & INR (Prothrombin Time & INR)",
               "result": "18",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 41,
-              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
+              "unit": "Seconds / Ratio",
+              "minNormal": 11,
+              "maxNormal": 14,
+              "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)",
               "flag": "NORMAL",
-              "method": "IFCC Kinetic UV without Pyridoxal Phosphate",
+              "method": "Optical Clotting Detection Analyzer",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
             },
             {
@@ -7761,7 +7761,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-06T17:04:30.693Z",
-      "updatedAt": "2026-10-11T15:31:17.354Z",
+      "updatedAt": "2026-10-16T14:54:14.602Z",
       "invoiceId": "inv-1791306270694"
     },
     {
@@ -8141,7 +8141,7 @@
       },
       "generalComment": "كافة الفحوصات المخبرية للمريض (أمال محمد) تقع في النطاقات الآمنة بشكل عام مع انتظام مؤشرات الأعضاء الحيوية ونشاط فسيولوجي متوازن.",
       "createdAt": "2026-10-06T11:59:36.696Z",
-      "updatedAt": "2026-10-12T20:50:55.069Z",
+      "updatedAt": "2026-10-16T14:54:14.602Z",
       "status": "verified",
       "profiles": [
         {
@@ -8358,15 +8358,15 @@
           },
           "parameters": [
             {
-              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
+              "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)",
               "id": "p-pkg-6-1791287976694",
               "flag": "NORMAL",
-              "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
-              "unit": "U/L",
+              "name": "Prothrombin Time & INR (Prothrombin Time & INR)",
+              "unit": "Seconds / Ratio",
               "result": "16",
-              "method": "IFCC Kinetic UV without Pyridoxal Phosphate",
-              "minNormal": 0,
-              "maxNormal": 41
+              "method": "Optical Clotting Detection Analyzer",
+              "minNormal": 11,
+              "maxNormal": 14
             },
             {
               "result": "31",
@@ -8498,7 +8498,7 @@
         "packagePrice": 199
       },
       "status": "verified",
-      "updatedAt": "2026-10-12T20:50:55.069Z",
+      "updatedAt": "2026-10-16T14:54:14.602Z",
       "createdAt": "2026-10-06T11:48:51.555Z",
       "reportNumber": "RT-2026-007",
       "patient": {
@@ -8739,15 +8739,15 @@
           },
           "parameters": [
             {
-              "minNormal": 0,
-              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
-              "maxNormal": 41,
+              "minNormal": 11,
+              "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)",
+              "maxNormal": 14,
               "flag": "NORMAL",
               "result": "22",
               "id": "p-pkg-6-1791287331553",
-              "method": "IFCC Kinetic UV without Pyridoxal Phosphate",
-              "unit": "U/L",
-              "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))"
+              "method": "Optical Clotting Detection Analyzer",
+              "unit": "Seconds / Ratio",
+              "name": "Prothrombin Time & INR (Prothrombin Time & INR)"
             },
             {
               "method": "IFCC Kinetic UV",
@@ -9080,14 +9080,14 @@
           "parameters": [
             {
               "result": "25",
-              "unit": "U/L",
-              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
-              "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
+              "unit": "Seconds / Ratio",
+              "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)",
+              "name": "Prothrombin Time & INR (Prothrombin Time & INR)",
               "flag": "NORMAL",
-              "method": "IFCC Kinetic UV without Pyridoxal Phosphate",
+              "method": "Optical Clotting Detection Analyzer",
               "id": "p-pkg-6-1791286741640",
-              "minNormal": 0,
-              "maxNormal": 41
+              "minNormal": 11,
+              "maxNormal": 14
             },
             {
               "maxNormal": 40,
@@ -9194,7 +9194,7 @@
       ],
       "invoiceId": "inv-1791286741643",
       "reportNumber": "RT-2026-006",
-      "updatedAt": "2026-10-16T14:52:30.069Z",
+      "updatedAt": "2026-10-16T14:54:14.603Z",
       "createdAt": "2026-10-06T11:39:01.642Z",
       "packageApplied": {
         "originalPrice": 2900,
@@ -9412,13 +9412,13 @@
           "parameters": [
             {
               "flag": "NORMAL",
-              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
-              "maxNormal": 41,
-              "unit": "U/L",
-              "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
-              "minNormal": 0,
+              "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)",
+              "maxNormal": 14,
+              "unit": "Seconds / Ratio",
+              "name": "Prothrombin Time & INR (Prothrombin Time & INR)",
+              "minNormal": 11,
               "result": "22",
-              "method": "IFCC Kinetic UV without Pyridoxal Phosphate",
+              "method": "Optical Clotting Detection Analyzer",
               "id": "p-pkg-6-1791285435310"
             },
             {
@@ -9561,7 +9561,7 @@
       "reportNumber": "RT-2026-005",
       "id": "rep-1791285435316",
       "createdAt": "2026-10-06T11:17:15.316Z",
-      "updatedAt": "2026-10-16T14:52:30.069Z"
+      "updatedAt": "2026-10-16T14:54:14.603Z"
     },
     {
       "updatedAt": "2026-10-16T14:52:30.069Z",
@@ -11693,7 +11693,7 @@
       },
       "generalComment": " ",
       "createdAt": "2026-10-04T14:50:55.998Z",
-      "updatedAt": "2026-10-12T20:50:55.071Z",
+      "updatedAt": "2026-10-16T14:54:14.604Z",
       "profiles": [
         {
           "id": "prof-pkg-1791408346561",
@@ -11870,14 +11870,14 @@
             },
             {
               "id": "p-pkg-6-1791408346560-q69",
-              "name": "إنزيم كبد ALT / SGPT (Alanine Aminotransferase (ALT / SGPT))",
+              "name": "Prothrombin Time & INR (Prothrombin Time & INR)",
               "result": "14",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 41,
-              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
+              "unit": "Seconds / Ratio",
+              "minNormal": 11,
+              "maxNormal": 14,
+              "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)",
               "flag": "NORMAL",
-              "method": "IFCC Kinetic UV without Pyridoxal Phosphate",
+              "method": "Optical Clotting Detection Analyzer",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
             },
             {
@@ -12928,14 +12928,15 @@
           },
           "parameters": [
             {
-              "minNormal": 0,
-              "maxNormal": 45,
-              "method": "IFCC UV with P5P",
+              "minNormal": 11,
+              "maxNormal": 14,
+              "method": "Optical Clotting Detection Analyzer",
               "flag": "NORMAL",
-              "unit": "U/L",
-              "name": "ALT (SGPT)",
+              "unit": "Seconds / Ratio",
+              "name": "Prothrombin Time & INR (Prothrombin Time & INR)",
               "id": "param-1791187807201-0",
-              "result": "28"
+              "result": "28",
+              "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)"
             },
             {
               "id": "param-1791187807201-1",
@@ -13053,7 +13054,7 @@
         "packagePrice": 199
       },
       "createdAt": "2026-10-04T14:22:02.634Z",
-      "updatedAt": "2026-10-16T14:52:30.071Z",
+      "updatedAt": "2026-10-16T14:54:14.605Z",
       "status": "verified",
       "generalComment": "طلب فحص مالي رقم RT-BK-5873 - تم التسميع آلياً من منظومة الفواتير",
       "staff": {
@@ -13100,7 +13101,7 @@
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-8097 - تم التسميع آلياً من منظومة الفواتير",
       "createdAt": "2026-10-04T14:16:24.421Z",
-      "updatedAt": "2026-10-16T14:52:30.071Z",
+      "updatedAt": "2026-10-16T14:54:14.605Z",
       "profiles": [
         {
           "id": "prof-inc-1791123384421-12",
@@ -13185,14 +13186,15 @@
           },
           "parameters": [
             {
-              "name": "ALT (SGPT)",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 45,
-              "method": "IFCC UV with P5P",
+              "name": "Prothrombin Time & INR (Prothrombin Time & INR)",
+              "unit": "Seconds / Ratio",
+              "minNormal": 11,
+              "maxNormal": 14,
+              "method": "Optical Clotting Detection Analyzer",
               "id": "param-1791150889294-0",
               "result": "31",
-              "flag": "NORMAL"
+              "flag": "NORMAL",
+              "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)"
             },
             {
               "name": "AST (SGOT)",
@@ -19282,14 +19284,14 @@
       "nameAr": "Prothrombin Time & INR",
       "nameEn": "Prothrombin Time & INR",
       "category": "Coagulation",
-      "price": 130,
+      "price": 298,
       "cost": 25,
       "sampleType": "Sodium Citrate 3.2% Plasma",
       "turnaroundTime": "Within 2 hours",
       "unit": "Seconds / Ratio",
       "minNormal": 11,
-      "maxNormal": 13.5,
-      "textReference": "PT: 11.0 - 13.5 sec | INR: 0.85 - 1.15 (Warfarin Target: 2.0 - 3.0)",
+      "maxNormal": 14,
+      "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)",
       "method": "Optical Clotting Detection Analyzer",
       "fastingInstructions": "No fasting required (record anticoagulant dose)"
     },
@@ -19299,13 +19301,13 @@
       "nameAr": "Activated Partial Thromboplastin Time",
       "nameEn": "Activated Partial Thromboplastin Time",
       "category": "Coagulation",
-      "price": 130,
+      "price": 300,
       "cost": 25,
       "sampleType": "Sodium Citrate 3.2% Plasma",
       "turnaroundTime": "Within 2 hours",
       "unit": "Seconds",
       "minNormal": 26,
-      "maxNormal": 36,
+      "maxNormal": 45,
       "textReference": "26.0 - 36.0 Seconds (Control: 30.0 sec)",
       "method": "Photo-Optical Coagulometer",
       "fastingInstructions": "No fasting required"
@@ -19316,7 +19318,7 @@
       "nameAr": "D-Dimer Quantitative Assay",
       "nameEn": "D-Dimer Quantitative Assay",
       "category": "Coagulation",
-      "price": 320,
+      "price": 499,
       "cost": 75,
       "sampleType": "Citrate Plasma",
       "turnaroundTime": "Within 2 hours",
