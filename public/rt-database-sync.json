@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T13:56:01.629Z",
+  "syncedAt": "2026-10-16T13:58:03.825Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -497,153 +497,6 @@
       "invoiceId": "inv-1792157519823"
     },
     {
-      "id": "rep-002",
-      "reportNumber": "RT-2026-002",
-      "patient": {
-        "id": "pat-002",
-        "labNumber": "RT-2026-002",
-        "barcode": "RT-10030",
-        "fullName": "منى عادل عبد الرحمن",
-        "age": 48,
-        "ageUnit": "years",
-        "gender": "female",
-        "phone": "01198765432",
-        "referringDoctorTitle": "Prof. Dr.",
-        "referringDoctorName": "أ.د. خالد الببلاوي - استشاري السكر والغدد",
-        "sampleDate": "2026-10-16",
-        "reportingDate": "2026-10-16",
-        "clinicalHistory": "متابعة دورية لمرض السكري من النوع الثاني وارتفاع ضغط الدم",
-        "fastingHours": 12,
-        "nationalId": "27608140102844",
-        "bloodGroup": "O+",
-        "loyaltyPoints": 340,
-        "loyaltyCardIssued": true,
-        "loyaltyCardNumber": "RT-GOLD-10030",
-        "testsSubtotal": 380,
-        "totalCost": 380,
-        "discountApplied": 38,
-        "paymentMethod": "visa"
-      },
-      "profiles": [
-        {
-          "id": "prof-gly-2",
-          "profileCode": "GLYCEMIC",
-          "titleEn": "Glycemic Status & Diabetes Profile",
-          "titleAr": "فحوصات السكر والتراكمي ومقاومة الإنسولين",
-          "category": "Metabolism & Diabetes",
-          "sampleType": "Fluoride / EDTA / Serum",
-          "interpretation": "Glycated hemoglobin (HbA1c), Glucose, and Insulin levels monitor glycemic control and metabolic resistance.",
-          "parameters": [
-            {
-              "id": "p-g1",
-              "name": "Fasting Blood Glucose",
-              "result": "148",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 105,
-              "panicLow": 50,
-              "panicHigh": 400,
-              "flag": "HIGH",
-              "method": "Hexokinase"
-            },
-            {
-              "id": "p-g3",
-              "name": "Estimated Average Glucose (eAG)",
-              "result": "180",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 126,
-              "flag": "HIGH",
-              "method": "Calculated from HbA1c"
-            }
-          ]
-        },
-        {
-          "id": "prof-gly-2",
-          "profileCode": "CBC",
-          "titleEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
-          "titleAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
-          "category": "Hematology",
-          "sampleType": "EDTA Whole Blood",
-          "interpretation": "Automated hematological indices and differential leucocytic count evaluated according to WHO standards.",
-          "parameters": [
-            {
-              "id": "p-g2",
-              "name": "Glycated Hemoglobin (HbA1c)",
-              "result": "7.9",
-              "unit": "%",
-              "minNormal": 4,
-              "maxNormal": 5.6,
-              "panicLow": 3.5,
-              "panicHigh": 14,
-              "flag": "HIGH",
-              "method": "HPLC NGSP Certified"
-            }
-          ]
-        },
-        {
-          "id": "prof-kft-2",
-          "profileCode": "RFT",
-          "titleEn": "Renal Function Profile (RFT / KFT)",
-          "titleAr": "وظائف الكلى والأملاح البولية",
-          "category": "Clinical Chemistry & Nephrology",
-          "sampleType": "Serum / Urine",
-          "interpretation": "Serum Creatinine, Urea, Uric Acid, and eGFR reflect glomerular filtration rate and nitrogenous waste clearance.",
-          "attachedIllustration": {
-            "id": "ren-aki",
-            "code": "REN_AKI",
-            "titleAr": "القصور الكلوي الحاد واحتباس البولينا (Acute Kidney Injury - AKI)",
-            "titleEn": "Acute Kidney Injury & Azotemia",
-            "category": "renal",
-            "imageUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgMTgwIiB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCI+CiAgICA8cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgcng9IjE0IiBmaWxsPSIjMDkwZDE2Ii8+CiAgICA8Y2lyY2xlIGN4PSIxNjAiIGN5PSI5MCIgcj0iNzYiIGZpbGw9IiMwYjEzMjkiIHN0cm9rZT0iIzMxMmU4MSIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM4MThjZjgiIGZvbnQtc2l6ZT0iMTAuNSIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1mYW1pbHk9IidDYWlybycsIHN5c3RlbS11aSwgLWFwcGxlLXN5c3RlbSwgc2Fucy1zZXJpZiI+QUNVVEUgS0lETkVZIElOSlVSWSAoQUtJKTwvdGV4dD4KICAgIDxwYXRoIGQ9Ik0gMTM1LDU1IEMgMTEwLDY1IDExMCwxMTUgMTM1LDEyNSBDIDE2MCwxMzUgMTkwLDExNSAxODUsOTAgQyAxODAsNjUgMTYwLDUwIDEzNSw1NSBaIiBmaWxsPSIjMWUxYjRiIiBzdHJva2U9IiM4MThjZjgiIHN0cm9rZS13aWR0aD0iMi41Ii8+CiAgICAgIDxjaXJjbGUgY3g9IjE2MCIgY3k9IjkwIiByPSIxNiIgZmlsbD0iI2Y0M2Y1ZSIvPgogICAgICA8dGV4dCB4PSIxNjAiIHk9IjkzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjkiIGZvbnQtd2VpZ2h0PSJib2xkIj5DcmVhdDwvdGV4dD4KICAgICAgPHRleHQgeD0iMTYwIiB5PSIxNDUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNmODcxNzEiIGZvbnQtc2l6ZT0iMTAiIGZvbnQtd2VpZ2h0PSJib2xkIj5DcmVhdGluaW5lICZndDsmZ3Q7IDIuNSBtZy9kTDwvdGV4dD4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMTcwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTRhM2I4IiBmb250LXNpemU9IjkiIGZvbnQtZmFtaWx5PSInQ2Fpcm8nLCBzeXN0ZW0tdWksIC1hcHBsZS1zeXN0ZW0sIHNhbnMtc2VyaWYiPlN1ZGRlbiBHbG9tZXJ1bGFyIFJldGVudGlvbjogQWN1dGUgQXpvdGVtaWEgJiBPbGlndXJpYTwvdGV4dD4KICA8L3N2Zz4=",
-            "pathologySummaryAr": "تدهور مفاجئ سريع في وظائف الكلى الإخراجية خلال ساعات إلى أيام، مؤدياً لاحتباس الفضلات النيتروجينية في الدم (ارتفاع حاد في الكرياتينين والبولينا وحمض البوليك) واختلال الأملاح."
-          },
-          "parameters": [
-            {
-              "id": "p-k1",
-              "name": "Serum Creatinine",
-              "result": "0.82",
-              "unit": "mg/dL",
-              "minNormal": 0.5,
-              "maxNormal": 1.1,
-              "flag": "NORMAL",
-              "method": "Enzymatic Spectrophotometry"
-            },
-            {
-              "id": "p-k2",
-              "name": "Blood Urea",
-              "result": "28",
-              "unit": "mg/dL",
-              "minNormal": 15,
-              "maxNormal": 45,
-              "flag": "NORMAL",
-              "method": "GLDH Coupled"
-            },
-            {
-              "id": "p-k3",
-              "name": "Serum Uric Acid",
-              "result": "4.9",
-              "unit": "mg/dL",
-              "minNormal": 2.6,
-              "maxNormal": 6,
-              "flag": "NORMAL",
-              "method": "Uricase Colorimetric"
-            }
-          ]
-        }
-      ],
-      "staff": {
-        "labChemist": "د. هبة الشناوي - كيميائية تحاليل",
-        "verifiedBy": "د. مصطفى العوضي - استشاري التحاليل",
-        "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
-      },
-      "generalComment": "يرجى مراجعة الطبيب المعالج لتعديل جرعات العلاج الغذائي والدوائي.",
-      "status": "verified",
-      "createdAt": "2026-10-16T08:41:01.806Z",
-      "updatedAt": "2026-10-16T08:41:01.806Z",
-      "invoiceId": "inv-002"
-    },
-    {
       "id": "rep-1791921893781",
       "reportNumber": "RT-2026-8988",
       "patient": {
@@ -751,12 +604,11 @@
             {
               "name": "Hemoglobin (Hb)",
               "unit": "g/dL",
-              "minNormal": 12,
-              "maxNormal": 16.5,
+              "minNormal": 11.5,
+              "maxNormal": 14.5,
               "panicLow": 7,
               "panicHigh": 20,
               "method": "Automated SLS-Hb",
-              "textReference": "M: 13.0 - 17.5 | F: 12.0 - 15.5 g/dL",
               "id": "param-1792066821075-0",
               "result": "10.98",
               "flag": "LOW"
@@ -1207,7 +1059,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-15T14:11:06.243Z",
+      "updatedAt": "2026-10-16T13:58:00.139Z",
       "invoiceId": "inv-1791921893782"
     },
     {
