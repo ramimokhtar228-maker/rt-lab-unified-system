@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:00:34.180Z",
+  "syncedAt": "2026-10-16T15:00:57.556Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -400,25 +400,27 @@
               "flag": "NORMAL"
             },
             {
-              "name": "Direct Bilirubin",
+              "name": "Direct Bilirubin (Direct Bilirubin)",
               "unit": "mg/dL",
               "minNormal": 0,
               "maxNormal": 0.3,
-              "textReference": "",
+              "textReference": "0.0 - 0.3 mg/dL",
               "id": "param-1792157676289-4",
               "result": "0.13",
-              "flag": "NORMAL"
+              "flag": "NORMAL",
+              "method": "Diazo without Accelerator"
             },
             {
-              "name": "Indirect Bilirubin",
+              "name": "Direct Bilirubin (Direct Bilirubin)",
               "unit": "mg/dL",
-              "minNormal": 0.1,
-              "maxNormal": 0.9,
+              "minNormal": 0,
+              "maxNormal": 0.3,
               "notes": "Calculated: Total Bilirubin - Direct Bilirubin",
-              "textReference": "",
+              "textReference": "0.0 - 0.3 mg/dL",
               "id": "param-1792157676289-5",
               "result": "0.7",
-              "flag": "NORMAL"
+              "flag": "NORMAL",
+              "method": "Diazo without Accelerator"
             },
             {
               "name": "Alanine Aminotransferase (ALT / SGPT) (Alanine Aminotransferase (ALT / SGPT))",
@@ -495,7 +497,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-16T13:31:59.823Z",
-      "updatedAt": "2026-10-16T15:00:24.524Z",
+      "updatedAt": "2026-10-16T15:00:31.711Z",
       "invoiceId": "inv-1792157519823"
     },
     {
@@ -2695,7 +2697,7 @@
           "parameters": [
             {
               "id": "p-1791819654844",
-              "name": "الصفراء المباشرة (Direct Bilirubin) (Direct Bilirubin)",
+              "name": "Direct Bilirubin (Direct Bilirubin)",
               "result": "",
               "unit": "mg/dL",
               "minNormal": 0,
@@ -2993,7 +2995,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-16T14:56:11.152Z",
+      "updatedAt": "2026-10-16T15:00:31.712Z",
       "invoiceId": "inv-1791819003027"
     },
     {
@@ -4101,7 +4103,7 @@
           "parameters": [
             {
               "id": "param-1792054914989",
-              "name": "الزلال بالدم (Serum Albumin) (Serum Albumin)",
+              "name": "Serum Albumin (Serum Albumin)",
               "result": "4.61",
               "unit": "g/dL",
               "minNormal": 3.5,
@@ -4418,7 +4420,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-11T15:38:48.875Z",
-      "updatedAt": "2026-10-16T14:59:23.333Z",
+      "updatedAt": "2026-10-16T15:00:39.594Z",
       "invoiceId": "inv-1791733128875"
     },
     {
@@ -19754,7 +19756,7 @@
       "nameAr": "Direct Bilirubin",
       "nameEn": "Direct Bilirubin",
       "category": "Liver Function",
-      "price": 88,
+      "price": 122,
       "cost": 12,
       "sampleType": "Serum (Protected from light)",
       "turnaroundTime": "Immediate (1 hour)",
@@ -19771,7 +19773,7 @@
       "nameAr": "Serum Albumin",
       "nameEn": "Serum Albumin",
       "category": "Liver Function",
-      "price": 88,
+      "price": 211,
       "cost": 12,
       "sampleType": "Serum",
       "turnaroundTime": "Immediate (1 hour)",
@@ -19788,7 +19790,7 @@
       "nameAr": "Total Serum Protein",
       "nameEn": "Total Serum Protein",
       "category": "Liver Function",
-      "price": 88,
+      "price": 210,
       "cost": 12,
       "sampleType": "Serum",
       "turnaroundTime": "Immediate (1 hour)",
