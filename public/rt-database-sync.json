@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:25:17.952Z",
+  "syncedAt": "2026-10-16T14:25:26.922Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3222,8 +3222,8 @@
               "maxNormal": 65,
               "textReference": "40 - 65 %",
               "id": "param-1792160624241-15",
-              "result": "",
-              "flag": ""
+              "result": "60",
+              "flag": "NORMAL"
             },
             {
               "name": "Band Forms (Stab) %",
@@ -3321,11 +3321,11 @@
               "unit": "x10^3/µL",
               "minNormal": 1.5,
               "maxNormal": 7.5,
-              "notes": "Auto-calculated: (WBC × Neut%) / 100",
+              "notes": "Calculated: (WBC × Neut%) / 100",
               "textReference": "1.5 - 7.5 x10^3/µL",
               "id": "param-1792160624241-25",
-              "result": "",
-              "flag": ""
+              "result": "4.1",
+              "flag": "NORMAL"
             },
             {
               "name": "Absolute Lymphocytes (ALC)",
@@ -3456,7 +3456,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:25:15.269Z",
+      "updatedAt": "2026-10-16T14:25:23.908Z",
       "invoiceId": "inv-1791735202176"
     },
     {
