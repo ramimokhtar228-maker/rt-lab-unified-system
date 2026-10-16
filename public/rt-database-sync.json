@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:56:32.644Z",
+  "syncedAt": "2026-10-16T14:57:36.303Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -454,24 +454,24 @@
               "flag": "NORMAL"
             },
             {
-              "name": "Blood Urea",
+              "name": "Blood Urea (Blood Urea)",
               "unit": "mg/dL",
               "minNormal": 15,
               "maxNormal": 45,
               "panicHigh": 120,
-              "method": "Urease-GLDH",
-              "textReference": "",
+              "method": "Urease / GLDH Enzymatic Kinetic",
+              "textReference": "15 - 45 mg/dL",
               "id": "param-1792157691139-1",
               "result": "31",
               "flag": "NORMAL"
             },
             {
-              "name": "Serum Uric Acid",
+              "name": "Serum Uric Acid (Serum Uric Acid)",
               "unit": "mg/dL",
               "minNormal": 3.5,
-              "maxNormal": 7.2,
-              "method": "Uricase-PAP",
-              "textReference": "",
+              "maxNormal": 6.2,
+              "method": "Uricase / POD Enzymatic Colorimetric",
+              "textReference": "Males: 3.5 - 6.2  mg/dL | Females: 2.6 - 6.0 mg/dL",
               "id": "param-1792157691139-4",
               "result": "5.12",
               "flag": "NORMAL"
@@ -493,7 +493,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-16T13:31:59.823Z",
-      "updatedAt": "2026-10-16T14:56:11.151Z",
+      "updatedAt": "2026-10-16T14:57:00.221Z",
       "invoiceId": "inv-1792157519823"
     },
     {
@@ -973,26 +973,27 @@
               "flag": "NORMAL"
             },
             {
-              "name": "Blood Urea",
+              "name": "Blood Urea (Blood Urea)",
               "unit": "mg/dL",
               "minNormal": 15,
               "maxNormal": 45,
               "panicHigh": 120,
-              "method": "Urease-GLDH",
-              "textReference": "",
+              "method": "Urease / GLDH Enzymatic Kinetic",
+              "textReference": "15 - 45 mg/dL",
               "id": "param-1792066910604-1",
               "result": "18",
               "flag": "NORMAL"
             },
             {
-              "name": "Blood Urea Nitrogen (BUN)",
+              "name": "Blood Urea (Blood Urea)",
               "unit": "mg/dL",
-              "minNormal": 7,
-              "maxNormal": 20,
-              "textReference": "",
+              "minNormal": 15,
+              "maxNormal": 45,
+              "textReference": "15 - 45 mg/dL",
               "id": "param-1792066910604-2",
               "result": "8.41",
-              "flag": "NORMAL"
+              "flag": "NORMAL",
+              "method": "Urease / GLDH Enzymatic Kinetic"
             },
             {
               "name": "Serum Creatinine (Serum Creatinine)",
@@ -1062,7 +1063,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-16T14:56:11.151Z",
+      "updatedAt": "2026-10-16T14:56:19.978Z",
       "invoiceId": "inv-1791921893782"
     },
     {
@@ -1649,12 +1650,12 @@
             },
             {
               "id": "p-pkg-1-1791833506659-pac",
-              "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
+              "name": "Serum Uric Acid (Serum Uric Acid)",
               "result": "5.33",
               "unit": "mg/dL",
               "minNormal": 3.5,
-              "maxNormal": 7.2,
-              "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
+              "maxNormal": 6.2,
+              "textReference": "Males: 3.5 - 6.2  mg/dL | Females: 2.6 - 6.0 mg/dL",
               "flag": "NORMAL",
               "method": "Uricase / POD Enzymatic Colorimetric",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
@@ -1685,7 +1686,7 @@
             },
             {
               "id": "p-pkg-4-1791833506659-ccw",
-              "name": "بولينا بالدم (Blood Urea) (Blood Urea)",
+              "name": "Blood Urea (Blood Urea)",
               "result": "20",
               "unit": "mg/dL",
               "minNormal": 15,
@@ -1865,7 +1866,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-12T19:31:46.660Z",
-      "updatedAt": "2026-10-16T14:56:11.152Z",
+      "updatedAt": "2026-10-16T14:57:00.222Z",
       "invoiceId": "inv-1791833506660",
       "smartReportEnabled": true,
       "smartReportClinicalData": {
@@ -2169,12 +2170,12 @@
             },
             {
               "id": "p-pkg-1-1791833372302-7zp",
-              "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
+              "name": "Serum Uric Acid (Serum Uric Acid)",
               "result": "4.21",
               "unit": "mg/dL",
               "minNormal": 3.5,
               "maxNormal": 6.2,
-              "textReference": "Males: 3.5 - 6.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
+              "textReference": "Males: 3.5 - 6.2  mg/dL | Females: 2.6 - 6.0 mg/dL",
               "flag": "NORMAL",
               "method": "Uricase / POD Enzymatic Colorimetric",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
@@ -2193,7 +2194,7 @@
             },
             {
               "id": "p-pkg-4-1791833372303-nso",
-              "name": "بولينا بالدم (Blood Urea) (Blood Urea)",
+              "name": "Blood Urea (Blood Urea)",
               "result": "38",
               "unit": "mg/dL",
               "minNormal": 15,
@@ -2443,7 +2444,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-12T19:29:32.306Z",
-      "updatedAt": "2026-10-16T14:56:11.152Z",
+      "updatedAt": "2026-10-16T14:57:00.222Z",
       "invoiceId": "inv-1791833372306",
       "smartReportEnabled": true,
       "smartReportClinicalData": {
@@ -4564,12 +4565,12 @@
             },
             {
               "id": "p-pkg-1-1791501113001-8ts",
-              "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
+              "name": "Serum Uric Acid (Serum Uric Acid)",
               "result": "",
               "unit": "mg/dL",
               "minNormal": 3.5,
-              "maxNormal": 7.2,
-              "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
+              "maxNormal": 6.2,
+              "textReference": "Males: 3.5 - 6.2  mg/dL | Females: 2.6 - 6.0 mg/dL",
               "flag": "NORMAL",
               "method": "Uricase / POD Enzymatic Colorimetric",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
@@ -4600,7 +4601,7 @@
             },
             {
               "id": "p-pkg-4-1791501113001-1nx",
-              "name": "بولينا بالدم (Blood Urea) (Blood Urea)",
+              "name": "Blood Urea (Blood Urea)",
               "result": "",
               "unit": "mg/dL",
               "minNormal": 15,
@@ -4708,7 +4709,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-08T23:11:53.004Z",
-      "updatedAt": "2026-10-16T14:56:11.153Z",
+      "updatedAt": "2026-10-16T14:57:00.223Z",
       "invoiceId": "inv-1791501113004"
     },
     {
@@ -4849,12 +4850,12 @@
             },
             {
               "id": "p-pkg-1-1791500705347-x8m",
-              "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
+              "name": "Serum Uric Acid (Serum Uric Acid)",
               "result": "4.22",
               "unit": "mg/dL",
               "minNormal": 3.5,
-              "maxNormal": 7.2,
-              "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
+              "maxNormal": 6.2,
+              "textReference": "Males: 3.5 - 6.2  mg/dL | Females: 2.6 - 6.0 mg/dL",
               "flag": "NORMAL",
               "method": "Uricase / POD Enzymatic Colorimetric",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
@@ -4873,7 +4874,7 @@
             },
             {
               "id": "p-pkg-4-1791500705347-nl7",
-              "name": "بولينا بالدم (Blood Urea) (Blood Urea)",
+              "name": "Blood Urea (Blood Urea)",
               "result": "25",
               "unit": "mg/dL",
               "minNormal": 15,
@@ -5117,7 +5118,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-08T23:05:05.350Z",
-      "updatedAt": "2026-10-16T14:56:11.153Z",
+      "updatedAt": "2026-10-16T14:57:00.223Z",
       "invoiceId": "inv-1791500705351",
       "smartReportEnabled": true,
       "smartReportClinicalData": {
@@ -7060,12 +7061,12 @@
             },
             {
               "id": "p-pkg-1-1791358565021-xpy",
-              "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
+              "name": "Serum Uric Acid (Serum Uric Acid)",
               "result": "5.66",
               "unit": "mg/dL",
               "minNormal": 3.5,
-              "maxNormal": 7.2,
-              "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
+              "maxNormal": 6.2,
+              "textReference": "Males: 3.5 - 6.2  mg/dL | Females: 2.6 - 6.0 mg/dL",
               "flag": "NORMAL",
               "method": "Uricase / POD Enzymatic Colorimetric",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
@@ -7096,7 +7097,7 @@
             },
             {
               "id": "p-pkg-4-1791358565021-1br",
-              "name": "بولينا بالدم (Blood Urea) (Blood Urea)",
+              "name": "Blood Urea (Blood Urea)",
               "result": "19",
               "unit": "mg/dL",
               "minNormal": 15,
@@ -7204,7 +7205,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-07T07:36:05.025Z",
-      "updatedAt": "2026-10-16T14:56:11.154Z",
+      "updatedAt": "2026-10-16T14:57:00.224Z",
       "invoiceId": "inv-1791358565025"
     },
     {
@@ -7345,7 +7346,7 @@
             },
             {
               "id": "p-pkg-1-1791321555659-011",
-              "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
+              "name": "Serum Uric Acid (Serum Uric Acid)",
               "result": "6.77",
               "unit": "mg/dL",
               "minNormal": 3.5,
@@ -7381,7 +7382,7 @@
             },
             {
               "id": "p-pkg-4-1791321555660-5kz",
-              "name": "بولينا بالدم (Blood Urea) (Blood Urea)",
+              "name": "Blood Urea (Blood Urea)",
               "result": "22",
               "unit": "mg/dL",
               "minNormal": 15,
@@ -7489,7 +7490,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-06T21:19:15.663Z",
-      "updatedAt": "2026-10-16T14:56:11.154Z",
+      "updatedAt": "2026-10-16T14:57:00.224Z",
       "invoiceId": "inv-1791321555664"
     },
     {
@@ -7640,7 +7641,7 @@
             },
             {
               "id": "p-pkg-1-1791306270691-juy",
-              "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
+              "name": "Serum Uric Acid (Serum Uric Acid)",
               "result": "6.0",
               "unit": "mg/dL",
               "minNormal": 3.5,
@@ -7676,7 +7677,7 @@
             },
             {
               "id": "p-pkg-4-1791306270691-vbi",
-              "name": "بولينا بالدم (Blood Urea) (Blood Urea)",
+              "name": "Blood Urea (Blood Urea)",
               "result": "26",
               "unit": "mg/dL",
               "minNormal": 15,
@@ -7762,7 +7763,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-06T17:04:30.693Z",
-      "updatedAt": "2026-10-16T14:56:11.154Z",
+      "updatedAt": "2026-10-16T14:57:00.225Z",
       "invoiceId": "inv-1791306270694"
     },
     {
@@ -8142,7 +8143,7 @@
       },
       "generalComment": "كافة الفحوصات المخبرية للمريض (أمال محمد) تقع في النطاقات الآمنة بشكل عام مع انتظام مؤشرات الأعضاء الحيوية ونشاط فسيولوجي متوازن.",
       "createdAt": "2026-10-06T11:59:36.696Z",
-      "updatedAt": "2026-10-16T14:56:11.154Z",
+      "updatedAt": "2026-10-16T14:57:00.225Z",
       "status": "verified",
       "profiles": [
         {
@@ -8275,14 +8276,14 @@
           },
           "parameters": [
             {
-              "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
+              "name": "Serum Uric Acid (Serum Uric Acid)",
               "unit": "mg/dL",
               "id": "p-pkg-1-1791287976694",
               "flag": "NORMAL",
               "minNormal": 3.5,
               "result": "6.05",
-              "maxNormal": 7.2,
-              "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
+              "maxNormal": 6.2,
+              "textReference": "Males: 3.5 - 6.2  mg/dL | Females: 2.6 - 6.0 mg/dL",
               "method": "Uricase / POD Enzymatic Colorimetric"
             },
             {
@@ -8298,7 +8299,7 @@
             },
             {
               "unit": "mg/dL",
-              "name": "بولينا بالدم (Blood Urea) (Blood Urea)",
+              "name": "Blood Urea (Blood Urea)",
               "textReference": "15 - 45 mg/dL",
               "id": "p-pkg-4-1791287976694",
               "minNormal": 15,
@@ -8499,7 +8500,7 @@
         "packagePrice": 199
       },
       "status": "verified",
-      "updatedAt": "2026-10-16T14:56:11.155Z",
+      "updatedAt": "2026-10-16T14:57:00.225Z",
       "createdAt": "2026-10-06T11:48:51.555Z",
       "reportNumber": "RT-2026-007",
       "patient": {
@@ -8657,13 +8658,13 @@
           "parameters": [
             {
               "result": "4.21",
-              "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
+              "textReference": "Males: 3.5 - 6.2  mg/dL | Females: 2.6 - 6.0 mg/dL",
               "method": "Uricase / POD Enzymatic Colorimetric",
               "unit": "mg/dL",
-              "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
+              "name": "Serum Uric Acid (Serum Uric Acid)",
               "minNormal": 3.5,
               "flag": "NORMAL",
-              "maxNormal": 7.2,
+              "maxNormal": 6.2,
               "id": "p-pkg-1-1791287331552"
             },
             {
@@ -8682,7 +8683,7 @@
               "minNormal": 15,
               "textReference": "15 - 45 mg/dL",
               "maxNormal": 45,
-              "name": "بولينا بالدم (Blood Urea) (Blood Urea)",
+              "name": "Blood Urea (Blood Urea)",
               "unit": "mg/dL",
               "result": "42",
               "flag": "NORMAL",
@@ -9007,13 +9008,13 @@
             {
               "flag": "NORMAL",
               "unit": "mg/dL",
-              "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
+              "name": "Serum Uric Acid (Serum Uric Acid)",
               "id": "p-pkg-1-1791286741640",
               "minNormal": 3.5,
-              "maxNormal": 7.2,
+              "maxNormal": 6.2,
               "result": "6.55",
               "method": "Uricase / POD Enzymatic Colorimetric",
-              "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL"
+              "textReference": "Males: 3.5 - 6.2  mg/dL | Females: 2.6 - 6.0 mg/dL"
             },
             {
               "result": "1.10",
@@ -9030,7 +9031,7 @@
               "flag": "NORMAL",
               "textReference": "15 - 45 mg/dL",
               "unit": "mg/dL",
-              "name": "بولينا بالدم (Blood Urea) (Blood Urea)",
+              "name": "Blood Urea (Blood Urea)",
               "id": "p-pkg-4-1791286741640",
               "method": "Urease / GLDH Enzymatic Kinetic",
               "maxNormal": 45,
@@ -9195,7 +9196,7 @@
       ],
       "invoiceId": "inv-1791286741643",
       "reportNumber": "RT-2026-006",
-      "updatedAt": "2026-10-16T14:56:11.155Z",
+      "updatedAt": "2026-10-16T14:57:00.225Z",
       "createdAt": "2026-10-06T11:39:01.642Z",
       "packageApplied": {
         "originalPrice": 2900,
@@ -9338,12 +9339,12 @@
           "parameters": [
             {
               "method": "Uricase / POD Enzymatic Colorimetric",
-              "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
+              "textReference": "Males: 3.5 - 6.2  mg/dL | Females: 2.6 - 6.0 mg/dL",
               "result": "4.55",
               "id": "p-pkg-1-1791285435310",
-              "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
+              "name": "Serum Uric Acid (Serum Uric Acid)",
               "unit": "mg/dL",
-              "maxNormal": 7.2,
+              "maxNormal": 6.2,
               "flag": "NORMAL",
               "minNormal": 3.5
             },
@@ -9360,7 +9361,7 @@
             },
             {
               "unit": "mg/dL",
-              "name": "بولينا بالدم (Blood Urea) (Blood Urea)",
+              "name": "Blood Urea (Blood Urea)",
               "method": "Urease / GLDH Enzymatic Kinetic",
               "result": "22",
               "id": "p-pkg-4-1791285435310",
@@ -9562,7 +9563,7 @@
       "reportNumber": "RT-2026-005",
       "id": "rep-1791285435316",
       "createdAt": "2026-10-06T11:17:15.316Z",
-      "updatedAt": "2026-10-16T14:56:11.155Z"
+      "updatedAt": "2026-10-16T14:57:00.226Z"
     },
     {
       "updatedAt": "2026-10-16T14:52:30.069Z",
@@ -11695,7 +11696,7 @@
       },
       "generalComment": " ",
       "createdAt": "2026-10-04T14:50:55.998Z",
-      "updatedAt": "2026-10-16T14:56:11.156Z",
+      "updatedAt": "2026-10-16T14:57:00.227Z",
       "profiles": [
         {
           "id": "prof-pkg-1791408346561",
@@ -11812,12 +11813,12 @@
             },
             {
               "id": "p-pkg-1-1791408346560-d9m",
-              "name": "حمض البوليك والنقرس (Serum Uric Acid) (Serum Uric Acid)",
+              "name": "Serum Uric Acid (Serum Uric Acid)",
               "result": "5.66",
               "unit": "mg/dL",
               "minNormal": 3.5,
-              "maxNormal": 7.2,
-              "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
+              "maxNormal": 6.2,
+              "textReference": "Males: 3.5 - 6.2  mg/dL | Females: 2.6 - 6.0 mg/dL",
               "flag": "NORMAL",
               "method": "Uricase / POD Enzymatic Colorimetric",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
@@ -11848,7 +11849,7 @@
             },
             {
               "id": "p-pkg-4-1791408346560-41f",
-              "name": "بولينا بالدم (Blood Urea) (Blood Urea)",
+              "name": "Blood Urea (Blood Urea)",
               "result": "19",
               "unit": "mg/dL",
               "minNormal": 15,
@@ -12993,13 +12994,13 @@
           "parameters": [
             {
               "result": "5.11",
-              "method": "Uricase",
-              "maxNormal": 7.2,
+              "method": "Uricase / POD Enzymatic Colorimetric",
+              "maxNormal": 6.2,
               "flag": "NORMAL",
               "minNormal": 3.5,
               "id": "param-1791187761770-2asy",
-              "textReference": "Males: 3.5 - 7.2 | Females: 2.6 - 6.0 mg/dL",
-              "name": "حمض البوليك / يوريك أسيد (Serum Uric Acid) (Serum Uric Acid)",
+              "textReference": "Males: 3.5 - 6.2  mg/dL | Females: 2.6 - 6.0 mg/dL",
+              "name": "Serum Uric Acid (Serum Uric Acid)",
               "unit": "mg/dL"
             },
             {
@@ -13015,11 +13016,11 @@
             },
             {
               "result": "28",
-              "method": "Urease - GLDH",
+              "method": "Urease / GLDH Enzymatic Kinetic",
               "unit": "mg/dL",
               "minNormal": 15,
               "maxNormal": 45,
-              "name": "بولينا بالدم (Blood Urea / BUN) (Blood Urea Nitrogen)",
+              "name": "Blood Urea (Blood Urea)",
               "flag": "NORMAL",
               "textReference": "15 - 45 mg/dL",
               "id": "param-1791187761771-pgym"
@@ -13057,7 +13058,7 @@
         "packagePrice": 199
       },
       "createdAt": "2026-10-04T14:22:02.634Z",
-      "updatedAt": "2026-10-16T14:56:11.157Z",
+      "updatedAt": "2026-10-16T14:57:00.227Z",
       "status": "verified",
       "generalComment": "طلب فحص مالي رقم RT-BK-5873 - تم التسميع آلياً من منظومة الفواتير",
       "staff": {
@@ -13104,7 +13105,7 @@
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-8097 - تم التسميع آلياً من منظومة الفواتير",
       "createdAt": "2026-10-04T14:16:24.421Z",
-      "updatedAt": "2026-10-16T14:56:11.157Z",
+      "updatedAt": "2026-10-16T14:57:00.228Z",
       "profiles": [
         {
           "id": "prof-inc-1791123384421-12",
@@ -13274,25 +13275,27 @@
               "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL"
             },
             {
-              "name": "Blood Urea",
+              "name": "Blood Urea (Blood Urea)",
               "unit": "mg/dL",
               "minNormal": 15,
               "maxNormal": 45,
               "panicHigh": 120,
-              "method": "Urease-GLDH",
+              "method": "Urease / GLDH Enzymatic Kinetic",
               "id": "param-1791150905118-1",
               "result": "27",
-              "flag": "NORMAL"
+              "flag": "NORMAL",
+              "textReference": "15 - 45 mg/dL"
             },
             {
-              "name": "Serum Uric Acid",
+              "name": "Serum Uric Acid (Serum Uric Acid)",
               "unit": "mg/dL",
               "minNormal": 3.5,
-              "maxNormal": 7.2,
-              "method": "Uricase-PAP",
+              "maxNormal": 6.2,
+              "method": "Uricase / POD Enzymatic Colorimetric",
               "id": "param-1791150905118-4",
               "result": "5.88",
-              "flag": "NORMAL"
+              "flag": "NORMAL",
+              "textReference": "Males: 3.5 - 6.2  mg/dL | Females: 2.6 - 6.0 mg/dL"
             }
           ]
         },
@@ -14252,23 +14255,25 @@
             },
             {
               "id": "p-k2",
-              "name": "Blood Urea",
+              "name": "Blood Urea (Blood Urea)",
               "result": "28",
               "unit": "mg/dL",
               "minNormal": 15,
               "maxNormal": 45,
               "flag": "NORMAL",
-              "method": "GLDH Coupled"
+              "method": "Urease / GLDH Enzymatic Kinetic",
+              "textReference": "15 - 45 mg/dL"
             },
             {
               "id": "p-k3",
-              "name": "Serum Uric Acid",
+              "name": "Serum Uric Acid (Serum Uric Acid)",
               "result": "4.9",
               "unit": "mg/dL",
-              "minNormal": 2.6,
-              "maxNormal": 6,
+              "minNormal": 3.5,
+              "maxNormal": 6.2,
               "flag": "NORMAL",
-              "method": "Uricase Colorimetric"
+              "method": "Uricase / POD Enzymatic Colorimetric",
+              "textReference": "Males: 3.5 - 6.2  mg/dL | Females: 2.6 - 6.0 mg/dL"
             }
           ]
         }
@@ -14281,7 +14286,7 @@
       "generalComment": "يرجى مراجعة الطبيب المعالج لتعديل جرعات العلاج الغذائي والدوائي.",
       "status": "verified",
       "createdAt": "2026-10-16T08:41:01.806Z",
-      "updatedAt": "2026-10-16T14:56:11.157Z",
+      "updatedAt": "2026-10-16T14:57:00.228Z",
       "invoiceId": "inv-002"
     }
   ],
@@ -19458,7 +19463,7 @@
       "nameAr": "Blood Urea",
       "nameEn": "Blood Urea",
       "category": "Kidney Function",
-      "price": 88,
+      "price": 188,
       "cost": 12,
       "sampleType": "Serum",
       "turnaroundTime": "Immediate (1 hour)",
@@ -19475,7 +19480,7 @@
       "nameAr": "Blood Urea Nitrogen (BUN)",
       "nameEn": "Blood Urea Nitrogen (BUN)",
       "category": "Kidney Function",
-      "price": 88,
+      "price": 188,
       "cost": 12,
       "sampleType": "Serum",
       "turnaroundTime": "Immediate (1 hour)",
@@ -19492,14 +19497,14 @@
       "nameAr": "Serum Uric Acid",
       "nameEn": "Serum Uric Acid",
       "category": "Kidney Function",
-      "price": 88,
+      "price": 188,
       "cost": 12,
       "sampleType": "Serum",
       "turnaroundTime": "Immediate (1 hour)",
       "unit": "mg/dL",
       "minNormal": 3.5,
-      "maxNormal": 7.2,
-      "textReference": "Males: 3.5 - 7.2 mg/dL | Females: 2.6 - 6.0 mg/dL",
+      "maxNormal": 6.2,
+      "textReference": "Males: 3.5 - 6.2  mg/dL | Females: 2.6 - 6.0 mg/dL",
       "method": "Uricase / POD Enzymatic Colorimetric",
       "fastingInstructions": "Fasting 4-8 hours preferred"
     },
