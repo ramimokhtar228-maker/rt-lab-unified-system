@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:50:21.820Z",
+  "syncedAt": "2026-10-16T15:50:37.606Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -1023,8 +1023,8 @@
               "method": "Urease-GLDH",
               "textReference": "",
               "id": "param-1792165765208-1",
-              "result": "1",
-              "flag": "LOW"
+              "result": "18",
+              "flag": "NORMAL"
             },
             {
               "name": "Blood Urea Nitrogen (BUN)",
@@ -1033,8 +1033,8 @@
               "maxNormal": 20,
               "textReference": "",
               "id": "param-1792165765208-2",
-              "result": "",
-              "flag": ""
+              "result": "8.41",
+              "flag": "NORMAL"
             },
             {
               "name": "BUN / Creatinine Ratio",
@@ -1044,7 +1044,7 @@
               "notes": "Normal: 10 - 20",
               "textReference": "",
               "id": "param-1792165765208-3",
-              "result": "1.5",
+              "result": "9.6",
               "flag": "LOW"
             },
             {
@@ -1093,7 +1093,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-16T15:50:16.556Z",
+      "updatedAt": "2026-10-16T15:50:35.132Z",
       "invoiceId": "inv-1791921893782"
     },
     {
