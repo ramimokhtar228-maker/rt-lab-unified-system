@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:48:07.989Z",
+  "syncedAt": "2026-10-16T15:48:21.627Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -991,18 +991,6 @@
               "id": "param-1792066910604-1",
               "result": "18",
               "flag": "NORMAL"
-            },
-            {
-              "name": "Serum Creatinine (Serum Creatinine)",
-              "unit": "mg/dL",
-              "minNormal": 0.6,
-              "maxNormal": 1.4,
-              "notes": "Normal: 10 - 20",
-              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
-              "id": "param-1792066910604-3",
-              "result": "11.8",
-              "flag": "NORMAL",
-              "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)"
             }
           ]
         },
@@ -1062,7 +1050,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-16T15:48:04.783Z",
+      "updatedAt": "2026-10-16T15:48:18.744Z",
       "invoiceId": "inv-1791921893782"
     },
     {
