@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:26:09.144Z",
+  "syncedAt": "2026-10-16T14:26:22.393Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3363,13 +3363,13 @@
             {
               "name": "Absolute Basophils (ABC)",
               "unit": "x10^3/µL",
-              "minNormal": 0.01,
+              "minNormal": 0,
               "maxNormal": 0.1,
               "notes": "Auto-calculated: (WBC × Baso%) / 100",
               "textReference": "0.01 - 0.1 x10^3/µL",
               "id": "param-1792160624241-29",
               "result": "0",
-              "flag": "LOW"
+              "flag": "NORMAL"
             },
             {
               "name": "NLR (Neutrophil/Lymphocyte)",
@@ -3456,7 +3456,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:26:06.718Z",
+      "updatedAt": "2026-10-16T14:26:19.842Z",
       "invoiceId": "inv-1791735202176"
     },
     {
