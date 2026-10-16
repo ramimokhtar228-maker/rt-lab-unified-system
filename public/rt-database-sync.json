@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:24:30.928Z",
+  "syncedAt": "2026-10-16T14:24:42.180Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3188,8 +3188,8 @@
               "maxNormal": 14.5,
               "textReference": "11.5 - 14.5 %",
               "id": "param-1792160624241-6",
-              "result": "",
-              "flag": ""
+              "result": "11",
+              "flag": "LOW"
             },
             {
               "name": "R.D.W-SD",
@@ -3515,7 +3515,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:24:24.174Z",
+      "updatedAt": "2026-10-16T14:24:40.255Z",
       "invoiceId": "inv-1791735202176"
     },
     {
