@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:17:56.551Z",
+  "syncedAt": "2026-10-16T15:18:05.569Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -21334,7 +21334,7 @@
       "nameAr": "Fecal Occult Blood Test (FIT Immunochemical)",
       "nameEn": "Fecal Occult Blood Test (FIT Immunochemical)",
       "category": "Gastroenterology",
-      "price": 120,
+      "price": 564,
       "cost": 25,
       "sampleType": "Stool Specimen",
       "turnaroundTime": "Within 2 hours",
