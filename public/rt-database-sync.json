@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:23:23.848Z",
+  "syncedAt": "2026-10-16T14:23:38.897Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3094,34 +3094,13 @@
             {
               "id": "param-1792160550594",
               "name": "Serum Ferritin Level (Serum Ferritin Level)",
-              "result": "4",
+              "result": "49",
               "unit": "ng/mL",
               "minNormal": 30,
               "maxNormal": 400,
               "textReference": "Adult Males: 30 - 400 ng/mL | Adult Females: 15 - 150 ng/mL",
               "method": "CLIA (Chemiluminescence Immunoassay)",
-              "flag": "LOW"
-            }
-          ]
-        },
-        {
-          "id": "prof-indiv-1792160568020",
-          "profileCode": "INDIVIDUAL",
-          "titleEn": "Individual Diagnostic Investigations",
-          "titleAr": "تحاليل منفردة ومحددة",
-          "category": "Hematology",
-          "sampleType": "EDTA Whole Blood",
-          "parameters": [
-            {
-              "id": "param-1792160568020",
-              "name": "Complete Blood Count with Differential (Complete Blood Count with Differential)",
-              "result": "",
-              "unit": "Multi-parameter",
-              "minNormal": 0,
-              "maxNormal": 0,
-              "textReference": "Hb: Male 13.0-17.5 g/dL, Female 12.0-15.5 | WBC: 4.0-11.0 10^3/uL | PLT: 150-450 10^3/uL",
-              "method": "5-Part Automated Flow Cytometry / Laser Impedance",
-              "flag": ""
+              "flag": "NORMAL"
             }
           ]
         }
@@ -3139,7 +3118,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:23:21.405Z",
+      "updatedAt": "2026-10-16T14:23:33.618Z",
       "invoiceId": "inv-1791735202176"
     },
     {
