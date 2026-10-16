@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:25:15.428Z",
+  "syncedAt": "2026-10-16T15:27:56.453Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -19264,6 +19264,22 @@
     "vodafoneCash": "01124485444"
   },
   "testCatalog": [
+    {
+      "id": "test-1792164472194",
+      "code": "HCT_632",
+      "nameEn": "Hematocrit %",
+      "nameAr": "نسبه الهيماتوكريت",
+      "category": "Clinical hematology",
+      "sampleType": "EDTA BLOOD",
+      "unit": "%",
+      "minNormal": 37,
+      "maxNormal": 49,
+      "textReference": "37-49",
+      "method": "Enzymatic",
+      "fastingInstructions": "لا يشترط الصيام",
+      "turnaroundHours": 2,
+      "price": 20
+    },
     {
       "id": "test-1792164310191",
       "code": "HB_727",
