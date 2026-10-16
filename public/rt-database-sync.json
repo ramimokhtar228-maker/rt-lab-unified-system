@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T13:53:10.601Z",
+  "syncedAt": "2026-10-16T13:53:42.897Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3709,7 +3709,7 @@
         "ageUnit": "years",
         "gender": "female",
         "referringDoctorTitle": "Dr.",
-        "referringDoctorName": "a",
+        "referringDoctorName": "herself ",
         "sampleDate": "2026-10-12",
         "reportingDate": "2026-10-15T14:25:00.000Z",
         "fastingHours": 12,
@@ -3722,7 +3722,9 @@
         "testsSubtotal": 5036,
         "totalCost": 1158,
         "discountApplied": 3878,
-        "paymentMethod": "cash"
+        "paymentMethod": "cash",
+        "clinicalDiagnosis": "Routine Comprehensive Health Checkup",
+        "clinicalHistory": "Routine Comprehensive Health Checkup"
       },
       "profiles": [
         {
@@ -4249,7 +4251,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-11T15:57:30.501Z",
-      "updatedAt": "2026-10-16T13:53:03.618Z",
+      "updatedAt": "2026-10-16T13:53:13.745Z",
       "invoiceId": "inv-1791734250501"
     },
     {
