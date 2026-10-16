@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:55:12.177Z",
+  "syncedAt": "2026-10-16T14:56:32.644Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -442,13 +442,13 @@
           "interpretation": "Renal biomarkers indicate adequate glomerular filtration and nitrogenous clearance.",
           "parameters": [
             {
-              "name": "Serum Creatinine",
+              "name": "Serum Creatinine (Serum Creatinine)",
               "unit": "mg/dL",
               "minNormal": 0.6,
-              "maxNormal": 1.2,
+              "maxNormal": 1.4,
               "panicHigh": 4,
-              "method": "Enzymatic / Jaffe Kinetic",
-              "textReference": "",
+              "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
               "id": "param-1792157691139-0",
               "result": "0.75",
               "flag": "NORMAL"
@@ -493,7 +493,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-16T13:31:59.823Z",
-      "updatedAt": "2026-10-16T14:54:14.598Z",
+      "updatedAt": "2026-10-16T14:56:11.151Z",
       "invoiceId": "inv-1792157519823"
     },
     {
@@ -961,13 +961,13 @@
           "interpretation": "Serum Creatinine, Urea, Uric Acid, and eGFR reflect glomerular filtration rate and nitrogenous waste clearance.",
           "parameters": [
             {
-              "name": "Serum Creatinine",
+              "name": "Serum Creatinine (Serum Creatinine)",
               "unit": "mg/dL",
               "minNormal": 0.6,
-              "maxNormal": 1.2,
+              "maxNormal": 1.4,
               "panicHigh": 4,
-              "method": "Enzymatic / Jaffe Kinetic",
-              "textReference": "",
+              "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
               "id": "param-1792066910604-0",
               "result": "0.71",
               "flag": "NORMAL"
@@ -995,15 +995,16 @@
               "flag": "NORMAL"
             },
             {
-              "name": "BUN / Creatinine Ratio",
-              "unit": "Ratio",
-              "minNormal": 10,
-              "maxNormal": 20,
+              "name": "Serum Creatinine (Serum Creatinine)",
+              "unit": "mg/dL",
+              "minNormal": 0.6,
+              "maxNormal": 1.4,
               "notes": "Normal: 10 - 20",
-              "textReference": "",
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
               "id": "param-1792066910604-3",
               "result": "11.8",
-              "flag": "NORMAL"
+              "flag": "NORMAL",
+              "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)"
             }
           ]
         },
@@ -1061,7 +1062,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-16T14:54:14.599Z",
+      "updatedAt": "2026-10-16T14:56:11.151Z",
       "invoiceId": "inv-1791921893782"
     },
     {
@@ -1340,13 +1341,13 @@
           },
           "parameters": [
             {
-              "name": "Serum Creatinine",
+              "name": "Serum Creatinine (Serum Creatinine)",
               "unit": "mg/dL",
               "minNormal": 0.6,
-              "maxNormal": 1.2,
+              "maxNormal": 1.4,
               "panicHigh": 4,
-              "method": "Enzymatic / Jaffe Kinetic",
-              "textReference": "",
+              "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
               "id": "param-1792065362057-0",
               "result": "1.10",
               "flag": "NORMAL"
@@ -1397,7 +1398,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-12T21:13:54.435Z",
-      "updatedAt": "2026-10-16T14:54:14.599Z",
+      "updatedAt": "2026-10-16T14:56:11.151Z",
       "invoiceId": "inv-1791839634435"
     },
     {
@@ -1672,12 +1673,12 @@
             },
             {
               "id": "p-pkg-3-1791833506659-avp",
-              "name": "كرياتينين بالدم (Serum Creatinine) (Serum Creatinine)",
+              "name": "Serum Creatinine (Serum Creatinine)",
               "result": "0.75",
               "unit": "mg/dL",
               "minNormal": 0.6,
-              "maxNormal": 1.2,
-              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.1 mg/dL",
+              "maxNormal": 1.4,
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
               "flag": "NORMAL",
               "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
@@ -1864,7 +1865,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-12T19:31:46.660Z",
-      "updatedAt": "2026-10-16T14:54:14.599Z",
+      "updatedAt": "2026-10-16T14:56:11.152Z",
       "invoiceId": "inv-1791833506660",
       "smartReportEnabled": true,
       "smartReportClinicalData": {
@@ -2180,12 +2181,12 @@
             },
             {
               "id": "p-pkg-3-1791833372303-gsq",
-              "name": "كرياتينين بالدم (Serum Creatinine) (Serum Creatinine)",
+              "name": "Serum Creatinine (Serum Creatinine)",
               "result": "1.21",
               "unit": "mg/dL",
               "minNormal": 0.6,
               "maxNormal": 1.4,
-              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.1 mg/dL",
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
               "flag": "NORMAL",
               "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
@@ -2442,7 +2443,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-12T19:29:32.306Z",
-      "updatedAt": "2026-10-16T14:54:14.599Z",
+      "updatedAt": "2026-10-16T14:56:11.152Z",
       "invoiceId": "inv-1791833372306",
       "smartReportEnabled": true,
       "smartReportClinicalData": {
@@ -2763,12 +2764,12 @@
           },
           "parameters": [
             {
-              "name": "Protein/Creatinine Ratio (UPCR)",
-              "unit": "mg/mg",
-              "minNormal": 0,
-              "maxNormal": 0.2,
-              "method": "Enzymatic / Jaffe",
-              "textReference": "< 0.2 mg/mg",
+              "name": "Serum Creatinine (Serum Creatinine)",
+              "unit": "mg/dL",
+              "minNormal": 0.6,
+              "maxNormal": 1.4,
+              "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
               "id": "param-4",
               "result": "",
               "flag": "NORMAL",
@@ -2987,7 +2988,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-16T14:54:14.599Z",
+      "updatedAt": "2026-10-16T14:56:11.152Z",
       "invoiceId": "inv-1791819003027"
     },
     {
@@ -4587,12 +4588,12 @@
             },
             {
               "id": "p-pkg-3-1791501113001-cky",
-              "name": "كرياتينين بالدم (Serum Creatinine) (Serum Creatinine)",
+              "name": "Serum Creatinine (Serum Creatinine)",
               "result": "",
               "unit": "mg/dL",
               "minNormal": 0.6,
-              "maxNormal": 1.2,
-              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.1 mg/dL",
+              "maxNormal": 1.4,
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
               "flag": "NORMAL",
               "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
@@ -4707,7 +4708,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-08T23:11:53.004Z",
-      "updatedAt": "2026-10-16T14:54:14.600Z",
+      "updatedAt": "2026-10-16T14:56:11.153Z",
       "invoiceId": "inv-1791501113004"
     },
     {
@@ -4860,12 +4861,12 @@
             },
             {
               "id": "p-pkg-3-1791500705347-4hu",
-              "name": "كرياتينين بالدم (Serum Creatinine) (Serum Creatinine)",
+              "name": "Serum Creatinine (Serum Creatinine)",
               "result": "0.87",
               "unit": "mg/dL",
               "minNormal": 0.6,
-              "maxNormal": 1.2,
-              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.1 mg/dL",
+              "maxNormal": 1.4,
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
               "flag": "NORMAL",
               "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
@@ -5116,7 +5117,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-08T23:05:05.350Z",
-      "updatedAt": "2026-10-16T14:54:14.600Z",
+      "updatedAt": "2026-10-16T14:56:11.153Z",
       "invoiceId": "inv-1791500705351",
       "smartReportEnabled": true,
       "smartReportClinicalData": {
@@ -7083,12 +7084,12 @@
             },
             {
               "id": "p-pkg-3-1791358565021-x8b",
-              "name": "كرياتينين بالدم (Serum Creatinine) (Serum Creatinine)",
+              "name": "Serum Creatinine (Serum Creatinine)",
               "result": "0.78",
               "unit": "mg/dL",
               "minNormal": 0.6,
-              "maxNormal": 1.2,
-              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.1 mg/dL",
+              "maxNormal": 1.4,
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
               "flag": "NORMAL",
               "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
@@ -7203,7 +7204,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-07T07:36:05.025Z",
-      "updatedAt": "2026-10-16T14:54:14.601Z",
+      "updatedAt": "2026-10-16T14:56:11.154Z",
       "invoiceId": "inv-1791358565025"
     },
     {
@@ -7368,12 +7369,12 @@
             },
             {
               "id": "p-pkg-3-1791321555660-62l",
-              "name": "كرياتينين بالدم (Serum Creatinine) (Serum Creatinine)",
+              "name": "Serum Creatinine (Serum Creatinine)",
               "result": "0.64",
               "unit": "mg/dL",
               "minNormal": 0.6,
-              "maxNormal": 1.2,
-              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.1 mg/dL",
+              "maxNormal": 1.4,
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
               "flag": "NORMAL",
               "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
@@ -7488,7 +7489,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-06T21:19:15.663Z",
-      "updatedAt": "2026-10-16T14:54:14.601Z",
+      "updatedAt": "2026-10-16T14:56:11.154Z",
       "invoiceId": "inv-1791321555664"
     },
     {
@@ -7663,12 +7664,12 @@
             },
             {
               "id": "p-pkg-3-1791306270691-ymi",
-              "name": "كرياتينين بالدم (Serum Creatinine) (Serum Creatinine)",
+              "name": "Serum Creatinine (Serum Creatinine)",
               "result": "0.77",
               "unit": "mg/dL",
               "minNormal": 0.6,
-              "maxNormal": 1.2,
-              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.1 mg/dL",
+              "maxNormal": 1.4,
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
               "flag": "NORMAL",
               "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
@@ -7761,7 +7762,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-06T17:04:30.693Z",
-      "updatedAt": "2026-10-16T14:54:14.602Z",
+      "updatedAt": "2026-10-16T14:56:11.154Z",
       "invoiceId": "inv-1791306270694"
     },
     {
@@ -8141,7 +8142,7 @@
       },
       "generalComment": "كافة الفحوصات المخبرية للمريض (أمال محمد) تقع في النطاقات الآمنة بشكل عام مع انتظام مؤشرات الأعضاء الحيوية ونشاط فسيولوجي متوازن.",
       "createdAt": "2026-10-06T11:59:36.696Z",
-      "updatedAt": "2026-10-16T14:54:14.602Z",
+      "updatedAt": "2026-10-16T14:56:11.154Z",
       "status": "verified",
       "profiles": [
         {
@@ -8285,13 +8286,13 @@
               "method": "Uricase / POD Enzymatic Colorimetric"
             },
             {
-              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.1 mg/dL",
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
               "result": "0.84",
               "minNormal": 0.6,
-              "maxNormal": 1.2,
+              "maxNormal": 1.4,
               "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
               "unit": "mg/dL",
-              "name": "كرياتينين بالدم (Serum Creatinine) (Serum Creatinine)",
+              "name": "Serum Creatinine (Serum Creatinine)",
               "id": "p-pkg-3-1791287976694",
               "flag": "NORMAL"
             },
@@ -8498,7 +8499,7 @@
         "packagePrice": 199
       },
       "status": "verified",
-      "updatedAt": "2026-10-16T14:54:14.602Z",
+      "updatedAt": "2026-10-16T14:56:11.155Z",
       "createdAt": "2026-10-06T11:48:51.555Z",
       "reportNumber": "RT-2026-007",
       "patient": {
@@ -8671,9 +8672,9 @@
               "unit": "mg/dL",
               "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
               "minNormal": 0.6,
-              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.1 mg/dL",
-              "maxNormal": 1.2,
-              "name": "كرياتينين بالدم (Serum Creatinine) (Serum Creatinine)",
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
+              "maxNormal": 1.4,
+              "name": "Serum Creatinine (Serum Creatinine)",
               "id": "p-pkg-3-1791287331553"
             },
             {
@@ -9019,11 +9020,11 @@
               "id": "p-pkg-3-1791286741640",
               "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
               "unit": "mg/dL",
-              "name": "كرياتينين بالدم (Serum Creatinine) (Serum Creatinine)",
-              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.1 mg/dL",
+              "name": "Serum Creatinine (Serum Creatinine)",
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
               "minNormal": 0.6,
               "flag": "NORMAL",
-              "maxNormal": 1.2
+              "maxNormal": 1.4
             },
             {
               "flag": "NORMAL",
@@ -9194,7 +9195,7 @@
       ],
       "invoiceId": "inv-1791286741643",
       "reportNumber": "RT-2026-006",
-      "updatedAt": "2026-10-16T14:54:14.603Z",
+      "updatedAt": "2026-10-16T14:56:11.155Z",
       "createdAt": "2026-10-06T11:39:01.642Z",
       "packageApplied": {
         "originalPrice": 2900,
@@ -9348,14 +9349,14 @@
             },
             {
               "minNormal": 0.6,
-              "maxNormal": 1.2,
+              "maxNormal": 1.4,
               "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
               "result": "0.97",
               "flag": "NORMAL",
-              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.1 mg/dL",
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
               "unit": "mg/dL",
               "id": "p-pkg-3-1791285435310",
-              "name": "كرياتينين بالدم (Serum Creatinine) (Serum Creatinine)"
+              "name": "Serum Creatinine (Serum Creatinine)"
             },
             {
               "unit": "mg/dL",
@@ -9561,7 +9562,7 @@
       "reportNumber": "RT-2026-005",
       "id": "rep-1791285435316",
       "createdAt": "2026-10-06T11:17:15.316Z",
-      "updatedAt": "2026-10-16T14:54:14.603Z"
+      "updatedAt": "2026-10-16T14:56:11.155Z"
     },
     {
       "updatedAt": "2026-10-16T14:52:30.069Z",
@@ -10425,7 +10426,7 @@
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-8226 - تم التسميع آلياً من منظومة الفواتير",
       "createdAt": "2026-10-04T15:16:43.337Z",
-      "updatedAt": "2026-10-07T22:08:46.524Z",
+      "updatedAt": "2026-10-16T14:54:54.634Z",
       "profiles": [
         {
           "id": "prof-inc-1791127003337-1",
@@ -10796,14 +10797,15 @@
               "flag": ""
             },
             {
-              "name": "Reticulocyte Count %",
+              "name": "Reticulocyte Count % (Reticulocyte Count %)",
               "unit": "%",
               "minNormal": 0.5,
-              "maxNormal": 2.5,
-              "textReference": "0.5 - 2.5 %",
+              "maxNormal": 2,
+              "textReference": "Adults: 0.5 - 2.0 % (Absolute: 25 - 85 x 10^9/L)",
               "id": "p-mig-32-1791157348011",
               "result": "",
-              "flag": ""
+              "flag": "",
+              "method": "Supravital Staining / Automated Flow"
             },
             {
               "name": "RPI (Reticulocyte Production Index)",
@@ -11693,7 +11695,7 @@
       },
       "generalComment": " ",
       "createdAt": "2026-10-04T14:50:55.998Z",
-      "updatedAt": "2026-10-16T14:54:14.604Z",
+      "updatedAt": "2026-10-16T14:56:11.156Z",
       "profiles": [
         {
           "id": "prof-pkg-1791408346561",
@@ -11834,12 +11836,12 @@
             },
             {
               "id": "p-pkg-3-1791408346560-orb",
-              "name": "كرياتينين بالدم (Serum Creatinine) (Serum Creatinine)",
+              "name": "Serum Creatinine (Serum Creatinine)",
               "result": "0.78",
               "unit": "mg/dL",
               "minNormal": 0.6,
-              "maxNormal": 1.2,
-              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.1 mg/dL",
+              "maxNormal": 1.4,
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
               "flag": "NORMAL",
               "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
               "notes": "فحوصات وفيتامينات إضافية للباقة"
@@ -12855,13 +12857,14 @@
             },
             {
               "unit": "%",
-              "name": "Reticulocyte Count %",
-              "textReference": "0.5 - 2.5 %",
+              "name": "Reticulocyte Count % (Reticulocyte Count %)",
+              "textReference": "Adults: 0.5 - 2.0 % (Absolute: 25 - 85 x 10^9/L)",
               "id": "p-mig-32-1791292960687",
-              "maxNormal": 2.5,
+              "maxNormal": 2,
               "flag": "",
               "result": "",
-              "minNormal": 0.5
+              "minNormal": 0.5,
+              "method": "Supravital Staining / Automated Flow"
             },
             {
               "id": "p-mig-33-1791292960687",
@@ -13002,11 +13005,11 @@
             {
               "result": "0.71",
               "unit": "mg/dL",
-              "textReference": "Adult Males: 0.7 - 1.3 | Adult Females: 0.6 - 1.1 mg/dL",
-              "name": "كرياتينين بالدم (Serum Creatinine) (Serum Creatinine)",
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
+              "name": "Serum Creatinine (Serum Creatinine)",
               "flag": "NORMAL",
-              "method": "Jaffe Modified / Enzymatic",
-              "maxNormal": 1.3,
+              "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
+              "maxNormal": 1.4,
               "minNormal": 0.6,
               "id": "param-1791187761771-673n"
             },
@@ -13054,7 +13057,7 @@
         "packagePrice": 199
       },
       "createdAt": "2026-10-04T14:22:02.634Z",
-      "updatedAt": "2026-10-16T14:54:14.605Z",
+      "updatedAt": "2026-10-16T14:56:11.157Z",
       "status": "verified",
       "generalComment": "طلب فحص مالي رقم RT-BK-5873 - تم التسميع آلياً من منظومة الفواتير",
       "staff": {
@@ -13101,7 +13104,7 @@
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-8097 - تم التسميع آلياً من منظومة الفواتير",
       "createdAt": "2026-10-04T14:16:24.421Z",
-      "updatedAt": "2026-10-16T14:54:14.605Z",
+      "updatedAt": "2026-10-16T14:56:11.157Z",
       "profiles": [
         {
           "id": "prof-inc-1791123384421-12",
@@ -13259,15 +13262,16 @@
           },
           "parameters": [
             {
-              "name": "Serum Creatinine",
+              "name": "Serum Creatinine (Serum Creatinine)",
               "unit": "mg/dL",
               "minNormal": 0.6,
-              "maxNormal": 1.2,
+              "maxNormal": 1.4,
               "panicHigh": 4,
-              "method": "Enzymatic / Jaffe Kinetic",
+              "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
               "id": "param-1791150905118-0",
               "result": "0.65",
-              "flag": "NORMAL"
+              "flag": "NORMAL",
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL"
             },
             {
               "name": "Blood Urea",
@@ -13473,7 +13477,7 @@
       },
       "generalComment": "",
       "createdAt": "2026-10-03T23:04:19.875Z",
-      "updatedAt": "2026-10-07T22:09:26.969Z",
+      "updatedAt": "2026-10-16T14:54:54.635Z",
       "profiles": [
         {
           "id": "prof-1791068659875",
@@ -13842,14 +13846,15 @@
               "flag": ""
             },
             {
-              "name": "Reticulocyte Count %",
+              "name": "Reticulocyte Count % (Reticulocyte Count %)",
               "unit": "%",
               "minNormal": 0.5,
-              "maxNormal": 2.5,
-              "textReference": "0.5 - 2.5 %",
+              "maxNormal": 2,
+              "textReference": "Adults: 0.5 - 2.0 % (Absolute: 25 - 85 x 10^9/L)",
               "id": "p-mig-32-1791157348122",
               "result": "",
-              "flag": ""
+              "flag": "",
+              "method": "Supravital Staining / Automated Flow"
             },
             {
               "name": "RPI (Reticulocyte Production Index)",
@@ -14236,13 +14241,14 @@
           "parameters": [
             {
               "id": "p-k1",
-              "name": "Serum Creatinine",
+              "name": "Serum Creatinine (Serum Creatinine)",
               "result": "0.82",
               "unit": "mg/dL",
-              "minNormal": 0.5,
-              "maxNormal": 1.1,
+              "minNormal": 0.6,
+              "maxNormal": 1.4,
               "flag": "NORMAL",
-              "method": "Enzymatic Spectrophotometry"
+              "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL"
             },
             {
               "id": "p-k2",
@@ -14275,7 +14281,7 @@
       "generalComment": "يرجى مراجعة الطبيب المعالج لتعديل جرعات العلاج الغذائي والدوائي.",
       "status": "verified",
       "createdAt": "2026-10-16T08:41:01.806Z",
-      "updatedAt": "2026-10-16T14:52:30.071Z",
+      "updatedAt": "2026-10-16T14:56:11.157Z",
       "invoiceId": "inv-002"
     }
   ],
@@ -19335,7 +19341,7 @@
       "nameAr": "ABO & Rh Blood Grouping",
       "nameEn": "ABO & Rh Blood Grouping",
       "category": "Hematology",
-      "price": 60,
+      "price": 240,
       "cost": 15,
       "sampleType": "EDTA Whole Blood",
       "turnaroundTime": "Immediate (1 hour)",
@@ -19350,7 +19356,7 @@
       "nameAr": "Reticulocyte Count %",
       "nameEn": "Reticulocyte Count %",
       "category": "Hematology",
-      "price": 90,
+      "price": 300,
       "cost": 15,
       "sampleType": "EDTA Whole Blood",
       "turnaroundTime": "Within 3 hours",
@@ -19367,14 +19373,14 @@
       "nameAr": "Bleeding Time & Clotting Time",
       "nameEn": "Bleeding Time & Clotting Time",
       "category": "Coagulation",
-      "price": 80,
+      "price": 200,
       "cost": 10,
       "sampleType": "Capillary Whole Blood",
       "turnaroundTime": "Immediate (30 min)",
       "unit": "Minutes",
       "minNormal": 1,
       "maxNormal": 9,
-      "textReference": "BT (Duke): 1 - 3 min | CT (Lee-White): 5 - 9 min",
+      "textReference": "BT (Duke): 1 - 4  min | CT (Lee-White): 5 - 9 min",
       "method": "Manual Duke / Lee-White Method",
       "fastingInstructions": "No fasting required"
     },
@@ -19384,7 +19390,7 @@
       "nameAr": "Protein C Chromogenic Activity",
       "nameEn": "Protein C Chromogenic Activity",
       "category": "Coagulation",
-      "price": 520,
+      "price": 1000,
       "cost": 140,
       "sampleType": "Citrate Plasma",
       "turnaroundTime": "24-48 hours",
@@ -19401,7 +19407,7 @@
       "nameAr": "Protein S Free Antigen",
       "nameEn": "Protein S Free Antigen",
       "category": "Coagulation",
-      "price": 520,
+      "price": 900,
       "cost": 140,
       "sampleType": "Citrate Plasma",
       "turnaroundTime": "24-48 hours",
@@ -19418,7 +19424,7 @@
       "nameAr": "Antithrombin III Functional Activity",
       "nameEn": "Antithrombin III Functional Activity",
       "category": "Hematology",
-      "price": 420,
+      "price": 1200,
       "cost": 105,
       "sampleType": "Citrate Plasma",
       "turnaroundTime": "Within 24 hours",
@@ -19435,14 +19441,14 @@
       "nameAr": "Serum Creatinine",
       "nameEn": "Serum Creatinine",
       "category": "Kidney Function",
-      "price": 88,
+      "price": 188,
       "cost": 12,
       "sampleType": "Serum",
       "turnaroundTime": "Immediate (1 hour)",
       "unit": "mg/dL",
       "minNormal": 0.6,
-      "maxNormal": 1.2,
-      "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.1 mg/dL",
+      "maxNormal": 1.4,
+      "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
       "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
       "fastingInstructions": "No fasting required; avoid heavy meat meals"
     },
@@ -22327,7 +22333,7 @@
       "nameAr": "Antithrombin III Functional Activity",
       "nameEn": "Antithrombin III Functional Activity",
       "category": "Hematology",
-      "price": 420,
+      "price": 1200,
       "cost": 105,
       "sampleType": "Citrate Plasma",
       "turnaroundTime": "Within 24 hours",
