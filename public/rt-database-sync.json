@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:17:02.317Z",
+  "syncedAt": "2026-10-16T15:17:12.378Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -21244,7 +21244,7 @@
       "nameAr": "Brucella Serology (Standard Agglutination Test)",
       "nameEn": "Brucella Serology (Standard Agglutination Test)",
       "category": "Infectious & Viral",
-      "price": 120,
+      "price": 566,
       "cost": 25,
       "sampleType": "Serum",
       "turnaroundTime": "Within 2 hours",
