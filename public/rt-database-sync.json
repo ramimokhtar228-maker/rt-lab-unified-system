@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:29:46.542Z",
+  "syncedAt": "2026-10-16T14:30:22.788Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2664,7 +2664,9 @@
         "testsSubtotal": 2821,
         "totalCost": 656,
         "discountApplied": 2285,
-        "paymentMethod": "cash"
+        "paymentMethod": "cash",
+        "clinicalDiagnosis": "HTN, COAGU",
+        "clinicalHistory": "HTN, COAGU"
       },
       "profiles": [
         {
@@ -2985,7 +2987,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-16T14:29:25.772Z",
+      "updatedAt": "2026-10-16T14:29:57.839Z",
       "invoiceId": "inv-1791819003027"
     },
     {
