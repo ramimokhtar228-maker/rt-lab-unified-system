@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:25:50.489Z",
+  "syncedAt": "2026-10-16T14:25:57.350Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3293,18 +3293,18 @@
               "maxNormal": 0,
               "textReference": "0 % (Absent in normal blood)",
               "id": "param-1792160624241-22",
-              "result": "",
-              "flag": ""
+              "result": "00",
+              "flag": "NORMAL"
             },
             {
               "name": "Myelocytes %",
-              "unit": "%",
+              "unit": "0",
               "minNormal": 0,
               "maxNormal": 0,
               "textReference": "0 % (Absent in normal blood)",
               "id": "param-1792160624241-23",
-              "result": "",
-              "flag": ""
+              "result": "00",
+              "flag": "NORMAL"
             },
             {
               "name": "Blast Cells %",
@@ -3456,7 +3456,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:25:47.260Z",
+      "updatedAt": "2026-10-16T14:25:54.238Z",
       "invoiceId": "inv-1791735202176"
     },
     {
