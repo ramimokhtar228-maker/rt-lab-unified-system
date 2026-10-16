@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:22:32.348Z",
+  "syncedAt": "2026-10-16T14:22:50.224Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3143,6 +3143,27 @@
               "flag": ""
             }
           ]
+        },
+        {
+          "id": "prof-indiv-1792160568020",
+          "profileCode": "INDIVIDUAL",
+          "titleEn": "Individual Diagnostic Investigations",
+          "titleAr": "تحاليل منفردة ومحددة",
+          "category": "Hematology",
+          "sampleType": "EDTA Whole Blood",
+          "parameters": [
+            {
+              "id": "param-1792160568020",
+              "name": "Complete Blood Count with Differential (Complete Blood Count with Differential)",
+              "result": "",
+              "unit": "Multi-parameter",
+              "minNormal": 0,
+              "maxNormal": 0,
+              "textReference": "Hb: Male 13.0-17.5 g/dL, Female 12.0-15.5 | WBC: 4.0-11.0 10^3/uL | PLT: 150-450 10^3/uL",
+              "method": "5-Part Automated Flow Cytometry / Laser Impedance",
+              "flag": ""
+            }
+          ]
         }
       ],
       "staff": {
@@ -3158,7 +3179,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:22:30.594Z",
+      "updatedAt": "2026-10-16T14:22:48.020Z",
       "invoiceId": "inv-1791735202176"
     },
     {
