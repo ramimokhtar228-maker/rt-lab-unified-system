@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:28:46.208Z",
+  "syncedAt": "2026-10-16T14:29:25.062Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2652,7 +2652,7 @@
         "gender": "female",
         "referringDoctorTitle": "Dr.",
         "referringDoctorName": "أ.د/ ياسر محمد علي",
-        "sampleDate": "2026-10-13",
+        "sampleDate": "2026-10-13T14:29:00.000Z",
         "reportingDate": "2026-10-13",
         "fastingHours": 6,
         "bookingType": "home_visit",
@@ -2985,7 +2985,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-13T20:17:47.985Z",
+      "updatedAt": "2026-10-16T14:29:21.446Z",
       "invoiceId": "inv-1791819003027"
     },
     {
