@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:18:05.569Z",
+  "syncedAt": "2026-10-16T15:18:14.863Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -21351,7 +21351,7 @@
       "nameAr": "Fecal Calprotectin Quantitative",
       "nameEn": "Fecal Calprotectin Quantitative",
       "category": "Gastroenterology",
-      "price": 490,
+      "price": 1277,
       "cost": 130,
       "sampleType": "Fresh Stool (Frozen if delayed)",
       "turnaroundTime": "Within 24 hours",
