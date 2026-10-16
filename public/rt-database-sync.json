@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:55:54.336Z",
+  "syncedAt": "2026-10-16T15:56:01.509Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -971,27 +971,6 @@
               "flag": "NORMAL"
             }
           ]
-        },
-        {
-          "id": "prof-indiv-1792166055645",
-          "profileCode": "INDIVIDUAL",
-          "titleEn": "Individual Diagnostic Investigations",
-          "titleAr": "تحاليل منفردة ومحددة",
-          "category": "Liver Function",
-          "sampleType": "Serum",
-          "parameters": [
-            {
-              "id": "param-1792166055645",
-              "name": "Alanine Aminotransferase (ALT / SGPT) (Alanine Aminotransferase (ALT / SGPT))",
-              "result": "23",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 41,
-              "textReference": "Adult Males: < 41 U/L | Adult Females: < 38  U/L",
-              "method": "IFCC Kinetic UV without Pyridoxal Phosphate",
-              "flag": "NORMAL"
-            }
-          ]
         }
       ],
       "staff": {
@@ -1015,7 +994,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-16T15:55:51.584Z",
+      "updatedAt": "2026-10-16T15:55:58.597Z",
       "invoiceId": "inv-1791921893782"
     },
     {
