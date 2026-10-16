@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T13:48:52.996Z",
+  "syncedAt": "2026-10-16T13:49:32.019Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -489,11 +489,11 @@
         "chemistLicense": "EGY-SCI-88402",
         "verifierLicense": "EGY-MGT-11024",
         "pathologistLicense": "EGY-MED-48201",
-        "hideSignatures": true
+        "hideSignatures": false
       },
       "status": "draft",
       "createdAt": "2026-10-16T13:31:59.823Z",
-      "updatedAt": "2026-10-16T13:48:26.052Z",
+      "updatedAt": "2026-10-16T13:48:28.484Z",
       "invoiceId": "inv-1792157519823"
     },
     {
