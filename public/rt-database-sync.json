@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:21:04.415Z",
+  "syncedAt": "2026-10-16T15:25:15.428Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -19264,6 +19264,22 @@
     "vodafoneCash": "01124485444"
   },
   "testCatalog": [
+    {
+      "id": "test-1792164310191",
+      "code": "HB_727",
+      "nameEn": "Hemoglobin %",
+      "nameAr": "نسبه هيموجلوبين",
+      "category": "Clinical hematology ",
+      "sampleType": "EDTA BLOOD",
+      "unit": "g/dL",
+      "minNormal": 12.5,
+      "maxNormal": 16.5,
+      "textReference": "MALE : 13.5-17.5    /.    FEMALE : 12.5-16.5",
+      "method": "Enzymatic",
+      "fastingInstructions": "لا يشترط الصيام",
+      "turnaroundHours": 2,
+      "price": 200
+    },
     {
       "id": "t-1",
       "code": "GLU_F",
