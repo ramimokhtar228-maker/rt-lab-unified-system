@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:23:13.055Z",
+  "syncedAt": "2026-10-16T14:23:23.848Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3094,13 +3094,13 @@
             {
               "id": "param-1792160550594",
               "name": "Serum Ferritin Level (Serum Ferritin Level)",
-              "result": "",
+              "result": "4",
               "unit": "ng/mL",
               "minNormal": 30,
               "maxNormal": 400,
               "textReference": "Adult Males: 30 - 400 ng/mL | Adult Females: 15 - 150 ng/mL",
               "method": "CLIA (Chemiluminescence Immunoassay)",
-              "flag": ""
+              "flag": "LOW"
             }
           ]
         },
@@ -3139,7 +3139,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:23:10.176Z",
+      "updatedAt": "2026-10-16T14:23:21.405Z",
       "invoiceId": "inv-1791735202176"
     },
     {
