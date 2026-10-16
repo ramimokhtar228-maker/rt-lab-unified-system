@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T13:50:30.230Z",
+  "syncedAt": "2026-10-16T13:53:10.601Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -485,7 +485,7 @@
         "pathologist": "أ.د. رامي مختار",
         "chemistTitle": "اخصائي كيمياء اكلينيكية وهرمونات",
         "verifierTitle": "طبيب باثولوجى / المدير التنفيذي",
-        "pathologistTitle": "استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
+        "pathologistTitle": "طبيب الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
         "chemistLicense": "EGY-SCI-88402",
         "verifierLicense": "EGY-MGT-11024",
         "pathologistLicense": "EGY-MED-48201",
@@ -493,7 +493,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-16T13:31:59.823Z",
-      "updatedAt": "2026-10-16T13:50:24.008Z",
+      "updatedAt": "2026-10-16T13:50:50.344Z",
       "invoiceId": "inv-1792157519823"
     },
     {
@@ -3709,7 +3709,7 @@
         "ageUnit": "years",
         "gender": "female",
         "referringDoctorTitle": "Dr.",
-        "referringDoctorName": "Family Care Clinics",
+        "referringDoctorName": "a",
         "sampleDate": "2026-10-12",
         "reportingDate": "2026-10-15T14:25:00.000Z",
         "fastingHours": 12,
@@ -4249,7 +4249,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-11T15:57:30.501Z",
-      "updatedAt": "2026-10-16T13:26:40.099Z",
+      "updatedAt": "2026-10-16T13:53:03.618Z",
       "invoiceId": "inv-1791734250501"
     },
     {
