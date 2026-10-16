@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:27:58.885Z",
+  "syncedAt": "2026-10-16T14:28:22.515Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3024,7 +3024,7 @@
           "titleAr": "Thyroid Function Full Panel",
           "category": "Endocrinology",
           "sampleType": "Serum",
-          "interpretation": "Euthyroid state: TSH, Free T3, and Free T4 are within euthyroid reference ranges.",
+          "interpretation": " ",
           "parameters": [
             {
               "name": "TSH (Thyroid Stimulating Hormone)",
@@ -3061,6 +3061,9 @@
               "result": "",
               "flag": ""
             }
+          ],
+          "interpretations": [
+            " "
           ]
         },
         {
@@ -3402,7 +3405,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:27:56.706Z",
+      "updatedAt": "2026-10-16T14:28:20.371Z",
       "invoiceId": "inv-1791735202176"
     },
     {
