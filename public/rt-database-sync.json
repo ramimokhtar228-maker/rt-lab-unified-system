@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:58:25.279Z",
+  "syncedAt": "2026-10-16T14:59:19.536Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -420,15 +420,16 @@
               "flag": "NORMAL"
             },
             {
-              "name": "AST/ALT Ratio (De Ritis)",
-              "unit": "Ratio",
-              "minNormal": 0.6,
-              "maxNormal": 1.1,
+              "name": "Alanine Aminotransferase (ALT / SGPT) (Alanine Aminotransferase (ALT / SGPT))",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 41,
               "notes": "Normal < 1.0 (Elevated > 2.0 in alcoholic liver disease/cirrhosis)",
-              "textReference": "",
+              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
               "id": "param-1792157676289-11",
               "result": "1.6",
-              "flag": "HIGH"
+              "flag": "HIGH",
+              "method": "IFCC Kinetic UV without Pyridoxal Phosphate"
             }
           ]
         },
@@ -493,7 +494,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-16T13:31:59.823Z",
-      "updatedAt": "2026-10-16T14:57:00.221Z",
+      "updatedAt": "2026-10-16T14:59:03.623Z",
       "invoiceId": "inv-1792157519823"
     },
     {
@@ -559,12 +560,12 @@
             },
             {
               "id": "p-1791921893780-8w3",
-              "name": "الفوسفور غير العضوي (Serum Phosphorus) (Serum Inorganic Phosphorus)",
+              "name": "Serum Inorganic Phosphorus (Serum Inorganic Phosphorus)",
               "result": "5.66",
               "unit": "mg/dL",
               "minNormal": 2.5,
               "maxNormal": 4.5,
-              "textReference": "Adults: 2.5 - 4.5 mg/dL | Children: 4.0 - 7.0 mg/dL",
+              "textReference": "Adults: 2.5 - 4.5 mg/dL | Children: 4.0 - 6.0 mg/dL",
               "flag": "HIGH",
               "method": "Phosphomolybdate UV"
             },
@@ -1063,7 +1064,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-16T14:57:45.502Z",
+      "updatedAt": "2026-10-16T14:58:06.017Z",
       "invoiceId": "inv-1791921893782"
     },
     {
@@ -1150,7 +1151,7 @@
           "parameters": [
             {
               "id": "p-1791919687675-wkh",
-              "name": "الماغنيسيوم بالدم (Serum Magnesium) (Serum Magnesium)",
+              "name": "Serum Magnesium (Serum Magnesium)",
               "result": "2.6",
               "unit": "mg/dL",
               "minNormal": 1.6,
@@ -1216,7 +1217,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T19:28:07.675Z",
-      "updatedAt": "2026-10-16T14:57:35.161Z",
+      "updatedAt": "2026-10-16T14:58:17.919Z",
       "invoiceId": "inv-1791919687676"
     },
     {
@@ -1311,15 +1312,16 @@
               "flag": "NORMAL"
             },
             {
-              "name": "AST/ALT Ratio (De Ritis)",
-              "unit": "Ratio",
-              "minNormal": 0.6,
-              "maxNormal": 1.1,
+              "name": "Alanine Aminotransferase (ALT / SGPT) (Alanine Aminotransferase (ALT / SGPT))",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 41,
               "notes": "Normal < 1.0 (Elevated > 2.0 in alcoholic liver disease/cirrhosis)",
-              "textReference": "",
+              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
               "id": "param-1792065347978-11",
               "result": "1.3",
-              "flag": "HIGH"
+              "flag": "HIGH",
+              "method": "IFCC Kinetic UV without Pyridoxal Phosphate"
             }
           ]
         },
@@ -1399,7 +1401,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-12T21:13:54.435Z",
-      "updatedAt": "2026-10-16T14:56:11.151Z",
+      "updatedAt": "2026-10-16T14:59:03.623Z",
       "invoiceId": "inv-1791839634435"
     },
     {
@@ -6872,14 +6874,15 @@
               "flag": "NORMAL"
             },
             {
-              "name": "Serum Magnesium",
+              "name": "Serum Magnesium (Serum Magnesium)",
               "unit": "mg/dL",
-              "minNormal": 1.7,
+              "minNormal": 1.6,
               "maxNormal": 2.6,
-              "textReference": "",
+              "textReference": "1.6 - 2.6 mg/dL (1.3 - 2.1 mEq/L)",
               "id": "param-5-1791359462609-l9r",
               "result": "2.44",
-              "flag": "NORMAL"
+              "flag": "NORMAL",
+              "method": "Calmagite / Xylidyl Blue Colorimetric"
             }
           ]
         },
@@ -6919,7 +6922,7 @@
       },
       "status": "verified",
       "createdAt": "2026-10-07T07:51:02.609Z",
-      "updatedAt": "2026-10-16T14:57:35.162Z",
+      "updatedAt": "2026-10-16T14:58:17.920Z",
       "invoiceId": "inv-1791359462609",
       "generalComment": ""
     },
@@ -10889,7 +10892,7 @@
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-5104 - تم التسميع آلياً من منظومة الفواتير",
       "createdAt": "2026-10-04T15:14:27.915Z",
-      "updatedAt": "2026-10-16T14:57:35.163Z",
+      "updatedAt": "2026-10-16T14:58:17.921Z",
       "profiles": [
         {
           "id": "prof-inc-1791126867915-1",
@@ -11173,11 +11176,14 @@
           "parameters": [
             {
               "id": "p-1791126867919",
-              "name": "الماغنيسيوم بالدم (Serum Magnesium) (Serum Magnesium)",
+              "name": "Serum Magnesium (Serum Magnesium)",
               "result": "",
-              "unit": "",
+              "unit": "mg/dL",
               "flag": "",
-              "textReference": "قيد الفحص المخبري"
+              "textReference": "1.6 - 2.6 mg/dL (1.3 - 2.1 mEq/L)",
+              "minNormal": 1.6,
+              "maxNormal": 2.6,
+              "method": "Calmagite / Xylidyl Blue Colorimetric"
             },
             {
               "id": "p-1791126867919",
@@ -13113,7 +13119,7 @@
       },
       "generalComment": "طلب فحص مالي رقم RT-BK-8097 - تم التسميع آلياً من منظومة الفواتير",
       "createdAt": "2026-10-04T14:16:24.421Z",
-      "updatedAt": "2026-10-16T14:57:00.228Z",
+      "updatedAt": "2026-10-16T14:59:03.626Z",
       "profiles": [
         {
           "id": "prof-inc-1791123384421-12",
@@ -13219,14 +13225,16 @@
               "flag": "NORMAL"
             },
             {
-              "name": "AST/ALT Ratio (De Ritis)",
-              "unit": "Ratio",
-              "minNormal": 0.6,
-              "maxNormal": 1.1,
+              "name": "Alanine Aminotransferase (ALT / SGPT) (Alanine Aminotransferase (ALT / SGPT))",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 41,
               "notes": "Normal < 1.0 (Elevated > 2.0 in alcoholic liver disease/cirrhosis)",
               "id": "param-1791150889294-11",
               "result": "1.2",
-              "flag": "HIGH"
+              "flag": "HIGH",
+              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
+              "method": "IFCC Kinetic UV without Pyridoxal Phosphate"
             }
           ]
         },
@@ -19607,14 +19615,14 @@
       "nameAr": "Serum Inorganic Phosphorus",
       "nameEn": "Serum Inorganic Phosphorus",
       "category": "Minerals & Bone",
-      "price": 110,
+      "price": 277,
       "cost": 15,
       "sampleType": "Serum",
       "turnaroundTime": "Within 2 hours",
       "unit": "mg/dL",
       "minNormal": 2.5,
       "maxNormal": 4.5,
-      "textReference": "Adults: 2.5 - 4.5 mg/dL | Children: 4.0 - 7.0 mg/dL",
+      "textReference": "Adults: 2.5 - 4.5 mg/dL | Children: 4.0 - 6.0 mg/dL",
       "method": "Phosphomolybdate UV",
       "fastingInstructions": "Fasting 8-10 hours, morning sample"
     },
@@ -19624,7 +19632,7 @@
       "nameAr": "Serum Magnesium",
       "nameEn": "Serum Magnesium",
       "category": "Minerals & Bone",
-      "price": 120,
+      "price": 400,
       "cost": 18,
       "sampleType": "Serum",
       "turnaroundTime": "Within 2 hours",
@@ -19641,7 +19649,7 @@
       "nameAr": "Microalbumin / Creatinine Ratio (ACR)",
       "nameEn": "Microalbumin / Creatinine Ratio (ACR)",
       "category": "Kidney Function",
-      "price": 190,
+      "price": 466,
       "cost": 40,
       "sampleType": "Random Morning Urine",
       "turnaroundTime": "Within 3 hours",
@@ -19658,7 +19666,7 @@
       "nameAr": "24-Hour Urine Protein Excretion",
       "nameEn": "24-Hour Urine Protein Excretion",
       "category": "Kidney Function",
-      "price": 190,
+      "price": 377,
       "cost": 40,
       "sampleType": "24-Hour Urine Collection",
       "turnaroundTime": "Within 24 hours",
@@ -19675,7 +19683,7 @@
       "nameAr": "Alanine Aminotransferase (ALT / SGPT)",
       "nameEn": "Alanine Aminotransferase (ALT / SGPT)",
       "category": "Liver Function",
-      "price": 88,
+      "price": 188,
       "cost": 12,
       "sampleType": "Serum",
       "turnaroundTime": "Immediate (1 hour)",
