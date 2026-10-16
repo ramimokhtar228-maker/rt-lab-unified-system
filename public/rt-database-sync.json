@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:21:00.689Z",
+  "syncedAt": "2026-10-16T14:22:16.295Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3101,6 +3101,27 @@
               "flag": ""
             }
           ]
+        },
+        {
+          "id": "prof-indiv-1792160533602",
+          "profileCode": "INDIVIDUAL",
+          "titleEn": "Individual Diagnostic Investigations",
+          "titleAr": "تحاليل منفردة ومحددة",
+          "category": "Anemia & Vitamins",
+          "sampleType": "Serum (Protected from light)",
+          "parameters": [
+            {
+              "id": "param-1792160533603",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
+              "result": "",
+              "unit": "ng/mL",
+              "minNormal": 30,
+              "maxNormal": 100,
+              "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+              "method": "CLIA (Chemiluminescence Immunoassay)",
+              "flag": ""
+            }
+          ]
         }
       ],
       "staff": {
@@ -3116,7 +3137,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:20:57.334Z",
+      "updatedAt": "2026-10-16T14:22:13.603Z",
       "invoiceId": "inv-1791735202176"
     },
     {
