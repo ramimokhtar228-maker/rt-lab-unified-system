@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:20:04.184Z",
+  "syncedAt": "2026-10-16T14:20:13.148Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3017,39 +3017,6 @@
       },
       "profiles": [
         {
-          "id": "prof-1791818276579-FREE_T3",
-          "profileCode": "TFT",
-          "titleEn": "Thyroid Function Profile (TFT)",
-          "titleAr": "وظائف الغدة الدرقية الشاملة",
-          "category": "Endocrinology & Thyroid Hormones",
-          "sampleType": "Serum (مصل الدم)",
-          "interpretation": "Thyroid hormones (TSH, FT3, FT4) evaluate pituitary-thyroid axis functionality.",
-          "parameters": [
-            {
-              "id": "p-1791818276579",
-              "name": "هرمون الغدة الدرقية الحر (Free T4) (Free Thyroxine (FT4))",
-              "result": "",
-              "unit": "ng/dL",
-              "minNormal": 0.89,
-              "maxNormal": 1.76,
-              "textReference": "0.89 - 1.76 ng/dL (11.5 - 22.7 pmol/L)",
-              "flag": "NORMAL",
-              "method": "CLIA (Chemiluminescence Immunoassay)"
-            },
-            {
-              "id": "p-1791818276580",
-              "name": "الهرمون المنشط للغدة الدرقية (TSH Ultrasensitive) (Thyroid Stimulating Hormone (TSH))",
-              "result": "",
-              "unit": "uIU/mL",
-              "minNormal": 0.55,
-              "maxNormal": 4.78,
-              "textReference": "Adults: 0.55 - 4.78 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
-              "flag": "NORMAL",
-              "method": "CLIA (3rd Generation Chemiluminescence)"
-            }
-          ]
-        },
-        {
           "id": "prof-1791818276580-CBC",
           "profileCode": "CBC",
           "titleEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
@@ -3297,7 +3264,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:20:00.867Z",
+      "updatedAt": "2026-10-16T14:20:03.673Z",
       "invoiceId": "inv-1791735202176"
     },
     {
