@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T13:35:10.538Z",
+  "syncedAt": "2026-10-16T13:35:41.823Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -1472,28 +1472,6 @@
           "interpretation": "Glycemic parameters evaluated according to ADA guidelines.",
           "parameters": [
             {
-              "name": "2 Hours Post-Prandial Glucose",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 140,
-              "panicHigh": 450,
-              "method": "Hexokinase",
-              "textReference": "",
-              "id": "param-1792157623439-1",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "Random Blood Glucose",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 140,
-              "textReference": "",
-              "id": "param-1792157623439-2",
-              "result": "",
-              "flag": ""
-            },
-            {
               "name": "HbA1c (Glycated Hemoglobin)",
               "unit": "%",
               "minNormal": 4,
@@ -1501,8 +1479,8 @@
               "textReference": "< 5.7% Normal, 5.7 - 6.4% Pre-Diabetes, ≥ 6.5% Diabetes",
               "method": "HPLC / Turbidimetric",
               "id": "param-1792157623439-3",
-              "result": "",
-              "flag": ""
+              "result": "5.40",
+              "flag": "NORMAL"
             },
             {
               "name": "Estimated Average Glucose (eAG)",
@@ -1510,10 +1488,10 @@
               "minNormal": 68,
               "maxNormal": 114,
               "textReference": "80 - 120 mg/dL",
-              "notes": "Auto-calculated: (28.7 × HbA1c) - 46.7",
+              "notes": "Calculated: (28.7 × HbA1c) - 46.7",
               "id": "param-1792157623439-4",
-              "result": "",
-              "flag": ""
+              "result": "108",
+              "flag": "NORMAL"
             }
           ]
         },
@@ -1676,8 +1654,8 @@
               "method": "Enzymatic / Jaffe Kinetic",
               "textReference": "",
               "id": "param-1792157691139-0",
-              "result": "",
-              "flag": ""
+              "result": "0.",
+              "flag": "LOW"
             },
             {
               "name": "Blood Urea",
@@ -1750,7 +1728,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-16T13:31:59.823Z",
-      "updatedAt": "2026-10-16T13:35:07.509Z",
+      "updatedAt": "2026-10-16T13:35:32.081Z",
       "invoiceId": "inv-1792157519823"
     },
     {
