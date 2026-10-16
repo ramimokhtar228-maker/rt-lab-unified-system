@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T13:44:30.010Z",
+  "syncedAt": "2026-10-16T13:44:35.289Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -482,7 +482,7 @@
       "staff": {
         "labChemist": "مني احمد",
         "verifiedBy": "رحاب على ",
-        "pathologist": "را",
+        "pathologist": "رام",
         "chemistTitle": "Senior Clinical Chemist - Hormones",
         "verifierTitle": "طبيب باثولوجي / المدير التنفيذي",
         "pathologistTitle": "طبيب الباثولوجيا الاكلينيكية والكيميائية كلية طب قصر العيني",
@@ -493,7 +493,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-16T13:31:59.823Z",
-      "updatedAt": "2026-10-16T13:44:27.428Z",
+      "updatedAt": "2026-10-16T13:44:29.620Z",
       "invoiceId": "inv-1792157519823"
     },
     {
