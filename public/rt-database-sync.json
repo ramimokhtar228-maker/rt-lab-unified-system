@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:25:01.449Z",
+  "syncedAt": "2026-10-16T14:25:09.176Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3204,16 +3204,6 @@
               "flag": "NORMAL"
             },
             {
-              "name": "MPV (Mean Platelet Volume)",
-              "unit": "fL",
-              "minNormal": 7.5,
-              "maxNormal": 11.5,
-              "textReference": "7.5 - 11.5 fL",
-              "id": "param-1792160624241-11",
-              "result": "",
-              "flag": ""
-            },
-            {
               "name": "PDW (Platelet Dist. Width)",
               "unit": "%",
               "minNormal": 9,
@@ -3487,7 +3477,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:24:59.463Z",
+      "updatedAt": "2026-10-16T14:25:05.984Z",
       "invoiceId": "inv-1791735202176"
     },
     {
