@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:34:00.073Z",
+  "syncedAt": "2026-10-16T15:34:55.048Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -568,7 +568,7 @@
               "unit": "mg/dL",
               "minNormal": 2.5,
               "maxNormal": 4.5,
-              "textReference": "Adults: 2.5 - 4.5 mg/dL | Children: 4.0 - 6.0 mg/dL",
+              "textReference": "Adults: 2.5 - 4.5 mg/dL | Children: 4.0 - 5.0 mg/dL",
               "flag": "HIGH",
               "method": "Phosphomolybdate UV"
             },
@@ -1073,7 +1073,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-16T15:08:26.236Z",
+      "updatedAt": "2026-10-16T15:34:52.686Z",
       "invoiceId": "inv-1791921893782"
     },
     {
