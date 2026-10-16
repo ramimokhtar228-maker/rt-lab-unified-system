@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:17:42.144Z",
+  "syncedAt": "2026-10-16T15:17:49.756Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -21304,7 +21304,7 @@
       "nameAr": "Complete Urine Analysis & Microscopy",
       "nameEn": "Complete Urine Analysis & Microscopy",
       "category": "Urinalysis & Parasitology",
-      "price": 70,
+      "price": 135,
       "cost": 15,
       "sampleType": "Clean Mid-stream Fresh Urine",
       "turnaroundTime": "Immediate (1 hour)",
