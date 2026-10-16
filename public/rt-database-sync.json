@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:29:25.062Z",
+  "syncedAt": "2026-10-16T14:29:46.542Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2653,7 +2653,7 @@
         "referringDoctorTitle": "Dr.",
         "referringDoctorName": "أ.د/ ياسر محمد علي",
         "sampleDate": "2026-10-13T14:29:00.000Z",
-        "reportingDate": "2026-10-13",
+        "reportingDate": "2026-10-17T14:29:00.000Z",
         "fastingHours": 6,
         "bookingType": "home_visit",
         "homeAddress": "مجموعة 71 عمارة  ٥٧ شقة 14 مدينتى",
@@ -2985,7 +2985,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-16T14:29:21.446Z",
+      "updatedAt": "2026-10-16T14:29:25.772Z",
       "invoiceId": "inv-1791819003027"
     },
     {
