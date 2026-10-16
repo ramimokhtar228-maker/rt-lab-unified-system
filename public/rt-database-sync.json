@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:26:03.928Z",
+  "syncedAt": "2026-10-16T14:26:09.144Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3313,8 +3313,8 @@
               "maxNormal": 0,
               "textReference": "0 % (Absent in normal blood)",
               "id": "param-1792160624241-24",
-              "result": "",
-              "flag": ""
+              "result": "00",
+              "flag": "NORMAL"
             },
             {
               "name": "Absolute Neutrophils (ANC)",
@@ -3456,7 +3456,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:26:02.163Z",
+      "updatedAt": "2026-10-16T14:26:06.718Z",
       "invoiceId": "inv-1791735202176"
     },
     {
