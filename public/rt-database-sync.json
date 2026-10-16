@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:24:54.836Z",
+  "syncedAt": "2026-10-16T14:25:01.449Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3192,24 +3192,6 @@
               "flag": "NORMAL"
             },
             {
-              "name": "Mentzer Index (MCV/RBC)",
-              "unit": "Ratio",
-              "notes": "Mentzer > 13: Suggestive of Iron Deficiency Anemia",
-              "textReference": "> 13 Iron Def. | < 13 Thalassemia",
-              "id": "param-1792160624241-8",
-              "result": "20.3",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Green & King Index",
-              "unit": "Index",
-              "notes": "(MCV² × RDW) / (Hb × 100)",
-              "textReference": "< 72 Thalassemia | > 72 Iron Def.",
-              "id": "param-1792160624241-9",
-              "result": "",
-              "flag": ""
-            },
-            {
               "name": "Platelets Count",
               "unit": "x10^3/µL",
               "minNormal": 150,
@@ -3218,8 +3200,8 @@
               "panicHigh": 1000,
               "textReference": "150 - 450 x10^3/µL",
               "id": "param-1792160624241-10",
-              "result": "",
-              "flag": ""
+              "result": "199",
+              "flag": "NORMAL"
             },
             {
               "name": "MPV (Mean Platelet Volume)",
@@ -3505,7 +3487,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:24:51.597Z",
+      "updatedAt": "2026-10-16T14:24:59.463Z",
       "invoiceId": "inv-1791735202176"
     },
     {
