@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:24:48.339Z",
+  "syncedAt": "2026-10-16T14:24:54.836Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3192,16 +3192,6 @@
               "flag": "NORMAL"
             },
             {
-              "name": "R.D.W-SD",
-              "unit": "fL",
-              "minNormal": 39,
-              "maxNormal": 46,
-              "textReference": "39.0 - 46.0 fL",
-              "id": "param-1792160624241-7",
-              "result": "",
-              "flag": ""
-            },
-            {
               "name": "Mentzer Index (MCV/RBC)",
               "unit": "Ratio",
               "notes": "Mentzer > 13: Suggestive of Iron Deficiency Anemia",
@@ -3515,7 +3505,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:24:41.455Z",
+      "updatedAt": "2026-10-16T14:24:51.597Z",
       "invoiceId": "inv-1791735202176"
     },
     {
