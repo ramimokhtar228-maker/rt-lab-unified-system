@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T17:50:52.652Z",
+  "syncedAt": "2026-10-16T17:51:00.505Z",
   "reports": [
     {
       "id": "rep-001",
@@ -1274,130 +1274,6 @@
           }
         },
         {
-          "id": "prof-1792066884186-0zdm",
-          "profileCode": "LFT",
-          "titleEn": "Liver Function Profile (LFT)",
-          "titleAr": "وظائف الكبد والإنزيمات الشاملة",
-          "category": "Clinical Chemistry & Hepatology",
-          "sampleType": "Serum (مصل الدم)",
-          "interpretation": "Liver enzymes and synthetic hepatic markers are within normal reference ranges.",
-          "attachedIllustration": {
-            "id": "hep-viral",
-            "code": "HEP_VIRAL_HEPATITIS",
-            "titleAr": "التهاب الكبد الفيروسي الحاد والمزمن (Viral Hepatitis B & C)",
-            "titleEn": "Acute & Chronic Viral Hepatitis",
-            "category": "hepatic",
-            "imageUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgMTgwIiB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCI+CiAgICA8cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgcng9IjE0IiBmaWxsPSIjMDkwZDE2Ii8+CiAgICA8Y2lyY2xlIGN4PSIxNjAiIGN5PSI5MCIgcj0iNzYiIGZpbGw9IiMwYjEzMjkiIHN0cm9rZT0iIzA2NWY0NiIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzNGQzOTkiIGZvbnQtc2l6ZT0iMTAuNSIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1mYW1pbHk9IidDYWlybycsIHN5c3RlbS11aSwgLWFwcGxlLXN5c3RlbSwgc2Fucy1zZXJpZiI+QUNVVEUgVklSQUwgSEVQQVRJVElTIChIQlYgLyBIQ1YpPC90ZXh0PgogICAgPGNpcmNsZSBjeD0iMTYwIiBjeT0iODUiIHI9IjQwIiBmaWxsPSIjMDY1ZjQ2IiBzdHJva2U9IiMzNGQzOTkiIHN0cm9rZS13aWR0aD0iMi41Ii8+CiAgICAgIDxjaXJjbGUgY3g9IjE2MCIgY3k9Ijg1IiByPSIyOCIgZmlsbD0iIzAyMmMyMiIvPgogICAgICA8dGV4dCB4PSIxNjAiIHk9IjgyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjYTdmM2QwIiBmb250LXNpemU9IjExIiBmb250LXdlaWdodD0iYm9sZCI+QUxUICZndDsmZ3Q7IDUwMDwvdGV4dD4KICAgICAgPHRleHQgeD0iMTYwIiB5PSI5OCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzZlZTdiNyIgZm9udC1zaXplPSI5IiBmb250LXdlaWdodD0iYm9sZCI+QVNUICZndDsmZ3Q7IDQwMDwvdGV4dD4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMTcwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTRhM2I4IiBmb250LXNpemU9IjkiIGZvbnQtZmFtaWx5PSInQ2Fpcm8nLCBzeXN0ZW0tdWksIC1hcHBsZS1zeXN0ZW0sIHNhbnMtc2VyaWYiPk1hc3NpdmUgSGVwYXRvY3l0ZSBDeXRvbHlzaXM6IE1hcmtlZCBBTFQgJiBBU1QgRWxldmF0aW9uPC90ZXh0PgogIDwvc3ZnPg==",
-            "pathologySummaryAr": "أذية والتهاب النسيج الكبدي بفعل الفيروسات الكبدية (B أو C) مما يتسبب في تحرر مكثف لإنزيمات الكبد السيتوبلازمية (ALT و AST بمئات أو آلاف الوحدات) مع اليرقان."
-          },
-          "parameters": [
-            {
-              "name": "Prothrombin Time & INR (Prothrombin Time & INR)",
-              "unit": "Seconds / Ratio",
-              "minNormal": 11,
-              "maxNormal": 14,
-              "method": "Optical Clotting Detection Analyzer",
-              "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)",
-              "id": "param-1792066884186-0",
-              "result": "13",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 40,
-              "method": "IFCC Kinetic UV",
-              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
-              "id": "param-1792066884186-1",
-              "result": "26",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Alkaline Phosphatase (ALP) (Alkaline Phosphatase (ALP))",
-              "unit": "U/L",
-              "textReference": "Adults: 40 - 130 U/L (Higher during childhood growth & pregnancy)",
-              "id": "param-1792066884186-2",
-              "result": "103",
-              "flag": "NORMAL",
-              "minNormal": 40,
-              "maxNormal": 130,
-              "method": "p-NPP Kinetic DEA buffer"
-            },
-            {
-              "name": "G.G.T",
-              "unit": "U/L",
-              "minNormal": 9,
-              "maxNormal": 48,
-              "textReference": "",
-              "id": "param-1792066884187-10",
-              "result": "21",
-              "flag": "NORMAL"
-            }
-          ],
-          "interpretations": [
-            "Liver enzymes and synthetic hepatic markers are within normal reference ranges."
-          ]
-        },
-        {
-          "id": "prof-1792066910604-ijue",
-          "profileCode": "RFT",
-          "titleEn": "Renal Function Profile (RFT / KFT)",
-          "titleAr": "وظائف الكلى والأملاح البولية",
-          "category": "Clinical Chemistry & Nephrology",
-          "sampleType": "Serum / Urine",
-          "interpretation": "Serum Creatinine, Urea, Uric Acid, and eGFR reflect glomerular filtration rate and nitrogenous waste clearance.",
-          "parameters": [
-            {
-              "name": "Serum Creatinine (Serum Creatinine)",
-              "unit": "mg/dL",
-              "minNormal": 0.6,
-              "maxNormal": 1.4,
-              "panicHigh": 4,
-              "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
-              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
-              "id": "param-1792066910604-0",
-              "result": "0.71",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Blood Urea (Blood Urea)",
-              "unit": "mg/dL",
-              "minNormal": 15,
-              "maxNormal": 45,
-              "panicHigh": 120,
-              "method": "Urease / GLDH Enzymatic Kinetic",
-              "textReference": "15 - 45 mg/dL",
-              "id": "param-1792066910604-1",
-              "result": "18",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Blood Urea (Blood Urea)",
-              "unit": "mg/dL",
-              "minNormal": 15,
-              "maxNormal": 45,
-              "textReference": "15 - 45 mg/dL",
-              "id": "param-1792066910604-2",
-              "result": "8.41",
-              "flag": "NORMAL",
-              "method": "Urease / GLDH Enzymatic Kinetic"
-            },
-            {
-              "name": "Serum Creatinine (Serum Creatinine)",
-              "unit": "mg/dL",
-              "minNormal": 0.6,
-              "maxNormal": 1.4,
-              "notes": "Normal: 10 - 20",
-              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
-              "id": "param-1792066910604-3",
-              "result": "11.8",
-              "flag": "NORMAL",
-              "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)"
-            }
-          ]
-        },
-        {
           "id": "prof-1792066933779-itzk",
           "profileCode": "IRON_PROFILE",
           "titleEn": "Iron Status & Ferritin Workup",
@@ -1430,6 +1306,115 @@
               "textReference": "Adult Males: 30 - 400 ng/mL | Adult Females: 15 - 150 ng/mL"
             }
           ]
+        },
+        {
+          "id": "prof-1792165765207-10hc",
+          "profileCode": "KFT",
+          "titleEn": "Kidney Function Profile",
+          "titleAr": "Kidney Function Profile",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum",
+          "interpretation": "Renal biomarkers indicate adequate glomerular filtration and nitrogenous clearance.",
+          "parameters": [
+            {
+              "name": "Serum Creatinine",
+              "unit": "mg/dL",
+              "minNormal": 0.6,
+              "maxNormal": 1.2,
+              "panicHigh": 4,
+              "method": "Enzymatic / Jaffe Kinetic",
+              "textReference": "",
+              "id": "param-1792165765208-0",
+              "result": "0.88",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Blood Urea",
+              "unit": "mg/dL",
+              "minNormal": 15,
+              "maxNormal": 45,
+              "panicHigh": 120,
+              "method": "Urease-GLDH",
+              "textReference": "",
+              "id": "param-1792165765208-1",
+              "result": "18",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Blood Urea Nitrogen (BUN)",
+              "unit": "mg/dL",
+              "minNormal": 7,
+              "maxNormal": 20,
+              "textReference": "",
+              "id": "param-1792165765208-2",
+              "result": "8.41",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-1792166170281-4jui",
+          "profileCode": "LFT",
+          "titleEn": "Liver Function Tests (LFT)",
+          "titleAr": "Liver Function Tests (LFT)",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum",
+          "interpretation": "Enzyme activities and synthetic hepatic markers are within normal limits.",
+          "parameters": [
+            {
+              "name": "ALT (SGPT)",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 45,
+              "method": "IFCC UV with P5P",
+              "textReference": "",
+              "id": "param-1792166170281-0",
+              "result": "23",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "AST (SGOT)",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 40,
+              "method": "IFCC UV with P5P",
+              "textReference": "",
+              "id": "param-1792166170282-1",
+              "result": "26",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Alkaline Phosphatase (ALP)",
+              "unit": "U/L",
+              "minNormal": 40,
+              "maxNormal": 130,
+              "textReference": "",
+              "id": "param-1792166170282-2",
+              "result": "103",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "G.G.T",
+              "unit": "U/L",
+              "minNormal": 9,
+              "maxNormal": 48,
+              "textReference": "",
+              "id": "param-1792166170282-10",
+              "result": "31",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "AST/ALT Ratio (De Ritis)",
+              "unit": "Ratio",
+              "minNormal": 0.6,
+              "maxNormal": 1.1,
+              "notes": "Normal < 1.0 (Elevated > 2.0 in alcoholic liver disease/cirrhosis)",
+              "textReference": "",
+              "id": "param-1792166170282-11",
+              "result": "1.1",
+              "flag": "NORMAL"
+            }
+          ]
         }
       ],
       "staff": {
@@ -1453,7 +1438,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-16T15:35:17.808Z",
+      "updatedAt": "2026-10-16T15:57:12.628Z",
       "invoiceId": "inv-1791921893782"
     },
     {
