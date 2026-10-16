@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:56:01.509Z",
+  "syncedAt": "2026-10-16T15:56:12.854Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -971,6 +971,147 @@
               "flag": "NORMAL"
             }
           ]
+        },
+        {
+          "id": "prof-1792166170281-4jui",
+          "profileCode": "LFT",
+          "titleEn": "Liver Function Tests (LFT)",
+          "titleAr": "Liver Function Tests (LFT)",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum",
+          "interpretation": "Enzyme activities and synthetic hepatic markers are within normal limits.",
+          "parameters": [
+            {
+              "name": "ALT (SGPT)",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 45,
+              "method": "IFCC UV with P5P",
+              "textReference": "",
+              "id": "param-1792166170281-0",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "AST (SGOT)",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 40,
+              "method": "IFCC UV with P5P",
+              "textReference": "",
+              "id": "param-1792166170282-1",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "Alkaline Phosphatase (ALP)",
+              "unit": "U/L",
+              "minNormal": 40,
+              "maxNormal": 130,
+              "textReference": "",
+              "id": "param-1792166170282-2",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "Total Bilirubin",
+              "unit": "mg/dL",
+              "minNormal": 0.2,
+              "maxNormal": 1.2,
+              "panicHigh": 5,
+              "method": "Jendrassik-Grof",
+              "textReference": "",
+              "id": "param-1792166170282-3",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "Direct Bilirubin",
+              "unit": "mg/dL",
+              "minNormal": 0,
+              "maxNormal": 0.3,
+              "textReference": "",
+              "id": "param-1792166170282-4",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "Indirect Bilirubin",
+              "unit": "mg/dL",
+              "minNormal": 0.1,
+              "maxNormal": 0.9,
+              "notes": "Auto-calculated: Total - Direct",
+              "textReference": "",
+              "id": "param-1792166170282-5",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "Total Serum Proteins",
+              "unit": "g/dL",
+              "minNormal": 6.4,
+              "maxNormal": 8.3,
+              "method": "Biuret",
+              "textReference": "",
+              "id": "param-1792166170282-6",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "Serum Albumin",
+              "unit": "g/dL",
+              "minNormal": 3.5,
+              "maxNormal": 5.2,
+              "method": "Bromocresol Green (BCG)",
+              "textReference": "",
+              "id": "param-1792166170282-7",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "Serum Globulin",
+              "unit": "g/dL",
+              "minNormal": 2.3,
+              "maxNormal": 3.5,
+              "notes": "Auto-calculated: Total Protein - Albumin",
+              "textReference": "",
+              "id": "param-1792166170282-8",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "A/G Ratio",
+              "unit": "Ratio",
+              "minNormal": 1.2,
+              "maxNormal": 2.2,
+              "notes": "Auto-calculated: Albumin / Globulin",
+              "textReference": "",
+              "id": "param-1792166170282-9",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "G.G.T",
+              "unit": "U/L",
+              "minNormal": 9,
+              "maxNormal": 48,
+              "textReference": "",
+              "id": "param-1792166170282-10",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "AST/ALT Ratio (De Ritis)",
+              "unit": "Ratio",
+              "minNormal": 0.6,
+              "maxNormal": 1.1,
+              "notes": "Auto-calculated: AST / ALT",
+              "textReference": "",
+              "id": "param-1792166170282-11",
+              "result": "",
+              "flag": ""
+            }
+          ]
         }
       ],
       "staff": {
@@ -994,7 +1135,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-16T15:55:58.597Z",
+      "updatedAt": "2026-10-16T15:56:10.282Z",
       "invoiceId": "inv-1791921893782"
     },
     {
