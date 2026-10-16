@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:19:31.669Z",
+  "syncedAt": "2026-10-16T15:19:40.222Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -21539,7 +21539,7 @@
       "nameAr": "SARS-CoV-2 & Influenza A/B RT-PCR",
       "nameEn": "SARS-CoV-2 & Influenza A/B RT-PCR",
       "category": "Molecular & PCR",
-      "price": 380,
+      "price": 600,
       "cost": 95,
       "sampleType": "Nasopharyngeal / Oropharyngeal Swab in VTM",
       "turnaroundTime": "Within 6 hours",
