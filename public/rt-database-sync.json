@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T13:35:41.823Z",
+  "syncedAt": "2026-10-16T13:36:17.057Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -1512,8 +1512,8 @@
               "method": "IFCC UV with P5P",
               "textReference": "",
               "id": "param-1792157676289-0",
-              "result": "",
-              "flag": ""
+              "result": "2",
+              "flag": "NORMAL"
             },
             {
               "name": "AST (SGOT)",
@@ -1654,8 +1654,8 @@
               "method": "Enzymatic / Jaffe Kinetic",
               "textReference": "",
               "id": "param-1792157691139-0",
-              "result": "0.",
-              "flag": "LOW"
+              "result": "0.75",
+              "flag": "NORMAL"
             },
             {
               "name": "Blood Urea",
@@ -1666,29 +1666,8 @@
               "method": "Urease-GLDH",
               "textReference": "",
               "id": "param-1792157691139-1",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "Blood Urea Nitrogen (BUN)",
-              "unit": "mg/dL",
-              "minNormal": 7,
-              "maxNormal": 20,
-              "textReference": "",
-              "id": "param-1792157691139-2",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "BUN / Creatinine Ratio",
-              "unit": "Ratio",
-              "minNormal": 10,
-              "maxNormal": 20,
-              "notes": "Auto-calculated: BUN / Creatinine",
-              "textReference": "",
-              "id": "param-1792157691139-3",
-              "result": "",
-              "flag": ""
+              "result": "31",
+              "flag": "NORMAL"
             },
             {
               "name": "Serum Uric Acid",
@@ -1698,19 +1677,8 @@
               "method": "Uricase-PAP",
               "textReference": "",
               "id": "param-1792157691139-4",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "eGFR (CKD-EPI)",
-              "unit": "mL/min/1.73m²",
-              "minNormal": 90,
-              "maxNormal": 120,
-              "notes": "Auto-calculated: CKD-EPI Formula",
-              "textReference": "",
-              "id": "param-1792157691139-5",
-              "result": "",
-              "flag": ""
+              "result": "5.12",
+              "flag": "NORMAL"
             }
           ]
         }
@@ -1728,7 +1696,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-16T13:31:59.823Z",
-      "updatedAt": "2026-10-16T13:35:32.081Z",
+      "updatedAt": "2026-10-16T13:36:03.084Z",
       "invoiceId": "inv-1792157519823"
     },
     {
