@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:49:27.939Z",
+  "syncedAt": "2026-10-16T15:50:05.476Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -1011,8 +1011,8 @@
               "method": "Enzymatic / Jaffe Kinetic",
               "textReference": "",
               "id": "param-1792165765208-0",
-              "result": "",
-              "flag": ""
+              "result": "0.88",
+              "flag": "NORMAL"
             },
             {
               "name": "Blood Urea",
@@ -1093,7 +1093,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-16T15:49:25.208Z",
+      "updatedAt": "2026-10-16T15:50:03.059Z",
       "invoiceId": "inv-1791921893782"
     },
     {
