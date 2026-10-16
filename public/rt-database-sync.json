@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T15:54:57.205Z",
+  "syncedAt": "2026-10-16T15:55:54.336Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -894,52 +894,6 @@
           }
         },
         {
-          "id": "prof-1792066884186-0zdm",
-          "profileCode": "LFT",
-          "titleEn": "Liver Function Profile (LFT)",
-          "titleAr": "وظائف الكبد والإنزيمات الشاملة",
-          "category": "Clinical Chemistry & Hepatology",
-          "sampleType": "Serum (مصل الدم)",
-          "interpretation": "Liver enzymes and synthetic hepatic markers are within normal reference ranges.",
-          "parameters": [
-            {
-              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 40,
-              "method": "IFCC Kinetic UV",
-              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
-              "id": "param-1792066884186-1",
-              "result": "26",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Alkaline Phosphatase (ALP) (Alkaline Phosphatase (ALP))",
-              "unit": "U/L",
-              "textReference": "Adults: 40 - 130 U/L (Higher during childhood growth & pregnancy)",
-              "id": "param-1792066884186-2",
-              "result": "103",
-              "flag": "NORMAL",
-              "minNormal": 40,
-              "maxNormal": 130,
-              "method": "p-NPP Kinetic DEA buffer"
-            },
-            {
-              "name": "G.G.T",
-              "unit": "U/L",
-              "minNormal": 9,
-              "maxNormal": 48,
-              "textReference": "",
-              "id": "param-1792066884187-10",
-              "result": "21",
-              "flag": "NORMAL"
-            }
-          ],
-          "interpretations": [
-            "Liver enzymes and synthetic hepatic markers are within normal reference ranges."
-          ]
-        },
-        {
           "id": "prof-1792066933779-itzk",
           "profileCode": "IRON_PROFILE",
           "titleEn": "Iron Status & Ferritin Workup",
@@ -1061,7 +1015,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-16T15:54:44.829Z",
+      "updatedAt": "2026-10-16T15:55:51.584Z",
       "invoiceId": "inv-1791921893782"
     },
     {
