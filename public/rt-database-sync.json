@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T14:20:13.148Z",
+  "syncedAt": "2026-10-16T14:20:48.803Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3249,6 +3249,92 @@
               "flag": "NORMAL"
             }
           ]
+        },
+        {
+          "id": "prof-1792160444948-xvpv",
+          "profileCode": "THYROID",
+          "titleEn": "Thyroid Function Full Panel",
+          "titleAr": "Thyroid Function Full Panel",
+          "category": "Endocrinology",
+          "sampleType": "Serum",
+          "interpretation": "Euthyroid state: TSH, Free T3, and Free T4 are within euthyroid reference ranges.",
+          "parameters": [
+            {
+              "name": "TSH (Thyroid Stimulating Hormone)",
+              "unit": "µIU/mL",
+              "minNormal": 0.27,
+              "maxNormal": 4.2,
+              "panicLow": 0.05,
+              "panicHigh": 20,
+              "method": "Chemiluminescence (CLIA 3rd Gen)",
+              "textReference": "",
+              "id": "param-1792160444949-0",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "Free T3 (FT3)",
+              "unit": "pg/mL",
+              "minNormal": 2,
+              "maxNormal": 4.4,
+              "method": "CLIA",
+              "textReference": "",
+              "id": "param-1792160444949-1",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "Free T4 (FT4)",
+              "unit": "ng/dL",
+              "minNormal": 0.93,
+              "maxNormal": 1.7,
+              "method": "CLIA",
+              "textReference": "",
+              "id": "param-1792160444949-2",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "Total Triiodothyronine (TT3)",
+              "unit": "ng/mL",
+              "minNormal": 0.8,
+              "maxNormal": 2,
+              "textReference": "",
+              "id": "param-1792160444949-3",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "Total Thyroxine (TT4)",
+              "unit": "µg/dL",
+              "minNormal": 5.1,
+              "maxNormal": 14.1,
+              "textReference": "",
+              "id": "param-1792160444949-4",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "Anti-TPO (Thyroid Peroxidase Ab)",
+              "unit": "IU/mL",
+              "minNormal": 0,
+              "maxNormal": 34,
+              "textReference": "< 34.0 IU/mL",
+              "id": "param-1792160444949-5",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "Anti-Thyroglobulin (Anti-TG)",
+              "unit": "IU/mL",
+              "minNormal": 0,
+              "maxNormal": 115,
+              "textReference": "< 115.0 IU/mL",
+              "id": "param-1792160444949-6",
+              "result": "",
+              "flag": ""
+            }
+          ]
         }
       ],
       "staff": {
@@ -3264,7 +3350,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T14:20:03.673Z",
+      "updatedAt": "2026-10-16T14:20:44.949Z",
       "invoiceId": "inv-1791735202176"
     },
     {
