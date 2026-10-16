@@ -1,7 +1,7 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-16T13:17:06.864Z",
-  "reportsCount": 45,
+  "syncedAt": "2026-10-16T13:17:32.271Z",
+  "reportsCount": 46,
   "invoicesCount": 30,
   "reports": [
     {
@@ -3205,6 +3205,506 @@
       "invoiceId": "inv-1791735202176"
     },
     {
+      "id": "rep-1791734735431",
+      "reportNumber": "RT-2026-036",
+      "patient": {
+        "id": "pat-1791734735430",
+        "labNumber": "RT-2026-036",
+        "barcode": "RT-10066",
+        "fullName": "كريم صلاح سعد",
+        "phone": "01003540455",
+        "age": 41,
+        "ageUnit": "years",
+        "gender": "male",
+        "referringDoctorTitle": "Dr.",
+        "referringDoctorName": "HIMSELF",
+        "sampleDate": "2026-10-12T08:06:00.000Z",
+        "reportingDate": "2026-10-15T11:06:00.000Z",
+        "fastingHours": 0,
+        "bookingType": "home_visit",
+        "homeAddress": "9/36 عمارات بالم الشطر السابع زهراء المعادي أمام مدرسة الواحه الفرنسية بوابه 8 الدور الثاني شقه 21",
+        "visitFee": -6,
+        "appointmentDate": "2026-10-12",
+        "appointmentTime": "11:20",
+        "deliveryNotes": "",
+        "testsSubtotal": 1995,
+        "totalCost": 433,
+        "discountApplied": 1556,
+        "paymentMethod": "cash"
+      },
+      "profiles": [
+        {
+          "id": "prof-1792055935644-1ocq",
+          "profileCode": "LFT",
+          "titleEn": "Liver Function Profile (LFT)",
+          "titleAr": "وظائف الكبد والإنزيمات الشاملة",
+          "category": "Clinical Chemistry & Hepatology",
+          "sampleType": "Serum (مصل الدم)",
+          "interpretation": "Hepatic transaminases (ALT, AST), Bilirubin, and Albumin assess hepatocellular integrity and synthetic capacity.",
+          "attachedIllustration": {
+            "id": "hep-viral",
+            "code": "HEP_VIRAL_HEPATITIS",
+            "titleAr": "التهاب الكبد الفيروسي الحاد والمزمن (Viral Hepatitis B & C)",
+            "titleEn": "Acute & Chronic Viral Hepatitis",
+            "category": "hepatic",
+            "imageUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgMTgwIiB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCI+CiAgICA8cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgcng9IjE0IiBmaWxsPSIjMDkwZDE2Ii8+CiAgICA8Y2lyY2xlIGN4PSIxNjAiIGN5PSI5MCIgcj0iNzYiIGZpbGw9IiMwYjEzMjkiIHN0cm9rZT0iIzA2NWY0NiIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzNGQzOTkiIGZvbnQtc2l6ZT0iMTAuNSIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1mYW1pbHk9IidDYWlybycsIHN5c3RlbS11aSwgLWFwcGxlLXN5c3RlbSwgc2Fucy1zZXJpZiI+QUNVVEUgVklSQUwgSEVQQVRJVElTIChIQlYgLyBIQ1YpPC90ZXh0PgogICAgPGNpcmNsZSBjeD0iMTYwIiBjeT0iODUiIHI9IjQwIiBmaWxsPSIjMDY1ZjQ2IiBzdHJva2U9IiMzNGQzOTkiIHN0cm9rZS13aWR0aD0iMi41Ii8+CiAgICAgIDxjaXJjbGUgY3g9IjE2MCIgY3k9Ijg1IiByPSIyOCIgZmlsbD0iIzAyMmMyMiIvPgogICAgICA8dGV4dCB4PSIxNjAiIHk9IjgyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjYTdmM2QwIiBmb250LXNpemU9IjExIiBmb250LXdlaWdodD0iYm9sZCI+QUxUICZndDsmZ3Q7IDUwMDwvdGV4dD4KICAgICAgPHRleHQgeD0iMTYwIiB5PSI5OCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzZlZTdiNyIgZm9udC1zaXplPSI5IiBmb250LXdlaWdodD0iYm9sZCI+QVNUICZndDsmZ3Q7IDQwMDwvdGV4dD4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMTcwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTRhM2I4IiBmb250LXNpemU9IjkiIGZvbnQtZmFtaWx5PSInQ2Fpcm8nLCBzeXN0ZW0tdWksIC1hcHBsZS1zeXN0ZW0sIHNhbnMtc2VyaWYiPk1hc3NpdmUgSGVwYXRvY3l0ZSBDeXRvbHlzaXM6IE1hcmtlZCBBTFQgJiBBU1QgRWxldmF0aW9uPC90ZXh0PgogIDwvc3ZnPg==",
+            "pathologySummaryAr": "أذية والتهاب النسيج الكبدي بفعل الفيروسات الكبدية (B أو C) مما يتسبب في تحرر مكثف لإنزيمات الكبد السيتوبلازمية (ALT و AST بمئات أو آلاف الوحدات) مع اليرقان."
+          },
+          "parameters": [
+            {
+              "name": "ALT (SGPT)",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 45,
+              "method": "IFCC UV with P5P",
+              "textReference": "",
+              "id": "param-1792055935644-0",
+              "result": "20",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "AST (SGOT)",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 40,
+              "method": "IFCC UV with P5P",
+              "textReference": "",
+              "id": "param-1792055935644-1",
+              "result": "34",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Total Bilirubin",
+              "unit": "mg/dL",
+              "minNormal": 0.2,
+              "maxNormal": 1.2,
+              "panicHigh": 5,
+              "method": "Jendrassik-Grof",
+              "textReference": "",
+              "id": "param-1792055935644-3",
+              "result": "1.13",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Direct Bilirubin",
+              "unit": "mg/dL",
+              "minNormal": 0,
+              "maxNormal": 0.3,
+              "textReference": "",
+              "id": "param-1792055935644-4",
+              "result": "0.26",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Indirect Bilirubin",
+              "unit": "mg/dL",
+              "minNormal": 0.1,
+              "maxNormal": 0.9,
+              "notes": "Calculated: Total Bilirubin - Direct Bilirubin",
+              "textReference": "",
+              "id": "param-1792055935644-5",
+              "result": "0.9",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "AST/ALT Ratio (De Ritis)",
+              "unit": "Ratio",
+              "minNormal": 0.6,
+              "maxNormal": 1.1,
+              "notes": "Normal < 1.0 (Elevated > 2.0 in alcoholic liver disease/cirrhosis)",
+              "textReference": "",
+              "id": "param-1792055935644-11",
+              "result": "1.7",
+              "flag": "HIGH"
+            }
+          ]
+        },
+        {
+          "id": "prof-1792055957538-rsbn",
+          "profileCode": "RFT",
+          "titleEn": "Renal Function Profile (RFT / KFT)",
+          "titleAr": "وظائف الكلى والأملاح البولية",
+          "category": "Clinical Chemistry & Nephrology",
+          "sampleType": "Serum / Urine",
+          "interpretation": "Serum Creatinine, Urea, Uric Acid, and eGFR reflect glomerular filtration rate and nitrogenous waste clearance.",
+          "attachedIllustration": {
+            "id": "ren-aki",
+            "code": "REN_AKI",
+            "titleAr": "القصور الكلوي الحاد واحتباس البولينا (Acute Kidney Injury - AKI)",
+            "titleEn": "Acute Kidney Injury & Azotemia",
+            "category": "renal",
+            "imageUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgMTgwIiB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCI+CiAgICA8cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgcng9IjE0IiBmaWxsPSIjMDkwZDE2Ii8+CiAgICA8Y2lyY2xlIGN4PSIxNjAiIGN5PSI5MCIgcj0iNzYiIGZpbGw9IiMwYjEzMjkiIHN0cm9rZT0iIzMxMmU4MSIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM4MThjZjgiIGZvbnQtc2l6ZT0iMTAuNSIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1mYW1pbHk9IidDYWlybycsIHN5c3RlbS11aSwgLWFwcGxlLXN5c3RlbSwgc2Fucy1zZXJpZiI+QUNVVEUgS0lETkVZIElOSlVSWSAoQUtJKTwvdGV4dD4KICAgIDxwYXRoIGQ9Ik0gMTM1LDU1IEMgMTEwLDY1IDExMCwxMTUgMTM1LDEyNSBDIDE2MCwxMzUgMTkwLDExNSAxODUsOTAgQyAxODAsNjUgMTYwLDUwIDEzNSw1NSBaIiBmaWxsPSIjMWUxYjRiIiBzdHJva2U9IiM4MThjZjgiIHN0cm9rZS13aWR0aD0iMi41Ii8+CiAgICAgIDxjaXJjbGUgY3g9IjE2MCIgY3k9IjkwIiByPSIxNiIgZmlsbD0iI2Y0M2Y1ZSIvPgogICAgICA8dGV4dCB4PSIxNjAiIHk9IjkzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjkiIGZvbnQtd2VpZ2h0PSJib2xkIj5DcmVhdDwvdGV4dD4KICAgICAgPHRleHQgeD0iMTYwIiB5PSIxNDUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNmODcxNzEiIGZvbnQtc2l6ZT0iMTAiIGZvbnQtd2VpZ2h0PSJib2xkIj5DcmVhdGluaW5lICZndDsmZ3Q7IDIuNSBtZy9kTDwvdGV4dD4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMTcwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTRhM2I4IiBmb250LXNpemU9IjkiIGZvbnQtZmFtaWx5PSInQ2Fpcm8nLCBzeXN0ZW0tdWksIC1hcHBsZS1zeXN0ZW0sIHNhbnMtc2VyaWYiPlN1ZGRlbiBHbG9tZXJ1bGFyIFJldGVudGlvbjogQWN1dGUgQXpvdGVtaWEgJiBPbGlndXJpYTwvdGV4dD4KICA8L3N2Zz4=",
+            "pathologySummaryAr": "تدهور مفاجئ سريع في وظائف الكلى الإخراجية خلال ساعات إلى أيام، مؤدياً لاحتباس الفضلات النيتروجينية في الدم (ارتفاع حاد في الكرياتينين والبولينا وحمض البوليك) واختلال الأملاح."
+          },
+          "parameters": [
+            {
+              "name": "Serum Creatinine",
+              "unit": "mg/dL",
+              "minNormal": 0.6,
+              "maxNormal": 1.2,
+              "panicHigh": 4,
+              "method": "Enzymatic / Jaffe Kinetic",
+              "textReference": "",
+              "id": "param-1792055957538-0",
+              "result": "0.73",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Blood Urea",
+              "unit": "mg/dL",
+              "minNormal": 15,
+              "maxNormal": 45,
+              "panicHigh": 120,
+              "method": "Urease-GLDH",
+              "textReference": "",
+              "id": "param-1792055957538-1",
+              "result": "28",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Serum Uric Acid",
+              "unit": "mg/dL",
+              "minNormal": 3.5,
+              "maxNormal": 7.2,
+              "method": "Uricase-PAP",
+              "textReference": "",
+              "id": "param-1792055957538-4",
+              "result": "5.03",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-1792056433557-8ey7",
+          "profileCode": "CBC",
+          "titleEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+          "titleAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
+          "category": "Hematology",
+          "sampleType": "EDTA Whole Blood",
+          "interpretation": "Automated hematological indices and differential leucocytic count evaluated according to WHO standards.",
+          "parameters": [
+            {
+              "name": "Hemoglobin (Hb)",
+              "unit": "g/dL",
+              "minNormal": 12,
+              "maxNormal": 16.5,
+              "panicLow": 7,
+              "panicHigh": 20,
+              "method": "Automated SLS-Hb",
+              "textReference": "M: 13.0 - 17.5 | F: 12.0 - 15.5 g/dL",
+              "id": "param-1792056433557-0",
+              "result": "14.84",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "R.B.Cs Count",
+              "unit": "x10^6/µL",
+              "minNormal": 4,
+              "maxNormal": 5.8,
+              "method": "Electrical Impedance",
+              "textReference": "M: 4.5 - 5.9 | F: 4.0 - 5.2",
+              "id": "param-1792056433557-1",
+              "result": "5.11",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Hematocrit (PCV)",
+              "unit": "%",
+              "minNormal": 36,
+              "maxNormal": 48,
+              "notes": "Calculated (HGB × 3)",
+              "textReference": "M: 40 - 52% | F: 36 - 48%",
+              "id": "param-1792056433557-2",
+              "result": "47.88",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "M.C.V",
+              "unit": "fL",
+              "minNormal": 80,
+              "maxNormal": 98,
+              "notes": "Calculated: (HCT × 10) / RBC",
+              "textReference": "80.0 - 98.0 fL",
+              "id": "param-1792056433557-3",
+              "result": "93.7",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "M.C.H",
+              "unit": "pg",
+              "minNormal": 27,
+              "maxNormal": 33,
+              "notes": "Calculated: (HGB × 10) / RBC",
+              "textReference": "27.0 - 33.0 pg",
+              "id": "param-1792056433557-4",
+              "result": "29",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "M.C.H.C",
+              "unit": "g/dL",
+              "minNormal": 32,
+              "maxNormal": 36,
+              "notes": "Calculated: (HGB × 100) / HCT",
+              "textReference": "32.0 - 36.0 g/dL",
+              "id": "param-1792056433557-5",
+              "result": "31",
+              "flag": "LOW"
+            },
+            {
+              "name": "R.D.W-CV",
+              "unit": "%",
+              "minNormal": 11.5,
+              "maxNormal": 14.5,
+              "textReference": "11.5 - 14.5 %",
+              "id": "param-1792056433557-6",
+              "result": "13.00",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Mentzer Index (MCV/RBC)",
+              "unit": "Ratio",
+              "notes": "Mentzer > 13: Suggestive of Iron Deficiency Anemia",
+              "textReference": "> 13 Iron Def. | < 13 Thalassemia",
+              "id": "param-1792056433557-8",
+              "result": "18.3",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Platelets Count",
+              "unit": "x10^3/µL",
+              "minNormal": 150,
+              "maxNormal": 450,
+              "panicLow": 50,
+              "panicHigh": 1000,
+              "textReference": "150 - 450 x10^3/µL",
+              "id": "param-1792056433557-10",
+              "result": "325",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Total Leucocytic Count (TLC)",
+              "unit": "x10^3/µL",
+              "minNormal": 4,
+              "maxNormal": 11,
+              "panicLow": 2,
+              "panicHigh": 30,
+              "textReference": "4.0 - 11.0 x10^3/µL",
+              "id": "param-1792056433557-14",
+              "result": "7.40",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Segmented Neutrophils %",
+              "unit": "%",
+              "minNormal": 40,
+              "maxNormal": 65,
+              "textReference": "40 - 65 %",
+              "id": "param-1792056433557-15",
+              "result": "49",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Band Forms (Stab) %",
+              "unit": "%",
+              "minNormal": 0,
+              "maxNormal": 5,
+              "textReference": "0 - 5 % (Left Shift if > 6%)",
+              "id": "param-1792056433557-16",
+              "result": "04",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Total Neutrophils %",
+              "unit": "%",
+              "minNormal": 40,
+              "maxNormal": 70,
+              "notes": "Auto-calculated: Segmented% + Band%",
+              "textReference": "40 - 70 %",
+              "id": "param-1792056433557-17",
+              "result": "53",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Lymphocytes %",
+              "unit": "%",
+              "minNormal": 20,
+              "maxNormal": 45,
+              "textReference": "20 - 45 %",
+              "id": "param-1792056433557-18",
+              "result": "43",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Monocytes %",
+              "unit": "%",
+              "minNormal": 2,
+              "maxNormal": 8,
+              "textReference": "2 - 8 %",
+              "id": "param-1792056433557-19",
+              "result": "02",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Eosinophils %",
+              "unit": "%",
+              "minNormal": 1,
+              "maxNormal": 6,
+              "textReference": "1 - 6 %",
+              "id": "param-1792056433557-20",
+              "result": "02",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Basophils %",
+              "unit": "%",
+              "minNormal": 0,
+              "maxNormal": 1,
+              "textReference": "0 - 1 %",
+              "id": "param-1792056433557-21",
+              "result": "00",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Metamyelocytes %",
+              "unit": "%",
+              "minNormal": 0,
+              "maxNormal": 0,
+              "textReference": "0 % (Absent in normal blood)",
+              "id": "param-1792056433557-22",
+              "result": "00",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Myelocytes %",
+              "unit": "%",
+              "minNormal": 0,
+              "maxNormal": 0,
+              "textReference": "0 % (Absent in normal blood)",
+              "id": "param-1792056433557-23",
+              "result": "00",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Blast Cells %",
+              "unit": "%",
+              "minNormal": 0,
+              "maxNormal": 0,
+              "textReference": "0 % (Absent in normal blood)",
+              "id": "param-1792056433557-24",
+              "result": "00",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Absolute Neutrophils (ANC)",
+              "unit": "x10^3/µL",
+              "minNormal": 1.5,
+              "maxNormal": 7.5,
+              "notes": "Calculated: (WBC × Neut%) / 100",
+              "textReference": "1.5 - 7.5 x10^3/µL",
+              "id": "param-1792056433557-25",
+              "result": "3.6",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Absolute Lymphocytes (ALC)",
+              "unit": "x10^3/µL",
+              "minNormal": 1,
+              "maxNormal": 4,
+              "notes": "Calculated: (WBC × Lymph%) / 100",
+              "textReference": "1.0 - 4.0 x10^3/µL",
+              "id": "param-1792056433557-26",
+              "result": "3.2",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Absolute Monocytes (AMC)",
+              "unit": "x10^3/µL",
+              "minNormal": 0.2,
+              "maxNormal": 0.8,
+              "notes": "Auto-calculated: (WBC × Mono%) / 100",
+              "textReference": "0.2 - 0.8 x10^3/µL",
+              "id": "param-1792056433557-27",
+              "result": "0.1",
+              "flag": "LOW"
+            },
+            {
+              "name": "Absolute Eosinophils (AEC)",
+              "unit": "x10^3/µL",
+              "minNormal": 0.04,
+              "maxNormal": 0.44,
+              "notes": "Auto-calculated: (WBC × Eos%) / 100",
+              "textReference": "0.04 - 0.44 x10^3/µL",
+              "id": "param-1792056433557-28",
+              "result": "0.1",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Absolute Basophils (ABC)",
+              "unit": "x10^3/µL",
+              "minNormal": 0.01,
+              "maxNormal": 0.1,
+              "notes": "Auto-calculated: (WBC × Baso%) / 100",
+              "textReference": "0.01 - 0.1 x10^3/µL",
+              "id": "param-1792056433557-29",
+              "result": "0",
+              "flag": "LOW"
+            },
+            {
+              "name": "NLR (Neutrophil/Lymphocyte)",
+              "unit": "Ratio",
+              "minNormal": 0.8,
+              "maxNormal": 2.5,
+              "notes": "Normal target < 2.5",
+              "textReference": "0.8 - 2.5 (Inflammatory Index)",
+              "id": "param-1792056433557-30",
+              "result": "1.1",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "HbA1c (Glycated Hemoglobin)",
+              "unit": "%",
+              "minNormal": 4,
+              "maxNormal": 5.6,
+              "textReference": "< 5.7% Normal, 5.7 - 6.4% Pre-Diabetes, ≥ 6.5% Diabetes",
+              "method": "HPLC / Turbidimetric",
+              "id": "param-1792056591964-3",
+              "result": "5.4",
+              "flag": "NORMAL"
+            },
+            {
+              "id": "param-1792066100277",
+              "name": "السكر التراكمي (HbA1c) (Glycated Hemoglobin (HbA1c))",
+              "result": "5.40",
+              "unit": "%",
+              "minNormal": 4,
+              "maxNormal": 5.6,
+              "textReference": "Normal: < 5.7 % | Pre-diabetic: 5.7 - 6.4 % | Diabetic: >= 6.5 %",
+              "method": "HPLC / Ion-Exchange Automated Analyzer (NGSP Certified)",
+              "flag": "NORMAL"
+            }
+          ]
+        }
+      ],
+      "staff": {
+        "labChemist": "مني احمد",
+        "verifiedBy": "رحاب علي عبدالحميد",
+        "pathologist": " رامي مختار",
+        "chemistTitle": "أخصائي أول كيمياء إكلينيكية وهرمونات",
+        "verifierTitle": "طبيب باثولوجى / المدير التنفيذى ",
+        "pathologistTitle": "طبيب الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
+        "chemistLicense": "EGY-SCI-88402",
+        "verifierLicense": "EGY-MGT-11024",
+        "pathologistLicense": "EGY-MED-48201",
+        "showHrSignature": false,
+        "showFinancialSignature": false
+      },
+      "status": "released",
+      "createdAt": "2026-10-11T16:05:35.431Z",
+      "updatedAt": "2026-10-15T12:09:51.165Z",
+      "invoiceId": "inv-1791734735431"
+    },
+    {
       "id": "rep-1791734250501",
       "reportNumber": "RT-2026-034",
       "patient": {
@@ -3240,7 +3740,7 @@
           "titleAr": "فحوصات السكر والتراكمي ومقاومة الإنسولين",
           "category": "Metabolism & Diabetes",
           "sampleType": "Fluoride / EDTA / Serum",
-          "interpretation": " ",
+          "interpretation": "Glycated hemoglobin (HbA1c), Glucose, and Insulin levels monitor glycemic control and metabolic resistance.",
           "parameters": [
             {
               "id": "param-1792073788518",
@@ -3253,9 +3753,6 @@
               "method": "Calculated: (Fasting Glucose x Fasting Insulin) / 405",
               "flag": "HIGH"
             }
-          ],
-          "interpretations": [
-            " "
           ]
         },
         {
@@ -3546,6 +4043,17 @@
               "textReference": "Normal: < 5.7 % | Pre-diabetic: 5.7 - 6.4 % | Diabetic: >= 6.5 %",
               "method": "HPLC / Ion-Exchange Automated Analyzer (NGSP Certified)",
               "flag": "NORMAL"
+            },
+            {
+              "id": "param-1792154521395",
+              "name": "Glycated Hemoglobin (HbA1c) (Glycated Hemoglobin (HbA1c))",
+              "result": "5.22",
+              "unit": "%",
+              "minNormal": 4,
+              "maxNormal": 5.6,
+              "textReference": "Normal: < 5.7 % | Pre-diabetic: 5.7 - 6.4 % | Diabetic: >= 6.5 %",
+              "method": "HPLC / Ion-Exchange Automated Analyzer (NGSP Certified)",
+              "flag": "NORMAL"
             }
           ]
         },
@@ -3592,10 +4100,6 @@
               "result": "1.54",
               "flag": "NORMAL"
             }
-          ],
-          "recommendedTests": [
-            "Anti-TPO Antibodies",
-            "Anti-Thyroglobulin"
           ]
         },
         {
@@ -3726,27 +4230,6 @@
               "maxNormal": 911,
               "textReference": "Normal: 211 - 911 pg/mL | Borderline: 150 - 210 | Deficient: < 150 pg/mL",
               "method": "CLIA (Chemiluminescence Immunoassay)",
-              "flag": "NORMAL"
-            }
-          ]
-        },
-        {
-          "id": "prof-indiv-1792154521395",
-          "profileCode": "INDIVIDUAL",
-          "titleEn": "Individual Diagnostic Investigations",
-          "titleAr": "تحاليل منفردة ومحددة",
-          "category": "Diabetes",
-          "sampleType": "EDTA Whole Blood",
-          "parameters": [
-            {
-              "id": "param-1792154521395",
-              "name": "Glycated Hemoglobin (HbA1c) (Glycated Hemoglobin (HbA1c))",
-              "result": "5.22",
-              "unit": "%",
-              "minNormal": 4,
-              "maxNormal": 5.6,
-              "textReference": "Normal: < 5.7 % | Pre-diabetic: 5.7 - 6.4 % | Diabetic: >= 6.5 %",
-              "method": "HPLC / Ion-Exchange Automated Analyzer (NGSP Certified)",
               "flag": "NORMAL"
             }
           ]
