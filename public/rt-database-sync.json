@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:35:18.156Z",
+  "syncedAt": "2026-10-17T20:35:31.603Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2682,7 +2682,7 @@
           "titleAr": "الفحوصات السيرولوجية والمناعية والفيروسات",
           "category": "Immunology & Serology",
           "sampleType": "Serum (مصل الدم)",
-          "interpretation": "Specific antibodies and viral antigens detected by electrochemiluminescence assay.",
+          "interpretation": "The",
           "parameters": [
             {
               "id": "p-1791819654844",
@@ -2695,6 +2695,9 @@
               "flag": "NORMAL",
               "method": "Real-Time RT-PCR Automated Viral Extraction & Amplification"
             }
+          ],
+          "interpretations": [
+            "The"
           ]
         },
         {
@@ -2956,7 +2959,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:35:16.313Z",
+      "updatedAt": "2026-10-17T20:35:25.867Z",
       "invoiceId": "inv-1791819003027"
     },
     {
