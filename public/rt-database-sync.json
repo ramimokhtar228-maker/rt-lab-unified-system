@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:41:29.043Z",
+  "syncedAt": "2026-10-17T20:41:34.523Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2820,7 +2820,7 @@
           "titleAr": "Coagulation & Hemostasis Profile",
           "category": "Hematology & Hemostasis",
           "sampleType": "Sodium Citrate Plasma (9:1 ratio)",
-          "interpretation": "Hemostatic integrity confirmed; extrinsic and intrinsic pathways within normal reference limits.",
+          "interpretation": " ",
           "parameters": [
             {
               "name": "Prothrombin Time (PT)",
@@ -2853,6 +2853,9 @@
               "result": "1.18",
               "flag": "NORMAL"
             }
+          ],
+          "interpretations": [
+            " "
           ]
         }
       ],
@@ -2877,7 +2880,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:41:25.848Z",
+      "updatedAt": "2026-10-17T20:41:31.133Z",
       "invoiceId": "inv-1791819003027"
     },
     {
