@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:41:10.350Z",
+  "syncedAt": "2026-10-17T20:41:18.574Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2850,7 +2850,7 @@
               "textReference": "0.85 - 1.15 (Warfarin Target: 2.0 - 3.0)",
               "panicHigh": 4.5,
               "id": "param-1792269260866-2",
-              "result": "1.09",
+              "result": "1",
               "flag": "NORMAL"
             }
           ]
@@ -2877,7 +2877,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:41:07.308Z",
+      "updatedAt": "2026-10-17T20:41:13.665Z",
       "invoiceId": "inv-1791819003027"
     },
     {
