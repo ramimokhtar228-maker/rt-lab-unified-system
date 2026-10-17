@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:25:46.563Z",
+  "syncedAt": "2026-10-17T20:25:52.730Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3055,8 +3055,8 @@
               "method": "CLIA",
               "textReference": "",
               "id": "param-1792160444949-1",
-              "result": "1",
-              "flag": "LOW"
+              "result": "2.16",
+              "flag": "NORMAL"
             },
             {
               "name": "Free T4 (FT4)",
@@ -3066,8 +3066,8 @@
               "method": "CLIA",
               "textReference": "",
               "id": "param-1792160444949-2",
-              "result": "",
-              "flag": ""
+              "result": "1",
+              "flag": "NORMAL"
             }
           ],
           "interpretations": [
@@ -3414,7 +3414,7 @@
       },
       "status": "in_progress",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-17T20:25:43.420Z",
+      "updatedAt": "2026-10-17T20:25:50.222Z",
       "invoiceId": "inv-1791735202176"
     },
     {
