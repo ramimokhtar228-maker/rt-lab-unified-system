@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:37:59.539Z",
+  "syncedAt": "2026-10-17T20:38:13.622Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2803,13 +2803,13 @@
             {
               "id": "param-1792269251426",
               "name": "Alpha-Fetoprotein (AFP) (Alpha-Fetoprotein (AFP))",
-              "result": "",
+              "result": "3",
               "unit": "ng/mL",
               "minNormal": 0,
               "maxNormal": 7,
               "textReference": "< 7.0 ng/mL (Non-pregnant Adults)",
               "method": "CLIA (Chemiluminescence Immunoassay)",
-              "flag": ""
+              "flag": "NORMAL"
             }
           ]
         },
@@ -2910,7 +2910,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:37:57.794Z",
+      "updatedAt": "2026-10-17T20:38:11.497Z",
       "invoiceId": "inv-1791819003027"
     },
     {
