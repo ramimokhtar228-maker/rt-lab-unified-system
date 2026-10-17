@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:25:39.292Z",
+  "syncedAt": "2026-10-17T20:25:46.563Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -3044,7 +3044,7 @@
               "method": "CLIA (3rd Generation Chemiluminescence)",
               "textReference": "Adults: 0.55 - 4.78 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
               "id": "param-1792160444949-0",
-              "result": "3",
+              "result": "3.33",
               "flag": "NORMAL"
             },
             {
@@ -3055,8 +3055,8 @@
               "method": "CLIA",
               "textReference": "",
               "id": "param-1792160444949-1",
-              "result": "",
-              "flag": ""
+              "result": "1",
+              "flag": "LOW"
             },
             {
               "name": "Free T4 (FT4)",
@@ -3414,7 +3414,7 @@
       },
       "status": "in_progress",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-17T20:25:36.388Z",
+      "updatedAt": "2026-10-17T20:25:43.420Z",
       "invoiceId": "inv-1791735202176"
     },
     {
