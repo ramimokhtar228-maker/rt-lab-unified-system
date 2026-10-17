@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:41:34.523Z",
+  "syncedAt": "2026-10-17T20:41:50.104Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2876,11 +2876,12 @@
         "financialLicense": "EGY-FIN-10492",
         "hrLicense": "EGY-HR-44190",
         "showFinancialSignature": true,
-        "showHrSignature": true
+        "showHrSignature": true,
+        "hideSignatures": true
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:41:31.133Z",
+      "updatedAt": "2026-10-17T20:41:47.603Z",
       "invoiceId": "inv-1791819003027"
     },
     {
