@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:37:04.602Z",
+  "syncedAt": "2026-10-17T20:37:12.111Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2772,19 +2772,8 @@
               "method": "Bromocresol Green (BCG)",
               "textReference": "",
               "id": "param-1792269222563-7",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "Serum Globulin",
-              "unit": "g/dL",
-              "minNormal": 2.3,
-              "maxNormal": 3.5,
-              "notes": "Auto-calculated: Total Protein - Albumin",
-              "textReference": "",
-              "id": "param-1792269222563-8",
-              "result": "",
-              "flag": ""
+              "result": "3.87",
+              "flag": "NORMAL"
             },
             {
               "name": "A/G Ratio",
@@ -2938,7 +2927,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:37:01.194Z",
+      "updatedAt": "2026-10-17T20:37:08.938Z",
       "invoiceId": "inv-1791819003027"
     },
     {
