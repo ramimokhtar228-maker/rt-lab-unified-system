@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-17T07:01:10.073Z",
+  "timestamp": "2026-10-17T07:14:51.468Z",
   "reportsCount": 46,
   "incomeCount": 31,
-  "loyaltyProfilesCount": 27,
+  "loyaltyProfilesCount": 28,
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -19012,6 +19012,38 @@
   ],
   "loyaltyProfiles": [
     {
+      "patientId": "pat-loyalty-1792220683672",
+      "patientName": "مي محمود احمد",
+      "phone": "01550554997",
+      "barcode": "RT-10067",
+      "cardNumber": "RT-GOLD-10067",
+      "bloodGroup": "",
+      "totalPoints": 1224,
+      "tier": "Gold",
+      "lifetimeSpent": 1224,
+      "issueDate": "2026-10-17",
+      "transactions": [
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 612,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-037",
+          "invoiceNumber": "INV-2026-037",
+          "amountEGP": 612
+        },
+        {
+          "id": "tx-1792220683672",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 612,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم INV-2026-037",
+          "invoiceNumber": "INV-2026-037",
+          "amountEGP": 612
+        }
+      ]
+    },
+    {
       "patientId": "pat-loyalty-1791735202177",
       "patientName": "مي محمود احمد",
       "phone": "01013242777",
@@ -19041,11 +19073,29 @@
       "barcode": "RT-10063",
       "cardNumber": "RT-GOLD-10063",
       "bloodGroup": "",
-      "totalPoints": 1563,
-      "tier": "Platinum",
-      "lifetimeSpent": 1563,
+      "totalPoints": 3463,
+      "tier": "VIP",
+      "lifetimeSpent": 3463,
       "issueDate": "2026-10-11",
       "transactions": [
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 950,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-046",
+          "invoiceNumber": "INV-2026-046",
+          "amountEGP": 950
+        },
+        {
+          "id": "tx-1792220683671",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 950,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-046",
+          "invoiceNumber": "INV-2026-046",
+          "amountEGP": 950
+        },
         {
           "id": "tx-1791734735433",
           "date": "2026-10-11",
@@ -19073,11 +19123,29 @@
       "barcode": "RT-10062",
       "cardNumber": "RT-GOLD-10062",
       "bloodGroup": "",
-      "totalPoints": 740,
-      "tier": "Gold",
-      "lifetimeSpent": 740,
+      "totalPoints": 5890,
+      "tier": "VIP",
+      "lifetimeSpent": 5890,
       "issueDate": "2026-10-11",
       "transactions": [
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 2575,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-032",
+          "invoiceNumber": "INV-2026-032",
+          "amountEGP": 2575
+        },
+        {
+          "id": "tx-1792220683672",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 2575,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-032",
+          "invoiceNumber": "INV-2026-032",
+          "amountEGP": 2575
+        },
         {
           "id": "tx-1791733128878",
           "date": "2026-10-11",
@@ -19096,11 +19164,47 @@
       "barcode": "RT-10062",
       "cardNumber": "RT-SILVER-10062",
       "bloodGroup": "",
-      "totalPoints": 199,
-      "tier": "Silver",
-      "lifetimeSpent": 199,
+      "totalPoints": 1295,
+      "tier": "Gold",
+      "lifetimeSpent": 1295,
       "issueDate": "2026-10-08",
       "transactions": [
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 349,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-032",
+          "invoiceNumber": "INV-2026-032",
+          "amountEGP": 349
+        },
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-8984",
+          "invoiceNumber": "INV-2026-8984",
+          "amountEGP": 199
+        },
+        {
+          "id": "tx-1792220683672",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 349,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-032",
+          "invoiceNumber": "INV-2026-032",
+          "amountEGP": 349
+        },
+        {
+          "id": "tx-1792220683671",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-8984",
+          "invoiceNumber": "INV-2026-8984",
+          "amountEGP": 199
+        },
         {
           "id": "tx-1791501113007",
           "date": "2026-10-08",
@@ -19119,11 +19223,47 @@
       "barcode": "RT-10061",
       "cardNumber": "RT-SILVER-10061",
       "bloodGroup": "",
-      "totalPoints": 199,
-      "tier": "Silver",
-      "lifetimeSpent": 199,
+      "totalPoints": 2595,
+      "tier": "Platinum",
+      "lifetimeSpent": 2595,
       "issueDate": "2026-10-08",
       "transactions": [
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-031",
+          "invoiceNumber": "INV-2026-031",
+          "amountEGP": 599
+        },
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-8983",
+          "invoiceNumber": "INV-2026-8983",
+          "amountEGP": 599
+        },
+        {
+          "id": "tx-1792220683672",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-031",
+          "invoiceNumber": "INV-2026-031",
+          "amountEGP": 599
+        },
+        {
+          "id": "tx-1792220683671",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-8983",
+          "invoiceNumber": "INV-2026-8983",
+          "amountEGP": 599
+        },
         {
           "id": "tx-1791500920502",
           "date": "2026-10-08",
@@ -19142,11 +19282,29 @@
       "barcode": "RT-10060",
       "cardNumber": "RT-SILVER-10060",
       "bloodGroup": "",
-      "totalPoints": 199,
-      "tier": "Silver",
-      "lifetimeSpent": 199,
+      "totalPoints": 1397,
+      "tier": "Gold",
+      "lifetimeSpent": 1397,
       "issueDate": "2026-10-08",
       "transactions": [
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-030",
+          "invoiceNumber": "INV-2026-030",
+          "amountEGP": 599
+        },
+        {
+          "id": "tx-1792220683672",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-030",
+          "invoiceNumber": "INV-2026-030",
+          "amountEGP": 599
+        },
         {
           "id": "tx-1791500705356",
           "date": "2026-10-08",
@@ -19211,11 +19369,29 @@
       "barcode": "RT-10062",
       "cardNumber": "RT-SILVER-10062",
       "bloodGroup": "",
-      "totalPoints": 333,
-      "tier": "Silver",
-      "lifetimeSpent": 333,
+      "totalPoints": 961,
+      "tier": "Gold",
+      "lifetimeSpent": 961,
       "issueDate": "2026-10-07",
       "transactions": [
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 314,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-032",
+          "invoiceNumber": "INV-2026-032",
+          "amountEGP": 314
+        },
+        {
+          "id": "tx-1792220683672",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 314,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-032",
+          "invoiceNumber": "INV-2026-032",
+          "amountEGP": 314
+        },
         {
           "id": "tx-1791414459348",
           "date": "2026-10-07",
@@ -19234,11 +19410,29 @@
       "barcode": "RT-10043",
       "cardNumber": "RT-SILVER-10043",
       "bloodGroup": "",
-      "totalPoints": 190,
-      "tier": "Silver",
-      "lifetimeSpent": 190,
+      "totalPoints": 570,
+      "tier": "Gold",
+      "lifetimeSpent": 570,
       "issueDate": "2026-10-07",
       "transactions": [
+        {
+          "id": "tx-1792220765385",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 190,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-013",
+          "invoiceNumber": "INV-2026-013",
+          "amountEGP": 190
+        },
+        {
+          "id": "tx-1792220683672",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 190,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-013",
+          "invoiceNumber": "INV-2026-013",
+          "amountEGP": 190
+        },
         {
           "id": "tx-1791381439613",
           "date": "2026-10-07",
@@ -19280,11 +19474,29 @@
       "barcode": "RT-10043",
       "cardNumber": "RT-GOLD-10043",
       "bloodGroup": "",
-      "totalPoints": 1026,
-      "tier": "Gold",
-      "lifetimeSpent": 1026,
+      "totalPoints": 3050,
+      "tier": "VIP",
+      "lifetimeSpent": 3050,
       "issueDate": "2026-10-07",
       "transactions": [
+        {
+          "id": "tx-1792220765385",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 1012,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-013",
+          "invoiceNumber": "INV-2026-013",
+          "amountEGP": 1012
+        },
+        {
+          "id": "tx-1792220683672",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 1012,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-013",
+          "invoiceNumber": "INV-2026-013",
+          "amountEGP": 1012
+        },
         {
           "id": "tx-1791359462638",
           "date": "2026-10-07",
@@ -19303,11 +19515,29 @@
       "barcode": "RT-10042",
       "cardNumber": "RT-SILVER-10042",
       "bloodGroup": "",
-      "totalPoints": 199,
-      "tier": "Silver",
-      "lifetimeSpent": 199,
+      "totalPoints": 897,
+      "tier": "Gold",
+      "lifetimeSpent": 897,
       "issueDate": "2026-10-07",
       "transactions": [
+        {
+          "id": "tx-1792220765385",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 349,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-012",
+          "invoiceNumber": "INV-2026-012",
+          "amountEGP": 349
+        },
+        {
+          "id": "tx-1792220683673",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 349,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-012",
+          "invoiceNumber": "INV-2026-012",
+          "amountEGP": 349
+        },
         {
           "id": "tx-1791358565055",
           "date": "2026-10-07",
@@ -19326,11 +19556,29 @@
       "barcode": "RT-10041",
       "cardNumber": "RT-SILVER-10041",
       "bloodGroup": "",
-      "totalPoints": 199,
-      "tier": "Silver",
-      "lifetimeSpent": 199,
+      "totalPoints": 897,
+      "tier": "Gold",
+      "lifetimeSpent": 897,
       "issueDate": "2026-10-06",
       "transactions": [
+        {
+          "id": "tx-1792220765385",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 349,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-011",
+          "invoiceNumber": "INV-2026-011",
+          "amountEGP": 349
+        },
+        {
+          "id": "tx-1792220683673",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 349,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-011",
+          "invoiceNumber": "INV-2026-011",
+          "amountEGP": 349
+        },
         {
           "id": "tx-1791321555676",
           "date": "2026-10-06",
@@ -19349,11 +19597,29 @@
       "barcode": "RT-10039",
       "cardNumber": "RT-SILVER-10039",
       "bloodGroup": "",
-      "totalPoints": 422,
-      "tier": "Silver",
-      "lifetimeSpent": 422,
+      "totalPoints": 604,
+      "tier": "Gold",
+      "lifetimeSpent": 604,
       "issueDate": "2026-10-06",
       "transactions": [
+        {
+          "id": "tx-1792220765385",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 91,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-009",
+          "invoiceNumber": "INV-2026-009",
+          "amountEGP": 91
+        },
+        {
+          "id": "tx-1792220683673",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 91,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-009",
+          "invoiceNumber": "INV-2026-009",
+          "amountEGP": 91
+        },
         {
           "id": "tx-1791320477694",
           "date": "2026-10-06",
@@ -19381,11 +19647,29 @@
       "barcode": "RT-10038",
       "cardNumber": "RT-SILVER-10038",
       "bloodGroup": "",
-      "totalPoints": 199,
-      "tier": "Silver",
-      "lifetimeSpent": 199,
+      "totalPoints": 597,
+      "tier": "Gold",
+      "lifetimeSpent": 597,
       "issueDate": "2026-10-06",
       "transactions": [
+        {
+          "id": "tx-1792220765386",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-008",
+          "invoiceNumber": "INV-2026-008",
+          "amountEGP": 199
+        },
+        {
+          "id": "tx-1792220683673",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-008",
+          "invoiceNumber": "INV-2026-008",
+          "amountEGP": 199
+        },
         {
           "id": "tx-1791287976704",
           "date": "2026-10-06",
@@ -19404,11 +19688,29 @@
       "barcode": "RT-10037",
       "cardNumber": "RT-SILVER-10037",
       "bloodGroup": "",
-      "totalPoints": 199,
-      "tier": "Silver",
-      "lifetimeSpent": 199,
+      "totalPoints": 897,
+      "tier": "Gold",
+      "lifetimeSpent": 897,
       "issueDate": "2026-10-06",
       "transactions": [
+        {
+          "id": "tx-1792220765386",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 349,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-007",
+          "invoiceNumber": "INV-2026-007",
+          "amountEGP": 349
+        },
+        {
+          "id": "tx-1792220683673",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 349,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-007",
+          "invoiceNumber": "INV-2026-007",
+          "amountEGP": 349
+        },
         {
           "id": "tx-1791287331564",
           "date": "2026-10-06",
@@ -19427,11 +19729,47 @@
       "barcode": "RT-10036",
       "cardNumber": "RT-SILVER-10036",
       "bloodGroup": "",
-      "totalPoints": 398,
-      "tier": "Silver",
-      "lifetimeSpent": 398,
+      "totalPoints": 2794,
+      "tier": "Platinum",
+      "lifetimeSpent": 2794,
       "issueDate": "2026-10-06",
       "transactions": [
+        {
+          "id": "tx-1792220765386",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-006",
+          "invoiceNumber": "INV-2026-006",
+          "amountEGP": 599
+        },
+        {
+          "id": "tx-1792220765386",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-006",
+          "invoiceNumber": "INV-2026-006",
+          "amountEGP": 599
+        },
+        {
+          "id": "tx-1792220683674",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-006",
+          "invoiceNumber": "INV-2026-006",
+          "amountEGP": 599
+        },
+        {
+          "id": "tx-1792220683673",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-006",
+          "invoiceNumber": "INV-2026-006",
+          "amountEGP": 599
+        },
         {
           "id": "tx-1791286741651",
           "date": "2026-10-06",
@@ -19459,11 +19797,29 @@
       "barcode": "RT-10035",
       "cardNumber": "RT-GOLD-10035",
       "bloodGroup": "",
-      "totalPoints": 599,
-      "tier": "Gold",
-      "lifetimeSpent": 599,
+      "totalPoints": 1797,
+      "tier": "Platinum",
+      "lifetimeSpent": 1797,
       "issueDate": "2026-10-06",
       "transactions": [
+        {
+          "id": "tx-1792220765386",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-005",
+          "invoiceNumber": "INV-2026-005",
+          "amountEGP": 599
+        },
+        {
+          "id": "tx-1792220683674",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-005",
+          "invoiceNumber": "INV-2026-005",
+          "amountEGP": 599
+        },
         {
           "id": "tx-1791285435325",
           "date": "2026-10-06",
@@ -19478,14 +19834,32 @@
     {
       "tier": "Gold",
       "patientId": "pat-loyalty-1791284141343",
-      "totalPoints": 745,
+      "totalPoints": 1143,
       "barcode": "RT-10034",
       "cardNumber": "RT-GOLD-10034",
       "phone": "01277489467",
       "patientName": "مريم عوض الكريم",
-      "lifetimeSpent": 745,
+      "lifetimeSpent": 1143,
       "issueDate": "2026-10-06",
       "transactions": [
+        {
+          "id": "tx-1792220765385",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-010",
+          "invoiceNumber": "INV-2026-010",
+          "amountEGP": 199
+        },
+        {
+          "id": "tx-1792220683673",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-010",
+          "invoiceNumber": "INV-2026-010",
+          "amountEGP": 199
+        },
         {
           "id": "tx-1791306270704",
           "date": "2026-10-06",
@@ -19508,8 +19882,26 @@
       "bloodGroup": ""
     },
     {
-      "lifetimeSpent": 252,
+      "lifetimeSpent": 756,
       "transactions": [
+        {
+          "id": "tx-1792220765386",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 252,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-001",
+          "invoiceNumber": "INV-2026-001",
+          "amountEGP": 252
+        },
+        {
+          "id": "tx-1792220683674",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 252,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-001",
+          "invoiceNumber": "INV-2026-001",
+          "amountEGP": 252
+        },
         {
           "amountEGP": 252,
           "points": 252,
@@ -19522,11 +19914,11 @@
       ],
       "patientName": "أحمد محمود إبراهيم",
       "phone": "01012345678",
-      "tier": "Silver",
+      "tier": "Gold",
       "issueDate": "2026-10-06",
       "patientId": "pat-001",
       "cardNumber": "RT-SILVER-10029",
-      "totalPoints": 252,
+      "totalPoints": 756,
       "barcode": "RT-10029",
       "bloodGroup": "A+"
     },
@@ -19539,8 +19931,26 @@
       "tier": "Gold",
       "barcode": "RT-10030",
       "patientId": "pat-002",
-      "totalPoints": 682,
+      "totalPoints": 1366,
       "transactions": [
+        {
+          "id": "tx-1792220765386",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 342,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-002",
+          "invoiceNumber": "INV-2026-002",
+          "amountEGP": 342
+        },
+        {
+          "id": "tx-1792220683674",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 342,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-002",
+          "invoiceNumber": "INV-2026-002",
+          "amountEGP": 342
+        },
         {
           "description": "نقاط فاتورة تحاليل السكر والكلى INV-2026-002",
           "points": 342,
@@ -19551,7 +19961,7 @@
           "type": "earn"
         }
       ],
-      "lifetimeSpent": 682
+      "lifetimeSpent": 1366
     },
     {
       "patientId": "pat-loyalty-1791400927210",
@@ -19560,11 +19970,29 @@
       "barcode": "RT-10061",
       "cardNumber": "RT-SILVER-10061",
       "bloodGroup": "",
-      "totalPoints": 184,
-      "tier": "Silver",
-      "lifetimeSpent": 184,
+      "totalPoints": 560,
+      "tier": "Gold",
+      "lifetimeSpent": 560,
       "issueDate": "2026-10-07",
       "transactions": [
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 188,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-031",
+          "invoiceNumber": "INV-2026-031",
+          "amountEGP": 188
+        },
+        {
+          "id": "tx-1792220683672",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 188,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-031",
+          "invoiceNumber": "INV-2026-031",
+          "amountEGP": 188
+        },
         {
           "id": "tx-1791400927211",
           "date": "2026-10-07",
@@ -19606,11 +20034,29 @@
       "barcode": "RT-9827361849",
       "cardNumber": "RT-GOLD-9827361849",
       "bloodGroup": "",
-      "totalPoints": 1301,
-      "tier": "Gold",
-      "lifetimeSpent": 1301,
+      "totalPoints": 2613,
+      "tier": "Platinum",
+      "lifetimeSpent": 2613,
       "issueDate": "2026-10-12",
       "transactions": [
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 656,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-8982",
+          "invoiceNumber": "INV-2026-8982",
+          "amountEGP": 656
+        },
+        {
+          "id": "tx-1792220683671",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 656,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-8982",
+          "invoiceNumber": "INV-2026-8982",
+          "amountEGP": 656
+        },
         {
           "id": "tx-1791819003070",
           "date": "2026-10-12",
@@ -19825,94 +20271,504 @@
   "dailyCloseouts": [],
   "auditLogs": [
     {
-      "id": "log-1792220466392-q5lnb",
-      "timestamp": "10/17/2026, 10:01:06 AM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "UPDATE",
-      "module": "SETTINGS",
-      "description": "تحديث الإمضاءات الافتراضية لطاقم الفحص والاعتماد"
-    },
-    {
-      "id": "log-1792220466390-owczv",
-      "timestamp": "10/17/2026, 10:01:06 AM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "UPDATE",
-      "module": "SETTINGS",
-      "description": "تحديث بيانات المعمل والاعتماد الطبي ووسائل التواصل"
-    },
-    {
-      "id": "log-1792173085500-jdik3",
-      "timestamp": "10/16/2026, 8:51:25 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "DELETE",
-      "module": "INCOME",
-      "description": "حذف الفاتورة رقم INV-2026-002 للمريض منى عادل عبد الرحمن"
-    },
-    {
-      "id": "log-1792173085499-u34ci",
-      "timestamp": "10/16/2026, 8:51:25 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "DELETE",
-      "module": "DIAGNOSTIC",
-      "description": "حذف التقرير الطبي للمريض منى عادل عبد الرحمن"
-    },
-    {
-      "id": "log-1792173071054-yg9qh",
-      "timestamp": "10/16/2026, 8:51:11 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "DELETE",
-      "module": "INCOME",
-      "description": "حذف الفاتورة رقم INV-2026-001 للمريض أحمد محمود إبراهيم"
-    },
-    {
-      "id": "log-1792173071051-9e0ja",
-      "timestamp": "10/16/2026, 8:51:11 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "DELETE",
-      "module": "DIAGNOSTIC",
-      "description": "حذف التقرير الطبي للمريض أحمد محمود إبراهيم"
-    },
-    {
-      "id": "log-1792165080192-2n1xm",
-      "timestamp": "10/16/2026, 6:38:00 PM",
+      "id": "log-1792221279724-q2w8r",
+      "timestamp": "10/17/2026, 10:14:39 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "CATALOG_UPDATE",
       "module": "CATALOG",
-      "description": "تحديث بروفايلات التحاليل الشاملة (20 بروفايل)"
+      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: GLU_R"
     },
     {
-      "id": "log-1792165080192-u2iae",
-      "timestamp": "10/16/2026, 6:38:00 PM",
+      "id": "log-1792221250714-f0ecr",
+      "timestamp": "10/17/2026, 10:14:10 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "مزامنة وتوحيد شامل للكتالوج: 212 فحص منفرد + 15 باقة + 20 بروفايل"
+      "action": "UPDATE",
+      "module": "HR",
+      "description": "تعديل بيانات الموظف رقم emp-1"
     },
     {
-      "id": "log-1792165010361-or982",
-      "timestamp": "10/16/2026, 6:36:50 PM",
+      "id": "log-1792221235205-0ggui",
+      "timestamp": "10/17/2026, 10:13:55 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
-      "action": "SYNC",
-      "module": "SECURITY",
-      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
+      "action": "CREATE",
+      "module": "HR",
+      "description": "إضافة موظف جديد: د. رحاب على عبد الحميد"
+    },
+    {
+      "id": "log-1792221163563-cfryn",
+      "timestamp": "10/17/2026, 10:12:43 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "HR",
+      "description": "تعديل بيانات الموظف رقم emp-1"
+    },
+    {
+      "id": "log-1792221141280-433go",
+      "timestamp": "10/17/2026, 10:12:21 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "HR",
+      "description": "تعديل بيانات الموظف رقم emp-1"
+    },
+    {
+      "id": "log-1792220763822-v5p1i",
+      "timestamp": "10/17/2026, 10:06:03 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "مزامنة رجعية لنقاط الولاء لـ 24 فاتورة سابقة"
+    },
+    {
+      "id": "log-1792220763822-6hz6y",
+      "timestamp": "10/17/2026, 10:06:03 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 342 نقطة ولاء للمريض منى عادل عبد الرحمن برقم هاتف 01198765432"
+    },
+    {
+      "id": "log-1792220763822-jzmbi",
+      "timestamp": "10/17/2026, 10:06:03 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 252 نقطة ولاء للمريض أحمد محمود إبراهيم برقم هاتف 01012345678"
+    },
+    {
+      "id": "log-1792220763822-4dyf0",
+      "timestamp": "10/17/2026, 10:06:03 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 599 نقطة ولاء للمريض محمد صلاح الدين عبدة برقم هاتف 01004359187"
+    },
+    {
+      "id": "log-1792220763822-icime",
+      "timestamp": "10/17/2026, 10:06:03 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 599 نقطة ولاء للمريض نورا سعيد حلمى برقم هاتف 01228439288"
+    },
+    {
+      "id": "log-1792220763822-83zhy",
+      "timestamp": "10/17/2026, 10:06:03 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 599 نقطة ولاء للمريض نورا سعيد حلمى برقم هاتف 01228439288"
+    },
+    {
+      "id": "log-1792220763822-74rvw",
+      "timestamp": "10/17/2026, 10:06:03 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 349 نقطة ولاء للمريض شريف عادل برقم هاتف 01100"
+    },
+    {
+      "id": "log-1792220763821-s2y2u",
+      "timestamp": "10/17/2026, 10:06:03 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 199 نقطة ولاء للمريض أمال محمد برقم هاتف 01555108312"
+    },
+    {
+      "id": "log-1792220763821-5by60",
+      "timestamp": "10/17/2026, 10:06:03 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 91 نقطة ولاء للمريض ٌٍّّرجاء حسن ابراهيم برقم هاتف 01124485444"
+    },
+    {
+      "id": "log-1792220763821-9clkq",
+      "timestamp": "10/17/2026, 10:06:03 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 199 نقطة ولاء للمريض هويدا الهادي يحيى برقم هاتف 01277489467"
+    },
+    {
+      "id": "log-1792220763821-aeuql",
+      "timestamp": "10/17/2026, 10:06:03 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 349 نقطة ولاء للمريض مروة عبدالفتاح ابراهيم برقم هاتف 01065490430"
+    },
+    {
+      "id": "log-1792220763821-ntmc9",
+      "timestamp": "10/17/2026, 10:06:03 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 349 نقطة ولاء للمريض كوثر ابراهيم برقم هاتف 01095920078"
+    },
+    {
+      "id": "log-1792220763821-pf9k1",
+      "timestamp": "10/17/2026, 10:06:03 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 1012 نقطة ولاء للمريض حبيبه مجدى محمد برقم هاتف 01148879943"
+    },
+    {
+      "id": "log-1792220763821-5eght",
+      "timestamp": "10/17/2026, 10:06:03 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 190 نقطة ولاء للمريض محمد حسن على برقم هاتف 01005314825"
+    },
+    {
+      "id": "log-1792220763821-gaot5",
+      "timestamp": "10/17/2026, 10:06:03 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 188 نقطة ولاء للمريض جيهان عبدالفتاح برقم هاتف 01099999098"
+    },
+    {
+      "id": "log-1792220763821-i06kl",
+      "timestamp": "10/17/2026, 10:06:03 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 314 نقطة ولاء للمريض جيهان  عبد الفتاح برقم هاتف 0 10 22231270"
+    },
+    {
+      "id": "log-1792220763821-4elvt",
+      "timestamp": "10/17/2026, 10:06:03 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 599 نقطة ولاء للمريض عادل احمد صبيح برقم هاتف 01112919075"
+    },
+    {
+      "id": "log-1792220763821-7nkz4",
+      "timestamp": "10/17/2026, 10:06:03 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 599 نقطة ولاء للمريض مجدى احمد ربيع برقم هاتف 01030502318"
+    },
+    {
+      "id": "log-1792220763821-uptkh",
+      "timestamp": "10/17/2026, 10:06:03 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 349 نقطة ولاء للمريض زينب عمر برقم هاتف 01091353732"
+    },
+    {
+      "id": "log-1792220763821-i8bhx",
+      "timestamp": "10/17/2026, 10:06:03 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 2575 نقطة ولاء للمريض داليا عبده حسين زهران برقم هاتف 01117552241"
+    },
+    {
+      "id": "log-1792220763821-7coha",
+      "timestamp": "10/17/2026, 10:06:03 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 612 نقطة ولاء للمريض مي محمود احمد برقم هاتف 01550554997"
+    },
+    {
+      "id": "log-1792220763821-ccd9b",
+      "timestamp": "10/17/2026, 10:06:03 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 656 نقطة ولاء للمريض منى محمود احمد برقم هاتف 01005750607"
+    },
+    {
+      "id": "log-1792220763821-dkelg",
+      "timestamp": "10/17/2026, 10:06:03 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 599 نقطة ولاء للمريض مجدي احمد ربيع برقم هاتف 01030502318"
+    },
+    {
+      "id": "log-1792220763821-tr01z",
+      "timestamp": "10/17/2026, 10:06:03 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 199 نقطة ولاء للمريض ّزينب عمر برقم هاتف 01091353732"
+    },
+    {
+      "id": "log-1792220763820-3il7k",
+      "timestamp": "10/17/2026, 10:06:03 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 950 نقطة ولاء للمريض كريم صلاح سعد برقم هاتف 01003540455"
+    },
+    {
+      "id": "log-1792220758425-inb09",
+      "timestamp": "10/17/2026, 10:05:58 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "تحديث إعدادات كروت الولاء وقيمة استبدال النقاط"
+    },
+    {
+      "id": "log-1792220682021-8ncbt",
+      "timestamp": "10/17/2026, 10:04:42 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "مزامنة رجعية لنقاط الولاء لـ 24 فاتورة سابقة"
+    },
+    {
+      "id": "log-1792220682021-am284",
+      "timestamp": "10/17/2026, 10:04:42 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 342 نقطة ولاء للمريض منى عادل عبد الرحمن برقم هاتف 01198765432"
+    },
+    {
+      "id": "log-1792220682021-uaqx0",
+      "timestamp": "10/17/2026, 10:04:42 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 252 نقطة ولاء للمريض أحمد محمود إبراهيم برقم هاتف 01012345678"
+    },
+    {
+      "id": "log-1792220682021-ths16",
+      "timestamp": "10/17/2026, 10:04:42 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 599 نقطة ولاء للمريض محمد صلاح الدين عبدة برقم هاتف 01004359187"
+    },
+    {
+      "id": "log-1792220682021-6vzka",
+      "timestamp": "10/17/2026, 10:04:42 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 599 نقطة ولاء للمريض نورا سعيد حلمى برقم هاتف 01228439288"
+    },
+    {
+      "id": "log-1792220682021-5vpd8",
+      "timestamp": "10/17/2026, 10:04:42 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 599 نقطة ولاء للمريض نورا سعيد حلمى برقم هاتف 01228439288"
+    },
+    {
+      "id": "log-1792220682021-451aq",
+      "timestamp": "10/17/2026, 10:04:42 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 349 نقطة ولاء للمريض شريف عادل برقم هاتف 01100"
+    },
+    {
+      "id": "log-1792220682021-ulc9t",
+      "timestamp": "10/17/2026, 10:04:42 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 199 نقطة ولاء للمريض أمال محمد برقم هاتف 01555108312"
+    },
+    {
+      "id": "log-1792220682021-mod77",
+      "timestamp": "10/17/2026, 10:04:42 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 91 نقطة ولاء للمريض ٌٍّّرجاء حسن ابراهيم برقم هاتف 01124485444"
+    },
+    {
+      "id": "log-1792220682021-ok1nn",
+      "timestamp": "10/17/2026, 10:04:42 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 199 نقطة ولاء للمريض هويدا الهادي يحيى برقم هاتف 01277489467"
+    },
+    {
+      "id": "log-1792220682021-fyg3v",
+      "timestamp": "10/17/2026, 10:04:42 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 349 نقطة ولاء للمريض مروة عبدالفتاح ابراهيم برقم هاتف 01065490430"
+    },
+    {
+      "id": "log-1792220682021-sdq8h",
+      "timestamp": "10/17/2026, 10:04:42 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 349 نقطة ولاء للمريض كوثر ابراهيم برقم هاتف 01095920078"
+    },
+    {
+      "id": "log-1792220682020-by1by",
+      "timestamp": "10/17/2026, 10:04:42 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 1012 نقطة ولاء للمريض حبيبه مجدى محمد برقم هاتف 01148879943"
+    },
+    {
+      "id": "log-1792220682020-ffhgm",
+      "timestamp": "10/17/2026, 10:04:42 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 190 نقطة ولاء للمريض محمد حسن على برقم هاتف 01005314825"
+    },
+    {
+      "id": "log-1792220682020-ycumv",
+      "timestamp": "10/17/2026, 10:04:42 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 188 نقطة ولاء للمريض جيهان عبدالفتاح برقم هاتف 01099999098"
+    },
+    {
+      "id": "log-1792220682020-tk1r2",
+      "timestamp": "10/17/2026, 10:04:42 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 314 نقطة ولاء للمريض جيهان  عبد الفتاح برقم هاتف 0 10 22231270"
+    },
+    {
+      "id": "log-1792220682020-ixckx",
+      "timestamp": "10/17/2026, 10:04:42 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 599 نقطة ولاء للمريض عادل احمد صبيح برقم هاتف 01112919075"
+    },
+    {
+      "id": "log-1792220682020-ya6tf",
+      "timestamp": "10/17/2026, 10:04:42 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 599 نقطة ولاء للمريض مجدى احمد ربيع برقم هاتف 01030502318"
+    },
+    {
+      "id": "log-1792220682020-irvud",
+      "timestamp": "10/17/2026, 10:04:42 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "LOYALTY",
+      "module": "LOYALTY",
+      "description": "إضافة 349 نقطة ولاء للمريض زينب عمر برقم هاتف 01091353732"
     }
   ]
 }
