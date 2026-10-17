@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:38:59.871Z",
+  "syncedAt": "2026-10-17T20:39:05.883Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2852,38 +2852,6 @@
               "id": "param-1792269260866-2",
               "result": "1.09",
               "flag": "NORMAL"
-            },
-            {
-              "name": "PTT / APTT",
-              "unit": "Seconds",
-              "minNormal": 26,
-              "maxNormal": 36,
-              "panicHigh": 70,
-              "textReference": "",
-              "id": "param-1792269260866-3",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "Fibrinogen",
-              "unit": "mg/dL",
-              "minNormal": 200,
-              "maxNormal": 400,
-              "textReference": "",
-              "id": "param-1792269260866-4",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "D-Dimer (Quantitative)",
-              "unit": "ng/mL FEU",
-              "minNormal": 0,
-              "maxNormal": 500,
-              "textReference": "< 500 ng/mL FEU",
-              "method": "Immunoturbidimetry",
-              "id": "param-1792269260866-5",
-              "result": "",
-              "flag": ""
             }
           ]
         }
@@ -2909,7 +2877,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:38:53.141Z",
+      "updatedAt": "2026-10-17T20:39:00.218Z",
       "invoiceId": "inv-1791819003027"
     },
     {
