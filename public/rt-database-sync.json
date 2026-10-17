@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:41:50.104Z",
+  "syncedAt": "2026-10-17T20:42:30.066Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2691,7 +2691,7 @@
               "unit": "IU/mL",
               "minNormal": 0,
               "maxNormal": 16,
-              "textReference": "Target Not Detected (< 15 IU/mL)",
+              "textReference": "Target Not Detected (< 16 IU/mL)",
               "flag": "NORMAL",
               "method": "Real-Time RT-PCR Automated Viral Extraction & Amplification"
             }
@@ -2877,11 +2877,11 @@
         "hrLicense": "EGY-HR-44190",
         "showFinancialSignature": true,
         "showHrSignature": true,
-        "hideSignatures": true
+        "hideSignatures": false
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:41:47.603Z",
+      "updatedAt": "2026-10-17T20:42:27.428Z",
       "invoiceId": "inv-1791819003027"
     },
     {
