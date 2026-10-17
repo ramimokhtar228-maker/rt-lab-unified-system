@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:33:44.919Z",
+  "syncedAt": "2026-10-17T20:34:14.804Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2837,6 +2837,27 @@
               "flag": ""
             }
           ]
+        },
+        {
+          "id": "prof-indiv-1792269251426",
+          "profileCode": "INDIVIDUAL",
+          "titleEn": "Individual Diagnostic Investigations",
+          "titleAr": "تحاليل منفردة ومحددة",
+          "category": "Tumor Markers",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "param-1792269251426",
+              "name": "Alpha-Fetoprotein (AFP) (Alpha-Fetoprotein (AFP))",
+              "result": "",
+              "unit": "ng/mL",
+              "minNormal": 0,
+              "maxNormal": 7,
+              "textReference": "< 7.0 ng/mL (Non-pregnant Adults)",
+              "method": "CLIA (Chemiluminescence Immunoassay)",
+              "flag": ""
+            }
+          ]
         }
       ],
       "staff": {
@@ -2860,7 +2881,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:33:42.563Z",
+      "updatedAt": "2026-10-17T20:34:11.426Z",
       "invoiceId": "inv-1791819003027"
     },
     {
