@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:37:48.790Z",
+  "syncedAt": "2026-10-17T20:37:59.539Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2788,7 +2788,8 @@
             }
           ],
           "interpretations": [
-            "Mild transaminitis (Bilirubin elevation), correlation with viral hepatitis serology and abdominal ultrasound is advised."
+            "Mild transaminitis (Bilirubin elevation), correlation with viral hepatitis serology and abdominal ultrasound is advised.",
+            "Liver enzymes and synthetic hepatic markers are within normal reference ranges."
           ]
         },
         {
@@ -2909,7 +2910,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:37:47.020Z",
+      "updatedAt": "2026-10-17T20:37:57.794Z",
       "invoiceId": "inv-1791819003027"
     },
     {
