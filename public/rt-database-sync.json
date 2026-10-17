@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:36:52.661Z",
+  "syncedAt": "2026-10-17T20:36:59.265Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2740,8 +2740,8 @@
               "method": "Jendrassik-Grof",
               "textReference": "",
               "id": "param-1792269222563-3",
-              "result": "1",
-              "flag": "NORMAL"
+              "result": "1.39",
+              "flag": "HIGH"
             },
             {
               "name": "Direct Bilirubin",
@@ -2750,19 +2750,19 @@
               "maxNormal": 0.3,
               "textReference": "",
               "id": "param-1792269222563-4",
-              "result": "",
-              "flag": ""
+              "result": "0.34",
+              "flag": "HIGH"
             },
             {
               "name": "Indirect Bilirubin",
               "unit": "mg/dL",
               "minNormal": 0.1,
               "maxNormal": 0.9,
-              "notes": "Auto-calculated: Total - Direct",
+              "notes": "Calculated: Total Bilirubin - Direct Bilirubin",
               "textReference": "",
               "id": "param-1792269222563-5",
-              "result": "",
-              "flag": ""
+              "result": "1.1",
+              "flag": "HIGH"
             },
             {
               "name": "Total Serum Proteins",
@@ -2949,7 +2949,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:36:49.091Z",
+      "updatedAt": "2026-10-17T20:36:56.753Z",
       "invoiceId": "inv-1791819003027"
     },
     {
