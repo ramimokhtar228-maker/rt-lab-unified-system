@@ -1390,7 +1390,31 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     realtimeSyncManager.broadcastAction('UPDATE_REPORT', newReport);
     realtimeSyncManager.broadcastAction('UPDATE_INVOICE', newInvoice);
 
-    logAction('CREATE', 'DIAGNOSTIC', `تسجيل مريض جديد ${patient.fullName} وحجز تحاليل وربط التقرير بالفاتورة المالية`);
+    // 1. Instant Cloud & Multi-device Sync for newly admitted case
+    const updatedReports = [newReport, ...reports];
+    const updatedInvoices = [newInvoice, ...incomeRecords];
+    const instantSyncPayload = {
+      reports: updatedReports,
+      incomeRecords: updatedInvoices,
+      expenses,
+      loyaltyProfiles,
+      inventory,
+      dailyCloseouts,
+      labInfo,
+      testCatalog,
+      packages
+    };
+    realtimeSyncManager.pushMasterSnapshot(instantSyncPayload).catch(err => {
+      console.warn('Instant Firestore push error:', err);
+    });
+    if (githubConfig.token && githubConfig.autoSync) {
+      pushFullStoreToGitHub(githubConfig, instantSyncPayload).catch(err => {
+        console.warn('Instant GitHub backup push error:', err);
+      });
+      syncInvoiceToDiagnostic(githubConfig, newInvoice).catch(() => {});
+    }
+
+    logAction('CREATE', 'DIAGNOSTIC', `تسجيل مريض جديد ${patient.fullName} وحجز تحاليل وربط التقرير بالفاتورة المالية ومزامنة البيانات سحابياً فوراً`);
     addNotification({
       title: "تم تسجيل المريض بنجاح",
       message: `تم حجز التحاليل للمريض ${patient.fullName} وإصدار فاتورة وإدراج العينة في قائمة عمل المعمل.`,
@@ -1398,7 +1422,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     });
 
     return newReport;
-  }, [currentUser, logAction, addNotification]);
+  }, [currentUser, logAction, addNotification, reports, incomeRecords, expenses, loyaltyProfiles, inventory, dailyCloseouts, labInfo, testCatalog, packages, githubConfig]);
 
   // Loyalty Program Helpers
   const calculateLoyaltyTier = useCallback((points: number): LoyaltyTier => {

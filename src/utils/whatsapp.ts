@@ -46,6 +46,8 @@ export function formatBookingConfirmationWhatsAppMessage(params: {
   testsList?: string;
   testsDetails?: { nameAr: string; nameEn?: string; code?: string; price?: number }[];
   packageName?: string;
+  packagePrice?: number;
+  extraTestsDetails?: { nameAr: string; nameEn?: string; code?: string; price?: number }[];
   subtotal: number;
   discountAmount: number;
   discountLabel: string;
@@ -63,22 +65,36 @@ export function formatBookingConfirmationWhatsAppMessage(params: {
   const whatsappNum = params.customLabInfo?.whatsapp || LAB_WHATSAPP;
   const mapsLink = params.branchGoogleMapsUrl || GOOGLE_MAPS_BRANCH_URL;
 
-  // Format tests list
+  // Format tests list: English abbreviations ONLY; For packages: package name and price ONLY without contents
   let testsBlock = '';
   if (params.packageName) {
-    testsBlock += `🎁 *الباقة المختارة:* ${params.packageName}\n`;
-  }
-  if (params.testsDetails && params.testsDetails.length > 0) {
-    const items = params.testsDetails.map((t, idx) => {
-      const priceText = t.price !== undefined ? ` (${t.price} ج.م)` : '';
-      const en = t.nameEn ? ` — ${t.nameEn}` : '';
-      return `  ${idx + 1}. *${t.nameAr}*${en}${priceText}`;
-    }).join('\n');
-    testsBlock += items;
-  } else if (params.testsList) {
-    testsBlock += params.testsList;
+    const pkgPrice = params.packagePrice !== undefined ? params.packagePrice : params.subtotal;
+    testsBlock += `🎁 *الباقة المختارة:* ${params.packageName} (${pkgPrice} ج.م)\n`;
+
+    // If extra individual tests were added on top of the package (outside package contents):
+    if (params.extraTestsDetails && params.extraTestsDetails.length > 0) {
+      testsBlock += `🧪 *تحاليل إضافية (اختصارات بالإنجليزية):*\n`;
+      const extras = params.extraTestsDetails.map(t => {
+        const abbrev = (t.code || t.nameEn || t.nameAr).trim();
+        return `  • *${abbrev}*`;
+      }).join('\n');
+      testsBlock += extras;
+    }
   } else {
-    testsBlock += '  • الفحوصات الطبية المحددة بملف المريض';
+    // Individual tests: English abbreviations ONLY
+    if (params.testsDetails && params.testsDetails.length > 0) {
+      const items = params.testsDetails.map(t => {
+        const abbrev = (t.code || t.nameEn || t.nameAr).trim();
+        return `  • *${abbrev}*`;
+      }).join('\n');
+      testsBlock += items;
+    } else if (params.testsList) {
+      // Clean string tests to bullet abbreviations
+      const lines = params.testsList.split('\n').map(l => l.trim()).filter(Boolean);
+      testsBlock += lines.map(l => l.startsWith('•') ? l : `  • *${l}*`).join('\n');
+    } else {
+      testsBlock += '  • *CBC*, *FBS*, *Routine Labs*';
+    }
   }
 
   // Location details
@@ -122,7 +138,7 @@ ${params.barcode ? `• *باركود العينة:* ${params.barcode}\n` : ''}�
 • *وقت الموعد:* ${params.time}
 ${locBlock}
 
-🧪 *الفحوصات والتحاليل المطلوبة:*
+🧪 *الفحوصات المطلوبة (اختصارات بالإنجليزية):*
 ${testsBlock}
 
 💳 *البيان المالي والفوترة:*

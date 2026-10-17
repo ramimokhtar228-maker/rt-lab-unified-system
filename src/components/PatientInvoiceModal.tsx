@@ -20,6 +20,7 @@ import {
   Percent
 } from 'lucide-react';
 import { formatWhatsAppMessage, openWhatsApp } from '../utils/whatsapp';
+import { useApp } from '../context/AppContext';
 
 interface PatientInvoiceModalProps {
   isOpen: boolean;
@@ -39,20 +40,24 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
 
   if (!isOpen || !report) return null;
 
-  // Load dynamic lab info and contact details
-  const labInfo = (() => {
+  // Load dynamic lab info and real contact details from context or storage
+  const { labInfo: contextLabInfo } = useApp();
+  const labInfo = contextLabInfo || (() => {
     try {
       const saved = localStorage.getItem('rt_lab_info_v2');
       if (saved) return JSON.parse(saved);
     } catch {}
     return {
       labNameAr: "معامل RT للتحاليل الطبية والتشخيصية",
-      hotline: "01012345678",
-      phone: "0244667788",
-      whatsapp: "01012345678",
-      mainAddress: "ميدان بهتيم برج صيدليه العزبى الدور الثالث امام الأسانسير شبرا الخيمه"
+      hotline: "01100874444",
+      phone: "01100874444",
+      whatsapp: "01100874444",
+      mainAddress: "ميدان بهتيم — برج صيدلية العزبي — الدور الثالث (أمام الأسانسير) — شبرا الخيمة"
     };
   })();
+  const contactPhone = labInfo.phone || labInfo.hotline || "01100874444";
+  const contactWhatsapp = labInfo.whatsapp || "01100874444";
+  const mainAddressDisplay = labInfo.mainAddress || "ميدان بهتيم — برج صيدلية العزبي — الدور الثالث — شبرا الخيمة";
 
   const p = report.patient;
   const invoiceNumber = p.clinicalHistory?.match(/فاتورة\s*(?:مالية)?\s*رقم\s*([\w\d-]+)/i)?.[1] 
@@ -293,7 +298,7 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
           <h1 style="margin: 0; font-size: 19px; font-weight: 900; color: #800000;">معامل RT للتحاليل التشخيصية</h1>
           <h2 style="margin: 2px 0 0 0; font-size: 13px; font-weight: 700; color: #0f172a;">معامل د. رامي مختار</h2>
           <p style="margin: 2px 0 0 0; font-size: 11px; font-weight: 600; color: #800000;">أطباء الباثولوجيا الإكلينيكية والكيميائية - طب قصر العيني</p>
-          <p style="margin: 2px 0 0 0; font-size: 10px; color: #64748b;">المقر الرئيسي: ${labInfo.mainAddress} | الخط الساخن: ${labInfo.hotline}</p>
+          <p style="margin: 2px 0 0 0; font-size: 10px; color: #64748b;">المقر الرئيسي: ${mainAddressDisplay} | تليفون المعمل والخط الساخن: ${contactPhone} | خدمة واتساب: ${contactWhatsapp}</p>
         </div>
 
         <div style="text-align: center; padding: 0 16px;">
@@ -452,7 +457,7 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
       </div>
 
       <div style="text-align: center; font-size: 9px; color: #94a3b8; margin-top: 10px; padding-top: 4px; border-top: 1px solid #f1f5f9;">
-        فاتورة إلكترونية معتمدة صادرة آلياً من منظومة RT LAB للتشخيص الطبي | تليفون الشكاوى والمقترحات: ${labInfo.hotline}
+        فاتورة إلكترونية معتمدة صادرة آلياً من منظومة RT LAB للتشخيص الطبي | تليفون المعمل: ${contactPhone} | خدمة عملاء واتساب: ${contactWhatsapp}
       </div>
     </div>
   </div>
@@ -546,8 +551,9 @@ ${discount > 0 ? `- الخصم: ${discount} ج.م\n` : ''}- الصافي الم�
 - المسدد نقداً: ${paidAmount} ج.م
 - المتبقي: ${remainingAmount > 0 ? `${remainingAmount} ج.م` : 'مسدد بالكامل ✓'}
 
-📞 الخط الساخن: ${labInfo.hotline}
-فروعنا: القاهرة (قصر العيني والمنيل) - الجيزة (الدقي) - الإسكندرية (سموحة)
+📞 الخط الساخن وهاتف المعمل: ${contactPhone}
+💬 خدمة عملاء واتساب: ${contactWhatsapp}
+📍 العنوان: ${mainAddressDisplay}
 نتمنى لكم دوام الصحة والعافية!`;
 
     openWhatsApp(p.phone, text);
@@ -688,7 +694,7 @@ ${discount > 0 ? `- الخصم: ${discount} ج.م\n` : ''}- الصافي الم�
                   <h1 className="text-lg font-black text-rose-950">معامل RT للتحاليل التشخيصية</h1>
                   <h2 className="text-xs font-bold text-slate-900">معامل د. رامي مختار</h2>
                   <p className="text-[11px] font-semibold text-rose-900">أطباء الباثولوجيا الإكلينيكية والكيميائية - طب قصر العيني</p>
-                  <p className="text-[10px] text-slate-500">الخط الساخن: ${labInfo.hotline} | القاهرة · الجيزة · الإسكندرية</p>
+                  <p className="text-[10px] text-slate-500">هاتف المعمل والخط الساخن: <strong className="font-mono text-slate-700">{contactPhone}</strong> | واتساب: <strong className="font-mono text-slate-700">{contactWhatsapp}</strong></p>
                 </div>
 
                 <div className="text-center px-4">
@@ -859,7 +865,7 @@ ${discount > 0 ? `- الخصم: ${discount} ج.م\n` : ''}- الصافي الم�
               </div>
 
               <div className="text-center text-[9px] text-slate-400 mt-4 pt-2 border-t border-slate-100">
-                فاتورة فحص إلكترونية معتمدة - معامل RT للتحاليل التشخيصية · الخط الساخن: ${labInfo.hotline}
+                فاتورة فحص إلكترونية معتمدة - معامل RT للتحاليل التشخيصية · هاتف: {contactPhone} · واتساب: {contactWhatsapp}
               </div>
             </div>
           </div>

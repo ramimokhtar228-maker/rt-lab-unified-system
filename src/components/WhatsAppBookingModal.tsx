@@ -43,6 +43,8 @@ export interface WhatsAppBookingModalProps {
     testsDetails?: { nameAr: string; nameEn?: string; code?: string; price?: number }[];
     testsList?: string;
     packageName?: string;
+    packagePrice?: number;
+    extraTestsDetails?: { nameAr: string; nameEn?: string; code?: string; price?: number }[];
     subtotal: number;
     discountAmount: number;
     discountLabel: string;
@@ -93,6 +95,8 @@ export const WhatsAppBookingModal: React.FC<WhatsAppBookingModalProps> = ({
         testsDetails: bookingData.testsDetails,
         testsList: bookingData.testsList || '',
         packageName: bookingData.packageName,
+        packagePrice: bookingData.packagePrice,
+        extraTestsDetails: bookingData.extraTestsDetails,
         subtotal: bookingData.subtotal,
         discountAmount: bookingData.discountAmount,
         discountLabel: bookingData.discountLabel,
@@ -134,6 +138,8 @@ export const WhatsAppBookingModal: React.FC<WhatsAppBookingModalProps> = ({
       testsDetails: bookingData.testsDetails,
       testsList: bookingData.testsList || '',
       packageName: bookingData.packageName,
+      packagePrice: bookingData.packagePrice,
+      extraTestsDetails: bookingData.extraTestsDetails,
       subtotal: bookingData.subtotal,
       discountAmount: bookingData.discountAmount,
       discountLabel: bookingData.discountLabel,

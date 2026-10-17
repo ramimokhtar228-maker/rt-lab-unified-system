@@ -1007,7 +1007,7 @@ function pageHtml(report: LabReport, profile: TestProfile, idx: number, total: n
     ? `<div class="rt-rec">
         <h4>Recommended Follow-up Investigations</h4>
         <div class="rt-rec-tags">
-          ${recommendedTests.map(t => `<span class="rt-rec-badge">${esc(latin(t))}</span>`).join('')}
+          ${recommendedTests.map(t => { const clean = t.replace(/\s*\([\u0600-\u06FF\s-]+\)/g, '').trim(); return `<span class="rt-rec-badge">${esc(clean || t)}</span>`; }).join('')}
         </div>
         <div class="rt-rec-disclaimer">Suggested according to analytical profiles. Please correlate clinically with treating physician.</div>
       </div>`

@@ -209,6 +209,13 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
         price: t.price
       })),
       packageName: selectedPackage?.titleAr,
+      packagePrice: selectedPackage?.packagePrice,
+      extraTestsDetails: selectedPackage ? extraItems.map(t => ({
+        nameAr: t.nameAr,
+        nameEn: t.nameEn,
+        code: t.code,
+        price: t.price
+      })) : undefined,
       subtotal: testsSubtotal,
       discountAmount: totalDiscount,
       discountLabel,

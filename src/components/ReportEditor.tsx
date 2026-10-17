@@ -84,28 +84,218 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
   const [isIllustrationsModalOpen, setIsIllustrationsModalOpen] = useState(false);
   const [profileForIllustration, setProfileForIllustration] = useState<string>('');
   const [manualRecommendInput, setManualRecommendInput] = useState<string>('');
+  const [investigationFilter, setInvestigationFilter] = useState<string>('');
 
-  // Curated Catalog for Follow-up Investigations
+  // Curated Comprehensive Catalog for Follow-up Investigations (14 Clinical Categories & 150+ Specialized Tests)
   const RECOMMENDED_INVESTIGATIONS_CATALOG = [
     {
-      category: 'Immunology & Autoimmune (المناعة والأجسام المضادة)',
-      tests: ['ANA (Antinuclear Antibodies IFA)', 'Anti-dsDNA', 'Rheumatoid Factor (RF Quantitative)', 'Anti-CCP', 'Total IgE', 'C3 & C4 Complement', 'Anti-TPO Antibodies', 'Anti-Thyroglobulin', 'CRP (High Sensitivity Quantitative)', 'ESR (Erythrocyte Sedimentation Rate)']
+      category: 'Immunology & Autoimmune (المناعة والأمراض الروماتيزمية)',
+      tests: [
+        'ANA (Antinuclear Antibodies IFA)',
+        'Anti-dsDNA (Double-Stranded DNA Quantitative)',
+        'Rheumatoid Factor (RF Quantitative)',
+        'Anti-CCP (Cyclic Citrullinated Peptide)',
+        'Anti-Cardiolipin Antibodies (IgG & IgM)',
+        'Lupus Anticoagulant (LA1 / LA2 Screen & Confirm)',
+        'Anti-Neutrophil Cytoplasmic Abs (p-ANCA & c-ANCA)',
+        'Anti-ENA Profile (Sm, RNP, SSA, SSB, Scl-70, Jo-1)',
+        'Complement Components C3 & C4',
+        'Total Serum IgE (Quantitative)',
+        'ASOT (Anti-Streptolysin O Titre Quantitative)',
+        'HLA-B27 Antigen Detection',
+        'High-Sensitivity CRP (hs-CRP Quantitative)',
+        'ESR (Erythrocyte Sedimentation Rate)'
+      ]
     },
     {
-      category: 'Hematology & Anemia (أمراض الدم والأنيميا)',
-      tests: ['Serum Ferritin', 'Serum Iron & TIBC', 'Complete Blood Count (CBC)', 'Reticulocyte Count', 'Hemoglobin Electrophoresis', 'Vitamin B12', 'Serum Folate', 'Peripheral Blood Smear Examination', 'Coombs Test (Direct DAT)', 'G6PD Quantitative Assay']
+      category: 'Cardiology & Cardiac Markers (القلب والأوعية الدموية وتجلط الدم)',
+      tests: [
+        'High-Sensitivity Troponin I (hs-cTnI Quantitative)',
+        'High-Sensitivity Troponin T (hs-cTnT Quantitative)',
+        'CK-MB (Creatine Kinase-MB Mass / Activity)',
+        'Total CPK / Creatine Kinase',
+        'NT-proBNP / BNP (Brain Natriuretic Peptide)',
+        'D-Dimer Quantitative Assay',
+        'Myoglobin Quantitative',
+        'Plasma Homocysteine',
+        'Lipoprotein-Associated Phospholipase A2 (Lp-PLA2)'
+      ]
     },
     {
-      category: 'Biochemistry & Metabolic (الكيمياء والتمثيل الغذائي)',
-      tests: ['HbA1c Glycated Hemoglobin', 'Lipid Profile (Chol, HDL, LDL, Trig)', 'Liver Function Panel (ALT, AST, Bilirubin, Albumin)', 'Kidney Function Panel (Creatinine, Urea, eGFR, Uric Acid)', 'Serum Electrolytes (Na, K, Cl)', 'Microalbumin / Creatinine Ratio', '24-Hour Urinary Protein', 'Cardiac Troponin I', 'Serum Amylase & Lipase']
+      category: 'Diabetes, Glycemic & Metabolic (السكر ومقاومة الإنسولين)',
+      tests: [
+        'HbA1c Glycated Hemoglobin (NGSP / IFCC Certified)',
+        'Fasting Blood Sugar (FBS / Glucose)',
+        '2-Hour Postprandial Blood Sugar (2HPP)',
+        'Fasting Serum Insulin (Quantitative)',
+        'HOMA-IR (Insulin Resistance Index)',
+        'Serum C-Peptide (Fasting & Postprandial)',
+        'Anti-GAD 65 Antibodies',
+        'Anti-Islet Cell Antibodies (ICA)',
+        'Oral Glucose Tolerance Test (OGTT 75g)'
+      ]
     },
     {
-      category: 'Endocrinology & Hormones (الغدد والهرمونات)',
-      tests: ['TSH (Thyroid Stimulating Hormone)', 'Free T3', 'Free T4', 'Fasting Insulin & HOMA-IR', 'Vitamin D (25-OH)', 'Serum Morning Cortisol', 'Total & Free Testosterone', 'Serum Prolactin', 'Beta-hCG Quantitative']
+      category: 'Lipid Profile & Atherosclerosis Risk (الدهون ومخاطر الشرايين)',
+      tests: [
+        'Complete Lipid Profile (Total Chol, HDL, LDL, Trig, VLDL)',
+        'Direct LDL-Cholesterol',
+        'Apolipoprotein A1 (Apo-A1)',
+        'Apolipoprotein B (Apo-B)',
+        'Lipoprotein(a) / Lp(a) Quantitative',
+        'Non-HDL Cholesterol Index'
+      ]
     },
     {
-      category: 'Microbiology & Serology (الميكروبيولوجي والمزارع)',
-      tests: ['Urine Culture & Sensitivity', 'Stool Analysis & Occult Blood', 'H. Pylori Antigen (Stool)', 'Viral Hepatitis Screening (HBsAg, HCV Ab)', 'Blood Culture & Sensitivity']
+      category: 'Endocrinology & Thyroid Function (الغدة الدرقية والتمثيل الغذائي)',
+      tests: [
+        'TSH (Thyroid Stimulating Hormone 3rd Gen Ultrasensitive)',
+        'Free T3 (Free Triiodothyronine)',
+        'Free T4 (Free Thyroxine)',
+        'Total T3 & Total T4',
+        'Anti-TPO (Thyroid Peroxidase Antibodies)',
+        'Anti-Thyroglobulin Antibodies (Anti-TG)',
+        'Serum Thyroglobulin (TG Marker)',
+        'PTH (Intact Parathyroid Hormone Quantitative)',
+        'Serum Morning Cortisol (8:00 AM)',
+        'Serum Evening Cortisol (4:00 PM / Midnight)',
+        'Plasma ACTH (Adrenocorticotropic Hormone)'
+      ]
+    },
+    {
+      category: 'Reproductive Endocrinology & Fertility (الهرمونات التناسلية والخصوبة)',
+      tests: [
+        'Serum Prolactin (Ultrasensitive Quantitative)',
+        'FSH (Follicle Stimulating Hormone)',
+        'LH (Luteinizing Hormone)',
+        'Total Serum Testosterone',
+        'Free Testosterone (Bioavailable)',
+        'DHEA-S (Dehydroepiandrosterone Sulfate)',
+        'Serum Estradiol (E2)',
+        'Serum Progesterone (Day 21 Luteal Phase)',
+        'AMH (Anti-Müllerian Hormone Ovarian Reserve)',
+        '17-Hydroxyprogesterone (17-OHP)',
+        'Total Beta-hCG (Quantitative Tumor & Pregnancy)',
+        'Semen Fluid Analysis (Manual & CASA WHO 6th)'
+      ]
+    },
+    {
+      category: 'Tumor Markers & Oncology Screening (دلالات الأورام والمسح السرطاني)',
+      tests: [
+        'Total PSA (Prostate Specific Antigen)',
+        'Free PSA & Free/Total PSA Ratio',
+        'CEA (Carcinoembryonic Antigen GI / Colon)',
+        'CA 19-9 (Pancreatic & Biliary Tumor Marker)',
+        'CA 125 (Ovarian Epithelial Tumor Marker)',
+        'CA 15-3 (Breast Carcinoma Marker)',
+        'Alpha-Fetoprotein (AFP Hepatocellular & Germ Cell)',
+        'Beta-2 Microglobulin (Serum & Urine)',
+        'Serum Calcitonin (Medullary Thyroid Carcinoma)',
+        'Serum Free Light Chains (Free Kappa & Lambda)'
+      ]
+    },
+    {
+      category: 'Hematology, Anemia & Coagulation (أمراض الدم، الأنيميا وسيولة التجلط)',
+      tests: [
+        'Complete Blood Count (CBC with 5-Part Differential)',
+        'Peripheral Blood Smear Examination (Morphology)',
+        'Serum Ferritin (Iron Stores Quantitative)',
+        'Serum Iron & Total Iron Binding Capacity (TIBC)',
+        'Transferrin Saturation Index (%)',
+        'Reticulocyte Count (Absolute & Percentage)',
+        'Hemoglobin Electrophoresis (HPLC Method)',
+        'Vitamin B12 (Active Cyanocobalamin)',
+        'Serum Folate & Red Blood Cell (RBC) Folate',
+        'Direct Antiglobulin Test (Direct Coombs DAT)',
+        'Indirect Antiglobulin Test (Indirect Coombs IAT)',
+        'G6PD Quantitative Enzyme Assay (Favism)',
+        'Prothrombin Time (PT) & INR',
+        'Activated Partial Thromboplastin Time (APTT)',
+        'Plasma Fibrinogen (Clauss Method)',
+        'Protein C & Protein S Functional Activity',
+        'Antithrombin III (AT-III Activity)'
+      ]
+    },
+    {
+      category: 'Hepatology, Liver & Gastrointestinal (الكبد، المرارة والجهاز الهضمي)',
+      tests: [
+        'Liver Function Panel (ALT, AST, Bilirubin, Albumin, Total Protein, ALP)',
+        'ALT / SGPT (Serum Alanine Aminotransferase)',
+        'AST / SGOT (Serum Aspartate Aminotransferase)',
+        'Total Bilirubin & Direct (Conjugated) Bilirubin',
+        'Alkaline Phosphatase (ALP) & Bone Isoenzyme',
+        'Gamma-Glutamyl Transferase (GGT)',
+        'Serum Amylase & Lipase',
+        'Stool Calprotectin (Quantitative IBD Marker)',
+        'Fecal Occult Blood Test (iFOBT / FIT)',
+        'H. Pylori Antigen (Stool Monoclonal Assay)',
+        'Stool Routine Examination & Parasitology'
+      ]
+    },
+    {
+      category: 'Nephrology, Renal & Electrolytes (الكلى، الأملاح، وصحة المسالك)',
+      tests: [
+        'Kidney Function Panel (Creatinine, Urea, BUN, Uric Acid, eGFR)',
+        'Serum Creatinine (Enzymatic Cleared)',
+        'Blood Urea Nitrogen (BUN)',
+        'Serum Uric Acid (Gout & Renal Risk)',
+        'Estimated Glomerular Filtration Rate (eGFR CKD-EPI)',
+        'Serum Electrolytes Panel (Na+, K+, Cl-, HCO3-)',
+        'Serum Calcium (Total & Ionized)',
+        'Serum Inorganic Phosphorus',
+        'Serum Magnesium',
+        'Urinary Albumin / Creatinine Ratio (UACR Spot)',
+        '24-Hour Urine Protein & Creatinine Clearance',
+        'Complete Routine Urine Analysis (Physical & Microscopic)',
+        'Urine Culture & Antimicrobial Sensitivity (Quantitative)'
+      ]
+    },
+    {
+      category: 'Vitamins, Minerals & Bone Health (الفيتامينات، المعادن وصحة العظام)',
+      tests: [
+        '25-Hydroxy Vitamin D (Total 25-OH D2 + D3)',
+        'Vitamin B12 (Active Cobalamin)',
+        'Serum Zinc & Copper (Trace Elements)',
+        'Serum Osteocalcin (Bone Turnover)',
+        'Beta-CrossLaps (Serum CTx Bone Resorption)'
+      ]
+    },
+    {
+      category: 'Infectious Diseases & Viral Serology (الأمراض المعدية والفيروسات)',
+      tests: [
+        'HBsAg (Hepatitis B Surface Antigen Chemiluminescence)',
+        'Anti-HBs (Hepatitis B Surface Antibody Quantitative Titre)',
+        'HCV Ab (Hepatitis C Virus Antibody 4th Gen)',
+        'HIV 1/2 Combo Antigen/Antibody (4th Gen)',
+        'Syphilis Screening (VDRL / RPR / TPHA Confirmatory)',
+        'Widal Agglutination Test (Typhoid Fever)',
+        'Brucella Standard Tube Agglutination (Abortus & Melitensis)',
+        'Epstein-Barr Virus (EBV VCA IgM & IgG)',
+        'Cytomegalovirus (CMV IgG & IgM)',
+        'Toxoplasma Gondii Antibodies (IgG, IgM & Avidity)',
+        'Rubella Antibodies (IgG & IgM)'
+      ]
+    },
+    {
+      category: 'Microbiology & Cultures (المزارع البكتيرية والفحص الميكروبي)',
+      tests: [
+        'Urine Culture & Sensitivity (CFU/mL & MIC Antibiogram)',
+        'Blood Culture & Sensitivity (Bact/ALERT Automated)',
+        'Sputum Culture & Acid-Fast Bacilli (AFB Stain)',
+        'Throat Swab Culture & Sensitivity',
+        'Wound / Pus Swab Culture & Sensitivity'
+      ]
+    },
+    {
+      category: 'Molecular Biology & Genetic PCR (البيولوجيا الجزيئية وفحوصات PCR)',
+      tests: [
+        'HCV RNA Quantitative by Real-Time PCR (Viral Load IU/mL)',
+        'HBV DNA Quantitative by Real-Time PCR (Viral Load IU/mL)',
+        'Factor V Leiden (G1691A Mutation Analysis)',
+        'Prothrombin G20210A Mutation Analysis',
+        'MTHFR (C677T & A1298C Thrombophilia Gene Mutation)',
+        'JAK2 V617F Quantitative Mutation (Myeloproliferative)'
+      ]
     }
   ];
 
@@ -1781,13 +1971,77 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                       </button>
                     </div>
 
+                    {/* Comprehensive Searchable Dropdown & Selector (سرد واختيار من قائمة منسدلة مصنفة) */}
+                    <div className="bg-white rounded-xl p-3 border border-emerald-200/80 shadow-xs space-y-2.5">
+                      <div className="grid grid-cols-1 sm:grid-cols-12 gap-2 items-center">
+                        <div className="sm:col-span-7">
+                          <label className="text-[10px] font-extrabold text-emerald-950 mb-1 flex items-center gap-1">
+                            <span>📋 قائمة سرد واختيار الفحوصات المقترحة (150+ فحص تشخيصي مصنف):</span>
+                          </label>
+                          <select
+                            onChange={(e) => {
+                              if (e.target.value) {
+                                handleToggleRecommendedTest(currentProfile.id, e.target.value);
+                                e.target.value = '';
+                              }
+                            }}
+                            className="w-full text-xs font-semibold bg-emerald-50/50 border border-emerald-300 rounded-lg p-2 text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer"
+                            defaultValue=""
+                          >
+                            <option value="" disabled>-- اضغط لاختيار فحص مقترح من القائمة الشاملة --</option>
+                            {RECOMMENDED_INVESTIGATIONS_CATALOG.map((group, gIdx) => (
+                              <optgroup key={gIdx} label={group.category}>
+                                {group.tests.map((testName, tIdx) => (
+                                  <option key={tIdx} value={testName}>
+                                    {currentRecs.includes(testName) ? `✓ [مضاف حالياً] ${testName}` : `+ ${testName}`}
+                                  </option>
+                                ))}
+                              </optgroup>
+                            ))}
+                          </select>
+                        </div>
+
+                        <div className="sm:col-span-5">
+                          <label className="text-[10px] font-extrabold text-slate-700 mb-1 block">
+                            🔍 بحث سريع داخل الفحوصات المقترحة:
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="اكتب اسم الفحص (مثال: Troponin, TSH, Ferritin)..."
+                            value={investigationFilter}
+                            onChange={(e) => setInvestigationFilter(e.target.value)}
+                            className="w-full text-xs px-2.5 py-2 rounded-lg border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
                     {/* Categorized Test Selector Pills */}
                     <div className="space-y-2 pt-1 border-t border-slate-200">
-                      <span className="text-[10px] font-bold text-slate-500 block">
-                        اختر تحاليل مقترحة من الكتالوج الطبي والمناعي المعتمد:
-                      </span>
-                      <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
-                        {RECOMMENDED_INVESTIGATIONS_CATALOG.map((group, gIdx) => (
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-bold text-slate-500 block">
+                          تصفح واختيار الفحوصات المقترحة بالبطاقات السريعة:
+                        </span>
+                        {investigationFilter && (
+                          <button
+                            type="button"
+                            onClick={() => setInvestigationFilter('')}
+                            className="text-[10px] font-bold text-rose-600 hover:underline cursor-pointer"
+                          >
+                            إلغاء التصفية
+                          </button>
+                        )}
+                      </div>
+                      <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
+                        {RECOMMENDED_INVESTIGATIONS_CATALOG
+                          .map(group => ({
+                            ...group,
+                            tests: investigationFilter.trim()
+                              ? group.tests.filter(t => t.toLowerCase().includes(investigationFilter.trim().toLowerCase()) || group.category.toLowerCase().includes(investigationFilter.trim().toLowerCase()))
+                              : group.tests
+                          }))
+                          .filter(group => group.tests.length > 0)
+                          .map((group, gIdx) => (
                           <div key={gIdx} className="space-y-1">
                             <span className="text-[10px] font-extrabold text-slate-700 block">{group.category}</span>
                             <div className="flex flex-wrap gap-1">
