@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T19:55:08.257Z",
+  "syncedAt": "2026-10-17T19:55:16.534Z",
   "reports": [
     {
       "id": "rep-1792266746907",
@@ -50,7 +50,8 @@
             }
           ],
           "recommendedTests": [
-            "CBC"
+            "CBC",
+            "CRP"
           ]
         }
       ],
@@ -75,7 +76,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-17T19:52:26.910Z",
-      "updatedAt": "2026-10-17T19:55:05.965Z",
+      "updatedAt": "2026-10-17T19:55:14.841Z",
       "invoiceId": "inv-1792266746910"
     },
     {
