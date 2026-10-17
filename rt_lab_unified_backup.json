@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-16T15:39:35.578Z",
+  "timestamp": "2026-10-17T07:01:10.073Z",
   "reportsCount": 46,
   "incomeCount": 31,
-  "loyaltyProfilesCount": 3,
+  "loyaltyProfilesCount": 27,
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -896,130 +896,6 @@
           }
         },
         {
-          "id": "prof-1792066884186-0zdm",
-          "profileCode": "LFT",
-          "titleEn": "Liver Function Profile (LFT)",
-          "titleAr": "وظائف الكبد والإنزيمات الشاملة",
-          "category": "Clinical Chemistry & Hepatology",
-          "sampleType": "Serum (مصل الدم)",
-          "interpretation": "Liver enzymes and synthetic hepatic markers are within normal reference ranges.",
-          "attachedIllustration": {
-            "id": "hep-viral",
-            "code": "HEP_VIRAL_HEPATITIS",
-            "titleAr": "التهاب الكبد الفيروسي الحاد والمزمن (Viral Hepatitis B & C)",
-            "titleEn": "Acute & Chronic Viral Hepatitis",
-            "category": "hepatic",
-            "imageUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgMTgwIiB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCI+CiAgICA8cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgcng9IjE0IiBmaWxsPSIjMDkwZDE2Ii8+CiAgICA8Y2lyY2xlIGN4PSIxNjAiIGN5PSI5MCIgcj0iNzYiIGZpbGw9IiMwYjEzMjkiIHN0cm9rZT0iIzA2NWY0NiIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMzNGQzOTkiIGZvbnQtc2l6ZT0iMTAuNSIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1mYW1pbHk9IidDYWlybycsIHN5c3RlbS11aSwgLWFwcGxlLXN5c3RlbSwgc2Fucy1zZXJpZiI+QUNVVEUgVklSQUwgSEVQQVRJVElTIChIQlYgLyBIQ1YpPC90ZXh0PgogICAgPGNpcmNsZSBjeD0iMTYwIiBjeT0iODUiIHI9IjQwIiBmaWxsPSIjMDY1ZjQ2IiBzdHJva2U9IiMzNGQzOTkiIHN0cm9rZS13aWR0aD0iMi41Ii8+CiAgICAgIDxjaXJjbGUgY3g9IjE2MCIgY3k9Ijg1IiByPSIyOCIgZmlsbD0iIzAyMmMyMiIvPgogICAgICA8dGV4dCB4PSIxNjAiIHk9IjgyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjYTdmM2QwIiBmb250LXNpemU9IjExIiBmb250LXdlaWdodD0iYm9sZCI+QUxUICZndDsmZ3Q7IDUwMDwvdGV4dD4KICAgICAgPHRleHQgeD0iMTYwIiB5PSI5OCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzZlZTdiNyIgZm9udC1zaXplPSI5IiBmb250LXdlaWdodD0iYm9sZCI+QVNUICZndDsmZ3Q7IDQwMDwvdGV4dD4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMTcwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTRhM2I4IiBmb250LXNpemU9IjkiIGZvbnQtZmFtaWx5PSInQ2Fpcm8nLCBzeXN0ZW0tdWksIC1hcHBsZS1zeXN0ZW0sIHNhbnMtc2VyaWYiPk1hc3NpdmUgSGVwYXRvY3l0ZSBDeXRvbHlzaXM6IE1hcmtlZCBBTFQgJiBBU1QgRWxldmF0aW9uPC90ZXh0PgogIDwvc3ZnPg==",
-            "pathologySummaryAr": "أذية والتهاب النسيج الكبدي بفعل الفيروسات الكبدية (B أو C) مما يتسبب في تحرر مكثف لإنزيمات الكبد السيتوبلازمية (ALT و AST بمئات أو آلاف الوحدات) مع اليرقان."
-          },
-          "parameters": [
-            {
-              "name": "Prothrombin Time & INR (Prothrombin Time & INR)",
-              "unit": "Seconds / Ratio",
-              "minNormal": 11,
-              "maxNormal": 14,
-              "method": "Optical Clotting Detection Analyzer",
-              "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)",
-              "id": "param-1792066884186-0",
-              "result": "13",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
-              "unit": "U/L",
-              "minNormal": 0,
-              "maxNormal": 40,
-              "method": "IFCC Kinetic UV",
-              "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
-              "id": "param-1792066884186-1",
-              "result": "26",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Alkaline Phosphatase (ALP) (Alkaline Phosphatase (ALP))",
-              "unit": "U/L",
-              "textReference": "Adults: 40 - 130 U/L (Higher during childhood growth & pregnancy)",
-              "id": "param-1792066884186-2",
-              "result": "103",
-              "flag": "NORMAL",
-              "minNormal": 40,
-              "maxNormal": 130,
-              "method": "p-NPP Kinetic DEA buffer"
-            },
-            {
-              "name": "G.G.T",
-              "unit": "U/L",
-              "minNormal": 9,
-              "maxNormal": 48,
-              "textReference": "",
-              "id": "param-1792066884187-10",
-              "result": "21",
-              "flag": "NORMAL"
-            }
-          ],
-          "interpretations": [
-            "Liver enzymes and synthetic hepatic markers are within normal reference ranges."
-          ]
-        },
-        {
-          "id": "prof-1792066910604-ijue",
-          "profileCode": "RFT",
-          "titleEn": "Renal Function Profile (RFT / KFT)",
-          "titleAr": "وظائف الكلى والأملاح البولية",
-          "category": "Clinical Chemistry & Nephrology",
-          "sampleType": "Serum / Urine",
-          "interpretation": "Serum Creatinine, Urea, Uric Acid, and eGFR reflect glomerular filtration rate and nitrogenous waste clearance.",
-          "parameters": [
-            {
-              "name": "Serum Creatinine (Serum Creatinine)",
-              "unit": "mg/dL",
-              "minNormal": 0.6,
-              "maxNormal": 1.4,
-              "panicHigh": 4,
-              "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
-              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
-              "id": "param-1792066910604-0",
-              "result": "0.71",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Blood Urea (Blood Urea)",
-              "unit": "mg/dL",
-              "minNormal": 15,
-              "maxNormal": 45,
-              "panicHigh": 120,
-              "method": "Urease / GLDH Enzymatic Kinetic",
-              "textReference": "15 - 45 mg/dL",
-              "id": "param-1792066910604-1",
-              "result": "18",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Blood Urea (Blood Urea)",
-              "unit": "mg/dL",
-              "minNormal": 15,
-              "maxNormal": 45,
-              "textReference": "15 - 45 mg/dL",
-              "id": "param-1792066910604-2",
-              "result": "8.41",
-              "flag": "NORMAL",
-              "method": "Urease / GLDH Enzymatic Kinetic"
-            },
-            {
-              "name": "Serum Creatinine (Serum Creatinine)",
-              "unit": "mg/dL",
-              "minNormal": 0.6,
-              "maxNormal": 1.4,
-              "notes": "Normal: 10 - 20",
-              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
-              "id": "param-1792066910604-3",
-              "result": "11.8",
-              "flag": "NORMAL",
-              "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)"
-            }
-          ]
-        },
-        {
           "id": "prof-1792066933779-itzk",
           "profileCode": "IRON_PROFILE",
           "titleEn": "Iron Status & Ferritin Workup",
@@ -1052,6 +928,115 @@
               "textReference": "Adult Males: 30 - 400 ng/mL | Adult Females: 15 - 150 ng/mL"
             }
           ]
+        },
+        {
+          "id": "prof-1792165765207-10hc",
+          "profileCode": "KFT",
+          "titleEn": "Kidney Function Profile",
+          "titleAr": "Kidney Function Profile",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum",
+          "interpretation": "Renal biomarkers indicate adequate glomerular filtration and nitrogenous clearance.",
+          "parameters": [
+            {
+              "name": "Serum Creatinine",
+              "unit": "mg/dL",
+              "minNormal": 0.6,
+              "maxNormal": 1.2,
+              "panicHigh": 4,
+              "method": "Enzymatic / Jaffe Kinetic",
+              "textReference": "",
+              "id": "param-1792165765208-0",
+              "result": "0.88",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Blood Urea",
+              "unit": "mg/dL",
+              "minNormal": 15,
+              "maxNormal": 45,
+              "panicHigh": 120,
+              "method": "Urease-GLDH",
+              "textReference": "",
+              "id": "param-1792165765208-1",
+              "result": "18",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Blood Urea Nitrogen (BUN)",
+              "unit": "mg/dL",
+              "minNormal": 7,
+              "maxNormal": 20,
+              "textReference": "",
+              "id": "param-1792165765208-2",
+              "result": "8.41",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-1792166170281-4jui",
+          "profileCode": "LFT",
+          "titleEn": "Liver Function Tests (LFT)",
+          "titleAr": "Liver Function Tests (LFT)",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum",
+          "interpretation": "Enzyme activities and synthetic hepatic markers are within normal limits.",
+          "parameters": [
+            {
+              "name": "ALT (SGPT)",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 45,
+              "method": "IFCC UV with P5P",
+              "textReference": "",
+              "id": "param-1792166170281-0",
+              "result": "23",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "AST (SGOT)",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 40,
+              "method": "IFCC UV with P5P",
+              "textReference": "",
+              "id": "param-1792166170282-1",
+              "result": "26",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Alkaline Phosphatase (ALP)",
+              "unit": "U/L",
+              "minNormal": 40,
+              "maxNormal": 130,
+              "textReference": "",
+              "id": "param-1792166170282-2",
+              "result": "103",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "G.G.T",
+              "unit": "U/L",
+              "minNormal": 9,
+              "maxNormal": 48,
+              "textReference": "",
+              "id": "param-1792166170282-10",
+              "result": "31",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "AST/ALT Ratio (De Ritis)",
+              "unit": "Ratio",
+              "minNormal": 0.6,
+              "maxNormal": 1.1,
+              "notes": "Normal < 1.0 (Elevated > 2.0 in alcoholic liver disease/cirrhosis)",
+              "textReference": "",
+              "id": "param-1792166170282-11",
+              "result": "1.1",
+              "flag": "NORMAL"
+            }
+          ]
         }
       ],
       "staff": {
@@ -1075,7 +1060,7 @@
       },
       "status": "released",
       "createdAt": "2026-10-13T20:04:53.781Z",
-      "updatedAt": "2026-10-16T15:35:17.808Z",
+      "updatedAt": "2026-10-16T15:57:12.628Z",
       "invoiceId": "inv-1791921893782"
     },
     {
@@ -14556,94 +14541,6 @@
       "updatedAt": "2026-10-16T13:31:59.823Z"
     },
     {
-      "id": "inv-001",
-      "invoiceNumber": "INV-2026-001",
-      "patientName": "أحمد محمود إبراهيم",
-      "patientPhone": "01012345678",
-      "patientAge": 34,
-      "patientGender": "male",
-      "barcode": "RT-10029",
-      "labNumber": "RT-2026-001",
-      "referringDoctor": "د. طارق المنشاوي",
-      "tests": [
-        {
-          "id": "t-cbc",
-          "code": "CBC",
-          "nameAr": "صورة الدم الكاملة (CBC 5-Diff)",
-          "nameEn": "Complete Blood Count",
-          "price": 280,
-          "category": "Hematology",
-          "cost": 45,
-          "sampleType": "EDTA Whole Blood"
-        }
-      ],
-      "subtotal": 280,
-      "testsSubtotal": 280,
-      "discount": 28,
-      "loyaltyDiscountEGP": 28,
-      "loyaltyPointsRedeemed": 0,
-      "loyaltyPointsEarned": 252,
-      "netAmount": 252,
-      "paidAmount": 252,
-      "remainingAmount": 0,
-      "paymentMethod": "cash",
-      "paymentStatus": "paid",
-      "cashierName": "المحاسب المالي",
-      "branch": "فرع القصر العيني - الرئيسي",
-      "notes": "خصم كارت الولاء الفضي 10%",
-      "syncStatus": "synced",
-      "createdAt": "2026-10-16T08:41:01.807Z",
-      "updatedAt": "2026-10-16T08:41:01.807Z"
-    },
-    {
-      "id": "inv-002",
-      "invoiceNumber": "INV-2026-002",
-      "patientName": "منى عادل عبد الرحمن",
-      "patientPhone": "01198765432",
-      "patientAge": 48,
-      "patientGender": "female",
-      "barcode": "RT-10030",
-      "labNumber": "RT-2026-002",
-      "referringDoctor": "أ.د. خالد الببلاوي",
-      "tests": [
-        {
-          "id": "t-hba1c",
-          "code": "HBA1C",
-          "nameAr": "السكر التراكمي (HbA1c HPLC)",
-          "nameEn": "Glycated Hemoglobin HbA1c",
-          "price": 160,
-          "category": "Diabetes",
-          "cost": 35
-        },
-        {
-          "id": "t-kft",
-          "code": "KFT",
-          "nameAr": "وظائف كلى كاملة (KFT)",
-          "nameEn": "Renal Function Panel",
-          "price": 220,
-          "category": "Biochemistry",
-          "cost": 30
-        }
-      ],
-      "subtotal": 380,
-      "testsSubtotal": 380,
-      "discount": 38,
-      "loyaltyDiscountEGP": 38,
-      "loyaltyPointsRedeemed": 0,
-      "loyaltyPointsEarned": 342,
-      "netAmount": 342,
-      "paidAmount": 342,
-      "remainingAmount": 0,
-      "paymentMethod": "visa",
-      "paymentStatus": "paid",
-      "cashierName": "المحاسب المالي",
-      "branch": "فرع القصر العيني - الرئيسي",
-      "notes": "خصم كارت الولاء الذهبي 10%",
-      "syncStatus": "synced",
-      "createdAt": "2026-10-16T08:41:01.807Z",
-      "updatedAt": "2026-10-16T08:41:01.807Z"
-    },
-    {
       "id": "inv-1791921893782",
       "invoiceNumber": "INV-2026-8988",
       "patientName": "آسيا محمد",
@@ -19023,75 +18920,751 @@
       "paymentMethod": "cash",
       "paymentStatus": "paid",
       "patientGender": "female"
+    },
+    {
+      "id": "inv-001",
+      "invoiceNumber": "INV-2026-001",
+      "patientName": "أحمد محمود إبراهيم",
+      "patientPhone": "01012345678",
+      "patientAge": 34,
+      "patientGender": "male",
+      "barcode": "RT-10029",
+      "labNumber": "RT-2026-001",
+      "referringDoctor": "د. طارق المنشاوي",
+      "tests": [
+        {
+          "id": "t-cbc",
+          "code": "CBC",
+          "nameAr": "صورة الدم الكاملة (CBC 5-Diff)",
+          "nameEn": "Complete Blood Count",
+          "price": 280,
+          "category": "Hematology",
+          "cost": 45,
+          "sampleType": "EDTA Whole Blood"
+        }
+      ],
+      "subtotal": 280,
+      "testsSubtotal": 280,
+      "discount": 28,
+      "loyaltyDiscountEGP": 28,
+      "loyaltyPointsRedeemed": 0,
+      "loyaltyPointsEarned": 252,
+      "netAmount": 252,
+      "paidAmount": 252,
+      "remainingAmount": 0,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "cashierName": "المحاسب المالي",
+      "branch": "فرع القصر العيني - الرئيسي",
+      "notes": "خصم كارت الولاء الفضي 10%",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-16T08:41:01.807Z",
+      "updatedAt": "2026-10-16T08:41:01.807Z"
+    },
+    {
+      "id": "inv-002",
+      "invoiceNumber": "INV-2026-002",
+      "patientName": "منى عادل عبد الرحمن",
+      "patientPhone": "01198765432",
+      "patientAge": 48,
+      "patientGender": "female",
+      "barcode": "RT-10030",
+      "labNumber": "RT-2026-002",
+      "referringDoctor": "أ.د. خالد الببلاوي",
+      "tests": [
+        {
+          "id": "t-hba1c",
+          "code": "HBA1C",
+          "nameAr": "السكر التراكمي (HbA1c HPLC)",
+          "nameEn": "Glycated Hemoglobin HbA1c",
+          "price": 160,
+          "category": "Diabetes",
+          "cost": 35
+        },
+        {
+          "id": "t-kft",
+          "code": "KFT",
+          "nameAr": "وظائف كلى كاملة (KFT)",
+          "nameEn": "Renal Function Panel",
+          "price": 220,
+          "category": "Biochemistry",
+          "cost": 30
+        }
+      ],
+      "subtotal": 380,
+      "testsSubtotal": 380,
+      "discount": 38,
+      "loyaltyDiscountEGP": 38,
+      "loyaltyPointsRedeemed": 0,
+      "loyaltyPointsEarned": 342,
+      "netAmount": 342,
+      "paidAmount": 342,
+      "remainingAmount": 0,
+      "paymentMethod": "visa",
+      "paymentStatus": "paid",
+      "cashierName": "المحاسب المالي",
+      "branch": "فرع القصر العيني - الرئيسي",
+      "notes": "خصم كارت الولاء الذهبي 10%",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-16T08:41:01.807Z",
+      "updatedAt": "2026-10-16T08:41:01.807Z"
     }
   ],
   "loyaltyProfiles": [
     {
-      "patientId": "pat-loyalty-1792157519828",
-      "patientName": "كريم صلاح سعد",
-      "phone": "01003540455",
-      "barcode": "RT-10076",
-      "cardNumber": "RT-GOLD-10076",
+      "patientId": "pat-loyalty-1791735202177",
+      "patientName": "مي محمود احمد",
+      "phone": "01013242777",
+      "barcode": "RT-10064",
+      "cardNumber": "RT-GOLD-10064",
       "bloodGroup": "",
-      "totalPoints": 950,
+      "totalPoints": 600,
       "tier": "Gold",
-      "lifetimeSpent": 950,
-      "issueDate": "2026-10-16",
+      "lifetimeSpent": 600,
+      "issueDate": "2026-10-11",
       "transactions": [
         {
-          "id": "tx-1792157519828",
-          "date": "2026-10-16",
+          "id": "tx-1791735202178",
+          "date": "2026-10-11",
           "type": "earn",
-          "points": 950,
-          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-046",
-          "invoiceNumber": "RT-2026-046",
-          "amountEGP": 950
+          "points": 600,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-034",
+          "invoiceNumber": "RT-2026-034",
+          "amountEGP": 600
         }
       ]
     },
     {
-      "patientId": "pat-001",
+      "patientId": "pat-loyalty-1791734250503",
+      "patientName": "دعاء مصطفى ابراهيم محمود",
+      "phone": "01003540455",
+      "barcode": "RT-10063",
+      "cardNumber": "RT-GOLD-10063",
+      "bloodGroup": "",
+      "totalPoints": 1563,
+      "tier": "Platinum",
+      "lifetimeSpent": 1563,
+      "issueDate": "2026-10-11",
+      "transactions": [
+        {
+          "id": "tx-1791734735433",
+          "date": "2026-10-11",
+          "type": "earn",
+          "points": 433,
+          "description": "اكتساب نقاط عن فاتورة رقم RT-2026-034",
+          "invoiceNumber": "RT-2026-034",
+          "amountEGP": 433
+        },
+        {
+          "id": "tx-1791734250503",
+          "date": "2026-10-11",
+          "type": "earn",
+          "points": 1130,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-033",
+          "invoiceNumber": "RT-2026-033",
+          "amountEGP": 1130
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791733128878",
+      "patientName": "داليا عبده حسين زهران",
+      "phone": "01117552241",
+      "barcode": "RT-10062",
+      "cardNumber": "RT-GOLD-10062",
+      "bloodGroup": "",
+      "totalPoints": 740,
+      "tier": "Gold",
+      "lifetimeSpent": 740,
+      "issueDate": "2026-10-11",
+      "transactions": [
+        {
+          "id": "tx-1791733128878",
+          "date": "2026-10-11",
+          "type": "earn",
+          "points": 740,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-032",
+          "invoiceNumber": "RT-2026-032",
+          "amountEGP": 740
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791501113007",
+      "patientName": "زينب عمر",
+      "phone": "01091353732",
+      "barcode": "RT-10062",
+      "cardNumber": "RT-SILVER-10062",
+      "bloodGroup": "",
+      "totalPoints": 199,
+      "tier": "Silver",
+      "lifetimeSpent": 199,
+      "issueDate": "2026-10-08",
+      "transactions": [
+        {
+          "id": "tx-1791501113007",
+          "date": "2026-10-08",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-032",
+          "invoiceNumber": "RT-2026-032",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791500920502",
+      "patientName": "مجدى احمد ربيع",
+      "phone": "01030502318",
+      "barcode": "RT-10061",
+      "cardNumber": "RT-SILVER-10061",
+      "bloodGroup": "",
+      "totalPoints": 199,
+      "tier": "Silver",
+      "lifetimeSpent": 199,
+      "issueDate": "2026-10-08",
+      "transactions": [
+        {
+          "id": "tx-1791500920502",
+          "date": "2026-10-08",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-031",
+          "invoiceNumber": "RT-2026-031",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791500705356",
+      "patientName": "عادل احمد صبيح",
+      "phone": "01112919075",
+      "barcode": "RT-10060",
+      "cardNumber": "RT-SILVER-10060",
+      "bloodGroup": "",
+      "totalPoints": 199,
+      "tier": "Silver",
+      "lifetimeSpent": 199,
+      "issueDate": "2026-10-08",
+      "transactions": [
+        {
+          "id": "tx-1791500705356",
+          "date": "2026-10-08",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-030",
+          "invoiceNumber": "RT-2026-030",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791499039660",
+      "patientName": "مني كرم هاشم",
+      "phone": "01113748875",
+      "barcode": "RT-10061",
+      "cardNumber": "RT-GOLD-10061",
+      "bloodGroup": "",
+      "totalPoints": 505,
+      "tier": "Gold",
+      "lifetimeSpent": 505,
+      "issueDate": "2026-10-08",
+      "transactions": [
+        {
+          "id": "tx-1791499039660",
+          "date": "2026-10-08",
+          "type": "earn",
+          "points": 505,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-031",
+          "invoiceNumber": "RT-2026-031",
+          "amountEGP": 505
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791498479900",
+      "patientName": "فاطمة احمد عبدالله",
+      "phone": "01010135898",
+      "barcode": "RT-10061",
+      "cardNumber": "RT-SILVER-10061",
+      "bloodGroup": "",
+      "totalPoints": 233,
+      "tier": "Silver",
+      "lifetimeSpent": 233,
+      "issueDate": "2026-10-08",
+      "transactions": [
+        {
+          "id": "tx-1791498479900",
+          "date": "2026-10-08",
+          "type": "earn",
+          "points": 233,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-031",
+          "invoiceNumber": "RT-2026-031",
+          "amountEGP": 233
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791414459348",
+      "patientName": "جيهان عبدالفتاح",
+      "phone": "01022231270",
+      "barcode": "RT-10062",
+      "cardNumber": "RT-SILVER-10062",
+      "bloodGroup": "",
+      "totalPoints": 333,
+      "tier": "Silver",
+      "lifetimeSpent": 333,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1791414459348",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 333,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-032",
+          "invoiceNumber": "RT-2026-032",
+          "amountEGP": 333
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791381439613",
+      "patientName": "محمد حسن على",
+      "phone": "01005314825",
+      "barcode": "RT-10043",
+      "cardNumber": "RT-SILVER-10043",
+      "bloodGroup": "",
+      "totalPoints": 190,
+      "tier": "Silver",
+      "lifetimeSpent": 190,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1791381439613",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 190,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-013",
+          "invoiceNumber": "RT-2026-013",
+          "amountEGP": 190
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791359724840",
+      "patientName": "فيرا ممدوح عبدالمسيح",
+      "phone": "01221502703",
+      "barcode": "RT-10044",
+      "cardNumber": "RT-SILVER-10044",
+      "bloodGroup": "",
+      "totalPoints": 498,
+      "tier": "Silver",
+      "lifetimeSpent": 498,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1791359724840",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 498,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-014",
+          "invoiceNumber": "RT-2026-014",
+          "amountEGP": 498
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791359462638",
+      "patientName": "حبيبه مجدى محمد",
+      "phone": "01148879943",
+      "barcode": "RT-10043",
+      "cardNumber": "RT-GOLD-10043",
+      "bloodGroup": "",
+      "totalPoints": 1026,
+      "tier": "Gold",
+      "lifetimeSpent": 1026,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1791359462638",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 1026,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-013",
+          "invoiceNumber": "RT-2026-013",
+          "amountEGP": 1026
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791358565055",
+      "patientName": "كوثر ابراهيم",
+      "phone": "01095920078",
+      "barcode": "RT-10042",
+      "cardNumber": "RT-SILVER-10042",
+      "bloodGroup": "",
+      "totalPoints": 199,
+      "tier": "Silver",
+      "lifetimeSpent": 199,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1791358565055",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-012",
+          "invoiceNumber": "RT-2026-012",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791321555676",
+      "patientName": "مروة عبدالفتاح ابراهيم",
+      "phone": "01065490430",
+      "barcode": "RT-10041",
+      "cardNumber": "RT-SILVER-10041",
+      "bloodGroup": "",
+      "totalPoints": 199,
+      "tier": "Silver",
+      "lifetimeSpent": 199,
+      "issueDate": "2026-10-06",
+      "transactions": [
+        {
+          "id": "tx-1791321555676",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-011",
+          "invoiceNumber": "RT-2026-011",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791305504358",
+      "patientName": "ٌٍّّرجاء حسن ابراهيم",
+      "phone": "01124485444",
+      "barcode": "RT-10039",
+      "cardNumber": "RT-SILVER-10039",
+      "bloodGroup": "",
+      "totalPoints": 422,
+      "tier": "Silver",
+      "lifetimeSpent": 422,
+      "issueDate": "2026-10-06",
+      "transactions": [
+        {
+          "id": "tx-1791320477694",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 171,
+          "description": "اكتساب نقاط عن فاتورة رقم RT-2026-011",
+          "invoiceNumber": "RT-2026-011",
+          "amountEGP": 171
+        },
+        {
+          "id": "tx-1791305504358",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 251,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-009",
+          "invoiceNumber": "RT-2026-009",
+          "amountEGP": 251
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791287976704",
+      "patientName": "أمال محمد",
+      "phone": "01555108312",
+      "barcode": "RT-10038",
+      "cardNumber": "RT-SILVER-10038",
+      "bloodGroup": "",
+      "totalPoints": 199,
+      "tier": "Silver",
+      "lifetimeSpent": 199,
+      "issueDate": "2026-10-06",
+      "transactions": [
+        {
+          "id": "tx-1791287976704",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-008",
+          "invoiceNumber": "RT-2026-008",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791287331564",
+      "patientName": "شريف عادل",
+      "phone": "01100",
+      "barcode": "RT-10037",
+      "cardNumber": "RT-SILVER-10037",
+      "bloodGroup": "",
+      "totalPoints": 199,
+      "tier": "Silver",
+      "lifetimeSpent": 199,
+      "issueDate": "2026-10-06",
+      "transactions": [
+        {
+          "id": "tx-1791287331564",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-007",
+          "invoiceNumber": "RT-2026-007",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791286375210",
+      "patientName": "نورا سعيد حلمى",
+      "phone": "01228439288",
+      "barcode": "RT-10036",
+      "cardNumber": "RT-SILVER-10036",
+      "bloodGroup": "",
+      "totalPoints": 398,
+      "tier": "Silver",
+      "lifetimeSpent": 398,
+      "issueDate": "2026-10-06",
+      "transactions": [
+        {
+          "id": "tx-1791286741651",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط عن فاتورة رقم RT-2026-006",
+          "invoiceNumber": "RT-2026-006",
+          "amountEGP": 199
+        },
+        {
+          "id": "tx-1791286375210",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-006",
+          "invoiceNumber": "RT-2026-006",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791285435325",
+      "patientName": "محمد صلاح الدين عبدة",
+      "phone": "01004359187",
+      "barcode": "RT-10035",
+      "cardNumber": "RT-GOLD-10035",
+      "bloodGroup": "",
+      "totalPoints": 599,
+      "tier": "Gold",
+      "lifetimeSpent": 599,
+      "issueDate": "2026-10-06",
+      "transactions": [
+        {
+          "id": "tx-1791285435325",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-005",
+          "invoiceNumber": "RT-2026-005",
+          "amountEGP": 599
+        }
+      ]
+    },
+    {
+      "tier": "Gold",
+      "patientId": "pat-loyalty-1791284141343",
+      "totalPoints": 745,
+      "barcode": "RT-10034",
+      "cardNumber": "RT-GOLD-10034",
+      "phone": "01277489467",
+      "patientName": "مريم عوض الكريم",
+      "lifetimeSpent": 745,
+      "issueDate": "2026-10-06",
+      "transactions": [
+        {
+          "id": "tx-1791306270704",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط عن فاتورة رقم RT-2026-010",
+          "invoiceNumber": "RT-2026-010",
+          "amountEGP": 199
+        },
+        {
+          "amountEGP": 546,
+          "points": 546,
+          "id": "tx-1791284141343",
+          "type": "earn",
+          "invoiceNumber": "RT-2026-004",
+          "date": "2026-10-06",
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-004"
+        }
+      ],
+      "bloodGroup": ""
+    },
+    {
+      "lifetimeSpent": 252,
+      "transactions": [
+        {
+          "amountEGP": 252,
+          "points": 252,
+          "id": "tx-l-1",
+          "description": "نقاط فاتورة تحاليل CBC رقم INV-2026-001",
+          "date": "2026-10-06",
+          "invoiceNumber": "INV-2026-001",
+          "type": "earn"
+        }
+      ],
       "patientName": "أحمد محمود إبراهيم",
       "phone": "01012345678",
-      "barcode": "RT-10029",
-      "cardNumber": "RT-SILVER-10029",
-      "bloodGroup": "A+",
-      "totalPoints": 252,
       "tier": "Silver",
-      "lifetimeSpent": 252,
-      "issueDate": "2026-10-16",
+      "issueDate": "2026-10-06",
+      "patientId": "pat-001",
+      "cardNumber": "RT-SILVER-10029",
+      "totalPoints": 252,
+      "barcode": "RT-10029",
+      "bloodGroup": "A+"
+    },
+    {
+      "phone": "01198765432",
+      "patientName": "منى عادل عبد الرحمن",
+      "cardNumber": "RT-GOLD-10030",
+      "bloodGroup": "O+",
+      "issueDate": "2026-10-06",
+      "tier": "Gold",
+      "barcode": "RT-10030",
+      "patientId": "pat-002",
+      "totalPoints": 682,
       "transactions": [
         {
-          "id": "tx-l-1",
-          "date": "2026-10-16",
+          "description": "نقاط فاتورة تحاليل السكر والكلى INV-2026-002",
+          "points": 342,
+          "id": "tx-l-2",
+          "invoiceNumber": "INV-2026-002",
+          "date": "2026-10-06",
+          "amountEGP": 342,
+          "type": "earn"
+        }
+      ],
+      "lifetimeSpent": 682
+    },
+    {
+      "patientId": "pat-loyalty-1791400927210",
+      "patientName": "جيهان عبدالفتاح",
+      "phone": "01099999098",
+      "barcode": "RT-10061",
+      "cardNumber": "RT-SILVER-10061",
+      "bloodGroup": "",
+      "totalPoints": 184,
+      "tier": "Silver",
+      "lifetimeSpent": 184,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1791400927211",
+          "date": "2026-10-07",
           "type": "earn",
-          "points": 252,
-          "description": "نقاط فاتورة تحاليل CBC رقم INV-2026-001",
-          "invoiceNumber": "INV-2026-001",
-          "amountEGP": 252
+          "points": 184,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-031",
+          "invoiceNumber": "RT-2026-031",
+          "amountEGP": 184
         }
       ]
     },
     {
-      "patientId": "pat-002",
-      "patientName": "منى عادل عبد الرحمن",
-      "phone": "01198765432",
-      "barcode": "RT-10030",
-      "cardNumber": "RT-GOLD-10030",
-      "bloodGroup": "O+",
-      "totalPoints": 682,
+      "patientId": "pat-loyalty-1791663303872",
+      "patientName": "يوستينا عماد",
+      "phone": "01204282609",
+      "barcode": "RT-10064",
+      "cardNumber": "RT-GOLD-10064",
+      "bloodGroup": "",
+      "totalPoints": 540,
       "tier": "Gold",
-      "lifetimeSpent": 682,
-      "issueDate": "2026-10-16",
+      "lifetimeSpent": 540,
+      "issueDate": "2026-10-10",
       "transactions": [
         {
-          "id": "tx-l-2",
-          "date": "2026-10-16",
+          "id": "tx-1791663303872",
+          "date": "2026-10-10",
           "type": "earn",
-          "points": 342,
-          "description": "نقاط فاتورة تحاليل السكر والكلى INV-2026-002",
-          "invoiceNumber": "INV-2026-002",
-          "amountEGP": 342
+          "points": 540,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-034",
+          "invoiceNumber": "RT-2026-034",
+          "amountEGP": 540
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791819003070",
+      "patientName": "منى محمود احمد",
+      "phone": "01005750607",
+      "barcode": "RT-9827361849",
+      "cardNumber": "RT-GOLD-9827361849",
+      "bloodGroup": "",
+      "totalPoints": 1301,
+      "tier": "Gold",
+      "lifetimeSpent": 1301,
+      "issueDate": "2026-10-12",
+      "transactions": [
+        {
+          "id": "tx-1791819003070",
+          "date": "2026-10-12",
+          "type": "earn",
+          "points": 1301,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-8982",
+          "invoiceNumber": "RT-2026-8982",
+          "amountEGP": 1301
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791836921765",
+      "patientName": "سلمي محمد",
+      "phone": "01155939560",
+      "barcode": "RT-9827361852",
+      "cardNumber": "RT-SILVER-9827361852",
+      "bloodGroup": "",
+      "totalPoints": 306,
+      "tier": "Silver",
+      "lifetimeSpent": 306,
+      "issueDate": "2026-10-12",
+      "transactions": [
+        {
+          "id": "tx-1791836921765",
+          "date": "2026-10-12",
+          "type": "earn",
+          "points": 306,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-8985",
+          "invoiceNumber": "RT-2026-8985",
+          "amountEGP": 306
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791839634484",
+      "patientName": "أشرف غانم",
+      "phone": "01100304890",
+      "barcode": "RT-9827361853",
+      "cardNumber": "RT-SILVER-9827361853",
+      "bloodGroup": "",
+      "totalPoints": 480,
+      "tier": "Silver",
+      "lifetimeSpent": 480,
+      "issueDate": "2026-10-12",
+      "transactions": [
+        {
+          "id": "tx-1791839634484",
+          "date": "2026-10-12",
+          "type": "earn",
+          "points": 480,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-8986",
+          "invoiceNumber": "RT-2026-8986",
+          "amountEGP": 480
         }
       ]
     }
@@ -19252,504 +19825,94 @@
   "dailyCloseouts": [],
   "auditLogs": [
     {
-      "id": "log-1792165154544-6f6b0",
-      "timestamp": "10/16/2026, 6:39:14 PM",
+      "id": "log-1792220466392-q5lnb",
+      "timestamp": "10/17/2026, 10:01:06 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "SETTINGS",
+      "description": "تحديث الإمضاءات الافتراضية لطاقم الفحص والاعتماد"
+    },
+    {
+      "id": "log-1792220466390-owczv",
+      "timestamp": "10/17/2026, 10:01:06 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "SETTINGS",
+      "description": "تحديث بيانات المعمل والاعتماد الطبي ووسائل التواصل"
+    },
+    {
+      "id": "log-1792173085500-jdik3",
+      "timestamp": "10/16/2026, 8:51:25 PM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "INCOME",
+      "description": "حذف الفاتورة رقم INV-2026-002 للمريض منى عادل عبد الرحمن"
+    },
+    {
+      "id": "log-1792173085499-u34ci",
+      "timestamp": "10/16/2026, 8:51:25 PM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض منى عادل عبد الرحمن"
+    },
+    {
+      "id": "log-1792173071054-yg9qh",
+      "timestamp": "10/16/2026, 8:51:11 PM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "INCOME",
+      "description": "حذف الفاتورة رقم INV-2026-001 للمريض أحمد محمود إبراهيم"
+    },
+    {
+      "id": "log-1792173071051-9e0ja",
+      "timestamp": "10/16/2026, 8:51:11 PM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض أحمد محمود إبراهيم"
+    },
+    {
+      "id": "log-1792165080192-2n1xm",
+      "timestamp": "10/16/2026, 6:38:00 PM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "CATALOG_UPDATE",
+      "module": "CATALOG",
+      "description": "تحديث بروفايلات التحاليل الشاملة (20 بروفايل)"
+    },
+    {
+      "id": "log-1792165080192-u2iae",
+      "timestamp": "10/16/2026, 6:38:00 PM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "CATALOG_UPDATE",
+      "module": "CATALOG",
+      "description": "مزامنة وتوحيد شامل للكتالوج: 212 فحص منفرد + 15 باقة + 20 بروفايل"
+    },
+    {
+      "id": "log-1792165010361-or982",
+      "timestamp": "10/16/2026, 6:36:50 PM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "SYNC",
       "module": "SECURITY",
       "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
-    },
-    {
-      "id": "log-1792164917821-p0oqw",
-      "timestamp": "10/16/2026, 6:35:17 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "UPDATE",
-      "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1791921893781"
-    },
-    {
-      "id": "log-1792164892688-6maq5",
-      "timestamp": "10/16/2026, 6:34:52 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "UPDATE",
-      "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1791921893781"
-    },
-    {
-      "id": "log-1792164837962-o7pw0",
-      "timestamp": "10/16/2026, 6:33:57 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "UPDATE",
-      "module": "CATALOG",
-      "description": "تحديث قائمة باقات الفحص الشامل المتاحة"
-    },
-    {
-      "id": "log-1792164472205-inb8l",
-      "timestamp": "10/16/2026, 6:27:52 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "إضافة تحليل جديد للكتالوج: نسبه الهيماتوكريت (HCT_632)"
-    },
-    {
-      "id": "log-1792164310205-q9wos",
-      "timestamp": "10/16/2026, 6:25:10 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "إضافة تحليل جديد للكتالوج: نسبه هيموجلوبين (HB_727)"
-    },
-    {
-      "id": "log-1792164061760-ucics",
-      "timestamp": "10/16/2026, 6:21:01 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: TRANSFERRIN"
-    },
-    {
-      "id": "log-1792164055209-hx6p2",
-      "timestamp": "10/16/2026, 6:20:55 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: FIBRINOGEN"
-    },
-    {
-      "id": "log-1792164049307-e32sg",
-      "timestamp": "10/16/2026, 6:20:49 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: COOMBS_INDIRECT"
-    },
-    {
-      "id": "log-1792164041498-c5w3d",
-      "timestamp": "10/16/2026, 6:20:41 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: COOMBS_DIRECT"
-    },
-    {
-      "id": "log-1792164027967-in6al",
-      "timestamp": "10/16/2026, 6:20:27 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: HB_ELECTRO"
-    },
-    {
-      "id": "log-1792164007611-vamjy",
-      "timestamp": "10/16/2026, 6:20:07 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: G6PD"
-    },
-    {
-      "id": "log-1792163994376-i7k8b",
-      "timestamp": "10/16/2026, 6:19:54 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: OGTT_75"
-    },
-    {
-      "id": "log-1792163978206-si7as",
-      "timestamp": "10/16/2026, 6:19:38 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: COVID_PCR"
-    },
-    {
-      "id": "log-1792163968127-d0orw",
-      "timestamp": "10/16/2026, 6:19:28 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: PCR_HIV_QUANT"
-    },
-    {
-      "id": "log-1792163957649-smgle",
-      "timestamp": "10/16/2026, 6:19:17 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: PCR_HBV_QUANT"
-    },
-    {
-      "id": "log-1792163944633-ou3cr",
-      "timestamp": "10/16/2026, 6:19:04 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: PCR_HCV_QUANT"
-    },
-    {
-      "id": "log-1792163932418-ivm8u",
-      "timestamp": "10/16/2026, 6:18:52 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: PCR_HCV_QUAL"
-    },
-    {
-      "id": "log-1792163924293-b65c4",
-      "timestamp": "10/16/2026, 6:18:44 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: SPUTUM_CULTURE"
-    },
-    {
-      "id": "log-1792163917350-bc5vi",
-      "timestamp": "10/16/2026, 6:18:37 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: STOOL_CULTURE"
-    },
-    {
-      "id": "log-1792163910045-kmxa6",
-      "timestamp": "10/16/2026, 6:18:30 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: URINE_CULTURE"
-    },
-    {
-      "id": "log-1792163900344-not9v",
-      "timestamp": "10/16/2026, 6:18:20 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: SEMEN_ANALYSIS"
-    },
-    {
-      "id": "log-1792163892015-lt1n8",
-      "timestamp": "10/16/2026, 6:18:12 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: CALPROTECTIN"
-    },
-    {
-      "id": "log-1792163883523-hhbsr",
-      "timestamp": "10/16/2026, 6:18:03 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: OCCULT_BLOOD"
-    },
-    {
-      "id": "log-1792163874463-9w5ki",
-      "timestamp": "10/16/2026, 6:17:54 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: STOOL_ANALYSIS"
-    },
-    {
-      "id": "log-1792163866902-cc9hw",
-      "timestamp": "10/16/2026, 6:17:46 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: URINE_ANALYSIS"
-    },
-    {
-      "id": "log-1792163859564-rvb7t",
-      "timestamp": "10/16/2026, 6:17:39 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: CMV_IGG_IGM"
-    },
-    {
-      "id": "log-1792163848923-hnnlt",
-      "timestamp": "10/16/2026, 6:17:28 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: RUBELLA_IGG_IGM"
-    },
-    {
-      "id": "log-1792163841255-318ke",
-      "timestamp": "10/16/2026, 6:17:21 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: TOXOPLASMA_IGG_IGM"
-    },
-    {
-      "id": "log-1792163830399-q2839",
-      "timestamp": "10/16/2026, 6:17:10 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: BRUCELLA"
-    },
-    {
-      "id": "log-1792163819966-22l2r",
-      "timestamp": "10/16/2026, 6:16:59 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: WIDAL_TEST"
-    },
-    {
-      "id": "log-1792163811065-kvxph",
-      "timestamp": "10/16/2026, 6:16:51 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: HP_BLOOD_AB"
-    },
-    {
-      "id": "log-1792163795747-j26fl",
-      "timestamp": "10/16/2026, 6:16:35 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: HP_STOOL_AG"
-    },
-    {
-      "id": "log-1792163697867-qcivq",
-      "timestamp": "10/16/2026, 6:14:57 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: HP_STOOL_AG"
-    },
-    {
-      "id": "log-1792163678141-n6b0c",
-      "timestamp": "10/16/2026, 6:14:38 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: VDRL_RPR"
-    },
-    {
-      "id": "log-1792163668047-y3et4",
-      "timestamp": "10/16/2026, 6:14:28 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: HAV_IGM"
-    },
-    {
-      "id": "log-1792163660873-tmmqt",
-      "timestamp": "10/16/2026, 6:14:20 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: HIV_COMBO"
-    },
-    {
-      "id": "log-1792163652134-3ggtp",
-      "timestamp": "10/16/2026, 6:14:12 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: HCV_AB"
-    },
-    {
-      "id": "log-1792163640936-69sp2",
-      "timestamp": "10/16/2026, 6:14:00 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: HBS_AG"
-    },
-    {
-      "id": "log-1792163633191-kcx81",
-      "timestamp": "10/16/2026, 6:13:53 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: INTERLEUKIN_6"
-    },
-    {
-      "id": "log-1792163619630-ie03a",
-      "timestamp": "10/16/2026, 6:13:39 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: PRO_CALCITONIN"
-    },
-    {
-      "id": "log-1792163612158-r7eho",
-      "timestamp": "10/16/2026, 6:13:32 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: ANTI_BETA2_GP1"
-    },
-    {
-      "id": "log-1792163605421-29ejx",
-      "timestamp": "10/16/2026, 6:13:25 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: ANTI_PHOSPHOLIPID"
-    },
-    {
-      "id": "log-1792163597419-vo5zw",
-      "timestamp": "10/16/2026, 6:13:17 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: C_ANCA"
-    },
-    {
-      "id": "log-1792163590018-o4vdf",
-      "timestamp": "10/16/2026, 6:13:10 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: P_ANCA"
-    },
-    {
-      "id": "log-1792163582830-f2vlv",
-      "timestamp": "10/16/2026, 6:13:02 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: LUPUS_ANTICOAG"
-    },
-    {
-      "id": "log-1792163571817-y1ei2",
-      "timestamp": "10/16/2026, 6:12:51 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: COMPLEMENT_C4"
-    },
-    {
-      "id": "log-1792163563443-mulfs",
-      "timestamp": "10/16/2026, 6:12:43 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: COMPLEMENT_C3"
-    },
-    {
-      "id": "log-1792163556809-qelpb",
-      "timestamp": "10/16/2026, 6:12:36 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: ANTI_DSDNA"
-    },
-    {
-      "id": "log-1792163547981-35mz3",
-      "timestamp": "10/16/2026, 6:12:27 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "CATALOG_UPDATE",
-      "module": "CATALOG",
-      "description": "تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: ANA_IFA"
     }
   ]
 }
