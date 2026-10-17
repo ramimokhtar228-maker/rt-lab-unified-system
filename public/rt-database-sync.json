@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T19:53:26.940Z",
+  "syncedAt": "2026-10-17T19:53:33.989Z",
   "reports": [
     {
       "id": "rep-1792266746907",
@@ -17,7 +17,7 @@
         "referringDoctorTitle": "Dr.",
         "referringDoctorName": "Herself",
         "sampleDate": "2026-10-16T09:53:00.000Z",
-        "reportingDate": "2026-10-16",
+        "reportingDate": "2026-10-17T18:53:00.000Z",
         "fastingHours": 0,
         "bookingType": "branch",
         "visitFee": 0,
@@ -72,7 +72,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-17T19:52:26.910Z",
-      "updatedAt": "2026-10-17T19:53:24.383Z",
+      "updatedAt": "2026-10-17T19:53:28.819Z",
       "invoiceId": "inv-1792266746910"
     },
     {
