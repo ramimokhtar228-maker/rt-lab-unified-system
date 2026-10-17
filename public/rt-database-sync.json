@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:33:20.590Z",
+  "syncedAt": "2026-10-17T20:33:27.091Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2676,50 +2676,6 @@
       },
       "profiles": [
         {
-          "id": "prof-1791819654843-BIL_T",
-          "profileCode": "LFT",
-          "titleEn": "Liver Function Profile (LFT)",
-          "titleAr": "وظائف الكبد والإنزيمات الشاملة",
-          "category": "Clinical Chemistry & Hepatology",
-          "sampleType": "Serum (مصل الدم)",
-          "interpretation": "Hepatic transaminases (ALT, AST), Bilirubin, and Albumin assess hepatocellular integrity and synthetic capacity.",
-          "parameters": [
-            {
-              "id": "p-1791819654844",
-              "name": "Direct Bilirubin (Direct Bilirubin)",
-              "result": "",
-              "unit": "mg/dL",
-              "minNormal": 0,
-              "maxNormal": 0.3,
-              "textReference": "0.0 - 0.3 mg/dL",
-              "flag": "NORMAL",
-              "method": "Diazo without Accelerator"
-            },
-            {
-              "id": "p-1791819654844",
-              "name": "Prothrombin Time & INR (Prothrombin Time & INR)",
-              "result": "",
-              "unit": "Seconds / Ratio",
-              "minNormal": 11,
-              "maxNormal": 14,
-              "textReference": "PT: 11.0 - 14.0 sec | INR: 0.85 - 1.40 (Warfarin Target: 2.0 - 3.0)",
-              "flag": "NORMAL",
-              "method": "Optical Clotting Detection Analyzer"
-            },
-            {
-              "id": "p-1791819654844",
-              "name": "Alkaline Phosphatase (ALP) (Alkaline Phosphatase (ALP))",
-              "result": "",
-              "unit": "U/L",
-              "minNormal": 40,
-              "maxNormal": 130,
-              "textReference": "Adults: 40 - 130 U/L (Higher during childhood growth & pregnancy)",
-              "flag": "NORMAL",
-              "method": "p-NPP Kinetic DEA buffer"
-            }
-          ]
-        },
-        {
           "id": "prof-1791819654844-PCR_HCV_QUANT",
           "profileCode": "SEROLOGY",
           "titleEn": "Serology, Immunology & Viral Screening",
@@ -2804,7 +2760,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:33:17.084Z",
+      "updatedAt": "2026-10-17T20:33:20.276Z",
       "invoiceId": "inv-1791819003027"
     },
     {
