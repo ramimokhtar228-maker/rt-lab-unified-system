@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:26:31.118Z",
+  "syncedAt": "2026-10-17T20:26:36.354Z",
   "reports": [
     {
       "id": "rep-001",
@@ -3412,7 +3412,7 @@
           "titleAr": "Thyroid Function Full Panel",
           "category": "Endocrinology",
           "sampleType": "Serum",
-          "interpretation": " ",
+          "interpretation": "Euthyroid state: TSH, Free T3, and Free T4 are within euthyroid reference ranges.",
           "parameters": [
             {
               "name": "Thyroid Stimulating Hormone (TSH) (Thyroid Stimulating Hormone (TSH))",
@@ -3424,8 +3424,8 @@
               "method": "CLIA (3rd Generation Chemiluminescence)",
               "textReference": "Adults: 0.55 - 4.78 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
               "id": "param-1792160444949-0",
-              "result": "",
-              "flag": ""
+              "result": "3.33",
+              "flag": "NORMAL"
             },
             {
               "name": "Free T3 (FT3)",
@@ -3435,8 +3435,8 @@
               "method": "CLIA",
               "textReference": "",
               "id": "param-1792160444949-1",
-              "result": "",
-              "flag": ""
+              "result": "2.16",
+              "flag": "NORMAL"
             },
             {
               "name": "Free T4 (FT4)",
@@ -3446,12 +3446,12 @@
               "method": "CLIA",
               "textReference": "",
               "id": "param-1792160444949-2",
-              "result": "",
-              "flag": ""
+              "result": "1.33",
+              "flag": "NORMAL"
             }
           ],
           "interpretations": [
-            " "
+            "Euthyroid state: TSH, Free T3, and Free T4 are within euthyroid reference ranges."
           ]
         },
         {
@@ -3794,7 +3794,7 @@
       },
       "status": "in_progress",
       "createdAt": "2026-10-11T16:13:22.176Z",
-      "updatedAt": "2026-10-16T15:08:49.235Z",
+      "updatedAt": "2026-10-17T20:26:00.819Z",
       "invoiceId": "inv-1791735202176"
     },
     {
