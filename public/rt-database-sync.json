@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T07:06:07.499Z",
+  "syncedAt": "2026-10-17T07:14:41.793Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -20323,7 +20323,7 @@
       "nameAr": "Random Blood Sugar",
       "nameEn": "Random Blood Sugar",
       "category": "Diabetes",
-      "price": 50,
+      "price": 88,
       "cost": 10,
       "sampleType": "Serum / Plasma",
       "turnaroundTime": "Immediate (30 min)",
