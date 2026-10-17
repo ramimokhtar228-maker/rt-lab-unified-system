@@ -1,36 +1,36 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T21:02:34.104Z",
+  "syncedAt": "2026-10-17T21:00:19.925Z",
   "reports": [
     {
-      "id": "rep-1792270290136",
-      "reportNumber": "RT-2026-048",
+      "id": "rep-1792266746907",
+      "reportNumber": "RT-2026-047",
       "patient": {
-        "id": "pat-1792270290132",
-        "labNumber": "RT-2026-048",
-        "barcode": "RT-10078",
+        "id": "pat-1792266746882",
+        "labNumber": "RT-2026-047",
+        "barcode": "RT-10077",
         "fullName": "فيرونيا ممدوح",
-        "phone": "01221502703",
+        "phone": "0 12 21502703",
         "age": 24,
         "ageUnit": "years",
         "gender": "female",
         "referringDoctorTitle": "Dr.",
         "referringDoctorName": "Herself",
-        "sampleDate": "2026-10-16T10:54:00.000Z",
-        "reportingDate": "2026-10-17T20:53:00.000Z",
+        "sampleDate": "2026-10-16T09:53:00.000Z",
+        "reportingDate": "2026-10-17T18:53:00.000Z",
         "fastingHours": 0,
         "bookingType": "branch",
         "visitFee": 0,
         "appointmentDate": "2026-10-16",
         "appointmentTime": "12:00",
         "testsSubtotal": 310,
-        "totalCost": 149,
-        "discountApplied": 161,
+        "totalCost": 152,
+        "discountApplied": 158,
         "paymentMethod": "cash"
       },
       "profiles": [
         {
-          "id": "prof-1792270290135-evfw",
+          "id": "prof-1792266746890-aq09",
           "profileCode": "ASOT",
           "titleEn": "Anti-Streptolysin O Titre (ASOT)",
           "titleAr": "Anti-Streptolysin O Titre (ASOT)",
@@ -38,7 +38,7 @@
           "sampleType": "Serum",
           "parameters": [
             {
-              "id": "p-1792270290136-gc6",
+              "id": "p-1792266746905-144",
               "name": "Anti-Streptolysin O Titre (ASOT) (Anti-Streptolysin O Titre (ASOT))",
               "result": "309",
               "unit": "IU/mL",
@@ -53,28 +53,32 @@
             "CBC",
             "CRP",
             "ESR"
-          ],
-          "interpretations": [
-            "CBC, CRP, LIPID PROFILE , ESR RECOMMENDED "
-          ],
-          "interpretation": "CBC, CRP, LIPID PROFILE , ESR RECOMMENDED "
+          ]
         }
       ],
       "staff": {
         "labChemist": "مني احمد",
-        "verifiedBy": "رحاب على ",
-        "pathologist": "رامي مختار ",
-        "chemistTitle": "اخصائي كيمياء اكلينيكية وهرمونات",
-        "verifierTitle": "طبيب باثولوجي / المدير التنفيذي",
-        "pathologistTitle": "طبيب الباثولوجيا الاكلينيكية والكيميائية كلية طب قصر العيني",
+        "verifiedBy": "رحاب على",
+        "pathologist": "رامي مختار",
+        "financialDirector": "أ/ ماجد حسني الشرقاوي",
+        "hrDirector": "أ/ أحمد فتحي الجمال",
+        "chemistTitle": "أخصائي أول كيمياء إكلينيكية وهرمونات",
+        "verifierTitle": "طبيب باثولوجى / المدير التنفيذي",
+        "pathologistTitle": "طبيب الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
+        "financialTitle": "المدير المالي ورئيس الحسابات (CFO)",
+        "hrTitle": "مدير الموارد البشرية وشؤون العاملين (HR)",
         "chemistLicense": "EGY-SCI-88402",
         "verifierLicense": "EGY-MGT-11024",
-        "pathologistLicense": "EGY-MED-48201"
+        "pathologistLicense": "EGY-MED-48201",
+        "financialLicense": "EGY-FIN-10492",
+        "hrLicense": "EGY-HR-44190",
+        "showFinancialSignature": true,
+        "showHrSignature": true
       },
-      "status": "released",
-      "createdAt": "2026-10-17T20:51:30.136Z",
-      "updatedAt": "2026-10-17T20:54:29.709Z",
-      "invoiceId": "inv-1792270290136"
+      "status": "draft",
+      "createdAt": "2026-10-17T19:52:26.910Z",
+      "updatedAt": "2026-10-17T19:55:24.149Z",
+      "invoiceId": "inv-1792266746910"
     },
     {
       "id": "rep-1792157519823",
@@ -14370,34 +14374,34 @@
       "invoiceId": "inv-002"
     },
     {
-      "id": "rep-1792266746907",
-      "reportNumber": "RT-2026-047",
+      "id": "rep-1792270290136",
+      "reportNumber": "RT-2026-048",
       "patient": {
-        "id": "pat-1792266746882",
-        "labNumber": "RT-2026-047",
-        "barcode": "RT-10077",
+        "id": "pat-1792270290132",
+        "labNumber": "RT-2026-048",
+        "barcode": "RT-10078",
         "fullName": "فيرونيا ممدوح",
-        "phone": "0 12 21502703",
+        "phone": "01221502703",
         "age": 24,
         "ageUnit": "years",
         "gender": "female",
         "referringDoctorTitle": "Dr.",
         "referringDoctorName": "Herself",
-        "sampleDate": "2026-10-16T09:53:00.000Z",
-        "reportingDate": "2026-10-17T18:53:00.000Z",
+        "sampleDate": "2026-10-16T10:54:00.000Z",
+        "reportingDate": "2026-10-17T20:53:00.000Z",
         "fastingHours": 0,
         "bookingType": "branch",
         "visitFee": 0,
         "appointmentDate": "2026-10-16",
         "appointmentTime": "12:00",
         "testsSubtotal": 310,
-        "totalCost": 152,
-        "discountApplied": 158,
+        "totalCost": 149,
+        "discountApplied": 161,
         "paymentMethod": "cash"
       },
       "profiles": [
         {
-          "id": "prof-1792266746890-aq09",
+          "id": "prof-1792270290135-evfw",
           "profileCode": "ASOT",
           "titleEn": "Anti-Streptolysin O Titre (ASOT)",
           "titleAr": "Anti-Streptolysin O Titre (ASOT)",
@@ -14405,7 +14409,7 @@
           "sampleType": "Serum",
           "parameters": [
             {
-              "id": "p-1792266746905-144",
+              "id": "p-1792270290136-gc6",
               "name": "Anti-Streptolysin O Titre (ASOT) (Anti-Streptolysin O Titre (ASOT))",
               "result": "309",
               "unit": "IU/mL",
@@ -14420,44 +14424,40 @@
             "CBC",
             "CRP",
             "ESR"
-          ]
+          ],
+          "interpretations": [
+            "CBC, CRP, LIPID PROFILE , ESR RECOMMENDED "
+          ],
+          "interpretation": "CBC, CRP, LIPID PROFILE , ESR RECOMMENDED "
         }
       ],
       "staff": {
         "labChemist": "مني احمد",
-        "verifiedBy": "رحاب على",
-        "pathologist": "رامي مختار",
-        "financialDirector": "أ/ ماجد حسني الشرقاوي",
-        "hrDirector": "أ/ أحمد فتحي الجمال",
-        "chemistTitle": "أخصائي أول كيمياء إكلينيكية وهرمونات",
-        "verifierTitle": "طبيب باثولوجى / المدير التنفيذي",
-        "pathologistTitle": "طبيب الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
-        "financialTitle": "المدير المالي ورئيس الحسابات (CFO)",
-        "hrTitle": "مدير الموارد البشرية وشؤون العاملين (HR)",
+        "verifiedBy": "رحاب على ",
+        "pathologist": "رامي مختار ",
+        "chemistTitle": "اخصائي كيمياء اكلينيكية وهرمونات",
+        "verifierTitle": "طبيب باثولوجي / المدير التنفيذي",
+        "pathologistTitle": "طبيب الباثولوجيا الاكلينيكية والكيميائية كلية طب قصر العيني",
         "chemistLicense": "EGY-SCI-88402",
         "verifierLicense": "EGY-MGT-11024",
-        "pathologistLicense": "EGY-MED-48201",
-        "financialLicense": "EGY-FIN-10492",
-        "hrLicense": "EGY-HR-44190",
-        "showFinancialSignature": true,
-        "showHrSignature": true
+        "pathologistLicense": "EGY-MED-48201"
       },
-      "status": "draft",
-      "createdAt": "2026-10-17T19:52:26.910Z",
-      "updatedAt": "2026-10-17T19:55:24.149Z",
-      "invoiceId": "inv-1792266746910"
+      "status": "released",
+      "createdAt": "2026-10-17T20:51:30.136Z",
+      "updatedAt": "2026-10-17T20:54:29.709Z",
+      "invoiceId": "inv-1792270290136"
     }
   ],
   "incomeRecords": [
     {
-      "id": "inv-1792270290136",
-      "invoiceNumber": "INV-2026-048",
+      "id": "inv-1792266746910",
+      "invoiceNumber": "INV-2026-047",
       "patientName": "فيرونيا ممدوح",
-      "patientPhone": "01221502703",
+      "patientPhone": "0 12 21502703",
       "patientAge": 24,
       "patientGender": "female",
-      "barcode": "RT-10078",
-      "labNumber": "RT-2026-048",
+      "barcode": "RT-10077",
+      "labNumber": "RT-2026-047",
       "referringDoctor": "Herself",
       "tests": [
         {
@@ -14477,9 +14477,9 @@
           "method": "Latex-Enhanced Immunoturbidimetry"
         }
       ],
-      "subtotal": 149,
+      "subtotal": 152,
       "testsSubtotal": 310,
-      "discount": 161,
+      "discount": 158,
       "visitFee": 0,
       "isHomeVisit": false,
       "netAmount": 0,
@@ -14490,8 +14490,8 @@
       "cashierName": "أ.د. رامي مختار",
       "branch": "فرع القصر العيني - الرئيسي",
       "syncStatus": "synced",
-      "createdAt": "2026-10-17T20:51:30.136Z",
-      "updatedAt": "2026-10-17T20:51:30.136Z"
+      "createdAt": "2026-10-17T19:52:26.913Z",
+      "updatedAt": "2026-10-17T19:52:26.913Z"
     },
     {
       "id": "inv-1792157519823",
@@ -14626,94 +14626,6 @@
       "syncStatus": "synced",
       "createdAt": "2026-10-16T13:31:59.823Z",
       "updatedAt": "2026-10-16T13:31:59.823Z"
-    },
-    {
-      "id": "inv-001",
-      "invoiceNumber": "INV-2026-001",
-      "patientName": "أحمد محمود إبراهيم",
-      "patientPhone": "01012345678",
-      "patientAge": 34,
-      "patientGender": "male",
-      "barcode": "RT-10029",
-      "labNumber": "RT-2026-001",
-      "referringDoctor": "د. طارق المنشاوي",
-      "tests": [
-        {
-          "id": "t-cbc",
-          "code": "CBC",
-          "nameAr": "صورة الدم الكاملة (CBC 5-Diff)",
-          "nameEn": "Complete Blood Count",
-          "price": 280,
-          "category": "Hematology",
-          "cost": 45,
-          "sampleType": "EDTA Whole Blood"
-        }
-      ],
-      "subtotal": 280,
-      "testsSubtotal": 280,
-      "discount": 28,
-      "loyaltyDiscountEGP": 28,
-      "loyaltyPointsRedeemed": 0,
-      "loyaltyPointsEarned": 252,
-      "netAmount": 252,
-      "paidAmount": 252,
-      "remainingAmount": 0,
-      "paymentMethod": "cash",
-      "paymentStatus": "paid",
-      "cashierName": "المحاسب المالي",
-      "branch": "فرع القصر العيني - الرئيسي",
-      "notes": "خصم كارت الولاء الفضي 10%",
-      "syncStatus": "synced",
-      "createdAt": "2026-10-16T08:41:01.807Z",
-      "updatedAt": "2026-10-16T08:41:01.807Z"
-    },
-    {
-      "id": "inv-002",
-      "invoiceNumber": "INV-2026-002",
-      "patientName": "منى عادل عبد الرحمن",
-      "patientPhone": "01198765432",
-      "patientAge": 48,
-      "patientGender": "female",
-      "barcode": "RT-10030",
-      "labNumber": "RT-2026-002",
-      "referringDoctor": "أ.د. خالد الببلاوي",
-      "tests": [
-        {
-          "id": "t-hba1c",
-          "code": "HBA1C",
-          "nameAr": "السكر التراكمي (HbA1c HPLC)",
-          "nameEn": "Glycated Hemoglobin HbA1c",
-          "price": 160,
-          "category": "Diabetes",
-          "cost": 35
-        },
-        {
-          "id": "t-kft",
-          "code": "KFT",
-          "nameAr": "وظائف كلى كاملة (KFT)",
-          "nameEn": "Renal Function Panel",
-          "price": 220,
-          "category": "Biochemistry",
-          "cost": 30
-        }
-      ],
-      "subtotal": 380,
-      "testsSubtotal": 380,
-      "discount": 38,
-      "loyaltyDiscountEGP": 38,
-      "loyaltyPointsRedeemed": 0,
-      "loyaltyPointsEarned": 342,
-      "netAmount": 342,
-      "paidAmount": 342,
-      "remainingAmount": 0,
-      "paymentMethod": "visa",
-      "paymentStatus": "paid",
-      "cashierName": "المحاسب المالي",
-      "branch": "فرع القصر العيني - الرئيسي",
-      "notes": "خصم كارت الولاء الذهبي 10%",
-      "syncStatus": "synced",
-      "createdAt": "2026-10-16T08:41:01.807Z",
-      "updatedAt": "2026-10-16T08:41:01.807Z"
     },
     {
       "id": "inv-1791921893782",
@@ -19097,14 +19009,102 @@
       "patientGender": "female"
     },
     {
-      "id": "inv-1792266746910",
-      "invoiceNumber": "INV-2026-047",
+      "id": "inv-001",
+      "invoiceNumber": "INV-2026-001",
+      "patientName": "أحمد محمود إبراهيم",
+      "patientPhone": "01012345678",
+      "patientAge": 34,
+      "patientGender": "male",
+      "barcode": "RT-10029",
+      "labNumber": "RT-2026-001",
+      "referringDoctor": "د. طارق المنشاوي",
+      "tests": [
+        {
+          "id": "t-cbc",
+          "code": "CBC",
+          "nameAr": "صورة الدم الكاملة (CBC 5-Diff)",
+          "nameEn": "Complete Blood Count",
+          "price": 280,
+          "category": "Hematology",
+          "cost": 45,
+          "sampleType": "EDTA Whole Blood"
+        }
+      ],
+      "subtotal": 280,
+      "testsSubtotal": 280,
+      "discount": 28,
+      "loyaltyDiscountEGP": 28,
+      "loyaltyPointsRedeemed": 0,
+      "loyaltyPointsEarned": 252,
+      "netAmount": 252,
+      "paidAmount": 252,
+      "remainingAmount": 0,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "cashierName": "المحاسب المالي",
+      "branch": "فرع القصر العيني - الرئيسي",
+      "notes": "خصم كارت الولاء الفضي 10%",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-16T08:41:01.807Z",
+      "updatedAt": "2026-10-16T08:41:01.807Z"
+    },
+    {
+      "id": "inv-002",
+      "invoiceNumber": "INV-2026-002",
+      "patientName": "منى عادل عبد الرحمن",
+      "patientPhone": "01198765432",
+      "patientAge": 48,
+      "patientGender": "female",
+      "barcode": "RT-10030",
+      "labNumber": "RT-2026-002",
+      "referringDoctor": "أ.د. خالد الببلاوي",
+      "tests": [
+        {
+          "id": "t-hba1c",
+          "code": "HBA1C",
+          "nameAr": "السكر التراكمي (HbA1c HPLC)",
+          "nameEn": "Glycated Hemoglobin HbA1c",
+          "price": 160,
+          "category": "Diabetes",
+          "cost": 35
+        },
+        {
+          "id": "t-kft",
+          "code": "KFT",
+          "nameAr": "وظائف كلى كاملة (KFT)",
+          "nameEn": "Renal Function Panel",
+          "price": 220,
+          "category": "Biochemistry",
+          "cost": 30
+        }
+      ],
+      "subtotal": 380,
+      "testsSubtotal": 380,
+      "discount": 38,
+      "loyaltyDiscountEGP": 38,
+      "loyaltyPointsRedeemed": 0,
+      "loyaltyPointsEarned": 342,
+      "netAmount": 342,
+      "paidAmount": 342,
+      "remainingAmount": 0,
+      "paymentMethod": "visa",
+      "paymentStatus": "paid",
+      "cashierName": "المحاسب المالي",
+      "branch": "فرع القصر العيني - الرئيسي",
+      "notes": "خصم كارت الولاء الذهبي 10%",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-16T08:41:01.807Z",
+      "updatedAt": "2026-10-16T08:41:01.807Z"
+    },
+    {
+      "id": "inv-1792270290136",
+      "invoiceNumber": "INV-2026-048",
       "patientName": "فيرونيا ممدوح",
-      "patientPhone": "0 12 21502703",
+      "patientPhone": "01221502703",
       "patientAge": 24,
       "patientGender": "female",
-      "barcode": "RT-10077",
-      "labNumber": "RT-2026-047",
+      "barcode": "RT-10078",
+      "labNumber": "RT-2026-048",
       "referringDoctor": "Herself",
       "tests": [
         {
@@ -19124,9 +19124,9 @@
           "method": "Latex-Enhanced Immunoturbidimetry"
         }
       ],
-      "subtotal": 152,
+      "subtotal": 149,
       "testsSubtotal": 310,
-      "discount": 158,
+      "discount": 161,
       "visitFee": 0,
       "isHomeVisit": false,
       "netAmount": 0,
@@ -19137,101 +19137,1121 @@
       "cashierName": "أ.د. رامي مختار",
       "branch": "فرع القصر العيني - الرئيسي",
       "syncStatus": "synced",
-      "createdAt": "2026-10-17T19:52:26.913Z",
-      "updatedAt": "2026-10-17T19:52:26.913Z"
+      "createdAt": "2026-10-17T20:51:30.136Z",
+      "updatedAt": "2026-10-17T20:51:30.136Z"
     }
   ],
   "expenses": [],
   "loyaltyProfiles": [
     {
-      "patientId": "pat-loyalty-1792270290141",
-      "patientName": "فيرونيا ممدوح",
-      "phone": "01221502703",
-      "barcode": "RT-10078",
-      "cardNumber": "RT-SILVER-10078",
+      "patientId": "pat-loyalty-1792220683672",
+      "patientName": "مي محمود احمد",
+      "phone": "01550554997",
+      "barcode": "RT-10067",
+      "cardNumber": "RT-GOLD-10067",
       "bloodGroup": "",
-      "totalPoints": 149,
-      "tier": "Silver",
-      "lifetimeSpent": 149,
+      "totalPoints": 1224,
+      "tier": "Gold",
+      "lifetimeSpent": 1224,
       "issueDate": "2026-10-17",
       "transactions": [
         {
-          "id": "tx-1792270290141",
+          "id": "tx-1792220765384",
           "date": "2026-10-17",
           "type": "earn",
-          "points": 149,
-          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-048",
-          "invoiceNumber": "RT-2026-048",
-          "amountEGP": 149
+          "points": 612,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-037",
+          "invoiceNumber": "INV-2026-037",
+          "amountEGP": 612
+        },
+        {
+          "id": "tx-1792220683672",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 612,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم INV-2026-037",
+          "invoiceNumber": "INV-2026-037",
+          "amountEGP": 612
         }
       ]
     },
     {
-      "patientId": "pat-loyalty-1792157519828",
-      "patientName": "كريم صلاح سعد",
-      "phone": "01003540455",
-      "barcode": "RT-10076",
-      "cardNumber": "RT-GOLD-10076",
+      "patientId": "pat-loyalty-1791735202177",
+      "patientName": "مي محمود احمد",
+      "phone": "01013242777",
+      "barcode": "RT-10064",
+      "cardNumber": "RT-GOLD-10064",
       "bloodGroup": "",
-      "totalPoints": 950,
+      "totalPoints": 600,
       "tier": "Gold",
-      "lifetimeSpent": 950,
-      "issueDate": "2026-10-16",
+      "lifetimeSpent": 600,
+      "issueDate": "2026-10-11",
       "transactions": [
         {
-          "id": "tx-1792157519828",
-          "date": "2026-10-16",
+          "id": "tx-1791735202178",
+          "date": "2026-10-11",
+          "type": "earn",
+          "points": 600,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-034",
+          "invoiceNumber": "RT-2026-034",
+          "amountEGP": 600
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791734250503",
+      "patientName": "دعاء مصطفى ابراهيم محمود",
+      "phone": "01003540455",
+      "barcode": "RT-10063",
+      "cardNumber": "RT-GOLD-10063",
+      "bloodGroup": "",
+      "totalPoints": 3463,
+      "tier": "VIP",
+      "lifetimeSpent": 3463,
+      "issueDate": "2026-10-11",
+      "transactions": [
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
           "type": "earn",
           "points": 950,
-          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-046",
-          "invoiceNumber": "RT-2026-046",
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-046",
+          "invoiceNumber": "INV-2026-046",
           "amountEGP": 950
+        },
+        {
+          "id": "tx-1792220683671",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 950,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-046",
+          "invoiceNumber": "INV-2026-046",
+          "amountEGP": 950
+        },
+        {
+          "id": "tx-1791734735433",
+          "date": "2026-10-11",
+          "type": "earn",
+          "points": 433,
+          "description": "اكتساب نقاط عن فاتورة رقم RT-2026-034",
+          "invoiceNumber": "RT-2026-034",
+          "amountEGP": 433
+        },
+        {
+          "id": "tx-1791734250503",
+          "date": "2026-10-11",
+          "type": "earn",
+          "points": 1130,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-033",
+          "invoiceNumber": "RT-2026-033",
+          "amountEGP": 1130
         }
       ]
     },
     {
-      "patientId": "pat-001",
-      "patientName": "أحمد محمود إبراهيم",
-      "phone": "01012345678",
-      "barcode": "RT-10029",
-      "cardNumber": "RT-SILVER-10029",
-      "bloodGroup": "A+",
-      "totalPoints": 252,
-      "tier": "Silver",
-      "lifetimeSpent": 252,
-      "issueDate": "2026-10-16",
+      "patientId": "pat-loyalty-1791733128878",
+      "patientName": "داليا عبده حسين زهران",
+      "phone": "01117552241",
+      "barcode": "RT-10062",
+      "cardNumber": "RT-GOLD-10062",
+      "bloodGroup": "",
+      "totalPoints": 5890,
+      "tier": "VIP",
+      "lifetimeSpent": 5890,
+      "issueDate": "2026-10-11",
       "transactions": [
         {
-          "id": "tx-l-1",
-          "date": "2026-10-16",
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 2575,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-032",
+          "invoiceNumber": "INV-2026-032",
+          "amountEGP": 2575
+        },
+        {
+          "id": "tx-1792220683672",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 2575,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-032",
+          "invoiceNumber": "INV-2026-032",
+          "amountEGP": 2575
+        },
+        {
+          "id": "tx-1791733128878",
+          "date": "2026-10-11",
+          "type": "earn",
+          "points": 740,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-032",
+          "invoiceNumber": "RT-2026-032",
+          "amountEGP": 740
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791501113007",
+      "patientName": "زينب عمر",
+      "phone": "01091353732",
+      "barcode": "RT-10062",
+      "cardNumber": "RT-SILVER-10062",
+      "bloodGroup": "",
+      "totalPoints": 1295,
+      "tier": "Gold",
+      "lifetimeSpent": 1295,
+      "issueDate": "2026-10-08",
+      "transactions": [
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 349,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-032",
+          "invoiceNumber": "INV-2026-032",
+          "amountEGP": 349
+        },
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-8984",
+          "invoiceNumber": "INV-2026-8984",
+          "amountEGP": 199
+        },
+        {
+          "id": "tx-1792220683672",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 349,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-032",
+          "invoiceNumber": "INV-2026-032",
+          "amountEGP": 349
+        },
+        {
+          "id": "tx-1792220683671",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-8984",
+          "invoiceNumber": "INV-2026-8984",
+          "amountEGP": 199
+        },
+        {
+          "id": "tx-1791501113007",
+          "date": "2026-10-08",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-032",
+          "invoiceNumber": "RT-2026-032",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791500920502",
+      "patientName": "مجدى احمد ربيع",
+      "phone": "01030502318",
+      "barcode": "RT-10061",
+      "cardNumber": "RT-SILVER-10061",
+      "bloodGroup": "",
+      "totalPoints": 2595,
+      "tier": "Platinum",
+      "lifetimeSpent": 2595,
+      "issueDate": "2026-10-08",
+      "transactions": [
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-031",
+          "invoiceNumber": "INV-2026-031",
+          "amountEGP": 599
+        },
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-8983",
+          "invoiceNumber": "INV-2026-8983",
+          "amountEGP": 599
+        },
+        {
+          "id": "tx-1792220683672",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-031",
+          "invoiceNumber": "INV-2026-031",
+          "amountEGP": 599
+        },
+        {
+          "id": "tx-1792220683671",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-8983",
+          "invoiceNumber": "INV-2026-8983",
+          "amountEGP": 599
+        },
+        {
+          "id": "tx-1791500920502",
+          "date": "2026-10-08",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-031",
+          "invoiceNumber": "RT-2026-031",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791500705356",
+      "patientName": "عادل احمد صبيح",
+      "phone": "01112919075",
+      "barcode": "RT-10060",
+      "cardNumber": "RT-SILVER-10060",
+      "bloodGroup": "",
+      "totalPoints": 1397,
+      "tier": "Gold",
+      "lifetimeSpent": 1397,
+      "issueDate": "2026-10-08",
+      "transactions": [
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-030",
+          "invoiceNumber": "INV-2026-030",
+          "amountEGP": 599
+        },
+        {
+          "id": "tx-1792220683672",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-030",
+          "invoiceNumber": "INV-2026-030",
+          "amountEGP": 599
+        },
+        {
+          "id": "tx-1791500705356",
+          "date": "2026-10-08",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-030",
+          "invoiceNumber": "RT-2026-030",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791499039660",
+      "patientName": "مني كرم هاشم",
+      "phone": "01113748875",
+      "barcode": "RT-10061",
+      "cardNumber": "RT-GOLD-10061",
+      "bloodGroup": "",
+      "totalPoints": 505,
+      "tier": "Gold",
+      "lifetimeSpent": 505,
+      "issueDate": "2026-10-08",
+      "transactions": [
+        {
+          "id": "tx-1791499039660",
+          "date": "2026-10-08",
+          "type": "earn",
+          "points": 505,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-031",
+          "invoiceNumber": "RT-2026-031",
+          "amountEGP": 505
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791498479900",
+      "patientName": "فاطمة احمد عبدالله",
+      "phone": "01010135898",
+      "barcode": "RT-10061",
+      "cardNumber": "RT-SILVER-10061",
+      "bloodGroup": "",
+      "totalPoints": 233,
+      "tier": "Silver",
+      "lifetimeSpent": 233,
+      "issueDate": "2026-10-08",
+      "transactions": [
+        {
+          "id": "tx-1791498479900",
+          "date": "2026-10-08",
+          "type": "earn",
+          "points": 233,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-031",
+          "invoiceNumber": "RT-2026-031",
+          "amountEGP": 233
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791414459348",
+      "patientName": "جيهان عبدالفتاح",
+      "phone": "01022231270",
+      "barcode": "RT-10062",
+      "cardNumber": "RT-SILVER-10062",
+      "bloodGroup": "",
+      "totalPoints": 961,
+      "tier": "Gold",
+      "lifetimeSpent": 961,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 314,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-032",
+          "invoiceNumber": "INV-2026-032",
+          "amountEGP": 314
+        },
+        {
+          "id": "tx-1792220683672",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 314,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-032",
+          "invoiceNumber": "INV-2026-032",
+          "amountEGP": 314
+        },
+        {
+          "id": "tx-1791414459348",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 333,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-032",
+          "invoiceNumber": "RT-2026-032",
+          "amountEGP": 333
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791381439613",
+      "patientName": "محمد حسن على",
+      "phone": "01005314825",
+      "barcode": "RT-10043",
+      "cardNumber": "RT-SILVER-10043",
+      "bloodGroup": "",
+      "totalPoints": 570,
+      "tier": "Gold",
+      "lifetimeSpent": 570,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1792220765385",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 190,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-013",
+          "invoiceNumber": "INV-2026-013",
+          "amountEGP": 190
+        },
+        {
+          "id": "tx-1792220683672",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 190,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-013",
+          "invoiceNumber": "INV-2026-013",
+          "amountEGP": 190
+        },
+        {
+          "id": "tx-1791381439613",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 190,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-013",
+          "invoiceNumber": "RT-2026-013",
+          "amountEGP": 190
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791359724840",
+      "patientName": "فيرا ممدوح عبدالمسيح",
+      "phone": "01221502703",
+      "barcode": "RT-10044",
+      "cardNumber": "RT-SILVER-10044",
+      "bloodGroup": "",
+      "totalPoints": 650,
+      "tier": "Gold",
+      "lifetimeSpent": 650,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1792266746999",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 152,
+          "description": "اكتساب نقاط عن فاتورة رقم RT-2026-047",
+          "invoiceNumber": "RT-2026-047",
+          "amountEGP": 152
+        },
+        {
+          "id": "tx-1791359724840",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 498,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-014",
+          "invoiceNumber": "RT-2026-014",
+          "amountEGP": 498
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791359462638",
+      "patientName": "حبيبه مجدى محمد",
+      "phone": "01148879943",
+      "barcode": "RT-10043",
+      "cardNumber": "RT-GOLD-10043",
+      "bloodGroup": "",
+      "totalPoints": 3050,
+      "tier": "VIP",
+      "lifetimeSpent": 3050,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1792220765385",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 1012,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-013",
+          "invoiceNumber": "INV-2026-013",
+          "amountEGP": 1012
+        },
+        {
+          "id": "tx-1792220683672",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 1012,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-013",
+          "invoiceNumber": "INV-2026-013",
+          "amountEGP": 1012
+        },
+        {
+          "id": "tx-1791359462638",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 1026,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-013",
+          "invoiceNumber": "RT-2026-013",
+          "amountEGP": 1026
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791358565055",
+      "patientName": "كوثر ابراهيم",
+      "phone": "01095920078",
+      "barcode": "RT-10042",
+      "cardNumber": "RT-SILVER-10042",
+      "bloodGroup": "",
+      "totalPoints": 897,
+      "tier": "Gold",
+      "lifetimeSpent": 897,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1792220765385",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 349,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-012",
+          "invoiceNumber": "INV-2026-012",
+          "amountEGP": 349
+        },
+        {
+          "id": "tx-1792220683673",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 349,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-012",
+          "invoiceNumber": "INV-2026-012",
+          "amountEGP": 349
+        },
+        {
+          "id": "tx-1791358565055",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-012",
+          "invoiceNumber": "RT-2026-012",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791321555676",
+      "patientName": "مروة عبدالفتاح ابراهيم",
+      "phone": "01065490430",
+      "barcode": "RT-10041",
+      "cardNumber": "RT-SILVER-10041",
+      "bloodGroup": "",
+      "totalPoints": 897,
+      "tier": "Gold",
+      "lifetimeSpent": 897,
+      "issueDate": "2026-10-06",
+      "transactions": [
+        {
+          "id": "tx-1792220765385",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 349,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-011",
+          "invoiceNumber": "INV-2026-011",
+          "amountEGP": 349
+        },
+        {
+          "id": "tx-1792220683673",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 349,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-011",
+          "invoiceNumber": "INV-2026-011",
+          "amountEGP": 349
+        },
+        {
+          "id": "tx-1791321555676",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-011",
+          "invoiceNumber": "RT-2026-011",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791305504358",
+      "patientName": "ٌٍّّرجاء حسن ابراهيم",
+      "phone": "01124485444",
+      "barcode": "RT-10039",
+      "cardNumber": "RT-SILVER-10039",
+      "bloodGroup": "",
+      "totalPoints": 604,
+      "tier": "Gold",
+      "lifetimeSpent": 604,
+      "issueDate": "2026-10-06",
+      "transactions": [
+        {
+          "id": "tx-1792220765385",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 91,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-009",
+          "invoiceNumber": "INV-2026-009",
+          "amountEGP": 91
+        },
+        {
+          "id": "tx-1792220683673",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 91,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-009",
+          "invoiceNumber": "INV-2026-009",
+          "amountEGP": 91
+        },
+        {
+          "id": "tx-1791320477694",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 171,
+          "description": "اكتساب نقاط عن فاتورة رقم RT-2026-011",
+          "invoiceNumber": "RT-2026-011",
+          "amountEGP": 171
+        },
+        {
+          "id": "tx-1791305504358",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 251,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-009",
+          "invoiceNumber": "RT-2026-009",
+          "amountEGP": 251
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791287976704",
+      "patientName": "أمال محمد",
+      "phone": "01555108312",
+      "barcode": "RT-10038",
+      "cardNumber": "RT-SILVER-10038",
+      "bloodGroup": "",
+      "totalPoints": 597,
+      "tier": "Gold",
+      "lifetimeSpent": 597,
+      "issueDate": "2026-10-06",
+      "transactions": [
+        {
+          "id": "tx-1792220765386",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-008",
+          "invoiceNumber": "INV-2026-008",
+          "amountEGP": 199
+        },
+        {
+          "id": "tx-1792220683673",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-008",
+          "invoiceNumber": "INV-2026-008",
+          "amountEGP": 199
+        },
+        {
+          "id": "tx-1791287976704",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-008",
+          "invoiceNumber": "RT-2026-008",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791287331564",
+      "patientName": "شريف عادل",
+      "phone": "01100",
+      "barcode": "RT-10037",
+      "cardNumber": "RT-SILVER-10037",
+      "bloodGroup": "",
+      "totalPoints": 897,
+      "tier": "Gold",
+      "lifetimeSpent": 897,
+      "issueDate": "2026-10-06",
+      "transactions": [
+        {
+          "id": "tx-1792220765386",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 349,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-007",
+          "invoiceNumber": "INV-2026-007",
+          "amountEGP": 349
+        },
+        {
+          "id": "tx-1792220683673",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 349,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-007",
+          "invoiceNumber": "INV-2026-007",
+          "amountEGP": 349
+        },
+        {
+          "id": "tx-1791287331564",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-007",
+          "invoiceNumber": "RT-2026-007",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791286375210",
+      "patientName": "نورا سعيد حلمى",
+      "phone": "01228439288",
+      "barcode": "RT-10036",
+      "cardNumber": "RT-SILVER-10036",
+      "bloodGroup": "",
+      "totalPoints": 2794,
+      "tier": "Platinum",
+      "lifetimeSpent": 2794,
+      "issueDate": "2026-10-06",
+      "transactions": [
+        {
+          "id": "tx-1792220765386",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-006",
+          "invoiceNumber": "INV-2026-006",
+          "amountEGP": 599
+        },
+        {
+          "id": "tx-1792220765386",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-006",
+          "invoiceNumber": "INV-2026-006",
+          "amountEGP": 599
+        },
+        {
+          "id": "tx-1792220683674",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-006",
+          "invoiceNumber": "INV-2026-006",
+          "amountEGP": 599
+        },
+        {
+          "id": "tx-1792220683673",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-006",
+          "invoiceNumber": "INV-2026-006",
+          "amountEGP": 599
+        },
+        {
+          "id": "tx-1791286741651",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط عن فاتورة رقم RT-2026-006",
+          "invoiceNumber": "RT-2026-006",
+          "amountEGP": 199
+        },
+        {
+          "id": "tx-1791286375210",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-006",
+          "invoiceNumber": "RT-2026-006",
+          "amountEGP": 199
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791285435325",
+      "patientName": "محمد صلاح الدين عبدة",
+      "phone": "01004359187",
+      "barcode": "RT-10035",
+      "cardNumber": "RT-GOLD-10035",
+      "bloodGroup": "",
+      "totalPoints": 1797,
+      "tier": "Platinum",
+      "lifetimeSpent": 1797,
+      "issueDate": "2026-10-06",
+      "transactions": [
+        {
+          "id": "tx-1792220765386",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-005",
+          "invoiceNumber": "INV-2026-005",
+          "amountEGP": 599
+        },
+        {
+          "id": "tx-1792220683674",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-005",
+          "invoiceNumber": "INV-2026-005",
+          "amountEGP": 599
+        },
+        {
+          "id": "tx-1791285435325",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-005",
+          "invoiceNumber": "RT-2026-005",
+          "amountEGP": 599
+        }
+      ]
+    },
+    {
+      "tier": "Gold",
+      "patientId": "pat-loyalty-1791284141343",
+      "totalPoints": 1143,
+      "barcode": "RT-10034",
+      "cardNumber": "RT-GOLD-10034",
+      "phone": "01277489467",
+      "patientName": "مريم عوض الكريم",
+      "lifetimeSpent": 1143,
+      "issueDate": "2026-10-06",
+      "transactions": [
+        {
+          "id": "tx-1792220765385",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-010",
+          "invoiceNumber": "INV-2026-010",
+          "amountEGP": 199
+        },
+        {
+          "id": "tx-1792220683673",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-010",
+          "invoiceNumber": "INV-2026-010",
+          "amountEGP": 199
+        },
+        {
+          "id": "tx-1791306270704",
+          "date": "2026-10-06",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط عن فاتورة رقم RT-2026-010",
+          "invoiceNumber": "RT-2026-010",
+          "amountEGP": 199
+        },
+        {
+          "amountEGP": 546,
+          "points": 546,
+          "id": "tx-1791284141343",
+          "type": "earn",
+          "invoiceNumber": "RT-2026-004",
+          "date": "2026-10-06",
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-004"
+        }
+      ],
+      "bloodGroup": ""
+    },
+    {
+      "lifetimeSpent": 756,
+      "transactions": [
+        {
+          "id": "tx-1792220765386",
+          "date": "2026-10-17",
           "type": "earn",
           "points": 252,
-          "description": "نقاط فاتورة تحاليل CBC رقم INV-2026-001",
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-001",
           "invoiceNumber": "INV-2026-001",
           "amountEGP": 252
+        },
+        {
+          "id": "tx-1792220683674",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 252,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-001",
+          "invoiceNumber": "INV-2026-001",
+          "amountEGP": 252
+        },
+        {
+          "amountEGP": 252,
+          "points": 252,
+          "id": "tx-l-1",
+          "description": "نقاط فاتورة تحاليل CBC رقم INV-2026-001",
+          "date": "2026-10-06",
+          "invoiceNumber": "INV-2026-001",
+          "type": "earn"
+        }
+      ],
+      "patientName": "أحمد محمود إبراهيم",
+      "phone": "01012345678",
+      "tier": "Gold",
+      "issueDate": "2026-10-06",
+      "patientId": "pat-001",
+      "cardNumber": "RT-SILVER-10029",
+      "totalPoints": 756,
+      "barcode": "RT-10029",
+      "bloodGroup": "A+"
+    },
+    {
+      "phone": "01198765432",
+      "patientName": "منى عادل عبد الرحمن",
+      "cardNumber": "RT-GOLD-10030",
+      "bloodGroup": "O+",
+      "issueDate": "2026-10-06",
+      "tier": "Gold",
+      "barcode": "RT-10030",
+      "patientId": "pat-002",
+      "totalPoints": 1366,
+      "transactions": [
+        {
+          "id": "tx-1792220765386",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 342,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-002",
+          "invoiceNumber": "INV-2026-002",
+          "amountEGP": 342
+        },
+        {
+          "id": "tx-1792220683674",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 342,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-002",
+          "invoiceNumber": "INV-2026-002",
+          "amountEGP": 342
+        },
+        {
+          "description": "نقاط فاتورة تحاليل السكر والكلى INV-2026-002",
+          "points": 342,
+          "id": "tx-l-2",
+          "invoiceNumber": "INV-2026-002",
+          "date": "2026-10-06",
+          "amountEGP": 342,
+          "type": "earn"
+        }
+      ],
+      "lifetimeSpent": 1366
+    },
+    {
+      "patientId": "pat-loyalty-1791400927210",
+      "patientName": "جيهان عبدالفتاح",
+      "phone": "01099999098",
+      "barcode": "RT-10061",
+      "cardNumber": "RT-SILVER-10061",
+      "bloodGroup": "",
+      "totalPoints": 560,
+      "tier": "Gold",
+      "lifetimeSpent": 560,
+      "issueDate": "2026-10-07",
+      "transactions": [
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 188,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-031",
+          "invoiceNumber": "INV-2026-031",
+          "amountEGP": 188
+        },
+        {
+          "id": "tx-1792220683672",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 188,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-031",
+          "invoiceNumber": "INV-2026-031",
+          "amountEGP": 188
+        },
+        {
+          "id": "tx-1791400927211",
+          "date": "2026-10-07",
+          "type": "earn",
+          "points": 184,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-031",
+          "invoiceNumber": "RT-2026-031",
+          "amountEGP": 184
         }
       ]
     },
     {
-      "patientId": "pat-002",
-      "patientName": "منى عادل عبد الرحمن",
-      "phone": "01198765432",
-      "barcode": "RT-10030",
-      "cardNumber": "RT-GOLD-10030",
-      "bloodGroup": "O+",
-      "totalPoints": 682,
+      "patientId": "pat-loyalty-1791663303872",
+      "patientName": "يوستينا عماد",
+      "phone": "01204282609",
+      "barcode": "RT-10064",
+      "cardNumber": "RT-GOLD-10064",
+      "bloodGroup": "",
+      "totalPoints": 540,
       "tier": "Gold",
-      "lifetimeSpent": 682,
-      "issueDate": "2026-10-16",
+      "lifetimeSpent": 540,
+      "issueDate": "2026-10-10",
       "transactions": [
         {
-          "id": "tx-l-2",
-          "date": "2026-10-16",
+          "id": "tx-1791663303872",
+          "date": "2026-10-10",
           "type": "earn",
-          "points": 342,
-          "description": "نقاط فاتورة تحاليل السكر والكلى INV-2026-002",
-          "invoiceNumber": "INV-2026-002",
-          "amountEGP": 342
+          "points": 540,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-034",
+          "invoiceNumber": "RT-2026-034",
+          "amountEGP": 540
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791819003070",
+      "patientName": "منى محمود احمد",
+      "phone": "01005750607",
+      "barcode": "RT-9827361849",
+      "cardNumber": "RT-GOLD-9827361849",
+      "bloodGroup": "",
+      "totalPoints": 2613,
+      "tier": "Platinum",
+      "lifetimeSpent": 2613,
+      "issueDate": "2026-10-12",
+      "transactions": [
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 656,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-8982",
+          "invoiceNumber": "INV-2026-8982",
+          "amountEGP": 656
+        },
+        {
+          "id": "tx-1792220683671",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 656,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-8982",
+          "invoiceNumber": "INV-2026-8982",
+          "amountEGP": 656
+        },
+        {
+          "id": "tx-1791819003070",
+          "date": "2026-10-12",
+          "type": "earn",
+          "points": 1301,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-8982",
+          "invoiceNumber": "RT-2026-8982",
+          "amountEGP": 1301
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791836921765",
+      "patientName": "سلمي محمد",
+      "phone": "01155939560",
+      "barcode": "RT-9827361852",
+      "cardNumber": "RT-SILVER-9827361852",
+      "bloodGroup": "",
+      "totalPoints": 306,
+      "tier": "Silver",
+      "lifetimeSpent": 306,
+      "issueDate": "2026-10-12",
+      "transactions": [
+        {
+          "id": "tx-1791836921765",
+          "date": "2026-10-12",
+          "type": "earn",
+          "points": 306,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-8985",
+          "invoiceNumber": "RT-2026-8985",
+          "amountEGP": 306
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1791839634484",
+      "patientName": "أشرف غانم",
+      "phone": "01100304890",
+      "barcode": "RT-9827361853",
+      "cardNumber": "RT-SILVER-9827361853",
+      "bloodGroup": "",
+      "totalPoints": 480,
+      "tier": "Silver",
+      "lifetimeSpent": 480,
+      "issueDate": "2026-10-12",
+      "transactions": [
+        {
+          "id": "tx-1791839634484",
+          "date": "2026-10-12",
+          "type": "earn",
+          "points": 480,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-8986",
+          "invoiceNumber": "RT-2026-8986",
+          "amountEGP": 480
         }
       ]
     }
@@ -19391,18 +20411,18 @@
   ],
   "labInfo": {
     "labNameAr": "معامل RT للتحاليل الطبية والتشخيصية",
-    "labNameEn": "RT Diagnostic Laboratories",
-    "sloganAr": "التشخيص الصحيح يبدأ معنا · دقة، سرعة، وأمان تشخيصي",
-    "sloganEn": "Accurate Diagnosis Starts With Us",
-    "supervisionAr": "أطباء واستشاريو كلية طب قصر العيني",
+    "vodafoneCash": "01100046841",
+    "whatsapp": "01100874444",
+    "hotline": "01100046841",
+    "instapay": "ramirtlab@instapay",
+    "mainAddress": "ميدان بهتيم برج صيدليه العزبى الدور الثالث امام الأسانسير شبرا الخيمه",
+    "phone": "01013242777",
     "supervisionEn": "Kasr Al Ainy Faculty of Medicine Consultants",
     "accreditation": "ISO 15189 Certified Quality Management",
-    "hotline": "01100874444",
-    "phone": "01013242777",
-    "whatsapp": "01100046841",
-    "mainAddress": "ميدان بهتيم برج صيدليه العزبى الدور الثالث امام الأسانسير شبرا الخيمه",
-    "instapay": "ramirtlab@instapay",
-    "vodafoneCash": "01124485444"
+    "sloganEn": "Accurate Diagnosis Starts With Us",
+    "labNameEn": "RT Diagnostic Laboratories",
+    "sloganAr": "التشخيص الصحيح يبدأ معنا · دقة، سرعة، وأمان تشخيصي",
+    "supervisionAr": "أطباء واستشاريو كلية طب قصر العيني"
   },
   "testCatalog": [
     {
