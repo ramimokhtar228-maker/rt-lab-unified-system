@@ -105,50 +105,6 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
   const [createdLabNum, setCreatedLabNum] = useState<string>('');
   const [isWhatsAppModalOpen, setIsWhatsAppModalOpen] = useState(false);
 
-  const bookingModalData = useMemo(() => {
-    const discountLabel = selectedPackage
-      ? `باقة: ${selectedPackage.titleAr}`
-      : (discountPercent > 0
-          ? `${discountPercent}%${loyaltyProfile ? ' (خصم كارت الولاء)' : ''}`
-          : (totalDiscount > 0 ? 'خصم مطبق' : 'لا يوجد'));
-
-    return {
-      patientName: fullName.trim() || 'العميل الكريم',
-      labNumber: createdLabNum || nextLabNumber,
-      barcode: nextBarcode,
-      phone: phone.trim(),
-      date: appointmentDate || today,
-      time: appointmentTime || '09:00',
-      isHomeVisit: bookingType === 'home_visit',
-      address: homeAddress,
-      deliveryNotes,
-      branchName: 'الفرع الرئيسي - بهتيم',
-      branchAddress: labInfo?.mainAddress,
-      branchPhone: labInfo?.phone,
-      testsDetails: selectedTests.map(t => ({
-        nameAr: t.nameAr,
-        nameEn: t.nameEn,
-        code: t.code,
-        price: t.price
-      })),
-      packageName: selectedPackage?.titleAr,
-      subtotal: testsSubtotal,
-      discountAmount: totalDiscount,
-      discountLabel,
-      visitFee: effectiveVisitFee,
-      netAmount: netTotal,
-      paidAmount,
-      remainingAmount,
-      paymentMethod: paymentMethod === 'cash' ? 'نقداً بالخزينة' : paymentMethod === 'visa' ? 'بطاقة ائتمانية / فيزا' : paymentMethod === 'instapay' ? 'إنستا باي InstaPay' : String(paymentMethod),
-      fastingHours: Number(fastingHours) || 0
-    };
-  }, [
-    fullName, createdLabNum, nextLabNumber, nextBarcode, phone, appointmentDate, today,
-    appointmentTime, bookingType, homeAddress, deliveryNotes, labInfo, selectedTests,
-    selectedPackage, testsSubtotal, totalDiscount, discountPercent, loyaltyProfile,
-    effectiveVisitFee, netTotal, paidAmount, remainingAmount, paymentMethod, fastingHours
-  ]);
-
   // Loyalty check by phone
   const loyaltyProfile = useMemo(() => {
     return getLoyaltyByPhone(phone);
@@ -224,6 +180,51 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
   }, [netTotal]);
 
   const remainingAmount = Math.max(0, netTotal - paidAmount);
+
+  // Professional WhatsApp Booking Data Memo (Computed after all financial & package variables)
+  const bookingModalData = useMemo(() => {
+    const discountLabel = selectedPackage
+      ? `باقة: ${selectedPackage.titleAr}`
+      : (discountPercent > 0
+          ? `${discountPercent}%${loyaltyProfile ? ' (خصم كارت الولاء)' : ''}`
+          : (totalDiscount > 0 ? 'خصم مطبق' : 'لا يوجد'));
+
+    return {
+      patientName: fullName.trim() || 'العميل الكريم',
+      labNumber: createdLabNum || nextLabNumber,
+      barcode: nextBarcode,
+      phone: phone.trim(),
+      date: appointmentDate || today,
+      time: appointmentTime || '09:00',
+      isHomeVisit: bookingType === 'home_visit',
+      address: homeAddress,
+      deliveryNotes,
+      branchName: 'الفرع الرئيسي - بهتيم',
+      branchAddress: labInfo?.mainAddress,
+      branchPhone: labInfo?.phone,
+      testsDetails: selectedTests.map(t => ({
+        nameAr: t.nameAr,
+        nameEn: t.nameEn,
+        code: t.code,
+        price: t.price
+      })),
+      packageName: selectedPackage?.titleAr,
+      subtotal: testsSubtotal,
+      discountAmount: totalDiscount,
+      discountLabel,
+      visitFee: effectiveVisitFee,
+      netAmount: netTotal,
+      paidAmount,
+      remainingAmount,
+      paymentMethod: paymentMethod === 'cash' ? 'نقداً بالخزينة' : paymentMethod === 'visa' ? 'بطاقة ائتمانية / فيزا' : paymentMethod === 'instapay' ? 'إنستا باي InstaPay' : String(paymentMethod),
+      fastingHours: Number(fastingHours) || 0
+    };
+  }, [
+    fullName, createdLabNum, nextLabNumber, nextBarcode, phone, appointmentDate, today,
+    appointmentTime, bookingType, homeAddress, deliveryNotes, labInfo, selectedTests,
+    selectedPackage, testsSubtotal, totalDiscount, discountPercent, loyaltyProfile,
+    effectiveVisitFee, netTotal, paidAmount, remainingAmount, paymentMethod, fastingHours
+  ]);
 
   // Add/Remove Tests
   const handleAddTest = (test: InvoiceTestItem) => {
