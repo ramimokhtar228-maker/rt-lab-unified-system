@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:24:55.213Z",
+  "syncedAt": "2026-10-17T20:25:02.310Z",
   "reports": [
     {
       "id": "rep-001",
@@ -14401,6 +14401,84 @@
           ]
         }
       ]
+    },
+    {
+      "id": "rep-1792266746907",
+      "reportNumber": "RT-2026-047",
+      "patient": {
+        "id": "pat-1792266746882",
+        "labNumber": "RT-2026-047",
+        "barcode": "RT-10077",
+        "fullName": "فيرونيا ممدوح",
+        "phone": "0 12 21502703",
+        "age": 24,
+        "ageUnit": "years",
+        "gender": "female",
+        "referringDoctorTitle": "Dr.",
+        "referringDoctorName": "Herself",
+        "sampleDate": "2026-10-16T09:53:00.000Z",
+        "reportingDate": "2026-10-17T18:53:00.000Z",
+        "fastingHours": 0,
+        "bookingType": "branch",
+        "visitFee": 0,
+        "appointmentDate": "2026-10-16",
+        "appointmentTime": "12:00",
+        "testsSubtotal": 310,
+        "totalCost": 152,
+        "discountApplied": 158,
+        "paymentMethod": "cash"
+      },
+      "profiles": [
+        {
+          "id": "prof-1792266746890-aq09",
+          "profileCode": "ASOT",
+          "titleEn": "Anti-Streptolysin O Titre (ASOT)",
+          "titleAr": "Anti-Streptolysin O Titre (ASOT)",
+          "category": "Immunology",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-1792266746905-144",
+              "name": "Anti-Streptolysin O Titre (ASOT) (Anti-Streptolysin O Titre (ASOT))",
+              "result": "309",
+              "unit": "IU/mL",
+              "minNormal": 0,
+              "maxNormal": 200,
+              "textReference": "Adults: < 200 IU/mL | Children: < 400 IU/mL",
+              "flag": "HIGH",
+              "method": "Latex-Enhanced Immunoturbidimetry"
+            }
+          ],
+          "recommendedTests": [
+            "CBC",
+            "CRP",
+            "ESR"
+          ]
+        }
+      ],
+      "staff": {
+        "labChemist": "مني احمد",
+        "verifiedBy": "رحاب على",
+        "pathologist": "رامي مختار",
+        "financialDirector": "أ/ ماجد حسني الشرقاوي",
+        "hrDirector": "أ/ أحمد فتحي الجمال",
+        "chemistTitle": "أخصائي أول كيمياء إكلينيكية وهرمونات",
+        "verifierTitle": "طبيب باثولوجى / المدير التنفيذي",
+        "pathologistTitle": "طبيب الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
+        "financialTitle": "المدير المالي ورئيس الحسابات (CFO)",
+        "hrTitle": "مدير الموارد البشرية وشؤون العاملين (HR)",
+        "chemistLicense": "EGY-SCI-88402",
+        "verifierLicense": "EGY-MGT-11024",
+        "pathologistLicense": "EGY-MED-48201",
+        "financialLicense": "EGY-FIN-10492",
+        "hrLicense": "EGY-HR-44190",
+        "showFinancialSignature": true,
+        "showHrSignature": true
+      },
+      "status": "draft",
+      "createdAt": "2026-10-17T19:52:26.910Z",
+      "updatedAt": "2026-10-17T19:55:24.149Z",
+      "invoiceId": "inv-1792266746910"
     }
   ],
   "incomeRecords": [
@@ -19006,6 +19084,50 @@
       "paymentMethod": "cash",
       "paymentStatus": "paid",
       "patientGender": "female"
+    },
+    {
+      "id": "inv-1792266746910",
+      "invoiceNumber": "INV-2026-047",
+      "patientName": "فيرونيا ممدوح",
+      "patientPhone": "0 12 21502703",
+      "patientAge": 24,
+      "patientGender": "female",
+      "barcode": "RT-10077",
+      "labNumber": "RT-2026-047",
+      "referringDoctor": "Herself",
+      "tests": [
+        {
+          "id": "t-96",
+          "code": "ASOT",
+          "nameAr": "Anti-Streptolysin O Titre (ASOT)",
+          "nameEn": "Anti-Streptolysin O Titre (ASOT)",
+          "category": "Immunology",
+          "price": 310,
+          "cost": 25,
+          "sampleType": "Serum",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "IU/mL",
+          "minNormal": 0,
+          "maxNormal": 200,
+          "textReference": "Adults: < 200 IU/mL | Children: < 400 IU/mL",
+          "method": "Latex-Enhanced Immunoturbidimetry"
+        }
+      ],
+      "subtotal": 152,
+      "testsSubtotal": 310,
+      "discount": 158,
+      "visitFee": 0,
+      "isHomeVisit": false,
+      "netAmount": 0,
+      "paidAmount": 0,
+      "remainingAmount": 0,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "cashierName": "أ.د. رامي مختار",
+      "branch": "فرع القصر العيني - الرئيسي",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-17T19:52:26.913Z",
+      "updatedAt": "2026-10-17T19:52:26.913Z"
     }
   ],
   "expenses": [],
@@ -19266,7 +19388,7 @@
       "nameAr": "Random Blood Sugar",
       "nameEn": "Random Blood Sugar",
       "category": "Diabetes",
-      "price": 50,
+      "price": 88,
       "cost": 10,
       "sampleType": "Serum / Plasma",
       "turnaroundTime": "Immediate (30 min)",
