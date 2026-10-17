@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:42:30.066Z",
+  "syncedAt": "2026-10-17T20:43:36.213Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2879,9 +2879,9 @@
         "showHrSignature": true,
         "hideSignatures": false
       },
-      "status": "draft",
+      "status": "released",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:42:27.428Z",
+      "updatedAt": "2026-10-17T20:43:31.132Z",
       "invoiceId": "inv-1791819003027"
     },
     {
