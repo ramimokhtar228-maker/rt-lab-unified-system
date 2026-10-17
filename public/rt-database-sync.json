@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:33:00.063Z",
+  "syncedAt": "2026-10-17T20:33:20.590Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2781,177 +2781,6 @@
               "flag": "NORMAL"
             }
           ]
-        },
-        {
-          "id": "prof-1791819654845-PT",
-          "profileCode": "CULTURE",
-          "titleEn": "Culture & Antimicrobial Susceptibility (C&S)",
-          "titleAr": "مزرعة ميكروبية واختبار حساسية المضادات الحيوية",
-          "category": "General Diagnostic",
-          "sampleType": "Serum",
-          "interpretation": "Significant bacterial pathogen isolated. Antimicrobial susceptibility profile detailed below.",
-          "parameters": [
-            {
-              "name": "Specimen Type",
-              "unit": "Clinical Protocol",
-              "textReference": "Urine / Swab / Blood",
-              "id": "param-0",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Gram Stain Examination",
-              "unit": "Clinical Protocol",
-              "textReference": "Direct Smear",
-              "id": "param-1",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Colony Count",
-              "unit": "CFU/mL",
-              "textReference": "> 100,000 CFU/mL (Significant)",
-              "id": "param-2",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Isolated Pathogen",
-              "unit": "Clinical Protocol",
-              "textReference": "Escherichia coli (E. coli)",
-              "id": "param-3",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Amoxicillin / Clavulanate (Augmentin)",
-              "unit": "Susceptibility (MIC / Disc)",
-              "textReference": "Sensitive / Resistant",
-              "id": "param-4",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Piperacillin / Tazobactam (Tazocin)",
-              "unit": "Susceptibility (MIC / Disc)",
-              "textReference": "Sensitive / Resistant",
-              "id": "param-5",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Cefuroxime (Zinnat)",
-              "unit": "Susceptibility (MIC / Disc)",
-              "textReference": "Sensitive / Resistant",
-              "id": "param-6",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Ceftriaxone (Rocephin)",
-              "unit": "pH Units",
-              "textReference": "Sensitive / Resistant",
-              "id": "param-7",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Ceftazidime (Fortum)",
-              "unit": "Susceptibility (MIC / Disc)",
-              "textReference": "Sensitive / Resistant",
-              "id": "param-8",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Cefepime (Maxipime)",
-              "unit": "Susceptibility (MIC / Disc)",
-              "textReference": "Sensitive / Resistant",
-              "id": "param-9",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Meropenem (Meronem)",
-              "unit": "Susceptibility (MIC / Disc)",
-              "textReference": "Sensitive / Resistant",
-              "id": "param-10",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Imipenem (Tienam)",
-              "unit": "Susceptibility (MIC / Disc)",
-              "textReference": "Sensitive / Resistant",
-              "id": "param-11",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Amikacin (Amikin)",
-              "unit": "Susceptibility (MIC / Disc)",
-              "textReference": "Sensitive / Resistant",
-              "id": "param-12",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Gentamicin (Garamycin)",
-              "unit": "Susceptibility (MIC / Disc)",
-              "textReference": "Sensitive / Resistant",
-              "id": "param-13",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Ciprofloxacin (Cipro)",
-              "unit": "Susceptibility (MIC / Disc)",
-              "textReference": "Sensitive / Resistant",
-              "id": "param-14",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Levofloxacin (Tavanic)",
-              "unit": "Susceptibility (MIC / Disc)",
-              "textReference": "Sensitive / Resistant",
-              "id": "param-15",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Fosfomycin (Monuril)",
-              "unit": "Susceptibility (MIC / Disc)",
-              "textReference": "Sensitive / Resistant",
-              "id": "param-17",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Trimethoprim / Sulfamethoxazole",
-              "unit": "Susceptibility (MIC / Disc)",
-              "textReference": "Sensitive / Resistant",
-              "id": "param-18",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Vancomycin (for Gram +ve)",
-              "unit": "Susceptibility (MIC / Disc)",
-              "textReference": "Sensitive / Resistant",
-              "id": "param-19",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Colistin (Colimycin)",
-              "unit": "Susceptibility (MIC / Disc)",
-              "textReference": "Sensitive / Resistant",
-              "id": "param-20",
-              "result": "",
-              "flag": "NORMAL"
-            }
-          ]
         }
       ],
       "staff": {
@@ -2975,7 +2804,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:32:54.459Z",
+      "updatedAt": "2026-10-17T20:33:17.084Z",
       "invoiceId": "inv-1791819003027"
     },
     {
