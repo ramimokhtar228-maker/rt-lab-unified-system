@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-17T20:17:21.924Z",
+  "timestamp": "2026-10-17T20:17:29.553Z",
   "reportsCount": 47,
   "incomeCount": 32,
   "loyaltyProfilesCount": 28,
@@ -20402,6 +20402,16 @@
   "dailyCloseouts": [],
   "auditLogs": [
     {
+      "id": "log-1792268247167-zkffl",
+      "timestamp": "10/17/2026, 11:17:27 PM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "SYNC",
+      "module": "SECURITY",
+      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
+    },
+    {
       "id": "log-1792266924150-pbf3h",
       "timestamp": "10/17/2026, 10:55:24 PM",
       "userId": "user-ceo",
@@ -20890,16 +20900,6 @@
       "action": "LOYALTY",
       "module": "LOYALTY",
       "description": "إضافة 599 نقطة ولاء للمريض محمد صلاح الدين عبدة برقم هاتف 01004359187"
-    },
-    {
-      "id": "log-1792220682021-6vzka",
-      "timestamp": "10/17/2026, 10:04:42 AM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "LOYALTY",
-      "module": "LOYALTY",
-      "description": "إضافة 599 نقطة ولاء للمريض نورا سعيد حلمى برقم هاتف 01228439288"
     }
   ]
 }
