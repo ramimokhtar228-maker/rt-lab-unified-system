@@ -15,8 +15,10 @@ import {
   Calendar,
   Layers,
   Sparkles,
-  CheckCheck
+  CheckCheck,
+  MessageCircle
 } from 'lucide-react';
+import { WhatsAppBookingModal } from './WhatsAppBookingModal';
 import { LabReport } from '../types';
 
 export const WorklistModule: React.FC = () => {
@@ -33,6 +35,7 @@ export const WorklistModule: React.FC = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'verified'>('all');
+  const [whatsAppReport, setWhatsAppReport] = useState<LabReport | null>(null);
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
 
   const filteredReports = useMemo(() => {
@@ -254,6 +257,16 @@ export const WorklistModule: React.FC = () => {
                 {/* Right: Actions */}
                 <div className="flex flex-wrap md:flex-col items-center md:items-end gap-2 shrink-0">
                   <div className="flex items-center gap-2">
+                    {rep.patient.phone && (
+                      <button
+                        onClick={() => setWhatsAppReport(rep)}
+                        title="إرسال رسالة واتساب لتأكيد الحجز ومتابعة المريض"
+                        className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-bold transition-colors cursor-pointer"
+                      >
+                        <MessageCircle className="w-4 h-4 text-emerald-600" />
+                        <span>واتساب</span>
+                      </button>
+                    )}
                     <button
                       onClick={() => handleQuickInstrumentPull(rep)}
                       title="سحب نتائج من أجهزة المعمل"
@@ -300,6 +313,37 @@ export const WorklistModule: React.FC = () => {
           })
         )}
       </div>
+      {/* WhatsApp Booking / Notification Modal */}
+      {whatsAppReport && (
+        <WhatsAppBookingModal
+          isOpen={!!whatsAppReport}
+          onClose={() => setWhatsAppReport(null)}
+          bookingData={{
+            patientName: whatsAppReport.patient.fullName,
+            labNumber: whatsAppReport.reportNumber,
+            barcode: whatsAppReport.patient.barcode || whatsAppReport.patient.labNumber,
+            phone: whatsAppReport.patient.phone,
+            date: whatsAppReport.patient.sampleDate ? whatsAppReport.patient.sampleDate.split('T')[0] : new Date().toISOString().split('T')[0],
+            time: whatsAppReport.patient.appointmentTime || '09:00',
+            isHomeVisit: whatsAppReport.patient.homeAddress ? true : false,
+            address: whatsAppReport.patient.homeAddress,
+            deliveryNotes: whatsAppReport.patient.deliveryNotes,
+            branchName: 'الفرع الرئيسي - بهتيم',
+            testsDetails: whatsAppReport.profiles.map(pr => ({
+              nameAr: pr.titleAr,
+              nameEn: pr.titleEn,
+              code: pr.profileCode,
+              price: pr.price || 150
+            })),
+            testsList: whatsAppReport.profiles.map(pr => `• ${pr.titleAr} (${pr.titleEn})`).join('\n'),
+            subtotal: whatsAppReport.profiles.reduce((acc, pr) => acc + (pr.price || 150), 0),
+            discountAmount: 0,
+            discountLabel: 'لا يوجد',
+            netAmount: whatsAppReport.profiles.reduce((acc, pr) => acc + (pr.price || 150), 0),
+            paymentMethod: 'نقداً / فيزا'
+          }}
+        />
+      )}
     </div>
   );
 };

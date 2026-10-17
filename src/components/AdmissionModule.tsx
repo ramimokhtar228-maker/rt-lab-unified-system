@@ -31,6 +31,7 @@ import { LAB_CATALOG } from '../data/labCatalog';
 import { INITIAL_INDIVIDUAL_TESTS } from '../data/individualTestsData';
 import { SmartTestSearch } from './SmartTestSearch';
 import { formatBookingConfirmationWhatsAppMessage, openWhatsApp } from '../utils/whatsapp';
+import { WhatsAppBookingModal } from './WhatsAppBookingModal';
 
 interface AdmissionModuleProps {
   onSuccess?: () => void;
@@ -102,6 +103,51 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
   const [redeemPoints, setRedeemPoints] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [createdLabNum, setCreatedLabNum] = useState<string>('');
+  const [isWhatsAppModalOpen, setIsWhatsAppModalOpen] = useState(false);
+
+  const bookingModalData = useMemo(() => {
+    const discountLabel = selectedPackage
+      ? `باقة: ${selectedPackage.titleAr}`
+      : (discountPercent > 0
+          ? `${discountPercent}%${loyaltyProfile ? ' (خصم كارت الولاء)' : ''}`
+          : (totalDiscount > 0 ? 'خصم مطبق' : 'لا يوجد'));
+
+    return {
+      patientName: fullName.trim() || 'العميل الكريم',
+      labNumber: createdLabNum || nextLabNumber,
+      barcode: nextBarcode,
+      phone: phone.trim(),
+      date: appointmentDate || today,
+      time: appointmentTime || '09:00',
+      isHomeVisit: bookingType === 'home_visit',
+      address: homeAddress,
+      deliveryNotes,
+      branchName: 'الفرع الرئيسي - بهتيم',
+      branchAddress: labInfo?.mainAddress,
+      branchPhone: labInfo?.phone,
+      testsDetails: selectedTests.map(t => ({
+        nameAr: t.nameAr,
+        nameEn: t.nameEn,
+        code: t.code,
+        price: t.price
+      })),
+      packageName: selectedPackage?.titleAr,
+      subtotal: testsSubtotal,
+      discountAmount: totalDiscount,
+      discountLabel,
+      visitFee: effectiveVisitFee,
+      netAmount: netTotal,
+      paidAmount,
+      remainingAmount,
+      paymentMethod: paymentMethod === 'cash' ? 'نقداً بالخزينة' : paymentMethod === 'visa' ? 'بطاقة ائتمانية / فيزا' : paymentMethod === 'instapay' ? 'إنستا باي InstaPay' : String(paymentMethod),
+      fastingHours: Number(fastingHours) || 0
+    };
+  }, [
+    fullName, createdLabNum, nextLabNumber, nextBarcode, phone, appointmentDate, today,
+    appointmentTime, bookingType, homeAddress, deliveryNotes, labInfo, selectedTests,
+    selectedPackage, testsSubtotal, totalDiscount, discountPercent, loyaltyProfile,
+    effectiveVisitFee, netTotal, paidAmount, remainingAmount, paymentMethod, fastingHours
+  ]);
 
   // Loyalty check by phone
   const loyaltyProfile = useMemo(() => {
@@ -388,15 +434,14 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-3">
-          {phone && (
-            <button
-              onClick={handleSendWhatsApp}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-colors cursor-pointer"
-            >
-              <MessageCircle className="w-4 h-4" />
-              <span>إرسال تأكيد الحجز بالواتساب</span>
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={() => setIsWhatsAppModalOpen(true)}
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-black text-xs shadow-lg shadow-emerald-950/20 transition-all cursor-pointer active:scale-98"
+          >
+            <MessageCircle className="w-4 h-4 text-emerald-200" />
+            <span>إرسال رسالة تأكيد الحجز بالواتساب (معاينة واحترافية)</span>
+          </button>
 
           <button
             onClick={() => {
@@ -424,6 +469,7 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
             تسجيل مريض آخر
           </button>
         </div>
+        <WhatsAppBookingModal isOpen={isWhatsAppModalOpen} onClose={() => setIsWhatsAppModalOpen(false)} bookingData={bookingModalData} />
       </div>
     );
   }
@@ -1162,6 +1208,16 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
               </div>
             </div>
 
+            {/* WhatsApp Booking Message Preview & Dispatch Button */}
+            <button
+              type="button"
+              onClick={() => setIsWhatsAppModalOpen(true)}
+              className="w-full py-3 px-4 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-950 border border-emerald-300 font-bold text-xs shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <MessageCircle className="w-4 h-4 text-emerald-700" />
+              <span>معاينة وإرسال رسالة الحجز عبر واتساب للمريض</span>
+            </button>
+
             {/* Submit Button */}
             <button
               type="submit"
@@ -1173,6 +1229,12 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
           </div>
         </div>
       </form>
+      {/* Professional WhatsApp Booking Modal */}
+      <WhatsAppBookingModal
+        isOpen={isWhatsAppModalOpen}
+        onClose={() => setIsWhatsAppModalOpen(false)}
+        bookingData={bookingModalData}
+      />
     </div>
   );
 };

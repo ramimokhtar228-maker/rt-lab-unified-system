@@ -34,6 +34,7 @@ import {
 } from '../utils/whatsapp';
 import { generateAndDownloadLoyaltyCard } from '../utils/loyaltyCardCanvas';
 import { send24HourEmailReminder } from '../utils/emailReminder';
+import { WhatsAppBookingModal } from './WhatsAppBookingModal';
 
 interface PatientFormProps {
   patient: Patient;
@@ -44,6 +45,7 @@ interface PatientFormProps {
 export const PatientForm: React.FC<PatientFormProps> = ({ patient, onChange, onRegisterLoyaltyProfile }) => {
   const [couponInput, setCouponInput] = useState('');
   const [whatsAppSent, setWhatsAppSent] = useState(false);
+  const [isWhatsAppModalOpen, setIsWhatsAppModalOpen] = useState(false);
   const [appliedCoupon, setAppliedCoupon] = useState<string | null>(patient.couponCode || null);
   const [customPercent, setCustomPercent] = useState<number>(15);
   const [customFlatDiscount, setCustomFlatDiscount] = useState<number>(0);
@@ -143,23 +145,7 @@ export const PatientForm: React.FC<PatientFormProps> = ({ patient, onChange, onR
 
   // WhatsApp booking confirmation
   const handleSendWhatsAppConfirmation = () => {
-    const msg = formatBookingConfirmationWhatsAppMessage({
-      patientName: patient.fullName || 'العميل الكريم',
-      labNumber: patient.labNumber,
-      date: patient.appointmentDate || patient.sampleDate.split('T')[0],
-      time: patient.appointmentTime || '10:00 ص',
-      isHomeVisit: bookingType === 'home_visit',
-      address: patient.homeAddress,
-      deliveryNotes: patient.deliveryNotes,
-      testsList: patient.clinicalHistory || 'الفحوصات التشخيصية المسجلة',
-      subtotal: baseSubtotal,
-      discountAmount,
-      discountLabel,
-      netAmount,
-      paymentMethod: patient.paymentMethod === 'card' ? 'بطاقة ائتمانية' : patient.paymentMethod === 'instapay' ? 'إنستا باي' : patient.paymentMethod === 'wallet' ? 'محفظة إلكترونية' : 'نقداً (كاش)'
-    });
-    openWhatsApp(patient.phone || '01000000000', msg);
-    setWhatsAppSent(true);
+    setIsWhatsAppModalOpen(true);
   };
 
   // Post Sample Draw & Loyalty Activation
@@ -847,6 +833,32 @@ export const PatientForm: React.FC<PatientFormProps> = ({ patient, onChange, onR
           </div>
         </div>
       )}
+      {/* WhatsApp Booking Confirmation Modal */}
+      <WhatsAppBookingModal
+        isOpen={isWhatsAppModalOpen}
+        onClose={() => {
+          setIsWhatsAppModalOpen(false);
+          setWhatsAppSent(true);
+        }}
+        bookingData={{
+          patientName: patient.fullName || 'العميل الكريم',
+          labNumber: patient.labNumber,
+          barcode: patient.barcode,
+          phone: patient.phone || '',
+          date: patient.appointmentDate || (patient.sampleDate ? patient.sampleDate.split('T')[0] : new Date().toISOString().split('T')[0]),
+          time: patient.appointmentTime || '10:00 ص',
+          isHomeVisit: bookingType === 'home_visit',
+          address: patient.homeAddress,
+          deliveryNotes: patient.deliveryNotes,
+          branchName: 'الفرع الرئيسي - بهتيم',
+          testsList: patient.clinicalHistory || 'الفحوصات التشخيصية المسجلة',
+          subtotal: baseSubtotal,
+          discountAmount,
+          discountLabel,
+          netAmount,
+          paymentMethod: patient.paymentMethod === 'card' ? 'بطاقة ائتمانية' : patient.paymentMethod === 'instapay' ? 'إنستا باي' : patient.paymentMethod === 'wallet' ? 'محفظة إلكترونية' : 'نقداً (كاش)'
+        }}
+      />
     </div>
   );
 };
