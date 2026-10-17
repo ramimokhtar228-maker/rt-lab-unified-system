@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:34:59.516Z",
+  "syncedAt": "2026-10-17T20:35:18.156Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2687,10 +2687,10 @@
             {
               "id": "p-1791819654844",
               "name": "HCV RNA Quantitative Real-Time PCR (HCV RNA Quantitative Real-Time PCR)",
-              "result": "Less t",
+              "result": "Less than 16",
               "unit": "IU/mL",
               "minNormal": 0,
-              "maxNormal": 15,
+              "maxNormal": 16,
               "textReference": "Target Not Detected (< 15 IU/mL)",
               "flag": "NORMAL",
               "method": "Real-Time RT-PCR Automated Viral Extraction & Amplification"
@@ -2956,7 +2956,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:34:55.457Z",
+      "updatedAt": "2026-10-17T20:35:16.313Z",
       "invoiceId": "inv-1791819003027"
     },
     {
