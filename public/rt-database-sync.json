@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T19:53:33.989Z",
+  "syncedAt": "2026-10-17T19:54:18.273Z",
   "reports": [
     {
       "id": "rep-1792266746907",
@@ -40,7 +40,7 @@
             {
               "id": "p-1792266746905-144",
               "name": "Anti-Streptolysin O Titre (ASOT) (Anti-Streptolysin O Titre (ASOT))",
-              "result": "",
+              "result": "3",
               "unit": "IU/mL",
               "minNormal": 0,
               "maxNormal": 200,
@@ -72,7 +72,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-17T19:52:26.910Z",
-      "updatedAt": "2026-10-17T19:53:28.819Z",
+      "updatedAt": "2026-10-17T19:54:15.943Z",
       "invoiceId": "inv-1792266746910"
     },
     {
