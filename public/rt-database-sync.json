@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:36:48.000Z",
+  "syncedAt": "2026-10-17T20:36:52.661Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2740,8 +2740,8 @@
               "method": "Jendrassik-Grof",
               "textReference": "",
               "id": "param-1792269222563-3",
-              "result": "",
-              "flag": ""
+              "result": "1",
+              "flag": "NORMAL"
             },
             {
               "name": "Direct Bilirubin",
@@ -2949,7 +2949,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:36:46.145Z",
+      "updatedAt": "2026-10-17T20:36:49.091Z",
       "invoiceId": "inv-1791819003027"
     },
     {
