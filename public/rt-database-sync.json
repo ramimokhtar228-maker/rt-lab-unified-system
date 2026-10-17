@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:37:12.111Z",
+  "syncedAt": "2026-10-17T20:37:20.556Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2776,27 +2776,6 @@
               "flag": "NORMAL"
             },
             {
-              "name": "A/G Ratio",
-              "unit": "Ratio",
-              "minNormal": 1.2,
-              "maxNormal": 2.2,
-              "notes": "Auto-calculated: Albumin / Globulin",
-              "textReference": "",
-              "id": "param-1792269222563-9",
-              "result": "",
-              "flag": ""
-            },
-            {
-              "name": "G.G.T",
-              "unit": "U/L",
-              "minNormal": 9,
-              "maxNormal": 48,
-              "textReference": "",
-              "id": "param-1792269222563-10",
-              "result": "",
-              "flag": ""
-            },
-            {
               "name": "AST/ALT Ratio (De Ritis)",
               "unit": "Ratio",
               "minNormal": 0.6,
@@ -2807,6 +2786,10 @@
               "result": "1.1",
               "flag": "NORMAL"
             }
+          ],
+          "interpretations": [
+            "Enzyme activities and synthetic hepatic markers are within normal limits.",
+            "Mild transaminitis (ALT & AST elevation), correlation with viral hepatitis serology and abdominal ultrasound is advised."
           ]
         },
         {
@@ -2927,7 +2910,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:37:08.938Z",
+      "updatedAt": "2026-10-17T20:37:18.338Z",
       "invoiceId": "inv-1791819003027"
     },
     {
