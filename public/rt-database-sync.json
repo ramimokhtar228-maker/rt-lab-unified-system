@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:38:44.688Z",
+  "syncedAt": "2026-10-17T20:38:51.593Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2839,8 +2839,8 @@
               "maxNormal": 120,
               "textReference": "",
               "id": "param-1792269260866-1",
-              "result": "",
-              "flag": ""
+              "result": "90.00",
+              "flag": "NORMAL"
             },
             {
               "name": "INR (International Normalized Ratio)",
@@ -2909,7 +2909,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:38:41.881Z",
+      "updatedAt": "2026-10-17T20:38:48.596Z",
       "invoiceId": "inv-1791819003027"
     },
     {
