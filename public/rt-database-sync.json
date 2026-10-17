@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:37:40.049Z",
+  "syncedAt": "2026-10-17T20:37:48.790Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2707,7 +2707,7 @@
           "titleAr": "Liver Function Tests (LFT)",
           "category": "Clinical Chemistry",
           "sampleType": "Serum",
-          "interpretation": "Enzyme activities and synthetic hepatic markers are within normal limits.",
+          "interpretation": "Mild transaminitis (Bilirubin elevation), correlation with viral hepatitis serology and abdominal ultrasound is advised.",
           "parameters": [
             {
               "name": "ALT (SGPT)",
@@ -2788,8 +2788,7 @@
             }
           ],
           "interpretations": [
-            "Enzyme activities and synthetic hepatic markers are within normal limits.",
-            "Mild transaminitis (Belevation), correlation with viral hepatitis serology and abdominal ultrasound is advised."
+            "Mild transaminitis (Bilirubin elevation), correlation with viral hepatitis serology and abdominal ultrasound is advised."
           ]
         },
         {
@@ -2910,7 +2909,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:37:35.783Z",
+      "updatedAt": "2026-10-17T20:37:47.020Z",
       "invoiceId": "inv-1791819003027"
     },
     {
