@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:36:36.205Z",
+  "syncedAt": "2026-10-17T20:36:40.458Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2728,7 +2728,7 @@
               "method": "IFCC UV with P5P",
               "textReference": "",
               "id": "param-1792269222563-1",
-              "result": "3",
+              "result": "36",
               "flag": "NORMAL"
             },
             {
@@ -2836,8 +2836,8 @@
               "notes": "Normal < 1.0 (Elevated > 2.0 in alcoholic liver disease/cirrhosis)",
               "textReference": "",
               "id": "param-1792269222563-11",
-              "result": "0.1",
-              "flag": "LOW"
+              "result": "1.1",
+              "flag": "NORMAL"
             }
           ]
         },
@@ -2959,7 +2959,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:36:34.497Z",
+      "updatedAt": "2026-10-17T20:36:35.884Z",
       "invoiceId": "inv-1791819003027"
     },
     {
