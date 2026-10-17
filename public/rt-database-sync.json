@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T07:04:45.676Z",
+  "syncedAt": "2026-10-17T07:06:07.499Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -19017,11 +19017,20 @@
       "barcode": "RT-10067",
       "cardNumber": "RT-GOLD-10067",
       "bloodGroup": "",
-      "totalPoints": 612,
+      "totalPoints": 1224,
       "tier": "Gold",
-      "lifetimeSpent": 612,
+      "lifetimeSpent": 1224,
       "issueDate": "2026-10-17",
       "transactions": [
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 612,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-037",
+          "invoiceNumber": "INV-2026-037",
+          "amountEGP": 612
+        },
         {
           "id": "tx-1792220683672",
           "date": "2026-10-17",
@@ -19063,11 +19072,20 @@
       "barcode": "RT-10063",
       "cardNumber": "RT-GOLD-10063",
       "bloodGroup": "",
-      "totalPoints": 2513,
-      "tier": "Platinum",
-      "lifetimeSpent": 2513,
+      "totalPoints": 3463,
+      "tier": "VIP",
+      "lifetimeSpent": 3463,
       "issueDate": "2026-10-11",
       "transactions": [
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 950,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-046",
+          "invoiceNumber": "INV-2026-046",
+          "amountEGP": 950
+        },
         {
           "id": "tx-1792220683671",
           "date": "2026-10-17",
@@ -19104,11 +19122,20 @@
       "barcode": "RT-10062",
       "cardNumber": "RT-GOLD-10062",
       "bloodGroup": "",
-      "totalPoints": 3315,
+      "totalPoints": 5890,
       "tier": "VIP",
-      "lifetimeSpent": 3315,
+      "lifetimeSpent": 5890,
       "issueDate": "2026-10-11",
       "transactions": [
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 2575,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-032",
+          "invoiceNumber": "INV-2026-032",
+          "amountEGP": 2575
+        },
         {
           "id": "tx-1792220683672",
           "date": "2026-10-17",
@@ -19136,11 +19163,29 @@
       "barcode": "RT-10062",
       "cardNumber": "RT-SILVER-10062",
       "bloodGroup": "",
-      "totalPoints": 747,
+      "totalPoints": 1295,
       "tier": "Gold",
-      "lifetimeSpent": 747,
+      "lifetimeSpent": 1295,
       "issueDate": "2026-10-08",
       "transactions": [
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 349,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-032",
+          "invoiceNumber": "INV-2026-032",
+          "amountEGP": 349
+        },
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-8984",
+          "invoiceNumber": "INV-2026-8984",
+          "amountEGP": 199
+        },
         {
           "id": "tx-1792220683672",
           "date": "2026-10-17",
@@ -19177,11 +19222,29 @@
       "barcode": "RT-10061",
       "cardNumber": "RT-SILVER-10061",
       "bloodGroup": "",
-      "totalPoints": 1397,
-      "tier": "Gold",
-      "lifetimeSpent": 1397,
+      "totalPoints": 2595,
+      "tier": "Platinum",
+      "lifetimeSpent": 2595,
       "issueDate": "2026-10-08",
       "transactions": [
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-031",
+          "invoiceNumber": "INV-2026-031",
+          "amountEGP": 599
+        },
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-8983",
+          "invoiceNumber": "INV-2026-8983",
+          "amountEGP": 599
+        },
         {
           "id": "tx-1792220683672",
           "date": "2026-10-17",
@@ -19218,11 +19281,20 @@
       "barcode": "RT-10060",
       "cardNumber": "RT-SILVER-10060",
       "bloodGroup": "",
-      "totalPoints": 798,
+      "totalPoints": 1397,
       "tier": "Gold",
-      "lifetimeSpent": 798,
+      "lifetimeSpent": 1397,
       "issueDate": "2026-10-08",
       "transactions": [
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-030",
+          "invoiceNumber": "INV-2026-030",
+          "amountEGP": 599
+        },
         {
           "id": "tx-1792220683672",
           "date": "2026-10-17",
@@ -19296,11 +19368,20 @@
       "barcode": "RT-10062",
       "cardNumber": "RT-SILVER-10062",
       "bloodGroup": "",
-      "totalPoints": 647,
+      "totalPoints": 961,
       "tier": "Gold",
-      "lifetimeSpent": 647,
+      "lifetimeSpent": 961,
       "issueDate": "2026-10-07",
       "transactions": [
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 314,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-032",
+          "invoiceNumber": "INV-2026-032",
+          "amountEGP": 314
+        },
         {
           "id": "tx-1792220683672",
           "date": "2026-10-17",
@@ -19328,11 +19409,20 @@
       "barcode": "RT-10043",
       "cardNumber": "RT-SILVER-10043",
       "bloodGroup": "",
-      "totalPoints": 380,
-      "tier": "Silver",
-      "lifetimeSpent": 380,
+      "totalPoints": 570,
+      "tier": "Gold",
+      "lifetimeSpent": 570,
       "issueDate": "2026-10-07",
       "transactions": [
+        {
+          "id": "tx-1792220765385",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 190,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-013",
+          "invoiceNumber": "INV-2026-013",
+          "amountEGP": 190
+        },
         {
           "id": "tx-1792220683672",
           "date": "2026-10-17",
@@ -19383,11 +19473,20 @@
       "barcode": "RT-10043",
       "cardNumber": "RT-GOLD-10043",
       "bloodGroup": "",
-      "totalPoints": 2038,
-      "tier": "Platinum",
-      "lifetimeSpent": 2038,
+      "totalPoints": 3050,
+      "tier": "VIP",
+      "lifetimeSpent": 3050,
       "issueDate": "2026-10-07",
       "transactions": [
+        {
+          "id": "tx-1792220765385",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 1012,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-013",
+          "invoiceNumber": "INV-2026-013",
+          "amountEGP": 1012
+        },
         {
           "id": "tx-1792220683672",
           "date": "2026-10-17",
@@ -19415,11 +19514,20 @@
       "barcode": "RT-10042",
       "cardNumber": "RT-SILVER-10042",
       "bloodGroup": "",
-      "totalPoints": 548,
+      "totalPoints": 897,
       "tier": "Gold",
-      "lifetimeSpent": 548,
+      "lifetimeSpent": 897,
       "issueDate": "2026-10-07",
       "transactions": [
+        {
+          "id": "tx-1792220765385",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 349,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-012",
+          "invoiceNumber": "INV-2026-012",
+          "amountEGP": 349
+        },
         {
           "id": "tx-1792220683673",
           "date": "2026-10-17",
@@ -19447,11 +19555,20 @@
       "barcode": "RT-10041",
       "cardNumber": "RT-SILVER-10041",
       "bloodGroup": "",
-      "totalPoints": 548,
+      "totalPoints": 897,
       "tier": "Gold",
-      "lifetimeSpent": 548,
+      "lifetimeSpent": 897,
       "issueDate": "2026-10-06",
       "transactions": [
+        {
+          "id": "tx-1792220765385",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 349,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-011",
+          "invoiceNumber": "INV-2026-011",
+          "amountEGP": 349
+        },
         {
           "id": "tx-1792220683673",
           "date": "2026-10-17",
@@ -19479,11 +19596,20 @@
       "barcode": "RT-10039",
       "cardNumber": "RT-SILVER-10039",
       "bloodGroup": "",
-      "totalPoints": 513,
+      "totalPoints": 604,
       "tier": "Gold",
-      "lifetimeSpent": 513,
+      "lifetimeSpent": 604,
       "issueDate": "2026-10-06",
       "transactions": [
+        {
+          "id": "tx-1792220765385",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 91,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-009",
+          "invoiceNumber": "INV-2026-009",
+          "amountEGP": 91
+        },
         {
           "id": "tx-1792220683673",
           "date": "2026-10-17",
@@ -19520,11 +19646,20 @@
       "barcode": "RT-10038",
       "cardNumber": "RT-SILVER-10038",
       "bloodGroup": "",
-      "totalPoints": 398,
-      "tier": "Silver",
-      "lifetimeSpent": 398,
+      "totalPoints": 597,
+      "tier": "Gold",
+      "lifetimeSpent": 597,
       "issueDate": "2026-10-06",
       "transactions": [
+        {
+          "id": "tx-1792220765386",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-008",
+          "invoiceNumber": "INV-2026-008",
+          "amountEGP": 199
+        },
         {
           "id": "tx-1792220683673",
           "date": "2026-10-17",
@@ -19552,11 +19687,20 @@
       "barcode": "RT-10037",
       "cardNumber": "RT-SILVER-10037",
       "bloodGroup": "",
-      "totalPoints": 548,
+      "totalPoints": 897,
       "tier": "Gold",
-      "lifetimeSpent": 548,
+      "lifetimeSpent": 897,
       "issueDate": "2026-10-06",
       "transactions": [
+        {
+          "id": "tx-1792220765386",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 349,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-007",
+          "invoiceNumber": "INV-2026-007",
+          "amountEGP": 349
+        },
         {
           "id": "tx-1792220683673",
           "date": "2026-10-17",
@@ -19584,11 +19728,29 @@
       "barcode": "RT-10036",
       "cardNumber": "RT-SILVER-10036",
       "bloodGroup": "",
-      "totalPoints": 1596,
+      "totalPoints": 2794,
       "tier": "Platinum",
-      "lifetimeSpent": 1596,
+      "lifetimeSpent": 2794,
       "issueDate": "2026-10-06",
       "transactions": [
+        {
+          "id": "tx-1792220765386",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-006",
+          "invoiceNumber": "INV-2026-006",
+          "amountEGP": 599
+        },
+        {
+          "id": "tx-1792220765386",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-006",
+          "invoiceNumber": "INV-2026-006",
+          "amountEGP": 599
+        },
         {
           "id": "tx-1792220683674",
           "date": "2026-10-17",
@@ -19634,11 +19796,20 @@
       "barcode": "RT-10035",
       "cardNumber": "RT-GOLD-10035",
       "bloodGroup": "",
-      "totalPoints": 1198,
-      "tier": "Gold",
-      "lifetimeSpent": 1198,
+      "totalPoints": 1797,
+      "tier": "Platinum",
+      "lifetimeSpent": 1797,
       "issueDate": "2026-10-06",
       "transactions": [
+        {
+          "id": "tx-1792220765386",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 599,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-005",
+          "invoiceNumber": "INV-2026-005",
+          "amountEGP": 599
+        },
         {
           "id": "tx-1792220683674",
           "date": "2026-10-17",
@@ -19662,14 +19833,23 @@
     {
       "tier": "Gold",
       "patientId": "pat-loyalty-1791284141343",
-      "totalPoints": 944,
+      "totalPoints": 1143,
       "barcode": "RT-10034",
       "cardNumber": "RT-GOLD-10034",
       "phone": "01277489467",
       "patientName": "مريم عوض الكريم",
-      "lifetimeSpent": 944,
+      "lifetimeSpent": 1143,
       "issueDate": "2026-10-06",
       "transactions": [
+        {
+          "id": "tx-1792220765385",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 199,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-010",
+          "invoiceNumber": "INV-2026-010",
+          "amountEGP": 199
+        },
         {
           "id": "tx-1792220683673",
           "date": "2026-10-17",
@@ -19701,8 +19881,17 @@
       "bloodGroup": ""
     },
     {
-      "lifetimeSpent": 504,
+      "lifetimeSpent": 756,
       "transactions": [
+        {
+          "id": "tx-1792220765386",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 252,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-001",
+          "invoiceNumber": "INV-2026-001",
+          "amountEGP": 252
+        },
         {
           "id": "tx-1792220683674",
           "date": "2026-10-17",
@@ -19728,7 +19917,7 @@
       "issueDate": "2026-10-06",
       "patientId": "pat-001",
       "cardNumber": "RT-SILVER-10029",
-      "totalPoints": 504,
+      "totalPoints": 756,
       "barcode": "RT-10029",
       "bloodGroup": "A+"
     },
@@ -19741,8 +19930,17 @@
       "tier": "Gold",
       "barcode": "RT-10030",
       "patientId": "pat-002",
-      "totalPoints": 1024,
+      "totalPoints": 1366,
       "transactions": [
+        {
+          "id": "tx-1792220765386",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 342,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-002",
+          "invoiceNumber": "INV-2026-002",
+          "amountEGP": 342
+        },
         {
           "id": "tx-1792220683674",
           "date": "2026-10-17",
@@ -19762,7 +19960,7 @@
           "type": "earn"
         }
       ],
-      "lifetimeSpent": 1024
+      "lifetimeSpent": 1366
     },
     {
       "patientId": "pat-loyalty-1791400927210",
@@ -19771,11 +19969,20 @@
       "barcode": "RT-10061",
       "cardNumber": "RT-SILVER-10061",
       "bloodGroup": "",
-      "totalPoints": 372,
-      "tier": "Silver",
-      "lifetimeSpent": 372,
+      "totalPoints": 560,
+      "tier": "Gold",
+      "lifetimeSpent": 560,
       "issueDate": "2026-10-07",
       "transactions": [
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 188,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-031",
+          "invoiceNumber": "INV-2026-031",
+          "amountEGP": 188
+        },
         {
           "id": "tx-1792220683672",
           "date": "2026-10-17",
@@ -19826,11 +20033,20 @@
       "barcode": "RT-9827361849",
       "cardNumber": "RT-GOLD-9827361849",
       "bloodGroup": "",
-      "totalPoints": 1957,
+      "totalPoints": 2613,
       "tier": "Platinum",
-      "lifetimeSpent": 1957,
+      "lifetimeSpent": 2613,
       "issueDate": "2026-10-12",
       "transactions": [
+        {
+          "id": "tx-1792220765384",
+          "date": "2026-10-17",
+          "type": "earn",
+          "points": 656,
+          "description": "اكتساب نقاط عن فاتورة رقم INV-2026-8982",
+          "invoiceNumber": "INV-2026-8982",
+          "amountEGP": 656
+        },
         {
           "id": "tx-1792220683671",
           "date": "2026-10-17",
