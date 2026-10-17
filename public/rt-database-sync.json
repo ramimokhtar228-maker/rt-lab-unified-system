@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:33:27.091Z",
+  "syncedAt": "2026-10-17T20:33:44.919Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2698,43 +2698,143 @@
           ]
         },
         {
-          "id": "prof-1791819654844-ALBUMIN",
-          "profileCode": "RFT",
-          "titleEn": "Renal Function Profile (RFT / KFT)",
-          "titleAr": "وظائف الكلى والأملاح البولية",
-          "category": "Clinical Chemistry & Nephrology",
-          "sampleType": "Serum / Urine",
-          "interpretation": "Serum Creatinine, Urea, Uric Acid, and eGFR reflect glomerular filtration rate and nitrogenous waste clearance.",
+          "id": "prof-1792269222563-dl88",
+          "profileCode": "LFT",
+          "titleEn": "Liver Function Tests (LFT)",
+          "titleAr": "Liver Function Tests (LFT)",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum",
+          "interpretation": "Enzyme activities and synthetic hepatic markers are within normal limits.",
           "parameters": [
             {
-              "name": "Serum Creatinine (Serum Creatinine)",
-              "unit": "mg/dL",
-              "minNormal": 0.6,
-              "maxNormal": 1.4,
-              "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
-              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
-              "id": "param-4",
+              "name": "ALT (SGPT)",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 45,
+              "method": "IFCC UV with P5P",
+              "textReference": "",
+              "id": "param-1792269222563-0",
               "result": "",
-              "flag": "NORMAL",
-              "notes": "Auto-calculated: (Microalbumin / Urine Creatinine) × 100"
+              "flag": ""
             },
             {
-              "name": "Total Urine Protein",
+              "name": "AST (SGOT)",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 40,
+              "method": "IFCC UV with P5P",
+              "textReference": "",
+              "id": "param-1792269222563-1",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "Alkaline Phosphatase (ALP)",
+              "unit": "U/L",
+              "minNormal": 40,
+              "maxNormal": 130,
+              "textReference": "",
+              "id": "param-1792269222563-2",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "Total Bilirubin",
+              "unit": "mg/dL",
+              "minNormal": 0.2,
+              "maxNormal": 1.2,
+              "panicHigh": 5,
+              "method": "Jendrassik-Grof",
+              "textReference": "",
+              "id": "param-1792269222563-3",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "Direct Bilirubin",
               "unit": "mg/dL",
               "minNormal": 0,
-              "maxNormal": 15,
+              "maxNormal": 0.3,
               "textReference": "",
-              "id": "param-3",
+              "id": "param-1792269222563-4",
               "result": "",
-              "flag": "NORMAL"
+              "flag": ""
             },
             {
-              "name": "Nitrofurantoin (Macrodantin)",
-              "unit": "Susceptibility (MIC / Disc)",
-              "textReference": "Sensitive / Resistant",
-              "id": "param-16",
+              "name": "Indirect Bilirubin",
+              "unit": "mg/dL",
+              "minNormal": 0.1,
+              "maxNormal": 0.9,
+              "notes": "Auto-calculated: Total - Direct",
+              "textReference": "",
+              "id": "param-1792269222563-5",
               "result": "",
-              "flag": "NORMAL"
+              "flag": ""
+            },
+            {
+              "name": "Total Serum Proteins",
+              "unit": "g/dL",
+              "minNormal": 6.4,
+              "maxNormal": 8.3,
+              "method": "Biuret",
+              "textReference": "",
+              "id": "param-1792269222563-6",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "Serum Albumin",
+              "unit": "g/dL",
+              "minNormal": 3.5,
+              "maxNormal": 5.2,
+              "method": "Bromocresol Green (BCG)",
+              "textReference": "",
+              "id": "param-1792269222563-7",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "Serum Globulin",
+              "unit": "g/dL",
+              "minNormal": 2.3,
+              "maxNormal": 3.5,
+              "notes": "Auto-calculated: Total Protein - Albumin",
+              "textReference": "",
+              "id": "param-1792269222563-8",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "A/G Ratio",
+              "unit": "Ratio",
+              "minNormal": 1.2,
+              "maxNormal": 2.2,
+              "notes": "Auto-calculated: Albumin / Globulin",
+              "textReference": "",
+              "id": "param-1792269222563-9",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "G.G.T",
+              "unit": "U/L",
+              "minNormal": 9,
+              "maxNormal": 48,
+              "textReference": "",
+              "id": "param-1792269222563-10",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "AST/ALT Ratio (De Ritis)",
+              "unit": "Ratio",
+              "minNormal": 0.6,
+              "maxNormal": 1.1,
+              "notes": "Auto-calculated: AST / ALT",
+              "textReference": "",
+              "id": "param-1792269222563-11",
+              "result": "",
+              "flag": ""
             }
           ]
         }
@@ -2760,7 +2860,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:33:20.276Z",
+      "updatedAt": "2026-10-17T20:33:42.563Z",
       "invoiceId": "inv-1791819003027"
     },
     {
