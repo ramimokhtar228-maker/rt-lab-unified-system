@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:38:13.622Z",
+  "syncedAt": "2026-10-17T20:38:39.376Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2803,7 +2803,7 @@
             {
               "id": "param-1792269251426",
               "name": "Alpha-Fetoprotein (AFP) (Alpha-Fetoprotein (AFP))",
-              "result": "3",
+              "result": "3.88",
               "unit": "ng/mL",
               "minNormal": 0,
               "maxNormal": 7,
@@ -2826,9 +2826,8 @@
               "name": "Prothrombin Time (PT)",
               "unit": "Seconds",
               "minNormal": 11,
-              "maxNormal": 13.5,
+              "maxNormal": 14,
               "method": "Optical Coagulometer",
-              "textReference": "",
               "id": "param-1792269260866-0",
               "result": "",
               "flag": ""
@@ -2910,7 +2909,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:38:11.497Z",
+      "updatedAt": "2026-10-17T20:38:37.336Z",
       "invoiceId": "inv-1791819003027"
     },
     {
