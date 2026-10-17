@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:32:28.452Z",
+  "syncedAt": "2026-10-17T20:33:00.063Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2749,15 +2749,6 @@
           "category": "Clinical Chemistry & Nephrology",
           "sampleType": "Serum / Urine",
           "interpretation": "Serum Creatinine, Urea, Uric Acid, and eGFR reflect glomerular filtration rate and nitrogenous waste clearance.",
-          "attachedIllustration": {
-            "id": "ren-aki",
-            "code": "REN_AKI",
-            "titleAr": "القصور الكلوي الحاد واحتباس البولينا (Acute Kidney Injury - AKI)",
-            "titleEn": "Acute Kidney Injury & Azotemia",
-            "category": "renal",
-            "imageUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMjAgMTgwIiB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCI+CiAgICA8cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgcng9IjE0IiBmaWxsPSIjMDkwZDE2Ii8+CiAgICA8Y2lyY2xlIGN4PSIxNjAiIGN5PSI5MCIgcj0iNzYiIGZpbGw9IiMwYjEzMjkiIHN0cm9rZT0iIzMxMmU4MSIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM4MThjZjgiIGZvbnQtc2l6ZT0iMTAuNSIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1mYW1pbHk9IidDYWlybycsIHN5c3RlbS11aSwgLWFwcGxlLXN5c3RlbSwgc2Fucy1zZXJpZiI+QUNVVEUgS0lETkVZIElOSlVSWSAoQUtJKTwvdGV4dD4KICAgIDxwYXRoIGQ9Ik0gMTM1LDU1IEMgMTEwLDY1IDExMCwxMTUgMTM1LDEyNSBDIDE2MCwxMzUgMTkwLDExNSAxODUsOTAgQyAxODAsNjUgMTYwLDUwIDEzNSw1NSBaIiBmaWxsPSIjMWUxYjRiIiBzdHJva2U9IiM4MThjZjgiIHN0cm9rZS13aWR0aD0iMi41Ii8+CiAgICAgIDxjaXJjbGUgY3g9IjE2MCIgY3k9IjkwIiByPSIxNiIgZmlsbD0iI2Y0M2Y1ZSIvPgogICAgICA8dGV4dCB4PSIxNjAiIHk9IjkzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZmZmIiBmb250LXNpemU9IjkiIGZvbnQtd2VpZ2h0PSJib2xkIj5DcmVhdDwvdGV4dD4KICAgICAgPHRleHQgeD0iMTYwIiB5PSIxNDUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNmODcxNzEiIGZvbnQtc2l6ZT0iMTAiIGZvbnQtd2VpZ2h0PSJib2xkIj5DcmVhdGluaW5lICZndDsmZ3Q7IDIuNSBtZy9kTDwvdGV4dD4KICAgIDx0ZXh0IHg9IjE2MCIgeT0iMTcwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTRhM2I4IiBmb250LXNpemU9IjkiIGZvbnQtZmFtaWx5PSInQ2Fpcm8nLCBzeXN0ZW0tdWksIC1hcHBsZS1zeXN0ZW0sIHNhbnMtc2VyaWYiPlN1ZGRlbiBHbG9tZXJ1bGFyIFJldGVudGlvbjogQWN1dGUgQXpvdGVtaWEgJiBPbGlndXJpYTwvdGV4dD4KICA8L3N2Zz4=",
-            "pathologySummaryAr": "تدهور مفاجئ سريع في وظائف الكلى الإخراجية خلال ساعات إلى أيام، مؤدياً لاحتباس الفضلات النيتروجينية في الدم (ارتفاع حاد في الكرياتينين والبولينا وحمض البوليك) واختلال الأملاح."
-          },
           "parameters": [
             {
               "name": "Serum Creatinine (Serum Creatinine)",
@@ -2984,7 +2975,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:32:18.458Z",
+      "updatedAt": "2026-10-17T20:32:54.459Z",
       "invoiceId": "inv-1791819003027"
     },
     {
