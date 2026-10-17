@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T19:54:18.273Z",
+  "syncedAt": "2026-10-17T19:55:08.257Z",
   "reports": [
     {
       "id": "rep-1792266746907",
@@ -40,14 +40,17 @@
             {
               "id": "p-1792266746905-144",
               "name": "Anti-Streptolysin O Titre (ASOT) (Anti-Streptolysin O Titre (ASOT))",
-              "result": "3",
+              "result": "309",
               "unit": "IU/mL",
               "minNormal": 0,
               "maxNormal": 200,
               "textReference": "Adults: < 200 IU/mL | Children: < 400 IU/mL",
-              "flag": "NORMAL",
+              "flag": "HIGH",
               "method": "Latex-Enhanced Immunoturbidimetry"
             }
+          ],
+          "recommendedTests": [
+            "CBC"
           ]
         }
       ],
@@ -72,7 +75,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-17T19:52:26.910Z",
-      "updatedAt": "2026-10-17T19:54:15.943Z",
+      "updatedAt": "2026-10-17T19:55:05.965Z",
       "invoiceId": "inv-1792266746910"
     },
     {
