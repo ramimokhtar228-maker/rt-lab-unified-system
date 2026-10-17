@@ -784,7 +784,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           pushFullStoreToGitHub(githubConfig, payload).catch(() => {});
         }
       }
-    }, 500);
+    }, 20000);
     return () => clearTimeout(timer);
   }, [reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, packages, githubConfig]);
 
@@ -2169,7 +2169,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          message: `Auto-sync unified data: ${reports.length} reports, ${incomeRecords.length} invoices [${new Date().toLocaleString('en-US')}]`,
+          message: `Auto-sync unified data: ${reports.length} reports, ${incomeRecords.length} invoices [${new Date().toLocaleString('en-US')}] [skip ci]`,
           content: contentBase64,
           branch: githubConfig.branch || 'main',
           sha

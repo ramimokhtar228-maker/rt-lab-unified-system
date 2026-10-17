@@ -260,7 +260,7 @@ export async function pushFinancialDataToRepo(
     const contentBase64 = encodeBase64Utf8(contentJson);
 
     const bodyPayload: Record<string, unknown> = {
-      message: `تسميع مالي ومزامنة الحالات: ${incomeRecords.length} حالة مسددة [RT Lab Accounting]`,
+      message: `تسميع مالي ومزامنة الحالات: ${incomeRecords.length} حالة مسددة [RT Lab Accounting] [skip ci]`,
       content: contentBase64,
       branch: 'main'
     };
@@ -658,7 +658,7 @@ async function pushSingleCaseToGitHub(
   const contentBase64 = encodeBase64Utf8(JSON.stringify(existingCases, null, 2));
 
   const body: Record<string, unknown> = {
-    message: `تسميع مالي لطلب فحص: ${record.patientName} (${record.labNumber}) [RT ERP]`,
+    message: `تسميع مالي لطلب فحص: ${record.patientName} (${record.labNumber}) [RT ERP] [skip ci]`,
     content: contentBase64,
     branch: 'main'
   };
@@ -723,7 +723,7 @@ export async function pushFullStoreToGitHub(
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        message: `مزامنة سحابية شاملة لقاعدة بيانات المعمل: ${new Date().toLocaleTimeString('en-US')}`,
+        message: `مزامنة سحابية شاملة لقاعدة بيانات المعمل: ${new Date().toLocaleTimeString('en-US')} [skip ci]`,
         content: contentBase64,
         branch: 'main',
         ...(existingSha ? { sha: existingSha } : {})
