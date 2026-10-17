@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:52:40.940Z",
+  "syncedAt": "2026-10-17T20:53:55.610Z",
   "reports": [
     {
       "id": "rep-1792270290136",
@@ -16,8 +16,8 @@
         "gender": "female",
         "referringDoctorTitle": "Dr.",
         "referringDoctorName": "Herself",
-        "sampleDate": "2026-10-16",
-        "reportingDate": "2026-10-16",
+        "sampleDate": "2026-10-16T10:54:00.000Z",
+        "reportingDate": "2026-10-17T20:53:00.000Z",
         "fastingHours": 0,
         "bookingType": "branch",
         "visitFee": 0,
@@ -53,7 +53,11 @@
             "CBC",
             "CRP",
             "ESR"
-          ]
+          ],
+          "interpretations": [
+            "CBC, CRP, LIPID PROFILE , ESR RECOMMENDED "
+          ],
+          "interpretation": "CBC, CRP, LIPID PROFILE , ESR RECOMMENDED "
         }
       ],
       "staff": {
@@ -69,7 +73,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-17T20:51:30.136Z",
-      "updatedAt": "2026-10-17T20:52:19.234Z",
+      "updatedAt": "2026-10-17T20:53:27.440Z",
       "invoiceId": "inv-1792270290136"
     },
     {
