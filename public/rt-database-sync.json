@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:34:14.804Z",
+  "syncedAt": "2026-10-17T20:34:23.564Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2858,6 +2858,81 @@
               "flag": ""
             }
           ]
+        },
+        {
+          "id": "prof-1792269260866-5ds2",
+          "profileCode": "COAG",
+          "titleEn": "Coagulation & Hemostasis Profile",
+          "titleAr": "Coagulation & Hemostasis Profile",
+          "category": "Hematology & Hemostasis",
+          "sampleType": "Sodium Citrate Plasma (9:1 ratio)",
+          "interpretation": "Hemostatic integrity confirmed; extrinsic and intrinsic pathways within normal reference limits.",
+          "parameters": [
+            {
+              "name": "Prothrombin Time (PT)",
+              "unit": "Seconds",
+              "minNormal": 11,
+              "maxNormal": 13.5,
+              "method": "Optical Coagulometer",
+              "textReference": "",
+              "id": "param-1792269260866-0",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "Prothrombin Activity / Conc.",
+              "unit": "%",
+              "minNormal": 70,
+              "maxNormal": 120,
+              "textReference": "",
+              "id": "param-1792269260866-1",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "INR (International Normalized Ratio)",
+              "unit": "Ratio",
+              "minNormal": 0.85,
+              "maxNormal": 1.15,
+              "textReference": "0.85 - 1.15 (Warfarin Target: 2.0 - 3.0)",
+              "panicHigh": 4.5,
+              "id": "param-1792269260866-2",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "PTT / APTT",
+              "unit": "Seconds",
+              "minNormal": 26,
+              "maxNormal": 36,
+              "panicHigh": 70,
+              "textReference": "",
+              "id": "param-1792269260866-3",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "Fibrinogen",
+              "unit": "mg/dL",
+              "minNormal": 200,
+              "maxNormal": 400,
+              "textReference": "",
+              "id": "param-1792269260866-4",
+              "result": "",
+              "flag": ""
+            },
+            {
+              "name": "D-Dimer (Quantitative)",
+              "unit": "ng/mL FEU",
+              "minNormal": 0,
+              "maxNormal": 500,
+              "textReference": "< 500 ng/mL FEU",
+              "method": "Immunoturbidimetry",
+              "id": "param-1792269260866-5",
+              "result": "",
+              "flag": ""
+            }
+          ]
         }
       ],
       "staff": {
@@ -2881,7 +2956,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:34:11.426Z",
+      "updatedAt": "2026-10-17T20:34:20.866Z",
       "invoiceId": "inv-1791819003027"
     },
     {
