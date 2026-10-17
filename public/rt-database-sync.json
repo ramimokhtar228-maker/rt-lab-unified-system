@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:38:39.376Z",
+  "syncedAt": "2026-10-17T20:38:44.688Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2829,8 +2829,8 @@
               "maxNormal": 14,
               "method": "Optical Coagulometer",
               "id": "param-1792269260866-0",
-              "result": "",
-              "flag": ""
+              "result": "13.77",
+              "flag": "NORMAL"
             },
             {
               "name": "Prothrombin Activity / Conc.",
@@ -2909,7 +2909,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:38:37.336Z",
+      "updatedAt": "2026-10-17T20:38:41.881Z",
       "invoiceId": "inv-1791819003027"
     },
     {
