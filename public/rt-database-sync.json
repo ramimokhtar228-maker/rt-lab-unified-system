@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-17T20:35:45.370Z",
+  "syncedAt": "2026-10-17T20:36:05.715Z",
   "reports": [
     {
       "id": "rep-1792157519823",
@@ -2682,7 +2682,7 @@
           "titleAr": "الفحوصات السيرولوجية والمناعية والفيروسات",
           "category": "Immunology & Serology",
           "sampleType": "Serum (مصل الدم)",
-          "interpretation": "The pat",
+          "interpretation": "The patient is below detection limit of ",
           "parameters": [
             {
               "id": "p-1791819654844",
@@ -2697,7 +2697,7 @@
             }
           ],
           "interpretations": [
-            "The pat"
+            "The patient is below detection limit of "
           ]
         },
         {
@@ -2959,7 +2959,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-12T15:30:03.027Z",
-      "updatedAt": "2026-10-17T20:35:31.344Z",
+      "updatedAt": "2026-10-17T20:35:57.134Z",
       "invoiceId": "inv-1791819003027"
     },
     {
