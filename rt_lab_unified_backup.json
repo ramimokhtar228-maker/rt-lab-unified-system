@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-18T19:15:57.074Z",
+  "timestamp": "2026-10-18T20:32:00.094Z",
   "reportsCount": 49,
   "incomeCount": 34,
   "loyaltyProfilesCount": 28,
@@ -21081,6 +21081,16 @@
   "dailyCloseouts": [],
   "auditLogs": [
     {
+      "id": "log-1792350961272-rqori",
+      "timestamp": "10/18/2026, 10:16:01 PM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "SYNC",
+      "module": "SECURITY",
+      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
+    },
+    {
       "id": "log-1792277177244-u8ldc",
       "timestamp": "10/18/2026, 1:46:17 AM",
       "userId": "user-ceo",
@@ -21569,16 +21579,6 @@
       "action": "LOYALTY",
       "module": "LOYALTY",
       "description": "إضافة 349 نقطة ولاء للمريض زينب عمر برقم هاتف 01091353732"
-    },
-    {
-      "id": "log-1792220763821-i8bhx",
-      "timestamp": "10/17/2026, 10:06:03 AM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "LOYALTY",
-      "module": "LOYALTY",
-      "description": "إضافة 2575 نقطة ولاء للمريض داليا عبده حسين زهران برقم هاتف 01117552241"
     }
   ]
 }
