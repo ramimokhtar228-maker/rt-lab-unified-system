@@ -1,32 +1,34 @@
 {
-  "timestamp": "2026-10-18T20:32:00.094Z",
-  "reportsCount": 49,
-  "incomeCount": 34,
+  "timestamp": "2026-10-18T20:39:06.217Z",
+  "reportsCount": 48,
+  "incomeCount": 33,
   "loyaltyProfilesCount": 28,
   "reports": [
     {
-      "id": "rep-1792277074288",
-      "reportNumber": "RT-2026-050",
+      "id": "rep-1792355890836",
+      "reportNumber": "RT-2026-054",
       "patient": {
-        "id": "pat-1792277074284",
-        "labNumber": "RT-2026-050",
-        "barcode": "RT-10080",
-        "fullName": "محسن عبدالمنعم",
-        "phone": "0 11 17552241",
-        "age": 58,
+        "id": "pat-1792355890834",
+        "labNumber": "RT-2026-054",
+        "barcode": "RT-10084",
+        "fullName": "دعاء احمد عبدالفتاح",
+        "phone": "0 11 41477450",
+        "age": 44,
         "ageUnit": "years",
-        "gender": "male",
+        "gender": "female",
         "referringDoctorTitle": "Dr.",
         "referringDoctorName": "Herself",
-        "sampleDate": "2026-10-18",
-        "reportingDate": "2026-10-18",
-        "fastingHours": 12,
-        "bookingType": "branch",
-        "visitFee": 0,
-        "appointmentDate": "2026-10-18",
-        "appointmentTime": "12:15",
+        "sampleDate": "2026-10-19",
+        "reportingDate": "2026-10-19",
+        "fastingHours": 10,
+        "bookingType": "home_visit",
+        "homeAddress": "٥ش امتداد امون من ش الحنفيه الدور الرابع ",
+        "visitFee": 60,
+        "appointmentDate": "2026-10-19",
+        "appointmentTime": "14:00",
+        "deliveryNotes": "",
         "testsSubtotal": 521,
-        "totalCost": 521,
+        "totalCost": 581,
         "discountApplied": 0,
         "paymentMethod": "cash",
         "assignedPackageId": "pkg-1"
@@ -39,7 +41,7 @@
       },
       "profiles": [
         {
-          "id": "prof-pkg-1792277074288",
+          "id": "prof-pkg-1792355890836",
           "profileCode": "PKG-ANNUAL-WELLNESS",
           "titleAr": "Comprehensive Annual Wellness Package",
           "titleEn": "Comprehensive Annual Wellness Package",
@@ -56,7 +58,7 @@
               "panicHigh": 400,
               "method": "Hexokinase",
               "textReference": "",
-              "id": "param-GLYCEMIC-0-1792277074284-y0s",
+              "id": "param-GLYCEMIC-0-1792355890834-821",
               "result": "",
               "flag": "NORMAL",
               "notes": "Diabetes & Glycemic Assessment (HbA1c & eAG)"
@@ -69,7 +71,7 @@
               "panicHigh": 450,
               "method": "Hexokinase",
               "textReference": "",
-              "id": "param-GLYCEMIC-1-1792277074284-oxd",
+              "id": "param-GLYCEMIC-1-1792355890834-w0i",
               "result": "",
               "flag": "NORMAL",
               "notes": "Diabetes & Glycemic Assessment (HbA1c & eAG)"
@@ -80,7 +82,7 @@
               "minNormal": 70,
               "maxNormal": 140,
               "textReference": "",
-              "id": "param-GLYCEMIC-2-1792277074284-7vw",
+              "id": "param-GLYCEMIC-2-1792355890834-v09",
               "result": "",
               "flag": "NORMAL",
               "notes": "Diabetes & Glycemic Assessment (HbA1c & eAG)"
@@ -92,7 +94,7 @@
               "maxNormal": 5.6,
               "textReference": "< 5.7% Normal, 5.7 - 6.4% Pre-Diabetes, ≥ 6.5% Diabetes",
               "method": "HPLC / Turbidimetric",
-              "id": "param-GLYCEMIC-3-1792277074284-w5t",
+              "id": "param-GLYCEMIC-3-1792355890834-msx",
               "result": "",
               "flag": "NORMAL",
               "notes": "Diabetes & Glycemic Assessment (HbA1c & eAG)"
@@ -104,7 +106,7 @@
               "maxNormal": 114,
               "textReference": "80 - 120 mg/dL",
               "notes": "Auto-calculated: (28.7 × HbA1c) - 46.7",
-              "id": "param-GLYCEMIC-4-1792277074284-mro",
+              "id": "param-GLYCEMIC-4-1792355890834-b8b",
               "result": "",
               "flag": "NORMAL"
             },
@@ -115,7 +117,7 @@
               "maxNormal": 200,
               "method": "CHOD-PAP",
               "textReference": "",
-              "id": "param-LIPID-0-1792277074284-38k",
+              "id": "param-LIPID-0-1792355890834-s29",
               "result": "",
               "flag": "NORMAL",
               "notes": "Lipid Profile"
@@ -128,7 +130,7 @@
               "panicHigh": 500,
               "method": "GPO-PAP",
               "textReference": "",
-              "id": "param-LIPID-1-1792277074284-lvx",
+              "id": "param-LIPID-1-1792355890834-3bv",
               "result": "",
               "flag": "NORMAL",
               "notes": "Lipid Profile"
@@ -140,7 +142,7 @@
               "maxNormal": 65,
               "method": "Direct Accelerator",
               "textReference": "",
-              "id": "param-LIPID-2-1792277074284-vx3",
+              "id": "param-LIPID-2-1792355890834-ghp",
               "result": "",
               "flag": "NORMAL",
               "notes": "Lipid Profile"
@@ -152,7 +154,7 @@
               "maxNormal": 100,
               "notes": "Friedewald Formula: Total Chol - HDL - (TG / 5)",
               "textReference": "",
-              "id": "param-LIPID-3-1792277074284-z4m",
+              "id": "param-LIPID-3-1792355890834-z5z",
               "result": "",
               "flag": "NORMAL"
             },
@@ -163,7 +165,7 @@
               "maxNormal": 30,
               "notes": "Auto-calculated: Triglycerides / 5",
               "textReference": "",
-              "id": "param-LIPID-4-1792277074284-beu",
+              "id": "param-LIPID-4-1792355890834-pp0",
               "result": "",
               "flag": "NORMAL"
             },
@@ -174,7 +176,7 @@
               "maxNormal": 130,
               "notes": "Auto-calculated: Total Chol - HDL",
               "textReference": "",
-              "id": "param-LIPID-5-1792277074284-ltd",
+              "id": "param-LIPID-5-1792355890834-9nj",
               "result": "",
               "flag": "NORMAL"
             },
@@ -185,7 +187,7 @@
               "maxNormal": 4.5,
               "textReference": "< 4.5 Desirable",
               "notes": "Auto-calculated: Total Chol / HDL",
-              "id": "param-LIPID-6-1792277074285-jr7",
+              "id": "param-LIPID-6-1792355890834-3vd",
               "result": "",
               "flag": "NORMAL"
             },
@@ -195,7 +197,7 @@
               "minNormal": 0,
               "maxNormal": 3,
               "textReference": "< 3.0 Desirable",
-              "id": "param-LIPID-7-1792277074285-y73",
+              "id": "param-LIPID-7-1792355890834-q2y",
               "result": "",
               "flag": "NORMAL",
               "notes": "Lipid Profile"
@@ -207,7 +209,7 @@
               "maxNormal": 45,
               "method": "IFCC UV with P5P",
               "textReference": "",
-              "id": "param-LFT-0-1792277074285-sqg",
+              "id": "param-LFT-0-1792355890834-fkp",
               "result": "",
               "flag": "NORMAL",
               "notes": "Liver Function Tests (LFT)"
@@ -219,7 +221,7 @@
               "maxNormal": 40,
               "method": "IFCC UV with P5P",
               "textReference": "",
-              "id": "param-LFT-1-1792277074285-ird",
+              "id": "param-LFT-1-1792355890834-i3t",
               "result": "",
               "flag": "NORMAL",
               "notes": "Liver Function Tests (LFT)"
@@ -230,7 +232,7 @@
               "minNormal": 40,
               "maxNormal": 130,
               "textReference": "",
-              "id": "param-LFT-2-1792277074285-870",
+              "id": "param-LFT-2-1792355890834-srr",
               "result": "",
               "flag": "NORMAL",
               "notes": "Liver Function Tests (LFT)"
@@ -243,7 +245,7 @@
               "panicHigh": 5,
               "method": "Jendrassik-Grof",
               "textReference": "",
-              "id": "param-LFT-3-1792277074285-6zt",
+              "id": "param-LFT-3-1792355890834-rpp",
               "result": "",
               "flag": "NORMAL",
               "notes": "Liver Function Tests (LFT)"
@@ -254,7 +256,7 @@
               "minNormal": 0,
               "maxNormal": 0.3,
               "textReference": "",
-              "id": "param-LFT-4-1792277074285-uos",
+              "id": "param-LFT-4-1792355890834-bte",
               "result": "",
               "flag": "NORMAL",
               "notes": "Liver Function Tests (LFT)"
@@ -266,7 +268,7 @@
               "maxNormal": 0.9,
               "notes": "Auto-calculated: Total - Direct",
               "textReference": "",
-              "id": "param-LFT-5-1792277074285-okv",
+              "id": "param-LFT-5-1792355890834-14z",
               "result": "",
               "flag": "NORMAL"
             },
@@ -277,7 +279,7 @@
               "maxNormal": 8.3,
               "method": "Biuret",
               "textReference": "",
-              "id": "param-LFT-6-1792277074285-nfn",
+              "id": "param-LFT-6-1792355890834-d4k",
               "result": "",
               "flag": "NORMAL",
               "notes": "Liver Function Tests (LFT)"
@@ -289,7 +291,7 @@
               "maxNormal": 5.2,
               "method": "Bromocresol Green (BCG)",
               "textReference": "",
-              "id": "param-LFT-7-1792277074285-sqp",
+              "id": "param-LFT-7-1792355890834-wwf",
               "result": "",
               "flag": "NORMAL",
               "notes": "Liver Function Tests (LFT)"
@@ -301,7 +303,7 @@
               "maxNormal": 3.5,
               "notes": "Auto-calculated: Total Protein - Albumin",
               "textReference": "",
-              "id": "param-LFT-8-1792277074285-ick",
+              "id": "param-LFT-8-1792355890834-x4m",
               "result": "",
               "flag": "NORMAL"
             },
@@ -312,7 +314,7 @@
               "maxNormal": 2.2,
               "notes": "Auto-calculated: Albumin / Globulin",
               "textReference": "",
-              "id": "param-LFT-9-1792277074285-7qh",
+              "id": "param-LFT-9-1792355890834-pmf",
               "result": "",
               "flag": "NORMAL"
             },
@@ -322,7 +324,7 @@
               "minNormal": 9,
               "maxNormal": 48,
               "textReference": "",
-              "id": "param-LFT-10-1792277074285-l5k",
+              "id": "param-LFT-10-1792355890834-zlh",
               "result": "",
               "flag": "NORMAL",
               "notes": "Liver Function Tests (LFT)"
@@ -334,7 +336,7 @@
               "maxNormal": 1.1,
               "notes": "Auto-calculated: AST / ALT",
               "textReference": "",
-              "id": "param-LFT-11-1792277074285-3ol",
+              "id": "param-LFT-11-1792355890834-5hw",
               "result": "",
               "flag": "NORMAL"
             },
@@ -346,7 +348,7 @@
               "panicHigh": 4,
               "method": "Enzymatic / Jaffe Kinetic",
               "textReference": "",
-              "id": "param-KFT-0-1792277074285-qyl",
+              "id": "param-KFT-0-1792355890834-4z5",
               "result": "",
               "flag": "NORMAL",
               "notes": "Kidney Function Profile"
@@ -359,7 +361,7 @@
               "panicHigh": 120,
               "method": "Urease-GLDH",
               "textReference": "",
-              "id": "param-KFT-1-1792277074285-h3d",
+              "id": "param-KFT-1-1792355890834-jqu",
               "result": "",
               "flag": "NORMAL",
               "notes": "Kidney Function Profile"
@@ -370,7 +372,7 @@
               "minNormal": 7,
               "maxNormal": 20,
               "textReference": "",
-              "id": "param-KFT-2-1792277074285-6k1",
+              "id": "param-KFT-2-1792355890834-rl6",
               "result": "",
               "flag": "NORMAL",
               "notes": "Kidney Function Profile"
@@ -382,7 +384,7 @@
               "maxNormal": 20,
               "notes": "Auto-calculated: BUN / Creatinine",
               "textReference": "",
-              "id": "param-KFT-3-1792277074285-ini",
+              "id": "param-KFT-3-1792355890834-26e",
               "result": "",
               "flag": "NORMAL"
             },
@@ -393,7 +395,7 @@
               "maxNormal": 7.2,
               "method": "Uricase-PAP",
               "textReference": "",
-              "id": "param-KFT-4-1792277074285-otv",
+              "id": "param-KFT-4-1792355890834-bjd",
               "result": "",
               "flag": "NORMAL",
               "notes": "Kidney Function Profile"
@@ -405,12 +407,12 @@
               "maxNormal": 120,
               "notes": "Auto-calculated: CKD-EPI Formula",
               "textReference": "",
-              "id": "param-KFT-5-1792277074285-97w",
+              "id": "param-KFT-5-1792355890835-123",
               "result": "",
               "flag": "NORMAL"
             },
             {
-              "id": "p-pkg-0-1792277074285-a9i",
+              "id": "p-pkg-0-1792355890835-c7e",
               "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
               "result": "",
               "unit": "ng/mL",
@@ -422,7 +424,7 @@
               "notes": "فحوصات وفيتامينات إضافية للباقة"
             },
             {
-              "id": "p-pkg-1-1792277074286-p27",
+              "id": "p-pkg-1-1792355890835-9ex",
               "name": "Thyroid Stimulating Hormone (TSH) (Thyroid Stimulating Hormone (TSH))",
               "result": "",
               "unit": "uIU/mL",
@@ -434,7 +436,7 @@
               "notes": "فحوصات وفيتامينات إضافية للباقة"
             },
             {
-              "id": "p-pkg-2-1792277074286-1de",
+              "id": "p-pkg-2-1792355890835-428",
               "name": "نسبه الهيماتوكريت (Hematocrit %)",
               "result": "",
               "unit": "%",
@@ -446,7 +448,7 @@
               "notes": "فحوصات وفيتامينات إضافية للباقة"
             },
             {
-              "id": "p-pkg-3-1792277074287-kv2",
+              "id": "p-pkg-3-1792355890836-rnf",
               "name": "نسبه هيموجلوبين (Hemoglobin %)",
               "result": "",
               "unit": "g/dL",
@@ -458,7 +460,7 @@
               "notes": "فحوصات وفيتامينات إضافية للباقة"
             },
             {
-              "id": "p-pkg-4-1792277074287-jsq",
+              "id": "p-pkg-4-1792355890836-tec",
               "name": "Total Serum Calcium (Total Serum Calcium)",
               "result": "",
               "unit": "mg/dL",
@@ -470,7 +472,7 @@
               "notes": "فحوصات وفيتامينات إضافية للباقة"
             },
             {
-              "id": "p-pkg-5-1792277074288-7hr",
+              "id": "p-pkg-5-1792355890836-ots",
               "name": "Erythrocyte Sedimentation Rate (Erythrocyte Sedimentation Rate)",
               "result": "",
               "unit": "mm/1st hr",
@@ -504,87 +506,9 @@
         "showHrSignature": true
       },
       "status": "draft",
-      "createdAt": "2026-10-17T22:44:34.288Z",
-      "updatedAt": "2026-10-17T22:44:34.288Z",
-      "invoiceId": "inv-1792277074288"
-    },
-    {
-      "id": "rep-1792266746907",
-      "reportNumber": "RT-2026-047",
-      "patient": {
-        "id": "pat-1792266746882",
-        "labNumber": "RT-2026-047",
-        "barcode": "RT-10077",
-        "fullName": "فيرونيا ممدوح",
-        "phone": "0 12 21502703",
-        "age": 24,
-        "ageUnit": "years",
-        "gender": "female",
-        "referringDoctorTitle": "Dr.",
-        "referringDoctorName": "Herself",
-        "sampleDate": "2026-10-16T09:53:00.000Z",
-        "reportingDate": "2026-10-17T18:53:00.000Z",
-        "fastingHours": 0,
-        "bookingType": "branch",
-        "visitFee": 0,
-        "appointmentDate": "2026-10-16",
-        "appointmentTime": "12:00",
-        "testsSubtotal": 310,
-        "totalCost": 152,
-        "discountApplied": 158,
-        "paymentMethod": "cash"
-      },
-      "profiles": [
-        {
-          "id": "prof-1792266746890-aq09",
-          "profileCode": "ASOT",
-          "titleEn": "Anti-Streptolysin O Titre (ASOT)",
-          "titleAr": "Anti-Streptolysin O Titre (ASOT)",
-          "category": "Immunology",
-          "sampleType": "Serum",
-          "parameters": [
-            {
-              "id": "p-1792266746905-144",
-              "name": "Anti-Streptolysin O Titre (ASOT) (Anti-Streptolysin O Titre (ASOT))",
-              "result": "309",
-              "unit": "IU/mL",
-              "minNormal": 0,
-              "maxNormal": 200,
-              "textReference": "Adults: < 200 IU/mL | Children: < 400 IU/mL",
-              "flag": "HIGH",
-              "method": "Latex-Enhanced Immunoturbidimetry"
-            }
-          ],
-          "recommendedTests": [
-            "CBC",
-            "CRP",
-            "ESR"
-          ]
-        }
-      ],
-      "staff": {
-        "labChemist": "مني احمد",
-        "verifiedBy": "رحاب على",
-        "pathologist": "رامي مختار",
-        "financialDirector": "أ/ ماجد حسني الشرقاوي",
-        "hrDirector": "أ/ أحمد فتحي الجمال",
-        "chemistTitle": "أخصائي أول كيمياء إكلينيكية وهرمونات",
-        "verifierTitle": "طبيب باثولوجى / المدير التنفيذي",
-        "pathologistTitle": "طبيب الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
-        "financialTitle": "المدير المالي ورئيس الحسابات (CFO)",
-        "hrTitle": "مدير الموارد البشرية وشؤون العاملين (HR)",
-        "chemistLicense": "EGY-SCI-88402",
-        "verifierLicense": "EGY-MGT-11024",
-        "pathologistLicense": "EGY-MED-48201",
-        "financialLicense": "EGY-FIN-10492",
-        "hrLicense": "EGY-HR-44190",
-        "showFinancialSignature": true,
-        "showHrSignature": true
-      },
-      "status": "draft",
-      "createdAt": "2026-10-17T19:52:26.910Z",
-      "updatedAt": "2026-10-17T19:55:24.149Z",
-      "invoiceId": "inv-1792266746910"
+      "createdAt": "2026-10-18T20:38:10.836Z",
+      "updatedAt": "2026-10-18T20:38:10.836Z",
+      "invoiceId": "inv-1792355890836"
     },
     {
       "id": "rep-1792157519823",
@@ -14956,14 +14880,14 @@
   ],
   "incomeRecords": [
     {
-      "id": "inv-1792277074288",
-      "invoiceNumber": "INV-2026-050",
-      "patientName": "محسن عبدالمنعم",
-      "patientPhone": "0 11 17552241",
-      "patientAge": 58,
-      "patientGender": "male",
-      "barcode": "RT-10080",
-      "labNumber": "RT-2026-050",
+      "id": "inv-1792355890836",
+      "invoiceNumber": "INV-2026-054",
+      "patientName": "دعاء احمد عبدالفتاح",
+      "patientPhone": "0 11 41477450",
+      "patientAge": 44,
+      "patientGender": "female",
+      "barcode": "RT-10084",
+      "labNumber": "RT-2026-054",
       "referringDoctor": "Herself",
       "tests": [
         {
@@ -15103,65 +15027,22 @@
           "fastingInstructions": "No fasting required"
         }
       ],
-      "subtotal": 521,
+      "subtotal": 581,
       "testsSubtotal": 521,
       "discount": 0,
-      "visitFee": 0,
-      "isHomeVisit": false,
-      "netAmount": 521,
-      "paidAmount": 521,
+      "visitFee": 60,
+      "isHomeVisit": true,
+      "visitAddress": "٥ش امتداد امون من ش الحنفيه الدور الرابع ",
+      "netAmount": 641,
+      "paidAmount": 641,
       "remainingAmount": 0,
       "paymentMethod": "cash",
       "paymentStatus": "paid",
       "cashierName": "أ.د. رامي مختار",
       "branch": "فرع القصر العيني - الرئيسي",
       "syncStatus": "synced",
-      "createdAt": "2026-10-17T22:44:34.288Z",
-      "updatedAt": "2026-10-17T22:44:34.288Z"
-    },
-    {
-      "id": "inv-1792266746910",
-      "invoiceNumber": "INV-2026-047",
-      "patientName": "فيرونيا ممدوح",
-      "patientPhone": "0 12 21502703",
-      "patientAge": 24,
-      "patientGender": "female",
-      "barcode": "RT-10077",
-      "labNumber": "RT-2026-047",
-      "referringDoctor": "Herself",
-      "tests": [
-        {
-          "id": "t-96",
-          "code": "ASOT",
-          "nameAr": "Anti-Streptolysin O Titre (ASOT)",
-          "nameEn": "Anti-Streptolysin O Titre (ASOT)",
-          "category": "Immunology",
-          "price": 310,
-          "cost": 25,
-          "sampleType": "Serum",
-          "turnaroundTime": "Within 2 hours",
-          "unit": "IU/mL",
-          "minNormal": 0,
-          "maxNormal": 200,
-          "textReference": "Adults: < 200 IU/mL | Children: < 400 IU/mL",
-          "method": "Latex-Enhanced Immunoturbidimetry"
-        }
-      ],
-      "subtotal": 152,
-      "testsSubtotal": 310,
-      "discount": 158,
-      "visitFee": 0,
-      "isHomeVisit": false,
-      "netAmount": 0,
-      "paidAmount": 0,
-      "remainingAmount": 0,
-      "paymentMethod": "cash",
-      "paymentStatus": "paid",
-      "cashierName": "أ.د. رامي مختار",
-      "branch": "فرع القصر العيني - الرئيسي",
-      "syncStatus": "synced",
-      "createdAt": "2026-10-17T19:52:26.913Z",
-      "updatedAt": "2026-10-17T19:52:26.913Z"
+      "createdAt": "2026-10-18T20:38:10.837Z",
+      "updatedAt": "2026-10-18T20:38:10.837Z"
     },
     {
       "id": "inv-1792157519823",
@@ -21081,6 +20962,136 @@
   "dailyCloseouts": [],
   "auditLogs": [
     {
+      "id": "log-1792355922897-uzlas",
+      "timestamp": "10/18/2026, 11:38:42 PM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "INCOME",
+      "description": "حذف الفاتورة رقم INV-2026-047 للمريض فيرونيا ممدوح"
+    },
+    {
+      "id": "log-1792355922896-defjd",
+      "timestamp": "10/18/2026, 11:38:42 PM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض فيرونيا ممدوح"
+    },
+    {
+      "id": "log-1792355920340-x6rce",
+      "timestamp": "10/18/2026, 11:38:40 PM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "INCOME",
+      "description": "حذف الفاتورة رقم INV-2026-053 للمريض دعاء احمد عبدالفتاح"
+    },
+    {
+      "id": "log-1792355920340-9sjku",
+      "timestamp": "10/18/2026, 11:38:40 PM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض دعاء احمد عبدالفتاح"
+    },
+    {
+      "id": "log-1792355918121-aks3l",
+      "timestamp": "10/18/2026, 11:38:38 PM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "INCOME",
+      "description": "حذف الفاتورة رقم INV-2026-052 للمريض دعاء احمد عبدالفتاح"
+    },
+    {
+      "id": "log-1792355918120-n0ayo",
+      "timestamp": "10/18/2026, 11:38:38 PM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض دعاء احمد عبدالفتاح"
+    },
+    {
+      "id": "log-1792355914909-wadz2",
+      "timestamp": "10/18/2026, 11:38:34 PM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "INCOME",
+      "description": "حذف الفاتورة رقم INV-2026-051 للمريض دعاء احمد عبدالفتاح"
+    },
+    {
+      "id": "log-1792355914908-wtwm4",
+      "timestamp": "10/18/2026, 11:38:34 PM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض دعاء احمد عبدالفتاح"
+    },
+    {
+      "id": "log-1792355911150-x7rn6",
+      "timestamp": "10/18/2026, 11:38:31 PM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "INCOME",
+      "description": "حذف الفاتورة رقم INV-2026-050 للمريض محسن عبدالمنعم"
+    },
+    {
+      "id": "log-1792355911150-kuqx4",
+      "timestamp": "10/18/2026, 11:38:31 PM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض محسن عبدالمنعم"
+    },
+    {
+      "id": "log-1792355909224-1ilfw",
+      "timestamp": "10/18/2026, 11:38:29 PM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "INCOME",
+      "description": "حذف الفاتورة رقم INV-2026-050 للمريض دعاء احمد عبدالفتاح"
+    },
+    {
+      "id": "log-1792355909221-8glhi",
+      "timestamp": "10/18/2026, 11:38:29 PM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "DELETE",
+      "module": "DIAGNOSTIC",
+      "description": "حذف التقرير الطبي للمريض دعاء احمد عبدالفتاح"
+    },
+    {
+      "id": "log-1792355529180-0u9bm",
+      "timestamp": "10/18/2026, 11:32:09 PM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "SYNC",
+      "module": "SECURITY",
+      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
+    },
+    {
       "id": "log-1792350961272-rqori",
       "timestamp": "10/18/2026, 10:16:01 PM",
       "userId": "user-ceo",
@@ -21449,136 +21460,6 @@
       "action": "LOYALTY",
       "module": "LOYALTY",
       "description": "إضافة 599 نقطة ولاء للمريض نورا سعيد حلمى برقم هاتف 01228439288"
-    },
-    {
-      "id": "log-1792220763822-74rvw",
-      "timestamp": "10/17/2026, 10:06:03 AM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "LOYALTY",
-      "module": "LOYALTY",
-      "description": "إضافة 349 نقطة ولاء للمريض شريف عادل برقم هاتف 01100"
-    },
-    {
-      "id": "log-1792220763821-s2y2u",
-      "timestamp": "10/17/2026, 10:06:03 AM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "LOYALTY",
-      "module": "LOYALTY",
-      "description": "إضافة 199 نقطة ولاء للمريض أمال محمد برقم هاتف 01555108312"
-    },
-    {
-      "id": "log-1792220763821-5by60",
-      "timestamp": "10/17/2026, 10:06:03 AM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "LOYALTY",
-      "module": "LOYALTY",
-      "description": "إضافة 91 نقطة ولاء للمريض ٌٍّّرجاء حسن ابراهيم برقم هاتف 01124485444"
-    },
-    {
-      "id": "log-1792220763821-9clkq",
-      "timestamp": "10/17/2026, 10:06:03 AM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "LOYALTY",
-      "module": "LOYALTY",
-      "description": "إضافة 199 نقطة ولاء للمريض هويدا الهادي يحيى برقم هاتف 01277489467"
-    },
-    {
-      "id": "log-1792220763821-aeuql",
-      "timestamp": "10/17/2026, 10:06:03 AM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "LOYALTY",
-      "module": "LOYALTY",
-      "description": "إضافة 349 نقطة ولاء للمريض مروة عبدالفتاح ابراهيم برقم هاتف 01065490430"
-    },
-    {
-      "id": "log-1792220763821-ntmc9",
-      "timestamp": "10/17/2026, 10:06:03 AM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "LOYALTY",
-      "module": "LOYALTY",
-      "description": "إضافة 349 نقطة ولاء للمريض كوثر ابراهيم برقم هاتف 01095920078"
-    },
-    {
-      "id": "log-1792220763821-pf9k1",
-      "timestamp": "10/17/2026, 10:06:03 AM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "LOYALTY",
-      "module": "LOYALTY",
-      "description": "إضافة 1012 نقطة ولاء للمريض حبيبه مجدى محمد برقم هاتف 01148879943"
-    },
-    {
-      "id": "log-1792220763821-5eght",
-      "timestamp": "10/17/2026, 10:06:03 AM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "LOYALTY",
-      "module": "LOYALTY",
-      "description": "إضافة 190 نقطة ولاء للمريض محمد حسن على برقم هاتف 01005314825"
-    },
-    {
-      "id": "log-1792220763821-gaot5",
-      "timestamp": "10/17/2026, 10:06:03 AM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "LOYALTY",
-      "module": "LOYALTY",
-      "description": "إضافة 188 نقطة ولاء للمريض جيهان عبدالفتاح برقم هاتف 01099999098"
-    },
-    {
-      "id": "log-1792220763821-i06kl",
-      "timestamp": "10/17/2026, 10:06:03 AM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "LOYALTY",
-      "module": "LOYALTY",
-      "description": "إضافة 314 نقطة ولاء للمريض جيهان  عبد الفتاح برقم هاتف 0 10 22231270"
-    },
-    {
-      "id": "log-1792220763821-4elvt",
-      "timestamp": "10/17/2026, 10:06:03 AM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "LOYALTY",
-      "module": "LOYALTY",
-      "description": "إضافة 599 نقطة ولاء للمريض عادل احمد صبيح برقم هاتف 01112919075"
-    },
-    {
-      "id": "log-1792220763821-7nkz4",
-      "timestamp": "10/17/2026, 10:06:03 AM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "LOYALTY",
-      "module": "LOYALTY",
-      "description": "إضافة 599 نقطة ولاء للمريض مجدى احمد ربيع برقم هاتف 01030502318"
-    },
-    {
-      "id": "log-1792220763821-uptkh",
-      "timestamp": "10/17/2026, 10:06:03 AM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "LOYALTY",
-      "module": "LOYALTY",
-      "description": "إضافة 349 نقطة ولاء للمريض زينب عمر برقم هاتف 01091353732"
     }
   ]
 }
