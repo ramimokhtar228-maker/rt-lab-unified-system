@@ -17,10 +17,13 @@ import {
   Building2,
   PhoneCall,
   Loader2,
-  Percent
+  Percent,
+  Edit2
 } from 'lucide-react';
 import { formatWhatsAppMessage, openWhatsApp } from '../utils/whatsapp';
 import { useApp } from '../context/AppContext';
+import { ClientEditModal } from './ClientEditModal';
+import { LabInfoEditModal } from './LabInfoEditModal';
 
 interface PatientInvoiceModalProps {
   isOpen: boolean;
@@ -36,12 +39,23 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
   onUpdateReport
 }) => {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const [isClientEditOpen, setIsClientEditOpen] = useState(false);
+  const [isLabEditOpen, setIsLabEditOpen] = useState(false);
   const invoiceContainerRef = useRef<HTMLDivElement>(null);
+
+  const { 
+    labInfo: contextLabInfo,
+    updateLabInfo,
+    staffSignatures,
+    updateStaffSignatures,
+    updateReport,
+    incomeRecords,
+    updateIncomeRecord
+  } = useApp();
 
   if (!isOpen || !report) return null;
 
   // Load dynamic lab info and real contact details from context or storage
-  const { labInfo: contextLabInfo } = useApp();
   const labInfo = contextLabInfo || (() => {
     try {
       const saved = localStorage.getItem('rt_lab_info_v2');
@@ -582,6 +596,26 @@ ${discount > 0 ? `- الخصم: ${discount} ج.م\n` : ''}- الصافي الم�
           </div>
 
           <div className="flex items-center gap-2">
+            {/* Edit Client Data */}
+            <button
+              onClick={() => setIsClientEditOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-sky-300 border border-slate-700 rounded-lg text-xs font-bold transition-all shadow-sm"
+              title="تعديل بيانات العميل / المريض بالفاتورة"
+            >
+              <User className="w-3.5 h-3.5 text-sky-400" />
+              <span>بيانات العميل</span>
+            </button>
+
+            {/* Edit Lab Info */}
+            <button
+              onClick={() => setIsLabEditOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-rose-300 border border-slate-700 rounded-lg text-xs font-bold transition-all shadow-sm"
+              title="تعديل بيانات المعمل والفاتورة والعنوان"
+            >
+              <Building2 className="w-3.5 h-3.5 text-rose-400" />
+              <span>بيانات المعمل</span>
+            </button>
+
             <button
               onClick={handleSendWhatsAppInvoice}
               className="flex items-center gap-1.5 px-3 py-2 bg-emerald-700 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold transition-all shadow-sm"
@@ -871,6 +905,44 @@ ${discount > 0 ? `- الخصم: ${discount} ج.م\n` : ''}- الصافي الم�
           </div>
         </div>
       </div>
+
+      {/* Edit Client Modal */}
+      {isClientEditOpen && (
+        <ClientEditModal
+          isOpen={isClientEditOpen}
+          onClose={() => setIsClientEditOpen(false)}
+          patient={p}
+          onSave={(updatedPatient) => {
+            if (onUpdateReport) {
+              onUpdateReport({ ...report, patient: updatedPatient });
+            } else {
+              updateReport(report.id, { patient: updatedPatient });
+            }
+            const inv = incomeRecords.find(i => i.barcode === updatedPatient.barcode || i.labNumber === updatedPatient.labNumber || i.id === report.invoiceId);
+            if (inv) {
+              updateIncomeRecord(inv.id, {
+                patientName: updatedPatient.fullName,
+                patientPhone: updatedPatient.phone,
+                patientAge: updatedPatient.age,
+                patientGender: updatedPatient.gender,
+                referringDoctor: updatedPatient.referringDoctorName
+              });
+            }
+          }}
+        />
+      )}
+
+      {/* Edit Lab Info Modal */}
+      {isLabEditOpen && (
+        <LabInfoEditModal
+          isOpen={isLabEditOpen}
+          onClose={() => setIsLabEditOpen(false)}
+          labInfo={labInfo}
+          onUpdateLabInfo={updateLabInfo}
+          staffSignatures={staffSignatures}
+          onUpdateStaffSignatures={updateStaffSignatures}
+        />
+      )}
     </div>
   );
 };

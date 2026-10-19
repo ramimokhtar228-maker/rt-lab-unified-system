@@ -14,7 +14,7 @@ export async function buildReportPDFBlob(report: LabReport, labInfo?: LabInfo): 
     ...report,
     staff: {
       ...DEFAULT_STAFF,
-      ...labInfo?.staffSignatures,
+      ...(labInfo as any)?.staffSignatures,
       ...report.staff
     }
   };

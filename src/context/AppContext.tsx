@@ -57,7 +57,7 @@ import { INITIAL_PACKAGES } from '../data/packagesData';
 import { INITIAL_INDIVIDUAL_TESTS } from '../data/individualTestsData';
 import { INITIAL_INSTRUMENTS, SAMPLE_INSTRUMENT_TRANSMISSIONS } from '../data/instrumentsData';
 import { realtimeSyncManager } from '../utils/realtimeMultiDeviceSync';
-import { pushFullStoreToGitHub, pullFullStoreFromGitHub } from '../utils/githubSync';
+import { pushFullStoreToGitHub, pullFullStoreFromGitHub, syncInvoiceToDiagnostic } from '../utils/githubSync';
 import {
   mergeCatalogWithDefaults,
   mergePackagesWithDefaults,
@@ -1411,7 +1411,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       pushFullStoreToGitHub(githubConfig, instantSyncPayload).catch(err => {
         console.warn('Instant GitHub backup push error:', err);
       });
-      syncInvoiceToDiagnostic(githubConfig, newInvoice).catch(() => {});
+      syncInvoiceToDiagnostic(newInvoice, githubConfig).catch(() => {});
     }
 
     logAction('CREATE', 'DIAGNOSTIC', `تسجيل مريض جديد ${patient.fullName} وحجز تحاليل وربط التقرير بالفاتورة المالية ومزامنة البيانات سحابياً فوراً`);

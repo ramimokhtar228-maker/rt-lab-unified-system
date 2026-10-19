@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useApp } from '../context/AppContext';
 import {
   Cpu,
@@ -16,7 +16,14 @@ import {
   Usb,
   Wifi,
   Search,
-  CheckCheck
+  CheckCheck,
+  Calendar,
+  Clock,
+  RefreshCw,
+  Inbox,
+  Filter,
+  CheckCircle2,
+  ChevronDown
 } from 'lucide-react';
 import { LabInstrument } from '../types';
 
@@ -37,10 +44,15 @@ export const InstrumentsModule: React.FC = () => {
   const [sampleBarcode, setSampleBarcode] = useState<string>('');
   const [selectedPatientReportId, setSelectedPatientReportId] = useState<string>(reports[0]?.id || '');
   const [isSimulating, setIsSimulating] = useState(false);
-  const [serialSupported, setSerialSupported] = useState(typeof navigator !== 'undefined' && 'serial' in navigator);
   const [serialConnecting, setSerialConnecting] = useState(false);
   const [selectedTxId, setSelectedTxId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+
+  // 48 Hours Bookings Queue States
+  const [is48hQueueActive, setIs48hQueueActive] = useState<boolean>(true);
+  const [queueFilter, setQueueFilter] = useState<'matching' | 'all'>('matching');
+  const [lastFetchTime, setLastFetchTime] = useState<string>(() => new Date().toLocaleTimeString('ar-EG'));
+  const [fetchToast, setFetchToast] = useState<string | null>(null);
 
   const activeInstrument = instruments.find(i => i.id === selectedInstId) || instruments[0];
   const selectedReport = reports.find(r => r.id === selectedPatientReportId) || reports[0];
@@ -51,6 +63,65 @@ export const InstrumentsModule: React.FC = () => {
       setSampleBarcode(selectedReport.patient.barcode || selectedReport.reportNumber);
     }
   }, [selectedReport, sampleBarcode]);
+
+  // Fetch & process all instrument bookings within previous 48 hours
+  const past48HoursBookings = useMemo(() => {
+    const now = new Date().getTime();
+    const fortyEightHoursMs = 48 * 60 * 60 * 1000;
+
+    return reports
+      .filter(r => {
+        const sampleDateMs = r.patient.sampleDate ? new Date(r.patient.sampleDate).getTime() : 0;
+        const createdAtMs = r.createdAt ? new Date(r.createdAt).getTime() : 0;
+        const targetMs = Math.max(sampleDateMs, createdAtMs);
+        // Include within 48h or default if recent
+        return (now - targetMs) <= fortyEightHoursMs || !r.patient.sampleDate;
+      })
+      .map(r => {
+        // Find matching profiles for active instrument
+        const matchedProfiles = r.profiles.filter(p =>
+          activeInstrument?.supportedProfiles.some(sp =>
+            p.profileCode.toLowerCase().includes(sp.toLowerCase()) ||
+            sp.toLowerCase().includes(p.profileCode.toLowerCase()) ||
+            p.titleEn.toLowerCase().includes(sp.toLowerCase())
+          )
+        );
+
+        const hasTransmission = transmissions.some(t =>
+          t.sampleBarcode === r.patient.barcode || t.patientLabNumber === r.reportNumber
+        );
+
+        // Approximate hours elapsed
+        const refTime = r.createdAt ? new Date(r.createdAt).getTime() : now;
+        const hoursAgo = Math.max(1, Math.round((now - refTime) / (1000 * 60 * 60)));
+
+        return {
+          report: r,
+          matchedProfiles,
+          isEligible: matchedProfiles.length > 0,
+          hasTransmission,
+          hoursAgo,
+          status: hasTransmission ? 'completed' : r.status === 'verified' ? 'verified' : 'queued'
+        };
+      });
+  }, [reports, activeInstrument, transmissions]);
+
+  // Filtered queue based on view mode
+  const displayedBookings = useMemo(() => {
+    if (queueFilter === 'matching') {
+      return past48HoursBookings.filter(b => b.isEligible);
+    }
+    return past48HoursBookings;
+  }, [past48HoursBookings, queueFilter]);
+
+  // Activate & Fetch 48h Bookings Handler
+  const handleFetch48hBookings = () => {
+    setIs48hQueueActive(true);
+    setLastFetchTime(new Date().toLocaleTimeString('ar-EG'));
+    const count = displayedBookings.length;
+    setFetchToast(`تم تفعيل وجلب ${count} حجز عينات بنجاح على أجهزة المعمل خلال الـ 48 ساعة السابقة!`);
+    setTimeout(() => setFetchToast(null), 4000);
+  };
 
   // Connect via Web Serial API
   const handleConnectWebSerial = async () => {
@@ -72,7 +143,23 @@ export const InstrumentsModule: React.FC = () => {
     }
   };
 
-  // Run Test / Simulation
+  // Run Test / Simulation on specific report from 48h Queue
+  const handleRunQueueSample = (reportId: string, barcode: string, patientName: string, labNumber: string) => {
+    if (!activeInstrument) return;
+    setSelectedPatientReportId(reportId);
+    setSampleBarcode(barcode);
+    setIsSimulating(true);
+
+    setTimeout(() => {
+      const newTx = simulateInstrumentRun(activeInstrument.id, barcode, patientName, labNumber);
+      setSelectedTxId(newTx.id);
+      setIsSimulating(false);
+      setFetchToast(`تم سحب إشارة التحليل وقراءة النتائج للجهاز ${activeInstrument.name} بنجاح!`);
+      setTimeout(() => setFetchToast(null), 3500);
+    }, 1200);
+  };
+
+  // Run Manual Simulation
   const handleRunTest = () => {
     if (!activeInstrument) return;
     setIsSimulating(true);
@@ -92,6 +179,8 @@ export const InstrumentsModule: React.FC = () => {
     const success = applyTransmissionToReport(txId, repId);
     if (success) {
       setSelectedReportId(repId);
+      setFetchToast('تم إدراج النتائج في التقرير بنجاح! يمكنك الآن فتح التقرير ومعاينته.');
+      setTimeout(() => setFetchToast(null), 3500);
     }
   };
 
@@ -103,6 +192,17 @@ export const InstrumentsModule: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      {/* Toast Alert */}
+      {fetchToast && (
+        <div className="bg-emerald-900 border border-emerald-500 text-emerald-100 p-3 rounded-xl text-xs font-bold flex items-center justify-between shadow-lg animate-in fade-in duration-150">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span>{fetchToast}</span>
+          </div>
+          <button onClick={() => setFetchToast(null)} className="text-emerald-300 hover:text-white text-xs">✕</button>
+        </div>
+      )}
+
       {/* Top Banner */}
       <div className="bg-gradient-to-r from-slate-900 via-rose-950 to-slate-900 text-white rounded-2xl p-6 shadow-xl border border-rose-900/40">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
@@ -114,13 +214,23 @@ export const InstrumentsModule: React.FC = () => {
               <div>
                 <h1 className="text-2xl font-black tracking-tight">وحدة الربط المباشر مع أجهزة التحاليل (LIS Instrument Interfacing)</h1>
                 <p className="text-slate-300 text-xs md:text-sm font-medium">
-                  منظومة الربط الآلي ثنائية الاتجاه مع أجهزة الدم والكيمياء والسيولة (ASTM E1381 / HL7 / RS232 Serial / TCP-IP)
+                  منظومة الربط الآلي ثنائية الاتجاه وجلب الحجوزات الحية خلال الـ 48 ساعة السابقة (ASTM / HL7 / Serial)
                 </p>
               </div>
             </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
+            {/* 48h Bookings Button */}
+            <button
+              onClick={handleFetch48hBookings}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-700 to-red-800 hover:from-rose-600 hover:to-red-700 text-white font-bold text-xs shadow-md transition-all cursor-pointer active:scale-98"
+              title="تفعيل وجلب كافة الحجوزات وعينات المرضى المسجلة خلال الـ 48 ساعة السابقة"
+            >
+              <RefreshCw className="w-4 h-4 animate-spin-hover" />
+              <span>تفعيل وجلب حجوزات الـ 48 ساعة ({displayedBookings.length})</span>
+            </button>
+
             <button
               onClick={handleConnectWebSerial}
               disabled={serialConnecting}
@@ -131,7 +241,7 @@ export const InstrumentsModule: React.FC = () => {
             </button>
             <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-950/80 text-emerald-300 border border-emerald-800/60 text-xs font-semibold">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-              <span>خادم الربط LIS Hub نشط</span>
+              <span>LIS Hub نشط</span>
             </div>
           </div>
         </div>
@@ -194,6 +304,191 @@ export const InstrumentsModule: React.FC = () => {
             </div>
           );
         })}
+      </div>
+
+      {/* 48-Hour Bookings & Instrument Queue Section (USER REQUESTED) */}
+      <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-rose-50 text-rose-700 rounded-xl border border-rose-200">
+              <Calendar className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="text-base font-black text-slate-900">
+                  قائمة الحجوزات والعينات على الأجهزة (خلال الـ 48 ساعة السابقة)
+                </h2>
+                <span className="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                  نشط ومحدث: {lastFetchTime}
+                </span>
+              </div>
+              <p className="text-xs text-slate-500">
+                الحجوزات وعينات المرضى الواردة للتحليل عبر الأجهزة الآلية مع إمكانية التشغيل الفوري وإدراج النتائج
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <div className="flex bg-slate-100 p-1 rounded-xl text-xs font-bold">
+              <button
+                type="button"
+                onClick={() => setQueueFilter('matching')}
+                className={`px-3 py-1.5 rounded-lg transition-all ${
+                  queueFilter === 'matching'
+                    ? 'bg-rose-900 text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                مطابقة لجهاز {activeInstrument.name} ({past48HoursBookings.filter(b => b.isEligible).length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setQueueFilter('all')}
+                className={`px-3 py-1.5 rounded-lg transition-all ${
+                  queueFilter === 'all'
+                    ? 'bg-rose-900 text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                كافة حجوزات الـ 48 ساعة ({past48HoursBookings.length})
+              </button>
+            </div>
+
+            <button
+              onClick={handleFetch48hBookings}
+              className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition"
+              title="إعادة جلب وتحديث الحجوزات"
+            >
+              <RefreshCw className="w-4 h-4 text-slate-600" />
+            </button>
+          </div>
+        </div>
+
+        {/* Bookings Queue Table */}
+        {displayedBookings.length === 0 ? (
+          <div className="text-center py-10 text-slate-400 text-xs space-y-2">
+            <Inbox className="w-8 h-8 mx-auto text-slate-300" />
+            <p>لا توجد حجوزات مسجلة مطابقة لهذا الجهاز خلال الـ 48 ساعة السابقة.</p>
+            <p className="text-[11px] text-slate-400">
+              يمكنك التبديل إلى "كافة حجوزات الـ 48 ساعة" أو تشغيل عينة يدوياً عبر لوحة الإرسال أدناه.
+            </p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto rounded-xl border border-slate-200">
+            <table className="w-full text-right text-xs">
+              <thead className="bg-slate-50 text-slate-700 font-bold border-b border-slate-200">
+                <tr>
+                  <th className="p-3">#</th>
+                  <th className="p-3">العميل / المريض</th>
+                  <th className="p-3">رقم المعمل والباركود</th>
+                  <th className="p-3">التحاليل المطلوبة</th>
+                  <th className="p-3">توقيت الحجز (48h)</th>
+                  <th className="p-3">الحالة على الجهاز</th>
+                  <th className="p-3 text-center">إجراءات التشغيل</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 bg-white">
+                {displayedBookings.map((b, idx) => {
+                  const rep = b.report;
+                  const isCurrent = rep.id === selectedPatientReportId;
+                  return (
+                    <tr
+                      key={rep.id}
+                      className={`hover:bg-slate-50 transition-colors ${
+                        isCurrent ? 'bg-rose-50/40 font-semibold' : ''
+                      }`}
+                    >
+                      <td className="p-3 text-slate-400 font-mono">{idx + 1}</td>
+                      <td className="p-3">
+                        <div className="font-bold text-slate-900">{rep.patient.fullName}</div>
+                        <div className="text-[11px] text-slate-500 font-mono">{rep.patient.phone || 'بدون هاتف'}</div>
+                      </td>
+                      <td className="p-3 font-mono">
+                        <span className="font-bold text-rose-950">{rep.reportNumber}</span>
+                        <div className="text-[10px] text-slate-400">||| {rep.patient.barcode}</div>
+                      </td>
+                      <td className="p-3">
+                        <div className="flex flex-wrap gap-1">
+                          {rep.profiles.map(p => {
+                            const isMatch = activeInstrument.supportedProfiles.some(sp =>
+                              p.profileCode.toLowerCase().includes(sp.toLowerCase()) ||
+                              sp.toLowerCase().includes(p.profileCode.toLowerCase())
+                            );
+                            return (
+                              <span
+                                key={p.id}
+                                className={`text-[10px] px-2 py-0.5 rounded font-bold ${
+                                  isMatch
+                                    ? 'bg-rose-100 text-rose-900 border border-rose-300'
+                                    : 'bg-slate-100 text-slate-600'
+                                }`}
+                              >
+                                {p.profileCode}
+                              </span>
+                            );
+                          })}
+                        </div>
+                      </td>
+                      <td className="p-3 text-slate-600 text-[11px]">
+                        <div className="flex items-center gap-1">
+                          <Clock className="w-3.5 h-3.5 text-slate-400" />
+                          <span>{rep.patient.sampleDate || 'اليوم'}</span>
+                        </div>
+                        <span className="text-[10px] text-rose-800 font-bold block mt-0.5">
+                          {b.hoursAgo <= 2 ? 'منذ قليل (حديث)' : `خلال آخر ${b.hoursAgo} ساعة`}
+                        </span>
+                      </td>
+                      <td className="p-3">
+                        {b.status === 'completed' ? (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-full">
+                            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                            تم سحب النتيجة
+                          </span>
+                        ) : b.status === 'verified' ? (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-800 bg-blue-100 px-2.5 py-1 rounded-full">
+                            معتمد مخبرياً
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-800 bg-amber-100 px-2.5 py-1 rounded-full">
+                            قيد الانتظار على الجهاز
+                          </span>
+                        )}
+                      </td>
+                      <td className="p-3 text-center">
+                        <div className="flex items-center justify-center gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() => handleRunQueueSample(rep.id, rep.patient.barcode, rep.patient.fullName, rep.reportNumber)}
+                            disabled={isSimulating}
+                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-rose-900 hover:bg-rose-800 text-white font-bold text-xs shadow-xs transition-all active:scale-95 cursor-pointer disabled:opacity-50"
+                            title="تشغيل الفحص الآلي وسحب القراءة من المجسات"
+                          >
+                            <Play className="w-3 h-3 fill-white" />
+                            <span>تشغيل على الجهاز</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setSelectedReportId(rep.id);
+                              setActiveTab('diagnostic_editor');
+                            }}
+                            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition cursor-pointer"
+                            title="فتح التقرير الطبي"
+                          >
+                            <span>فتح التقرير</span>
+                            <ArrowRight className="w-3 h-3" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       {/* Main Testing & Data Transmission Section */}

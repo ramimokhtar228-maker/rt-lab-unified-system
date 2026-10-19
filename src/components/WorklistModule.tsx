@@ -333,13 +333,13 @@ export const WorklistModule: React.FC = () => {
               nameAr: pr.titleAr,
               nameEn: pr.titleEn,
               code: pr.profileCode,
-              price: pr.price || 150
+              price: (pr as any).price || 150
             })),
             testsList: whatsAppReport.profiles.map(pr => `• ${pr.titleAr} (${pr.titleEn})`).join('\n'),
-            subtotal: whatsAppReport.profiles.reduce((acc, pr) => acc + (pr.price || 150), 0),
+            subtotal: whatsAppReport.profiles.reduce((acc, pr) => acc + ((pr as any).price || 150), 0),
             discountAmount: 0,
             discountLabel: 'لا يوجد',
-            netAmount: whatsAppReport.profiles.reduce((acc, pr) => acc + (pr.price || 150), 0),
+            netAmount: whatsAppReport.profiles.reduce((acc, pr) => acc + ((pr as any).price || 150), 0),
             paymentMethod: 'نقداً / فيزا'
           }}
         />

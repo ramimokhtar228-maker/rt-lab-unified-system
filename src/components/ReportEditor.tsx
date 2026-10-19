@@ -1524,7 +1524,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                 <thead>
                   <tr className="bg-gradient-to-r from-red-950 via-slate-900 to-slate-900 text-white text-xs font-bold uppercase tracking-wider">
                     <th className="py-2.5 px-3 text-left w-10">#</th>
-                    <th className="py-2.5 px-3 text-left">Test</th>
+                    <th className="py-2.5 px-3 text-left">Investigation</th>
                     <th className="py-2.5 px-3 text-center w-44">Result</th>
                     <th className="py-2.5 px-3 text-center w-28">Unit</th>
                     <th className="py-2.5 px-3 text-center w-28">Flags</th>

@@ -892,13 +892,33 @@ function signatureBlock(report: LabReport, lab?: LabInfo): string {
   </div>`;
 }
 
+function cleanInvestigationName(raw?: string | null): string {
+  if (!raw) return '—';
+  let str = latin(raw, raw).trim();
+  // Strip duplicate consecutive identical tokens or words (e.g. "Hemoglobin (Hemoglobin)" or "WBC - WBC" or "Glucose Glucose")
+  const parensMatch = str.match(/^(.+?)\s*\(\s*\1\s*\)$/i);
+  if (parensMatch) {
+    return parensMatch[1].trim();
+  }
+  const parts = str.split(/\s*[-–—/:]\s+/);
+  if (parts.length === 2 && parts[0].trim().toLowerCase() === parts[1].trim().toLowerCase()) {
+    return parts[0].trim();
+  }
+  const words = str.split(/\s+/);
+  if (words.length === 2 && words[0].toLowerCase() === words[1].toLowerCase()) {
+    return words[0];
+  }
+  return str;
+}
+
 function rowHtml(p: TestParameter): string {
   const k = flagKind(p);
   const cls = k === 'H' ? 'h' : k === 'L' ? 'l' : k === 'CH' || k === 'CL' ? 'c' : k === 'A' ? 'h' : '';
   const ref = latin(formatReferenceDisplay(p), '—');
+  const cleanName = cleanInvestigationName(p.name);
   return `<tr>
     <td class="test">
-      ${esc(latin(p.name, p.name))}
+      ${esc(cleanName)}
       ${p.method ? `<small>Method: ${esc(latin(p.method))}</small>` : ''}
     </td>
     <td class="result ${cls}">${esc(p.result || '—')}</td>
@@ -1047,11 +1067,11 @@ function pageHtml(report: LabReport, profile: TestProfile, idx: number, total: n
       <div class="meta">Specimen: ${esc(latin(profile.sampleType, 'Serum / Whole Blood'))}</div>
     </div>
 
-    <!-- STRICT COLUMN ORDER: Test | Result | Unit | Flags | References -->
+    <!-- STRICT COLUMN ORDER: Investigation | Result | Unit | Flags | References -->
     <table class="rt-table">
       <thead>
         <tr>
-          <th class="c-test">Test</th>
+          <th class="c-test">Investigation</th>
           <th class="c-result">Result</th>
           <th class="c-unit">Unit</th>
           <th class="c-flag">Flags</th>

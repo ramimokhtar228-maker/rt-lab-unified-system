@@ -8,7 +8,7 @@ export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): voi
     ...report,
     staff: {
       ...DEFAULT_STAFF,
-      ...labInfo?.staffSignatures,
+      ...(labInfo as any)?.staffSignatures,
       ...report.staff
     }
   };

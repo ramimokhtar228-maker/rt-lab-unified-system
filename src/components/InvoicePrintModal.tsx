@@ -1,10 +1,12 @@
 import { tafqeetEGP } from '../utils/tafqeet';
 import { RTLogo } from './RTLogo';
 import React, { useState } from 'react';
-import { IncomeRecord } from '../types';
+import { IncomeRecord, Patient } from '../types';
 import { generateBarcodeSVG } from '../utils/barcode';
-import { X, Printer, Tag, FileText, CheckCircle2 } from 'lucide-react';
+import { X, Printer, Tag, FileText, CheckCircle2, User, Building2, Edit } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { ClientEditModal } from './ClientEditModal';
+import { LabInfoEditModal } from './LabInfoEditModal';
 
 interface InvoicePrintModalProps {
   invoice: IncomeRecord | null;
@@ -12,13 +14,24 @@ interface InvoicePrintModalProps {
 }
 
 export const InvoicePrintModal: React.FC<InvoicePrintModalProps> = ({ invoice, onClose }) => {
-  const { language, labInfo, facilities } = useApp();
+  const { 
+    language, 
+    labInfo, 
+    updateLabInfo, 
+    staffSignatures, 
+    updateStaffSignatures, 
+    facilities, 
+    updateIncomeRecord, 
+    reports, 
+    updateReport 
+  } = useApp();
+  const [isClientModalOpen, setIsClientModalOpen] = useState(false);
+  const [isLabModalOpen, setIsLabModalOpen] = useState(false);
   const branchObj = facilities.find(f => f.nameAr === invoice?.branch || f.id === invoice?.branchId) || facilities[0];
   const [printLayout, setPrintLayout] = useState<'standard' | 'thermal' | 'tube_sticker'>('standard');
 
   if (!invoice) return null;
 
-  
   const handlePrintClean = () => {
     window.print();
   };
@@ -27,6 +40,23 @@ export const InvoicePrintModal: React.FC<InvoicePrintModalProps> = ({ invoice, o
     handlePrintClean();
   };
 
+  // Build patient object for ClientEditModal
+  const currentPatient: Patient = {
+    id: invoice.id,
+    fullName: invoice.patientName,
+    phone: invoice.patientPhone || '',
+    age: invoice.patientAge || 30,
+    ageUnit: 'years',
+    gender: (invoice.patientGender as any) || 'male',
+    labNumber: invoice.labNumber,
+    barcode: invoice.barcode,
+    sampleDate: (invoice as any).date || (invoice.createdAt ? invoice.createdAt.split('T')[0] : new Date().toISOString().split('T')[0]),
+    reportingDate: (invoice as any).date || (invoice.createdAt ? invoice.createdAt.split('T')[0] : new Date().toISOString().split('T')[0]),
+    referringDoctorTitle: 'Dr.',
+    referringDoctorName: invoice.referringDoctor,
+    totalCost: invoice.netAmount,
+    discountApplied: invoice.discount
+  };
 
   const barcodeSvgHtml = generateBarcodeSVG(invoice.barcode, 260, 55, true);
   const stickerSvgHtml = generateBarcodeSVG(invoice.barcode, 180, 40, true);
@@ -36,7 +66,7 @@ export const InvoicePrintModal: React.FC<InvoicePrintModalProps> = ({ invoice, o
       <div className="bg-white rounded-xl shadow-2xl border border-slate-200 max-w-2xl w-full my-auto overflow-hidden print:border-none print:shadow-none print:rounded-none print:m-0 print:p-0 print:w-full print:max-w-none print:bg-white">
         
         {/* Modal Controls Bar (Hidden during print) */}
-        <div className="px-6 py-3.5 bg-slate-900 text-white flex items-center justify-between print:hidden">
+        <div className="px-6 py-3.5 bg-slate-900 text-white flex flex-wrap items-center justify-between gap-2 print:hidden">
           <div className="flex items-center gap-2">
             <Printer className="w-5 h-5 text-amber-400" />
             <h3 className="font-bold text-sm">
@@ -44,7 +74,29 @@ export const InvoicePrintModal: React.FC<InvoicePrintModalProps> = ({ invoice, o
             </h3>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
+            {/* Edit Client Data */}
+            <button
+              type="button"
+              onClick={() => setIsClientModalOpen(true)}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-sky-300 border border-slate-700 rounded-lg text-xs font-bold transition-all shadow-sm"
+              title="تعديل بيانات العميل / المريض"
+            >
+              <User className="w-3.5 h-3.5 text-sky-400" />
+              <span>بيانات العميل</span>
+            </button>
+
+            {/* Edit Lab Info */}
+            <button
+              type="button"
+              onClick={() => setIsLabModalOpen(true)}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-rose-300 border border-slate-700 rounded-lg text-xs font-bold transition-all shadow-sm"
+              title="تعديل بيانات المعمل والفاتورة والعنوان"
+            >
+              <Building2 className="w-3.5 h-3.5 text-rose-400" />
+              <span>بيانات المعمل</span>
+            </button>
+
             {/* Layout switch */}
             <div className="flex bg-slate-800 p-0.5 rounded-lg text-xs">
               <button
@@ -63,7 +115,7 @@ export const InvoicePrintModal: React.FC<InvoicePrintModalProps> = ({ invoice, o
                   printLayout === 'thermal' ? 'bg-rose-900 text-white font-bold' : 'text-slate-300 hover:text-white'
                 }`}
               >
-                {language === 'ar' ? 'إيصال حراري 80mm' : 'Thermal'}
+                {language === 'ar' ? 'حراري 80mm' : 'Thermal'}
               </button>
               <button
                 type="button"
@@ -72,7 +124,7 @@ export const InvoicePrintModal: React.FC<InvoicePrintModalProps> = ({ invoice, o
                   printLayout === 'tube_sticker' ? 'bg-rose-900 text-white font-bold' : 'text-slate-300 hover:text-white'
                 }`}
               >
-                {language === 'ar' ? 'استيكر الأنابيب' : 'Tube Label'}
+                {language === 'ar' ? 'استيكر' : 'Tube'}
               </button>
             </div>
 
@@ -81,7 +133,7 @@ export const InvoicePrintModal: React.FC<InvoicePrintModalProps> = ({ invoice, o
               className="flex items-center gap-1.5 px-3 py-1.5 bg-rose-700 hover:bg-rose-900 text-white text-xs font-bold rounded-lg transition-colors shadow-sm"
             >
               <Printer className="w-4 h-4" />
-              <span>{language === 'ar' ? 'طباعة الآن' : 'Print'}</span>
+              <span>{language === 'ar' ? 'طباعة' : 'Print'}</span>
             </button>
 
             <button
@@ -389,6 +441,45 @@ export const InvoicePrintModal: React.FC<InvoicePrintModalProps> = ({ invoice, o
 
         </div>
       </div>
+
+      {/* Edit Client Modal */}
+      {isClientModalOpen && (
+        <ClientEditModal
+          isOpen={isClientModalOpen}
+          onClose={() => setIsClientModalOpen(false)}
+          patient={currentPatient}
+          onSave={(updatedPatient) => {
+            updateIncomeRecord(invoice.id, {
+              patientName: updatedPatient.fullName,
+              patientPhone: updatedPatient.phone,
+              patientAge: updatedPatient.age,
+              patientGender: updatedPatient.gender,
+              referringDoctor: updatedPatient.referringDoctorName
+            });
+            const matchingRep = reports.find(r => r.patient.barcode === invoice.barcode || r.reportNumber === invoice.labNumber || r.invoiceId === invoice.id);
+            if (matchingRep) {
+              updateReport(matchingRep.id, {
+                patient: {
+                  ...matchingRep.patient,
+                  ...updatedPatient
+                }
+              });
+            }
+          }}
+        />
+      )}
+
+      {/* Edit Lab Info Modal */}
+      {isLabModalOpen && (
+        <LabInfoEditModal
+          isOpen={isLabModalOpen}
+          onClose={() => setIsLabModalOpen(false)}
+          labInfo={labInfo}
+          onUpdateLabInfo={updateLabInfo}
+          staffSignatures={staffSignatures}
+          onUpdateStaffSignatures={updateStaffSignatures}
+        />
+      )}
     </div>
   );
 };

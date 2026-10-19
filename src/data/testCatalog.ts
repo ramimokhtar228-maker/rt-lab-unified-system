@@ -168,6 +168,18 @@ export const CBC_20_CATALOG: CatalogTestItem[] = [
     category: 'CBC',
   },
   {
+    code: 'P-LCR',
+    nameEn: 'Platelet Large Cell Ratio (P-LCR)',
+    nameAr: 'نسبة الصفائح الكبيرة الحجم',
+    unit: '%',
+    minMale: 15.0,
+    maxMale: 45.0,
+    minFemale: 15.0,
+    maxFemale: 45.0,
+    precision: 1,
+    category: 'CBC',
+  },
+  {
     code: 'NEUT_PCT',
     nameEn: 'Neutrophils %',
     nameAr: 'الخلايا المتعادلة %',
@@ -252,7 +264,57 @@ export const CBC_20_CATALOG: CatalogTestItem[] = [
     precision: 2,
     category: 'CBC',
   },
+  {
+    code: 'AMC',
+    nameEn: 'Absolute Monocyte Count (AMC)',
+    nameAr: 'العدد المطلق للخلايا وحيدة النواة',
+    unit: '10³/µL',
+    minMale: 0.1,
+    maxMale: 0.8,
+    minFemale: 0.1,
+    maxFemale: 0.8,
+    precision: 2,
+    category: 'CBC',
+  },
+  {
+    code: 'AEC',
+    nameEn: 'Absolute Eosinophil Count (AEC)',
+    nameAr: 'العدد المطلق للخلايا الحمضية',
+    unit: '10³/µL',
+    minMale: 0.04,
+    maxMale: 0.45,
+    minFemale: 0.04,
+    maxFemale: 0.45,
+    precision: 2,
+    category: 'CBC',
+  },
+  {
+    code: 'ABC',
+    nameEn: 'Absolute Basophil Count (ABC)',
+    nameAr: 'العدد المطلق للخلايا القاعدية',
+    unit: '10³/µL',
+    minMale: 0.01,
+    maxMale: 0.10,
+    minFemale: 0.01,
+    maxFemale: 0.10,
+    precision: 2,
+    category: 'CBC',
+  },
+  {
+    code: 'NLR',
+    nameEn: 'Neutrophil to Lymphocyte Ratio (NLR)',
+    nameAr: 'نسبة الخلايا المتعادلة إلى اللمفاوية',
+    unit: 'Ratio',
+    minMale: 1.0,
+    maxMale: 3.0,
+    minFemale: 1.0,
+    maxFemale: 3.0,
+    precision: 2,
+    category: 'CBC',
+  },
 ];
+
+export const CBC_25_CATALOG = CBC_20_CATALOG;
 
 export const LFT_CATALOG: CatalogTestItem[] = [
   {
@@ -577,7 +639,7 @@ export const ELECTROLYTES_CATALOG: CatalogTestItem[] = [
 ];
 
 export const PANEL_DEFINITIONS = [
-  { code: 'CBC', nameEn: 'Complete Blood Count (CBC - 20 Parameters)', nameAr: 'صورة الدم الكاملة (20 عنصر)', items: CBC_20_CATALOG },
+  { code: 'CBC', nameEn: 'Complete Blood Count (CBC - 25 Standard Parameters)', nameAr: 'صورة الدم الكاملة (25 عنصر طبي معتمد)', items: CBC_25_CATALOG },
   { code: 'LFT', nameEn: 'Liver Function Tests (LFT)', nameAr: 'وظائف الكبد الكاملة', items: LFT_CATALOG },
   { code: 'RFT', nameEn: 'Renal / Kidney Function Tests (RFT)', nameAr: 'وظائف الكلى', items: RFT_CATALOG },
   { code: 'LIPID', nameEn: 'Lipid Profile', nameAr: 'دهنيات الدم الشاملة', items: LIPID_CATALOG },

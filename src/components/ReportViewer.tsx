@@ -393,10 +393,15 @@ export const ReportViewer: React.FC<ReportViewerProps> = ({
                         : 'bg-white'
                     }`}
                   >
-                    {/* Test Name */}
+                    {/* Test Name (Investigation - No duplicate repetition) */}
                     <td className="py-2.5 px-3">
-                      <div className="font-bold text-slate-900 text-[13px]">{item.testNameEn}</div>
-                      <div className="text-[11px] text-slate-500 font-medium">{item.testNameAr}</div>
+                      <div className="font-bold text-slate-900 text-[13px]">{item.testNameEn || item.testNameAr}</div>
+                      {item.testNameAr &&
+                       item.testNameEn &&
+                       item.testNameAr.trim().toLowerCase() !== item.testNameEn.trim().toLowerCase() &&
+                       !item.testNameEn.toLowerCase().includes(item.testNameAr.toLowerCase()) && (
+                        <div className="text-[11px] text-slate-500 font-medium">{item.testNameAr}</div>
+                      )}
                     </td>
 
                     {/* Result Value */}

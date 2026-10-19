@@ -10,6 +10,8 @@ import { downloadReportPDF, triggerPrintDialog } from '../utils/pdfExport';
 import { openPrintReportWindow } from '../utils/printReportWindow';
 import { buildReportPages, REPORT_CSS } from '../utils/reportTemplate';
 import { useApp } from '../context/AppContext';
+import { ClientEditModal } from './ClientEditModal';
+import { LabInfoEditModal } from './LabInfoEditModal';
 import { 
   Printer, 
   Share2, 
@@ -25,7 +27,8 @@ import {
   Receipt,
   Settings,
   Microscope,
-  Sparkles
+  Sparkles,
+  User
 } from 'lucide-react';
 
 interface ReportViewerPrintProps {
@@ -45,17 +48,27 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
   onOpenIllustrationsModal,
   onOpenSmartReport
 }) => {
-  const { labInfo } = useApp();
+  const { 
+    labInfo, 
+    updateLabInfo, 
+    staffSignatures, 
+    updateStaffSignatures, 
+    updateReport,
+    incomeRecords,
+    updateIncomeRecord
+  } = useApp();
+  const [isClientModalOpen, setIsClientModalOpen] = useState(false);
+  const [isLabModalOpen, setIsLabModalOpen] = useState(false);
   const p = report.patient;
   const totalPages = report.profiles.length;
   const safeReport = useMemo<LabReport>(() => ({
     ...report,
     staff: {
       ...DEFAULT_STAFF,
-      ...labInfo?.staffSignatures,
+      ...staffSignatures,
       ...report.staff
     }
-  }), [report, labInfo]);
+  }), [report, staffSignatures]);
   const staff = safeReport.staff;
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
@@ -135,17 +148,28 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
             <span>تصدير PowerPoint</span>
           </button>
 
+          {/* Edit Client / Patient Data */}
+          <button
+            onClick={() => setIsClientModalOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-sky-300 border border-slate-700 text-xs font-bold rounded-lg shadow-sm transition-all"
+            title="تعديل وإضافة بيانات العميل / المريض في التقرير والفاتورة"
+          >
+            <User className="w-3.5 h-3.5 text-sky-400" />
+            <span>بيانات العميل</span>
+          </button>
+
           {/* Lab Info & Signatures Edit */}
-          {onOpenLabInfoModal && (
-            <button
-              onClick={onOpenLabInfoModal}
-              className="flex items-center gap-1.5 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-rose-300 border border-slate-700 text-xs font-bold rounded-lg shadow-sm transition-all"
-              title="تعديل بيانات المعمل والإمضاءات والهواتف والعنوان"
-            >
-              <Settings className="w-3.5 h-3.5 text-rose-400" />
-              <span>بيانات المعمل والإمضاءات</span>
-            </button>
-          )}
+          <button
+            onClick={() => {
+              if (onOpenLabInfoModal) onOpenLabInfoModal();
+              else setIsLabModalOpen(true);
+            }}
+            className="flex items-center gap-1.5 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-rose-300 border border-slate-700 text-xs font-bold rounded-lg shadow-sm transition-all"
+            title="تعديل بيانات المعمل والإمضاءات والهواتف والعنوان"
+          >
+            <Settings className="w-3.5 h-3.5 text-rose-400" />
+            <span>بيانات المعمل والإمضاءات</span>
+          </button>
 
           {/* Invoice Button */}
           {onOpenInvoice && (
@@ -198,6 +222,40 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
         <style>{REPORT_CSS}</style>
         <div className="rt-root" dangerouslySetInnerHTML={{ __html: buildReportPages(safeReport, labInfo) }} />
       </div>
+
+      {/* Edit Client Modal */}
+      {isClientModalOpen && (
+        <ClientEditModal
+          isOpen={isClientModalOpen}
+          onClose={() => setIsClientModalOpen(false)}
+          patient={safeReport.patient}
+          onSave={(updatedPatient) => {
+            updateReport(safeReport.id, { patient: updatedPatient });
+            const inv = incomeRecords.find(i => i.barcode === updatedPatient.barcode || i.labNumber === updatedPatient.labNumber || i.id === safeReport.invoiceId);
+            if (inv) {
+              updateIncomeRecord(inv.id, {
+                patientName: updatedPatient.fullName,
+                patientPhone: updatedPatient.phone,
+                patientAge: updatedPatient.age,
+                patientGender: updatedPatient.gender,
+                referringDoctor: updatedPatient.referringDoctorName
+              });
+            }
+          }}
+        />
+      )}
+
+      {/* Edit Lab Info Modal */}
+      {isLabModalOpen && (
+        <LabInfoEditModal
+          isOpen={isLabModalOpen}
+          onClose={() => setIsLabModalOpen(false)}
+          labInfo={labInfo}
+          onUpdateLabInfo={updateLabInfo}
+          staffSignatures={staffSignatures}
+          onUpdateStaffSignatures={updateStaffSignatures}
+        />
+      )}
     </div>
   );
 };
