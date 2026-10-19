@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-19T17:08:30.661Z",
+  "timestamp": "2026-10-19T17:55:04.239Z",
   "reportsCount": 49,
   "incomeCount": 34,
   "loyaltyProfilesCount": 4,
@@ -20064,6 +20064,36 @@
   "dailyCloseouts": [],
   "auditLogs": [
     {
+      "id": "log-1792432470328-zobo6",
+      "timestamp": "10/19/2026, 8:54:30 PM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "SETTINGS",
+      "description": "تحديث الإمضاءات الافتراضية لطاقم الفحص والاعتماد"
+    },
+    {
+      "id": "log-1792432470327-5b16q",
+      "timestamp": "10/19/2026, 8:54:30 PM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "SETTINGS",
+      "description": "تحديث بيانات المعمل والاعتماد الطبي ووسائل التواصل"
+    },
+    {
+      "id": "log-1792429721171-cqyhk",
+      "timestamp": "10/19/2026, 8:08:41 PM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "SYNC",
+      "module": "SECURITY",
+      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
+    },
+    {
       "id": "log-1792429399779-sljom",
       "timestamp": "10/19/2026, 8:03:19 PM",
       "userId": "user-ceo",
@@ -20526,36 +20556,6 @@
     {
       "id": "log-1792270321539-h2lco",
       "timestamp": "10/17/2026, 11:52:01 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "UPDATE",
-      "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
-    },
-    {
-      "id": "log-1792270302809-hi71m",
-      "timestamp": "10/17/2026, 11:51:42 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "UPDATE",
-      "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
-    },
-    {
-      "id": "log-1792270302412-d32mx",
-      "timestamp": "10/17/2026, 11:51:42 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "UPDATE",
-      "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
-    },
-    {
-      "id": "log-1792270301563-sd1n9",
-      "timestamp": "10/17/2026, 11:51:41 PM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
