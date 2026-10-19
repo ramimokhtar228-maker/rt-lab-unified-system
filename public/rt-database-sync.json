@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-19T16:54:18.981Z",
+  "syncedAt": "2026-10-19T16:54:38.329Z",
   "reports": [
     {
       "id": "rep-1792428857302",
@@ -21751,7 +21751,6 @@
       "lastRestockedDate": "2026-08-20"
     }
   ],
-  "dailyCloseouts": [],
   "labInfo": {
     "labNameAr": "معامل RT للتحاليل الطبية والتشخيصية",
     "vodafoneCash": "01100046841",
