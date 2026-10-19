@@ -711,6 +711,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                 return Array.from(map.values());
               });
             }
+            if (Array.isArray(ghRes.data.expenses) && ghRes.data.expenses.length > 0) {
+              setExpenses(ghRes.data.expenses);
+            }
+            if (Array.isArray(ghRes.data.loyaltyProfiles) && ghRes.data.loyaltyProfiles.length > 0) {
+              setLoyaltyProfiles(ghRes.data.loyaltyProfiles);
+            }
+            if (Array.isArray(ghRes.data.inventory) && ghRes.data.inventory.length > 0) {
+              setInventory(ghRes.data.inventory);
+            }
+            if (ghRes.data.labInfo) {
+              setLabInfo(ghRes.data.labInfo);
+            }
             if (Array.isArray(ghRes.data.testCatalog) && ghRes.data.testCatalog.length > 0) {
               setTestCatalog(prev => mergeCatalogWithDefaults(ghRes.data.testCatalog));
             }
@@ -749,6 +761,25 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                 return Array.from(map.values());
               });
             }
+          } else {
+            pullFullStoreFromGitHub(githubConfig).then(ghRes => {
+              if (ghRes.success && ghRes.data) {
+                if (Array.isArray(ghRes.data.reports) && ghRes.data.reports.length > 0) {
+                  setReports(prev => {
+                    const map = new Map(prev.map(r => [r.id, r]));
+                    ghRes.data.reports.forEach((r: LabReport) => map.set(r.id, r));
+                    return Array.from(map.values());
+                  });
+                }
+                if (Array.isArray(ghRes.data.incomeRecords) && ghRes.data.incomeRecords.length > 0) {
+                  setIncomeRecords(prev => {
+                    const map = new Map(prev.map(i => [i.id, i]));
+                    ghRes.data.incomeRecords.forEach((i: IncomeRecord) => map.set(i.id, i));
+                    return Array.from(map.values());
+                  });
+                }
+              }
+            }).catch(() => {});
           }
         }).catch(() => {});
       }

@@ -749,29 +749,70 @@ export async function pullFullStoreFromGitHub(
     const filePath = 'public/rt-database-sync.json';
     const apiUrl = `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/${filePath}`;
 
-    const res = await fetch(apiUrl, {
-      headers: creds.token ? {
-        Authorization: `token ${creds.token}`,
-        Accept: 'application/vnd.github.v3+json'
-      } : {
-        Accept: 'application/vnd.github.v3+json'
-      }
-    });
+    // 1. Try GitHub Contents API (supports both data.content and data.download_url for >1MB files)
+    try {
+      const res = await fetch(apiUrl, {
+        headers: creds.token ? {
+          Authorization: `token ${creds.token}`,
+          Accept: 'application/vnd.github.v3+json'
+        } : {
+          Accept: 'application/vnd.github.v3+json'
+        }
+      });
 
-    if (!res.ok) {
-      // Also try fetching raw from gh-pages or public path
+      if (res.ok) {
+        const data = await res.json();
+        if (typeof data.content === 'string' && data.content.length > 0) {
+          const content = decodeBase64Utf8(data.content);
+          const parsed = JSON.parse(content);
+          return { success: true, data: parsed, message: 'تم استرداد وتحديث البيانات سحابياً بنجاح!' };
+        } else if (data.download_url) {
+          // GitHub Contents API omits `content` if file size exceeds 1MB, but provides `download_url`
+          const downloadRes = await fetch(`${data.download_url}?t=${Date.now()}`);
+          if (downloadRes.ok) {
+            const parsed = await downloadRes.json();
+            return { success: true, data: parsed, message: 'تم استرداد وتحديث البيانات سحابياً بنجاح!' };
+          }
+        }
+      }
+    } catch (apiErr) {
+      console.warn('GitHub Contents API fetch note:', apiErr);
+    }
+
+    // 2. Direct fast raw CDN fallback (fetches newest commit instantly)
+    try {
+      const rawUrl = `https://raw.githubusercontent.com/${creds.owner}/${creds.repo}/main/public/rt-database-sync.json?t=${Date.now()}`;
+      const rawRes = await fetch(rawUrl);
+      if (rawRes.ok) {
+        const parsed = await rawRes.json();
+        return { success: true, data: parsed, message: 'تم استرداد البيانات من السحابة مباشرة بنجاح!' };
+      }
+    } catch (rawErr) {
+      console.warn('Raw GitHub CDN fetch note:', rawErr);
+    }
+
+    // 3. Fallback to repository backup file if available
+    try {
+      const backupUrl = `https://raw.githubusercontent.com/${creds.owner}/${creds.repo}/main/rt_lab_unified_backup.json?t=${Date.now()}`;
+      const backupRes = await fetch(backupUrl);
+      if (backupRes.ok) {
+        const parsed = await backupRes.json();
+        return { success: true, data: parsed, message: 'تم استرداد البيانات من النسخة الاحتياطية السحابية بنجاح!' };
+      }
+    } catch (backupErr) {
+      console.warn('Backup fetch note:', backupErr);
+    }
+
+    // 4. Local static public file fallback
+    try {
       const publicRes = await fetch(`./rt-database-sync.json?t=${Date.now()}`);
       if (publicRes.ok) {
         const json = await publicRes.json();
-        return { success: true, data: json, message: 'تم استرداد البيانات من السحابة بنجاح' };
+        return { success: true, data: json, message: 'تم استرداد البيانات من الملف المخبري بنجاح' };
       }
-      return { success: false, message: 'لم يتم العثور على نسخة سحابية بعد' };
-    }
+    } catch {}
 
-    const data = await res.json();
-    const content = decodeBase64Utf8(data.content);
-    const parsed = JSON.parse(content);
-    return { success: true, data: parsed, message: 'تم استرداد وتحديث البيانات سحابياً بنجاح!' };
+    return { success: false, message: 'لم يتم العثور على نسخة سحابية بعد' };
   } catch (err) {
     return { success: false, message: `خطأ أثناء الجلب: ${(err as Error).message}` };
   }
