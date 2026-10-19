@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-19T17:03:12.755Z",
+  "timestamp": "2026-10-19T17:08:30.661Z",
   "reportsCount": 49,
   "incomeCount": 34,
   "loyaltyProfilesCount": 4,
@@ -20064,6 +20064,16 @@
   "dailyCloseouts": [],
   "auditLogs": [
     {
+      "id": "log-1792429399779-sljom",
+      "timestamp": "10/19/2026, 8:03:19 PM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "SYNC",
+      "module": "SECURITY",
+      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
+    },
+    {
       "id": "log-1792397492841-ycq04",
       "timestamp": "10/19/2026, 11:11:32 AM",
       "userId": "user-ceo",
@@ -20552,16 +20562,6 @@
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
       "description": "تحديث التقرير الطبي رقم rep-1792270290136"
-    },
-    {
-      "id": "log-1792270290140-xsxk3",
-      "timestamp": "10/17/2026, 11:51:30 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "LOYALTY",
-      "module": "LOYALTY",
-      "description": "إضافة 149 نقطة ولاء للمريض فيرونيا ممدوح برقم هاتف 01221502703"
     }
   ]
 }
