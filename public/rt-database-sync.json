@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-20T07:54:53.987Z",
+  "syncedAt": "2026-10-20T07:56:02.778Z",
   "reports": [
     {
       "id": "rep-1792482321561",
@@ -195,7 +195,8 @@
           ],
           "interpretations": [
             " "
-          ]
+          ],
+          "recommendedTests": []
         }
       ],
       "staff": {
@@ -211,7 +212,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-20T07:45:21.561Z",
-      "updatedAt": "2026-10-20T07:54:33.253Z",
+      "updatedAt": "2026-10-20T07:55:41.651Z",
       "invoiceId": "inv-1792482321561"
     },
     {
