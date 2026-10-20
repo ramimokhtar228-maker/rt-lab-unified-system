@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-20T07:48:12.938Z",
+  "syncedAt": "2026-10-20T07:48:46.268Z",
   "reports": [
     {
       "id": "rep-1792482321561",
@@ -1112,7 +1112,7 @@
           "titleAr": "Lipid Profile",
           "category": "Clinical Chemistry",
           "sampleType": "Serum (12h Fasting)",
-          "interpretation": "Lipid ratios demonstrate favorable cardiovascular risk stratification.",
+          "interpretation": "Hypercholesterolemia with elevated LDL-C. Cardiovascular risk evaluation and dietary modification recommended.",
           "parameters": [
             {
               "name": "Total Serum Cholesterol",
@@ -1199,9 +1199,12 @@
               "maxNormal": 3,
               "textReference": "< 3.0 Desirable",
               "id": "param-7-1792482113808-fhk",
-              "result": "",
-              "flag": "NORMAL"
+              "result": "3.73",
+              "flag": "HIGH"
             }
+          ],
+          "interpretations": [
+            "Hypercholesterolemia with elevated LDL-C. Cardiovascular risk evaluation and dietary modification recommended."
           ]
         }
       ],
@@ -1218,7 +1221,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-20T07:41:53.808Z",
-      "updatedAt": "2026-10-20T07:47:52.265Z",
+      "updatedAt": "2026-10-20T07:48:24.475Z",
       "invoiceId": "inv-1792482113809"
     },
     {
