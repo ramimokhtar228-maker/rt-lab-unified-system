@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-20T08:00:31.987Z",
+  "syncedAt": "2026-10-20T08:01:50.776Z",
   "reports": [
     {
       "id": "rep-1792482321561",
@@ -212,9 +212,9 @@
         "verifierLicense": "EGY-MGT-11024",
         "pathologistLicense": "EGY-MED-48201"
       },
-      "status": "released",
+      "status": "draft",
       "createdAt": "2026-10-20T07:45:21.561Z",
-      "updatedAt": "2026-10-20T07:58:42.700Z",
+      "updatedAt": "2026-10-20T07:57:48.875Z",
       "invoiceId": "inv-1792482321561"
     },
     {
@@ -322,19 +322,6 @@
               "notes": "Liver Function Tests (LFT)"
             },
             {
-              "name": "Serum Creatinine",
-              "unit": "mg/dL",
-              "minNormal": 0.6,
-              "maxNormal": 1.2,
-              "panicHigh": 4,
-              "method": "Enzymatic / Jaffe Kinetic",
-              "textReference": "",
-              "id": "param-KFT-0-1792482240250-x8m",
-              "result": "0.78",
-              "flag": "NORMAL",
-              "notes": "Kidney Function Profile"
-            },
-            {
               "name": "Blood Urea",
               "unit": "mg/dL",
               "minNormal": 15,
@@ -343,14 +330,59 @@
               "method": "Urease-GLDH",
               "textReference": "",
               "id": "param-KFT-1-1792482240250-aew",
-              "result": "31",
+              "result": "",
               "flag": "NORMAL",
               "notes": "Kidney Function Profile"
             },
             {
+              "name": "Blood Urea Nitrogen (BUN)",
+              "unit": "mg/dL",
+              "minNormal": 7,
+              "maxNormal": 20,
+              "textReference": "",
+              "id": "param-KFT-2-1792482240250-wv4",
+              "result": "",
+              "flag": "NORMAL",
+              "notes": "Kidney Function Profile"
+            },
+            {
+              "name": "BUN / Creatinine Ratio",
+              "unit": "Ratio",
+              "minNormal": 10,
+              "maxNormal": 20,
+              "notes": "Auto-calculated: BUN / Creatinine",
+              "textReference": "",
+              "id": "param-KFT-3-1792482240250-hu5",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Serum Uric Acid",
+              "unit": "mg/dL",
+              "minNormal": 3.5,
+              "maxNormal": 7.2,
+              "method": "Uricase-PAP",
+              "textReference": "",
+              "id": "param-KFT-4-1792482240250-f52",
+              "result": "",
+              "flag": "NORMAL",
+              "notes": "Kidney Function Profile"
+            },
+            {
+              "name": "eGFR (CKD-EPI)",
+              "unit": "mL/min/1.73m²",
+              "minNormal": 90,
+              "maxNormal": 120,
+              "notes": "Auto-calculated: CKD-EPI Formula",
+              "textReference": "",
+              "id": "param-KFT-5-1792482240250-jjf",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
               "id": "p-pkg-0-1792482240251-xra",
               "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
-              "result": "37.88",
+              "result": "",
               "unit": "ng/mL",
               "minNormal": 30,
               "maxNormal": 100,
@@ -362,8 +394,8 @@
             {
               "id": "p-pkg-1-1792482240251-4qc",
               "name": "Thyroid Stimulating Hormone (TSH) (Thyroid Stimulating Hormone (TSH))",
-              "result": "3+55",
-              "unit": "",
+              "result": "",
+              "unit": "uIU/mL",
               "minNormal": 0.35,
               "maxNormal": 4.94,
               "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
@@ -435,7 +467,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-20T07:44:00.252Z",
-      "updatedAt": "2026-10-20T08:00:10.900Z",
+      "updatedAt": "2026-10-20T08:01:29.924Z",
       "invoiceId": "inv-1792482240252"
     },
     {
