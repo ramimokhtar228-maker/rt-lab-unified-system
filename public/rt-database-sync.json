@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-20T18:26:29.629Z",
+  "syncedAt": "2026-10-20T18:30:01.403Z",
   "reports": [
     {
       "id": "rep-1792520370357",
@@ -28379,33 +28379,29 @@
     },
     {
       "id": "pkg-12",
-      "code": "PKG-FITNESS-ATHLETES",
+      "code": "PKG- 299",
       "titleAr": "Athletes & Fitness Performance Panel",
       "titleEn": "Athletes & Fitness Performance Panel",
-      "descriptionAr": "Athlete panel: testosterone, muscle enzyme CPK, liver and kidney function and electrolytes.",
-      "targetAudience": "Athletes, bodybuilders and supplement users",
-      "includedProfiles": [
-        "CBC",
-        "LFT",
-        "KFT",
-        "LIPID",
-        "CALCIUM_ELEC"
-      ],
+      "descriptionAr": "Check for all body functions ",
+      "targetAudience": "All ",
+      "includedProfiles": [],
       "includedIndividualTestCodes": [
-        "TESTOSTERONE_TOT",
-        "CPK_TOTAL",
         "CREAT",
         "UREA",
-        "URIC",
         "GLU_F",
         "VIT_D",
-        "SODIUM",
-        "POTASSIUM"
+        "HBA1C",
+        "ALT",
+        "AST",
+        "CALCIUM_TOTAL",
+        "TSH",
+        "HB_727",
+        "HCT_632"
       ],
-      "originalPrice": 1720,
-      "packagePrice": 990,
-      "discountPercentage": 42,
-      "fastingRequired": "Fasting 10-12 hours; light rest before collection",
+      "originalPrice": 2200,
+      "packagePrice": 299,
+      "discountPercentage": 86,
+      "fastingRequired": "Fasting 8-10  hours; light rest before collection",
       "sampleTypes": [
         "Serum",
         "EDTA Whole Blood"
