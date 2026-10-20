@@ -1,0 +1,93 @@
+[
+  {
+    "id": "rep-inv-1792482113809",
+    "reportNumber": "RT-2026-051",
+    "invoiceNumber": "INV-2026-051",
+    "barcode": "RT-10081",
+    "patientName": "صباح السيد محمد",
+    "age": 43,
+    "gender": "female",
+    "phone": "01123862286",
+    "referringDoctor": "Herself",
+    "tests": [
+      {
+        "id": "t-33",
+        "code": "AST",
+        "nameAr": "Aspartate Aminotransferase (AST / SGOT)",
+        "nameEn": "Aspartate Aminotransferase (AST / SGOT)",
+        "category": "Liver Function",
+        "price": 188,
+        "cost": 12,
+        "sampleType": "Serum",
+        "turnaroundTime": "Immediate (1 hour)",
+        "unit": "U/L",
+        "minNormal": 0,
+        "maxNormal": 40,
+        "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
+        "method": "IFCC Kinetic UV"
+      },
+      {
+        "id": "t-32",
+        "code": "ALT",
+        "nameAr": "Alanine Aminotransferase (ALT / SGPT)",
+        "nameEn": "Alanine Aminotransferase (ALT / SGPT)",
+        "category": "Liver Function",
+        "price": 188,
+        "cost": 12,
+        "sampleType": "Serum",
+        "turnaroundTime": "Immediate (1 hour)",
+        "unit": "U/L",
+        "minNormal": 0,
+        "maxNormal": 41,
+        "textReference": "Adult Males: < 41 U/L | Adult Females: < 38  U/L",
+        "method": "IFCC Kinetic UV without Pyridoxal Phosphate"
+      },
+      {
+        "id": "t-53",
+        "code": "TSH",
+        "nameAr": "Thyroid Stimulating Hormone (TSH)",
+        "nameEn": "Thyroid Stimulating Hormone (TSH)",
+        "category": "Thyroid",
+        "price": 412,
+        "cost": 30,
+        "sampleType": "Serum",
+        "turnaroundTime": "Within 2 hours",
+        "unit": "uIU/mL",
+        "minNormal": 0.55,
+        "maxNormal": 4.78,
+        "textReference": "Adults: 0.55 - 4.78 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+        "method": "CLIA (3rd Generation Chemiluminescence)"
+      },
+      {
+        "id": "t-30",
+        "code": "MICROALBUMIN",
+        "nameAr": "Microalbumin / Creatinine Ratio (ACR)",
+        "nameEn": "Microalbumin / Creatinine Ratio (ACR)",
+        "category": "Kidney Function",
+        "price": 466,
+        "cost": 40,
+        "sampleType": "Random Morning Urine",
+        "turnaroundTime": "Within 3 hours",
+        "unit": "mg/g Creat",
+        "minNormal": 0,
+        "maxNormal": 30,
+        "textReference": "Normal: < 30 mg/g | Microalbuminuria: 30 - 300 | Macroalbuminuria: > 300",
+        "method": "Immunoturbidimetric Quantitative Assay"
+      },
+      {
+        "id": "prof-LIPID",
+        "code": "LIPID",
+        "nameAr": "Lipid Profile",
+        "nameEn": "Lipid Profile",
+        "category": "Clinical Chemistry",
+        "price": 250,
+        "sampleType": "Serum (12h Fasting)"
+      }
+    ],
+    "netAmount": 0,
+    "paidAmount": 0,
+    "paymentStatus": "paid",
+    "financialClearance": "CLEARED_FOR_RELEASE",
+    "createdAt": "2026-10-20T07:41:53.809Z"
+  }
+]
