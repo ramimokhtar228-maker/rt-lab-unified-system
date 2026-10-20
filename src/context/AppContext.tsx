@@ -57,7 +57,7 @@ import { INITIAL_PACKAGES } from '../data/packagesData';
 import { INITIAL_INDIVIDUAL_TESTS } from '../data/individualTestsData';
 import { INITIAL_INSTRUMENTS, SAMPLE_INSTRUMENT_TRANSMISSIONS } from '../data/instrumentsData';
 import { realtimeSyncManager } from '../utils/realtimeMultiDeviceSync';
-import { pushFullStoreToGitHub, pullFullStoreFromGitHub, syncInvoiceToDiagnostic } from '../utils/githubSync';
+import { pushFullStoreToGitHub, pullFullStoreFromGitHub, syncInvoiceToDiagnostic, fetchDiagnosticCases, convertIncomeRecordToDiagnosticReport } from '../utils/githubSync';
 import {
   mergeCatalogWithDefaults,
   mergePackagesWithDefaults,
@@ -2435,21 +2435,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         const existingBarcodes = new Set(mergedReports.map(r => r.patient?.barcode).filter(Boolean));
         const existingNumbers = new Set(mergedReports.map(r => r.reportNumber).filter(Boolean));
 
-        diagCasesRes.cases.forEach(c => {
+        diagCasesRes.cases.forEach((c: any) => {
           if ((c.barcode && !existingBarcodes.has(c.barcode)) || (c.labNumber && !existingNumbers.has(c.labNumber))) {
             const newRep = convertIncomeRecordToDiagnosticReport({
               id: c.id,
-              date: c.sampleDate,
-              time: '10:00 AM',
               invoiceNumber: c.invoiceNumber || `INV-${c.labNumber}`,
               labNumber: c.labNumber,
               barcode: c.barcode,
               patientName: c.fullName,
-              patientAge: c.age,
-              patientGender: c.gender,
-              patientPhone: c.phone,
+              patientAge: c.age || 30,
+              patientGender: c.gender || 'male',
+              patientPhone: c.phone || '',
               referringDoctor: c.referringDoctorName || 'كشف معمل',
-              tests: (c.testNames || ['تحاليل مخبرية']).map((tName, idx) => ({
+              tests: (c.testNames || ['تحاليل مخبرية']).map((tName: string, idx: number) => ({
                 code: `TST-${idx}`,
                 nameAr: tName,
                 nameEn: tName,
@@ -2457,18 +2455,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                 price: 100,
                 cost: 20
               })),
-              grossAmount: c.totalCost || 200,
+              subtotal: c.totalCost || 200,
               discount: 0,
               netAmount: c.totalCost || 200,
               paidAmount: c.paidAmount || (c.paymentStatus === 'paid' ? c.totalCost || 200 : 0),
               remainingAmount: 0,
               paymentMethod: 'cash',
               paymentStatus: (c.paymentStatus as any) || 'paid',
-              status: 'active',
-              creatorName: 'مزامنة سحابية',
-              createdAt: c.sampleDate,
-              updatedAt: c.sampleDate
-            });
+              cashierName: 'مزامنة سحابية',
+              branch: 'الفرع الرئيسي',
+              syncStatus: 'synced',
+              createdAt: c.sampleDate || new Date().toISOString(),
+              updatedAt: c.sampleDate || new Date().toISOString()
+            }) as unknown as LabReport;
             mergedReports = [newRep, ...mergedReports];
           }
         });
