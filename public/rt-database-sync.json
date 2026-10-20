@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-20T16:51:11.074Z",
+  "syncedAt": "2026-10-20T16:51:42.593Z",
   "reports": [
     {
       "id": "rep-1792515070911",
@@ -23833,7 +23833,6 @@
       "lastRestockedDate": "2026-08-20"
     }
   ],
-  "dailyCloseouts": [],
   "labInfo": {
     "labNameAr": "معامل RT للتحاليل الطبية والتشخيصية",
     "labNameEn": "RT Diagnostic Laboratories",
