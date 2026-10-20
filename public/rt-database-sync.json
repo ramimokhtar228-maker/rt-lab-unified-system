@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-20T07:59:03.321Z",
+  "syncedAt": "2026-10-20T08:00:31.987Z",
   "reports": [
     {
       "id": "rep-1792482321561",
@@ -270,32 +270,8 @@
               "method": "Hexokinase",
               "textReference": "",
               "id": "param-GLYCEMIC-0-1792482240209-9sn",
-              "result": "",
-              "flag": "NORMAL",
-              "notes": "Diabetes & Glycemic Assessment (HbA1c & eAG)"
-            },
-            {
-              "name": "2 Hours Post-Prandial Glucose",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 140,
-              "panicHigh": 450,
-              "method": "Hexokinase",
-              "textReference": "",
-              "id": "param-GLYCEMIC-1-1792482240209-m5x",
-              "result": "",
-              "flag": "NORMAL",
-              "notes": "Diabetes & Glycemic Assessment (HbA1c & eAG)"
-            },
-            {
-              "name": "Random Blood Glucose",
-              "unit": "mg/dL",
-              "minNormal": 70,
-              "maxNormal": 140,
-              "textReference": "",
-              "id": "param-GLYCEMIC-2-1792482240209-wt2",
-              "result": "",
-              "flag": "NORMAL",
+              "result": "100",
+              "flag": "HIGH",
               "notes": "Diabetes & Glycemic Assessment (HbA1c & eAG)"
             },
             {
@@ -322,98 +298,6 @@
               "flag": "NORMAL"
             },
             {
-              "name": "Total Serum Cholesterol",
-              "unit": "mg/dL",
-              "minNormal": 120,
-              "maxNormal": 200,
-              "method": "CHOD-PAP",
-              "textReference": "",
-              "id": "param-LIPID-0-1792482240209-q9h",
-              "result": "",
-              "flag": "NORMAL",
-              "notes": "Lipid Profile"
-            },
-            {
-              "name": "Serum Triglycerides",
-              "unit": "mg/dL",
-              "minNormal": 40,
-              "maxNormal": 150,
-              "panicHigh": 500,
-              "method": "GPO-PAP",
-              "textReference": "",
-              "id": "param-LIPID-1-1792482240209-ilw",
-              "result": "",
-              "flag": "NORMAL",
-              "notes": "Lipid Profile"
-            },
-            {
-              "name": "HDL - Cholesterol (Good)",
-              "unit": "mg/dL",
-              "minNormal": 40,
-              "maxNormal": 65,
-              "method": "Direct Accelerator",
-              "textReference": "",
-              "id": "param-LIPID-2-1792482240209-0cx",
-              "result": "",
-              "flag": "NORMAL",
-              "notes": "Lipid Profile"
-            },
-            {
-              "name": "LDL - Cholesterol (Calculated)",
-              "unit": "mg/dL",
-              "minNormal": 0,
-              "maxNormal": 100,
-              "notes": "Friedewald Formula: Total Chol - HDL - (TG / 5)",
-              "textReference": "",
-              "id": "param-LIPID-3-1792482240209-7a7",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "VLDL - Cholesterol",
-              "unit": "mg/dL",
-              "minNormal": 5,
-              "maxNormal": 30,
-              "notes": "Auto-calculated: Triglycerides / 5",
-              "textReference": "",
-              "id": "param-LIPID-4-1792482240209-rkp",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Non-HDL Cholesterol",
-              "unit": "mg/dL",
-              "minNormal": 0,
-              "maxNormal": 130,
-              "notes": "Auto-calculated: Total Chol - HDL",
-              "textReference": "",
-              "id": "param-LIPID-5-1792482240209-o7s",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Total Chol / HDL Ratio",
-              "unit": "Ratio",
-              "minNormal": 0,
-              "maxNormal": 4.5,
-              "textReference": "< 4.5 Desirable",
-              "notes": "Auto-calculated: Total Chol / HDL",
-              "id": "param-LIPID-6-1792482240209-mcp",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "LDL / HDL Ratio",
-              "unit": "Ratio",
-              "minNormal": 0,
-              "maxNormal": 3,
-              "textReference": "< 3.0 Desirable",
-              "id": "param-LIPID-7-1792482240209-jh9",
-              "result": "",
-              "flag": "NORMAL",
-              "notes": "Lipid Profile"
-            },
-            {
               "name": "ALT (SGPT)",
               "unit": "U/L",
               "minNormal": 0,
@@ -421,7 +305,7 @@
               "method": "IFCC UV with P5P",
               "textReference": "",
               "id": "param-LFT-0-1792482240209-sh0",
-              "result": "",
+              "result": "18",
               "flag": "NORMAL",
               "notes": "Liver Function Tests (LFT)"
             },
@@ -433,123 +317,9 @@
               "method": "IFCC UV with P5P",
               "textReference": "",
               "id": "param-LFT-1-1792482240209-5cm",
-              "result": "",
+              "result": "27",
               "flag": "NORMAL",
               "notes": "Liver Function Tests (LFT)"
-            },
-            {
-              "name": "Alkaline Phosphatase (ALP)",
-              "unit": "U/L",
-              "minNormal": 40,
-              "maxNormal": 130,
-              "textReference": "",
-              "id": "param-LFT-2-1792482240209-b7k",
-              "result": "",
-              "flag": "NORMAL",
-              "notes": "Liver Function Tests (LFT)"
-            },
-            {
-              "name": "Total Bilirubin",
-              "unit": "mg/dL",
-              "minNormal": 0.2,
-              "maxNormal": 1.2,
-              "panicHigh": 5,
-              "method": "Jendrassik-Grof",
-              "textReference": "",
-              "id": "param-LFT-3-1792482240209-0c5",
-              "result": "",
-              "flag": "NORMAL",
-              "notes": "Liver Function Tests (LFT)"
-            },
-            {
-              "name": "Direct Bilirubin",
-              "unit": "mg/dL",
-              "minNormal": 0,
-              "maxNormal": 0.3,
-              "textReference": "",
-              "id": "param-LFT-4-1792482240209-0kx",
-              "result": "",
-              "flag": "NORMAL",
-              "notes": "Liver Function Tests (LFT)"
-            },
-            {
-              "name": "Indirect Bilirubin",
-              "unit": "mg/dL",
-              "minNormal": 0.1,
-              "maxNormal": 0.9,
-              "notes": "Auto-calculated: Total - Direct",
-              "textReference": "",
-              "id": "param-LFT-5-1792482240209-ira",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Total Serum Proteins",
-              "unit": "g/dL",
-              "minNormal": 6.4,
-              "maxNormal": 8.3,
-              "method": "Biuret",
-              "textReference": "",
-              "id": "param-LFT-6-1792482240209-0t1",
-              "result": "",
-              "flag": "NORMAL",
-              "notes": "Liver Function Tests (LFT)"
-            },
-            {
-              "name": "Serum Albumin",
-              "unit": "g/dL",
-              "minNormal": 3.5,
-              "maxNormal": 5.2,
-              "method": "Bromocresol Green (BCG)",
-              "textReference": "",
-              "id": "param-LFT-7-1792482240250-qv0",
-              "result": "",
-              "flag": "NORMAL",
-              "notes": "Liver Function Tests (LFT)"
-            },
-            {
-              "name": "Serum Globulin",
-              "unit": "g/dL",
-              "minNormal": 2.3,
-              "maxNormal": 3.5,
-              "notes": "Auto-calculated: Total Protein - Albumin",
-              "textReference": "",
-              "id": "param-LFT-8-1792482240250-2yk",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "A/G Ratio",
-              "unit": "Ratio",
-              "minNormal": 1.2,
-              "maxNormal": 2.2,
-              "notes": "Auto-calculated: Albumin / Globulin",
-              "textReference": "",
-              "id": "param-LFT-9-1792482240250-ujs",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "G.G.T",
-              "unit": "U/L",
-              "minNormal": 9,
-              "maxNormal": 48,
-              "textReference": "",
-              "id": "param-LFT-10-1792482240250-633",
-              "result": "",
-              "flag": "NORMAL",
-              "notes": "Liver Function Tests (LFT)"
-            },
-            {
-              "name": "AST/ALT Ratio (De Ritis)",
-              "unit": "Ratio",
-              "minNormal": 0.6,
-              "maxNormal": 1.1,
-              "notes": "Auto-calculated: AST / ALT",
-              "textReference": "",
-              "id": "param-LFT-11-1792482240250-0bq",
-              "result": "",
-              "flag": "NORMAL"
             },
             {
               "name": "Serum Creatinine",
@@ -560,7 +330,7 @@
               "method": "Enzymatic / Jaffe Kinetic",
               "textReference": "",
               "id": "param-KFT-0-1792482240250-x8m",
-              "result": "",
+              "result": "0.78",
               "flag": "NORMAL",
               "notes": "Kidney Function Profile"
             },
@@ -573,59 +343,14 @@
               "method": "Urease-GLDH",
               "textReference": "",
               "id": "param-KFT-1-1792482240250-aew",
-              "result": "",
+              "result": "31",
               "flag": "NORMAL",
               "notes": "Kidney Function Profile"
-            },
-            {
-              "name": "Blood Urea Nitrogen (BUN)",
-              "unit": "mg/dL",
-              "minNormal": 7,
-              "maxNormal": 20,
-              "textReference": "",
-              "id": "param-KFT-2-1792482240250-wv4",
-              "result": "",
-              "flag": "NORMAL",
-              "notes": "Kidney Function Profile"
-            },
-            {
-              "name": "BUN / Creatinine Ratio",
-              "unit": "Ratio",
-              "minNormal": 10,
-              "maxNormal": 20,
-              "notes": "Auto-calculated: BUN / Creatinine",
-              "textReference": "",
-              "id": "param-KFT-3-1792482240250-hu5",
-              "result": "",
-              "flag": "NORMAL"
-            },
-            {
-              "name": "Serum Uric Acid",
-              "unit": "mg/dL",
-              "minNormal": 3.5,
-              "maxNormal": 7.2,
-              "method": "Uricase-PAP",
-              "textReference": "",
-              "id": "param-KFT-4-1792482240250-f52",
-              "result": "",
-              "flag": "NORMAL",
-              "notes": "Kidney Function Profile"
-            },
-            {
-              "name": "eGFR (CKD-EPI)",
-              "unit": "mL/min/1.73m²",
-              "minNormal": 90,
-              "maxNormal": 120,
-              "notes": "Auto-calculated: CKD-EPI Formula",
-              "textReference": "",
-              "id": "param-KFT-5-1792482240250-jjf",
-              "result": "",
-              "flag": "NORMAL"
             },
             {
               "id": "p-pkg-0-1792482240251-xra",
               "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
-              "result": "",
+              "result": "37.88",
               "unit": "ng/mL",
               "minNormal": 30,
               "maxNormal": 100,
@@ -637,8 +362,8 @@
             {
               "id": "p-pkg-1-1792482240251-4qc",
               "name": "Thyroid Stimulating Hormone (TSH) (Thyroid Stimulating Hormone (TSH))",
-              "result": "",
-              "unit": "uIU/mL",
+              "result": "3+55",
+              "unit": "",
               "minNormal": 0.35,
               "maxNormal": 4.94,
               "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
@@ -710,7 +435,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-20T07:44:00.252Z",
-      "updatedAt": "2026-10-20T07:44:00.252Z",
+      "updatedAt": "2026-10-20T08:00:10.900Z",
       "invoiceId": "inv-1792482240252"
     },
     {
