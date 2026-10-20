@@ -82,23 +82,27 @@ export function mergePackagesWithDefaults(savedPackages?: ComprehensivePackage[]
       return {
         ...defPkg,
         ...existing,
-        nameAr: (existing as any).nameAr || (existing as any).titleAr || defPkg.titleAr,
+        nameAr: (existing as any).nameAr || existing.titleAr || defPkg.titleAr,
         titleAr: existing.titleAr || defPkg.titleAr,
         titleEn: existing.titleEn || defPkg.titleEn,
-        packagePrice: typeof existing.packagePrice === 'number' && existing.packagePrice > 0 ? existing.packagePrice : defPkg.packagePrice,
-        originalPrice: typeof existing.originalPrice === 'number' && existing.originalPrice > 0 ? existing.originalPrice : defPkg.originalPrice,
-        includedProfiles: Array.isArray(existing.includedProfiles) && existing.includedProfiles.length > 0 
-          ? existing.includedProfiles 
+        packagePrice: typeof existing.packagePrice === 'number' ? existing.packagePrice : defPkg.packagePrice,
+        originalPrice: typeof existing.originalPrice === 'number' ? existing.originalPrice : defPkg.originalPrice,
+        discountPercentage: typeof existing.discountPercentage === 'number' ? existing.discountPercentage : defPkg.discountPercentage,
+        includedProfiles: Array.isArray(existing.includedProfiles)
+          ? existing.includedProfiles
           : defPkg.includedProfiles,
-        includedIndividualTestCodes: Array.isArray(existing.includedIndividualTestCodes) && existing.includedIndividualTestCodes.length > 0 
-          ? existing.includedIndividualTestCodes 
-          : defPkg.includedIndividualTestCodes
+        includedIndividualTestCodes: Array.isArray(existing.includedIndividualTestCodes)
+          ? existing.includedIndividualTestCodes
+          : defPkg.includedIndividualTestCodes,
+        fastingRequired: existing.fastingRequired || defPkg.fastingRequired,
+        sampleTypes: Array.isArray(existing.sampleTypes) && existing.sampleTypes.length > 0 ? existing.sampleTypes : defPkg.sampleTypes,
+        isPopular: existing.isPopular !== undefined ? existing.isPopular : defPkg.isPopular
       };
     }
     return { ...defPkg };
   });
 
-  // Append custom packages
+  // Append custom packages created by user
   savedMap.forEach(customPkg => {
     merged.push(customPkg);
   });
@@ -131,7 +135,9 @@ export function mergeProfilesWithDefaults(savedProfiles?: CatalogProfileTemplate
         titleEn: existing.titleEn || defProf.titleEn,
         category: existing.category || defProf.category,
         sampleType: existing.sampleType || defProf.sampleType,
-        parameters: existing.parameters && existing.parameters.length >= defProf.parameters.length
+        defaultInterpretation: existing.defaultInterpretation !== undefined ? existing.defaultInterpretation : defProf.defaultInterpretation,
+        // Always preserve the user's customized parameters list!
+        parameters: Array.isArray(existing.parameters)
           ? existing.parameters
           : defProf.parameters
       };
@@ -139,6 +145,7 @@ export function mergeProfilesWithDefaults(savedProfiles?: CatalogProfileTemplate
     return { ...defProf };
   });
 
+  // Append user's custom created profiles
   savedMap.forEach(customProf => {
     merged.push(customProf);
   });

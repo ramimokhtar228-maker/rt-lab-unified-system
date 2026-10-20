@@ -1,10 +1,19 @@
 import { LabReport, IncomeRecord, PatientLoyaltyProfile } from "../types";
 import { LAB_CATALOG } from "./labCatalog";
 import { DISEASE_ILLUSTRATIONS } from "./diseaseIllustrations";
+import seedDatabase from "../../public/rt-database-sync.json";
 
 const todayStr = new Date().toISOString().split('T')[0];
 
-export const INITIAL_REPORTS: LabReport[] = [
+const SEED_REPORTS = (seedDatabase && Array.isArray((seedDatabase as any).reports) && (seedDatabase as any).reports.length > 0)
+  ? ((seedDatabase as any).reports as LabReport[])
+  : [];
+
+const SEED_INCOME = (seedDatabase && Array.isArray((seedDatabase as any).incomeRecords) && (seedDatabase as any).incomeRecords.length > 0)
+  ? ((seedDatabase as any).incomeRecords as IncomeRecord[])
+  : [];
+
+export const INITIAL_REPORTS: LabReport[] = SEED_REPORTS.length > 0 ? SEED_REPORTS : [
   {
     id: "rep-001",
     reportNumber: "RT-2026-001",
@@ -153,7 +162,7 @@ export const INITIAL_REPORTS: LabReport[] = [
   }
 ];
 
-export const INITIAL_INCOME_RECORDS: IncomeRecord[] = [
+export const INITIAL_INCOME_RECORDS: IncomeRecord[] = SEED_INCOME.length > 0 ? SEED_INCOME : [
   {
     id: "inv-001",
     invoiceNumber: "INV-2026-001",

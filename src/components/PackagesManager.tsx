@@ -97,10 +97,14 @@ export const PackagesManager: React.FC<PackagesManagerProps> = ({
     setIsModalOpen(true);
   };
 
+  const [saveSuccessMsg, setSaveSuccessMsg] = useState<string | null>(null);
+
   const handleDeletePackage = (id: string, title: string) => {
     if (confirm(`هل أنت متأكد من حذف باقة "${title}"؟`)) {
       const updated = packages.filter(p => p.id !== id);
       onUpdatePackages(updated);
+      setSaveSuccessMsg(`تم حذف باقة "${title}" ومزامنة التغييرات سحابياً.`);
+      setTimeout(() => setSaveSuccessMsg(null), 4000);
     }
   };
 
@@ -130,6 +134,7 @@ export const PackagesManager: React.FC<PackagesManagerProps> = ({
           : p
       );
       onUpdatePackages(updated);
+      setSaveSuccessMsg(`✅ تم تعديل باقة "${formData.titleAr}" بنجاح ومزامنتها على كافة الأجهزة!`);
     } else {
       // Create new
       const newPkg: ComprehensivePackage = {
@@ -149,8 +154,10 @@ export const PackagesManager: React.FC<PackagesManagerProps> = ({
         isPopular: !!formData.isPopular
       };
       onUpdatePackages([newPkg, ...packages]);
+      setSaveSuccessMsg(`✅ تم إنشاء باقة "${formData.titleAr}" بنجاح وحفظها سحابياً لكافة الأجهزة!`);
     }
 
+    setTimeout(() => setSaveSuccessMsg(null), 5000);
     setIsModalOpen(false);
   };
 
@@ -196,6 +203,13 @@ export const PackagesManager: React.FC<PackagesManagerProps> = ({
           <span>إضافة باقة فحص جديدة</span>
         </button>
       </div>
+
+      {saveSuccessMsg && (
+        <div className="p-3 bg-emerald-50 border border-emerald-300 text-emerald-800 rounded-xl text-xs font-bold flex items-center gap-2 shadow-sm animate-in fade-in">
+          <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
+          <span>{saveSuccessMsg}</span>
+        </div>
+      )}
 
       {/* Filter and Search Bar */}
       <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">

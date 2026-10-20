@@ -16,7 +16,9 @@ import {
   Layers,
   Sparkles,
   CheckCheck,
-  MessageCircle
+  MessageCircle,
+  RefreshCw,
+  Check
 } from 'lucide-react';
 import { WhatsAppBookingModal } from './WhatsAppBookingModal';
 import { LabReport } from '../types';
@@ -30,13 +32,30 @@ export const WorklistModule: React.FC = () => {
     verifyReport,
     setIsBarcodeScannerOpen,
     instruments,
-    simulateInstrumentRun
+    simulateInstrumentRun,
+    syncAllDevicesNow
   } = useApp();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'verified'>('all');
   const [whatsAppReport, setWhatsAppReport] = useState<LabReport | null>(null);
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [isSyncingCases, setIsSyncingCases] = useState(false);
+  const [syncFeedback, setSyncFeedback] = useState<string | null>(null);
+
+  const handleSyncCases = async () => {
+    setIsSyncingCases(true);
+    setSyncFeedback(null);
+    try {
+      const res = await syncAllDevicesNow();
+      setSyncFeedback(res.message);
+      setTimeout(() => setSyncFeedback(null), 5000);
+    } catch {
+      setSyncFeedback('تعذر جلب الحالات — تحقق من اتصال الإنترنت.');
+    } finally {
+      setIsSyncingCases(false);
+    }
+  };
 
   const filteredReports = useMemo(() => {
     return reports.filter(r => {
@@ -96,7 +115,16 @@ export const WorklistModule: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={handleSyncCases}
+              disabled={isSyncingCases}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 text-white font-bold text-xs shadow-md transition-all cursor-pointer disabled:opacity-50"
+              title="جلب كافة الحالات المسجلة والمزامنة السحابية الفورية بين جميع الأجهزة"
+            >
+              <RefreshCw className={`w-4 h-4 ${isSyncingCases ? 'animate-spin' : ''}`} />
+              <span>{isSyncingCases ? 'جاري جلب ومزامنة الحالات...' : 'جلب الحالات وتزامن الأجهزة'}</span>
+            </button>
             <button
               onClick={() => setIsBarcodeScannerOpen(true)}
               className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold cursor-pointer transition-colors"
@@ -109,6 +137,12 @@ export const WorklistModule: React.FC = () => {
             </div>
           </div>
         </div>
+        {syncFeedback && (
+          <div className="mt-3 p-2.5 bg-emerald-950/70 border border-emerald-500/50 rounded-xl text-emerald-200 text-xs font-bold flex items-center gap-2 animate-in fade-in">
+            <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span>{syncFeedback}</span>
+          </div>
+        )}
       </div>
 
       {/* Filter and Search Bar */}

@@ -1,6 +1,6 @@
 {
-  "name": "RT-Lab Unified Clinical Laboratory System",
-  "description": "Advanced clinical laboratory information, test catalog management, dynamic patient reporting with English results, custom signatures, and dark red & navy blue RT branding.",
+  "name": "RT Lab Unified Medical & Financial ERP",
+  "description": "منظومة معمل RT الموحدة لإدارة التحاليل والتقارير الطبية، الفواتير المالية، الباقات، البروفايلات والمزامنة السحابية الفورية بين كافة الأجهزة.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

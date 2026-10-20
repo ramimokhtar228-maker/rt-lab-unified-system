@@ -54,7 +54,7 @@ export const DashboardModule: React.FC = () => {
     setIsLabInfoModalOpen,
     deleteReport,
     deleteIncomeRecord,
-    syncUnifiedDataToGitHub,
+    syncAllDevicesNow,
     currentUser,
     profitConfig
   } = useApp();
@@ -152,13 +152,11 @@ export const DashboardModule: React.FC = () => {
     setManualSyncing(true);
     setSyncFeedback(null);
     try {
-      await realtimeSyncManager.pullMasterSnapshot();
-      await realtimeSyncManager.broadcastAction('REQUEST_LATEST_STATE', { from: 'manual' });
-      const res = await syncUnifiedDataToGitHub();
-      setSyncFeedback(res.message || 'تمت مزامنة البيانات بين الأجهزة');
-      setTimeout(() => setSyncFeedback(null), 4000);
+      const res = await syncAllDevicesNow();
+      setSyncFeedback(res.message);
+      setTimeout(() => setSyncFeedback(null), 5000);
     } catch {
-      setSyncFeedback('فشلت المزامنة السحابية — تحقق من الإنترنت أو حصة Firebase');
+      setSyncFeedback('فشلت المزامنة السحابية — يرجى التحقق من اتصال الإنترنت.');
     } finally {
       setManualSyncing(false);
     }

@@ -249,6 +249,7 @@ interface AppContextType {
   githubConfig: GitHubSyncConfig;
   updateGithubConfig: (config: Partial<GitHubSyncConfig>) => void;
   syncUnifiedDataToGitHub: () => Promise<{ success: boolean; message: string }>;
+  syncAllDevicesNow: () => Promise<{ success: boolean; message: string; reportsCount?: number; invoicesCount?: number }>;
 
   // Backups
   exportBackup: (password?: string) => Promise<string>;
@@ -628,6 +629,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setTestCatalog(prev => mergeCatalogWithDefaults(msg.payload));
       } else if (msg.action === 'UPDATE_PACKAGES' && Array.isArray(msg.payload)) {
         setPackages(prev => mergePackagesWithDefaults(msg.payload));
+      } else if (msg.action === 'UPDATE_PROFILES' && Array.isArray(msg.payload)) {
+        setDiagnosticProfiles(prev => mergeProfilesWithDefaults(msg.payload));
       } else if (msg.action === 'PING_TEST') {
         addNotification({
           title: '⚡ تسميع لحظي متزامن فوري',
@@ -657,6 +660,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
         if (msg.payload.labInfo) {
           setLabInfo(msg.payload.labInfo);
+        }
+        if (Array.isArray(msg.payload.packages) && msg.payload.packages.length > 0) {
+          setPackages(prev => mergePackagesWithDefaults(msg.payload.packages));
+        }
+        if (Array.isArray(msg.payload.diagnosticProfiles) && msg.payload.diagnosticProfiles.length > 0) {
+          setDiagnosticProfiles(prev => mergeProfilesWithDefaults(msg.payload.diagnosticProfiles));
         }
       }
     });
@@ -693,8 +702,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (Array.isArray(res.data.packages) && res.data.packages.length > 0) {
           setPackages(prev => mergePackagesWithDefaults(res.data.packages));
         }
+        if (Array.isArray(res.data.diagnosticProfiles) && res.data.diagnosticProfiles.length > 0) {
+          setDiagnosticProfiles(prev => mergeProfilesWithDefaults(res.data.diagnosticProfiles));
+        }
       } else {
-        // Fallback to GitHub repo store if Firestore snapshot is not initialized yet
+        // Fallback to GitHub repo store directly
         pullFullStoreFromGitHub(githubConfig).then(ghRes => {
           if (ghRes.success && ghRes.data) {
             if (Array.isArray(ghRes.data.reports) && ghRes.data.reports.length > 0) {
@@ -729,6 +741,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             if (Array.isArray(ghRes.data.packages) && ghRes.data.packages.length > 0) {
               setPackages(prev => mergePackagesWithDefaults(ghRes.data.packages));
             }
+            if (Array.isArray(ghRes.data.diagnosticProfiles) && ghRes.data.diagnosticProfiles.length > 0) {
+              setDiagnosticProfiles(prev => mergeProfilesWithDefaults(ghRes.data.diagnosticProfiles));
+            }
           }
         }).catch(() => {});
       }
@@ -737,6 +752,56 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return () => {
       unsubscribe();
     };
+  }, [githubConfig]);
+
+  // Periodic automatic background sync every 35 seconds to keep all devices updated
+  useEffect(() => {
+    if (!githubConfig.token || !githubConfig.autoSync) return;
+
+    const interval = setInterval(() => {
+      if (typeof document !== 'undefined' && document.hidden) return;
+      if (typeof navigator !== 'undefined' && !navigator.onLine) return;
+
+      pullFullStoreFromGitHub(githubConfig).then(ghRes => {
+        if (ghRes.success && ghRes.data) {
+          const data = ghRes.data;
+          if (Array.isArray(data.reports) && data.reports.length > 0) {
+            setReports(prev => {
+              const currentMap = new Map(prev.map(r => [r.id, r]));
+              let hasNew = false;
+              data.reports.forEach((r: LabReport) => {
+                if (!currentMap.has(r.id)) {
+                  currentMap.set(r.id, r);
+                  hasNew = true;
+                }
+              });
+              return hasNew ? Array.from(currentMap.values()) : prev;
+            });
+          }
+          if (Array.isArray(data.incomeRecords) && data.incomeRecords.length > 0) {
+            setIncomeRecords(prev => {
+              const currentMap = new Map(prev.map(i => [i.id, i]));
+              let hasNew = false;
+              data.incomeRecords.forEach((i: IncomeRecord) => {
+                if (!currentMap.has(i.id)) {
+                  currentMap.set(i.id, i);
+                  hasNew = true;
+                }
+              });
+              return hasNew ? Array.from(currentMap.values()) : prev;
+            });
+          }
+          if (Array.isArray(data.packages) && data.packages.length > 0) {
+            setPackages(prev => mergePackagesWithDefaults(data.packages));
+          }
+          if (Array.isArray(data.diagnosticProfiles) && data.diagnosticProfiles.length > 0) {
+            setDiagnosticProfiles(prev => mergeProfilesWithDefaults(data.diagnosticProfiles));
+          }
+        }
+      }).catch(() => {});
+    }, 35000);
+
+    return () => clearInterval(interval);
   }, [githubConfig]);
 
 
@@ -804,7 +869,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           inventory,
           labInfo,
           testCatalog,
-          packages
+          packages,
+          diagnosticProfiles
         };
 
         // 1. Instant Firebase Cloud persistence
@@ -815,9 +881,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           pushFullStoreToGitHub(githubConfig, payload).catch(() => {});
         }
       }
-    }, 20000);
+    }, 15000);
     return () => clearTimeout(timer);
-  }, [reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, packages, githubConfig]);
+  }, [reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, packages, diagnosticProfiles, githubConfig]);
 
   // Audit Logging helper
   const logAction = useCallback((action: AuditLog['action'], module: AuditLog['module'], description: string) => {
@@ -1056,53 +1122,169 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Packages Management CRUD
   const updatePackages = useCallback((pkgs: ComprehensivePackage[]) => {
     setPackages(pkgs);
+    try {
+      localStorage.setItem(PACKAGES_KEY, JSON.stringify(pkgs));
+    } catch {}
     realtimeSyncManager.broadcastAction('UPDATE_PACKAGES', pkgs);
+    if (githubConfig.token && githubConfig.autoSync) {
+      pushFullStoreToGitHub(githubConfig, {
+        reports,
+        incomeRecords,
+        expenses,
+        loyaltyProfiles,
+        inventory,
+        labInfo,
+        testCatalog,
+        packages: pkgs,
+        diagnosticProfiles
+      }).catch(err => console.warn('Package sync note:', err));
+    }
     logAction('UPDATE', 'CATALOG', 'تحديث قائمة باقات الفحص الشامل المتاحة');
-  }, [logAction]);
+  }, [logAction, githubConfig, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, diagnosticProfiles]);
 
   const addPackage = useCallback((pkg: ComprehensivePackage) => {
     setPackages(prev => {
       const next = [pkg, ...prev];
+      try {
+        localStorage.setItem(PACKAGES_KEY, JSON.stringify(next));
+      } catch {}
       realtimeSyncManager.broadcastAction('UPDATE_PACKAGES', next);
+      if (githubConfig.token && githubConfig.autoSync) {
+        pushFullStoreToGitHub(githubConfig, {
+          reports,
+          incomeRecords,
+          expenses,
+          loyaltyProfiles,
+          inventory,
+          labInfo,
+          testCatalog,
+          packages: next,
+          diagnosticProfiles
+        }).catch(err => console.warn('Add package sync note:', err));
+      }
       return next;
     });
     logAction('CREATE', 'CATALOG', `إضافة باقة فحص جديدة: ${pkg.titleAr} (${pkg.code})`);
-  }, [logAction]);
+  }, [logAction, githubConfig, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, diagnosticProfiles]);
 
   const updateSinglePackage = useCallback((id: string, updates: Partial<ComprehensivePackage>) => {
     setPackages(prev => {
       const next = prev.map(p => p.id === id ? { ...p, ...updates } : p);
+      try {
+        localStorage.setItem(PACKAGES_KEY, JSON.stringify(next));
+      } catch {}
       realtimeSyncManager.broadcastAction('UPDATE_PACKAGES', next);
+      if (githubConfig.token && githubConfig.autoSync) {
+        pushFullStoreToGitHub(githubConfig, {
+          reports,
+          incomeRecords,
+          expenses,
+          loyaltyProfiles,
+          inventory,
+          labInfo,
+          testCatalog,
+          packages: next,
+          diagnosticProfiles
+        }).catch(err => console.warn('Update package sync note:', err));
+      }
       return next;
     });
     logAction('UPDATE', 'CATALOG', `تعديل بيانات الباقة: ${id}`);
-  }, [logAction]);
+  }, [logAction, githubConfig, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, diagnosticProfiles]);
 
   const deletePackage = useCallback((id: string) => {
     setPackages(prev => {
       const next = prev.filter(p => p.id !== id);
+      try {
+        localStorage.setItem(PACKAGES_KEY, JSON.stringify(next));
+      } catch {}
       realtimeSyncManager.broadcastAction('UPDATE_PACKAGES', next);
+      if (githubConfig.token && githubConfig.autoSync) {
+        pushFullStoreToGitHub(githubConfig, {
+          reports,
+          incomeRecords,
+          expenses,
+          loyaltyProfiles,
+          inventory,
+          labInfo,
+          testCatalog,
+          packages: next,
+          diagnosticProfiles
+        }).catch(err => console.warn('Delete package sync note:', err));
+      }
       return next;
     });
     logAction('DELETE', 'CATALOG', `حذف الباقة: ${id}`);
-  }, [logAction]);
+  }, [logAction, githubConfig, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, diagnosticProfiles]);
 
   const resetPackages = useCallback(() => {
     const fullPkgs = mergePackagesWithDefaults();
     setPackages(fullPkgs);
+    try {
+      localStorage.setItem(PACKAGES_KEY, JSON.stringify(fullPkgs));
+    } catch {}
     realtimeSyncManager.broadcastAction('UPDATE_PACKAGES', fullPkgs);
+    if (githubConfig.token && githubConfig.autoSync) {
+      pushFullStoreToGitHub(githubConfig, {
+        reports,
+        incomeRecords,
+        expenses,
+        loyaltyProfiles,
+        inventory,
+        labInfo,
+        testCatalog,
+        packages: fullPkgs,
+        diagnosticProfiles
+      }).catch(() => {});
+    }
     logAction('UPDATE', 'CATALOG', `استعادة الباقات الافتراضية الـ 15 المتكاملة (${fullPkgs.length} باقة)`);
-  }, [logAction]);
+  }, [logAction, githubConfig, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, diagnosticProfiles]);
 
   const updateDiagnosticProfiles = useCallback((profiles: CatalogProfileTemplate[]) => {
     setDiagnosticProfiles(profiles);
-    logAction('CATALOG_UPDATE', 'CATALOG', `تحديث بروفايلات التحاليل الشاملة (${profiles.length} بروفايل)`);
-  }, [logAction]);
+    try {
+      localStorage.setItem(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(profiles));
+      localStorage.setItem('rt_lab_catalog_v2', JSON.stringify(profiles));
+    } catch {}
+    realtimeSyncManager.broadcastAction('UPDATE_PROFILES', profiles);
+    if (githubConfig.token && githubConfig.autoSync) {
+      pushFullStoreToGitHub(githubConfig, {
+        reports,
+        incomeRecords,
+        expenses,
+        loyaltyProfiles,
+        inventory,
+        labInfo,
+        testCatalog,
+        packages,
+        diagnosticProfiles: profiles
+      }).catch(err => console.warn('Profile sync note:', err));
+    }
+    logAction('CATALOG_UPDATE', 'CATALOG', `تحديث بروفايلات التحاليل الشاملة (${profiles.length} بروفايل) ومزامنتها سحابياً`);
+  }, [logAction, githubConfig, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, packages]);
 
   const resetDiagnosticProfiles = useCallback(() => {
     setDiagnosticProfiles(LAB_CATALOG);
+    try {
+      localStorage.setItem(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(LAB_CATALOG));
+      localStorage.setItem('rt_lab_catalog_v2', JSON.stringify(LAB_CATALOG));
+    } catch {}
+    realtimeSyncManager.broadcastAction('UPDATE_PROFILES', LAB_CATALOG);
+    if (githubConfig.token && githubConfig.autoSync) {
+      pushFullStoreToGitHub(githubConfig, {
+        reports,
+        incomeRecords,
+        expenses,
+        loyaltyProfiles,
+        inventory,
+        labInfo,
+        testCatalog,
+        packages,
+        diagnosticProfiles: LAB_CATALOG
+      }).catch(() => {});
+    }
     logAction('CATALOG_UPDATE', 'CATALOG', 'استعادة بروفايلات التحاليل الافتراضية (24 بروفايل طبي)');
-  }, [logAction]);
+  }, [logAction, githubConfig, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, packages]);
 
   const forceSyncCatalog = useCallback(() => {
     const refreshedTests = mergeCatalogWithDefaults(testCatalog);
@@ -1131,12 +1313,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       inventory,
       labInfo,
       testCatalog: refreshedTests,
-      packages: refreshedPackages
+      packages: refreshedPackages,
+      diagnosticProfiles: refreshedProfiles
     };
 
     realtimeSyncManager.pushMasterSnapshot(syncPayload);
     realtimeSyncManager.broadcastAction('UPDATE_CATALOG', refreshedTests);
     realtimeSyncManager.broadcastAction('UPDATE_PACKAGES', refreshedPackages);
+    realtimeSyncManager.broadcastAction('UPDATE_PROFILES', refreshedProfiles);
 
     if (githubConfig.token) {
       pushFullStoreToGitHub(githubConfig, syncPayload).catch(() => {});
@@ -2169,81 +2353,183 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setGithubConfig(prev => ({ ...prev, ...config }));
   }, []);
 
-  const syncUnifiedDataToGitHub = useCallback(async (): Promise<{ success: boolean; message: string }> => {
-    if (!githubConfig.token || !githubConfig.repoOwner || !githubConfig.repoName) {
-      return { success: false, message: "بيانات مستودع GitHub غير مكتملة" };
-    }
-
+  const syncAllDevicesNow = useCallback(async (): Promise<{ success: boolean; message: string; reportsCount?: number; invoicesCount?: number }> => {
     try {
-      const payload = {
-        timestamp: new Date().toISOString(),
-        reportsCount: reports.length,
-        incomeCount: incomeRecords.length,
-        loyaltyProfilesCount: loyaltyProfiles.length,
-        reports,
-        incomeRecords,
+      // 1. Pull latest database from GitHub directly via raw API
+      const ghRes = await pullFullStoreFromGitHub(githubConfig);
+      let mergedReports = [...reports];
+      let mergedInvoices = [...incomeRecords];
+      let mergedPackages = [...packages];
+      let mergedProfiles = [...diagnosticProfiles];
+      let mergedCatalog = [...testCatalog];
+
+      if (ghRes.success && ghRes.data) {
+        const data = ghRes.data;
+        if (Array.isArray(data.reports) && data.reports.length > 0) {
+          const map = new Map<string, LabReport>();
+          mergedReports.forEach(r => {
+            if (r.id) map.set(r.id, r);
+            if (r.reportNumber) map.set(r.reportNumber, r);
+            if (r.patient?.barcode) map.set(r.patient.barcode, r);
+          });
+          data.reports.forEach((r: LabReport) => {
+            const existing = map.get(r.id) || (r.reportNumber && map.get(r.reportNumber)) || (r.patient?.barcode && map.get(r.patient.barcode));
+            if (!existing) {
+              map.set(r.id, r);
+            } else {
+              map.set(existing.id, { ...existing, ...r });
+            }
+          });
+          mergedReports = Array.from(new Set(map.values()));
+          setReports(mergedReports);
+        }
+
+        if (Array.isArray(data.incomeRecords) && data.incomeRecords.length > 0) {
+          const map = new Map<string, IncomeRecord>();
+          mergedInvoices.forEach(i => {
+            if (i.id) map.set(i.id, i);
+            if (i.invoiceNumber) map.set(i.invoiceNumber, i);
+            if (i.barcode) map.set(i.barcode, i);
+          });
+          data.incomeRecords.forEach((i: IncomeRecord) => {
+            const existing = map.get(i.id) || (i.invoiceNumber && map.get(i.invoiceNumber)) || (i.barcode && map.get(i.barcode));
+            if (!existing) {
+              map.set(i.id, i);
+            } else {
+              map.set(existing.id, { ...existing, ...i });
+            }
+          });
+          mergedInvoices = Array.from(new Set(map.values()));
+          setIncomeRecords(mergedInvoices);
+        }
+
+        if (Array.isArray(data.packages) && data.packages.length > 0) {
+          mergedPackages = mergePackagesWithDefaults(data.packages);
+          setPackages(mergedPackages);
+        }
+
+        if (Array.isArray(data.diagnosticProfiles) && data.diagnosticProfiles.length > 0) {
+          mergedProfiles = mergeProfilesWithDefaults(data.diagnosticProfiles);
+          setDiagnosticProfiles(mergedProfiles);
+        }
+
+        if (Array.isArray(data.testCatalog) && data.testCatalog.length > 0) {
+          mergedCatalog = mergeCatalogWithDefaults(data.testCatalog);
+          setTestCatalog(mergedCatalog);
+        }
+
+        if (Array.isArray(data.expenses) && data.expenses.length > 0) {
+          setExpenses(data.expenses);
+        }
+        if (Array.isArray(data.loyaltyProfiles) && data.loyaltyProfiles.length > 0) {
+          setLoyaltyProfiles(data.loyaltyProfiles);
+        }
+        if (data.labInfo) {
+          setLabInfo(data.labInfo);
+        }
+      }
+
+      // 2. Also fetch diagnostic cases queue from GitHub
+      const diagCasesRes = await fetchDiagnosticCases(githubConfig);
+      if (diagCasesRes.success && Array.isArray(diagCasesRes.cases)) {
+        const existingBarcodes = new Set(mergedReports.map(r => r.patient?.barcode).filter(Boolean));
+        const existingNumbers = new Set(mergedReports.map(r => r.reportNumber).filter(Boolean));
+
+        diagCasesRes.cases.forEach(c => {
+          if ((c.barcode && !existingBarcodes.has(c.barcode)) || (c.labNumber && !existingNumbers.has(c.labNumber))) {
+            const newRep = convertIncomeRecordToDiagnosticReport({
+              id: c.id,
+              date: c.sampleDate,
+              time: '10:00 AM',
+              invoiceNumber: c.invoiceNumber || `INV-${c.labNumber}`,
+              labNumber: c.labNumber,
+              barcode: c.barcode,
+              patientName: c.fullName,
+              patientAge: c.age,
+              patientGender: c.gender,
+              patientPhone: c.phone,
+              referringDoctor: c.referringDoctorName || 'كشف معمل',
+              tests: (c.testNames || ['تحاليل مخبرية']).map((tName, idx) => ({
+                code: `TST-${idx}`,
+                nameAr: tName,
+                nameEn: tName,
+                category: 'Clinical',
+                price: 100,
+                cost: 20
+              })),
+              grossAmount: c.totalCost || 200,
+              discount: 0,
+              netAmount: c.totalCost || 200,
+              paidAmount: c.paidAmount || (c.paymentStatus === 'paid' ? c.totalCost || 200 : 0),
+              remainingAmount: 0,
+              paymentMethod: 'cash',
+              paymentStatus: (c.paymentStatus as any) || 'paid',
+              status: 'active',
+              creatorName: 'مزامنة سحابية',
+              createdAt: c.sampleDate,
+              updatedAt: c.sampleDate
+            });
+            mergedReports = [newRep, ...mergedReports];
+          }
+        });
+        setReports(mergedReports);
+      }
+
+      // 3. Save to localStorage immediately
+      try {
+        localStorage.setItem(REPORTS_KEY, JSON.stringify(mergedReports));
+        localStorage.setItem(INCOME_KEY, JSON.stringify(mergedInvoices));
+        localStorage.setItem(PACKAGES_KEY, JSON.stringify(mergedPackages));
+        localStorage.setItem(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(mergedProfiles));
+        localStorage.setItem(CATALOG_KEY, JSON.stringify(mergedCatalog));
+      } catch (e) {
+        console.warn('Storage save note:', e);
+      }
+
+      // 4. Push unified state back to GitHub and broadcast to all devices
+      const unifiedStore = {
+        reports: mergedReports,
+        incomeRecords: mergedInvoices,
+        expenses,
         loyaltyProfiles,
         inventory,
-        dailyCloseouts,
-        auditLogs: auditLogs.slice(0, 50)
+        labInfo,
+        testCatalog: mergedCatalog,
+        packages: mergedPackages,
+        diagnosticProfiles: mergedProfiles
       };
 
-      // 1. Instant Push to Firebase Cloud Firestore Master Snapshot
-      await realtimeSyncManager.pushMasterSnapshot({
-        reports,
-        incomeRecords,
-        loyaltyProfiles,
-        inventory,
-        dailyCloseouts,
-        labInfo,
-        expenses
-      });
-
-      const path = 'rt_lab_unified_backup.json';
-      const url = `https://api.github.com/repos/${githubConfig.repoOwner}/${githubConfig.repoName}/contents/${path}`;
-
-      let sha: string | undefined;
-      const getRes = await fetch(url, {
-        headers: {
-          'Authorization': `token ${githubConfig.token}`,
-          'Accept': 'application/vnd.github.v3+json'
-        }
-      });
-      if (getRes.ok) {
-        const getData = await getRes.json();
-        sha = getData.sha;
+      if (githubConfig.token) {
+        await pushFullStoreToGitHub(githubConfig, unifiedStore);
       }
+      realtimeSyncManager.broadcastAction('FULL_SYNC', unifiedStore);
 
-      const contentBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
+      setGithubConfig(prev => ({ ...prev, lastSyncAt: new Date().toLocaleString('en-US'), status: 'connected' }));
 
-      const putRes = await fetch(url, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `token ${githubConfig.token}`,
-          'Accept': 'application/vnd.github.v3+json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          message: `Auto-sync unified data: ${reports.length} reports, ${incomeRecords.length} invoices [${new Date().toLocaleString('en-US')}] [skip ci]`,
-          content: contentBase64,
-          branch: githubConfig.branch || 'main',
-          sha
-        })
+      addNotification({
+        title: '✅ تمت المزامنة الشاملة بنجاح',
+        message: `تم جلب ومزامنة ${mergedReports.length} تقرير وحالة و ${mergedInvoices.length} فاتورة و ${mergedPackages.length} باقة بين كافة الأجهزة بنجاح.`,
+        type: 'success'
       });
 
-      if (putRes.ok) {
-        setGithubConfig(prev => ({ ...prev, lastSyncAt: new Date().toLocaleString('en-US'), status: 'connected' }));
-        logAction('SYNC', 'SECURITY', 'مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح');
-        return { success: true, message: "تمت المزامنة وحفظ البيانات سحابياً بنجاح!" };
-      } else {
-        const errData = await putRes.json().catch(() => ({}));
-        throw new Error(errData.message || 'فشلت المزامنة مع GitHub');
-      }
+      return {
+        success: true,
+        message: `تم بنجاح جلب ومزامنة ${mergedReports.length} حالة طبية و ${mergedInvoices.length} فاتورة مسجلة و ${mergedPackages.length} باقة بين كافة الأجهزة!`,
+        reportsCount: mergedReports.length,
+        invoicesCount: mergedInvoices.length
+      };
     } catch (err: any) {
-      setGithubConfig(prev => ({ ...prev, status: 'error', errorMessage: err.message }));
-      return { success: false, message: err.message || 'خطأ أثناء المزامنة' };
+      console.error('syncAllDevicesNow error:', err);
+      return {
+        success: false,
+        message: `خطأ أثناء المزامنة: ${err.message || 'تعذر الاتصال بالسحابة'}`
+      };
     }
-  }, [githubConfig, reports, incomeRecords, loyaltyProfiles, inventory, dailyCloseouts, auditLogs, logAction]);
+  }, [reports, incomeRecords, packages, diagnosticProfiles, testCatalog, expenses, loyaltyProfiles, inventory, labInfo, githubConfig, addNotification]);
+
+  const syncUnifiedDataToGitHub = useCallback(async (): Promise<{ success: boolean; message: string }> => {
+    return await syncAllDevicesNow();
+  }, [syncAllDevicesNow]);
 
   const value: AppContextType = {
     language,
@@ -2376,6 +2662,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     githubConfig,
     updateGithubConfig,
     syncUnifiedDataToGitHub,
+    syncAllDevicesNow,
 
     exportBackup,
     importBackup,

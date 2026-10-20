@@ -32,7 +32,7 @@ export const Header: React.FC = () => {
     notifications,
     markNotificationRead,
     clearNotifications,
-    syncUnifiedDataToGitHub,
+    syncAllDevicesNow,
     githubConfig
   } = useApp();
 
@@ -50,11 +50,11 @@ export const Header: React.FC = () => {
     setIsSyncing(true);
     setSyncStatusMsg(null);
     try {
-      const res = await syncUnifiedDataToGitHub();
+      const res = await syncAllDevicesNow();
       setSyncStatusMsg(res.message);
-      setTimeout(() => setSyncStatusMsg(null), 4000);
+      setTimeout(() => setSyncStatusMsg(null), 5000);
     } catch {
-      setSyncStatusMsg("فشلت المزامنة");
+      setSyncStatusMsg("فشلت المزامنة السحابية — يرجى التحقق من اتصال الإنترنت.");
     } finally {
       setIsSyncing(false);
     }

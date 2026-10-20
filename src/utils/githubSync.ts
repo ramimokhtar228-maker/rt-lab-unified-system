@@ -115,14 +115,72 @@ export async function fetchDiagnosticCases(
   try {
     const creds = resolveCredentials(arg1, arg2, arg3);
     const cases: DiagnosticPatientCase[] = [];
+    const seenIds = new Set<string>();
 
-    // 1. Try reading public/rt-cases-sync.json first
+    // 1. Priority: pull from public/rt-database-sync.json which contains ALL registered cases and reports
+    try {
+      const dbRes = await fetch(
+        `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/public/rt-database-sync.json`,
+        {
+          headers: creds.token ? {
+            Authorization: `token ${creds.token}`,
+            Accept: 'application/vnd.github.v3.raw',
+            'Cache-Control': 'no-cache'
+          } : {
+            Accept: 'application/vnd.github.v3.raw'
+          }
+        }
+      );
+      if (dbRes.ok) {
+        const dbData = await dbRes.json();
+        if (Array.isArray(dbData.reports)) {
+          for (const rep of dbData.reports) {
+            const pat = rep.patient || {};
+            const key = rep.reportNumber || rep.id || pat.barcode || pat.fullName;
+            if (key && !seenIds.has(key)) {
+              seenIds.add(key);
+              const testNames: string[] = [];
+              if (Array.isArray(rep.profiles)) {
+                rep.profiles.forEach((p: any) => {
+                  if (p.titleAr || p.titleEn) testNames.push(p.titleAr || p.titleEn);
+                });
+              }
+              if (rep.packageApplied?.titleAr) {
+                testNames.unshift(`باقة: ${rep.packageApplied.titleAr}`);
+              }
+              cases.push({
+                id: rep.id || `rep-${cases.length + 1}`,
+                labNumber: rep.reportNumber || pat.labNumber || `RT-${cases.length + 1}`,
+                barcode: pat.barcode || rep.barcode || '',
+                fullName: pat.fullName || 'مريض غير مسمى',
+                age: pat.age || 30,
+                gender: pat.gender || 'male',
+                phone: pat.phone || '',
+                referringDoctorName: pat.referringDoctorName || 'كشف معمل',
+                sampleDate: pat.sampleDate || rep.createdAt || new Date().toISOString(),
+                totalCost: pat.totalCost || rep.totalCost,
+                paidAmount: pat.paidAmount || rep.paidAmount,
+                paymentStatus: rep.paymentStatus || (rep.financialClearance === 'CLEARED' ? 'paid' : 'pending'),
+                invoiceNumber: rep.invoiceNumber || pat.invoiceNumber,
+                testNames: testNames.length > 0 ? testNames : ['تحاليل مخبرية']
+              });
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('Database sync fetch note:', e);
+    }
+
+    // 2. Also check public/rt-cases-sync.json
     try {
       const syncRes = await fetch(
         `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/public/rt-cases-sync.json`,
         {
-          headers: {
+          headers: creds.token ? {
             Authorization: `token ${creds.token}`,
+            Accept: 'application/vnd.github.v3+json'
+          } : {
             Accept: 'application/vnd.github.v3+json'
           }
         }
@@ -130,28 +188,32 @@ export async function fetchDiagnosticCases(
 
       if (syncRes.ok) {
         const syncData = await syncRes.json();
-        const contentStr = decodeBase64Utf8(syncData.content);
-        const parsed = JSON.parse(contentStr);
+        const contentStr = syncData.content ? decodeBase64Utf8(syncData.content) : '';
+        const parsed = contentStr ? JSON.parse(contentStr) : null;
         if (Array.isArray(parsed)) {
           for (const item of parsed) {
-            cases.push({
-              id: item.id || `diag-${cases.length + 1}`,
-              labNumber: item.reportNumber || item.labNumber || `RT-${cases.length + 1}`,
-              barcode: item.barcode || (item.patient && item.patient.barcode) || '',
-              fullName: item.patientName || (item.patient && item.patient.fullName) || 'مريض غير مسمى',
-              age: (item.patient && item.patient.age) || item.age || 35,
-              gender: (item.patient && item.patient.gender) || item.gender || 'male',
-              phone: (item.patient && item.patient.phone) || item.phone || '',
-              referringDoctorName: (item.patient && item.patient.referringDoctorName) || item.referringDoctor || 'فحص ذاتي / كشف معمل',
-              sampleDate: (item.patient && item.patient.sampleDate) || item.createdAt || new Date().toISOString(),
-              totalCost: (item.patient && item.patient.totalCost) || item.totalCost || item.netAmount,
-              paidAmount: item.paidAmount,
-              paymentStatus: item.paymentStatus,
-              invoiceNumber: item.invoiceNumber,
-              testNames: Array.isArray(item.tests)
-                ? item.tests.map((t: InvoiceTestItem | { nameAr?: string; titleAr?: string; name?: string }) => t.nameAr || (t as { titleAr?: string }).titleAr || (t as { name?: string }).name || 'فحص')
-                : (item.testNames || ['تحاليل مخبرية'])
-            });
+            const key = item.reportNumber || item.labNumber || item.barcode;
+            if (key && !seenIds.has(key)) {
+              seenIds.add(key);
+              cases.unshift({
+                id: item.id || `diag-${cases.length + 1}`,
+                labNumber: item.reportNumber || item.labNumber || `RT-${cases.length + 1}`,
+                barcode: item.barcode || (item.patient && item.patient.barcode) || '',
+                fullName: item.patientName || (item.patient && item.patient.fullName) || 'مريض غير مسمى',
+                age: (item.patient && item.patient.age) || item.age || 35,
+                gender: (item.patient && item.patient.gender) || item.gender || 'male',
+                phone: (item.patient && item.patient.phone) || item.phone || '',
+                referringDoctorName: (item.patient && item.patient.referringDoctorName) || item.referringDoctor || 'فحص ذاتي / كشف معمل',
+                sampleDate: (item.patient && item.patient.sampleDate) || item.createdAt || new Date().toISOString(),
+                totalCost: (item.patient && item.patient.totalCost) || item.totalCost || item.netAmount,
+                paidAmount: item.paidAmount,
+                paymentStatus: item.paymentStatus,
+                invoiceNumber: item.invoiceNumber,
+                testNames: Array.isArray(item.tests)
+                  ? item.tests.map((t: InvoiceTestItem | { nameAr?: string; titleAr?: string; name?: string }) => t.nameAr || (t as { titleAr?: string }).titleAr || (t as { name?: string }).name || 'فحص')
+                  : (item.testNames || ['تحاليل مخبرية'])
+              });
+            }
           }
         }
       }
@@ -159,7 +221,7 @@ export async function fetchDiagnosticCases(
       // file might not exist yet
     }
 
-    // 2. Also check if local storage has any pending orders
+    // 3. Also check if local storage has any pending orders
     if (typeof window !== 'undefined') {
       try {
         const localCasesStr = localStorage.getItem('rt_lab_cases_sync_v1');
@@ -167,7 +229,9 @@ export async function fetchDiagnosticCases(
           const localCases = JSON.parse(localCasesStr);
           if (Array.isArray(localCases)) {
             for (const lc of localCases) {
-              if (!cases.some(c => c.barcode === lc.barcode || c.labNumber === lc.labNumber)) {
+              const key = lc.barcode || lc.labNumber;
+              if (key && !seenIds.has(key)) {
+                seenIds.add(key);
                 cases.unshift(lc);
               }
             }
@@ -180,7 +244,7 @@ export async function fetchDiagnosticCases(
 
     return {
       success: true,
-      message: `تم جلب ${cases.length} حالة مسجلة من منظومة تحاليل RT التشخيصية.`,
+      message: `تم جلب ${cases.length} حالة مسجلة من كافة الأجهزة ومنظومة تحاليل RT السحابية بنجاح.`,
       casesFound: cases,
       cases
     };
@@ -692,22 +756,6 @@ export async function pushFullStoreToGitHub(
     const filePath = 'public/rt-database-sync.json';
     const apiUrl = `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/${filePath}`;
 
-    let existingSha: string | undefined;
-    try {
-      const checkRes = await fetch(apiUrl, {
-        headers: {
-          Authorization: `token ${creds.token}`,
-          Accept: 'application/vnd.github.v3+json'
-        }
-      });
-      if (checkRes.ok) {
-        const checkData = await checkRes.json();
-        existingSha = checkData.sha;
-      }
-    } catch {
-      // file might not exist yet
-    }
-
     const fullData = {
       system: 'RT Lab Unified Medical & Financial ERP',
       syncedAt: new Date().toISOString(),
@@ -715,26 +763,58 @@ export async function pushFullStoreToGitHub(
     };
 
     const contentBase64 = encodeBase64Utf8(JSON.stringify(fullData, null, 2));
-    const putRes = await fetch(apiUrl, {
-      method: 'PUT',
-      headers: {
-        Authorization: `token ${creds.token}`,
-        Accept: 'application/vnd.github.v3+json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        message: `مزامنة سحابية شاملة لقاعدة بيانات المعمل: ${new Date().toLocaleTimeString('en-US')} [skip ci]`,
-        content: contentBase64,
-        branch: 'main',
-        ...(existingSha ? { sha: existingSha } : {})
-      })
-    });
 
-    if (!putRes.ok) {
+    // Helper to attempt commit with SHA
+    async function attemptCommit(retryCount = 0): Promise<{ success: boolean; message: string }> {
+      let existingSha: string | undefined;
+      try {
+        const checkRes = await fetch(`${apiUrl}?ref=main&_=${Date.now()}`, {
+          headers: {
+            Authorization: `token ${creds.token}`,
+            Accept: 'application/vnd.github.v3+json',
+            'Cache-Control': 'no-cache'
+          }
+        });
+        if (checkRes.ok) {
+          const checkData = await checkRes.json();
+          existingSha = checkData.sha;
+        }
+      } catch {
+        // file might not exist yet
+      }
+
+      const putRes = await fetch(apiUrl, {
+        method: 'PUT',
+        headers: {
+          Authorization: `token ${creds.token}`,
+          Accept: 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: `مزامنة سحابية شاملة لقاعدة بيانات المعمل: ${new Date().toLocaleTimeString('en-US')} [skip ci]`,
+          content: contentBase64,
+          branch: 'main',
+          ...(existingSha ? { sha: existingSha } : {})
+        })
+      });
+
+      if (putRes.ok) {
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('rt_lab_last_cloud_sync', new Date().toISOString());
+        }
+        return { success: true, message: 'تم حفظ ومزامنة قاعدة البيانات سحابياً بنجاح!' };
+      }
+
+      // If conflict (409) or pre-condition, retry with latest SHA
+      if ((putRes.status === 409 || putRes.status === 422) && retryCount < 2) {
+        await new Promise(r => setTimeout(r, 600));
+        return attemptCommit(retryCount + 1);
+      }
+
       return { success: false, message: `فشل الحفظ السحابي: ${putRes.statusText}` };
     }
 
-    return { success: true, message: 'تم حفظ ومزامنة قاعدة البيانات سحابياً بنجاح!' };
+    return await attemptCommit();
   } catch (err) {
     return { success: false, message: `خطأ: ${(err as Error).message}` };
   }
@@ -749,9 +829,30 @@ export async function pullFullStoreFromGitHub(
     const filePath = 'public/rt-database-sync.json';
     const apiUrl = `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/${filePath}`;
 
-    // 1. Try GitHub Contents API (supports both data.content and data.download_url for >1MB files)
+    // 0. Primary & Most Reliable: Direct raw GitHub API (Supports ANY file size up to 100MB, zero CDN cache)
     try {
-      const res = await fetch(apiUrl, {
+      const rawApiRes = await fetch(`${apiUrl}?ref=main&_=${Date.now()}`, {
+        headers: creds.token ? {
+          Authorization: `token ${creds.token}`,
+          Accept: 'application/vnd.github.v3.raw',
+          'Cache-Control': 'no-cache, no-store'
+        } : {
+          Accept: 'application/vnd.github.v3.raw'
+        }
+      });
+      if (rawApiRes.ok) {
+        const rawJson = await rawApiRes.json();
+        if (rawJson && (Array.isArray(rawJson.reports) || Array.isArray(rawJson.incomeRecords))) {
+          return { success: true, data: rawJson, message: 'تم استرداد وتحديث البيانات سحابياً بنجاح!' };
+        }
+      }
+    } catch (rawApiErr) {
+      console.warn('Raw GitHub API direct fetch note:', rawApiErr);
+    }
+
+    // 1. Try GitHub Contents API with download_url fallback
+    try {
+      const res = await fetch(`${apiUrl}?ref=main&_=${Date.now()}`, {
         headers: creds.token ? {
           Authorization: `token ${creds.token}`,
           Accept: 'application/vnd.github.v3+json'
@@ -767,7 +868,6 @@ export async function pullFullStoreFromGitHub(
           const parsed = JSON.parse(content);
           return { success: true, data: parsed, message: 'تم استرداد وتحديث البيانات سحابياً بنجاح!' };
         } else if (data.download_url) {
-          // GitHub Contents API omits `content` if file size exceeds 1MB, but provides `download_url`
           const downloadRes = await fetch(`${data.download_url}?t=${Date.now()}`);
           if (downloadRes.ok) {
             const parsed = await downloadRes.json();

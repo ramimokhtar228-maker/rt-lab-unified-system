@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Cloud, RefreshCw, Database, Download, Upload, CheckCircle2, ShieldCheck, HardDrive } from 'lucide-react';
 import { LabReport, Patient, LabSettings } from '../types/laboratory';
 import { downloadFile } from '../utils/exportFormats';
+import { useApp } from '../context/AppContext';
 
 interface CloudSyncModalProps {
   isOpen: boolean;
@@ -20,6 +21,7 @@ export const CloudSyncModal: React.FC<CloudSyncModalProps> = ({
   settings,
   onRestoreData,
 }) => {
+  const { syncAllDevicesNow } = useApp();
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [lastSyncTime, setLastSyncTime] = useState<string>(new Date().toLocaleTimeString('ar-EG'));
   const [autoSyncEnabled, setAutoSyncEnabled] = useState<boolean>(true);
@@ -27,14 +29,19 @@ export const CloudSyncModal: React.FC<CloudSyncModalProps> = ({
 
   if (!isOpen) return null;
 
-  const handleManualSync = () => {
+  const handleManualSync = async () => {
     setIsSyncing(true);
-    setTimeout(() => {
-      setIsSyncing(false);
+    setSyncSuccessMsg(null);
+    try {
+      const res = await syncAllDevicesNow();
       setLastSyncTime(new Date().toLocaleTimeString('ar-EG'));
-      setSyncSuccessMsg('تمت المزامنة السحابية بنجاح — كافة السجلات والتقارير مطابقة للخادم المركزي.');
-      setTimeout(() => setSyncSuccessMsg(null), 4000);
-    }, 1200);
+      setSyncSuccessMsg(res.message);
+      setTimeout(() => setSyncSuccessMsg(null), 5000);
+    } catch {
+      setSyncSuccessMsg('فشلت المزامنة السحابية — يرجى التحقق من اتصال الإنترنت.');
+    } finally {
+      setIsSyncing(false);
+    }
   };
 
   const handleExportBackup = () => {
