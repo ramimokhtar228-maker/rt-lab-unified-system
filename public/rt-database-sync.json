@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-20T07:56:02.778Z",
+  "syncedAt": "2026-10-20T07:56:28.543Z",
   "reports": [
     {
       "id": "rep-1792482321561",
@@ -196,7 +196,9 @@
           "interpretations": [
             " "
           ],
-          "recommendedTests": []
+          "recommendedTests": [
+            "Complete Lipid Profile (Total Chol, HDL, LDL, Trig, VLDL)"
+          ]
         }
       ],
       "staff": {
@@ -212,7 +214,7 @@
       },
       "status": "draft",
       "createdAt": "2026-10-20T07:45:21.561Z",
-      "updatedAt": "2026-10-20T07:55:41.651Z",
+      "updatedAt": "2026-10-20T07:56:08.057Z",
       "invoiceId": "inv-1792482321561"
     },
     {
