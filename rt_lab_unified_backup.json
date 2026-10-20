@@ -1,9 +1,664 @@
 {
-  "timestamp": "2026-10-20T07:34:33.915Z",
-  "reportsCount": 50,
-  "incomeCount": 35,
-  "loyaltyProfilesCount": 4,
+  "timestamp": "2026-10-20T08:04:39.692Z",
+  "reportsCount": 53,
+  "incomeCount": 38,
+  "loyaltyProfilesCount": 7,
   "reports": [
+    {
+      "id": "rep-1792482321561",
+      "reportNumber": "RT-2026-053",
+      "patient": {
+        "id": "pat-1792482321556",
+        "labNumber": "RT-2026-053",
+        "barcode": "RT-10083",
+        "fullName": "صابر حسنى نبية",
+        "phone": "01226008453",
+        "age": 60,
+        "ageUnit": "years",
+        "gender": "male",
+        "referringDoctorTitle": "Dr.",
+        "referringDoctorName": "Himself",
+        "sampleDate": "2026-10-18",
+        "reportingDate": "2026-10-20T07:57:00.000Z",
+        "fastingHours": 0,
+        "bookingType": "branch",
+        "visitFee": 0,
+        "appointmentDate": "2026-10-18",
+        "appointmentTime": "12:04",
+        "testsSubtotal": 521,
+        "totalCost": 521,
+        "discountApplied": 0,
+        "paymentMethod": "cash",
+        "assignedPackageId": "pkg-1"
+      },
+      "packageApplied": {
+        "code": "PKG-ANNUAL-WELLNESS",
+        "titleAr": "Comprehensive Annual Wellness Package",
+        "packagePrice": 521,
+        "originalPrice": 5000
+      },
+      "profiles": [
+        {
+          "id": "prof-pkg-1792482321560",
+          "profileCode": "PKG-ANNUAL-WELLNESS",
+          "titleAr": "Comprehensive Annual Wellness Package",
+          "titleEn": "Comprehensive Annual Wellness Package",
+          "category": "باقة فحوصات شاملة",
+          "sampleType": "Serum + EDTA Whole Blood + Clean Urine",
+          "interpretation": " ",
+          "parameters": [
+            {
+              "name": "Fasting Blood Glucose",
+              "unit": "mg/dL",
+              "minNormal": 70,
+              "maxNormal": 99,
+              "panicLow": 50,
+              "panicHigh": 400,
+              "method": "Hexokinase",
+              "textReference": "",
+              "id": "param-GLYCEMIC-0-1792482321556-j7n",
+              "result": "96",
+              "flag": "NORMAL",
+              "notes": "Diabetes & Glycemic Assessment (HbA1c & eAG)"
+            },
+            {
+              "name": "HbA1c (Glycated Hemoglobin)",
+              "unit": "%",
+              "minNormal": 4,
+              "maxNormal": 5.6,
+              "textReference": "< 5.7% Normal, 5.7 - 6.4% Pre-Diabetes, ≥ 6.5% Diabetes",
+              "method": "HPLC / Turbidimetric",
+              "id": "param-GLYCEMIC-3-1792482321556-wfx",
+              "result": "5.67",
+              "flag": "HIGH",
+              "notes": "Diabetes & Glycemic Assessment (HbA1c & eAG)"
+            },
+            {
+              "name": "Estimated Average Glucose (eAG)",
+              "unit": "mg/dL",
+              "minNormal": 68,
+              "maxNormal": 114,
+              "textReference": "80 - 120 mg/dL",
+              "notes": "Calculated: (28.7 × HbA1c) - 46.7",
+              "id": "param-GLYCEMIC-4-1792482321556-q1o",
+              "result": "116",
+              "flag": "HIGH"
+            },
+            {
+              "name": "ALT (SGPT)",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 45,
+              "method": "IFCC UV with P5P",
+              "textReference": "",
+              "id": "param-LFT-0-1792482321556-uv2",
+              "result": "33",
+              "flag": "NORMAL",
+              "notes": "Liver Function Tests (LFT)"
+            },
+            {
+              "name": "AST (SGOT)",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 40,
+              "method": "IFCC UV with P5P",
+              "textReference": "",
+              "id": "param-LFT-1-1792482321556-7x5",
+              "result": "38",
+              "flag": "NORMAL",
+              "notes": "Liver Function Tests (LFT)"
+            },
+            {
+              "name": "Serum Creatinine",
+              "unit": "mg/dL",
+              "minNormal": 0.6,
+              "maxNormal": 1.2,
+              "panicHigh": 4,
+              "method": "Enzymatic / Jaffe Kinetic",
+              "textReference": "",
+              "id": "param-KFT-0-1792482321558-5w0",
+              "result": "0.92",
+              "flag": "NORMAL",
+              "notes": "Kidney Function Profile"
+            },
+            {
+              "name": "Blood Urea",
+              "unit": "mg/dL",
+              "minNormal": 15,
+              "maxNormal": 45,
+              "panicHigh": 120,
+              "method": "Urease-GLDH",
+              "textReference": "",
+              "id": "param-KFT-1-1792482321558-c0x",
+              "result": "29",
+              "flag": "NORMAL",
+              "notes": "Kidney Function Profile"
+            },
+            {
+              "id": "p-pkg-0-1792482321558-1ej",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
+              "result": "39.66",
+              "unit": "ng/mL",
+              "minNormal": 30,
+              "maxNormal": 100,
+              "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+              "flag": "NORMAL",
+              "method": "CLIA (Chemiluminescence Immunoassay)",
+              "notes": "فحوصات وفيتامينات إضافية للباقة"
+            },
+            {
+              "id": "p-pkg-1-1792482321559-yc9",
+              "name": "Thyroid Stimulating Hormone (TSH) (Thyroid Stimulating Hormone (TSH))",
+              "result": "1.92",
+              "unit": "uIU/mL",
+              "minNormal": 0.35,
+              "maxNormal": 4.94,
+              "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+              "flag": "NORMAL",
+              "method": "CLIA (3rd Generation Chemiluminescence)",
+              "notes": "فحوصات وفيتامينات إضافية للباقة"
+            },
+            {
+              "id": "p-pkg-3-1792482321560-24m",
+              "name": "نسبه هيموجلوبين (Hemoglobin %)",
+              "result": "15.60",
+              "unit": "g/dL",
+              "minNormal": 12.5,
+              "maxNormal": 16.5,
+              "textReference": "MALE : 13.5-17.5    /.    FEMALE : 12.5-16.5",
+              "flag": "NORMAL",
+              "method": "Enzymatic",
+              "notes": "فحوصات وفيتامينات إضافية للباقة"
+            },
+            {
+              "id": "p-pkg-2-1792482321559-57f",
+              "name": "نسبه الهيماتوكريت (Hematocrit %)",
+              "result": "49.11",
+              "unit": "%",
+              "minNormal": 37,
+              "maxNormal": 55,
+              "textReference": "37-55",
+              "flag": "NORMAL",
+              "method": "Enzymatic",
+              "notes": "Calculated (HGB × 3)"
+            },
+            {
+              "id": "p-pkg-4-1792482321560-0fa",
+              "name": "Total Serum Calcium (Total Serum Calcium)",
+              "result": "9.30",
+              "unit": "mg/dL",
+              "minNormal": 8.6,
+              "maxNormal": 10.3,
+              "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
+              "flag": "NORMAL",
+              "method": "Arsenazo III / CPC Photometric",
+              "notes": "فحوصات وفيتامينات إضافية للباقة"
+            }
+          ],
+          "interpretations": [
+            " "
+          ],
+          "recommendedTests": [
+            "Complete Lipid Profile (Total Chol, HDL, LDL, Trig, VLDL)"
+          ]
+        }
+      ],
+      "staff": {
+        "labChemist": "مني احمد",
+        "verifiedBy": "رحاب على ",
+        "pathologist": "رامي مختار ",
+        "chemistTitle": "اخصائي كيمياء اكلينيكية وهرمونات",
+        "verifierTitle": "طبيب باثولوجي / المدير التنفيذي",
+        "pathologistTitle": "طبيب الباثولوجيا الاكلينيكية والكيميائية كلية طب قصر العيني",
+        "chemistLicense": "EGY-SCI-88402",
+        "verifierLicense": "EGY-MGT-11024",
+        "pathologistLicense": "EGY-MED-48201"
+      },
+      "status": "draft",
+      "createdAt": "2026-10-20T07:45:21.561Z",
+      "updatedAt": "2026-10-20T07:57:48.875Z",
+      "invoiceId": "inv-1792482321561"
+    },
+    {
+      "id": "rep-1792482240251",
+      "reportNumber": "RT-2026-052",
+      "patient": {
+        "id": "pat-1792482240208",
+        "labNumber": "RT-2026-052",
+        "barcode": "RT-10082",
+        "fullName": "محسن عبدالمنعم",
+        "phone": "01117552241",
+        "age": 58,
+        "ageUnit": "years",
+        "gender": "male",
+        "referringDoctorTitle": "Dr.",
+        "referringDoctorName": "Himself",
+        "sampleDate": "2026-10-18",
+        "reportingDate": "2026-10-18",
+        "fastingHours": 0,
+        "bookingType": "branch",
+        "visitFee": 0,
+        "appointmentDate": "2026-10-18",
+        "appointmentTime": "12:04",
+        "testsSubtotal": 521,
+        "totalCost": 521,
+        "discountApplied": 0,
+        "paymentMethod": "cash",
+        "assignedPackageId": "pkg-1"
+      },
+      "packageApplied": {
+        "code": "PKG-ANNUAL-WELLNESS",
+        "titleAr": "Comprehensive Annual Wellness Package",
+        "packagePrice": 521,
+        "originalPrice": 5000
+      },
+      "profiles": [
+        {
+          "id": "prof-pkg-1792483351415",
+          "profileCode": "PKG-ANNUAL-WELLNESS",
+          "titleAr": "Comprehensive Annual Wellness Package",
+          "titleEn": "Comprehensive Annual Wellness Package",
+          "category": "باقة فحوصات شاملة",
+          "sampleType": "Serum + EDTA Whole Blood + Clean Urine",
+          "interpretation": "جميع تحاليل وفحوصات الباقة الشاملة تم تقييمها ومطابقتها للمعدلات المرجعية المعتمدة دولياً.",
+          "parameters": [
+            {
+              "name": "Fasting Blood Glucose",
+              "unit": "mg/dL",
+              "minNormal": 70,
+              "maxNormal": 110,
+              "panicLow": 50,
+              "panicHigh": 400,
+              "method": "Hexokinase",
+              "id": "param-GLYCEMIC-0-1792483351410-ej4",
+              "result": "100",
+              "flag": "NORMAL",
+              "notes": "Diabetes & Glycemic Assessment (HbA1c & eAG)"
+            },
+            {
+              "name": "HbA1c (Glycated Hemoglobin)",
+              "unit": "%",
+              "minNormal": 4,
+              "maxNormal": 5.6,
+              "textReference": "< 5.7% Normal, 5.7 - 6.4% Pre-Diabetes, ≥ 6.5% Diabetes",
+              "method": "HPLC / Turbidimetric",
+              "id": "param-GLYCEMIC-3-1792483351411-z3u",
+              "result": "",
+              "flag": "NORMAL",
+              "notes": "Diabetes & Glycemic Assessment (HbA1c & eAG)"
+            },
+            {
+              "name": "Estimated Average Glucose (eAG)",
+              "unit": "mg/dL",
+              "minNormal": 68,
+              "maxNormal": 114,
+              "textReference": "80 - 120 mg/dL",
+              "notes": "Auto-calculated: (28.7 × HbA1c) - 46.7",
+              "id": "param-GLYCEMIC-4-1792483351411-6jt",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "ALT (SGPT)",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 45,
+              "method": "IFCC UV with P5P",
+              "textReference": "",
+              "id": "param-LFT-0-1792483351411-cgn",
+              "result": "18",
+              "flag": "NORMAL",
+              "notes": "Liver Function Tests (LFT)"
+            },
+            {
+              "name": "AST (SGOT)",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 40,
+              "method": "IFCC UV with P5P",
+              "textReference": "",
+              "id": "param-LFT-1-1792483351411-7yf",
+              "result": "27",
+              "flag": "NORMAL",
+              "notes": "Liver Function Tests (LFT)"
+            },
+            {
+              "name": "Serum Creatinine",
+              "unit": "mg/dL",
+              "minNormal": 0.6,
+              "maxNormal": 1.2,
+              "panicHigh": 4,
+              "method": "Enzymatic / Jaffe Kinetic",
+              "textReference": "",
+              "id": "param-KFT-0-1792483351412-tih",
+              "result": "0.78",
+              "flag": "NORMAL",
+              "notes": "Kidney Function Profile"
+            },
+            {
+              "name": "Blood Urea",
+              "unit": "mg/dL",
+              "minNormal": 15,
+              "maxNormal": 45,
+              "panicHigh": 120,
+              "method": "Urease-GLDH",
+              "textReference": "",
+              "id": "param-KFT-1-1792483351412-27u",
+              "result": "31",
+              "flag": "NORMAL",
+              "notes": "Kidney Function Profile"
+            },
+            {
+              "id": "p-pkg-0-1792483351413-b0c",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
+              "result": "38.98",
+              "unit": "ng/mL",
+              "minNormal": 30,
+              "maxNormal": 100,
+              "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+              "flag": "NORMAL",
+              "method": "CLIA (Chemiluminescence Immunoassay)",
+              "notes": "فحوصات وفيتامينات إضافية للباقة"
+            },
+            {
+              "id": "p-pkg-1-1792483351413-xw1",
+              "name": "Thyroid Stimulating Hormone (TSH) (Thyroid Stimulating Hormone (TSH))",
+              "result": "3.22",
+              "unit": "uIU/mL",
+              "minNormal": 0.35,
+              "maxNormal": 4.94,
+              "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+              "flag": "NORMAL",
+              "method": "CLIA (3rd Generation Chemiluminescence)",
+              "notes": "فحوصات وفيتامينات إضافية للباقة"
+            },
+            {
+              "id": "p-pkg-3-1792483351415-ndb",
+              "name": "نسبه هيموجلوبين (Hemoglobin %)",
+              "result": "13.11",
+              "unit": "g/dL",
+              "minNormal": 12.5,
+              "maxNormal": 16.5,
+              "textReference": "MALE : 13.5-17.5    /.    FEMALE : 12.5-16.5",
+              "flag": "NORMAL",
+              "method": "Enzymatic",
+              "notes": "فحوصات وفيتامينات إضافية للباقة"
+            },
+            {
+              "id": "p-pkg-2-1792483351414-i92",
+              "name": "نسبه الهيماتوكريت (Hematocrit %)",
+              "result": "46.77",
+              "unit": "%",
+              "minNormal": 37,
+              "maxNormal": 49,
+              "textReference": "37-49",
+              "flag": "NORMAL",
+              "method": "Enzymatic",
+              "notes": "Calculated (HGB × 3)"
+            },
+            {
+              "id": "p-pkg-4-1792483351415-5lo",
+              "name": "Total Serum Calcium (Total Serum Calcium)",
+              "result": "9.55",
+              "unit": "mg/dL",
+              "minNormal": 8.6,
+              "maxNormal": 10.3,
+              "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
+              "flag": "NORMAL",
+              "method": "Arsenazo III / CPC Photometric",
+              "notes": "فحوصات وفيتامينات إضافية للباقة"
+            }
+          ]
+        }
+      ],
+      "staff": {
+        "labChemist": "مني احمد",
+        "verifiedBy": "رحاب على ",
+        "pathologist": "رامي مختار ",
+        "chemistTitle": "اخصائي كيمياء اكلينيكية وهرمونات",
+        "verifierTitle": "طبيب باثولوجي / المدير التنفيذي",
+        "pathologistTitle": "طبيب الباثولوجيا الاكلينيكية والكيميائية كلية طب قصر العيني",
+        "chemistLicense": "EGY-SCI-88402",
+        "verifierLicense": "EGY-MGT-11024",
+        "pathologistLicense": "EGY-MED-48201"
+      },
+      "status": "in_progress",
+      "createdAt": "2026-10-20T07:44:00.252Z",
+      "updatedAt": "2026-10-20T08:04:22.317Z",
+      "invoiceId": "inv-1792482240252"
+    },
+    {
+      "id": "rep-1792482113808",
+      "reportNumber": "RT-2026-051",
+      "patient": {
+        "id": "pat-1792482113807",
+        "labNumber": "RT-2026-051",
+        "barcode": "RT-10081",
+        "fullName": "صباح السيد محمد",
+        "phone": "01123862286",
+        "age": 43,
+        "ageUnit": "years",
+        "gender": "female",
+        "referringDoctorTitle": "Dr.",
+        "referringDoctorName": "Herself",
+        "sampleDate": "2026-10-17",
+        "reportingDate": "2026-10-20T07:50:00.000Z",
+        "fastingHours": 12,
+        "bookingType": "branch",
+        "visitFee": 0,
+        "appointmentDate": "2026-10-17",
+        "appointmentTime": "09:00",
+        "testsSubtotal": 1504,
+        "totalCost": 752,
+        "discountApplied": 752,
+        "paymentMethod": "cash"
+      },
+      "profiles": [
+        {
+          "id": "prof-1792482113808-2heo",
+          "profileCode": "TSH",
+          "titleEn": "Thyroid Stimulating Hormone (TSH)",
+          "titleAr": "Thyroid Stimulating Hormone (TSH)",
+          "category": "Thyroid",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-1792482113808-szu",
+              "name": "Thyroid Stimulating Hormone (TSH) (Thyroid Stimulating Hormone (TSH))",
+              "result": "2.28",
+              "unit": "uIU/mL",
+              "minNormal": 0.35,
+              "maxNormal": 4.94,
+              "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+              "flag": "NORMAL",
+              "method": "CLIA (3rd Generation Chemiluminescence)"
+            }
+          ]
+        },
+        {
+          "id": "prof-1792482113808-r5k9",
+          "profileCode": "MICROALBUMIN",
+          "titleEn": "Microalbumin / Creatinine Ratio (ACR)",
+          "titleAr": "Microalbumin / Creatinine Ratio (ACR)",
+          "category": "Kidney Function",
+          "sampleType": "Random Morning Urine",
+          "parameters": [
+            {
+              "id": "p-1792482113808-mlj",
+              "name": "Microalbumin / Creatinine Ratio (ACR) (Microalbumin / Creatinine Ratio (ACR))",
+              "result": "29.33",
+              "unit": "mg/g Creat",
+              "minNormal": 0,
+              "maxNormal": 30,
+              "textReference": "Normal: < 30 mg/g | Microalbuminuria: 30 - 300 | Macroalbuminuria: > 300",
+              "flag": "NORMAL",
+              "method": "Immunoturbidimetric Quantitative Assay"
+            }
+          ]
+        },
+        {
+          "id": "prof-1792482113808-arso",
+          "profileCode": "LIPID",
+          "titleEn": "Lipid Profile",
+          "titleAr": "Lipid Profile",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum (12h Fasting)",
+          "interpretation": "Hypercholesterolemia with elevated LDL-C. Cardiovascular risk evaluation and dietary modification recommended.",
+          "parameters": [
+            {
+              "name": "Total Serum Cholesterol",
+              "unit": "mg/dL",
+              "minNormal": 120,
+              "maxNormal": 200,
+              "method": "CHOD-PAP",
+              "textReference": "",
+              "id": "param-0-1792482113808-83x",
+              "result": "277",
+              "flag": "HIGH"
+            },
+            {
+              "name": "Serum Triglycerides",
+              "unit": "mg/dL",
+              "minNormal": 40,
+              "maxNormal": 150,
+              "panicHigh": 500,
+              "method": "GPO-PAP",
+              "textReference": "",
+              "id": "param-1-1792482113808-19r",
+              "result": "227",
+              "flag": "HIGH"
+            },
+            {
+              "name": "HDL - Cholesterol (Good)",
+              "unit": "mg/dL",
+              "minNormal": 40,
+              "maxNormal": 65,
+              "method": "Direct Accelerator",
+              "textReference": "",
+              "id": "param-2-1792482113808-psg",
+              "result": "49",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "LDL - Cholesterol (Calculated)",
+              "unit": "mg/dL",
+              "minNormal": 0,
+              "maxNormal": 100,
+              "notes": "Friedewald Formula: TC - HDL - (TG/5)",
+              "textReference": "",
+              "id": "param-3-1792482113808-thp",
+              "result": "183",
+              "flag": "HIGH"
+            },
+            {
+              "name": "VLDL - Cholesterol",
+              "unit": "mg/dL",
+              "minNormal": 5,
+              "maxNormal": 30,
+              "notes": "Calculated: Triglycerides / 5",
+              "textReference": "",
+              "id": "param-4-1792482113808-cr6",
+              "result": "45",
+              "flag": "HIGH"
+            },
+            {
+              "name": "Non-HDL Cholesterol",
+              "unit": "mg/dL",
+              "minNormal": 0,
+              "maxNormal": 130,
+              "notes": "Calculated: Total Cholesterol - HDL",
+              "textReference": "",
+              "id": "param-5-1792482113808-j6q",
+              "result": "228",
+              "flag": "HIGH"
+            },
+            {
+              "name": "Total Chol / HDL Ratio",
+              "unit": "Ratio",
+              "minNormal": 0,
+              "maxNormal": 4.5,
+              "textReference": "< 4.5 Desirable",
+              "notes": "Desirable < 4.5",
+              "id": "param-6-1792482113808-uyf",
+              "result": "5.7",
+              "flag": "HIGH"
+            },
+            {
+              "name": "LDL / HDL Ratio",
+              "unit": "Ratio",
+              "minNormal": 0,
+              "maxNormal": 3,
+              "textReference": "< 3.0 Desirable",
+              "id": "param-7-1792482113808-fhk",
+              "result": "3.73",
+              "flag": "HIGH"
+            }
+          ],
+          "interpretations": [
+            "Hypercholesterolemia with elevated LDL-C. Cardiovascular risk evaluation and dietary modification recommended."
+          ]
+        },
+        {
+          "id": "prof-1792482552363-9j6u",
+          "profileCode": "LFT",
+          "titleEn": "Liver Function Tests (LFT)",
+          "titleAr": "Liver Function Tests (LFT)",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum",
+          "interpretation": "Enzyme activities and synthetic hepatic markers are within normal limits.",
+          "parameters": [
+            {
+              "name": "ALT (SGPT)",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 45,
+              "method": "IFCC UV with P5P",
+              "textReference": "",
+              "id": "param-1792482552363-0",
+              "result": "26",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "AST (SGOT)",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 40,
+              "method": "IFCC UV with P5P",
+              "textReference": "",
+              "id": "param-1792482552363-1",
+              "result": "35",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "AST/ALT Ratio (De Ritis)",
+              "unit": "Ratio",
+              "minNormal": 0.6,
+              "maxNormal": 1.1,
+              "notes": "Normal < 1.0 (Elevated > 2.0 in alcoholic liver disease/cirrhosis)",
+              "textReference": "",
+              "id": "param-1792482552363-11",
+              "result": "1.4",
+              "flag": "HIGH"
+            }
+          ]
+        }
+      ],
+      "staff": {
+        "labChemist": "مني احمد",
+        "verifiedBy": "رحاب على ",
+        "pathologist": "رامي مختار ",
+        "chemistTitle": "اخصائي كيمياء اكلينيكية وهرمونات",
+        "verifierTitle": "طبيب باثولوجي / المدير التنفيذي",
+        "pathologistTitle": "طبيب الباثولوجيا الاكلينيكية والكيميائية كلية طب قصر العيني",
+        "chemistLicense": "EGY-SCI-88402",
+        "verifierLicense": "EGY-MGT-11024",
+        "pathologistLicense": "EGY-MED-48201"
+      },
+      "status": "released",
+      "createdAt": "2026-10-20T07:41:53.808Z",
+      "updatedAt": "2026-10-20T07:51:22.766Z",
+      "invoiceId": "inv-1792482113809"
+    },
     {
       "id": "rep-1792270290136",
       "reportNumber": "RT-2026-048",
@@ -15464,6 +16119,435 @@
   ],
   "incomeRecords": [
     {
+      "id": "inv-1792482321561",
+      "invoiceNumber": "INV-2026-053",
+      "patientName": "صابر حسنى نبية",
+      "patientPhone": "01226008453",
+      "patientAge": 60,
+      "patientGender": "male",
+      "barcode": "RT-10083",
+      "labNumber": "RT-2026-053",
+      "referringDoctor": "Himself",
+      "tests": [
+        {
+          "id": "prof-GLYCEMIC",
+          "code": "GLYCEMIC",
+          "nameAr": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "nameEn": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Fluoride Plasma & EDTA Blood"
+        },
+        {
+          "id": "prof-LIPID",
+          "code": "LIPID",
+          "nameAr": "Lipid Profile",
+          "nameEn": "Lipid Profile",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum (12h Fasting)"
+        },
+        {
+          "id": "prof-LFT",
+          "code": "LFT",
+          "nameAr": "Liver Function Tests (LFT)",
+          "nameEn": "Liver Function Tests (LFT)",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum"
+        },
+        {
+          "id": "prof-KFT",
+          "code": "KFT",
+          "nameAr": "Kidney Function Profile",
+          "nameEn": "Kidney Function Profile",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum"
+        },
+        {
+          "id": "t-79",
+          "code": "VIT_D",
+          "nameAr": "25-Hydroxy Vitamin D Total",
+          "nameEn": "25-Hydroxy Vitamin D Total",
+          "category": "Anemia & Vitamins",
+          "price": 360,
+          "cost": 85,
+          "sampleType": "Serum (Protected from light)",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "ng/mL",
+          "minNormal": 30,
+          "maxNormal": 100,
+          "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+          "method": "CLIA (Chemiluminescence Immunoassay)",
+          "fastingInstructions": "No fasting required"
+        },
+        {
+          "id": "t-53",
+          "code": "TSH",
+          "nameAr": "Thyroid Stimulating Hormone (TSH)",
+          "nameEn": "Thyroid Stimulating Hormone (TSH)",
+          "category": "Thyroid",
+          "price": 150,
+          "cost": 30,
+          "sampleType": "Serum",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "uIU/mL",
+          "minNormal": 0.35,
+          "maxNormal": 4.94,
+          "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+          "method": "CLIA (3rd Generation Chemiluminescence)",
+          "fastingInstructions": "No fasting required (early morning, before thyroid medication)"
+        },
+        {
+          "id": "test-1792164472194",
+          "code": "HCT_632",
+          "nameEn": "Hematocrit %",
+          "nameAr": "نسبه الهيماتوكريت",
+          "category": "Clinical hematology",
+          "sampleType": "EDTA BLOOD",
+          "unit": "%",
+          "minNormal": 37,
+          "maxNormal": 49,
+          "textReference": "37-49",
+          "method": "Enzymatic",
+          "fastingInstructions": "لا يشترط الصيام",
+          "turnaroundHours": 2,
+          "price": 20
+        },
+        {
+          "id": "test-1792164310191",
+          "code": "HB_727",
+          "nameEn": "Hemoglobin %",
+          "nameAr": "نسبه هيموجلوبين",
+          "category": "Clinical hematology ",
+          "sampleType": "EDTA BLOOD",
+          "unit": "g/dL",
+          "minNormal": 12.5,
+          "maxNormal": 16.5,
+          "textReference": "MALE : 13.5-17.5    /.    FEMALE : 12.5-16.5",
+          "method": "Enzymatic",
+          "fastingInstructions": "لا يشترط الصيام",
+          "turnaroundHours": 2,
+          "price": 200
+        },
+        {
+          "id": "t-26",
+          "code": "CALCIUM_TOTAL",
+          "nameAr": "Total Serum Calcium",
+          "nameEn": "Total Serum Calcium",
+          "category": "Minerals & Bone",
+          "price": 110,
+          "cost": 15,
+          "sampleType": "Serum",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "mg/dL",
+          "minNormal": 8.6,
+          "maxNormal": 10.3,
+          "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
+          "method": "Arsenazo III / CPC Photometric",
+          "fastingInstructions": "Fasting 8-10 hours (morning preferred)"
+        },
+        {
+          "id": "t-9",
+          "code": "ESR",
+          "nameAr": "Erythrocyte Sedimentation Rate",
+          "nameEn": "Erythrocyte Sedimentation Rate",
+          "category": "Hematology",
+          "price": 70,
+          "cost": 15,
+          "sampleType": "Citrated Whole Blood (1:4)",
+          "turnaroundTime": "2 hours",
+          "unit": "mm/1st hr",
+          "minNormal": 0,
+          "maxNormal": 15,
+          "textReference": "Males: < 15 mm/1st hr | Females: < 20 mm/1st hr (Higher with age)",
+          "method": "Modified Westergren Automated Method",
+          "fastingInstructions": "No fasting required"
+        }
+      ],
+      "subtotal": 521,
+      "testsSubtotal": 521,
+      "discount": 0,
+      "visitFee": 0,
+      "isHomeVisit": false,
+      "netAmount": 521,
+      "paidAmount": 521,
+      "remainingAmount": 0,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "cashierName": "أ.د. رامي مختار",
+      "branch": "فرع القصر العيني - الرئيسي",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-20T07:45:21.561Z",
+      "updatedAt": "2026-10-20T07:45:21.561Z"
+    },
+    {
+      "id": "inv-1792482240252",
+      "invoiceNumber": "INV-2026-052",
+      "patientName": "محسن عبدالمنعم",
+      "patientPhone": "01117552241",
+      "patientAge": 58,
+      "patientGender": "male",
+      "barcode": "RT-10082",
+      "labNumber": "RT-2026-052",
+      "referringDoctor": "Himself",
+      "tests": [
+        {
+          "id": "prof-GLYCEMIC",
+          "code": "GLYCEMIC",
+          "nameAr": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "nameEn": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Fluoride Plasma & EDTA Blood"
+        },
+        {
+          "id": "prof-LIPID",
+          "code": "LIPID",
+          "nameAr": "Lipid Profile",
+          "nameEn": "Lipid Profile",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum (12h Fasting)"
+        },
+        {
+          "id": "prof-LFT",
+          "code": "LFT",
+          "nameAr": "Liver Function Tests (LFT)",
+          "nameEn": "Liver Function Tests (LFT)",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum"
+        },
+        {
+          "id": "prof-KFT",
+          "code": "KFT",
+          "nameAr": "Kidney Function Profile",
+          "nameEn": "Kidney Function Profile",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum"
+        },
+        {
+          "id": "t-79",
+          "code": "VIT_D",
+          "nameAr": "25-Hydroxy Vitamin D Total",
+          "nameEn": "25-Hydroxy Vitamin D Total",
+          "category": "Anemia & Vitamins",
+          "price": 360,
+          "cost": 85,
+          "sampleType": "Serum (Protected from light)",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "ng/mL",
+          "minNormal": 30,
+          "maxNormal": 100,
+          "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+          "method": "CLIA (Chemiluminescence Immunoassay)",
+          "fastingInstructions": "No fasting required"
+        },
+        {
+          "id": "t-53",
+          "code": "TSH",
+          "nameAr": "Thyroid Stimulating Hormone (TSH)",
+          "nameEn": "Thyroid Stimulating Hormone (TSH)",
+          "category": "Thyroid",
+          "price": 150,
+          "cost": 30,
+          "sampleType": "Serum",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "uIU/mL",
+          "minNormal": 0.35,
+          "maxNormal": 4.94,
+          "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+          "method": "CLIA (3rd Generation Chemiluminescence)",
+          "fastingInstructions": "No fasting required (early morning, before thyroid medication)"
+        },
+        {
+          "id": "test-1792164472194",
+          "code": "HCT_632",
+          "nameEn": "Hematocrit %",
+          "nameAr": "نسبه الهيماتوكريت",
+          "category": "Clinical hematology",
+          "sampleType": "EDTA BLOOD",
+          "unit": "%",
+          "minNormal": 37,
+          "maxNormal": 49,
+          "textReference": "37-49",
+          "method": "Enzymatic",
+          "fastingInstructions": "لا يشترط الصيام",
+          "turnaroundHours": 2,
+          "price": 20
+        },
+        {
+          "id": "test-1792164310191",
+          "code": "HB_727",
+          "nameEn": "Hemoglobin %",
+          "nameAr": "نسبه هيموجلوبين",
+          "category": "Clinical hematology ",
+          "sampleType": "EDTA BLOOD",
+          "unit": "g/dL",
+          "minNormal": 12.5,
+          "maxNormal": 16.5,
+          "textReference": "MALE : 13.5-17.5    /.    FEMALE : 12.5-16.5",
+          "method": "Enzymatic",
+          "fastingInstructions": "لا يشترط الصيام",
+          "turnaroundHours": 2,
+          "price": 200
+        },
+        {
+          "id": "t-26",
+          "code": "CALCIUM_TOTAL",
+          "nameAr": "Total Serum Calcium",
+          "nameEn": "Total Serum Calcium",
+          "category": "Minerals & Bone",
+          "price": 110,
+          "cost": 15,
+          "sampleType": "Serum",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "mg/dL",
+          "minNormal": 8.6,
+          "maxNormal": 10.3,
+          "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
+          "method": "Arsenazo III / CPC Photometric",
+          "fastingInstructions": "Fasting 8-10 hours (morning preferred)"
+        },
+        {
+          "id": "t-9",
+          "code": "ESR",
+          "nameAr": "Erythrocyte Sedimentation Rate",
+          "nameEn": "Erythrocyte Sedimentation Rate",
+          "category": "Hematology",
+          "price": 70,
+          "cost": 15,
+          "sampleType": "Citrated Whole Blood (1:4)",
+          "turnaroundTime": "2 hours",
+          "unit": "mm/1st hr",
+          "minNormal": 0,
+          "maxNormal": 15,
+          "textReference": "Males: < 15 mm/1st hr | Females: < 20 mm/1st hr (Higher with age)",
+          "method": "Modified Westergren Automated Method",
+          "fastingInstructions": "No fasting required"
+        }
+      ],
+      "subtotal": 521,
+      "testsSubtotal": 521,
+      "discount": 0,
+      "visitFee": 0,
+      "isHomeVisit": false,
+      "netAmount": 521,
+      "paidAmount": 521,
+      "remainingAmount": 0,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "cashierName": "أ.د. رامي مختار",
+      "branch": "فرع القصر العيني - الرئيسي",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-20T07:44:00.252Z",
+      "updatedAt": "2026-10-20T07:44:00.252Z"
+    },
+    {
+      "id": "inv-1792482113809",
+      "invoiceNumber": "INV-2026-051",
+      "patientName": "صباح السيد محمد",
+      "patientPhone": "01123862286",
+      "patientAge": 43,
+      "patientGender": "female",
+      "barcode": "RT-10081",
+      "labNumber": "RT-2026-051",
+      "referringDoctor": "Herself",
+      "tests": [
+        {
+          "id": "t-33",
+          "code": "AST",
+          "nameAr": "Aspartate Aminotransferase (AST / SGOT)",
+          "nameEn": "Aspartate Aminotransferase (AST / SGOT)",
+          "category": "Liver Function",
+          "price": 188,
+          "cost": 12,
+          "sampleType": "Serum",
+          "turnaroundTime": "Immediate (1 hour)",
+          "unit": "U/L",
+          "minNormal": 0,
+          "maxNormal": 40,
+          "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
+          "method": "IFCC Kinetic UV"
+        },
+        {
+          "id": "t-32",
+          "code": "ALT",
+          "nameAr": "Alanine Aminotransferase (ALT / SGPT)",
+          "nameEn": "Alanine Aminotransferase (ALT / SGPT)",
+          "category": "Liver Function",
+          "price": 188,
+          "cost": 12,
+          "sampleType": "Serum",
+          "turnaroundTime": "Immediate (1 hour)",
+          "unit": "U/L",
+          "minNormal": 0,
+          "maxNormal": 41,
+          "textReference": "Adult Males: < 41 U/L | Adult Females: < 38  U/L",
+          "method": "IFCC Kinetic UV without Pyridoxal Phosphate"
+        },
+        {
+          "id": "t-53",
+          "code": "TSH",
+          "nameAr": "Thyroid Stimulating Hormone (TSH)",
+          "nameEn": "Thyroid Stimulating Hormone (TSH)",
+          "category": "Thyroid",
+          "price": 412,
+          "cost": 30,
+          "sampleType": "Serum",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "uIU/mL",
+          "minNormal": 0.55,
+          "maxNormal": 4.78,
+          "textReference": "Adults: 0.55 - 4.78 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+          "method": "CLIA (3rd Generation Chemiluminescence)"
+        },
+        {
+          "id": "t-30",
+          "code": "MICROALBUMIN",
+          "nameAr": "Microalbumin / Creatinine Ratio (ACR)",
+          "nameEn": "Microalbumin / Creatinine Ratio (ACR)",
+          "category": "Kidney Function",
+          "price": 466,
+          "cost": 40,
+          "sampleType": "Random Morning Urine",
+          "turnaroundTime": "Within 3 hours",
+          "unit": "mg/g Creat",
+          "minNormal": 0,
+          "maxNormal": 30,
+          "textReference": "Normal: < 30 mg/g | Microalbuminuria: 30 - 300 | Macroalbuminuria: > 300",
+          "method": "Immunoturbidimetric Quantitative Assay"
+        },
+        {
+          "id": "prof-LIPID",
+          "code": "LIPID",
+          "nameAr": "Lipid Profile",
+          "nameEn": "Lipid Profile",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum (12h Fasting)"
+        }
+      ],
+      "subtotal": 752,
+      "testsSubtotal": 1504,
+      "discount": 752,
+      "visitFee": 0,
+      "isHomeVisit": false,
+      "netAmount": 0,
+      "paidAmount": 0,
+      "remainingAmount": 0,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "cashierName": "أ.د. رامي مختار",
+      "branch": "فرع القصر العيني - الرئيسي",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-20T07:41:53.809Z",
+      "updatedAt": "2026-10-20T07:41:53.809Z"
+    },
+    {
       "id": "inv-1792270290136",
       "invoiceNumber": "INV-2026-048",
       "patientName": "فيرونيا ممدوح",
@@ -20487,6 +21571,75 @@
   ],
   "loyaltyProfiles": [
     {
+      "patientId": "pat-loyalty-1792482321573",
+      "patientName": "صابر حسنى نبية",
+      "phone": "01226008453",
+      "barcode": "RT-10083",
+      "cardNumber": "RT-GOLD-10083",
+      "bloodGroup": "",
+      "totalPoints": 521,
+      "tier": "Gold",
+      "lifetimeSpent": 521,
+      "issueDate": "2026-10-20",
+      "transactions": [
+        {
+          "id": "tx-1792482321573",
+          "date": "2026-10-20",
+          "type": "earn",
+          "points": 521,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-053",
+          "invoiceNumber": "RT-2026-053",
+          "amountEGP": 521
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1792482240284",
+      "patientName": "محسن عبدالمنعم",
+      "phone": "01117552241",
+      "barcode": "RT-10082",
+      "cardNumber": "RT-GOLD-10082",
+      "bloodGroup": "",
+      "totalPoints": 521,
+      "tier": "Gold",
+      "lifetimeSpent": 521,
+      "issueDate": "2026-10-20",
+      "transactions": [
+        {
+          "id": "tx-1792482240284",
+          "date": "2026-10-20",
+          "type": "earn",
+          "points": 521,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-052",
+          "invoiceNumber": "RT-2026-052",
+          "amountEGP": 521
+        }
+      ]
+    },
+    {
+      "patientId": "pat-loyalty-1792482113834",
+      "patientName": "صباح السيد محمد",
+      "phone": "01123862286",
+      "barcode": "RT-10081",
+      "cardNumber": "RT-GOLD-10081",
+      "bloodGroup": "",
+      "totalPoints": 752,
+      "tier": "Gold",
+      "lifetimeSpent": 752,
+      "issueDate": "2026-10-20",
+      "transactions": [
+        {
+          "id": "tx-1792482113834",
+          "date": "2026-10-20",
+          "type": "earn",
+          "points": 752,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-051",
+          "invoiceNumber": "RT-2026-051",
+          "amountEGP": 752
+        }
+      ]
+    },
+    {
       "patientId": "pat-loyalty-1792270290141",
       "patientName": "فيرونيا ممدوح",
       "phone": "01221502703",
@@ -20735,504 +21888,504 @@
   "dailyCloseouts": [],
   "auditLogs": [
     {
-      "id": "log-1792432529143-e6xeo",
-      "timestamp": "10/19/2026, 8:55:29 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "SYNC",
-      "module": "SECURITY",
-      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
-    },
-    {
-      "id": "log-1792432510903-c2xum",
-      "timestamp": "10/19/2026, 8:55:10 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "SYNC",
-      "module": "SECURITY",
-      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
-    },
-    {
-      "id": "log-1792432470328-zobo6",
-      "timestamp": "10/19/2026, 8:54:30 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "UPDATE",
-      "module": "SETTINGS",
-      "description": "تحديث الإمضاءات الافتراضية لطاقم الفحص والاعتماد"
-    },
-    {
-      "id": "log-1792432470327-5b16q",
-      "timestamp": "10/19/2026, 8:54:30 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "UPDATE",
-      "module": "SETTINGS",
-      "description": "تحديث بيانات المعمل والاعتماد الطبي ووسائل التواصل"
-    },
-    {
-      "id": "log-1792429721171-cqyhk",
-      "timestamp": "10/19/2026, 8:08:41 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "SYNC",
-      "module": "SECURITY",
-      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
-    },
-    {
-      "id": "log-1792429399779-sljom",
-      "timestamp": "10/19/2026, 8:03:19 PM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "SYNC",
-      "module": "SECURITY",
-      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
-    },
-    {
-      "id": "log-1792397492841-ycq04",
-      "timestamp": "10/19/2026, 11:11:32 AM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "UPDATE",
-      "module": "SETTINGS",
-      "description": "تحديث الإمضاءات الافتراضية لطاقم الفحص والاعتماد"
-    },
-    {
-      "id": "log-1792397492841-38tgu",
-      "timestamp": "10/19/2026, 11:11:32 AM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "UPDATE",
-      "module": "SETTINGS",
-      "description": "تحديث بيانات المعمل والاعتماد الطبي ووسائل التواصل"
-    },
-    {
-      "id": "log-1792275601654-a8ijo",
-      "timestamp": "10/18/2026, 1:20:01 AM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "SYNC",
-      "module": "SECURITY",
-      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
-    },
-    {
-      "id": "log-1792275593973-wrn9w",
-      "timestamp": "10/18/2026, 1:19:53 AM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "SYNC",
-      "module": "SECURITY",
-      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
-    },
-    {
-      "id": "log-1792270963644-aevov",
-      "timestamp": "10/18/2026, 12:02:43 AM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "SYNC",
-      "module": "SECURITY",
-      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
-    },
-    {
-      "id": "log-1792270927853-ayjq0",
-      "timestamp": "10/18/2026, 12:02:07 AM",
-      "userId": "user-ceo",
-      "userName": "أ.د. رامي مختار",
-      "userRole": "admin_ceo",
-      "action": "SYNC",
-      "module": "SECURITY",
-      "description": "مزامنة النسخة الاحتياطية الموحدة مع مستودع GitHub بنجاح"
-    },
-    {
-      "id": "log-1792270469710-ywe41",
-      "timestamp": "10/17/2026, 11:54:29 PM",
+      "id": "log-1792483462318-tmr8z",
+      "timestamp": "10/20/2026, 11:04:22 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270407440-ssdgy",
-      "timestamp": "10/17/2026, 11:53:27 PM",
+      "id": "log-1792483449971-50nl7",
+      "timestamp": "10/20/2026, 11:04:09 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270406745-qem0w",
-      "timestamp": "10/17/2026, 11:53:26 PM",
+      "id": "log-1792483446982-wb01q",
+      "timestamp": "10/20/2026, 11:04:06 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270404961-bi8pt",
-      "timestamp": "10/17/2026, 11:53:24 PM",
+      "id": "log-1792483446864-96wls",
+      "timestamp": "10/20/2026, 11:04:06 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270403225-bd7wp",
-      "timestamp": "10/17/2026, 11:53:23 PM",
+      "id": "log-1792483446435-b5z8a",
+      "timestamp": "10/20/2026, 11:04:06 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270397721-k56hj",
-      "timestamp": "10/17/2026, 11:53:17 PM",
+      "id": "log-1792483445976-mot1e",
+      "timestamp": "10/20/2026, 11:04:05 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270380727-okyga",
-      "timestamp": "10/17/2026, 11:53:00 PM",
+      "id": "log-1792483438658-zpw5u",
+      "timestamp": "10/20/2026, 11:03:58 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270380699-j48co",
-      "timestamp": "10/17/2026, 11:53:00 PM",
+      "id": "log-1792483438553-pr3mw",
+      "timestamp": "10/20/2026, 11:03:58 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270380021-rdr9b",
-      "timestamp": "10/17/2026, 11:53:00 PM",
+      "id": "log-1792483438179-dfkqz",
+      "timestamp": "10/20/2026, 11:03:58 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270379350-4vidd",
-      "timestamp": "10/17/2026, 11:52:59 PM",
+      "id": "log-1792483437559-997ca",
+      "timestamp": "10/20/2026, 11:03:57 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270378974-y1vf8",
-      "timestamp": "10/17/2026, 11:52:58 PM",
+      "id": "log-1792483437030-d5cut",
+      "timestamp": "10/20/2026, 11:03:57 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270378352-lmy22",
-      "timestamp": "10/17/2026, 11:52:58 PM",
+      "id": "log-1792483432639-nmhpm",
+      "timestamp": "10/20/2026, 11:03:52 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270377772-wlve8",
-      "timestamp": "10/17/2026, 11:52:57 PM",
+      "id": "log-1792483432530-ydb1z",
+      "timestamp": "10/20/2026, 11:03:52 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270377021-n78ry",
-      "timestamp": "10/17/2026, 11:52:57 PM",
+      "id": "log-1792483431889-qrm8a",
+      "timestamp": "10/20/2026, 11:03:51 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270376392-6clxj",
-      "timestamp": "10/17/2026, 11:52:56 PM",
+      "id": "log-1792483431126-mlad1",
+      "timestamp": "10/20/2026, 11:03:51 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270375680-zyb5f",
-      "timestamp": "10/17/2026, 11:52:55 PM",
+      "id": "log-1792483430930-1r36o",
+      "timestamp": "10/20/2026, 11:03:50 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270375177-3ct6c",
-      "timestamp": "10/17/2026, 11:52:55 PM",
+      "id": "log-1792483427988-aubh4",
+      "timestamp": "10/20/2026, 11:03:47 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270374514-vk06o",
-      "timestamp": "10/17/2026, 11:52:54 PM",
+      "id": "log-1792483424055-trzjc",
+      "timestamp": "10/20/2026, 11:03:44 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270374490-wffr7",
-      "timestamp": "10/17/2026, 11:52:54 PM",
+      "id": "log-1792483423937-cc40b",
+      "timestamp": "10/20/2026, 11:03:43 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270372701-ook2f",
-      "timestamp": "10/17/2026, 11:52:52 PM",
+      "id": "log-1792483423483-xm7sa",
+      "timestamp": "10/20/2026, 11:03:43 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270371805-11iwh",
-      "timestamp": "10/17/2026, 11:52:51 PM",
+      "id": "log-1792483422843-mfg6l",
+      "timestamp": "10/20/2026, 11:03:42 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270370784-u7cvw",
-      "timestamp": "10/17/2026, 11:52:50 PM",
+      "id": "log-1792483419420-fw8pt",
+      "timestamp": "10/20/2026, 11:03:39 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270369784-2bx13",
-      "timestamp": "10/17/2026, 11:52:49 PM",
+      "id": "log-1792483418839-x0mng",
+      "timestamp": "10/20/2026, 11:03:38 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270369149-bi80h",
-      "timestamp": "10/17/2026, 11:52:49 PM",
+      "id": "log-1792483418810-k9ann",
+      "timestamp": "10/20/2026, 11:03:38 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270368656-t73zq",
-      "timestamp": "10/17/2026, 11:52:48 PM",
+      "id": "log-1792483417801-dqbot",
+      "timestamp": "10/20/2026, 11:03:37 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270368086-fx73f",
-      "timestamp": "10/17/2026, 11:52:48 PM",
+      "id": "log-1792483417709-ehyl1",
+      "timestamp": "10/20/2026, 11:03:37 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270367582-mcq6o",
-      "timestamp": "10/17/2026, 11:52:47 PM",
+      "id": "log-1792483417685-mokdf",
+      "timestamp": "10/20/2026, 11:03:37 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270367048-5ku9s",
-      "timestamp": "10/17/2026, 11:52:47 PM",
+      "id": "log-1792483417341-pslc9",
+      "timestamp": "10/20/2026, 11:03:37 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270366500-k5wsh",
-      "timestamp": "10/17/2026, 11:52:46 PM",
+      "id": "log-1792483416889-2nset",
+      "timestamp": "10/20/2026, 11:03:36 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270365886-hbm3d",
-      "timestamp": "10/17/2026, 11:52:45 PM",
+      "id": "log-1792483416211-68fbu",
+      "timestamp": "10/20/2026, 11:03:36 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270365181-2zxtl",
-      "timestamp": "10/17/2026, 11:52:45 PM",
+      "id": "log-1792483413643-ke0d8",
+      "timestamp": "10/20/2026, 11:03:33 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270364703-et2lv",
-      "timestamp": "10/17/2026, 11:52:44 PM",
+      "id": "log-1792483413052-rhw7m",
+      "timestamp": "10/20/2026, 11:03:33 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270364200-4a2gg",
-      "timestamp": "10/17/2026, 11:52:44 PM",
+      "id": "log-1792483412056-apxst",
+      "timestamp": "10/20/2026, 11:03:32 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270363737-f46k0",
-      "timestamp": "10/17/2026, 11:52:43 PM",
+      "id": "log-1792483411261-0v27p",
+      "timestamp": "10/20/2026, 11:03:31 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270363068-ttf7y",
-      "timestamp": "10/17/2026, 11:52:43 PM",
+      "id": "log-1792483407259-194ui",
+      "timestamp": "10/20/2026, 11:03:27 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270362582-tz0yr",
-      "timestamp": "10/17/2026, 11:52:42 PM",
+      "id": "log-1792483406878-61ogy",
+      "timestamp": "10/20/2026, 11:03:26 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270362096-u846p",
-      "timestamp": "10/17/2026, 11:52:42 PM",
+      "id": "log-1792483401981-nlu9q",
+      "timestamp": "10/20/2026, 11:03:21 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     },
     {
-      "id": "log-1792270339235-qj2fz",
-      "timestamp": "10/17/2026, 11:52:19 PM",
+      "id": "log-1792483401818-jvr98",
+      "timestamp": "10/20/2026, 11:03:21 AM",
       "userId": "user-ceo",
       "userName": "أ.د. رامي مختار",
       "userRole": "admin_ceo",
       "action": "UPDATE",
       "module": "DIAGNOSTIC",
-      "description": "تحديث التقرير الطبي رقم rep-1792270290136"
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
+    },
+    {
+      "id": "log-1792483401317-qg0if",
+      "timestamp": "10/20/2026, 11:03:21 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
+    },
+    {
+      "id": "log-1792483400987-yow2e",
+      "timestamp": "10/20/2026, 11:03:20 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
+    },
+    {
+      "id": "log-1792483396015-1gw7h",
+      "timestamp": "10/20/2026, 11:03:16 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
+    },
+    {
+      "id": "log-1792483394366-5pt4n",
+      "timestamp": "10/20/2026, 11:03:14 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
+    },
+    {
+      "id": "log-1792483393484-bhybi",
+      "timestamp": "10/20/2026, 11:03:13 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
+    },
+    {
+      "id": "log-1792483393162-6n799",
+      "timestamp": "10/20/2026, 11:03:13 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
+    },
+    {
+      "id": "log-1792483392156-ggiq0",
+      "timestamp": "10/20/2026, 11:03:12 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
+    },
+    {
+      "id": "log-1792483391725-ft474",
+      "timestamp": "10/20/2026, 11:03:11 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
+    },
+    {
+      "id": "log-1792483391322-78yf3",
+      "timestamp": "10/20/2026, 11:03:11 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
+    },
+    {
+      "id": "log-1792483391098-gocm7",
+      "timestamp": "10/20/2026, 11:03:11 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
+    },
+    {
+      "id": "log-1792483388939-jloc8",
+      "timestamp": "10/20/2026, 11:03:08 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
+    },
+    {
+      "id": "log-1792483388267-h0ke3",
+      "timestamp": "10/20/2026, 11:03:08 AM",
+      "userId": "user-ceo",
+      "userName": "أ.د. رامي مختار",
+      "userRole": "admin_ceo",
+      "action": "UPDATE",
+      "module": "DIAGNOSTIC",
+      "description": "تحديث التقرير الطبي رقم rep-1792482240251"
     }
   ]
 }
