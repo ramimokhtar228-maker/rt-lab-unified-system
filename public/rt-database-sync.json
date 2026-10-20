@@ -1,6 +1,6 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-20T07:45:22.239Z",
+  "syncedAt": "2026-10-20T07:45:42.053Z",
   "reports": [
     {
       "id": "rep-1792482321561",
@@ -22134,6 +22134,29 @@
   "expenses": [],
   "loyaltyProfiles": [
     {
+      "patientId": "pat-loyalty-1792482321573",
+      "patientName": "صابر حسنى نبية",
+      "phone": "01226008453",
+      "barcode": "RT-10083",
+      "cardNumber": "RT-GOLD-10083",
+      "bloodGroup": "",
+      "totalPoints": 521,
+      "tier": "Gold",
+      "lifetimeSpent": 521,
+      "issueDate": "2026-10-20",
+      "transactions": [
+        {
+          "id": "tx-1792482321573",
+          "date": "2026-10-20",
+          "type": "earn",
+          "points": 521,
+          "description": "اكتساب نقاط ترحيبية وفاتورة رقم RT-2026-053",
+          "invoiceNumber": "RT-2026-053",
+          "amountEGP": 521
+        }
+      ]
+    },
+    {
       "patientId": "pat-loyalty-1792482240284",
       "patientName": "محسن عبدالمنعم",
       "phone": "01117552241",
@@ -22425,7 +22448,6 @@
       "lastRestockedDate": "2026-08-20"
     }
   ],
-  "dailyCloseouts": [],
   "labInfo": {
     "labNameAr": "معامل RT للتحاليل الطبية والتشخيصية",
     "labNameEn": "RT Diagnostic Laboratories",
