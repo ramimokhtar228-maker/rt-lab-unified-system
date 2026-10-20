@@ -1,7 +1,234 @@
 {
   "system": "RT Lab Unified Medical & Financial ERP",
-  "syncedAt": "2026-10-20T07:35:37.602Z",
+  "syncedAt": "2026-10-20T07:42:07.937Z",
   "reports": [
+    {
+      "id": "rep-1792482113808",
+      "reportNumber": "RT-2026-051",
+      "patient": {
+        "id": "pat-1792482113807",
+        "labNumber": "RT-2026-051",
+        "barcode": "RT-10081",
+        "fullName": "صباح السيد محمد",
+        "phone": "01123862286",
+        "age": 43,
+        "ageUnit": "years",
+        "gender": "female",
+        "referringDoctorTitle": "Dr.",
+        "referringDoctorName": "Herself",
+        "sampleDate": "2026-10-17",
+        "reportingDate": "2026-10-17",
+        "fastingHours": 12,
+        "bookingType": "branch",
+        "visitFee": 0,
+        "appointmentDate": "2026-10-17",
+        "appointmentTime": "09:00",
+        "testsSubtotal": 1504,
+        "totalCost": 752,
+        "discountApplied": 752,
+        "paymentMethod": "cash"
+      },
+      "profiles": [
+        {
+          "id": "prof-1792482113808-liu3",
+          "profileCode": "AST",
+          "titleEn": "Aspartate Aminotransferase (AST / SGOT)",
+          "titleAr": "Aspartate Aminotransferase (AST / SGOT)",
+          "category": "Liver Function",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-1792482113808-844",
+              "name": "Aspartate Aminotransferase (AST / SGOT) (Aspartate Aminotransferase (AST / SGOT))",
+              "result": "",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 40,
+              "textReference": "Adult Males: < 40 U/L | Adult Females: < 32 U/L",
+              "flag": "NORMAL",
+              "method": "IFCC Kinetic UV"
+            }
+          ]
+        },
+        {
+          "id": "prof-1792482113808-hucd",
+          "profileCode": "ALT",
+          "titleEn": "Alanine Aminotransferase (ALT / SGPT)",
+          "titleAr": "Alanine Aminotransferase (ALT / SGPT)",
+          "category": "Liver Function",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-1792482113808-yaq",
+              "name": "Alanine Aminotransferase (ALT / SGPT) (Alanine Aminotransferase (ALT / SGPT))",
+              "result": "",
+              "unit": "U/L",
+              "minNormal": 0,
+              "maxNormal": 41,
+              "textReference": "Adult Males: < 41 U/L | Adult Females: < 33 U/L",
+              "flag": "NORMAL",
+              "method": "IFCC Kinetic UV without Pyridoxal Phosphate"
+            }
+          ]
+        },
+        {
+          "id": "prof-1792482113808-2heo",
+          "profileCode": "TSH",
+          "titleEn": "Thyroid Stimulating Hormone (TSH)",
+          "titleAr": "Thyroid Stimulating Hormone (TSH)",
+          "category": "Thyroid",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-1792482113808-szu",
+              "name": "Thyroid Stimulating Hormone (TSH) (Thyroid Stimulating Hormone (TSH))",
+              "result": "",
+              "unit": "uIU/mL",
+              "minNormal": 0.35,
+              "maxNormal": 4.94,
+              "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+              "flag": "NORMAL",
+              "method": "CLIA (3rd Generation Chemiluminescence)"
+            }
+          ]
+        },
+        {
+          "id": "prof-1792482113808-r5k9",
+          "profileCode": "MICROALBUMIN",
+          "titleEn": "Microalbumin / Creatinine Ratio (ACR)",
+          "titleAr": "Microalbumin / Creatinine Ratio (ACR)",
+          "category": "Kidney Function",
+          "sampleType": "Random Morning Urine",
+          "parameters": [
+            {
+              "id": "p-1792482113808-mlj",
+              "name": "Microalbumin / Creatinine Ratio (ACR) (Microalbumin / Creatinine Ratio (ACR))",
+              "result": "",
+              "unit": "mg/g Creat",
+              "minNormal": 0,
+              "maxNormal": 30,
+              "textReference": "Normal: < 30 mg/g | Microalbuminuria: 30 - 300 | Macroalbuminuria: > 300",
+              "flag": "NORMAL",
+              "method": "Immunoturbidimetric Quantitative Assay"
+            }
+          ]
+        },
+        {
+          "id": "prof-1792482113808-arso",
+          "profileCode": "LIPID",
+          "titleEn": "Lipid Profile",
+          "titleAr": "Lipid Profile",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum (12h Fasting)",
+          "interpretation": "Lipid ratios demonstrate favorable cardiovascular risk stratification.",
+          "parameters": [
+            {
+              "name": "Total Serum Cholesterol",
+              "unit": "mg/dL",
+              "minNormal": 120,
+              "maxNormal": 200,
+              "method": "CHOD-PAP",
+              "textReference": "",
+              "id": "param-0-1792482113808-83x",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Serum Triglycerides",
+              "unit": "mg/dL",
+              "minNormal": 40,
+              "maxNormal": 150,
+              "panicHigh": 500,
+              "method": "GPO-PAP",
+              "textReference": "",
+              "id": "param-1-1792482113808-19r",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "HDL - Cholesterol (Good)",
+              "unit": "mg/dL",
+              "minNormal": 40,
+              "maxNormal": 65,
+              "method": "Direct Accelerator",
+              "textReference": "",
+              "id": "param-2-1792482113808-psg",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "LDL - Cholesterol (Calculated)",
+              "unit": "mg/dL",
+              "minNormal": 0,
+              "maxNormal": 100,
+              "notes": "Friedewald Formula: Total Chol - HDL - (TG / 5)",
+              "textReference": "",
+              "id": "param-3-1792482113808-thp",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "VLDL - Cholesterol",
+              "unit": "mg/dL",
+              "minNormal": 5,
+              "maxNormal": 30,
+              "notes": "Auto-calculated: Triglycerides / 5",
+              "textReference": "",
+              "id": "param-4-1792482113808-cr6",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Non-HDL Cholesterol",
+              "unit": "mg/dL",
+              "minNormal": 0,
+              "maxNormal": 130,
+              "notes": "Auto-calculated: Total Chol - HDL",
+              "textReference": "",
+              "id": "param-5-1792482113808-j6q",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "Total Chol / HDL Ratio",
+              "unit": "Ratio",
+              "minNormal": 0,
+              "maxNormal": 4.5,
+              "textReference": "< 4.5 Desirable",
+              "notes": "Auto-calculated: Total Chol / HDL",
+              "id": "param-6-1792482113808-uyf",
+              "result": "",
+              "flag": "NORMAL"
+            },
+            {
+              "name": "LDL / HDL Ratio",
+              "unit": "Ratio",
+              "minNormal": 0,
+              "maxNormal": 3,
+              "textReference": "< 3.0 Desirable",
+              "id": "param-7-1792482113808-fhk",
+              "result": "",
+              "flag": "NORMAL"
+            }
+          ]
+        }
+      ],
+      "staff": {
+        "labChemist": "مني احمد",
+        "verifiedBy": "رحاب على ",
+        "pathologist": "رامي مختار ",
+        "chemistTitle": "اخصائي كيمياء اكلينيكية وهرمونات",
+        "verifierTitle": "طبيب باثولوجي / المدير التنفيذي",
+        "pathologistTitle": "طبيب الباثولوجيا الاكلينيكية والكيميائية كلية طب قصر العيني",
+        "chemistLicense": "EGY-SCI-88402",
+        "verifierLicense": "EGY-MGT-11024",
+        "pathologistLicense": "EGY-MED-48201"
+      },
+      "status": "draft",
+      "createdAt": "2026-10-20T07:41:53.808Z",
+      "updatedAt": "2026-10-20T07:41:53.808Z",
+      "invoiceId": "inv-1792482113809"
+    },
     {
       "id": "rep-1792270290136",
       "reportNumber": "RT-2026-048",
@@ -15462,6 +15689,107 @@
   ],
   "incomeRecords": [
     {
+      "id": "inv-1792482113809",
+      "invoiceNumber": "INV-2026-051",
+      "patientName": "صباح السيد محمد",
+      "patientPhone": "01123862286",
+      "patientAge": 43,
+      "patientGender": "female",
+      "barcode": "RT-10081",
+      "labNumber": "RT-2026-051",
+      "referringDoctor": "Herself",
+      "tests": [
+        {
+          "id": "t-33",
+          "code": "AST",
+          "nameAr": "Aspartate Aminotransferase (AST / SGOT)",
+          "nameEn": "Aspartate Aminotransferase (AST / SGOT)",
+          "category": "Liver Function",
+          "price": 188,
+          "cost": 12,
+          "sampleType": "Serum",
+          "turnaroundTime": "Immediate (1 hour)",
+          "unit": "U/L",
+          "minNormal": 0,
+          "maxNormal": 40,
+          "textReference": "Adult Males: < 40 U/L | Adult Females: < 38 U/L",
+          "method": "IFCC Kinetic UV"
+        },
+        {
+          "id": "t-32",
+          "code": "ALT",
+          "nameAr": "Alanine Aminotransferase (ALT / SGPT)",
+          "nameEn": "Alanine Aminotransferase (ALT / SGPT)",
+          "category": "Liver Function",
+          "price": 188,
+          "cost": 12,
+          "sampleType": "Serum",
+          "turnaroundTime": "Immediate (1 hour)",
+          "unit": "U/L",
+          "minNormal": 0,
+          "maxNormal": 41,
+          "textReference": "Adult Males: < 41 U/L | Adult Females: < 38  U/L",
+          "method": "IFCC Kinetic UV without Pyridoxal Phosphate"
+        },
+        {
+          "id": "t-53",
+          "code": "TSH",
+          "nameAr": "Thyroid Stimulating Hormone (TSH)",
+          "nameEn": "Thyroid Stimulating Hormone (TSH)",
+          "category": "Thyroid",
+          "price": 412,
+          "cost": 30,
+          "sampleType": "Serum",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "uIU/mL",
+          "minNormal": 0.55,
+          "maxNormal": 4.78,
+          "textReference": "Adults: 0.55 - 4.78 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+          "method": "CLIA (3rd Generation Chemiluminescence)"
+        },
+        {
+          "id": "t-30",
+          "code": "MICROALBUMIN",
+          "nameAr": "Microalbumin / Creatinine Ratio (ACR)",
+          "nameEn": "Microalbumin / Creatinine Ratio (ACR)",
+          "category": "Kidney Function",
+          "price": 466,
+          "cost": 40,
+          "sampleType": "Random Morning Urine",
+          "turnaroundTime": "Within 3 hours",
+          "unit": "mg/g Creat",
+          "minNormal": 0,
+          "maxNormal": 30,
+          "textReference": "Normal: < 30 mg/g | Microalbuminuria: 30 - 300 | Macroalbuminuria: > 300",
+          "method": "Immunoturbidimetric Quantitative Assay"
+        },
+        {
+          "id": "prof-LIPID",
+          "code": "LIPID",
+          "nameAr": "Lipid Profile",
+          "nameEn": "Lipid Profile",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum (12h Fasting)"
+        }
+      ],
+      "subtotal": 752,
+      "testsSubtotal": 1504,
+      "discount": 752,
+      "visitFee": 0,
+      "isHomeVisit": false,
+      "netAmount": 0,
+      "paidAmount": 0,
+      "remainingAmount": 0,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "cashierName": "أ.د. رامي مختار",
+      "branch": "فرع القصر العيني - الرئيسي",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-20T07:41:53.809Z",
+      "updatedAt": "2026-10-20T07:41:53.809Z"
+    },
+    {
       "id": "inv-1792270290136",
       "invoiceNumber": "INV-2026-048",
       "patientName": "فيرونيا ممدوح",
@@ -20731,6 +21059,7 @@
       "lastRestockedDate": "2026-08-20"
     }
   ],
+  "dailyCloseouts": [],
   "labInfo": {
     "labNameAr": "معامل RT للتحاليل الطبية والتشخيصية",
     "labNameEn": "RT Diagnostic Laboratories",
