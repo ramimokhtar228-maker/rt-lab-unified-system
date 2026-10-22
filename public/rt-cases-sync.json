@@ -1,5 +1,87 @@
 [
   {
+    "id": "rep-inv-1792699877460",
+    "reportNumber": "RT-2026-061",
+    "invoiceNumber": "INV-2026-061",
+    "barcode": "RT-10091",
+    "patientName": "مكة احمد سيف الدين",
+    "age": 7,
+    "gender": "female",
+    "phone": "01124580333",
+    "referringDoctor": "HERSELF",
+    "tests": [
+      {
+        "id": "prof-CBC",
+        "code": "CBC",
+        "nameAr": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+        "nameEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+        "category": "Hematology",
+        "price": 250,
+        "sampleType": "EDTA Whole Blood"
+      },
+      {
+        "id": "t-206",
+        "code": "URINE_CULTURE",
+        "nameAr": "Urine Culture & Sensitivity (Antibiogram)",
+        "nameEn": "Urine Culture & Sensitivity (Antibiogram)",
+        "category": "Microbiology",
+        "price": 240,
+        "cost": 55,
+        "sampleType": "Clean-Catch Midstream Urine in Sterile Cup",
+        "turnaroundTime": "48 hours",
+        "unit": "CFU/mL",
+        "textReference": "No significant bacterial growth (< 10,000 CFU/mL)",
+        "method": "Aerobic Culture on Blood & MacConkey Agar + Kirby-Bauer Sensitivity"
+      },
+      {
+        "id": "prof-URINE",
+        "code": "URINE",
+        "nameAr": "Complete Urine Analysis",
+        "nameEn": "Complete Urine Analysis",
+        "category": "Clinical Microscopy",
+        "price": 250,
+        "sampleType": "Clean Catch Midstream Urine"
+      },
+      {
+        "id": "t-20",
+        "code": "UREA",
+        "nameAr": "Blood Urea",
+        "nameEn": "Blood Urea",
+        "category": "Kidney Function",
+        "price": 188,
+        "cost": 12,
+        "sampleType": "Serum",
+        "turnaroundTime": "Immediate (1 hour)",
+        "unit": "mg/dL",
+        "minNormal": 15,
+        "maxNormal": 45,
+        "textReference": "15 - 45 mg/dL",
+        "method": "Urease / GLDH Enzymatic Kinetic"
+      },
+      {
+        "id": "t-19",
+        "code": "CREAT",
+        "nameAr": "Serum Creatinine",
+        "nameEn": "Serum Creatinine",
+        "category": "Kidney Function",
+        "price": 188,
+        "cost": 12,
+        "sampleType": "Serum",
+        "turnaroundTime": "Immediate (1 hour)",
+        "unit": "mg/dL",
+        "minNormal": 0.6,
+        "maxNormal": 1.4,
+        "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
+        "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)"
+      }
+    ],
+    "netAmount": 300,
+    "paidAmount": 300,
+    "paymentStatus": "paid",
+    "financialClearance": "CLEARED_FOR_RELEASE",
+    "createdAt": "2026-10-22T20:11:17.460Z"
+  },
+  {
     "id": "rep-inv-1792699476123",
     "reportNumber": "RT-2026-060",
     "invoiceNumber": "INV-2026-060",
