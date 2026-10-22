@@ -19,7 +19,8 @@ import {
   DollarSign,
   ArrowRight,
   TrendingUp,
-  Receipt
+  Receipt,
+  RefreshCw
 } from 'lucide-react';
 import { IncomeRecord, PaymentStatus, PaymentMethod } from '../types';
 import { InvoicePrintModal } from './InvoicePrintModal';
@@ -80,6 +81,25 @@ export const IncomeModule: React.FC = () => {
     }
   };
 
+  const [isSyncingInvoices, setIsSyncingInvoices] = useState(false);
+  const [syncFeedbackMsg, setSyncFeedbackMsg] = useState<string | null>(null);
+
+  const { syncAllDevicesNow } = useApp();
+
+  const handleSyncInvoices = async () => {
+    setIsSyncingInvoices(true);
+    setSyncFeedbackMsg(null);
+    try {
+      const res = await syncAllDevicesNow();
+      setSyncFeedbackMsg(res.message);
+      setTimeout(() => setSyncFeedbackMsg(null), 5000);
+    } catch {
+      setSyncFeedbackMsg('تعذر مزامنة الفواتير — تحقق من اتصال الإنترنت.');
+    } finally {
+      setIsSyncingInvoices(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Top Banner */}
@@ -99,14 +119,33 @@ export const IncomeModule: React.FC = () => {
             </div>
           </div>
 
-          <button
-            onClick={() => setIsPatientFormOpen(true)}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-rose-700 hover:bg-rose-600 text-white font-bold text-xs shadow-md transition-all cursor-pointer"
-          >
-            <PlusCircle className="w-4 h-4" />
-            <span>تسجيل مريض وفاتورة جديدة</span>
-          </button>
+          <div className="flex flex-wrap items-center gap-2.5">
+            <button
+              onClick={handleSyncInvoices}
+              disabled={isSyncingInvoices}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-100 border border-slate-700 hover:border-emerald-500/50 font-bold text-xs shadow-md transition-all cursor-pointer disabled:opacity-50"
+              title="مزامنة فورية لكافة الفواتير والحسابات بين الموبايل والكمبيوتر والمعمل"
+            >
+              <RefreshCw className={`w-4 h-4 ${isSyncingInvoices ? 'animate-spin text-rose-400' : 'text-emerald-400'}`} />
+              <span>{isSyncingInvoices ? 'جاري مزامنة الفواتير...' : 'مزامنة الفواتير مع الأجهزة'}</span>
+            </button>
+
+            <button
+              onClick={() => setIsPatientFormOpen(true)}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-rose-700 hover:bg-rose-600 text-white font-bold text-xs shadow-md transition-all cursor-pointer"
+            >
+              <PlusCircle className="w-4 h-4" />
+              <span>تسجيل مريض وفاتورة جديدة</span>
+            </button>
+          </div>
         </div>
+
+        {syncFeedbackMsg && (
+          <div className="mt-4 p-3 bg-emerald-950/80 border border-emerald-500/60 rounded-xl text-emerald-200 text-xs font-bold flex items-center gap-2 animate-in fade-in">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span>{syncFeedbackMsg}</span>
+          </div>
+        )}
       </div>
 
       {/* Aggregate Financial Cards */}

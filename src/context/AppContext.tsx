@@ -744,6 +744,63 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             if (Array.isArray(ghRes.data.diagnosticProfiles) && ghRes.data.diagnosticProfiles.length > 0) {
               setDiagnosticProfiles(prev => mergeProfilesWithDefaults(ghRes.data.diagnosticProfiles));
             }
+
+            // Also check for pending incoming diagnostic cases from GitHub queue
+            fetchDiagnosticCases(githubConfig).then(casesRes => {
+              if (casesRes.success && Array.isArray(casesRes.cases) && casesRes.cases.length > 0) {
+                setReports(curReports => {
+                  const existingCodes = new Set(curReports.map(r => r.patient?.barcode || r.reportNumber));
+                  let addedCount = 0;
+                  const newOnes: LabReport[] = [];
+                  casesRes.cases!.forEach(c => {
+                    const code = c.barcode || c.labNumber;
+                    if (code && !existingCodes.has(code)) {
+                      existingCodes.add(code);
+                      addedCount++;
+                      newOnes.push(convertIncomeRecordToDiagnosticReport({
+                        id: c.id,
+                        invoiceNumber: c.invoiceNumber || `INV-${c.labNumber}`,
+                        labNumber: c.labNumber,
+                        barcode: c.barcode,
+                        patientName: c.fullName,
+                        patientAge: c.age,
+                        patientGender: c.gender,
+                        patientPhone: c.phone,
+                        referringDoctor: c.referringDoctorName || 'كشف معمل',
+                        tests: (c.testNames || ['تحاليل مخبرية']).map((tName, idx) => ({
+                          id: `tst-${idx}-${c.id}`,
+                          code: `TST-${idx}`,
+                          nameAr: tName,
+                          nameEn: tName,
+                          category: 'Clinical',
+                          price: 100,
+                          cost: 20
+                        })),
+                        subtotal: c.totalCost || 200,
+                        discount: 0,
+                        netAmount: c.totalCost || 200,
+                        paidAmount: c.paidAmount || (c.paymentStatus === 'paid' ? c.totalCost || 200 : 0),
+                        remainingAmount: 0,
+                        paymentMethod: 'cash',
+                        paymentStatus: (c.paymentStatus as any) || 'paid',
+                        cashierName: 'مزامنة سحابية',
+                        branch: 'الفرع الرئيسي',
+                        syncStatus: 'synced',
+                        createdAt: c.sampleDate,
+                        updatedAt: c.sampleDate
+                      }) as unknown as LabReport);
+                    }
+                  });
+                  return addedCount > 0 ? [...newOnes, ...curReports] : curReports;
+                });
+              }
+            }).catch(() => {});
+
+            addNotification({
+              title: '⚡ المزامنة السحابية الموحدة مفعّلة',
+              message: `تم جلب ومزامنة كافة السجلات بنجاح (${ghRes.data.reports?.length || 0} تقرير / ${ghRes.data.incomeRecords?.length || 0} فاتورة).`,
+              type: 'success'
+            });
           }
         }).catch(() => {});
       }

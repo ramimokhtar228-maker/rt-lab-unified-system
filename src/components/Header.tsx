@@ -125,8 +125,8 @@ export const Header: React.FC = () => {
               <button
                 onClick={handleCloudSync}
                 disabled={isSyncing}
-                title="تسميع ومزامنة حية فورية بين الموبايل واللاب توب وجميع الأجهزة"
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 border border-slate-700 text-xs font-bold transition-all cursor-pointer active:scale-95 shadow-xs"
+                title="تسميع ومزامنة حية فورية بين الموبايل واللاب توب وجميع الأجهزة (الإصدار v4.3)"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 border border-emerald-500/40 text-xs font-bold transition-all cursor-pointer active:scale-95 shadow-xs"
               >
                 {isSyncing ? (
                   <RefreshCw className="w-3.5 h-3.5 animate-spin text-rose-400" />
@@ -134,6 +134,9 @@ export const Header: React.FC = () => {
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-xs shadow-emerald-500 animate-pulse" />
                 )}
                 <span>مزامنة الأجهزة</span>
+                <span className="px-1.5 py-0.5 rounded text-[10px] bg-emerald-900/60 text-emerald-300 font-mono font-bold border border-emerald-500/30">
+                  v4.3 نشط
+                </span>
               </button>
               {syncStatusMsg && (
                 <div className="absolute left-0 top-full mt-2 w-64 bg-slate-800 text-emerald-400 border border-slate-700 text-[11px] p-2.5 rounded-xl shadow-2xl z-50">
