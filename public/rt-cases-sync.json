@@ -1,5 +1,55 @@
 [
   {
+    "id": "rep-inv-1792699192842",
+    "reportNumber": "RT-2026-059",
+    "invoiceNumber": "INV-2026-059",
+    "barcode": "RT-10089",
+    "patientName": "زينب عمر الفاروق",
+    "age": 53,
+    "gender": "female",
+    "phone": "01091353732",
+    "referringDoctor": "Herself",
+    "tests": [
+      {
+        "id": "t-54",
+        "code": "FREE_T3",
+        "nameAr": "Free Triiodothyronine (FT3)",
+        "nameEn": "Free Triiodothyronine (FT3)",
+        "category": "Thyroid",
+        "price": 388,
+        "cost": 32,
+        "sampleType": "Serum",
+        "turnaroundTime": "Within 2 hours",
+        "unit": "pg/mL",
+        "minNormal": 2.3,
+        "maxNormal": 4.2,
+        "textReference": "2.3 - 4.2 pg/mL (3.5 - 6.5 pmol/L)",
+        "method": "CLIA (Chemiluminescence Immunoassay)"
+      },
+      {
+        "id": "t-55",
+        "code": "FREE_T4",
+        "nameAr": "Free Thyroxine (FT4)",
+        "nameEn": "Free Thyroxine (FT4)",
+        "category": "Thyroid",
+        "price": 388,
+        "cost": 32,
+        "sampleType": "Serum",
+        "turnaroundTime": "Within 2 hours",
+        "unit": "ng/dL",
+        "minNormal": 0.89,
+        "maxNormal": 1.76,
+        "textReference": "0.89 - 1.76 ng/dL (11.5 - 22.7 pmol/L)",
+        "method": "CLIA (Chemiluminescence Immunoassay)"
+      }
+    ],
+    "netAmount": 62,
+    "paidAmount": 62,
+    "paymentStatus": "paid",
+    "financialClearance": "CLEARED_FOR_RELEASE",
+    "createdAt": "2026-10-22T19:59:52.842Z"
+  },
+  {
     "id": "rep-inv-1792521201957",
     "reportNumber": "RT-2026-058",
     "invoiceNumber": "INV-2026-058",
