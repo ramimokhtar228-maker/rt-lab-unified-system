@@ -16,8 +16,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="./assets/index-6v-eDRwN.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-Cb-22q4A.css">
+    <script>
+      // Automatically clean up any stale service workers or caches to ensure users immediately get the latest updates
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(regs) {
+          for (var i = 0; i < regs.length; i++) {
+            regs[i].unregister();
+          }
+        });
+      }
+    </script>
+    <script type="module" crossorigin src="/assets/index-Cq6fsxjH.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BJai1LGS.css">
   </head>
   <body class="bg-slate-950 text-slate-100 antialiased selection:bg-red-800 selection:text-white min-h-screen">
     <div id="root"></div>
