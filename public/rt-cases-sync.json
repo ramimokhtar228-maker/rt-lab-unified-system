@@ -1,5 +1,39 @@
 [
   {
+    "id": "rep-inv-1792776774493",
+    "reportNumber": "RT-2026-062",
+    "invoiceNumber": "INV-2026-062",
+    "barcode": "RT-10092",
+    "patientName": "يارا محمد  رمضان",
+    "age": 10,
+    "gender": "female",
+    "phone": "01127504064",
+    "referringDoctor": "Herself",
+    "tests": [
+      {
+        "id": "t-8",
+        "code": "CBC",
+        "nameAr": "Complete Blood Count with Differential",
+        "nameEn": "Complete Blood Count with Differential",
+        "category": "Hematology",
+        "price": 400,
+        "cost": 30,
+        "sampleType": "EDTA Whole Blood",
+        "turnaroundTime": "Immediate (1 hour)",
+        "unit": "Multi-parameter",
+        "minNormal": 0,
+        "maxNormal": 0,
+        "textReference": "Hb: Male 13.0-17.5 g/dL, Female 12.0-15.5 | WBC: 4.0-11.0 10^3/uL | PLT: 150-450 10^3/uL",
+        "method": "5-Part Automated Flow Cytometry / Laser Impedance"
+      }
+    ],
+    "netAmount": 0,
+    "paidAmount": 0,
+    "paymentStatus": "paid",
+    "financialClearance": "CLEARED_FOR_RELEASE",
+    "createdAt": "2026-10-23T17:32:54.494Z"
+  },
+  {
     "id": "rep-inv-1792699877460",
     "reportNumber": "RT-2026-061",
     "invoiceNumber": "INV-2026-061",
