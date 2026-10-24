@@ -21,6 +21,8 @@ export type SyncActionType =
   | 'UPDATE_CATALOG'
   | 'UPDATE_PACKAGES'
   | 'UPDATE_PROFILES'
+  | 'UPDATE_STAFF'
+  | 'UPDATE_STAFF_OPTIONS'
   | 'PING_TEST'
   | 'FULL_SYNC';
 

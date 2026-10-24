@@ -255,7 +255,7 @@ function setVal(
  */
 export function runAutomaticCalculations(
   parameters: TestParameter[],
-  patientContext?: { age?: number; gender?: 'male' | 'female' }
+  patientContext?: { age?: number; gender?: any }
 ): { updatedParams: TestParameter[]; calculationsApplied: string[] } {
   const paramsCopy: TestParameter[] = JSON.parse(JSON.stringify(parameters));
   const applied: string[] = [];

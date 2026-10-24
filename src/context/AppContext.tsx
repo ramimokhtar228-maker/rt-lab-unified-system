@@ -1233,7 +1233,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const nextProfiles = prevProfiles.map(prof => {
         let profChanged = false;
         const nextParams = prof.parameters.map(param => {
-          const matchesCode = param.id?.toLowerCase().includes(code.toLowerCase()) ||
+          const matchesCode = (param as any).id?.toLowerCase().includes(code.toLowerCase()) ||
                               param.name?.toLowerCase().includes(code.toLowerCase()) ||
                               (updates.nameEn && param.name?.toLowerCase().includes(updates.nameEn.toLowerCase())) ||
                               (updates.nameAr && param.name?.includes(updates.nameAr));

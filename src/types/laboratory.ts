@@ -10,7 +10,7 @@ export interface Patient {
   nationalId: string;
   fullName: string;
   fullNameEn: string;
-  gender: 'MALE' | 'FEMALE';
+  gender: 'MALE' | 'FEMALE' | 'CHILD' | 'NEWBORN' | 'male' | 'female' | 'child' | 'newborn';
   age: number;
   ageUnit: 'YEARS' | 'MONTHS' | 'DAYS';
   phone: string;

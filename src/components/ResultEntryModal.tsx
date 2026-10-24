@@ -92,7 +92,7 @@ export const ResultEntryModal: React.FC<ResultEntryModalProps> = ({
       setPatientNameEn(existingReport.patient.fullNameEn);
       setMrn(existingReport.patient.mrn);
       setAge(existingReport.patient.age);
-      setGender(existingReport.patient.gender);
+      setGender((existingReport.patient.gender?.toUpperCase() as any) || 'MALE');
       setDoctorName(existingReport.patient.doctorName);
       setSampleId(existingReport.patient.sampleId);
 
@@ -117,7 +117,7 @@ export const ResultEntryModal: React.FC<ResultEntryModalProps> = ({
         setPatientNameEn(p.fullNameEn);
         setMrn(p.mrn);
         setAge(p.age);
-        setGender(p.gender);
+        setGender((p.gender?.toUpperCase() as any) || 'MALE');
         setDoctorName(p.doctorName);
         setSampleId(`SMP-${Math.floor(100000 + Math.random() * 900000)}`);
       }

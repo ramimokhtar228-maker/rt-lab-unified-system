@@ -41,7 +41,7 @@ export type PaymentMethod =
   | 'vodafone_cash'
   | 'wallet';
 
-export type PaymentStatus = 'paid' | 'partial' | 'unpaid';
+export type PaymentStatus = 'paid' | 'partial' | 'unpaid' | 'pending';
 
 export interface InvoiceTestItem {
   id: string;
@@ -66,7 +66,7 @@ export interface IncomeRecord {
   patientName: string;
   patientPhone: string;
   patientAge: number;
-  patientGender: 'male' | 'female';
+  patientGender: Gender;
   barcode: string;
   labNumber: string;
   referringDoctor: string;
@@ -400,6 +400,9 @@ export interface Patient {
   visitFee?: number;
   visitSpecialist?: string;
   testsSubtotal?: number;
+  paidAmount?: number;
+  remainingAmount?: number;
+  paymentStatus?: PaymentStatus;
 }
 
 export interface TestParameter {

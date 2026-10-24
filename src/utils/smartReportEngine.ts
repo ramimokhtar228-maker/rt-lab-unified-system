@@ -1,10 +1,10 @@
-import { LabReport, TestParameter } from '../types/lab';
+import { LabReport, TestParameter, Gender } from '../types/lab';
 
 export interface SmartClinicalAnalysis {
   reportId: string;
   patientName: string;
   age: number;
-  gender: 'male' | 'female';
+  gender: Gender;
   executiveSummaryAr: string;
   executiveSummaryEn: string;
   criticalAlerts: Array<{ titleAr: string; titleEn: string; severity: 'critical' | 'high' | 'moderate'; detail: string }>;
