@@ -59,18 +59,45 @@ export function mergeCatalogWithDefaults(savedCatalog?: InvoiceTestItem[]): Invo
 }
 
 /**
- * Merges any existing packages with the 15 comprehensive default packages
+ * Merges any existing packages with the 15 comprehensive default packages,
+ * ensuring any custom-added user packages are NEVER lost during cloud sync or refresh.
  */
-export function mergePackagesWithDefaults(savedPackages?: ComprehensivePackage[]): ComprehensivePackage[] {
-  if (!Array.isArray(savedPackages) || savedPackages.length === 0) {
+export function mergePackagesWithDefaults(
+  savedPackages?: ComprehensivePackage[],
+  localPackages?: ComprehensivePackage[]
+): ComprehensivePackage[] {
+  const allCandidates: ComprehensivePackage[] = [];
+  
+  if (Array.isArray(savedPackages)) {
+    allCandidates.push(...savedPackages);
+  }
+  if (Array.isArray(localPackages)) {
+    allCandidates.push(...localPackages);
+  }
+  if (typeof window !== 'undefined') {
+    try {
+      const stored = localStorage.getItem('rt_lab_packages_v3');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) allCandidates.push(...parsed);
+      }
+    } catch {}
+  }
+
+  if (allCandidates.length === 0) {
     return [...INITIAL_PACKAGES];
   }
 
   const savedMap = new Map<string, ComprehensivePackage>();
-  savedPackages.forEach(pkg => {
-    if (pkg) {
-      const key = (pkg.code || pkg.id || '').toUpperCase().trim();
-      if (key) savedMap.set(key, pkg);
+  allCandidates.forEach(pkg => {
+    if (pkg && (pkg.code || pkg.id || pkg.titleAr)) {
+      const key = (pkg.code || pkg.id || pkg.titleAr).toUpperCase().trim();
+      const existing = savedMap.get(key);
+      if (!existing) {
+        savedMap.set(key, pkg);
+      } else {
+        savedMap.set(key, { ...existing, ...pkg });
+      }
     }
   });
 
@@ -104,7 +131,10 @@ export function mergePackagesWithDefaults(savedPackages?: ComprehensivePackage[]
 
   // Append custom packages created by user
   savedMap.forEach(customPkg => {
-    merged.push(customPkg);
+    const cKey = (customPkg.code || customPkg.id || '').toUpperCase().trim();
+    if (!merged.some(m => (m.code || m.id || '').toUpperCase().trim() === cKey)) {
+      merged.push(customPkg);
+    }
   });
 
   return merged;

@@ -75,36 +75,55 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
   const mainAddressDisplay = labInfo.mainAddress || "ميدان بهتيم — برج صيدلية العزبي — الدور الثالث — شبرا الخيمة";
 
   const p = report.patient;
-  const invoiceNumber = p.clinicalHistory?.match(/فاتورة\s*(?:مالية)?\s*رقم\s*([\w\d-]+)/i)?.[1] 
-    || `INV-${p.labNumber || '2026'}`;
   
-  // Calculate prices based on profiles and parameters
-  const items = report.profiles.map((prof, idx) => {
-    // Estimations or package prices
-    let price = 150;
-    if (prof.profileCode === 'CBC') price = 180;
-    else if (prof.profileCode === 'LFT') price = 250;
-    else if (prof.profileCode === 'KFT') price = 200;
-    else if (prof.profileCode === 'LIPID') price = 220;
-    else if (prof.profileCode === 'GLYCEMIC') price = 120;
-    else if (prof.profileCode === 'THYROID') price = 300;
-    else if (prof.profileCode === 'COAG') price = 150;
-    else if (prof.parameters.length > 5) price = 200;
-    else price = Math.max(80, prof.parameters.length * 40);
+  // Find real linked financial invoice
+  const linkedInvoice = incomeRecords.find(i => 
+    (report.invoiceId && (i.id === report.invoiceId || i.invoiceNumber === report.invoiceId)) ||
+    i.labNumber === p.labNumber ||
+    (p.barcode && i.barcode === p.barcode)
+  );
 
-    return {
-      id: prof.id || `item-${idx}`,
-      titleAr: prof.titleAr || prof.titleEn,
-      titleEn: prof.titleEn,
-      category: prof.category || 'تحاليل تشخيصية',
-      sampleType: prof.sampleType || 'Serum',
-      parametersCount: prof.parameters.length,
-      price: price
-    };
-  });
+  const invoiceNumber = linkedInvoice?.invoiceNumber
+    || p.clinicalHistory?.match(/فاتورة\s*(?:مالية)?\s*رقم\s*([\w\d-]+)/i)?.[1] 
+    || `INV-${p.labNumber?.replace('RT-', '') || '2026'}`;
+  
+  // Calculate prices based on linked invoice or profiles
+  const items = (linkedInvoice?.tests && linkedInvoice.tests.length > 0)
+    ? linkedInvoice.tests.map((t, idx) => ({
+        id: t.id || `item-${idx}`,
+        titleAr: t.nameAr || t.nameEn || 'تحليل مخبري',
+        titleEn: t.nameEn || t.code || 'Lab Test',
+        category: t.category || 'تحاليل تشخيصية',
+        sampleType: t.sampleType || 'Serum',
+        parametersCount: 1,
+        price: t.price || 150
+      }))
+    : report.profiles.map((prof, idx) => {
+        let price = 150;
+        if (prof.profileCode === 'CBC') price = 180;
+        else if (prof.profileCode === 'LFT') price = 250;
+        else if (prof.profileCode === 'KFT') price = 200;
+        else if (prof.profileCode === 'LIPID') price = 220;
+        else if (prof.profileCode === 'GLYCEMIC') price = 120;
+        else if (prof.profileCode === 'THYROID') price = 300;
+        else if (prof.profileCode === 'COAG') price = 150;
+        else if (prof.parameters.length > 5) price = 200;
+        else price = Math.max(80, prof.parameters.length * 40);
 
-  const visitFee = (p as any).visitFee || 0;
-  const testsSubtotal = report.packageApplied?.packagePrice 
+        return {
+          id: prof.id || `item-${idx}`,
+          titleAr: prof.titleAr || prof.titleEn,
+          titleEn: prof.titleEn,
+          category: prof.category || 'تحاليل تشخيصية',
+          sampleType: prof.sampleType || 'Serum',
+          parametersCount: prof.parameters.length,
+          price: price
+        };
+      });
+
+  const visitFee = (p as any).visitFee || linkedInvoice?.visitFee || 0;
+  const testsSubtotal = linkedInvoice?.testsSubtotal 
+    || report.packageApplied?.packagePrice 
     || (p as any).testsSubtotal 
     || (p.totalCost ? Math.max(0, p.totalCost - visitFee) : items.reduce((sum, item) => sum + item.price, 0));
   const subtotal = testsSubtotal + visitFee;
@@ -191,9 +210,13 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
       });
     }
   };
-  const isPaid = !p.clinicalHistory?.includes('متبقي');
-  const paidAmount = isPaid ? netTotal : Math.round(netTotal * 0.5);
-  const remainingAmount = netTotal - paidAmount;
+  const realPaid = (p as any).paidAmount !== undefined 
+    ? (p as any).paidAmount 
+    : (linkedInvoice?.paidAmount !== undefined ? linkedInvoice.paidAmount : netTotal);
+  const paidAmount = realPaid;
+  const remainingAmount = (p as any).remainingAmount !== undefined
+    ? (p as any).remainingAmount
+    : (linkedInvoice?.remainingAmount !== undefined ? linkedInvoice.remainingAmount : Math.max(0, netTotal - paidAmount));
 
   const sampleDateFormatted = p.sampleDate ? new Date(p.sampleDate).toLocaleDateString('en-GB', {
     year: 'numeric',

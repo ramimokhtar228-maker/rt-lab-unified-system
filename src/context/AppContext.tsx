@@ -740,15 +740,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               setTestCatalog(prev => mergeCatalogWithDefaults(ghRes.data.testCatalog));
             }
             if (Array.isArray(ghRes.data.packages) && ghRes.data.packages.length > 0) {
-              setPackages(prev => mergePackagesWithDefaults(ghRes.data.packages));
+              setPackages(prev => mergePackagesWithDefaults(ghRes.data.packages, prev));
             }
             if (Array.isArray(ghRes.data.diagnosticProfiles) && ghRes.data.diagnosticProfiles.length > 0) {
               setDiagnosticProfiles(prev => mergeProfilesWithDefaults(ghRes.data.diagnosticProfiles));
             }
 
-            // Also check for pending incoming diagnostic cases from GitHub queue
+            // Also check for pending incoming diagnostic cases from GitHub queue (sync cases 59 to 68+)
             fetchDiagnosticCases(githubConfig).then(casesRes => {
               if (casesRes.success && Array.isArray(casesRes.cases) && casesRes.cases.length > 0) {
+                // 1. Sync reports
                 setReports(curReports => {
                   const existingCodes = new Set(curReports.map(r => r.patient?.barcode || r.reportNumber));
                   let addedCount = 0;
@@ -758,41 +759,103 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                     if (code && !existingCodes.has(code)) {
                       existingCodes.add(code);
                       addedCount++;
-                      newOnes.push(convertIncomeRecordToDiagnosticReport({
+                      const actualTests = (Array.isArray(c.tests) && c.tests.length > 0)
+                        ? c.tests
+                        : (c.testNames || ['تحاليل مخبرية']).map((tName, idx) => ({
+                            id: `tst-${idx}-${c.id}`,
+                            code: `TST-${idx}`,
+                            nameAr: tName,
+                            nameEn: tName,
+                            category: 'Clinical',
+                            price: 150,
+                            cost: 30
+                          }));
+                      const net = c.totalCost || 200;
+                      const paid = c.paidAmount !== undefined ? c.paidAmount : (c.paymentStatus === 'paid' ? net : 0);
+                      const rep = convertIncomeRecordToDiagnosticReport({
                         id: c.id,
-                        invoiceNumber: c.invoiceNumber || `INV-${c.labNumber}`,
+                        invoiceNumber: c.invoiceNumber || `INV-${c.labNumber.replace('RT-', '')}`,
                         labNumber: c.labNumber,
                         barcode: c.barcode,
                         patientName: c.fullName,
-                        patientAge: c.age,
-                        patientGender: c.gender,
-                        patientPhone: c.phone,
+                        patientAge: c.age || 30,
+                        patientGender: c.gender || 'male',
+                        patientPhone: c.phone || '',
                         referringDoctor: c.referringDoctorName || 'كشف معمل',
-                        tests: (c.testNames || ['تحاليل مخبرية']).map((tName, idx) => ({
-                          id: `tst-${idx}-${c.id}`,
-                          code: `TST-${idx}`,
-                          nameAr: tName,
-                          nameEn: tName,
-                          category: 'Clinical',
-                          price: 100,
-                          cost: 20
-                        })),
-                        subtotal: c.totalCost || 200,
+                        tests: actualTests,
+                        subtotal: net,
                         discount: 0,
-                        netAmount: c.totalCost || 200,
-                        paidAmount: c.paidAmount || (c.paymentStatus === 'paid' ? c.totalCost || 200 : 0),
-                        remainingAmount: 0,
+                        netAmount: net,
+                        paidAmount: paid,
+                        remainingAmount: Math.max(0, net - paid),
                         paymentMethod: 'cash',
-                        paymentStatus: (c.paymentStatus as any) || 'paid',
+                        paymentStatus: (c.paymentStatus as any) || (paid >= net ? 'paid' : 'pending'),
                         cashierName: 'مزامنة سحابية',
-                        branch: 'الفرع الرئيسي',
+                        branch: 'الفرع الرئيسي - بهتيم',
                         syncStatus: 'synced',
-                        createdAt: c.sampleDate,
-                        updatedAt: c.sampleDate
-                      }) as unknown as LabReport);
+                        createdAt: c.sampleDate || new Date().toISOString(),
+                        updatedAt: c.sampleDate || new Date().toISOString()
+                      }) as unknown as LabReport;
+                      newOnes.push(rep);
                     }
                   });
                   return addedCount > 0 ? [...newOnes, ...curReports] : curReports;
+                });
+
+                // 2. Sync corresponding financial invoices
+                setIncomeRecords(curInvoices => {
+                  const existingCodes = new Set(curInvoices.map(i => i.invoiceNumber || i.labNumber));
+                  let addedInvoices = 0;
+                  const newInvoices: IncomeRecord[] = [];
+                  casesRes.cases!.forEach(c => {
+                    const invNumber = c.invoiceNumber || `INV-${c.labNumber.replace('RT-', '')}`;
+                    if (!existingCodes.has(invNumber) && !existingCodes.has(c.labNumber)) {
+                      existingCodes.add(invNumber);
+                      existingCodes.add(c.labNumber);
+                      addedInvoices++;
+                      const net = c.totalCost || 200;
+                      const paid = c.paidAmount !== undefined ? c.paidAmount : (c.paymentStatus === 'paid' ? net : 0);
+                      const actualTests = (Array.isArray(c.tests) && c.tests.length > 0)
+                        ? c.tests
+                        : (c.testNames || ['تحاليل مخبرية']).map((tName, idx) => ({
+                            id: `tst-${idx}-${c.id}`,
+                            code: `TST-${idx}`,
+                            nameAr: tName,
+                            nameEn: tName,
+                            category: 'Clinical',
+                            price: 150,
+                            cost: 30
+                          }));
+                      newInvoices.push({
+                        id: `inv-${c.id || c.labNumber}-${Date.now()}`,
+                        invoiceNumber: invNumber,
+                        patientName: c.fullName,
+                        patientPhone: c.phone || '',
+                        patientAge: c.age || 30,
+                        patientGender: c.gender || 'male',
+                        barcode: c.barcode,
+                        labNumber: c.labNumber,
+                        referringDoctor: c.referringDoctorName || 'كشف معمل',
+                        tests: actualTests,
+                        subtotal: net,
+                        testsSubtotal: net,
+                        discount: 0,
+                        visitFee: 0,
+                        isHomeVisit: false,
+                        netAmount: net,
+                        paidAmount: paid,
+                        remainingAmount: Math.max(0, net - paid),
+                        paymentMethod: 'cash',
+                        paymentStatus: (c.paymentStatus as any) || (paid >= net ? 'paid' : 'pending'),
+                        cashierName: 'مزامنة سحابية',
+                        branch: 'الفرع الرئيسي - بهتيم',
+                        syncStatus: 'synced',
+                        createdAt: c.sampleDate || new Date().toISOString(),
+                        updatedAt: c.sampleDate || new Date().toISOString()
+                      });
+                    }
+                  });
+                  return addedInvoices > 0 ? [...newInvoices, ...curInvoices] : curInvoices;
                 });
               }
             }).catch(() => {});
@@ -850,7 +913,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             });
           }
           if (Array.isArray(data.packages) && data.packages.length > 0) {
-            setPackages(prev => mergePackagesWithDefaults(data.packages));
+            setPackages(prev => mergePackagesWithDefaults(data.packages, prev));
           }
           if (Array.isArray(data.diagnosticProfiles) && data.diagnosticProfiles.length > 0) {
             setDiagnosticProfiles(prev => mergeProfilesWithDefaults(data.diagnosticProfiles));
@@ -1674,7 +1737,23 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setReports(prev => [newReport, ...prev]);
     setSelectedReportId(newReport.id);
 
-    // Matching financial invoice
+    // Matching financial invoice with 100% accurate price calculations
+    const rawSubtotal = patient.testsSubtotal || patient.totalCost || 0;
+    const fee = patient.visitFee || 0;
+    const disc = patient.discountApplied || 0;
+    const gross = rawSubtotal + fee;
+    const net = (patient as any).netAmount !== undefined 
+      ? (patient as any).netAmount 
+      : Math.max(0, gross - disc);
+    const paid = (patient as any).paidAmount !== undefined 
+      ? (patient as any).paidAmount 
+      : net;
+    const remaining = (patient as any).remainingAmount !== undefined 
+      ? (patient as any).remainingAmount 
+      : Math.max(0, net - paid);
+    const pStatus = (patient as any).paymentStatus 
+      || (paid >= net ? 'paid' : (paid > 0 ? 'partial' : 'pending'));
+
     const newInvoice: IncomeRecord = {
       id: `inv-${Date.now()}`,
       invoiceNumber: `INV-${patient.labNumber.replace('RT-', '')}`,
@@ -1686,19 +1765,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       labNumber: patient.labNumber,
       referringDoctor: patient.referringDoctorName || 'أطباء كلية طب قصر العيني',
       tests: selectedTests,
-      subtotal: patient.totalCost || 0,
-      testsSubtotal: patient.testsSubtotal || patient.totalCost || 0,
-      discount: patient.discountApplied || 0,
-      visitFee: patient.visitFee || 0,
+      subtotal: gross,
+      testsSubtotal: rawSubtotal,
+      discount: disc,
+      visitFee: fee,
       isHomeVisit: patient.bookingType === 'home_visit',
       visitAddress: patient.homeAddress,
-      netAmount: Math.max(0, (patient.totalCost || 0) - (patient.discountApplied || 0) + (patient.visitFee || 0)),
-      paidAmount: Math.max(0, (patient.totalCost || 0) - (patient.discountApplied || 0) + (patient.visitFee || 0)),
-      remainingAmount: 0,
+      netAmount: net,
+      paidAmount: paid,
+      remainingAmount: remaining,
       paymentMethod: (patient.paymentMethod as any) || 'cash',
-      paymentStatus: 'paid',
+      paymentStatus: pStatus,
       cashierName: currentUser.nameAr,
-      branch: patient.branchAddress || 'فرع القصر العيني - الرئيسي',
+      branch: patient.branchAddress || 'الفرع الرئيسي - بهتيم',
       syncStatus: 'synced',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -2603,7 +2682,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
 
         if (Array.isArray(data.packages) && data.packages.length > 0) {
-          mergedPackages = mergePackagesWithDefaults(data.packages);
+          mergedPackages = mergePackagesWithDefaults(data.packages, packages);
           setPackages(mergedPackages);
         }
 
@@ -2640,17 +2719,33 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
       }
 
-      // 2. Also fetch diagnostic cases queue from GitHub
+      // 2. Also fetch diagnostic cases queue from GitHub and sync both reports AND invoices
       const diagCasesRes = await fetchDiagnosticCases(githubConfig);
       if (diagCasesRes.success && Array.isArray(diagCasesRes.cases)) {
         const existingBarcodes = new Set(mergedReports.map(r => r.patient?.barcode).filter(Boolean));
         const existingNumbers = new Set(mergedReports.map(r => r.reportNumber).filter(Boolean));
+        const existingInvNumbers = new Set(mergedInvoices.map(i => i.invoiceNumber || i.labNumber));
 
         diagCasesRes.cases.forEach((c: any) => {
+          const invNum = c.invoiceNumber || `INV-${c.labNumber.replace('RT-', '')}`;
+          const net = c.totalCost || 0;
+          const paid = c.paidAmount !== undefined ? c.paidAmount : (c.paymentStatus === 'paid' ? net : 0);
+          const actualTests = (Array.isArray(c.tests) && c.tests.length > 0)
+            ? c.tests
+            : (c.testNames || ['تحاليل مخبرية']).map((tName: string, idx: number) => ({
+                id: `tst-${idx}-${c.id}`,
+                code: `TST-${idx}`,
+                nameAr: tName,
+                nameEn: tName,
+                category: 'Clinical',
+                price: 150,
+                cost: 30
+              }));
+
           if ((c.barcode && !existingBarcodes.has(c.barcode)) || (c.labNumber && !existingNumbers.has(c.labNumber))) {
             const newRep = convertIncomeRecordToDiagnosticReport({
               id: c.id,
-              invoiceNumber: c.invoiceNumber || `INV-${c.labNumber}`,
+              invoiceNumber: invNum,
               labNumber: c.labNumber,
               barcode: c.barcode,
               patientName: c.fullName,
@@ -2658,31 +2753,60 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               patientGender: c.gender || 'male',
               patientPhone: c.phone || '',
               referringDoctor: c.referringDoctorName || 'كشف معمل',
-              tests: (c.testNames || ['تحاليل مخبرية']).map((tName: string, idx: number) => ({
-                code: `TST-${idx}`,
-                nameAr: tName,
-                nameEn: tName,
-                category: 'Clinical',
-                price: 100,
-                cost: 20
-              })),
-              subtotal: c.totalCost || 200,
+              tests: actualTests,
+              subtotal: net,
               discount: 0,
-              netAmount: c.totalCost || 200,
-              paidAmount: c.paidAmount || (c.paymentStatus === 'paid' ? c.totalCost || 200 : 0),
-              remainingAmount: 0,
+              netAmount: net,
+              paidAmount: paid,
+              remainingAmount: Math.max(0, net - paid),
               paymentMethod: 'cash',
-              paymentStatus: (c.paymentStatus as any) || 'paid',
+              paymentStatus: (c.paymentStatus as any) || (paid >= net ? 'paid' : 'pending'),
               cashierName: 'مزامنة سحابية',
-              branch: 'الفرع الرئيسي',
+              branch: 'الفرع الرئيسي - بهتيم',
               syncStatus: 'synced',
               createdAt: c.sampleDate || new Date().toISOString(),
               updatedAt: c.sampleDate || new Date().toISOString()
             }) as unknown as LabReport;
             mergedReports = [newRep, ...mergedReports];
+            if (c.barcode) existingBarcodes.add(c.barcode);
+            if (c.labNumber) existingNumbers.add(c.labNumber);
+          }
+
+          if (!existingInvNumbers.has(invNum) && !existingInvNumbers.has(c.labNumber)) {
+            const newInv: IncomeRecord = {
+              id: `inv-${c.id || c.labNumber}-${Date.now()}`,
+              invoiceNumber: invNum,
+              patientName: c.fullName,
+              patientPhone: c.phone || '',
+              patientAge: c.age || 30,
+              patientGender: c.gender || 'male',
+              barcode: c.barcode,
+              labNumber: c.labNumber,
+              referringDoctor: c.referringDoctorName || 'كشف معمل',
+              tests: actualTests,
+              subtotal: net,
+              testsSubtotal: net,
+              discount: 0,
+              visitFee: 0,
+              isHomeVisit: false,
+              netAmount: net,
+              paidAmount: paid,
+              remainingAmount: Math.max(0, net - paid),
+              paymentMethod: 'cash',
+              paymentStatus: (c.paymentStatus as any) || (paid >= net ? 'paid' : 'pending'),
+              cashierName: 'مزامنة سحابية',
+              branch: 'الفرع الرئيسي - بهتيم',
+              syncStatus: 'synced',
+              createdAt: c.sampleDate || new Date().toISOString(),
+              updatedAt: c.sampleDate || new Date().toISOString()
+            };
+            mergedInvoices = [newInv, ...mergedInvoices];
+            existingInvNumbers.add(invNum);
+            existingInvNumbers.add(c.labNumber);
           }
         });
         setReports(mergedReports);
+        setIncomeRecords(mergedInvoices);
       }
 
       // 3. Save to localStorage immediately

@@ -352,6 +352,9 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
       testsSubtotal,
       totalCost: netTotal,
       discountApplied: totalDiscount,
+      paidAmount,
+      remainingAmount,
+      paymentStatus: paidAmount >= netTotal ? 'paid' : (paidAmount > 0 ? 'partial' : 'pending'),
       paymentMethod: (paymentMethod as any) || 'cash'
     };
 
@@ -379,15 +382,15 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
   };
 
   const handleSendWhatsApp = () => {
-    const testsAbbrev = selectedTests.map(t => `• ${t.code}`).join('\n') || '• —';
     const discountLabel = selectedPackage
-      ? 'باقة / خصم باقة'
+      ? `باقة: ${selectedPackage.titleAr}`
       : (discountPercent > 0
           ? `${discountPercent}%${loyaltyProfile ? ' (كرت ولاء)' : ''}`
           : (totalDiscount > 0 ? 'خصم مطبق' : 'لا يوجد'));
     const text = formatBookingConfirmationWhatsAppMessage({
       patientName: fullName,
-      labNumber: nextLabNumber || createdLabNum,
+      labNumber: createdLabNum || nextLabNumber,
+      barcode: nextBarcode,
       phone: phone.trim(),
       date: appointmentDate || today,
       time: appointmentTime || '09:00',
@@ -395,14 +398,20 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
       address: homeAddress,
       deliveryNotes,
       branchAddress: labInfo?.mainAddress,
-      testsList: testsAbbrev,
-      subtotal: testsSubtotal,
+      testsDetails: selectedTests.map(t => ({ nameAr: t.nameAr, nameEn: t.nameEn, code: t.code, price: t.price })),
+      packageName: selectedPackage?.titleAr,
+      packagePrice: selectedPackage?.packagePrice,
+      extraTestsDetails: selectedPackage ? extraItems.map(t => ({ nameAr: t.nameAr, nameEn: t.nameEn, code: t.code, price: t.price })) : undefined,
+      subtotal: grossSubtotal,
       discountAmount: totalDiscount,
       discountLabel,
       visitFee: effectiveVisitFee,
       netAmount: netTotal,
+      paidAmount,
+      remainingAmount,
       paymentMethod: paymentMethod === 'cash' ? 'نقدي' : paymentMethod === 'visa' ? 'فيزا' : paymentMethod === 'instapay' ? 'إنستا باي' : String(paymentMethod),
-      fastingHours: Number(fastingHours) || 0
+      fastingHours: Number(fastingHours) || 0,
+      customLabInfo: labInfo
     });
     openWhatsApp(phone, text);
   };

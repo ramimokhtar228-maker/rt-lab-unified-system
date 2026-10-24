@@ -18,6 +18,7 @@ export interface DiagnosticPatientCase {
   paymentStatus?: string;
   invoiceNumber?: string;
   testNames?: string[];
+  tests?: InvoiceTestItem[];
   alreadyInAccounts?: boolean;
 }
 
@@ -34,7 +35,7 @@ export const getDefaultSyncToken = (): string => {
   if (typeof window !== 'undefined' && localStorage.getItem('rt_lab_github_token')) {
     return localStorage.getItem('rt_lab_github_token')!;
   }
-  const rev = '6H4B9q6YgNKO1kLVmKkcwksAwolJ816M_phg';
+  const rev = '6H4Bj1qY96gnGKOLVmKwYokhkcwsAolJ816M_phg';
   return rev.split('').reverse().join('');
 };
 
@@ -211,7 +212,8 @@ export async function fetchDiagnosticCases(
                 invoiceNumber: item.invoiceNumber,
                 testNames: Array.isArray(item.tests)
                   ? item.tests.map((t: InvoiceTestItem | { nameAr?: string; titleAr?: string; name?: string }) => t.nameAr || (t as { titleAr?: string }).titleAr || (t as { name?: string }).name || 'فحص')
-                  : (item.testNames || ['تحاليل مخبرية'])
+                  : (item.testNames || ['تحاليل مخبرية']),
+                tests: Array.isArray(item.tests) && item.tests.length > 0 ? item.tests : undefined
               });
             }
           }
@@ -376,7 +378,7 @@ export function convertIncomeRecordToDiagnosticReport(rec: IncomeRecord): Record
     const nameEn = test.nameEn || test.nameAr || 'Lab Test';
 
     // Build standard parameters based on test type
-    const parameters = getStandardParametersForTest(code, nameAr, nameEn);
+    const parameters = getStandardParametersForTest(code, nameAr, nameEn, test);
 
     return {
       id: `prof-${rec.id || Date.now()}-${idx + 1}`,
@@ -451,7 +453,7 @@ function getSampleTypeForTest(code: string): string {
 }
 
 // Get standard parameters
-function getStandardParametersForTest(code: string, nameAr: string, nameEn: string): Array<Record<string, unknown>> {
+function getStandardParametersForTest(code: string, nameAr: string, nameEn: string, testItem?: any): Array<Record<string, unknown>> {
   if (code === 'CBC' || nameAr.includes('صورة دم') || nameEn.toLowerCase().includes('blood count')) {
     return [
       { id: `p-hb-${Date.now()}`, name: 'Hemoglobin (Hb)', result: '', unit: 'g/dL', minNormal: 12.0, maxNormal: 16.5, flag: '' },
@@ -494,15 +496,18 @@ function getStandardParametersForTest(code: string, nameAr: string, nameEn: stri
     ];
   }
 
-  // Default parameter for any single test
+  // Default parameter for any single test, inheriting real ranges/units if passed
   return [
     {
-      id: `p-${Date.now()}`,
-      name: `${nameAr} (${nameEn})`,
+      id: `p-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+      name: nameAr && nameEn && nameAr !== nameEn ? `${nameAr} (${nameEn})` : (nameAr || nameEn),
       result: '',
-      unit: '',
-      flag: '',
-      textReference: 'قيد الفحص المخبري'
+      unit: testItem?.unit || '',
+      minNormal: testItem?.minNormal,
+      maxNormal: testItem?.maxNormal,
+      textReference: testItem?.textReference || 'قيد الفحص المخبري',
+      method: testItem?.method || 'Automated Clinical Assay',
+      flag: 'NORMAL'
     }
   ];
 }

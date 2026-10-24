@@ -28,7 +28,7 @@ export function openWhatsApp(phone: string, message: string): void {
   window.open(url, '_blank');
 }
 
-/** Professional Medical Booking & Admission Confirmation Message */
+/** Professional, concise & comprehensive Medical Booking Confirmation Message */
 export function formatBookingConfirmationWhatsAppMessage(params: {
   patientName: string;
   labNumber: string;
@@ -47,6 +47,7 @@ export function formatBookingConfirmationWhatsAppMessage(params: {
   testsDetails?: { nameAr: string; nameEn?: string; code?: string; price?: number }[];
   packageName?: string;
   packagePrice?: number;
+  packageOriginalPrice?: number;
   extraTestsDetails?: { nameAr: string; nameEn?: string; code?: string; price?: number }[];
   subtotal: number;
   discountAmount: number;
@@ -62,105 +63,77 @@ export function formatBookingConfirmationWhatsAppMessage(params: {
   const labTitle = params.customLabInfo?.labNameAr || LAB_NAME_AR;
   const branchAddr = params.branchAddress || params.customLabInfo?.mainAddress || BRANCH_MAIN_ADDRESS;
   const contactPhone = params.branchPhone || params.customLabInfo?.phone || params.customLabInfo?.hotline || LAB_PHONE;
-  const whatsappNum = params.customLabInfo?.whatsapp || LAB_WHATSAPP;
   const mapsLink = params.branchGoogleMapsUrl || GOOGLE_MAPS_BRANCH_URL;
 
-  // Format tests list: English abbreviations ONLY; For packages: package name and price ONLY without contents
+  // 1. Format Tests (Clear, concise, professional)
   let testsBlock = '';
   if (params.packageName) {
-    const pkgPrice = params.packagePrice !== undefined ? params.packagePrice : params.subtotal;
-    testsBlock += `🎁 *الباقة المختارة:* ${params.packageName} (${pkgPrice} ج.م)\n`;
+    const pkgPrice = params.packagePrice !== undefined ? params.packagePrice : params.netAmount;
+    testsBlock += `• *باقة:* ${params.packageName} (${pkgPrice} ج.م)\n`;
 
-    // If extra individual tests were added on top of the package (outside package contents):
     if (params.extraTestsDetails && params.extraTestsDetails.length > 0) {
-      testsBlock += `🧪 *تحاليل إضافية (اختصارات بالإنجليزية):*\n`;
-      const extras = params.extraTestsDetails.map(t => {
-        const abbrev = (t.code || t.nameEn || t.nameAr).trim();
-        return `  • *${abbrev}*`;
-      }).join('\n');
-      testsBlock += extras;
+      const extras = params.extraTestsDetails.map(t => (t.code || t.nameEn || t.nameAr).trim()).join('، ');
+      testsBlock += `• *تحاليل إضافية:* ${extras}\n`;
     }
+  } else if (params.testsDetails && params.testsDetails.length > 0) {
+    const items = params.testsDetails.map(t => {
+      const codeOrEn = (t.code || t.nameEn || t.nameAr).trim();
+      const p = t.price ? ` (${t.price} ج.م)` : '';
+      return `• ${codeOrEn}${p}`;
+    }).join('\n');
+    testsBlock += items + '\n';
+  } else if (params.testsList) {
+    const lines = params.testsList.split('\n').map(l => l.trim()).filter(Boolean);
+    testsBlock += lines.map(l => l.startsWith('•') ? l : `• ${l}`).join('\n') + '\n';
   } else {
-    // Individual tests: English abbreviations ONLY
-    if (params.testsDetails && params.testsDetails.length > 0) {
-      const items = params.testsDetails.map(t => {
-        const abbrev = (t.code || t.nameEn || t.nameAr).trim();
-        return `  • *${abbrev}*`;
-      }).join('\n');
-      testsBlock += items;
-    } else if (params.testsList) {
-      // Clean string tests to bullet abbreviations
-      const lines = params.testsList.split('\n').map(l => l.trim()).filter(Boolean);
-      testsBlock += lines.map(l => l.startsWith('•') ? l : `  • *${l}*`).join('\n');
-    } else {
-      testsBlock += '  • *CBC*, *FBS*, *Routine Labs*';
-    }
+    testsBlock += '• فحوصات مخبرية شاملة\n';
   }
 
-  // Location details
+  // 2. Location
   const locBlock = params.isHomeVisit
-    ? `🏠 *نوع الحجز:* زيارة منزلية خاصة لسحب العينات\n📍 *عنوان الزيارة:* ${params.address || 'مسجل لدى طاقم الزيارات المنزلية'}${params.deliveryNotes ? `\n📝 *ملاحظات الوصول:* ${params.deliveryNotes}` : ''}\n📞 *هاتف التنسيق:* ${params.phone || '—'}`
-    : `🏥 *نوع الحجز:* فحص وحضور بمقر المعمل\n🏢 *الفرع:* ${params.branchName || 'الفرع الرئيسي'}\n📍 *العنوان:* ${branchAddr}\n🗺️ *موقع الفرع على الخريطة (GPS):* ${mapsLink}`;
+    ? `• نوع الحجز: *زيارة منزلية خاصة لسحب العينات* 🏠\n• عنوان الزيارة: *${params.address || 'مسجل لدى طاقم الزيارات'}*${params.deliveryNotes ? ` (${params.deliveryNotes})` : ''}`
+    : `• المقر: *${params.branchName || 'الفرع الرئيسي'}* 🏥\n• العنوان: ${branchAddr}\n• اللوكيشن: ${mapsLink}`;
 
-  // Visit fee line
-  const visitFeeText = (params.visitFee && params.visitFee > 0)
-    ? `• *رسوم الزيارة المنزلية:* +${params.visitFee} ج.م\n`
-    : '';
+  // 3. Financial calculations with 100% precision
+  const visitFee = params.visitFee || 0;
+  const discount = Math.max(0, params.discountAmount || 0);
+  const net = params.netAmount;
+  const rawSubtotal = Math.max(net, params.subtotal || (net + discount - visitFee));
+  const paid = params.paidAmount !== undefined ? params.paidAmount : net;
+  const remaining = params.remainingAmount !== undefined ? params.remainingAmount : Math.max(0, net - paid);
+  const remainingText = remaining > 0 ? `*متبقي ${remaining} ج.م*` : 'مسدد بالكامل ✅';
 
-  // Payment status
-  const paidText = (params.paidAmount !== undefined && params.paidAmount > 0)
-    ? `• *المبلغ المدفوع:* ${params.paidAmount} ج.م\n`
-    : '';
-  const remainingText = (params.remainingAmount !== undefined && params.remainingAmount > 0)
-    ? `• *المتبقي سداده:* *${params.remainingAmount} ج.م*\n`
-    : (params.paidAmount !== undefined && params.paidAmount >= params.netAmount)
-      ? `• *حالة السداد:* مسدد بالكامل ✅\n`
-      : '';
-
-  // Fasting instructions
-  let fastingText = '';
-  if (params.fastingHours && params.fastingHours > 0) {
-    fastingText = `• يُشترط الصيام لمدة *${params.fastingHours} ساعة* متواصلة قبل سحب العينة (يُسمح بشرب الماء النقي فقط بكميات مناسبة).`;
-  } else {
-    fastingText = `• يُرجى الالتزام بالصيام في حال كانت تحاليلكم تتطلب ذلك كالسكر والدهون (شرب الماء مسموح دائماً).`;
-  }
+  // 4. Fasting
+  const fastingText = params.fastingHours && params.fastingHours > 0
+    ? `صيام *${params.fastingHours} ساعات* قبل سحب العينة (يُسمح بشرب الماء فقط)`
+    : `يُرجى الصيام في حال طلبت التحاليل ذلك (شرب الماء مسموح دائماً)`;
 
   return `🔬 *${labTitle}*
-*RT Clinical Diagnostic Laboratories*
-*معامل أ.د. رامي مختار — استشاريو الباثولوجيا الإكلينيكية والكيميائية (طب قصر العيني)*
-━━━━━━━━━━━━━━━━━━━━━
-السيد/ة الفاضل/ة: *${params.patientName}* 🌸
-تحية طيبة،، يسعدنا تأكيد حجز موعد تحاليلكم الطبية بنجاح ✅
+*أ.د. رامي مختار — استشاريو الباثولوجيا الإكلينيكية (طب قصر العيني)*
+━━━━━━━━━━━━━━━━━━━━
+أهلاً بحضرتك أ/ *${params.patientName.trim()}* 🌸
+تم تأكيد حجز موعد تحاليلكم الطبية بنجاح ✅
 
-📋 *بيانات الحجز والموعد:*
-• *رقم الحجز / الملف:* #${params.labNumber}
-${params.barcode ? `• *باركود العينة:* ${params.barcode}\n` : ''}• *اليوم والتاريخ:* ${params.date}
-• *وقت الموعد:* ${params.time}
+📋 *بيانات الموعد:*
+• رقم الملف: *#${params.labNumber}*${params.barcode ? ` | باركود: *${params.barcode}*` : ''}
+• الموعد: *${params.date}* — الساعة *${params.time}*
 ${locBlock}
 
-🧪 *الفحوصات المطلوبة (اختصارات بالإنجليزية):*
-${testsBlock}
+🧪 *الفحوصات المطلوبة:*
+${testsBlock.trimEnd()}
 
-💳 *البيان المالي والفوترة:*
-• *إجمالي التحاليل:* ${params.subtotal} ج.م
-${params.discountAmount > 0 ? `• *الخصم المطبق (${params.discountLabel}):* -${params.discountAmount} ج.م\n` : ''}${visitFeeText}• *المبلغ الصافي المطلوب:* *${params.netAmount} ج.م*
-${paidText}${remainingText}• *طريقة الدفع:* ${params.paymentMethod}
+💰 *البيان المالي:*
+• إجمالي الفحوصات: *${rawSubtotal} ج.م*
+${discount > 0 ? `• الخصم المطبق (${params.discountLabel}): *- ${discount} ج.م*\n` : ''}${visitFee > 0 ? `• رسوم الزيارة المنزلية: *+ ${visitFee} ج.م*\n` : ''}• *الصافي المطلوب:* *${net} ج.م*
+• المبلغ المسدد: *${paid} ج.م*
+• حالة السداد: ${remainingText}
+• طريقة الدفع: ${params.paymentMethod}
 
-⚠️ *إرشادات وتحضيرات هامة قبل التحليل:*
-${fastingText}
-• شرب الماء النقي مسموح ومحبذ للمحافظة على رطوبة الأوردة وسهولة سحب العينة.
-• في حال تناول أدوية دورية (سكر، ضغط، غدة)، يُرجى استشارة المعمل أو الطبيب المعالج قبل تناول الجرعة.
-• يُرجى إحضار بطاقة الرقم القومي أو إبرازها لمسؤول السحب.
+⚠️ *تعليمات هامة:*
+• ${fastingText}.
 
-🎁 *برنامج الولاء RT Loyalty:*
-تم ربط رقم هاتفكم بنظام نقاط الولاء، وستحصلون على نقاط مجانية وخصومات مستمرة على كافة الزيارات القادمة.
-
-📞 *للتواصل، الاستفسار، أو تعديل الموعد:*
-• الخط الساخن / الهاتف: ${contactPhone}
-• محادثة واتساب المعمل: https://wa.me/${formatEgyptianPhoneForWhatsApp(whatsappNum)}
-• الدفع السريع عبر إنستاباي: ${INSTAPAY_IPA}
-
-نسأل الله لكم دوام الصحة والعافية ونتشرف بخدمتكم دائماً! 🌸`;
+📞 *للتواصل أو الاستفسار:* ${contactPhone}
+نسأل الله لكم دوام الصحة والعافية 🌸`;
 }
 
 /** Professional Results Notification Message */
