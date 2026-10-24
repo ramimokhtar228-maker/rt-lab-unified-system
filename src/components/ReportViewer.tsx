@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { LabReport, LabSettings, TestResultItem } from '../types/laboratory';
 import { downloadFile, generateCSVReport, generateHL7FHIRJson } from '../utils/exportFormats';
+import { formatGenderAr, formatGenderEn } from '../utils/calculator';
 
 interface ReportViewerProps {
   report: LabReport;
@@ -314,7 +315,7 @@ export const ReportViewer: React.FC<ReportViewerProps> = ({
               <span className="text-slate-500 block text-[11px]">الرقم الطبي (MRN) / السن / الجنس:</span>
               <span className="font-mono font-bold text-slate-900 block">{report.patient.mrn}</span>
               <span className="font-medium text-slate-700">
-                {report.patient.age} سنة ({report.patient.gender === 'MALE' ? 'ذكر / Male' : 'أنثى / Female'})
+                {report.patient.age} سنة ({formatGenderAr(report.patient.gender)} / {formatGenderEn(report.patient.gender)})
               </span>
             </div>
 
@@ -545,6 +546,29 @@ export const ReportViewer: React.FC<ReportViewerProps> = ({
           <div className="mb-6 p-3 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-700">
             <span className="font-bold text-slate-900 block mb-0.5">ملاحظات إكلينيكية / Clinical Comments:</span>
             <p>{report.clinicalNotes}</p>
+          </div>
+        )}
+
+        {/* Recommended Follow-up Investigations */}
+        {((report as any).recommendedTests || (report as any).profiles?.some((pr: any) => pr.recommendedTests?.length > 0)) && (
+          <div className="mb-6 p-4 bg-emerald-50/80 rounded-xl border border-emerald-200 text-xs text-slate-800">
+            <div className="font-bold text-emerald-950 flex items-center gap-2 mb-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-700" />
+              <span>فحوصات مقترحة للمتابعة (Recommended Follow-up Investigations):</span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {Array.from(new Set<string>([
+                ...((report as any).recommendedTests || []),
+                ...((report as any).profiles || []).flatMap((pr: any) => pr.recommendedTests || [])
+              ].filter(Boolean))).map((testName, idx) => (
+                <span key={idx} className="bg-white border border-emerald-300 text-emerald-900 font-bold px-3 py-1 rounded-lg text-xs shadow-2xs">
+                  {testName}
+                </span>
+              ))}
+            </div>
+            <p className="text-[11px] text-emerald-800/80 mt-2 italic">
+              Suggested according to analytical profiles. Please correlate clinically with treating physician.
+            </p>
           </div>
         )}
 

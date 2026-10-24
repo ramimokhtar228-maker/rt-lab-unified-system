@@ -291,12 +291,12 @@ export const PatientForm: React.FC<PatientFormProps> = ({ patient, onChange, onR
           <label className="block text-xs font-semibold text-slate-700 mb-1">
             النوع (Gender) <span className="text-rose-600">*</span>
           </label>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             <button
               type="button"
               onClick={() => updateField('gender', 'male')}
-              className={`py-2 px-3 text-xs font-bold rounded-lg border transition-all cursor-pointer ${
-                patient.gender === 'male' ? 'bg-slate-900 text-white border-slate-900 shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-200'
+              className={`py-2 px-2 text-center text-xs font-bold rounded-lg border transition-all cursor-pointer ${
+                patient.gender === 'male' ? 'bg-slate-900 text-white border-slate-900 shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
               }`}
             >
               ذكر (Male)
@@ -304,11 +304,29 @@ export const PatientForm: React.FC<PatientFormProps> = ({ patient, onChange, onR
             <button
               type="button"
               onClick={() => updateField('gender', 'female')}
-              className={`py-2 px-3 text-xs font-bold rounded-lg border transition-all cursor-pointer ${
-                patient.gender === 'female' ? 'bg-rose-800 text-white border-rose-800 shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-200'
+              className={`py-2 px-2 text-center text-xs font-bold rounded-lg border transition-all cursor-pointer ${
+                patient.gender === 'female' ? 'bg-rose-800 text-white border-rose-800 shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
               }`}
             >
               أنثى (Female)
+            </button>
+            <button
+              type="button"
+              onClick={() => updateField('gender', 'child')}
+              className={`py-2 px-2 text-center text-xs font-bold rounded-lg border transition-all cursor-pointer ${
+                patient.gender === 'child' ? 'bg-amber-700 text-white border-amber-700 shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+              }`}
+            >
+              أطفال (Child)
+            </button>
+            <button
+              type="button"
+              onClick={() => updateField('gender', 'newborn')}
+              className={`py-2 px-2 text-center text-xs font-bold rounded-lg border transition-all cursor-pointer ${
+                patient.gender === 'newborn' ? 'bg-teal-700 text-white border-teal-700 shadow-sm' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+              }`}
+            >
+              حديثي الولادة (Newborn)
             </button>
           </div>
         </div>

@@ -140,6 +140,7 @@ interface AppContextType {
   testCatalog: InvoiceTestItem[];
   addCatalogTest: (test: InvoiceTestItem) => void;
   updateCatalogTest: (code: string, updates: Partial<InvoiceTestItem>) => void;
+  updateIndividualTests: (tests: InvoiceTestItem[]) => void;
   deleteCatalogTest: (code: string) => void;
   resetCatalog: () => void;
   forceSyncCatalog: () => { testsCount: number; packagesCount: number; profilesCount: number };
@@ -1160,11 +1161,58 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
         return reportModified ? { ...rep, profiles: nextProfiles, updatedAt: new Date().toISOString() } : rep;
       });
-
       return anyReportModified ? nextReports : prevReports;
     });
 
+    // Also propagate changes to diagnosticProfiles templates so new reports inherit the updated normals!
+    setDiagnosticProfiles(prevProfiles => {
+      let anyProfChanged = false;
+      const nextProfiles = prevProfiles.map(prof => {
+        let profChanged = false;
+        const nextParams = prof.parameters.map(param => {
+          const matchesCode = param.id?.toLowerCase().includes(code.toLowerCase()) ||
+                              param.name?.toLowerCase().includes(code.toLowerCase()) ||
+                              (updates.nameEn && param.name?.toLowerCase().includes(updates.nameEn.toLowerCase())) ||
+                              (updates.nameAr && param.name?.includes(updates.nameAr));
+          if (matchesCode) {
+            profChanged = true;
+            anyProfChanged = true;
+            return {
+              ...param,
+              unit: updates.unit !== undefined ? updates.unit : param.unit,
+              minNormal: updates.minNormal !== undefined ? updates.minNormal : param.minNormal,
+              maxNormal: updates.maxNormal !== undefined ? updates.maxNormal : param.maxNormal,
+              textReference: updates.textReference !== undefined ? updates.textReference : param.textReference,
+              method: updates.method !== undefined ? updates.method : param.method,
+              name: updates.nameAr && updates.nameEn ? `${updates.nameAr} (${updates.nameEn})` : (updates.nameAr || updates.nameEn || param.name)
+            };
+          }
+          return param;
+        });
+        return profChanged ? { ...prof, parameters: nextParams } : prof;
+      });
+      if (anyProfChanged) {
+        try {
+          localStorage.setItem(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(nextProfiles));
+          localStorage.setItem('rt_lab_catalog_v2', JSON.stringify(nextProfiles));
+        } catch {}
+      }
+      return anyProfChanged ? nextProfiles : prevProfiles;
+    });
+
     logAction('CATALOG_UPDATE', 'CATALOG', `تعديل سعر وبيانات التحليل وتحديثها فورياً في كافة التقارير: ${code}`);
+  }, [logAction]);
+
+  const updateIndividualTests = useCallback((tests: InvoiceTestItem[]) => {
+    setTestCatalog(tests);
+    try {
+      localStorage.setItem(CATALOG_KEY, JSON.stringify(tests));
+      localStorage.setItem('rt_lab_individual_tests_v2', JSON.stringify(tests));
+    } catch (e) {
+      console.warn('Storage save error:', e);
+    }
+    realtimeSyncManager.broadcastAction('UPDATE_CATALOG', tests);
+    logAction('CATALOG_UPDATE', 'CATALOG', `تحديث قائمة التحاليل (${tests.length} فحص)`);
   }, [logAction]);
 
   const deleteCatalogTest = useCallback((code: string) => {
@@ -2283,8 +2331,31 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Staff Signatures & Options
   const updateStaffSignatures = useCallback((signatures: LabStaffSignatures) => {
     setStaffSignatures(signatures);
+    try {
+      localStorage.setItem(STAFF_SIGNATURES_KEY, JSON.stringify(signatures));
+      localStorage.setItem('rt_lab_staff_v3', JSON.stringify(signatures));
+      localStorage.setItem('rt_lab_staff_v2', JSON.stringify(signatures));
+    } catch (e) {
+      console.warn('Storage save error:', e);
+    }
+    realtimeSyncManager.broadcastAction('UPDATE_STAFF', signatures);
+    if (githubConfig.token && githubConfig.autoSync) {
+      pushFullStoreToGitHub(githubConfig, {
+        reports,
+        incomeRecords,
+        expenses,
+        loyaltyProfiles,
+        inventory,
+        labInfo,
+        staffSignatures: signatures,
+        staffSignatureOptions,
+        testCatalog,
+        packages,
+        diagnosticProfiles
+      }).catch(() => {});
+    }
     logAction('UPDATE', 'SETTINGS', 'تحديث الإمضاءات الافتراضية لطاقم الفحص والاعتماد');
-  }, [logAction]);
+  }, [logAction, githubConfig, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, staffSignatureOptions, testCatalog, packages, diagnosticProfiles]);
 
   const addStaffSignatureOption = useCallback((
     role: 'chemist' | 'verifier' | 'consultant',
@@ -2300,10 +2371,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     setStaffSignatureOptions(prev => {
       const targetKey = role === 'chemist' ? 'chemists' : role === 'verifier' ? 'verifiers' : 'consultants';
-      return {
+      const updated = {
         ...prev,
         [targetKey]: [newItem, ...prev[targetKey].filter(x => x.name !== item.name)]
       };
+      try {
+        localStorage.setItem(STAFF_OPTIONS_KEY, JSON.stringify(updated));
+      } catch {}
+      return updated;
     });
 
     logAction('CREATE', 'SETTINGS', `إضافة عضو جديد لطاقم الاعتماد: ${item.name} (${item.title})`);
@@ -2314,14 +2389,81 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     id: string,
     item: { name: string; title: string; license?: string }
   ) => {
+    let oldName = '';
     setStaffSignatureOptions(prev => {
       const targetKey = role === 'chemist' ? 'chemists' : role === 'verifier' ? 'verifiers' : 'consultants';
-      return {
+      const existing = prev[targetKey].find(x => x.id === id);
+      if (existing) oldName = existing.name;
+      const updated = {
         ...prev,
         [targetKey]: prev[targetKey].map(x => (x.id === id ? { ...x, ...item } : x))
       };
+      try {
+        localStorage.setItem(STAFF_OPTIONS_KEY, JSON.stringify(updated));
+      } catch {}
+      return updated;
     });
-    logAction('UPDATE', 'SETTINGS', `تحديث بيانات عضو طاقم الاعتماد: ${item.name}`);
+
+    // Automatically update default staffSignatures if this doctor was selected
+    setStaffSignatures(prev => {
+      let isChanged = false;
+      const next = { ...prev };
+      if (role === 'chemist' && (prev.labChemist === oldName || !prev.labChemist)) {
+        next.labChemist = item.name;
+        next.chemistTitle = item.title;
+        if (item.license) next.chemistLicense = item.license;
+        isChanged = true;
+      } else if (role === 'verifier' && (prev.verifiedBy === oldName || !prev.verifiedBy)) {
+        next.verifiedBy = item.name;
+        next.verifierTitle = item.title;
+        if (item.license) next.verifierLicense = item.license;
+        isChanged = true;
+      } else if (role === 'consultant' && (prev.pathologist === oldName || !prev.pathologist)) {
+        next.pathologist = item.name;
+        next.pathologistTitle = item.title;
+        if (item.license) next.pathologistLicense = item.license;
+        isChanged = true;
+      }
+      if (isChanged) {
+        try {
+          localStorage.setItem(STAFF_SIGNATURES_KEY, JSON.stringify(next));
+          localStorage.setItem('rt_lab_staff_v3', JSON.stringify(next));
+          localStorage.setItem('rt_lab_staff_v2', JSON.stringify(next));
+        } catch {}
+      }
+      return isChanged ? next : prev;
+    });
+
+    // Update in any reports that reference the modified doctor
+    setReports(prevReports => {
+      let anyRepChanged = false;
+      const nextReports = prevReports.map(rep => {
+        if (!rep.staff) return rep;
+        let repChanged = false;
+        const newStaff = { ...rep.staff };
+        if (role === 'chemist' && rep.staff.labChemist === oldName) {
+          newStaff.labChemist = item.name;
+          newStaff.chemistTitle = item.title;
+          if (item.license) newStaff.chemistLicense = item.license;
+          repChanged = true;
+        } else if (role === 'verifier' && rep.staff.verifiedBy === oldName) {
+          newStaff.verifiedBy = item.name;
+          newStaff.verifierTitle = item.title;
+          if (item.license) newStaff.verifierLicense = item.license;
+          repChanged = true;
+        } else if (role === 'consultant' && rep.staff.pathologist === oldName) {
+          newStaff.pathologist = item.name;
+          newStaff.pathologistTitle = item.title;
+          if (item.license) newStaff.pathologistLicense = item.license;
+          repChanged = true;
+        }
+        if (repChanged) anyRepChanged = true;
+        return repChanged ? { ...rep, staff: newStaff } : rep;
+      });
+      return anyRepChanged ? nextReports : prevReports;
+    });
+
+    logAction('UPDATE', 'SETTINGS', `تحديث بيانات عضو طاقم الاعتماد وتحديث كافة السجلات: ${item.name}`);
   }, [logAction]);
 
   const deleteStaffSignatureOption = useCallback((
@@ -2484,6 +2626,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (data.labInfo) {
           setLabInfo(data.labInfo);
         }
+        if (data.staffSignatures) {
+          setStaffSignatures(data.staffSignatures);
+          try {
+            localStorage.setItem(STAFF_SIGNATURES_KEY, JSON.stringify(data.staffSignatures));
+          } catch {}
+        }
+        if (data.staffSignatureOptions) {
+          setStaffSignatureOptions(data.staffSignatureOptions);
+          try {
+            localStorage.setItem(STAFF_OPTIONS_KEY, JSON.stringify(data.staffSignatureOptions));
+          } catch {}
+        }
       }
 
       // 2. Also fetch diagnostic cases queue from GitHub
@@ -2538,6 +2692,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         localStorage.setItem(PACKAGES_KEY, JSON.stringify(mergedPackages));
         localStorage.setItem(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(mergedProfiles));
         localStorage.setItem(CATALOG_KEY, JSON.stringify(mergedCatalog));
+        localStorage.setItem(STAFF_SIGNATURES_KEY, JSON.stringify(staffSignatures));
+        localStorage.setItem(STAFF_OPTIONS_KEY, JSON.stringify(staffSignatureOptions));
       } catch (e) {
         console.warn('Storage save note:', e);
       }
@@ -2550,6 +2706,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         loyaltyProfiles,
         inventory,
         labInfo,
+        staffSignatures,
+        staffSignatureOptions,
         testCatalog: mergedCatalog,
         packages: mergedPackages,
         diagnosticProfiles: mergedProfiles
@@ -2625,6 +2783,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     testCatalog,
     addCatalogTest,
     updateCatalogTest,
+    updateIndividualTests,
     deleteCatalogTest,
     resetCatalog,
     forceSyncCatalog,

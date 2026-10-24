@@ -32,15 +32,17 @@ export function calculateFlag(
 }
 
 export function formatReferenceDisplay(param: TestParameter): string {
-  if (param.textReference) return param.textReference;
   if (param.minNormal !== undefined && param.maxNormal !== undefined) {
-    return `${param.minNormal} - ${param.maxNormal} ${param.unit}`;
+    return `${param.minNormal} - ${param.maxNormal} ${param.unit || ''}`.trim();
   }
   if (param.maxNormal !== undefined) {
-    return `< ${param.maxNormal} ${param.unit}`;
+    return `< ${param.maxNormal} ${param.unit || ''}`.trim();
   }
   if (param.minNormal !== undefined) {
-    return `> ${param.minNormal} ${param.unit}`;
+    return `> ${param.minNormal} ${param.unit || ''}`.trim();
+  }
+  if (param.textReference && param.textReference.trim().length > 0) {
+    return param.textReference.trim();
   }
   return 'Negative';
 }

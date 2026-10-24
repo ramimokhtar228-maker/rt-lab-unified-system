@@ -34,14 +34,31 @@ export const ParameterEditModal: React.FC<ParameterEditModalProps> = ({
       return;
     }
 
+    const minVal = minNormal !== '' && !isNaN(parseFloat(minNormal)) ? parseFloat(minNormal) : undefined;
+    const maxVal = maxNormal !== '' && !isNaN(parseFloat(maxNormal)) ? parseFloat(maxNormal) : undefined;
+    const panicLowVal = panicLow !== '' && !isNaN(parseFloat(panicLow)) ? parseFloat(panicLow) : undefined;
+    const panicHighVal = panicHigh !== '' && !isNaN(parseFloat(panicHigh)) ? parseFloat(panicHigh) : undefined;
+
+    // Auto-update textReference if numeric ranges exist or if user updated them
+    let computedTextRef = textReference.trim();
+    if (!computedTextRef && (minVal !== undefined || maxVal !== undefined)) {
+      if (minVal !== undefined && maxVal !== undefined) {
+        computedTextRef = `${minVal} - ${maxVal} ${unit.trim()}`.trim();
+      } else if (maxVal !== undefined) {
+        computedTextRef = `< ${maxVal} ${unit.trim()}`.trim();
+      } else if (minVal !== undefined) {
+        computedTextRef = `> ${minVal} ${unit.trim()}`.trim();
+      }
+    }
+
     onSave({
       name: name.trim(),
       unit: unit.trim(),
-      minNormal: minNormal !== '' ? parseFloat(minNormal) : undefined,
-      maxNormal: maxNormal !== '' ? parseFloat(maxNormal) : undefined,
-      panicLow: panicLow !== '' ? parseFloat(panicLow) : undefined,
-      panicHigh: panicHigh !== '' ? parseFloat(panicHigh) : undefined,
-      textReference: textReference.trim() || undefined,
+      minNormal: minVal,
+      maxNormal: maxVal,
+      panicLow: panicLowVal,
+      panicHigh: panicHighVal,
+      textReference: computedTextRef || undefined,
       method: method.trim() || undefined,
       notes: notes.trim() || undefined
     });

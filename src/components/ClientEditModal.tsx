@@ -133,6 +133,8 @@ export const ClientEditModal: React.FC<ClientEditModalProps> = ({
               >
                 <option value="male">ذكر (Male)</option>
                 <option value="female">أنثى (Female)</option>
+                <option value="child">أطفال (Child)</option>
+                <option value="newborn">حديثي الولادة (Newborn)</option>
               </select>
             </div>
 

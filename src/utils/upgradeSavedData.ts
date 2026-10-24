@@ -35,7 +35,7 @@ export function mergeCatalogWithDefaults(savedCatalog?: InvoiceTestItem[]): Invo
         nameAr: existing.nameAr || defTest.nameAr,
         nameEn: existing.nameEn || defTest.nameEn,
         sampleType: existing.sampleType || defTest.sampleType,
-        textReference: existing.textReference || defTest.textReference,
+        textReference: existing.textReference !== undefined ? existing.textReference : defTest.textReference,
         minNormal: existing.minNormal !== undefined ? existing.minNormal : defTest.minNormal,
         maxNormal: existing.maxNormal !== undefined ? existing.maxNormal : defTest.maxNormal,
         turnaroundTime: existing.turnaroundTime || defTest.turnaroundTime,
@@ -319,12 +319,17 @@ export function runGlobalDataUpgrade(): { upgradedReportsCount: number; success:
       gizaAddress: 'شارع القصر العيني أمام مستشفى قصر العيني الفرنساوي - القاهرة',
       alexAddress: ''
     };
-    localStorage.setItem('rt_lab_contacts', JSON.stringify(officialContacts));
-    localStorage.setItem('rt_lab_info_v2', JSON.stringify(INITIAL_LAB_INFO));
-    localStorage.setItem('rt_lab_info_v1', JSON.stringify(INITIAL_LAB_INFO));
-    localStorage.setItem('rt_lab_info_v3', JSON.stringify(INITIAL_LAB_INFO));
-    localStorage.setItem('rt_lab_staff_v2', JSON.stringify(DEFAULT_STAFF));
-    localStorage.setItem('rt_lab_staff_v3', JSON.stringify(DEFAULT_STAFF));
+    if (!localStorage.getItem('rt_lab_contacts')) {
+      localStorage.setItem('rt_lab_contacts', JSON.stringify(officialContacts));
+    }
+    if (!localStorage.getItem('rt_lab_info_v3') && !localStorage.getItem('rt_lab_info_v2')) {
+      localStorage.setItem('rt_lab_info_v3', JSON.stringify(INITIAL_LAB_INFO));
+      localStorage.setItem('rt_lab_info_v2', JSON.stringify(INITIAL_LAB_INFO));
+    }
+    if (!localStorage.getItem('rt_lab_unified_staff_signatures_v3') && !localStorage.getItem('rt_lab_staff_v3') && !localStorage.getItem('rt_lab_staff_v2')) {
+      localStorage.setItem('rt_lab_unified_staff_signatures_v3', JSON.stringify(DEFAULT_STAFF));
+      localStorage.setItem('rt_lab_staff_v3', JSON.stringify(DEFAULT_STAFF));
+    }
 
     // 2. Upgrade and Merge Test Catalog in localStorage
     const savedTestCatalogRaw = localStorage.getItem('rt_lab_unified_test_catalog_v3');

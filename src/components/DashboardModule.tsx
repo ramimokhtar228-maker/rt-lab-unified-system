@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
+import { formatGenderAr } from '../utils/calculator';
 import {
   TrendingUp,
   DollarSign,
@@ -552,7 +553,7 @@ export const DashboardModule: React.FC = () => {
                       </td>
 
                       <td className="py-3 px-3 text-slate-600">
-                        {rep.patient.age} سنة · {rep.patient.gender === 'male' ? 'ذكر' : 'أنثى'}
+                        {rep.patient.age} سنة · {formatGenderAr(rep.patient.gender)}
                       </td>
 
                       <td className="py-3 px-3">

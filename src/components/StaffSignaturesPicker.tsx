@@ -18,8 +18,11 @@ export const StaffSignaturesPicker: React.FC<StaffSignaturesPickerProps> = ({
     staffSignatureOptions,
     addStaffSignatureOption,
     updateStaffSignatureOption,
-    deleteStaffSignatureOption
+    deleteStaffSignatureOption,
+    updateStaffSignatures
   } = useApp();
+
+  const [savedDefaultAlert, setSavedDefaultAlert] = useState(false);
 
   // Modal states for Adding / Editing staff options
   const [addingRole, setAddingRole] = useState<'chemist' | 'verifier' | 'consultant' | null>(null);
@@ -53,28 +56,31 @@ export const StaffSignaturesPicker: React.FC<StaffSignaturesPickerProps> = ({
   };
 
   const handleSelectStaff = (role: 'chemist' | 'verifier' | 'consultant', item: StaffOptionItem) => {
+    let updatedSigs: LabStaffSignatures;
     if (role === 'chemist') {
-      onChange({
+      updatedSigs = {
         ...signatures,
         labChemist: item.name,
         chemistTitle: item.title,
         chemistLicense: item.license || signatures.chemistLicense
-      });
+      };
     } else if (role === 'verifier') {
-      onChange({
+      updatedSigs = {
         ...signatures,
         verifiedBy: item.name,
         verifierTitle: item.title,
         verifierLicense: item.license || signatures.verifierLicense
-      });
-    } else if (role === 'consultant') {
-      onChange({
+      };
+    } else {
+      updatedSigs = {
         ...signatures,
         pathologist: item.name,
         pathologistTitle: item.title,
         pathologistLicense: item.license || signatures.pathologistLicense
-      });
+      };
     }
+    onChange(updatedSigs);
+    updateStaffSignatures(updatedSigs);
   };
 
   const handleOpenAdd = (role: 'chemist' | 'verifier' | 'consultant') => {
@@ -113,14 +119,17 @@ export const StaffSignaturesPicker: React.FC<StaffSignaturesPickerProps> = ({
         title: formTitle.trim(),
         license: formLicense.trim() || undefined
       });
+      let updatedSigs = { ...signatures };
       // Update in active report if currently selected
-      if (editingItem.role === 'chemist' && signatures.labChemist === editingItem.item.name) {
-        onChange({ ...signatures, labChemist: formName.trim(), chemistTitle: formTitle.trim(), chemistLicense: formLicense.trim() || undefined });
-      } else if (editingItem.role === 'verifier' && signatures.verifiedBy === editingItem.item.name) {
-        onChange({ ...signatures, verifiedBy: formName.trim(), verifierTitle: formTitle.trim(), verifierLicense: formLicense.trim() || undefined });
-      } else if (editingItem.role === 'consultant' && signatures.pathologist === editingItem.item.name) {
-        onChange({ ...signatures, pathologist: formName.trim(), pathologistTitle: formTitle.trim(), pathologistLicense: formLicense.trim() || undefined });
+      if (editingItem.role === 'chemist' && (signatures.labChemist === editingItem.item.name || !signatures.labChemist)) {
+        updatedSigs = { ...updatedSigs, labChemist: formName.trim(), chemistTitle: formTitle.trim(), chemistLicense: formLicense.trim() || undefined };
+      } else if (editingItem.role === 'verifier' && (signatures.verifiedBy === editingItem.item.name || !signatures.verifiedBy)) {
+        updatedSigs = { ...updatedSigs, verifiedBy: formName.trim(), verifierTitle: formTitle.trim(), verifierLicense: formLicense.trim() || undefined };
+      } else if (editingItem.role === 'consultant' && (signatures.pathologist === editingItem.item.name || !signatures.pathologist)) {
+        updatedSigs = { ...updatedSigs, pathologist: formName.trim(), pathologistTitle: formTitle.trim(), pathologistLicense: formLicense.trim() || undefined };
       }
+      onChange(updatedSigs);
+      updateStaffSignatures(updatedSigs);
       setEditingItem(null);
     } else if (addingRole) {
       addStaffSignatureOption(addingRole, {
@@ -129,13 +138,16 @@ export const StaffSignaturesPicker: React.FC<StaffSignaturesPickerProps> = ({
         license: formLicense.trim() || undefined
       });
       // Apply immediately
+      let updatedSigs = { ...signatures };
       if (addingRole === 'chemist') {
-        onChange({ ...signatures, labChemist: formName.trim(), chemistTitle: formTitle.trim(), chemistLicense: formLicense.trim() || undefined });
+        updatedSigs = { ...updatedSigs, labChemist: formName.trim(), chemistTitle: formTitle.trim(), chemistLicense: formLicense.trim() || undefined };
       } else if (addingRole === 'verifier') {
-        onChange({ ...signatures, verifiedBy: formName.trim(), verifierTitle: formTitle.trim(), verifierLicense: formLicense.trim() || undefined });
+        updatedSigs = { ...updatedSigs, verifiedBy: formName.trim(), verifierTitle: formTitle.trim(), verifierLicense: formLicense.trim() || undefined };
       } else if (addingRole === 'consultant') {
-        onChange({ ...signatures, pathologist: formName.trim(), pathologistTitle: formTitle.trim(), pathologistLicense: formLicense.trim() || undefined });
+        updatedSigs = { ...updatedSigs, pathologist: formName.trim(), pathologistTitle: formTitle.trim(), pathologistLicense: formLicense.trim() || undefined };
       }
+      onChange(updatedSigs);
+      updateStaffSignatures(updatedSigs);
       setAddingRole(null);
     }
 
@@ -162,29 +174,53 @@ export const StaffSignaturesPicker: React.FC<StaffSignaturesPickerProps> = ({
           </div>
         </div>
 
-        {/* Master Visibility Button */}
-        <button
-          type="button"
-          onClick={handleToggleHideAll}
-          className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition ${
-            hideAll
-              ? 'bg-amber-50 text-amber-900 border-amber-300 hover:bg-amber-100'
-              : 'bg-emerald-50 text-emerald-900 border-emerald-300 hover:bg-emerald-100'
-          }`}
-        >
-          {hideAll ? (
-            <>
-              <EyeOff className="w-3.5 h-3.5 text-amber-700" />
-              <span>الإمضاءات مخفية حالياً بالتقرير (اضغط للإظهار)</span>
-            </>
-          ) : (
-            <>
-              <Eye className="w-3.5 h-3.5 text-emerald-700" />
-              <span>الإمضاءات مفعّلة وظاهرة بالتقرير (اضغط للإخفاء)</span>
-            </>
-          )}
-        </button>
+        <div className="flex items-center gap-2">
+          {/* Save As Default Button */}
+          <button
+            type="button"
+            onClick={() => {
+              updateStaffSignatures(signatures);
+              setSavedDefaultAlert(true);
+              setTimeout(() => setSavedDefaultAlert(false), 4000);
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-rose-900 hover:bg-rose-800 text-white shadow-xs transition cursor-pointer"
+            title="حفظ وتثبيت هذه الإمضاءات كبيانات افتراضية لكافة التقارير والمعمل"
+          >
+            <Check className="w-3.5 h-3.5" />
+            <span>حفظ كإمضاءات افتراضية</span>
+          </button>
+
+          {/* Master Visibility Button */}
+          <button
+            type="button"
+            onClick={handleToggleHideAll}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition ${
+              hideAll
+                ? 'bg-amber-50 text-amber-900 border-amber-300 hover:bg-amber-100'
+                : 'bg-emerald-50 text-emerald-900 border-emerald-300 hover:bg-emerald-100'
+            }`}
+          >
+            {hideAll ? (
+              <>
+                <EyeOff className="w-3.5 h-3.5 text-amber-700" />
+                <span>الإمضاءات مخفية (اضغط للإظهار)</span>
+              </>
+            ) : (
+              <>
+                <Eye className="w-3.5 h-3.5 text-emerald-700" />
+                <span>الإمضاءات مفعّلة بالتقرير</span>
+              </>
+            )}
+          </button>
+        </div>
       </div>
+
+      {savedDefaultAlert && (
+        <div className="p-3 bg-emerald-50 text-emerald-900 rounded-xl text-xs font-bold border border-emerald-300 flex items-center gap-2 animate-in fade-in">
+          <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+          <span>✅ تم حفظ وتحديث توقيعات الأطباء وسجلات الاعتماد الافتراضية بنجاح واعتمادها لكافة التقارير!</span>
+        </div>
+      )}
 
       {/* Grid of the 3 Signatures */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">

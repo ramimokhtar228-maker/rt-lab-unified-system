@@ -65,8 +65,8 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
     ...report,
     staff: {
       ...DEFAULT_STAFF,
-      ...staffSignatures,
-      ...report.staff
+      ...report.staff,
+      ...staffSignatures
     }
   }), [report, staffSignatures]);
   const staff = safeReport.staff;

@@ -353,7 +353,7 @@ export interface StaffMember {
   nationalId?: string;
 }
 
-export type Gender = 'male' | 'female';
+export type Gender = 'male' | 'female' | 'child' | 'newborn' | 'MALE' | 'FEMALE' | 'CHILD' | 'NEWBORN';
 export type AgeUnit = 'years' | 'months' | 'days';
 export type DoctorTitle = 'Prof. Dr.' | 'Dr.' | 'Herself' | 'Himself' | 'Custom';
 export type ResultFlag = 'NORMAL' | 'HIGH' | 'LOW' | 'PANIC_HIGH' | 'PANIC_LOW' | 'ABNORMAL' | '';

@@ -96,24 +96,54 @@ export function getChartPointerPosition(
 /**
  * Formats reference interval for display in column 5
  */
+/**
+ * Formats reference interval for display in column 5
+ */
 export function formatReferenceDisplay(param: TestParameter): string {
-  if (param.textReference && param.textReference.trim().length > 0) {
-    return param.textReference;
-  }
-
+  // If numeric normal boundaries are defined, prioritize them so modifications are always reflected immediately
   if (param.minNormal !== undefined && param.maxNormal !== undefined) {
-    return `${param.minNormal} - ${param.maxNormal} ${param.unit}`.trim();
+    return `${param.minNormal} - ${param.maxNormal} ${param.unit || ''}`.trim();
   }
 
   if (param.maxNormal !== undefined) {
-    return `< ${param.maxNormal} ${param.unit}`.trim();
+    return `< ${param.maxNormal} ${param.unit || ''}`.trim();
   }
 
   if (param.minNormal !== undefined) {
-    return `> ${param.minNormal} ${param.unit}`.trim();
+    return `> ${param.minNormal} ${param.unit || ''}`.trim();
+  }
+
+  if (param.textReference && param.textReference.trim().length > 0) {
+    return param.textReference.trim();
   }
 
   return 'Normal';
+}
+
+/**
+ * Format gender for Arabic display
+ */
+export function formatGenderAr(gender?: string): string {
+  if (!gender) return 'ذكر';
+  const g = gender.toLowerCase().trim();
+  if (g === 'male' || g === 'm') return 'ذكر';
+  if (g === 'female' || g === 'f') return 'أنثى';
+  if (g === 'child' || g === 'children' || g === 'pediatric') return 'أطفال';
+  if (g === 'newborn' || g === 'neonate' || g === 'infant') return 'حديثي الولادة';
+  return gender;
+}
+
+/**
+ * Format gender for English / Report display
+ */
+export function formatGenderEn(gender?: string): string {
+  if (!gender) return 'Male';
+  const g = gender.toLowerCase().trim();
+  if (g === 'male' || g === 'm') return 'Male';
+  if (g === 'female' || g === 'f') return 'Female';
+  if (g === 'child' || g === 'children' || g === 'pediatric') return 'Child / Pediatric';
+  if (g === 'newborn' || g === 'neonate' || g === 'infant') return 'Newborn / Neonate';
+  return gender;
 }
 
 /**

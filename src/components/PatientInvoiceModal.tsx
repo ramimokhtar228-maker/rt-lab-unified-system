@@ -1,4 +1,5 @@
 import { tafqeetEGP } from '../utils/tafqeet';
+import { formatGenderAr } from '../utils/calculator';
 import React, { useRef, useState } from 'react';
 import { LabReport } from '../types/lab';
 import { RTLogo } from './RTLogo';
@@ -353,7 +354,7 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
 
           <div>
             <span style="color: #64748b;">السن / النوع:</span>
-            <strong style="margin-right: 4px;">${p.age} ${p.ageUnit === 'years' ? 'سنة' : 'شهر'} / ${p.gender === 'male' ? 'ذكر' : 'أنثى'}</strong>
+            <strong style="margin-right: 4px;">${p.age} ${p.ageUnit === 'years' ? 'سنة' : 'شهر'} / ${formatGenderAr(p.gender)}</strong>
           </div>
           <div>
             <span style="color: #64748b;">تاريخ السحب:</span>
@@ -771,7 +772,7 @@ ${discount > 0 ? `- الخصم: ${discount} ج.م\n` : ''}- الصافي الم�
 
                   <div>
                     <span className="text-slate-500">السن / النوع: </span>
-                    <strong>{p.age} {p.ageUnit === 'years' ? 'سنة' : 'شهر'} / {p.gender === 'male' ? 'ذكر' : 'أنثى'}</strong>
+                    <strong>{p.age} {p.ageUnit === 'years' ? 'سنة' : 'شهر'} / {formatGenderAr(p.gender)}</strong>
                   </div>
                   <div>
                     <span className="text-slate-500">تاريخ السحب: </span>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { STAFF_OPTIONS, DEFAULT_STAFF } from '../data/labCatalog';
+import { useApp } from '../context/AppContext';
 import { LabStaffSignatures } from '../types/lab';
-import { UserCheck, Plus, Trash2, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { UserCheck, CheckCircle2 } from 'lucide-react';
 
 interface StaffSettingsModalProps {
   currentStaff: LabStaffSignatures;
@@ -12,9 +12,11 @@ export const StaffSettingsModal: React.FC<StaffSettingsModalProps> = ({
   currentStaff,
   onUpdateDefaultStaff
 }) => {
-  const [chemists, setChemists] = useState<string[]>(STAFF_OPTIONS.chemists);
-  const [verifiers, setVerifiers] = useState<string[]>(STAFF_OPTIONS.verifiers);
-  const [pathologists, setPathologists] = useState<string[]>(STAFF_OPTIONS.pathologists);
+  const {
+    staffSignatureOptions,
+    addStaffSignatureOption,
+    updateStaffSignatures
+  } = useApp();
 
   const [activeChemist, setActiveChemist] = useState<string>(currentStaff.labChemist);
   const [activeVerifier, setActiveVerifier] = useState<string>(currentStaff.verifiedBy);
@@ -28,31 +30,37 @@ export const StaffSettingsModal: React.FC<StaffSettingsModalProps> = ({
 
   const handleAddChemist = () => {
     if (!newChemist.trim()) return;
-    setChemists([...chemists, newChemist.trim()]);
-    setActiveChemist(newChemist.trim());
+    const name = newChemist.trim();
+    addStaffSignatureOption('chemist', { name, title: 'Senior Clinical Chemist' });
+    setActiveChemist(name);
     setNewChemist('');
   };
 
   const handleAddVerifier = () => {
     if (!newVerifier.trim()) return;
-    setVerifiers([...verifiers, newVerifier.trim()]);
-    setActiveVerifier(newVerifier.trim());
+    const name = newVerifier.trim();
+    addStaffSignatureOption('verifier', { name, title: 'Operations & Quality Manager' });
+    setActiveVerifier(name);
     setNewVerifier('');
   };
 
   const handleAddPathologist = () => {
     if (!newPathologist.trim()) return;
-    setPathologists([...pathologists, newPathologist.trim()]);
-    setActivePathologist(newPathologist.trim());
+    const name = newPathologist.trim();
+    addStaffSignatureOption('consultant', { name, title: 'Consultant Clinical Pathologist - Kasr Al Ainy' });
+    setActivePathologist(name);
     setNewPathologist('');
   };
 
   const handleSaveDefaults = () => {
-    onUpdateDefaultStaff({
+    const updated: LabStaffSignatures = {
+      ...currentStaff,
       labChemist: activeChemist,
       verifiedBy: activeVerifier,
       pathologist: activePathologist
-    });
+    };
+    onUpdateDefaultStaff(updated);
+    updateStaffSignatures(updated);
     setSavedNotification(true);
     setTimeout(() => setSavedNotification(false), 3000);
   };
@@ -105,8 +113,8 @@ export const StaffSettingsModal: React.FC<StaffSettingsModalProps> = ({
               onChange={(e) => setActiveChemist(e.target.value)}
               className="w-full text-xs font-semibold bg-white border border-slate-300 rounded-lg p-2.5 text-slate-900"
             >
-              {chemists.map((name, i) => (
-                <option key={i} value={name}>{name}</option>
+              {staffSignatureOptions.chemists.map((c) => (
+                <option key={c.id} value={c.name}>{c.name} — {c.title}</option>
               ))}
             </select>
           </div>
@@ -146,8 +154,8 @@ export const StaffSettingsModal: React.FC<StaffSettingsModalProps> = ({
               onChange={(e) => setActiveVerifier(e.target.value)}
               className="w-full text-xs font-semibold bg-white border border-slate-300 rounded-lg p-2.5 text-slate-900"
             >
-              {verifiers.map((name, i) => (
-                <option key={i} value={name}>{name}</option>
+              {staffSignatureOptions.verifiers.map((v) => (
+                <option key={v.id} value={v.name}>{v.name} — {v.title}</option>
               ))}
             </select>
           </div>
@@ -187,8 +195,8 @@ export const StaffSettingsModal: React.FC<StaffSettingsModalProps> = ({
               onChange={(e) => setActivePathologist(e.target.value)}
               className="w-full text-xs font-bold bg-white border border-rose-300 rounded-lg p-2.5 text-rose-950"
             >
-              {pathologists.map((name, i) => (
-                <option key={i} value={name}>{name}</option>
+              {staffSignatureOptions.consultants.map((p) => (
+                <option key={p.id} value={p.name}>{p.name} — {p.title}</option>
               ))}
             </select>
           </div>

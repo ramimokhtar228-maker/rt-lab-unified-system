@@ -59,7 +59,7 @@ export const ResultEntryModal: React.FC<ResultEntryModalProps> = ({
   const [patientNameEn, setPatientNameEn] = useState<string>('');
   const [mrn, setMrn] = useState<string>('');
   const [age, setAge] = useState<number>(35);
-  const [gender, setGender] = useState<'MALE' | 'FEMALE'>('MALE');
+  const [gender, setGender] = useState<'MALE' | 'FEMALE' | 'CHILD' | 'NEWBORN'>('MALE');
   const [doctorName, setDoctorName] = useState<string>('د. الطبيب المعالج');
   const [sampleId, setSampleId] = useState<string>('');
 
@@ -425,11 +425,13 @@ export const ResultEntryModal: React.FC<ResultEntryModalProps> = ({
                   <label className="text-slate-500 block mb-1">الجنس:</label>
                   <select
                     value={gender}
-                    onChange={(e) => setGender(e.target.value as 'MALE' | 'FEMALE')}
+                    onChange={(e) => setGender(e.target.value as any)}
                     className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-1 py-1.5 text-center font-bold"
                   >
                     <option value="MALE">ذكر</option>
                     <option value="FEMALE">أنثى</option>
+                    <option value="CHILD">أطفال</option>
+                    <option value="NEWBORN">حديثي الولادة</option>
                   </select>
                 </div>
               </div>

@@ -66,6 +66,7 @@ const AppContent: React.FC = () => {
     updateDiagnosticProfiles,
     resetDiagnosticProfiles,
     updateCatalogTest,
+    updateIndividualTests,
     addCatalogTest,
     deleteCatalogTest,
     forceSyncCatalog,
@@ -291,7 +292,7 @@ const AppContent: React.FC = () => {
                   }
                 }}
                 individualTests={testCatalog as any}
-                onUpdateIndividualTests={() => {}}
+                onUpdateIndividualTests={updateIndividualTests}
               />
             )}
             {activeTab === 'audit_settings' && <SettingsBackupModule />}

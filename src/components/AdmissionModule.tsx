@@ -609,6 +609,8 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
                 >
                   <option value="male">ذكر (Male)</option>
                   <option value="female">أنثى (Female)</option>
+                  <option value="child">أطفال (Child)</option>
+                  <option value="newborn">حديثي الولادة (Newborn)</option>
                 </select>
               </div>
 

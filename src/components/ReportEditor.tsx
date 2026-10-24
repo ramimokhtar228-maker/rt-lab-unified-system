@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { LabReport, TestProfile, TestParameter, LabStaffSignatures, ReportStatus, ComprehensivePackage, DiseaseIllustration } from '../types/lab';
-import { calculateFlag, formatReferenceDisplay, runAutomaticCalculations } from '../utils/calculator';
+import { calculateFlag, formatReferenceDisplay, runAutomaticCalculations, formatGenderAr } from '../utils/calculator';
 import { COMMON_INTERPRETATIONS, STAFF_OPTIONS } from '../data/labCatalog';
 import { suggestHematologicalIllustration, DISEASE_ILLUSTRATIONS } from '../data/diseaseIllustrations';
 import { ColouredRangeChart } from './ColouredRangeChart';
@@ -805,7 +805,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                   {report.patient.labNumber}
                 </span>
                 <span className="text-xs text-slate-600 font-bold">
-                  ({report.patient.age} {report.patient.ageUnit === 'years' ? 'سنة' : report.patient.ageUnit === 'months' ? 'شهر' : 'يوم'} / {report.patient.gender === 'male' ? 'ذكر' : 'أنثى'})
+                  ({report.patient.age} {report.patient.ageUnit === 'years' ? 'سنة' : report.patient.ageUnit === 'months' ? 'شهر' : 'يوم'} / {formatGenderAr(report.patient.gender)})
                 </span>
               </div>
               <div className="flex items-center gap-3 text-xs text-slate-500 mt-0.5 flex-wrap">
@@ -890,11 +890,11 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
               {/* Gender */}
               <div className="space-y-1">
                 <label className="font-bold text-slate-700">النوع:</label>
-                <div className="flex items-center gap-1 p-0.5 bg-slate-100 rounded-lg border border-slate-200">
+                <div className="grid grid-cols-2 gap-1 p-0.5 bg-slate-100 rounded-lg border border-slate-200">
                   <button
                     type="button"
                     onClick={() => handleUpdatePatient({ gender: 'male' })}
-                    className={`flex-1 py-1 text-center font-bold rounded-md transition-all ${
+                    className={`py-1 text-center font-bold rounded-md transition-all text-[11px] ${
                       report.patient.gender === 'male' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
@@ -903,11 +903,29 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                   <button
                     type="button"
                     onClick={() => handleUpdatePatient({ gender: 'female' })}
-                    className={`flex-1 py-1 text-center font-bold rounded-md transition-all ${
+                    className={`py-1 text-center font-bold rounded-md transition-all text-[11px] ${
                       report.patient.gender === 'female' ? 'bg-rose-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
                     أنثى (Female)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleUpdatePatient({ gender: 'child' })}
+                    className={`py-1 text-center font-bold rounded-md transition-all text-[11px] ${
+                      report.patient.gender === 'child' ? 'bg-amber-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    أطفال (Child)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleUpdatePatient({ gender: 'newborn' })}
+                    className={`py-1 text-center font-bold rounded-md transition-all text-[11px] ${
+                      report.patient.gender === 'newborn' ? 'bg-teal-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    حديثي الولادة (Newborn)
                   </button>
                 </div>
               </div>

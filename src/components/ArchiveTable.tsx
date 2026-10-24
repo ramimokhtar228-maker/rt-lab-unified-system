@@ -3,6 +3,7 @@ import { useApp } from '../context/AppContext';
 import { LabReport, ReportStatus } from '../types/lab';
 import { formatWhatsAppMessage, openWhatsApp } from '../utils/whatsapp';
 import { exportReportToPPTX } from '../utils/pptxExport';
+import { formatGenderAr } from '../utils/calculator';
 import { 
   Archive, 
   Search, 
@@ -389,7 +390,7 @@ export const ArchiveTable: React.FC<ArchiveTableProps> = ({
                         {p.age} {p.ageUnit === 'years' ? 'سنة' : p.ageUnit === 'months' ? 'شهر' : 'يوم'}
                       </div>
                       <div className="text-[10px] text-slate-400">
-                        {p.gender === 'male' ? 'ذكر' : 'أنثى'}
+                        {formatGenderAr(p.gender)}
                       </div>
                     </td>
 

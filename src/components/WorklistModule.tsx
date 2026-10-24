@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useApp } from '../context/AppContext';
+import { formatGenderAr } from '../utils/calculator';
 import {
   FlaskConical,
   Search,
@@ -251,7 +252,7 @@ export const WorklistModule: React.FC = () => {
                   </div>
 
                   <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500">
-                    <span>{rep.patient.age} {rep.patient.ageUnit === 'years' ? 'سنة' : 'شهر'} ({rep.patient.gender === 'male' ? 'ذكر' : 'أنثى'})</span>
+                    <span>{rep.patient.age} {rep.patient.ageUnit === 'years' ? 'سنة' : 'شهر'} ({formatGenderAr(rep.patient.gender)})</span>
                     <span>·</span>
                     <span>الهاتف: <strong className="font-mono text-slate-700">{rep.patient.phone || 'غير مسجل'}</strong></span>
                     <span>·</span>
