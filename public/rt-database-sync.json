@@ -3,6 +3,1748 @@
   "syncedAt": "2026-10-20T18:38:36.730Z",
   "reports": [
     {
+      "id": "rep-RT-2026-059",
+      "reportNumber": "RT-2026-059",
+      "patient": {
+        "id": "pat-RT-2026-059",
+        "labNumber": "RT-2026-059",
+        "barcode": "RT-10089",
+        "fullName": "زينب عمر الفاروق",
+        "age": 53,
+        "ageUnit": "years",
+        "gender": "female",
+        "phone": "01091353732",
+        "referringDoctorTitle": "Prof. Dr.",
+        "referringDoctorName": "Herself",
+        "sampleDate": "2026-10-22T19:59",
+        "reportingDate": "2026-10-22T19:59",
+        "clinicalHistory": "طلب فحص مخبري مسجل بنظام الحالات السحابي",
+        "bloodGroup": "O+",
+        "totalCost": 62
+      },
+      "status": "draft",
+      "staff": {
+        "labChemist": "كيميائي / محمود سامي",
+        "verifiedBy": "د. مروة عبد الرحمن",
+        "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
+      },
+      "createdAt": "2026-10-22T19:59:52.842Z",
+      "updatedAt": "2026-10-22T19:59:52.842Z",
+      "invoiceId": "INV-2026-059",
+      "profiles": [
+        {
+          "id": "prof-RT-2026-059-0",
+          "profileCode": "FREE_T3",
+          "titleEn": "Free Triiodothyronine (FT3)",
+          "titleAr": "Free Triiodothyronine (FT3)",
+          "category": "Thyroid",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-059-0-1",
+              "name": "Free Triiodothyronine (FT3) (Free Triiodothyronine (FT3))",
+              "result": "",
+              "unit": "pg/mL",
+              "minNormal": 2.3,
+              "maxNormal": 4.2,
+              "textReference": "2.3 - 4.2 pg/mL (3.5 - 6.5 pmol/L)",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-059-1",
+          "profileCode": "FREE_T4",
+          "titleEn": "Free Thyroxine (FT4)",
+          "titleAr": "Free Thyroxine (FT4)",
+          "category": "Thyroid",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-059-1-1",
+              "name": "Free Thyroxine (FT4) (Free Thyroxine (FT4))",
+              "result": "",
+              "unit": "ng/dL",
+              "minNormal": 0.89,
+              "maxNormal": 1.76,
+              "textReference": "0.89 - 1.76 ng/dL (11.5 - 22.7 pmol/L)",
+              "flag": "NORMAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rep-RT-2026-060",
+      "reportNumber": "RT-2026-060",
+      "patient": {
+        "id": "pat-RT-2026-060",
+        "labNumber": "RT-2026-060",
+        "barcode": "RT-10090",
+        "fullName": "مريم انطون انور",
+        "age": 34,
+        "ageUnit": "years",
+        "gender": "female",
+        "phone": "01286688480",
+        "referringDoctorTitle": "Prof. Dr.",
+        "referringDoctorName": "HERSELF",
+        "sampleDate": "2026-10-22T20:04",
+        "reportingDate": "2026-10-22T20:04",
+        "clinicalHistory": "طلب فحص مخبري مسجل بنظام الحالات السحابي",
+        "bloodGroup": "O+",
+        "totalCost": 821
+      },
+      "status": "draft",
+      "staff": {
+        "labChemist": "كيميائي / محمود سامي",
+        "verifiedBy": "د. مروة عبد الرحمن",
+        "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
+      },
+      "createdAt": "2026-10-22T20:04:36.123Z",
+      "updatedAt": "2026-10-22T20:04:36.123Z",
+      "invoiceId": "INV-2026-060",
+      "profiles": [
+        {
+          "id": "prof-RT-2026-060-0",
+          "profileCode": "GLYCEMIC",
+          "titleEn": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "titleAr": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "category": "Clinical Chemistry",
+          "sampleType": "Fluoride Plasma & EDTA Blood",
+          "parameters": [
+            {
+              "id": "p-RT-2026-060-0-1",
+              "name": "Diabetes & Glycemic Assessment (HbA1c & eAG) (Diabetes & Glycemic Assessment (HbA1c & eAG))",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-060-1",
+          "profileCode": "LIPID",
+          "titleEn": "Lipid Profile",
+          "titleAr": "Lipid Profile",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum (12h Fasting)",
+          "parameters": [
+            {
+              "id": "p-RT-2026-060-1-1",
+              "name": "Lipid Profile (Lipid Profile)",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-060-2",
+          "profileCode": "LFT",
+          "titleEn": "Liver Function Tests (LFT)",
+          "titleAr": "Liver Function Tests (LFT)",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-060-2-1",
+              "name": "Liver Function Tests (LFT) (Liver Function Tests (LFT))",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-060-3",
+          "profileCode": "KFT",
+          "titleEn": "Kidney Function Profile",
+          "titleAr": "Kidney Function Profile",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-060-3-1",
+              "name": "Kidney Function Profile (Kidney Function Profile)",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-060-4",
+          "profileCode": "VIT_D",
+          "titleEn": "25-Hydroxy Vitamin D Total",
+          "titleAr": "25-Hydroxy Vitamin D Total",
+          "category": "Anemia & Vitamins",
+          "sampleType": "Serum (Protected from light)",
+          "parameters": [
+            {
+              "id": "p-RT-2026-060-4-1",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
+              "result": "",
+              "unit": "ng/mL",
+              "minNormal": 30,
+              "maxNormal": 100,
+              "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-060-5",
+          "profileCode": "TSH",
+          "titleEn": "Thyroid Stimulating Hormone (TSH)",
+          "titleAr": "Thyroid Stimulating Hormone (TSH)",
+          "category": "Thyroid",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-060-5-1",
+              "name": "Thyroid Stimulating Hormone (TSH) (Thyroid Stimulating Hormone (TSH))",
+              "result": "",
+              "unit": "uIU/mL",
+              "minNormal": 0.35,
+              "maxNormal": 4.94,
+              "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-060-6",
+          "profileCode": "HCT_632",
+          "titleEn": "Hematocrit %",
+          "titleAr": "نسبه الهيماتوكريت",
+          "category": "Clinical hematology",
+          "sampleType": "EDTA BLOOD",
+          "parameters": [
+            {
+              "id": "p-RT-2026-060-6-1",
+              "name": "نسبه الهيماتوكريت (Hematocrit %)",
+              "result": "",
+              "unit": "%",
+              "minNormal": 37,
+              "maxNormal": 49,
+              "textReference": "37-49",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-060-7",
+          "profileCode": "HB_727",
+          "titleEn": "Hemoglobin %",
+          "titleAr": "نسبه هيموجلوبين",
+          "category": "Clinical hematology ",
+          "sampleType": "EDTA BLOOD",
+          "parameters": [
+            {
+              "id": "p-RT-2026-060-7-1",
+              "name": "نسبه هيموجلوبين (Hemoglobin %)",
+              "result": "",
+              "unit": "g/dL",
+              "minNormal": 12.5,
+              "maxNormal": 16.5,
+              "textReference": "MALE : 13.5-17.5    /.    FEMALE : 12.5-16.5",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-060-8",
+          "profileCode": "CALCIUM_TOTAL",
+          "titleEn": "Total Serum Calcium",
+          "titleAr": "Total Serum Calcium",
+          "category": "Minerals & Bone",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-060-8-1",
+              "name": "Total Serum Calcium (Total Serum Calcium)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 8.6,
+              "maxNormal": 10.3,
+              "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-060-9",
+          "profileCode": "ESR",
+          "titleEn": "Erythrocyte Sedimentation Rate",
+          "titleAr": "Erythrocyte Sedimentation Rate",
+          "category": "Hematology",
+          "sampleType": "Citrated Whole Blood (1:4)",
+          "parameters": [
+            {
+              "id": "p-RT-2026-060-9-1",
+              "name": "Erythrocyte Sedimentation Rate (Erythrocyte Sedimentation Rate)",
+              "result": "",
+              "unit": "mm/1st hr",
+              "minNormal": 0,
+              "maxNormal": 15,
+              "textReference": "Males: < 15 mm/1st hr | Females: < 20 mm/1st hr (Higher with age)",
+              "flag": "NORMAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rep-RT-2026-061",
+      "reportNumber": "RT-2026-061",
+      "patient": {
+        "id": "pat-RT-2026-061",
+        "labNumber": "RT-2026-061",
+        "barcode": "RT-10091",
+        "fullName": "مكة احمد سيف الدين",
+        "age": 7,
+        "ageUnit": "years",
+        "gender": "female",
+        "phone": "01124580333",
+        "referringDoctorTitle": "Prof. Dr.",
+        "referringDoctorName": "HERSELF",
+        "sampleDate": "2026-10-22T20:11",
+        "reportingDate": "2026-10-22T20:11",
+        "clinicalHistory": "طلب فحص مخبري مسجل بنظام الحالات السحابي",
+        "bloodGroup": "O+",
+        "totalCost": 300
+      },
+      "status": "draft",
+      "staff": {
+        "labChemist": "كيميائي / محمود سامي",
+        "verifiedBy": "د. مروة عبد الرحمن",
+        "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
+      },
+      "createdAt": "2026-10-22T20:11:17.460Z",
+      "updatedAt": "2026-10-22T20:11:17.460Z",
+      "invoiceId": "INV-2026-061",
+      "profiles": [
+        {
+          "id": "prof-RT-2026-061-0",
+          "profileCode": "CBC",
+          "titleEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+          "titleAr": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+          "category": "Hematology",
+          "sampleType": "EDTA Whole Blood",
+          "parameters": [
+            {
+              "id": "p-RT-2026-061-0-1",
+              "name": "Complete Blood Count (CBC) with Full Automated Differential & Indices (Complete Blood Count (CBC) with Full Automated Differential & Indices)",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-061-1",
+          "profileCode": "URINE_CULTURE",
+          "titleEn": "Urine Culture & Sensitivity (Antibiogram)",
+          "titleAr": "Urine Culture & Sensitivity (Antibiogram)",
+          "category": "Microbiology",
+          "sampleType": "Clean-Catch Midstream Urine in Sterile Cup",
+          "parameters": [
+            {
+              "id": "p-RT-2026-061-1-1",
+              "name": "Urine Culture & Sensitivity (Antibiogram) (Urine Culture & Sensitivity (Antibiogram))",
+              "result": "",
+              "unit": "CFU/mL",
+              "textReference": "No significant bacterial growth (< 10,000 CFU/mL)",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-061-2",
+          "profileCode": "URINE",
+          "titleEn": "Complete Urine Analysis",
+          "titleAr": "Complete Urine Analysis",
+          "category": "Clinical Microscopy",
+          "sampleType": "Clean Catch Midstream Urine",
+          "parameters": [
+            {
+              "id": "p-RT-2026-061-2-1",
+              "name": "Complete Urine Analysis (Complete Urine Analysis)",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-061-3",
+          "profileCode": "UREA",
+          "titleEn": "Blood Urea",
+          "titleAr": "Blood Urea",
+          "category": "Kidney Function",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-061-3-1",
+              "name": "Blood Urea (Blood Urea)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 15,
+              "maxNormal": 45,
+              "textReference": "15 - 45 mg/dL",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-061-4",
+          "profileCode": "CREAT",
+          "titleEn": "Serum Creatinine",
+          "titleAr": "Serum Creatinine",
+          "category": "Kidney Function",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-061-4-1",
+              "name": "Serum Creatinine (Serum Creatinine)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 0.6,
+              "maxNormal": 1.4,
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
+              "flag": "NORMAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rep-RT-2026-062",
+      "reportNumber": "RT-2026-062",
+      "patient": {
+        "id": "pat-RT-2026-062",
+        "labNumber": "RT-2026-062",
+        "barcode": "RT-10092",
+        "fullName": "يارا محمد  رمضان",
+        "age": 10,
+        "ageUnit": "years",
+        "gender": "female",
+        "phone": "01127504064",
+        "referringDoctorTitle": "Prof. Dr.",
+        "referringDoctorName": "Herself",
+        "sampleDate": "2026-10-23T17:32",
+        "reportingDate": "2026-10-23T17:32",
+        "clinicalHistory": "طلب فحص مخبري مسجل بنظام الحالات السحابي",
+        "bloodGroup": "O+",
+        "totalCost": 0
+      },
+      "status": "draft",
+      "staff": {
+        "labChemist": "كيميائي / محمود سامي",
+        "verifiedBy": "د. مروة عبد الرحمن",
+        "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
+      },
+      "createdAt": "2026-10-23T17:32:54.494Z",
+      "updatedAt": "2026-10-23T17:32:54.494Z",
+      "invoiceId": "INV-2026-062",
+      "profiles": [
+        {
+          "id": "prof-RT-2026-062-0",
+          "profileCode": "CBC",
+          "titleEn": "Complete Blood Count with Differential",
+          "titleAr": "Complete Blood Count with Differential",
+          "category": "Hematology",
+          "sampleType": "EDTA Whole Blood",
+          "parameters": [
+            {
+              "id": "p-RT-2026-062-0-1",
+              "name": "Complete Blood Count with Differential (Complete Blood Count with Differential)",
+              "result": "",
+              "unit": "Multi-parameter",
+              "minNormal": 0,
+              "maxNormal": 0,
+              "textReference": "Hb: Male 13.0-17.5 g/dL, Female 12.0-15.5 | WBC: 4.0-11.0 10^3/uL | PLT: 150-450 10^3/uL",
+              "flag": "NORMAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rep-RT-2026-063",
+      "reportNumber": "RT-2026-063",
+      "patient": {
+        "id": "pat-RT-2026-063",
+        "labNumber": "RT-2026-063",
+        "barcode": "RT-10093",
+        "fullName": "دعاء احمد  عبدالفتاح",
+        "age": 44,
+        "ageUnit": "years",
+        "gender": "female",
+        "phone": "01141477450",
+        "referringDoctorTitle": "Prof. Dr.",
+        "referringDoctorName": "Herself",
+        "sampleDate": "2026-10-24T12:41",
+        "reportingDate": "2026-10-24T12:41",
+        "clinicalHistory": "طلب فحص مخبري مسجل بنظام الحالات السحابي",
+        "bloodGroup": "O+",
+        "totalCost": 641
+      },
+      "status": "draft",
+      "staff": {
+        "labChemist": "كيميائي / محمود سامي",
+        "verifiedBy": "د. مروة عبد الرحمن",
+        "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
+      },
+      "createdAt": "2026-10-24T12:41:21.827Z",
+      "updatedAt": "2026-10-24T12:41:21.827Z",
+      "invoiceId": "INV-2026-063",
+      "profiles": [
+        {
+          "id": "prof-RT-2026-063-0",
+          "profileCode": "GLYCEMIC",
+          "titleEn": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "titleAr": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "category": "Clinical Chemistry",
+          "sampleType": "Fluoride Plasma & EDTA Blood",
+          "parameters": [
+            {
+              "id": "p-RT-2026-063-0-1",
+              "name": "Diabetes & Glycemic Assessment (HbA1c & eAG) (Diabetes & Glycemic Assessment (HbA1c & eAG))",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-063-1",
+          "profileCode": "LIPID",
+          "titleEn": "Lipid Profile",
+          "titleAr": "Lipid Profile",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum (12h Fasting)",
+          "parameters": [
+            {
+              "id": "p-RT-2026-063-1-1",
+              "name": "Lipid Profile (Lipid Profile)",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-063-2",
+          "profileCode": "LFT",
+          "titleEn": "Liver Function Tests (LFT)",
+          "titleAr": "Liver Function Tests (LFT)",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-063-2-1",
+              "name": "Liver Function Tests (LFT) (Liver Function Tests (LFT))",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-063-3",
+          "profileCode": "KFT",
+          "titleEn": "Kidney Function Profile",
+          "titleAr": "Kidney Function Profile",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-063-3-1",
+              "name": "Kidney Function Profile (Kidney Function Profile)",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-063-4",
+          "profileCode": "VIT_D",
+          "titleEn": "25-Hydroxy Vitamin D Total",
+          "titleAr": "25-Hydroxy Vitamin D Total",
+          "category": "Anemia & Vitamins",
+          "sampleType": "Serum (Protected from light)",
+          "parameters": [
+            {
+              "id": "p-RT-2026-063-4-1",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
+              "result": "",
+              "unit": "ng/mL",
+              "minNormal": 30,
+              "maxNormal": 100,
+              "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-063-5",
+          "profileCode": "TSH",
+          "titleEn": "Thyroid Stimulating Hormone (TSH)",
+          "titleAr": "Thyroid Stimulating Hormone (TSH)",
+          "category": "Thyroid",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-063-5-1",
+              "name": "Thyroid Stimulating Hormone (TSH) (Thyroid Stimulating Hormone (TSH))",
+              "result": "",
+              "unit": "uIU/mL",
+              "minNormal": 0.35,
+              "maxNormal": 4.94,
+              "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-063-6",
+          "profileCode": "HCT_632",
+          "titleEn": "Hematocrit %",
+          "titleAr": "نسبه الهيماتوكريت",
+          "category": "Clinical hematology",
+          "sampleType": "EDTA BLOOD",
+          "parameters": [
+            {
+              "id": "p-RT-2026-063-6-1",
+              "name": "نسبه الهيماتوكريت (Hematocrit %)",
+              "result": "",
+              "unit": "%",
+              "minNormal": 37,
+              "maxNormal": 49,
+              "textReference": "37-49",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-063-7",
+          "profileCode": "HB_727",
+          "titleEn": "Hemoglobin %",
+          "titleAr": "نسبه هيموجلوبين",
+          "category": "Clinical hematology ",
+          "sampleType": "EDTA BLOOD",
+          "parameters": [
+            {
+              "id": "p-RT-2026-063-7-1",
+              "name": "نسبه هيموجلوبين (Hemoglobin %)",
+              "result": "",
+              "unit": "g/dL",
+              "minNormal": 12.5,
+              "maxNormal": 16.5,
+              "textReference": "MALE : 13.5-17.5    /.    FEMALE : 12.5-16.5",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-063-8",
+          "profileCode": "CALCIUM_TOTAL",
+          "titleEn": "Total Serum Calcium",
+          "titleAr": "Total Serum Calcium",
+          "category": "Minerals & Bone",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-063-8-1",
+              "name": "Total Serum Calcium (Total Serum Calcium)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 8.6,
+              "maxNormal": 10.3,
+              "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-063-9",
+          "profileCode": "ESR",
+          "titleEn": "Erythrocyte Sedimentation Rate",
+          "titleAr": "Erythrocyte Sedimentation Rate",
+          "category": "Hematology",
+          "sampleType": "Citrated Whole Blood (1:4)",
+          "parameters": [
+            {
+              "id": "p-RT-2026-063-9-1",
+              "name": "Erythrocyte Sedimentation Rate (Erythrocyte Sedimentation Rate)",
+              "result": "",
+              "unit": "mm/1st hr",
+              "minNormal": 0,
+              "maxNormal": 15,
+              "textReference": "Males: < 15 mm/1st hr | Females: < 20 mm/1st hr (Higher with age)",
+              "flag": "NORMAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rep-RT-2026-064",
+      "reportNumber": "RT-2026-064",
+      "patient": {
+        "id": "pat-RT-2026-064",
+        "labNumber": "RT-2026-064",
+        "barcode": "RT-10094",
+        "fullName": "عائشة شحاتة توفيق",
+        "age": 65,
+        "ageUnit": "years",
+        "gender": "female",
+        "phone": "01124485444",
+        "referringDoctorTitle": "Prof. Dr.",
+        "referringDoctorName": "Herself",
+        "sampleDate": "2026-10-24T14:47",
+        "reportingDate": "2026-10-24T14:47",
+        "clinicalHistory": "طلب فحص مخبري مسجل بنظام الحالات السحابي",
+        "bloodGroup": "O+",
+        "totalCost": 641
+      },
+      "status": "draft",
+      "staff": {
+        "labChemist": "كيميائي / محمود سامي",
+        "verifiedBy": "د. مروة عبد الرحمن",
+        "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
+      },
+      "createdAt": "2026-10-24T14:47:32.178Z",
+      "updatedAt": "2026-10-24T14:47:32.178Z",
+      "invoiceId": "INV-2026-064",
+      "profiles": [
+        {
+          "id": "prof-RT-2026-064-0",
+          "profileCode": "GLYCEMIC",
+          "titleEn": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "titleAr": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "category": "Clinical Chemistry",
+          "sampleType": "Fluoride Plasma & EDTA Blood",
+          "parameters": [
+            {
+              "id": "p-RT-2026-064-0-1",
+              "name": "Diabetes & Glycemic Assessment (HbA1c & eAG) (Diabetes & Glycemic Assessment (HbA1c & eAG))",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-064-1",
+          "profileCode": "LIPID",
+          "titleEn": "Lipid Profile",
+          "titleAr": "Lipid Profile",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum (12h Fasting)",
+          "parameters": [
+            {
+              "id": "p-RT-2026-064-1-1",
+              "name": "Lipid Profile (Lipid Profile)",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-064-2",
+          "profileCode": "LFT",
+          "titleEn": "Liver Function Tests (LFT)",
+          "titleAr": "Liver Function Tests (LFT)",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-064-2-1",
+              "name": "Liver Function Tests (LFT) (Liver Function Tests (LFT))",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-064-3",
+          "profileCode": "KFT",
+          "titleEn": "Kidney Function Profile",
+          "titleAr": "Kidney Function Profile",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-064-3-1",
+              "name": "Kidney Function Profile (Kidney Function Profile)",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-064-4",
+          "profileCode": "VIT_D",
+          "titleEn": "25-Hydroxy Vitamin D Total",
+          "titleAr": "25-Hydroxy Vitamin D Total",
+          "category": "Anemia & Vitamins",
+          "sampleType": "Serum (Protected from light)",
+          "parameters": [
+            {
+              "id": "p-RT-2026-064-4-1",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
+              "result": "",
+              "unit": "ng/mL",
+              "minNormal": 30,
+              "maxNormal": 100,
+              "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-064-5",
+          "profileCode": "TSH",
+          "titleEn": "Thyroid Stimulating Hormone (TSH)",
+          "titleAr": "Thyroid Stimulating Hormone (TSH)",
+          "category": "Thyroid",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-064-5-1",
+              "name": "Thyroid Stimulating Hormone (TSH) (Thyroid Stimulating Hormone (TSH))",
+              "result": "",
+              "unit": "uIU/mL",
+              "minNormal": 0.35,
+              "maxNormal": 4.94,
+              "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-064-6",
+          "profileCode": "HCT_632",
+          "titleEn": "Hematocrit %",
+          "titleAr": "نسبه الهيماتوكريت",
+          "category": "Clinical hematology",
+          "sampleType": "EDTA BLOOD",
+          "parameters": [
+            {
+              "id": "p-RT-2026-064-6-1",
+              "name": "نسبه الهيماتوكريت (Hematocrit %)",
+              "result": "",
+              "unit": "%",
+              "minNormal": 37,
+              "maxNormal": 49,
+              "textReference": "37-49",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-064-7",
+          "profileCode": "HB_727",
+          "titleEn": "Hemoglobin %",
+          "titleAr": "نسبه هيموجلوبين",
+          "category": "Clinical hematology ",
+          "sampleType": "EDTA BLOOD",
+          "parameters": [
+            {
+              "id": "p-RT-2026-064-7-1",
+              "name": "نسبه هيموجلوبين (Hemoglobin %)",
+              "result": "",
+              "unit": "g/dL",
+              "minNormal": 12.5,
+              "maxNormal": 16.5,
+              "textReference": "MALE : 13.5-17.5    /.    FEMALE : 12.5-16.5",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-064-8",
+          "profileCode": "CALCIUM_TOTAL",
+          "titleEn": "Total Serum Calcium",
+          "titleAr": "Total Serum Calcium",
+          "category": "Minerals & Bone",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-064-8-1",
+              "name": "Total Serum Calcium (Total Serum Calcium)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 8.6,
+              "maxNormal": 10.3,
+              "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-064-9",
+          "profileCode": "ESR",
+          "titleEn": "Erythrocyte Sedimentation Rate",
+          "titleAr": "Erythrocyte Sedimentation Rate",
+          "category": "Hematology",
+          "sampleType": "Citrated Whole Blood (1:4)",
+          "parameters": [
+            {
+              "id": "p-RT-2026-064-9-1",
+              "name": "Erythrocyte Sedimentation Rate (Erythrocyte Sedimentation Rate)",
+              "result": "",
+              "unit": "mm/1st hr",
+              "minNormal": 0,
+              "maxNormal": 15,
+              "textReference": "Males: < 15 mm/1st hr | Females: < 20 mm/1st hr (Higher with age)",
+              "flag": "NORMAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rep-RT-2026-065",
+      "reportNumber": "RT-2026-065",
+      "patient": {
+        "id": "pat-RT-2026-065",
+        "labNumber": "RT-2026-065",
+        "barcode": "RT-10095",
+        "fullName": "محسن عبدالمنعم",
+        "age": 58,
+        "ageUnit": "years",
+        "gender": "male",
+        "phone": "01117552241",
+        "referringDoctorTitle": "Prof. Dr.",
+        "referringDoctorName": "Himself",
+        "sampleDate": "2026-10-24T16:35",
+        "reportingDate": "2026-10-24T16:35",
+        "clinicalHistory": "طلب فحص مخبري مسجل بنظام الحالات السحابي",
+        "bloodGroup": "O+",
+        "totalCost": 521
+      },
+      "status": "draft",
+      "staff": {
+        "labChemist": "كيميائي / محمود سامي",
+        "verifiedBy": "د. مروة عبد الرحمن",
+        "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
+      },
+      "createdAt": "2026-10-24T16:35:13.342Z",
+      "updatedAt": "2026-10-24T16:35:13.342Z",
+      "invoiceId": "INV-2026-065",
+      "profiles": [
+        {
+          "id": "prof-RT-2026-065-0",
+          "profileCode": "GLYCEMIC",
+          "titleEn": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "titleAr": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "category": "Clinical Chemistry",
+          "sampleType": "Fluoride Plasma & EDTA Blood",
+          "parameters": [
+            {
+              "id": "p-RT-2026-065-0-1",
+              "name": "Diabetes & Glycemic Assessment (HbA1c & eAG) (Diabetes & Glycemic Assessment (HbA1c & eAG))",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-065-1",
+          "profileCode": "LIPID",
+          "titleEn": "Lipid Profile",
+          "titleAr": "Lipid Profile",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum (12h Fasting)",
+          "parameters": [
+            {
+              "id": "p-RT-2026-065-1-1",
+              "name": "Lipid Profile (Lipid Profile)",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-065-2",
+          "profileCode": "LFT",
+          "titleEn": "Liver Function Tests (LFT)",
+          "titleAr": "Liver Function Tests (LFT)",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-065-2-1",
+              "name": "Liver Function Tests (LFT) (Liver Function Tests (LFT))",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-065-3",
+          "profileCode": "KFT",
+          "titleEn": "Kidney Function Profile",
+          "titleAr": "Kidney Function Profile",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-065-3-1",
+              "name": "Kidney Function Profile (Kidney Function Profile)",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-065-4",
+          "profileCode": "VIT_D",
+          "titleEn": "25-Hydroxy Vitamin D Total",
+          "titleAr": "25-Hydroxy Vitamin D Total",
+          "category": "Anemia & Vitamins",
+          "sampleType": "Serum (Protected from light)",
+          "parameters": [
+            {
+              "id": "p-RT-2026-065-4-1",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
+              "result": "",
+              "unit": "ng/mL",
+              "minNormal": 30,
+              "maxNormal": 100,
+              "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-065-5",
+          "profileCode": "TSH",
+          "titleEn": "Thyroid Stimulating Hormone (TSH)",
+          "titleAr": "Thyroid Stimulating Hormone (TSH)",
+          "category": "Thyroid",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-065-5-1",
+              "name": "Thyroid Stimulating Hormone (TSH) (Thyroid Stimulating Hormone (TSH))",
+              "result": "",
+              "unit": "uIU/mL",
+              "minNormal": 0.35,
+              "maxNormal": 4.94,
+              "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-065-6",
+          "profileCode": "HCT_632",
+          "titleEn": "Hematocrit %",
+          "titleAr": "نسبه الهيماتوكريت",
+          "category": "Clinical hematology",
+          "sampleType": "EDTA BLOOD",
+          "parameters": [
+            {
+              "id": "p-RT-2026-065-6-1",
+              "name": "نسبه الهيماتوكريت (Hematocrit %)",
+              "result": "",
+              "unit": "%",
+              "minNormal": 37,
+              "maxNormal": 49,
+              "textReference": "37-49",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-065-7",
+          "profileCode": "HB_727",
+          "titleEn": "Hemoglobin %",
+          "titleAr": "نسبه هيموجلوبين",
+          "category": "Clinical hematology ",
+          "sampleType": "EDTA BLOOD",
+          "parameters": [
+            {
+              "id": "p-RT-2026-065-7-1",
+              "name": "نسبه هيموجلوبين (Hemoglobin %)",
+              "result": "",
+              "unit": "g/dL",
+              "minNormal": 12.5,
+              "maxNormal": 16.5,
+              "textReference": "MALE : 13.5-17.5    /.    FEMALE : 12.5-16.5",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-065-8",
+          "profileCode": "CALCIUM_TOTAL",
+          "titleEn": "Total Serum Calcium",
+          "titleAr": "Total Serum Calcium",
+          "category": "Minerals & Bone",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-065-8-1",
+              "name": "Total Serum Calcium (Total Serum Calcium)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 8.6,
+              "maxNormal": 10.3,
+              "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-065-9",
+          "profileCode": "ESR",
+          "titleEn": "Erythrocyte Sedimentation Rate",
+          "titleAr": "Erythrocyte Sedimentation Rate",
+          "category": "Hematology",
+          "sampleType": "Citrated Whole Blood (1:4)",
+          "parameters": [
+            {
+              "id": "p-RT-2026-065-9-1",
+              "name": "Erythrocyte Sedimentation Rate (Erythrocyte Sedimentation Rate)",
+              "result": "",
+              "unit": "mm/1st hr",
+              "minNormal": 0,
+              "maxNormal": 15,
+              "textReference": "Males: < 15 mm/1st hr | Females: < 20 mm/1st hr (Higher with age)",
+              "flag": "NORMAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rep-RT-2026-066",
+      "reportNumber": "RT-2026-066",
+      "patient": {
+        "id": "pat-RT-2026-066",
+        "labNumber": "RT-2026-066",
+        "barcode": "RT-10096",
+        "fullName": "منار اشرف",
+        "age": 19,
+        "ageUnit": "years",
+        "gender": "female",
+        "phone": "01099141483",
+        "referringDoctorTitle": "Prof. Dr.",
+        "referringDoctorName": "HERSELF",
+        "sampleDate": "2026-10-24T20:10",
+        "reportingDate": "2026-10-24T20:10",
+        "clinicalHistory": "طلب فحص مخبري مسجل بنظام الحالات السحابي",
+        "bloodGroup": "O+",
+        "totalCost": 521
+      },
+      "status": "draft",
+      "staff": {
+        "labChemist": "كيميائي / محمود سامي",
+        "verifiedBy": "د. مروة عبد الرحمن",
+        "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
+      },
+      "createdAt": "2026-10-24T20:10:59.277Z",
+      "updatedAt": "2026-10-24T20:10:59.277Z",
+      "invoiceId": "INV-2026-066",
+      "profiles": [
+        {
+          "id": "prof-RT-2026-066-0",
+          "profileCode": "GLYCEMIC",
+          "titleEn": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "titleAr": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "category": "Clinical Chemistry",
+          "sampleType": "Fluoride Plasma & EDTA Blood",
+          "parameters": [
+            {
+              "id": "p-RT-2026-066-0-1",
+              "name": "Diabetes & Glycemic Assessment (HbA1c & eAG) (Diabetes & Glycemic Assessment (HbA1c & eAG))",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-066-1",
+          "profileCode": "LIPID",
+          "titleEn": "Lipid Profile",
+          "titleAr": "Lipid Profile",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum (12h Fasting)",
+          "parameters": [
+            {
+              "id": "p-RT-2026-066-1-1",
+              "name": "Lipid Profile (Lipid Profile)",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-066-2",
+          "profileCode": "LFT",
+          "titleEn": "Liver Function Tests (LFT)",
+          "titleAr": "Liver Function Tests (LFT)",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-066-2-1",
+              "name": "Liver Function Tests (LFT) (Liver Function Tests (LFT))",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-066-3",
+          "profileCode": "KFT",
+          "titleEn": "Kidney Function Profile",
+          "titleAr": "Kidney Function Profile",
+          "category": "Clinical Chemistry",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-066-3-1",
+              "name": "Kidney Function Profile (Kidney Function Profile)",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-066-4",
+          "profileCode": "VIT_D",
+          "titleEn": "25-Hydroxy Vitamin D Total",
+          "titleAr": "25-Hydroxy Vitamin D Total",
+          "category": "Anemia & Vitamins",
+          "sampleType": "Serum (Protected from light)",
+          "parameters": [
+            {
+              "id": "p-RT-2026-066-4-1",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
+              "result": "",
+              "unit": "ng/mL",
+              "minNormal": 30,
+              "maxNormal": 100,
+              "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-066-5",
+          "profileCode": "TSH",
+          "titleEn": "Thyroid Stimulating Hormone (TSH)",
+          "titleAr": "Thyroid Stimulating Hormone (TSH)",
+          "category": "Thyroid",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-066-5-1",
+              "name": "Thyroid Stimulating Hormone (TSH) (Thyroid Stimulating Hormone (TSH))",
+              "result": "",
+              "unit": "uIU/mL",
+              "minNormal": 0.35,
+              "maxNormal": 4.94,
+              "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-066-6",
+          "profileCode": "HCT_632",
+          "titleEn": "Hematocrit %",
+          "titleAr": "نسبه الهيماتوكريت",
+          "category": "Clinical hematology",
+          "sampleType": "EDTA BLOOD",
+          "parameters": [
+            {
+              "id": "p-RT-2026-066-6-1",
+              "name": "نسبه الهيماتوكريت (Hematocrit %)",
+              "result": "",
+              "unit": "%",
+              "minNormal": 37,
+              "maxNormal": 49,
+              "textReference": "37-49",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-066-7",
+          "profileCode": "HB_727",
+          "titleEn": "Hemoglobin %",
+          "titleAr": "نسبه هيموجلوبين",
+          "category": "Clinical hematology ",
+          "sampleType": "EDTA BLOOD",
+          "parameters": [
+            {
+              "id": "p-RT-2026-066-7-1",
+              "name": "نسبه هيموجلوبين (Hemoglobin %)",
+              "result": "",
+              "unit": "g/dL",
+              "minNormal": 12.5,
+              "maxNormal": 16.5,
+              "textReference": "MALE : 13.5-17.5    /.    FEMALE : 12.5-16.5",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-066-8",
+          "profileCode": "CALCIUM_TOTAL",
+          "titleEn": "Total Serum Calcium",
+          "titleAr": "Total Serum Calcium",
+          "category": "Minerals & Bone",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-066-8-1",
+              "name": "Total Serum Calcium (Total Serum Calcium)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 8.6,
+              "maxNormal": 10.3,
+              "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-066-9",
+          "profileCode": "ESR",
+          "titleEn": "Erythrocyte Sedimentation Rate",
+          "titleAr": "Erythrocyte Sedimentation Rate",
+          "category": "Hematology",
+          "sampleType": "Citrated Whole Blood (1:4)",
+          "parameters": [
+            {
+              "id": "p-RT-2026-066-9-1",
+              "name": "Erythrocyte Sedimentation Rate (Erythrocyte Sedimentation Rate)",
+              "result": "",
+              "unit": "mm/1st hr",
+              "minNormal": 0,
+              "maxNormal": 15,
+              "textReference": "Males: < 15 mm/1st hr | Females: < 20 mm/1st hr (Higher with age)",
+              "flag": "NORMAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rep-RT-2026-067",
+      "reportNumber": "RT-2026-067",
+      "patient": {
+        "id": "pat-RT-2026-067",
+        "labNumber": "RT-2026-067",
+        "barcode": "RT-10097",
+        "fullName": "هند مرسي عبدالرحمن",
+        "age": 35,
+        "ageUnit": "years",
+        "gender": "female",
+        "phone": "01099141483",
+        "referringDoctorTitle": "Prof. Dr.",
+        "referringDoctorName": "HERSELF",
+        "sampleDate": "2026-10-24T20:16",
+        "reportingDate": "2026-10-24T20:16",
+        "clinicalHistory": "طلب فحص مخبري مسجل بنظام الحالات السحابي",
+        "bloodGroup": "O+",
+        "totalCost": 1050
+      },
+      "status": "draft",
+      "staff": {
+        "labChemist": "كيميائي / محمود سامي",
+        "verifiedBy": "د. مروة عبد الرحمن",
+        "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
+      },
+      "createdAt": "2026-10-24T20:16:17.386Z",
+      "updatedAt": "2026-10-24T20:16:17.386Z",
+      "invoiceId": "INV-2026-067",
+      "profiles": [
+        {
+          "id": "prof-RT-2026-067-0",
+          "profileCode": "CBC",
+          "titleEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+          "titleAr": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
+          "category": "Hematology",
+          "sampleType": "EDTA Whole Blood",
+          "parameters": [
+            {
+              "id": "p-RT-2026-067-0-1",
+              "name": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة (Complete Blood Count (CBC) with Full Automated Differential & Indices)",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-067-1",
+          "profileCode": "THYROID",
+          "titleEn": "Thyroid Function Full Panel",
+          "titleAr": "Thyroid Function Full Panel",
+          "category": "Endocrinology",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-067-1-1",
+              "name": "Thyroid Function Full Panel (Thyroid Function Full Panel)",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-067-2",
+          "profileCode": "URINE",
+          "titleEn": "Complete Urine Analysis",
+          "titleAr": "Complete Urine Analysis",
+          "category": "Clinical Microscopy",
+          "sampleType": "Clean Catch Midstream Urine",
+          "parameters": [
+            {
+              "id": "p-RT-2026-067-2-1",
+              "name": "Complete Urine Analysis (Complete Urine Analysis)",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-067-3",
+          "profileCode": "FERRITIN",
+          "titleEn": "Serum Ferritin Level",
+          "titleAr": "Serum Ferritin Level",
+          "category": "Anemia & Vitamins",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-067-3-1",
+              "name": "Serum Ferritin Level (Serum Ferritin Level)",
+              "result": "",
+              "unit": "ng/mL",
+              "minNormal": 30,
+              "maxNormal": 400,
+              "textReference": "Adult Males: 30 - 400 ng/mL | Adult Females: 15 - 150 ng/mL",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-067-4",
+          "profileCode": "VIT_D",
+          "titleEn": "25-Hydroxy Vitamin D Total",
+          "titleAr": "25-Hydroxy Vitamin D Total",
+          "category": "Anemia & Vitamins",
+          "sampleType": "Serum (Protected from light)",
+          "parameters": [
+            {
+              "id": "p-RT-2026-067-4-1",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
+              "result": "",
+              "unit": "ng/mL",
+              "minNormal": 30,
+              "maxNormal": 100,
+              "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-067-5",
+          "profileCode": "CALCIUM_TOTAL",
+          "titleEn": "Total Serum Calcium",
+          "titleAr": "Total Serum Calcium",
+          "category": "Minerals & Bone",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-067-5-1",
+              "name": "Total Serum Calcium (Total Serum Calcium)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 8.6,
+              "maxNormal": 10.3,
+              "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-067-6",
+          "profileCode": "GLU_F",
+          "titleEn": "Fasting Blood Sugar",
+          "titleAr": "Fasting Blood Sugar",
+          "category": "Diabetes",
+          "sampleType": "Fluoride Plasma / Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-067-6-1",
+              "name": "Fasting Blood Sugar (Fasting Blood Sugar)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 70,
+              "maxNormal": 100,
+              "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-067-7",
+          "profileCode": "CREAT",
+          "titleEn": "Serum Creatinine",
+          "titleAr": "Serum Creatinine",
+          "category": "Kidney Function",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-067-7-1",
+              "name": "Serum Creatinine (Serum Creatinine)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 0.6,
+              "maxNormal": 1.2,
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.1 mg/dL",
+              "flag": "NORMAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rep-RT-2026-068",
+      "reportNumber": "RT-2026-068",
+      "patient": {
+        "id": "pat-RT-2026-068",
+        "labNumber": "RT-2026-068",
+        "barcode": "RT-10098",
+        "fullName": "دينا سامى",
+        "age": 40,
+        "ageUnit": "years",
+        "gender": "female",
+        "phone": "01099141483",
+        "referringDoctorTitle": "Prof. Dr.",
+        "referringDoctorName": "herself",
+        "sampleDate": "2026-10-24T20:18",
+        "reportingDate": "2026-10-24T20:18",
+        "clinicalHistory": "طلب فحص مخبري مسجل بنظام الحالات السحابي",
+        "bloodGroup": "O+",
+        "totalCost": 1050
+      },
+      "status": "draft",
+      "staff": {
+        "labChemist": "كيميائي / محمود سامي",
+        "verifiedBy": "د. مروة عبد الرحمن",
+        "pathologist": "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
+      },
+      "createdAt": "2026-10-24T20:18:40.495Z",
+      "updatedAt": "2026-10-24T20:18:40.495Z",
+      "invoiceId": "INV-2026-068",
+      "profiles": [
+        {
+          "id": "prof-RT-2026-068-0",
+          "profileCode": "CBC",
+          "titleEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+          "titleAr": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
+          "category": "Hematology",
+          "sampleType": "EDTA Whole Blood",
+          "parameters": [
+            {
+              "id": "p-RT-2026-068-0-1",
+              "name": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة (Complete Blood Count (CBC) with Full Automated Differential & Indices)",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-068-1",
+          "profileCode": "THYROID",
+          "titleEn": "Thyroid Function Full Panel",
+          "titleAr": "Thyroid Function Full Panel",
+          "category": "Endocrinology",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-068-1-1",
+              "name": "Thyroid Function Full Panel (Thyroid Function Full Panel)",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-068-2",
+          "profileCode": "URINE",
+          "titleEn": "Complete Urine Analysis",
+          "titleAr": "Complete Urine Analysis",
+          "category": "Clinical Microscopy",
+          "sampleType": "Clean Catch Midstream Urine",
+          "parameters": [
+            {
+              "id": "p-RT-2026-068-2-1",
+              "name": "Complete Urine Analysis (Complete Urine Analysis)",
+              "result": "",
+              "unit": "",
+              "textReference": "قيد الفحص المخبري",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-068-3",
+          "profileCode": "FERRITIN",
+          "titleEn": "Serum Ferritin Level",
+          "titleAr": "Serum Ferritin Level",
+          "category": "Anemia & Vitamins",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-068-3-1",
+              "name": "Serum Ferritin Level (Serum Ferritin Level)",
+              "result": "",
+              "unit": "ng/mL",
+              "minNormal": 30,
+              "maxNormal": 400,
+              "textReference": "Adult Males: 30 - 400 ng/mL | Adult Females: 15 - 150 ng/mL",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-068-4",
+          "profileCode": "VIT_D",
+          "titleEn": "25-Hydroxy Vitamin D Total",
+          "titleAr": "25-Hydroxy Vitamin D Total",
+          "category": "Anemia & Vitamins",
+          "sampleType": "Serum (Protected from light)",
+          "parameters": [
+            {
+              "id": "p-RT-2026-068-4-1",
+              "name": "25-Hydroxy Vitamin D Total (25-Hydroxy Vitamin D Total)",
+              "result": "",
+              "unit": "ng/mL",
+              "minNormal": 30,
+              "maxNormal": 100,
+              "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-068-5",
+          "profileCode": "CALCIUM_TOTAL",
+          "titleEn": "Total Serum Calcium",
+          "titleAr": "Total Serum Calcium",
+          "category": "Minerals & Bone",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-068-5-1",
+              "name": "Total Serum Calcium (Total Serum Calcium)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 8.6,
+              "maxNormal": 10.3,
+              "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-068-6",
+          "profileCode": "GLU_F",
+          "titleEn": "Fasting Blood Sugar",
+          "titleAr": "Fasting Blood Sugar",
+          "category": "Diabetes",
+          "sampleType": "Fluoride Plasma / Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-068-6-1",
+              "name": "Fasting Blood Sugar (Fasting Blood Sugar)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 70,
+              "maxNormal": 100,
+              "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
+              "flag": "NORMAL"
+            }
+          ]
+        },
+        {
+          "id": "prof-RT-2026-068-7",
+          "profileCode": "CREAT",
+          "titleEn": "Serum Creatinine",
+          "titleAr": "Serum Creatinine",
+          "category": "Kidney Function",
+          "sampleType": "Serum",
+          "parameters": [
+            {
+              "id": "p-RT-2026-068-7-1",
+              "name": "Serum Creatinine (Serum Creatinine)",
+              "result": "",
+              "unit": "mg/dL",
+              "minNormal": 0.6,
+              "maxNormal": 1.2,
+              "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.1 mg/dL",
+              "flag": "NORMAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "rep-1792521201957",
       "reportNumber": "RT-2026-058",
       "patient": {
@@ -18742,6 +20484,1302 @@
     }
   ],
   "incomeRecords": [
+    {
+      "id": "inv-RT-2026-059-1792872194688",
+      "invoiceNumber": "INV-2026-059",
+      "patientName": "زينب عمر الفاروق",
+      "patientPhone": "01091353732",
+      "patientAge": 53,
+      "patientGender": "female",
+      "barcode": "RT-10089",
+      "labNumber": "RT-2026-059",
+      "referringDoctor": "Herself",
+      "tests": [
+        {
+          "id": "t-54",
+          "code": "FREE_T3",
+          "nameAr": "Free Triiodothyronine (FT3)",
+          "nameEn": "Free Triiodothyronine (FT3)",
+          "category": "Thyroid",
+          "price": 388,
+          "cost": 32,
+          "sampleType": "Serum",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "pg/mL",
+          "minNormal": 2.3,
+          "maxNormal": 4.2,
+          "textReference": "2.3 - 4.2 pg/mL (3.5 - 6.5 pmol/L)",
+          "method": "CLIA (Chemiluminescence Immunoassay)"
+        },
+        {
+          "id": "t-55",
+          "code": "FREE_T4",
+          "nameAr": "Free Thyroxine (FT4)",
+          "nameEn": "Free Thyroxine (FT4)",
+          "category": "Thyroid",
+          "price": 388,
+          "cost": 32,
+          "sampleType": "Serum",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "ng/dL",
+          "minNormal": 0.89,
+          "maxNormal": 1.76,
+          "textReference": "0.89 - 1.76 ng/dL (11.5 - 22.7 pmol/L)",
+          "method": "CLIA (Chemiluminescence Immunoassay)"
+        }
+      ],
+      "subtotal": 62,
+      "testsSubtotal": 62,
+      "discount": 0,
+      "visitFee": 0,
+      "isHomeVisit": false,
+      "netAmount": 62,
+      "paidAmount": 62,
+      "remainingAmount": 0,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "cashierName": "د. رامي مختار",
+      "branch": "الفرع الرئيسي - بهتيم",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-22T19:59:52.842Z",
+      "updatedAt": "2026-10-22T19:59:52.842Z"
+    },
+    {
+      "id": "inv-RT-2026-060-1792872194688",
+      "invoiceNumber": "INV-2026-060",
+      "patientName": "مريم انطون انور",
+      "patientPhone": "01286688480",
+      "patientAge": 34,
+      "patientGender": "female",
+      "barcode": "RT-10090",
+      "labNumber": "RT-2026-060",
+      "referringDoctor": "HERSELF",
+      "tests": [
+        {
+          "id": "prof-GLYCEMIC",
+          "code": "GLYCEMIC",
+          "nameAr": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "nameEn": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Fluoride Plasma & EDTA Blood"
+        },
+        {
+          "id": "prof-LIPID",
+          "code": "LIPID",
+          "nameAr": "Lipid Profile",
+          "nameEn": "Lipid Profile",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum (12h Fasting)"
+        },
+        {
+          "id": "prof-LFT",
+          "code": "LFT",
+          "nameAr": "Liver Function Tests (LFT)",
+          "nameEn": "Liver Function Tests (LFT)",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum"
+        },
+        {
+          "id": "prof-KFT",
+          "code": "KFT",
+          "nameAr": "Kidney Function Profile",
+          "nameEn": "Kidney Function Profile",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum"
+        },
+        {
+          "id": "t-79",
+          "code": "VIT_D",
+          "nameAr": "25-Hydroxy Vitamin D Total",
+          "nameEn": "25-Hydroxy Vitamin D Total",
+          "category": "Anemia & Vitamins",
+          "price": 360,
+          "cost": 85,
+          "sampleType": "Serum (Protected from light)",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "ng/mL",
+          "minNormal": 30,
+          "maxNormal": 100,
+          "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+          "method": "CLIA (Chemiluminescence Immunoassay)",
+          "fastingInstructions": "No fasting required"
+        },
+        {
+          "id": "t-53",
+          "code": "TSH",
+          "nameAr": "Thyroid Stimulating Hormone (TSH)",
+          "nameEn": "Thyroid Stimulating Hormone (TSH)",
+          "category": "Thyroid",
+          "price": 150,
+          "cost": 30,
+          "sampleType": "Serum",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "uIU/mL",
+          "minNormal": 0.35,
+          "maxNormal": 4.94,
+          "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+          "method": "CLIA (3rd Generation Chemiluminescence)",
+          "fastingInstructions": "No fasting required (early morning, before thyroid medication)"
+        },
+        {
+          "id": "test-1792164472194",
+          "code": "HCT_632",
+          "nameEn": "Hematocrit %",
+          "nameAr": "نسبه الهيماتوكريت",
+          "category": "Clinical hematology",
+          "sampleType": "EDTA BLOOD",
+          "unit": "%",
+          "minNormal": 37,
+          "maxNormal": 49,
+          "textReference": "37-49",
+          "method": "Enzymatic",
+          "fastingInstructions": "لا يشترط الصيام",
+          "turnaroundHours": 2,
+          "price": 20
+        },
+        {
+          "id": "test-1792164310191",
+          "code": "HB_727",
+          "nameEn": "Hemoglobin %",
+          "nameAr": "نسبه هيموجلوبين",
+          "category": "Clinical hematology ",
+          "sampleType": "EDTA BLOOD",
+          "unit": "g/dL",
+          "minNormal": 12.5,
+          "maxNormal": 16.5,
+          "textReference": "MALE : 13.5-17.5    /.    FEMALE : 12.5-16.5",
+          "method": "Enzymatic",
+          "fastingInstructions": "لا يشترط الصيام",
+          "turnaroundHours": 2,
+          "price": 200
+        },
+        {
+          "id": "t-26",
+          "code": "CALCIUM_TOTAL",
+          "nameAr": "Total Serum Calcium",
+          "nameEn": "Total Serum Calcium",
+          "category": "Minerals & Bone",
+          "price": 110,
+          "cost": 15,
+          "sampleType": "Serum",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "mg/dL",
+          "minNormal": 8.6,
+          "maxNormal": 10.3,
+          "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
+          "method": "Arsenazo III / CPC Photometric",
+          "fastingInstructions": "Fasting 8-10 hours (morning preferred)"
+        },
+        {
+          "id": "t-9",
+          "code": "ESR",
+          "nameAr": "Erythrocyte Sedimentation Rate",
+          "nameEn": "Erythrocyte Sedimentation Rate",
+          "category": "Hematology",
+          "price": 70,
+          "cost": 15,
+          "sampleType": "Citrated Whole Blood (1:4)",
+          "turnaroundTime": "2 hours",
+          "unit": "mm/1st hr",
+          "minNormal": 0,
+          "maxNormal": 15,
+          "textReference": "Males: < 15 mm/1st hr | Females: < 20 mm/1st hr (Higher with age)",
+          "method": "Modified Westergren Automated Method",
+          "fastingInstructions": "No fasting required"
+        }
+      ],
+      "subtotal": 821,
+      "testsSubtotal": 821,
+      "discount": 0,
+      "visitFee": 0,
+      "isHomeVisit": false,
+      "netAmount": 821,
+      "paidAmount": 821,
+      "remainingAmount": 0,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "cashierName": "د. رامي مختار",
+      "branch": "الفرع الرئيسي - بهتيم",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-22T20:04:36.123Z",
+      "updatedAt": "2026-10-22T20:04:36.123Z"
+    },
+    {
+      "id": "inv-RT-2026-061-1792872194688",
+      "invoiceNumber": "INV-2026-061",
+      "patientName": "مكة احمد سيف الدين",
+      "patientPhone": "01124580333",
+      "patientAge": 7,
+      "patientGender": "female",
+      "barcode": "RT-10091",
+      "labNumber": "RT-2026-061",
+      "referringDoctor": "HERSELF",
+      "tests": [
+        {
+          "id": "prof-CBC",
+          "code": "CBC",
+          "nameAr": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+          "nameEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+          "category": "Hematology",
+          "price": 250,
+          "sampleType": "EDTA Whole Blood"
+        },
+        {
+          "id": "t-206",
+          "code": "URINE_CULTURE",
+          "nameAr": "Urine Culture & Sensitivity (Antibiogram)",
+          "nameEn": "Urine Culture & Sensitivity (Antibiogram)",
+          "category": "Microbiology",
+          "price": 240,
+          "cost": 55,
+          "sampleType": "Clean-Catch Midstream Urine in Sterile Cup",
+          "turnaroundTime": "48 hours",
+          "unit": "CFU/mL",
+          "textReference": "No significant bacterial growth (< 10,000 CFU/mL)",
+          "method": "Aerobic Culture on Blood & MacConkey Agar + Kirby-Bauer Sensitivity"
+        },
+        {
+          "id": "prof-URINE",
+          "code": "URINE",
+          "nameAr": "Complete Urine Analysis",
+          "nameEn": "Complete Urine Analysis",
+          "category": "Clinical Microscopy",
+          "price": 250,
+          "sampleType": "Clean Catch Midstream Urine"
+        },
+        {
+          "id": "t-20",
+          "code": "UREA",
+          "nameAr": "Blood Urea",
+          "nameEn": "Blood Urea",
+          "category": "Kidney Function",
+          "price": 188,
+          "cost": 12,
+          "sampleType": "Serum",
+          "turnaroundTime": "Immediate (1 hour)",
+          "unit": "mg/dL",
+          "minNormal": 15,
+          "maxNormal": 45,
+          "textReference": "15 - 45 mg/dL",
+          "method": "Urease / GLDH Enzymatic Kinetic"
+        },
+        {
+          "id": "t-19",
+          "code": "CREAT",
+          "nameAr": "Serum Creatinine",
+          "nameEn": "Serum Creatinine",
+          "category": "Kidney Function",
+          "price": 188,
+          "cost": 12,
+          "sampleType": "Serum",
+          "turnaroundTime": "Immediate (1 hour)",
+          "unit": "mg/dL",
+          "minNormal": 0.6,
+          "maxNormal": 1.4,
+          "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.2  mg/dL",
+          "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)"
+        }
+      ],
+      "subtotal": 300,
+      "testsSubtotal": 300,
+      "discount": 0,
+      "visitFee": 0,
+      "isHomeVisit": false,
+      "netAmount": 300,
+      "paidAmount": 300,
+      "remainingAmount": 0,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "cashierName": "د. رامي مختار",
+      "branch": "الفرع الرئيسي - بهتيم",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-22T20:11:17.460Z",
+      "updatedAt": "2026-10-22T20:11:17.460Z"
+    },
+    {
+      "id": "inv-RT-2026-062-1792872194688",
+      "invoiceNumber": "INV-2026-062",
+      "patientName": "يارا محمد  رمضان",
+      "patientPhone": "01127504064",
+      "patientAge": 10,
+      "patientGender": "female",
+      "barcode": "RT-10092",
+      "labNumber": "RT-2026-062",
+      "referringDoctor": "Herself",
+      "tests": [
+        {
+          "id": "t-8",
+          "code": "CBC",
+          "nameAr": "Complete Blood Count with Differential",
+          "nameEn": "Complete Blood Count with Differential",
+          "category": "Hematology",
+          "price": 400,
+          "cost": 30,
+          "sampleType": "EDTA Whole Blood",
+          "turnaroundTime": "Immediate (1 hour)",
+          "unit": "Multi-parameter",
+          "minNormal": 0,
+          "maxNormal": 0,
+          "textReference": "Hb: Male 13.0-17.5 g/dL, Female 12.0-15.5 | WBC: 4.0-11.0 10^3/uL | PLT: 150-450 10^3/uL",
+          "method": "5-Part Automated Flow Cytometry / Laser Impedance"
+        }
+      ],
+      "subtotal": 0,
+      "testsSubtotal": 0,
+      "discount": 0,
+      "visitFee": 0,
+      "isHomeVisit": false,
+      "netAmount": 0,
+      "paidAmount": 0,
+      "remainingAmount": 0,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "cashierName": "د. رامي مختار",
+      "branch": "الفرع الرئيسي - بهتيم",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-23T17:32:54.494Z",
+      "updatedAt": "2026-10-23T17:32:54.494Z"
+    },
+    {
+      "id": "inv-RT-2026-063-1792872194688",
+      "invoiceNumber": "INV-2026-063",
+      "patientName": "دعاء احمد  عبدالفتاح",
+      "patientPhone": "01141477450",
+      "patientAge": 44,
+      "patientGender": "female",
+      "barcode": "RT-10093",
+      "labNumber": "RT-2026-063",
+      "referringDoctor": "Herself",
+      "tests": [
+        {
+          "id": "prof-GLYCEMIC",
+          "code": "GLYCEMIC",
+          "nameAr": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "nameEn": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Fluoride Plasma & EDTA Blood"
+        },
+        {
+          "id": "prof-LIPID",
+          "code": "LIPID",
+          "nameAr": "Lipid Profile",
+          "nameEn": "Lipid Profile",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum (12h Fasting)"
+        },
+        {
+          "id": "prof-LFT",
+          "code": "LFT",
+          "nameAr": "Liver Function Tests (LFT)",
+          "nameEn": "Liver Function Tests (LFT)",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum"
+        },
+        {
+          "id": "prof-KFT",
+          "code": "KFT",
+          "nameAr": "Kidney Function Profile",
+          "nameEn": "Kidney Function Profile",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum"
+        },
+        {
+          "id": "t-79",
+          "code": "VIT_D",
+          "nameAr": "25-Hydroxy Vitamin D Total",
+          "nameEn": "25-Hydroxy Vitamin D Total",
+          "category": "Anemia & Vitamins",
+          "price": 360,
+          "cost": 85,
+          "sampleType": "Serum (Protected from light)",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "ng/mL",
+          "minNormal": 30,
+          "maxNormal": 100,
+          "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+          "method": "CLIA (Chemiluminescence Immunoassay)",
+          "fastingInstructions": "No fasting required"
+        },
+        {
+          "id": "t-53",
+          "code": "TSH",
+          "nameAr": "Thyroid Stimulating Hormone (TSH)",
+          "nameEn": "Thyroid Stimulating Hormone (TSH)",
+          "category": "Thyroid",
+          "price": 150,
+          "cost": 30,
+          "sampleType": "Serum",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "uIU/mL",
+          "minNormal": 0.35,
+          "maxNormal": 4.94,
+          "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+          "method": "CLIA (3rd Generation Chemiluminescence)",
+          "fastingInstructions": "No fasting required (early morning, before thyroid medication)"
+        },
+        {
+          "id": "test-1792164472194",
+          "code": "HCT_632",
+          "nameEn": "Hematocrit %",
+          "nameAr": "نسبه الهيماتوكريت",
+          "category": "Clinical hematology",
+          "sampleType": "EDTA BLOOD",
+          "unit": "%",
+          "minNormal": 37,
+          "maxNormal": 49,
+          "textReference": "37-49",
+          "method": "Enzymatic",
+          "fastingInstructions": "لا يشترط الصيام",
+          "turnaroundHours": 2,
+          "price": 20
+        },
+        {
+          "id": "test-1792164310191",
+          "code": "HB_727",
+          "nameEn": "Hemoglobin %",
+          "nameAr": "نسبه هيموجلوبين",
+          "category": "Clinical hematology ",
+          "sampleType": "EDTA BLOOD",
+          "unit": "g/dL",
+          "minNormal": 12.5,
+          "maxNormal": 16.5,
+          "textReference": "MALE : 13.5-17.5    /.    FEMALE : 12.5-16.5",
+          "method": "Enzymatic",
+          "fastingInstructions": "لا يشترط الصيام",
+          "turnaroundHours": 2,
+          "price": 200
+        },
+        {
+          "id": "t-26",
+          "code": "CALCIUM_TOTAL",
+          "nameAr": "Total Serum Calcium",
+          "nameEn": "Total Serum Calcium",
+          "category": "Minerals & Bone",
+          "price": 110,
+          "cost": 15,
+          "sampleType": "Serum",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "mg/dL",
+          "minNormal": 8.6,
+          "maxNormal": 10.3,
+          "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
+          "method": "Arsenazo III / CPC Photometric",
+          "fastingInstructions": "Fasting 8-10 hours (morning preferred)"
+        },
+        {
+          "id": "t-9",
+          "code": "ESR",
+          "nameAr": "Erythrocyte Sedimentation Rate",
+          "nameEn": "Erythrocyte Sedimentation Rate",
+          "category": "Hematology",
+          "price": 70,
+          "cost": 15,
+          "sampleType": "Citrated Whole Blood (1:4)",
+          "turnaroundTime": "2 hours",
+          "unit": "mm/1st hr",
+          "minNormal": 0,
+          "maxNormal": 15,
+          "textReference": "Males: < 15 mm/1st hr | Females: < 20 mm/1st hr (Higher with age)",
+          "method": "Modified Westergren Automated Method",
+          "fastingInstructions": "No fasting required"
+        }
+      ],
+      "subtotal": 641,
+      "testsSubtotal": 641,
+      "discount": 0,
+      "visitFee": 0,
+      "isHomeVisit": false,
+      "netAmount": 641,
+      "paidAmount": 641,
+      "remainingAmount": 0,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "cashierName": "د. رامي مختار",
+      "branch": "الفرع الرئيسي - بهتيم",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-24T12:41:21.827Z",
+      "updatedAt": "2026-10-24T12:41:21.827Z"
+    },
+    {
+      "id": "inv-RT-2026-064-1792872194688",
+      "invoiceNumber": "INV-2026-064",
+      "patientName": "عائشة شحاتة توفيق",
+      "patientPhone": "01124485444",
+      "patientAge": 65,
+      "patientGender": "female",
+      "barcode": "RT-10094",
+      "labNumber": "RT-2026-064",
+      "referringDoctor": "Herself",
+      "tests": [
+        {
+          "id": "prof-GLYCEMIC",
+          "code": "GLYCEMIC",
+          "nameAr": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "nameEn": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Fluoride Plasma & EDTA Blood"
+        },
+        {
+          "id": "prof-LIPID",
+          "code": "LIPID",
+          "nameAr": "Lipid Profile",
+          "nameEn": "Lipid Profile",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum (12h Fasting)"
+        },
+        {
+          "id": "prof-LFT",
+          "code": "LFT",
+          "nameAr": "Liver Function Tests (LFT)",
+          "nameEn": "Liver Function Tests (LFT)",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum"
+        },
+        {
+          "id": "prof-KFT",
+          "code": "KFT",
+          "nameAr": "Kidney Function Profile",
+          "nameEn": "Kidney Function Profile",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum"
+        },
+        {
+          "id": "t-79",
+          "code": "VIT_D",
+          "nameAr": "25-Hydroxy Vitamin D Total",
+          "nameEn": "25-Hydroxy Vitamin D Total",
+          "category": "Anemia & Vitamins",
+          "price": 360,
+          "cost": 85,
+          "sampleType": "Serum (Protected from light)",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "ng/mL",
+          "minNormal": 30,
+          "maxNormal": 100,
+          "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+          "method": "CLIA (Chemiluminescence Immunoassay)",
+          "fastingInstructions": "No fasting required"
+        },
+        {
+          "id": "t-53",
+          "code": "TSH",
+          "nameAr": "Thyroid Stimulating Hormone (TSH)",
+          "nameEn": "Thyroid Stimulating Hormone (TSH)",
+          "category": "Thyroid",
+          "price": 150,
+          "cost": 30,
+          "sampleType": "Serum",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "uIU/mL",
+          "minNormal": 0.35,
+          "maxNormal": 4.94,
+          "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+          "method": "CLIA (3rd Generation Chemiluminescence)",
+          "fastingInstructions": "No fasting required (early morning, before thyroid medication)"
+        },
+        {
+          "id": "test-1792164472194",
+          "code": "HCT_632",
+          "nameEn": "Hematocrit %",
+          "nameAr": "نسبه الهيماتوكريت",
+          "category": "Clinical hematology",
+          "sampleType": "EDTA BLOOD",
+          "unit": "%",
+          "minNormal": 37,
+          "maxNormal": 49,
+          "textReference": "37-49",
+          "method": "Enzymatic",
+          "fastingInstructions": "لا يشترط الصيام",
+          "turnaroundHours": 2,
+          "price": 20
+        },
+        {
+          "id": "test-1792164310191",
+          "code": "HB_727",
+          "nameEn": "Hemoglobin %",
+          "nameAr": "نسبه هيموجلوبين",
+          "category": "Clinical hematology ",
+          "sampleType": "EDTA BLOOD",
+          "unit": "g/dL",
+          "minNormal": 12.5,
+          "maxNormal": 16.5,
+          "textReference": "MALE : 13.5-17.5    /.    FEMALE : 12.5-16.5",
+          "method": "Enzymatic",
+          "fastingInstructions": "لا يشترط الصيام",
+          "turnaroundHours": 2,
+          "price": 200
+        },
+        {
+          "id": "t-26",
+          "code": "CALCIUM_TOTAL",
+          "nameAr": "Total Serum Calcium",
+          "nameEn": "Total Serum Calcium",
+          "category": "Minerals & Bone",
+          "price": 110,
+          "cost": 15,
+          "sampleType": "Serum",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "mg/dL",
+          "minNormal": 8.6,
+          "maxNormal": 10.3,
+          "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
+          "method": "Arsenazo III / CPC Photometric",
+          "fastingInstructions": "Fasting 8-10 hours (morning preferred)"
+        },
+        {
+          "id": "t-9",
+          "code": "ESR",
+          "nameAr": "Erythrocyte Sedimentation Rate",
+          "nameEn": "Erythrocyte Sedimentation Rate",
+          "category": "Hematology",
+          "price": 70,
+          "cost": 15,
+          "sampleType": "Citrated Whole Blood (1:4)",
+          "turnaroundTime": "2 hours",
+          "unit": "mm/1st hr",
+          "minNormal": 0,
+          "maxNormal": 15,
+          "textReference": "Males: < 15 mm/1st hr | Females: < 20 mm/1st hr (Higher with age)",
+          "method": "Modified Westergren Automated Method",
+          "fastingInstructions": "No fasting required"
+        }
+      ],
+      "subtotal": 641,
+      "testsSubtotal": 641,
+      "discount": 0,
+      "visitFee": 0,
+      "isHomeVisit": false,
+      "netAmount": 641,
+      "paidAmount": 641,
+      "remainingAmount": 0,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "cashierName": "د. رامي مختار",
+      "branch": "الفرع الرئيسي - بهتيم",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-24T14:47:32.178Z",
+      "updatedAt": "2026-10-24T14:47:32.178Z"
+    },
+    {
+      "id": "inv-RT-2026-065-1792872194688",
+      "invoiceNumber": "INV-2026-065",
+      "patientName": "محسن عبدالمنعم",
+      "patientPhone": "01117552241",
+      "patientAge": 58,
+      "patientGender": "male",
+      "barcode": "RT-10095",
+      "labNumber": "RT-2026-065",
+      "referringDoctor": "Himself",
+      "tests": [
+        {
+          "id": "prof-GLYCEMIC",
+          "code": "GLYCEMIC",
+          "nameAr": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "nameEn": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Fluoride Plasma & EDTA Blood"
+        },
+        {
+          "id": "prof-LIPID",
+          "code": "LIPID",
+          "nameAr": "Lipid Profile",
+          "nameEn": "Lipid Profile",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum (12h Fasting)"
+        },
+        {
+          "id": "prof-LFT",
+          "code": "LFT",
+          "nameAr": "Liver Function Tests (LFT)",
+          "nameEn": "Liver Function Tests (LFT)",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum"
+        },
+        {
+          "id": "prof-KFT",
+          "code": "KFT",
+          "nameAr": "Kidney Function Profile",
+          "nameEn": "Kidney Function Profile",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum"
+        },
+        {
+          "id": "t-79",
+          "code": "VIT_D",
+          "nameAr": "25-Hydroxy Vitamin D Total",
+          "nameEn": "25-Hydroxy Vitamin D Total",
+          "category": "Anemia & Vitamins",
+          "price": 360,
+          "cost": 85,
+          "sampleType": "Serum (Protected from light)",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "ng/mL",
+          "minNormal": 30,
+          "maxNormal": 100,
+          "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+          "method": "CLIA (Chemiluminescence Immunoassay)",
+          "fastingInstructions": "No fasting required"
+        },
+        {
+          "id": "t-53",
+          "code": "TSH",
+          "nameAr": "Thyroid Stimulating Hormone (TSH)",
+          "nameEn": "Thyroid Stimulating Hormone (TSH)",
+          "category": "Thyroid",
+          "price": 150,
+          "cost": 30,
+          "sampleType": "Serum",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "uIU/mL",
+          "minNormal": 0.35,
+          "maxNormal": 4.94,
+          "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+          "method": "CLIA (3rd Generation Chemiluminescence)",
+          "fastingInstructions": "No fasting required (early morning, before thyroid medication)"
+        },
+        {
+          "id": "test-1792164472194",
+          "code": "HCT_632",
+          "nameEn": "Hematocrit %",
+          "nameAr": "نسبه الهيماتوكريت",
+          "category": "Clinical hematology",
+          "sampleType": "EDTA BLOOD",
+          "unit": "%",
+          "minNormal": 37,
+          "maxNormal": 49,
+          "textReference": "37-49",
+          "method": "Enzymatic",
+          "fastingInstructions": "لا يشترط الصيام",
+          "turnaroundHours": 2,
+          "price": 20
+        },
+        {
+          "id": "test-1792164310191",
+          "code": "HB_727",
+          "nameEn": "Hemoglobin %",
+          "nameAr": "نسبه هيموجلوبين",
+          "category": "Clinical hematology ",
+          "sampleType": "EDTA BLOOD",
+          "unit": "g/dL",
+          "minNormal": 12.5,
+          "maxNormal": 16.5,
+          "textReference": "MALE : 13.5-17.5    /.    FEMALE : 12.5-16.5",
+          "method": "Enzymatic",
+          "fastingInstructions": "لا يشترط الصيام",
+          "turnaroundHours": 2,
+          "price": 200
+        },
+        {
+          "id": "t-26",
+          "code": "CALCIUM_TOTAL",
+          "nameAr": "Total Serum Calcium",
+          "nameEn": "Total Serum Calcium",
+          "category": "Minerals & Bone",
+          "price": 110,
+          "cost": 15,
+          "sampleType": "Serum",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "mg/dL",
+          "minNormal": 8.6,
+          "maxNormal": 10.3,
+          "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
+          "method": "Arsenazo III / CPC Photometric",
+          "fastingInstructions": "Fasting 8-10 hours (morning preferred)"
+        },
+        {
+          "id": "t-9",
+          "code": "ESR",
+          "nameAr": "Erythrocyte Sedimentation Rate",
+          "nameEn": "Erythrocyte Sedimentation Rate",
+          "category": "Hematology",
+          "price": 70,
+          "cost": 15,
+          "sampleType": "Citrated Whole Blood (1:4)",
+          "turnaroundTime": "2 hours",
+          "unit": "mm/1st hr",
+          "minNormal": 0,
+          "maxNormal": 15,
+          "textReference": "Males: < 15 mm/1st hr | Females: < 20 mm/1st hr (Higher with age)",
+          "method": "Modified Westergren Automated Method",
+          "fastingInstructions": "No fasting required"
+        }
+      ],
+      "subtotal": 521,
+      "testsSubtotal": 521,
+      "discount": 0,
+      "visitFee": 0,
+      "isHomeVisit": false,
+      "netAmount": 521,
+      "paidAmount": 521,
+      "remainingAmount": 0,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "cashierName": "د. رامي مختار",
+      "branch": "الفرع الرئيسي - بهتيم",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-24T16:35:13.342Z",
+      "updatedAt": "2026-10-24T16:35:13.342Z"
+    },
+    {
+      "id": "inv-RT-2026-066-1792872194688",
+      "invoiceNumber": "INV-2026-066",
+      "patientName": "منار اشرف",
+      "patientPhone": "01099141483",
+      "patientAge": 19,
+      "patientGender": "female",
+      "barcode": "RT-10096",
+      "labNumber": "RT-2026-066",
+      "referringDoctor": "HERSELF",
+      "tests": [
+        {
+          "id": "prof-GLYCEMIC",
+          "code": "GLYCEMIC",
+          "nameAr": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "nameEn": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Fluoride Plasma & EDTA Blood"
+        },
+        {
+          "id": "prof-LIPID",
+          "code": "LIPID",
+          "nameAr": "Lipid Profile",
+          "nameEn": "Lipid Profile",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum (12h Fasting)"
+        },
+        {
+          "id": "prof-LFT",
+          "code": "LFT",
+          "nameAr": "Liver Function Tests (LFT)",
+          "nameEn": "Liver Function Tests (LFT)",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum"
+        },
+        {
+          "id": "prof-KFT",
+          "code": "KFT",
+          "nameAr": "Kidney Function Profile",
+          "nameEn": "Kidney Function Profile",
+          "category": "Clinical Chemistry",
+          "price": 250,
+          "sampleType": "Serum"
+        },
+        {
+          "id": "t-79",
+          "code": "VIT_D",
+          "nameAr": "25-Hydroxy Vitamin D Total",
+          "nameEn": "25-Hydroxy Vitamin D Total",
+          "category": "Anemia & Vitamins",
+          "price": 360,
+          "cost": 85,
+          "sampleType": "Serum (Protected from light)",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "ng/mL",
+          "minNormal": 30,
+          "maxNormal": 100,
+          "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+          "method": "CLIA (Chemiluminescence Immunoassay)",
+          "fastingInstructions": "No fasting required"
+        },
+        {
+          "id": "t-53",
+          "code": "TSH",
+          "nameAr": "Thyroid Stimulating Hormone (TSH)",
+          "nameEn": "Thyroid Stimulating Hormone (TSH)",
+          "category": "Thyroid",
+          "price": 150,
+          "cost": 30,
+          "sampleType": "Serum",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "uIU/mL",
+          "minNormal": 0.35,
+          "maxNormal": 4.94,
+          "textReference": "Adults: 0.35 - 4.94 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)",
+          "method": "CLIA (3rd Generation Chemiluminescence)",
+          "fastingInstructions": "No fasting required (early morning, before thyroid medication)"
+        },
+        {
+          "id": "test-1792164472194",
+          "code": "HCT_632",
+          "nameEn": "Hematocrit %",
+          "nameAr": "نسبه الهيماتوكريت",
+          "category": "Clinical hematology",
+          "sampleType": "EDTA BLOOD",
+          "unit": "%",
+          "minNormal": 37,
+          "maxNormal": 49,
+          "textReference": "37-49",
+          "method": "Enzymatic",
+          "fastingInstructions": "لا يشترط الصيام",
+          "turnaroundHours": 2,
+          "price": 20
+        },
+        {
+          "id": "test-1792164310191",
+          "code": "HB_727",
+          "nameEn": "Hemoglobin %",
+          "nameAr": "نسبه هيموجلوبين",
+          "category": "Clinical hematology ",
+          "sampleType": "EDTA BLOOD",
+          "unit": "g/dL",
+          "minNormal": 12.5,
+          "maxNormal": 16.5,
+          "textReference": "MALE : 13.5-17.5    /.    FEMALE : 12.5-16.5",
+          "method": "Enzymatic",
+          "fastingInstructions": "لا يشترط الصيام",
+          "turnaroundHours": 2,
+          "price": 200
+        },
+        {
+          "id": "t-26",
+          "code": "CALCIUM_TOTAL",
+          "nameAr": "Total Serum Calcium",
+          "nameEn": "Total Serum Calcium",
+          "category": "Minerals & Bone",
+          "price": 110,
+          "cost": 15,
+          "sampleType": "Serum",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "mg/dL",
+          "minNormal": 8.6,
+          "maxNormal": 10.3,
+          "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
+          "method": "Arsenazo III / CPC Photometric",
+          "fastingInstructions": "Fasting 8-10 hours (morning preferred)"
+        },
+        {
+          "id": "t-9",
+          "code": "ESR",
+          "nameAr": "Erythrocyte Sedimentation Rate",
+          "nameEn": "Erythrocyte Sedimentation Rate",
+          "category": "Hematology",
+          "price": 70,
+          "cost": 15,
+          "sampleType": "Citrated Whole Blood (1:4)",
+          "turnaroundTime": "2 hours",
+          "unit": "mm/1st hr",
+          "minNormal": 0,
+          "maxNormal": 15,
+          "textReference": "Males: < 15 mm/1st hr | Females: < 20 mm/1st hr (Higher with age)",
+          "method": "Modified Westergren Automated Method",
+          "fastingInstructions": "No fasting required"
+        }
+      ],
+      "subtotal": 521,
+      "testsSubtotal": 521,
+      "discount": 0,
+      "visitFee": 0,
+      "isHomeVisit": false,
+      "netAmount": 521,
+      "paidAmount": 521,
+      "remainingAmount": 0,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "cashierName": "د. رامي مختار",
+      "branch": "الفرع الرئيسي - بهتيم",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-24T20:10:59.277Z",
+      "updatedAt": "2026-10-24T20:10:59.277Z"
+    },
+    {
+      "id": "inv-RT-2026-067-1792872194688",
+      "invoiceNumber": "INV-2026-067",
+      "patientName": "هند مرسي عبدالرحمن",
+      "patientPhone": "01099141483",
+      "patientAge": 35,
+      "patientGender": "female",
+      "barcode": "RT-10097",
+      "labNumber": "RT-2026-067",
+      "referringDoctor": "HERSELF",
+      "tests": [
+        {
+          "id": "prof-CBC",
+          "code": "CBC",
+          "nameAr": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
+          "nameEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+          "category": "Hematology",
+          "price": 250,
+          "sampleType": "EDTA Whole Blood"
+        },
+        {
+          "id": "prof-THYROID",
+          "code": "THYROID",
+          "nameAr": "Thyroid Function Full Panel",
+          "nameEn": "Thyroid Function Full Panel",
+          "category": "Endocrinology",
+          "price": 250,
+          "sampleType": "Serum"
+        },
+        {
+          "id": "prof-URINE",
+          "code": "URINE",
+          "nameAr": "Complete Urine Analysis",
+          "nameEn": "Complete Urine Analysis",
+          "category": "Clinical Microscopy",
+          "price": 250,
+          "sampleType": "Clean Catch Midstream Urine"
+        },
+        {
+          "id": "t-76",
+          "code": "FERRITIN",
+          "nameAr": "Serum Ferritin Level",
+          "nameEn": "Serum Ferritin Level",
+          "category": "Anemia & Vitamins",
+          "price": 220,
+          "cost": 45,
+          "sampleType": "Serum",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "ng/mL",
+          "minNormal": 30,
+          "maxNormal": 400,
+          "textReference": "Adult Males: 30 - 400 ng/mL | Adult Females: 15 - 150 ng/mL",
+          "method": "CLIA (Chemiluminescence Immunoassay)",
+          "fastingInstructions": "No fasting required"
+        },
+        {
+          "id": "t-79",
+          "code": "VIT_D",
+          "nameAr": "25-Hydroxy Vitamin D Total",
+          "nameEn": "25-Hydroxy Vitamin D Total",
+          "category": "Anemia & Vitamins",
+          "price": 360,
+          "cost": 85,
+          "sampleType": "Serum (Protected from light)",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "ng/mL",
+          "minNormal": 30,
+          "maxNormal": 100,
+          "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+          "method": "CLIA (Chemiluminescence Immunoassay)",
+          "fastingInstructions": "No fasting required"
+        },
+        {
+          "id": "t-26",
+          "code": "CALCIUM_TOTAL",
+          "nameAr": "Total Serum Calcium",
+          "nameEn": "Total Serum Calcium",
+          "category": "Minerals & Bone",
+          "price": 110,
+          "cost": 15,
+          "sampleType": "Serum",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "mg/dL",
+          "minNormal": 8.6,
+          "maxNormal": 10.3,
+          "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
+          "method": "Arsenazo III / CPC Photometric",
+          "fastingInstructions": "Fasting 8-10 hours (morning preferred)"
+        },
+        {
+          "id": "t-1",
+          "code": "GLU_F",
+          "nameAr": "Fasting Blood Sugar",
+          "nameEn": "Fasting Blood Sugar",
+          "category": "Diabetes",
+          "price": 88,
+          "cost": 12,
+          "sampleType": "Fluoride Plasma / Serum",
+          "turnaroundTime": "Immediate (1 hour)",
+          "unit": "mg/dL",
+          "minNormal": 70,
+          "maxNormal": 100,
+          "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
+          "method": "Hexokinase / GOD-PAP",
+          "fastingInstructions": "Fasting 8-10 hours (water only)"
+        },
+        {
+          "id": "t-19",
+          "code": "CREAT",
+          "nameAr": "Serum Creatinine",
+          "nameEn": "Serum Creatinine",
+          "category": "Kidney Function",
+          "price": 88,
+          "cost": 12,
+          "sampleType": "Serum",
+          "turnaroundTime": "Immediate (1 hour)",
+          "unit": "mg/dL",
+          "minNormal": 0.6,
+          "maxNormal": 1.2,
+          "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.1 mg/dL",
+          "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
+          "fastingInstructions": "No fasting required; avoid heavy meat meals"
+        }
+      ],
+      "subtotal": 1050,
+      "testsSubtotal": 1050,
+      "discount": 0,
+      "visitFee": 0,
+      "isHomeVisit": false,
+      "netAmount": 1050,
+      "paidAmount": 1050,
+      "remainingAmount": 0,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "cashierName": "د. رامي مختار",
+      "branch": "الفرع الرئيسي - بهتيم",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-24T20:16:17.386Z",
+      "updatedAt": "2026-10-24T20:16:17.386Z"
+    },
+    {
+      "id": "inv-RT-2026-068-1792872194688",
+      "invoiceNumber": "INV-2026-068",
+      "patientName": "دينا سامى",
+      "patientPhone": "01099141483",
+      "patientAge": 40,
+      "patientGender": "female",
+      "barcode": "RT-10098",
+      "labNumber": "RT-2026-068",
+      "referringDoctor": "herself",
+      "tests": [
+        {
+          "id": "prof-CBC",
+          "code": "CBC",
+          "nameAr": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
+          "nameEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+          "category": "Hematology",
+          "price": 250,
+          "sampleType": "EDTA Whole Blood"
+        },
+        {
+          "id": "prof-THYROID",
+          "code": "THYROID",
+          "nameAr": "Thyroid Function Full Panel",
+          "nameEn": "Thyroid Function Full Panel",
+          "category": "Endocrinology",
+          "price": 250,
+          "sampleType": "Serum"
+        },
+        {
+          "id": "prof-URINE",
+          "code": "URINE",
+          "nameAr": "Complete Urine Analysis",
+          "nameEn": "Complete Urine Analysis",
+          "category": "Clinical Microscopy",
+          "price": 250,
+          "sampleType": "Clean Catch Midstream Urine"
+        },
+        {
+          "id": "t-76",
+          "code": "FERRITIN",
+          "nameAr": "Serum Ferritin Level",
+          "nameEn": "Serum Ferritin Level",
+          "category": "Anemia & Vitamins",
+          "price": 220,
+          "cost": 45,
+          "sampleType": "Serum",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "ng/mL",
+          "minNormal": 30,
+          "maxNormal": 400,
+          "textReference": "Adult Males: 30 - 400 ng/mL | Adult Females: 15 - 150 ng/mL",
+          "method": "CLIA (Chemiluminescence Immunoassay)",
+          "fastingInstructions": "No fasting required"
+        },
+        {
+          "id": "t-79",
+          "code": "VIT_D",
+          "nameAr": "25-Hydroxy Vitamin D Total",
+          "nameEn": "25-Hydroxy Vitamin D Total",
+          "category": "Anemia & Vitamins",
+          "price": 360,
+          "cost": 85,
+          "sampleType": "Serum (Protected from light)",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "ng/mL",
+          "minNormal": 30,
+          "maxNormal": 100,
+          "textReference": "Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100",
+          "method": "CLIA (Chemiluminescence Immunoassay)",
+          "fastingInstructions": "No fasting required"
+        },
+        {
+          "id": "t-26",
+          "code": "CALCIUM_TOTAL",
+          "nameAr": "Total Serum Calcium",
+          "nameEn": "Total Serum Calcium",
+          "category": "Minerals & Bone",
+          "price": 110,
+          "cost": 15,
+          "sampleType": "Serum",
+          "turnaroundTime": "Within 2 hours",
+          "unit": "mg/dL",
+          "minNormal": 8.6,
+          "maxNormal": 10.3,
+          "textReference": "8.6 - 10.3 mg/dL (Panic: < 6.5 or > 13.0)",
+          "method": "Arsenazo III / CPC Photometric",
+          "fastingInstructions": "Fasting 8-10 hours (morning preferred)"
+        },
+        {
+          "id": "t-1",
+          "code": "GLU_F",
+          "nameAr": "Fasting Blood Sugar",
+          "nameEn": "Fasting Blood Sugar",
+          "category": "Diabetes",
+          "price": 88,
+          "cost": 12,
+          "sampleType": "Fluoride Plasma / Serum",
+          "turnaroundTime": "Immediate (1 hour)",
+          "unit": "mg/dL",
+          "minNormal": 70,
+          "maxNormal": 100,
+          "textReference": "Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126",
+          "method": "Hexokinase / GOD-PAP",
+          "fastingInstructions": "Fasting 8-10 hours (water only)"
+        },
+        {
+          "id": "t-19",
+          "code": "CREAT",
+          "nameAr": "Serum Creatinine",
+          "nameEn": "Serum Creatinine",
+          "category": "Kidney Function",
+          "price": 88,
+          "cost": 12,
+          "sampleType": "Serum",
+          "turnaroundTime": "Immediate (1 hour)",
+          "unit": "mg/dL",
+          "minNormal": 0.6,
+          "maxNormal": 1.2,
+          "textReference": "Adult Males: 0.7 - 1.3 mg/dL | Adult Females: 0.5 - 1.1 mg/dL",
+          "method": "Kinetic Alkaline Picrate (Modified Jaffe / Enzymatic)",
+          "fastingInstructions": "No fasting required; avoid heavy meat meals"
+        }
+      ],
+      "subtotal": 1050,
+      "testsSubtotal": 1050,
+      "discount": 0,
+      "visitFee": 0,
+      "isHomeVisit": false,
+      "netAmount": 1050,
+      "paidAmount": 1050,
+      "remainingAmount": 0,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "cashierName": "د. رامي مختار",
+      "branch": "الفرع الرئيسي - بهتيم",
+      "syncStatus": "synced",
+      "createdAt": "2026-10-24T20:18:40.495Z",
+      "updatedAt": "2026-10-24T20:18:40.495Z"
+    },
     {
       "id": "inv-1792521201957",
       "invoiceNumber": "INV-2026-058",
