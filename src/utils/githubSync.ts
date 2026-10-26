@@ -2,6 +2,8 @@ import { IncomeRecord, GitHubSyncConfig, InvoiceTestItem } from '../types';
 import { unionReports, unionInvoices } from './labNumbering';
 import { mergePackagesWithDefaults } from './upgradeSavedData';
 
+import { getDeletionTombstones, importDeletionTombstones, filterDeletedReports, filterDeletedInvoices } from './deletionRegistry';
+
 export interface DiagnosticPatientCase {
   id: string;
   labNumber: string;
@@ -827,6 +829,7 @@ export async function pushFullStoreToGitHub(
         repoName: creds.repo
       } as unknown as GitHubSyncConfig);
       if (cloudStore.success && cloudStore.data) {
+        importDeletionTombstones(cloudStore.data.deletedReports, cloudStore.data.deletedInvoices);
         safePayload = {
           ...storePayload,
           reports: unionReports(storePayload.reports, cloudStore.data.reports),
@@ -839,6 +842,16 @@ export async function pushFullStoreToGitHub(
     } catch {
       // keep the local snapshot when the cloud cannot be read
     }
+
+    // سجل المحذوفات: يمنع إعادة إدخال أي حالة أو فاتورة محذوفة من نسخ الأجهزة الأخرى
+    const tombstones = getDeletionTombstones();
+    safePayload = {
+      ...safePayload,
+      reports: filterDeletedReports(Array.isArray(safePayload.reports) ? safePayload.reports : []),
+      incomeRecords: filterDeletedInvoices(Array.isArray(safePayload.incomeRecords) ? safePayload.incomeRecords : []),
+      deletedReports: tombstones.reports,
+      deletedInvoices: tombstones.invoices
+    };
 
     const fullData = {
       system: 'RT Lab Unified Medical & Financial ERP',

@@ -60,6 +60,7 @@ import { realtimeSyncManager } from '../utils/realtimeMultiDeviceSync';
 import { pushFullStoreToGitHub, pullFullStoreFromGitHub, syncInvoiceToDiagnostic, fetchDiagnosticCases, convertIncomeRecordToDiagnosticReport } from '../utils/githubSync';
 import { resolveUniqueLabIdentity, dedupeReports, dedupeInvoices } from '../utils/labNumbering';
 import { notifyReportApproved } from '../utils/whatsappNotify';
+import { registerReportDeletion, registerInvoiceDeletion, importDeletionTombstones, filterDeletedReports, filterDeletedInvoices } from '../utils/deletionRegistry';
 import {
   mergeCatalogWithDefaults,
   mergePackagesWithDefaults,
@@ -887,6 +888,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         // Fallback to GitHub repo store directly
         pullFullStoreFromGitHub(githubConfig).then(ghRes => {
           if (ghRes.success && ghRes.data) {
+            importDeletionTombstones(ghRes.data.deletedReports, ghRes.data.deletedInvoices);
             if (Array.isArray(ghRes.data.reports) && ghRes.data.reports.length > 0) {
               setReports(prev => {
                 const map = new Map<string, LabReport>();
@@ -906,7 +908,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                     map.set(r.id, r);
                   }
                 });
-                return Array.from(new Set(map.values()));
+                return filterDeletedReports(Array.from(new Set(map.values())));
               });
             }
             if (Array.isArray(ghRes.data.incomeRecords) && ghRes.data.incomeRecords.length > 0) {
@@ -928,7 +930,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                     map.set(i.id, i);
                   }
                 });
-                return Array.from(new Set(map.values()));
+                return filterDeletedInvoices(Array.from(new Set(map.values())));
               });
             }
             if (Array.isArray(ghRes.data.expenses) && ghRes.data.expenses.length > 0) {
@@ -1131,6 +1133,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       pullFullStoreFromGitHub(githubConfig).then(ghRes => {
         if (ghRes.success && ghRes.data) {
           const data = ghRes.data;
+          importDeletionTombstones(data.deletedReports, data.deletedInvoices);
           if (Array.isArray(data.reports) && data.reports.length > 0) {
             setReports(prev => {
               const currentMap = new Map<string, LabReport>();
@@ -1163,7 +1166,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                 }
               });
 
-              return hasChanged ? nextReports : prev;
+              if (hasChanged) return filterDeletedReports(nextReports);
+              const cleanedReports = filterDeletedReports(prev);
+              return cleanedReports.length === prev.length ? prev : cleanedReports;
             });
           }
 
@@ -1198,7 +1203,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                 }
               });
 
-              return hasChanged ? nextInvoices : prev;
+              if (hasChanged) return filterDeletedInvoices(nextInvoices);
+              const cleanedInvoices = filterDeletedInvoices(prev);
+              return cleanedInvoices.length === prev.length ? prev : cleanedInvoices;
             });
           }
 
@@ -1222,6 +1229,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (document.visibilityState === 'visible') {
         pullFullStoreFromGitHub(githubConfig).then(ghRes => {
           if (ghRes.success && ghRes.data) {
+            importDeletionTombstones(ghRes.data.deletedReports, ghRes.data.deletedInvoices);
             if (Array.isArray(ghRes.data.reports) && ghRes.data.reports.length > 0) {
               setReports(prev => {
                 const map = new Map<string, LabReport>();
@@ -1238,7 +1246,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                     map.set(r.id, r);
                   }
                 });
-                return Array.from(new Set(map.values()));
+                return filterDeletedReports(Array.from(new Set(map.values())));
               });
             }
             if (Array.isArray(ghRes.data.incomeRecords) && ghRes.data.incomeRecords.length > 0) {
@@ -1257,7 +1265,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                     map.set(i.id, i);
                   }
                 });
-                return Array.from(new Set(map.values()));
+                return filterDeletedInvoices(Array.from(new Set(map.values())));
               });
             }
           }
@@ -1412,6 +1420,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const deleteReport = useCallback((id: string) => {
     const reportToDelete = reports.find(r => r.id === id);
+    // تسجيل الحذف حتى ينتقل لجميع الأجهزة ولا تعود الحالة من النسخة السحابية
+    registerReportDeletion(reportToDelete);
     setReports(prev => {
       const next = prev.filter(r => r.id !== id);
       triggerAutoCloudPush(next);
@@ -1494,6 +1504,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const deleteIncomeRecord = useCallback((id: string) => {
     const inv = incomeRecords.find(i => i.id === id);
+    registerInvoiceDeletion(inv);
     setIncomeRecords(prev => {
       const next = prev.filter(i => i.id !== id);
       triggerAutoCloudPush(undefined, next);
@@ -2977,6 +2988,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       if (ghRes.success && ghRes.data) {
         const data = ghRes.data;
+        importDeletionTombstones(data.deletedReports, data.deletedInvoices);
         if (Array.isArray(data.reports) && data.reports.length > 0) {
           const map = new Map<string, LabReport>();
           mergedReports.forEach(r => {
@@ -2995,7 +3007,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               if (merged.patient?.barcode) map.set(merged.patient.barcode, merged);
             }
           });
-          mergedReports = Array.from(new Set(map.values()));
+          mergedReports = filterDeletedReports(Array.from(new Set(map.values())));
           setReports(mergedReports);
         }
 
@@ -3017,7 +3029,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               if (merged.barcode) map.set(merged.barcode, merged);
             }
           });
-          mergedInvoices = Array.from(new Set(map.values()));
+          mergedInvoices = filterDeletedInvoices(Array.from(new Set(map.values())));
           setIncomeRecords(mergedInvoices);
         }
 
