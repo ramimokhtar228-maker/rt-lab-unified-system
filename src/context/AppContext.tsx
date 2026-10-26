@@ -59,6 +59,7 @@ import { INITIAL_INSTRUMENTS, SAMPLE_INSTRUMENT_TRANSMISSIONS } from '../data/in
 import { realtimeSyncManager } from '../utils/realtimeMultiDeviceSync';
 import { pushFullStoreToGitHub, pullFullStoreFromGitHub, syncInvoiceToDiagnostic, fetchDiagnosticCases, convertIncomeRecordToDiagnosticReport } from '../utils/githubSync';
 import { resolveUniqueLabIdentity, dedupeReports, dedupeInvoices } from '../utils/labNumbering';
+import { notifyReportApproved } from '../utils/whatsappNotify';
 import {
   mergeCatalogWithDefaults,
   mergePackagesWithDefaults,
@@ -1393,10 +1394,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const updateReport = useCallback((id: string, updates: Partial<LabReport>) => {
     setReports(prev => {
+      const previousReport = prev.find(r => r.id === id);
       const updatedList = prev.map(r => r.id === id ? { ...r, ...updates, updatedAt: new Date().toISOString() } : r);
       const target = updatedList.find(r => r.id === id);
       if (target) {
         realtimeSyncManager.broadcastAction('UPDATE_REPORT', target);
+        // إشعار واتساب فوري عند اعتماد التقرير لأول مرة
+        if (target.status === 'verified' && previousReport?.status !== 'verified') {
+          void notifyReportApproved(target);
+        }
       }
       triggerAutoCloudPush(updatedList);
       return updatedList;
@@ -1443,12 +1449,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       return updatedList;
     });
     logAction('UPDATE', 'DIAGNOSTIC', `اعتماد التقرير الطبي رسمياً بواسطة ${currentUser.nameAr}`);
+    const approvedReport = reports.find(r => r.id === id);
+    if (approvedReport) {
+      void notifyReportApproved({ ...approvedReport, status: 'verified', updatedAt: new Date().toISOString() });
+    }
     addNotification({
       title: "تم اعتماد التقرير الطبي",
       message: `تم اعتماد تقرير المريض برقم ${id} وأصبح جاهزاً للطباعة والإرسال.`,
       type: "success"
     });
-  }, [currentUser, logAction, addNotification, triggerAutoCloudPush]);
+  }, [currentUser, logAction, addNotification, triggerAutoCloudPush, reports]);
 
   // Financial CRUD
   const addIncomeRecord = useCallback((record: Omit<IncomeRecord, 'id' | 'createdAt' | 'updatedAt'>): IncomeRecord => {

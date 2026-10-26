@@ -16,6 +16,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { PWAInstallModal } from './PWAInstallModal';
+import { WhatsAppAlertSettings } from './WhatsAppAlertSettings';
 
 export const SettingsBackupModule: React.FC = () => {
   const {
@@ -275,6 +276,9 @@ export const SettingsBackupModule: React.FC = () => {
         isOpen={pwaModalOpen}
         onClose={() => setPwaModalOpen(false)}
       />
+
+      {/* WhatsApp Report Approval Alerts */}
+      <WhatsAppAlertSettings />
 
       {/* Lab Facilities & Reset Settings */}
       <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
