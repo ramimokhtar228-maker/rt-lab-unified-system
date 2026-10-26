@@ -6,7 +6,7 @@ export interface DiagnosticPatientCase {
   barcode: string;
   fullName: string;
   age: number;
-  gender: 'male' | 'female';
+  gender: string;
   phone: string;
   referringDoctorTitle?: string;
   referringDoctorName?: string;
@@ -19,6 +19,17 @@ export interface DiagnosticPatientCase {
   invoiceNumber?: string;
   testNames?: string[];
   tests?: InvoiceTestItem[];
+  bookingType?: 'branch' | 'home_visit';
+  isHomeVisit?: boolean;
+  visitFee?: number;
+  visitAddress?: string;
+  homeAddress?: string;
+  deliveryNotes?: string;
+  visitSpecialist?: string;
+  discount?: number;
+  testsSubtotal?: number;
+  remainingAmount?: number;
+  paymentMethod?: string;
   alreadyInAccounts?: boolean;
 }
 
@@ -196,6 +207,10 @@ export async function fetchDiagnosticCases(
             const key = item.reportNumber || item.labNumber || item.barcode;
             if (key && !seenIds.has(key)) {
               seenIds.add(key);
+              const isHome = item.isHomeVisit ?? (item.patient && item.patient.isHomeVisit) ?? (item.bookingType === 'home_visit' || (item.patient && item.patient.bookingType === 'home_visit'));
+              const bType = item.bookingType || (item.patient && item.patient.bookingType) || (isHome ? 'home_visit' : 'branch');
+              const vFee = item.visitFee ?? (item.patient && item.patient.visitFee) ?? 0;
+              const vAddr = item.visitAddress || item.homeAddress || (item.patient && item.patient.homeAddress) || '';
               cases.unshift({
                 id: item.id || `diag-${cases.length + 1}`,
                 labNumber: item.reportNumber || item.labNumber || `RT-${cases.length + 1}`,
@@ -213,7 +228,18 @@ export async function fetchDiagnosticCases(
                 testNames: Array.isArray(item.tests)
                   ? item.tests.map((t: InvoiceTestItem | { nameAr?: string; titleAr?: string; name?: string }) => t.nameAr || (t as { titleAr?: string }).titleAr || (t as { name?: string }).name || 'فحص')
                   : (item.testNames || ['تحاليل مخبرية']),
-                tests: Array.isArray(item.tests) && item.tests.length > 0 ? item.tests : undefined
+                tests: Array.isArray(item.tests) && item.tests.length > 0 ? item.tests : undefined,
+                bookingType: bType,
+                isHomeVisit: isHome,
+                visitFee: vFee,
+                visitAddress: vAddr,
+                homeAddress: vAddr,
+                deliveryNotes: item.deliveryNotes || (item.patient && item.patient.deliveryNotes),
+                visitSpecialist: item.visitSpecialist || (item.patient && item.patient.visitSpecialist),
+                discount: item.discount ?? (item.patient && item.patient.discountApplied) ?? 0,
+                testsSubtotal: item.testsSubtotal ?? (item.patient && item.patient.testsSubtotal) ?? item.netAmount,
+                remainingAmount: item.remainingAmount ?? (item.patient && item.patient.remainingAmount) ?? 0,
+                paymentMethod: item.paymentMethod || (item.patient && item.patient.paymentMethod) || 'cash'
               });
             }
           }
@@ -407,9 +433,21 @@ export function convertIncomeRecordToDiagnosticReport(rec: IncomeRecord): Record
       referringDoctorName: rec.referringDoctor || 'فحص ذاتي / كشف معمل',
       sampleDate: nowIso.substring(0, 16),
       reportingDate: nowIso.substring(0, 16),
-      clinicalHistory: `طلب صادر من الفاتورة المالية ${rec.invoiceNumber} - السداد: ${rec.paymentStatus === 'paid' ? 'مسدد بالكامل' : 'متبقي ' + rec.remainingAmount + ' ج.م'}`,
+      clinicalHistory: `طلب صادر من الفاتورة المالية ${rec.invoiceNumber} - السداد: ${rec.paymentStatus === 'paid' ? 'مسدد بالكامل' : 'متبقي ' + (rec.remainingAmount || 0) + ' ج.م'}`,
       bloodGroup: 'O+',
-      totalCost: rec.netAmount
+      totalCost: rec.netAmount,
+      bookingType: (rec as any).bookingType || (rec.isHomeVisit ? 'home_visit' : 'branch'),
+      isHomeVisit: rec.isHomeVisit ?? ((rec as any).bookingType === 'home_visit'),
+      homeAddress: rec.visitAddress || (rec as any).homeAddress,
+      visitFee: rec.visitFee || 0,
+      visitSpecialist: rec.visitSpecialist,
+      deliveryNotes: (rec as any).deliveryNotes,
+      discountApplied: rec.discount || 0,
+      testsSubtotal: rec.testsSubtotal || rec.subtotal || rec.netAmount,
+      paidAmount: rec.paidAmount,
+      remainingAmount: rec.remainingAmount,
+      paymentMethod: (rec as any).paymentMethod || 'cash',
+      paymentStatus: rec.paymentStatus
     },
     status: 'draft',
     staff: {
@@ -693,7 +731,11 @@ async function pushSingleCaseToGitHub(
     /* file may not exist yet */
   }
 
-  // Format case
+  const isHome = record.isHomeVisit ?? (record.bookingType === 'home_visit');
+  const bType = record.bookingType || (isHome ? 'home_visit' : 'branch');
+  const vFee = record.visitFee || 0;
+  const vAddr = record.visitAddress || (record as any).homeAddress || '';
+
   const casePayload = {
     id: `rep-${record.id}`,
     reportNumber: record.labNumber,
@@ -709,6 +751,18 @@ async function pushSingleCaseToGitHub(
     paidAmount: record.paidAmount,
     paymentStatus: record.paymentStatus,
     financialClearance: record.paymentStatus === 'paid' ? 'CLEARED_FOR_RELEASE' : 'PAYMENT_PENDING',
+    bookingType: bType,
+    isHomeVisit: isHome,
+    visitFee: vFee,
+    visitAddress: vAddr,
+    homeAddress: vAddr,
+    deliveryNotes: (record as any).deliveryNotes,
+    visitSpecialist: record.visitSpecialist,
+    discount: record.discount || 0,
+    testsSubtotal: record.testsSubtotal || record.subtotal || record.netAmount,
+    subtotal: record.subtotal || record.netAmount,
+    remainingAmount: record.remainingAmount || 0,
+    paymentMethod: record.paymentMethod || 'cash',
     createdAt: record.createdAt || new Date().toISOString()
   };
 
@@ -767,7 +821,9 @@ export async function pushFullStoreToGitHub(
       ...storePayload
     };
 
-    const contentBase64 = encodeBase64Utf8(JSON.stringify(fullData, null, 2));
+    // Minify JSON to drastically reduce byte size and prevent GitHub 1MB Contents API limit
+    const jsonString = JSON.stringify(fullData);
+    const contentBase64 = encodeBase64Utf8(jsonString);
 
     // Helper to attempt commit with SHA
     async function attemptCommit(retryCount = 0): Promise<{ success: boolean; message: string }> {
@@ -777,7 +833,7 @@ export async function pushFullStoreToGitHub(
           headers: {
             Authorization: `token ${creds.token}`,
             Accept: 'application/vnd.github.v3+json',
-            'Cache-Control': 'no-cache'
+            'Cache-Control': 'no-cache, no-store'
           }
         });
         if (checkRes.ok) {

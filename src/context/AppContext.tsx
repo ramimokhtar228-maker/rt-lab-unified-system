@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import {
   Language,
   UserProfile,
@@ -267,6 +267,107 @@ interface AppContextType {
   setIsLabInfoModalOpen: (open: boolean) => void;
 }
 
+export function mergeTwoReports(localRep: LabReport, remoteRep: LabReport): LabReport {
+  const localTime = new Date(localRep.updatedAt || localRep.createdAt || 0).getTime();
+  const remoteTime = new Date(remoteRep.updatedAt || remoteRep.createdAt || 0).getTime();
+
+  // Count entered results
+  const localResultCount = localRep.profiles?.reduce((acc, prof) => acc + (prof.parameters?.filter(p => p.result && p.result.trim() !== '').length || 0), 0) || 0;
+  const remoteResultCount = remoteRep.profiles?.reduce((acc, prof) => acc + (prof.parameters?.filter(p => p.result && p.result.trim() !== '').length || 0), 0) || 0;
+
+  // Decide profile parameters
+  let chosenProfiles = remoteRep.profiles || localRep.profiles || [];
+  if (localResultCount > 0 && remoteResultCount === 0) {
+    chosenProfiles = localRep.profiles;
+  } else if (remoteResultCount > 0 && localResultCount === 0) {
+    chosenProfiles = remoteRep.profiles;
+  } else if (localResultCount > 0 && remoteResultCount > 0) {
+    chosenProfiles = (remoteRep.profiles || []).map(remoteProf => {
+      const localProf = localRep.profiles?.find(lp => lp.profileCode === remoteProf.profileCode || lp.titleEn === remoteProf.titleEn || lp.titleAr === remoteProf.titleAr);
+      if (!localProf) return remoteProf;
+      const mergedParams = remoteProf.parameters.map(remParam => {
+        const locParam = localProf.parameters?.find(lp => lp.name === remParam.name || lp.id === remParam.id);
+        if (locParam && locParam.result && (!remParam.result || localTime > remoteTime)) {
+          return { ...remParam, result: locParam.result, flag: locParam.flag || remParam.flag };
+        }
+        return remParam;
+      });
+      return { ...remoteProf, parameters: mergedParams };
+    });
+  } else if (localTime > remoteTime) {
+    chosenProfiles = localRep.profiles || remoteRep.profiles;
+  }
+
+  // Merge patient data safely so home visit info and phone are NEVER wiped out
+  const isHome = remoteRep.patient?.isHomeVisit ?? localRep.patient?.isHomeVisit ?? (remoteRep.patient?.bookingType === 'home_visit' || localRep.patient?.bookingType === 'home_visit');
+  const bType = remoteRep.patient?.bookingType || localRep.patient?.bookingType || (isHome ? 'home_visit' : 'branch');
+  const vFee = remoteRep.patient?.visitFee ?? localRep.patient?.visitFee ?? 0;
+  const hAddr = remoteRep.patient?.homeAddress || localRep.patient?.homeAddress || (remoteRep.patient as any)?.visitAddress || (localRep.patient as any)?.visitAddress;
+
+  const mergedPatient: Patient = {
+    ...localRep.patient,
+    ...remoteRep.patient,
+    bookingType: bType,
+    isHomeVisit: isHome,
+    visitFee: vFee,
+    homeAddress: hAddr,
+    deliveryNotes: remoteRep.patient?.deliveryNotes || localRep.patient?.deliveryNotes,
+    visitSpecialist: remoteRep.patient?.visitSpecialist || localRep.patient?.visitSpecialist,
+    phone: remoteRep.patient?.phone || localRep.patient?.phone,
+    totalCost: remoteRep.patient?.totalCost ?? localRep.patient?.totalCost,
+    paidAmount: remoteRep.patient?.paidAmount ?? localRep.patient?.paidAmount,
+    remainingAmount: remoteRep.patient?.remainingAmount ?? localRep.patient?.remainingAmount,
+    discountApplied: remoteRep.patient?.discountApplied ?? localRep.patient?.discountApplied,
+    paymentStatus: remoteRep.patient?.paymentStatus || localRep.patient?.paymentStatus
+  };
+
+  const status = (remoteRep.status === 'verified' || localRep.status === 'verified') ? 'verified' : (remoteRep.status || localRep.status || 'draft');
+
+  return {
+    ...localRep,
+    ...remoteRep,
+    status,
+    patient: mergedPatient,
+    profiles: chosenProfiles,
+    staff: {
+      ...(localRep.staff || {}),
+      ...(remoteRep.staff || {})
+    },
+    updatedAt: new Date(Math.max(localTime, remoteTime, Date.now())).toISOString()
+  };
+}
+
+export function mergeTwoInvoices(localInv: IncomeRecord, remoteInv: IncomeRecord): IncomeRecord {
+  const localTime = new Date(localInv.updatedAt || localInv.createdAt || 0).getTime();
+  const remoteTime = new Date(remoteInv.updatedAt || remoteInv.createdAt || 0).getTime();
+
+  const isHome = remoteInv.isHomeVisit ?? localInv.isHomeVisit ?? (remoteInv.bookingType === 'home_visit' || localInv.bookingType === 'home_visit');
+  const bType = remoteInv.bookingType || localInv.bookingType || (isHome ? 'home_visit' : 'branch');
+  const vFee = remoteInv.visitFee ?? localInv.visitFee ?? 0;
+  const vAddr = remoteInv.visitAddress || localInv.visitAddress;
+
+  return {
+    ...localInv,
+    ...remoteInv,
+    isHomeVisit: isHome,
+    bookingType: bType,
+    visitFee: vFee,
+    visitAddress: vAddr,
+    deliveryNotes: (remoteInv as any).deliveryNotes || (localInv as any).deliveryNotes,
+    visitSpecialist: remoteInv.visitSpecialist || localInv.visitSpecialist,
+    patientPhone: remoteInv.patientPhone || localInv.patientPhone,
+    tests: (remoteInv.tests && remoteInv.tests.length > 0) ? remoteInv.tests : localInv.tests,
+    testsSubtotal: remoteInv.testsSubtotal ?? localInv.testsSubtotal,
+    discount: remoteInv.discount ?? localInv.discount,
+    subtotal: remoteInv.subtotal ?? localInv.subtotal,
+    netAmount: remoteInv.netAmount ?? localInv.netAmount,
+    paidAmount: remoteInv.paidAmount ?? localInv.paidAmount,
+    remainingAmount: remoteInv.remainingAmount ?? localInv.remainingAmount,
+    paymentStatus: (remoteInv.paymentStatus === 'paid' || localInv.paymentStatus === 'paid') ? 'paid' : (remoteInv.paymentStatus || localInv.paymentStatus),
+    updatedAt: new Date(Math.max(localTime, remoteTime, Date.now())).toISOString()
+  };
+}
+
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -505,6 +606,40 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // 16. GitHub Sync Config
   const [githubConfig, setGithubConfig] = useState<GitHubSyncConfig>(INITIAL_GITHUB_CONFIG);
 
+  // Automatic Debounced Cloud Push: Pushes to GitHub cloud whenever reports or invoices change
+  const cloudPushTimeoutRef = useRef<any>(null);
+
+  const triggerAutoCloudPush = useCallback((customReports?: LabReport[], customInvoices?: IncomeRecord[]) => {
+    if (!githubConfig.token || !githubConfig.autoSync) return;
+    if (cloudPushTimeoutRef.current) {
+      clearTimeout(cloudPushTimeoutRef.current);
+    }
+    const currentReps = customReports || reports;
+    const currentInvs = customInvoices || incomeRecords;
+
+    cloudPushTimeoutRef.current = setTimeout(async () => {
+      try {
+        const snapshot = {
+          reports: currentReps,
+          incomeRecords: currentInvs,
+          expenses,
+          loyaltyProfiles,
+          inventory,
+          dailyCloseouts,
+          labInfo,
+          staffSignatures,
+          staffSignatureOptions,
+          testCatalog,
+          packages,
+          diagnosticProfiles
+        };
+        await pushFullStoreToGitHub(githubConfig, snapshot);
+      } catch (err) {
+        console.warn('Auto cloud push error:', err);
+      }
+    }, 1200);
+  }, [githubConfig, reports, incomeRecords, expenses, loyaltyProfiles, inventory, dailyCloseouts, labInfo, staffSignatures, staffSignatureOptions, testCatalog, packages, diagnosticProfiles]);
+
   // Persistence Effects
   useEffect(() => { try { localStorage.setItem(REPORTS_KEY, JSON.stringify(reports)); } catch (e) { console.error(e); } }, [reports]);
   useEffect(() => { try { localStorage.setItem(INCOME_KEY, JSON.stringify(incomeRecords)); } catch (e) { console.error(e); } }, [incomeRecords]);
@@ -676,16 +811,46 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (res.success && res.data) {
         if (Array.isArray(res.data.reports) && res.data.reports.length > 0) {
           setReports(prev => {
-            const map = new Map(prev.map(r => [r.id, r]));
-            res.data.reports.forEach((r: LabReport) => map.set(r.id, r));
-            return Array.from(map.values());
+            const map = new Map<string, LabReport>();
+            prev.forEach(r => {
+              if (r.id) map.set(r.id, r);
+              if (r.reportNumber) map.set(r.reportNumber, r);
+              if (r.patient?.barcode) map.set(r.patient.barcode, r);
+            });
+            res.data.reports.forEach((r: LabReport) => {
+              const existing = map.get(r.id) || (r.reportNumber && map.get(r.reportNumber)) || (r.patient?.barcode && map.get(r.patient.barcode));
+              if (existing) {
+                const merged = mergeTwoReports(existing, r);
+                map.set(existing.id, merged);
+                if (merged.reportNumber) map.set(merged.reportNumber, merged);
+                if (merged.patient?.barcode) map.set(merged.patient.barcode, merged);
+              } else {
+                map.set(r.id, r);
+              }
+            });
+            return Array.from(new Set(map.values()));
           });
         }
         if (Array.isArray(res.data.incomeRecords) && res.data.incomeRecords.length > 0) {
           setIncomeRecords(prev => {
-            const map = new Map(prev.map(i => [i.id, i]));
-            res.data.incomeRecords.forEach((i: IncomeRecord) => map.set(i.id, i));
-            return Array.from(map.values());
+            const map = new Map<string, IncomeRecord>();
+            prev.forEach(i => {
+              if (i.id) map.set(i.id, i);
+              if (i.invoiceNumber) map.set(i.invoiceNumber, i);
+              if (i.barcode) map.set(i.barcode, i);
+            });
+            res.data.incomeRecords.forEach((i: IncomeRecord) => {
+              const existing = map.get(i.id) || (i.invoiceNumber && map.get(i.invoiceNumber)) || (i.barcode && map.get(i.barcode));
+              if (existing) {
+                const merged = mergeTwoInvoices(existing, i);
+                map.set(existing.id, merged);
+                if (merged.invoiceNumber) map.set(merged.invoiceNumber, merged);
+                if (merged.barcode) map.set(merged.barcode, merged);
+              } else {
+                map.set(i.id, i);
+              }
+            });
+            return Array.from(new Set(map.values()));
           });
         }
         if (Array.isArray(res.data.expenses) && res.data.expenses.length > 0) {
@@ -712,16 +877,46 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           if (ghRes.success && ghRes.data) {
             if (Array.isArray(ghRes.data.reports) && ghRes.data.reports.length > 0) {
               setReports(prev => {
-                const map = new Map(prev.map(r => [r.id, r]));
-                ghRes.data.reports.forEach((r: LabReport) => map.set(r.id, r));
-                return Array.from(map.values());
+                const map = new Map<string, LabReport>();
+                prev.forEach(r => {
+                  if (r.id) map.set(r.id, r);
+                  if (r.reportNumber) map.set(r.reportNumber, r);
+                  if (r.patient?.barcode) map.set(r.patient.barcode, r);
+                });
+                ghRes.data.reports.forEach((r: LabReport) => {
+                  const existing = map.get(r.id) || (r.reportNumber && map.get(r.reportNumber)) || (r.patient?.barcode && map.get(r.patient.barcode));
+                  if (existing) {
+                    const merged = mergeTwoReports(existing, r);
+                    map.set(existing.id, merged);
+                    if (merged.reportNumber) map.set(merged.reportNumber, merged);
+                    if (merged.patient?.barcode) map.set(merged.patient.barcode, merged);
+                  } else {
+                    map.set(r.id, r);
+                  }
+                });
+                return Array.from(new Set(map.values()));
               });
             }
             if (Array.isArray(ghRes.data.incomeRecords) && ghRes.data.incomeRecords.length > 0) {
               setIncomeRecords(prev => {
-                const map = new Map(prev.map(i => [i.id, i]));
-                ghRes.data.incomeRecords.forEach((i: IncomeRecord) => map.set(i.id, i));
-                return Array.from(map.values());
+                const map = new Map<string, IncomeRecord>();
+                prev.forEach(i => {
+                  if (i.id) map.set(i.id, i);
+                  if (i.invoiceNumber) map.set(i.invoiceNumber, i);
+                  if (i.barcode) map.set(i.barcode, i);
+                });
+                ghRes.data.incomeRecords.forEach((i: IncomeRecord) => {
+                  const existing = map.get(i.id) || (i.invoiceNumber && map.get(i.invoiceNumber)) || (i.barcode && map.get(i.barcode));
+                  if (existing) {
+                    const merged = mergeTwoInvoices(existing, i);
+                    map.set(existing.id, merged);
+                    if (merged.invoiceNumber) map.set(merged.invoiceNumber, merged);
+                    if (merged.barcode) map.set(merged.barcode, merged);
+                  } else {
+                    map.set(i.id, i);
+                  }
+                });
+                return Array.from(new Set(map.values()));
               });
             }
             if (Array.isArray(ghRes.data.expenses) && ghRes.data.expenses.length > 0) {
@@ -746,7 +941,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               setDiagnosticProfiles(prev => mergeProfilesWithDefaults(ghRes.data.diagnosticProfiles));
             }
 
-            // Also check for pending incoming diagnostic cases from GitHub queue (sync cases 59 to 68+)
+            // Also check for pending incoming diagnostic cases from GitHub queue (sync cases 50 to 68+)
             fetchDiagnosticCases(githubConfig).then(casesRes => {
               if (casesRes.success && Array.isArray(casesRes.cases) && casesRes.cases.length > 0) {
                 // 1. Sync reports
@@ -772,6 +967,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                           }));
                       const net = c.totalCost || 200;
                       const paid = c.paidAmount !== undefined ? c.paidAmount : (c.paymentStatus === 'paid' ? net : 0);
+                      const isHome = c.isHomeVisit ?? (c.bookingType === 'home_visit' || (c.visitFee && c.visitFee > 0));
+                      const vFee = c.visitFee || 0;
+                      const vAddr = c.visitAddress || c.homeAddress || '';
+                      const bType = c.bookingType || (isHome ? 'home_visit' : 'branch');
+                      const disc = c.discount || 0;
+                      const testsSub = c.testsSubtotal || net;
+
                       const rep = convertIncomeRecordToDiagnosticReport({
                         id: c.id,
                         invoiceNumber: c.invoiceNumber || `INV-${c.labNumber.replace('RT-', '')}`,
@@ -784,17 +986,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                         referringDoctor: c.referringDoctorName || 'كشف معمل',
                         tests: actualTests,
                         subtotal: net,
-                        discount: 0,
+                        discount: disc,
                         netAmount: net,
                         paidAmount: paid,
                         remainingAmount: Math.max(0, net - paid),
-                        paymentMethod: 'cash',
+                        paymentMethod: c.paymentMethod || 'cash',
                         paymentStatus: (c.paymentStatus as any) || (paid >= net ? 'paid' : 'pending'),
                         cashierName: 'مزامنة سحابية',
                         branch: 'الفرع الرئيسي - بهتيم',
                         syncStatus: 'synced',
                         createdAt: c.sampleDate || new Date().toISOString(),
-                        updatedAt: c.sampleDate || new Date().toISOString()
+                        updatedAt: c.sampleDate || new Date().toISOString(),
+                        isHomeVisit: isHome,
+                        bookingType: bType,
+                        visitFee: vFee,
+                        visitAddress: vAddr,
+                        homeAddress: vAddr,
+                        deliveryNotes: c.deliveryNotes || '',
+                        visitSpecialist: c.visitSpecialist || '',
+                        testsSubtotal: testsSub,
+                        discountApplied: disc
                       }) as unknown as LabReport;
                       newOnes.push(rep);
                     }
@@ -815,6 +1026,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                       addedInvoices++;
                       const net = c.totalCost || 200;
                       const paid = c.paidAmount !== undefined ? c.paidAmount : (c.paymentStatus === 'paid' ? net : 0);
+                      const isHome = c.isHomeVisit ?? (c.bookingType === 'home_visit' || (c.visitFee && c.visitFee > 0));
+                      const vFee = c.visitFee || 0;
+                      const vAddr = c.visitAddress || c.homeAddress || '';
+                      const bType = c.bookingType || (isHome ? 'home_visit' : 'branch');
+                      const disc = c.discount || 0;
+                      const testsSub = c.testsSubtotal || net;
+
                       const actualTests = (Array.isArray(c.tests) && c.tests.length > 0)
                         ? c.tests
                         : (c.testNames || ['تحاليل مخبرية']).map((tName, idx) => ({
@@ -838,14 +1056,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                         referringDoctor: c.referringDoctorName || 'كشف معمل',
                         tests: actualTests,
                         subtotal: net,
-                        testsSubtotal: net,
-                        discount: 0,
-                        visitFee: 0,
-                        isHomeVisit: false,
+                        testsSubtotal: testsSub,
+                        discount: disc,
+                        visitFee: vFee,
+                        isHomeVisit: isHome,
+                        bookingType: bType,
+                        visitAddress: vAddr,
+                        deliveryNotes: c.deliveryNotes || '',
+                        visitSpecialist: c.visitSpecialist || '',
                         netAmount: net,
                         paidAmount: paid,
                         remainingAmount: Math.max(0, net - paid),
-                        paymentMethod: 'cash',
+                        paymentMethod: (c.paymentMethod as any) || 'cash',
                         paymentStatus: (c.paymentStatus as any) || (paid >= net ? 'paid' : 'pending'),
                         cashierName: 'مزامنة سحابية',
                         branch: 'الفرع الرئيسي - بهتيم',
@@ -875,7 +1097,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
   }, [githubConfig]);
 
-  // Periodic automatic background sync every 35 seconds to keep all devices updated
+  // Periodic automatic background sync every 12 seconds to keep all devices updated bidirectionally
   useEffect(() => {
     if (!githubConfig.token || !githubConfig.autoSync) return;
 
@@ -888,30 +1110,75 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           const data = ghRes.data;
           if (Array.isArray(data.reports) && data.reports.length > 0) {
             setReports(prev => {
-              const currentMap = new Map(prev.map(r => [r.id, r]));
-              let hasNew = false;
-              data.reports.forEach((r: LabReport) => {
-                if (!currentMap.has(r.id)) {
-                  currentMap.set(r.id, r);
-                  hasNew = true;
+              const currentMap = new Map<string, LabReport>();
+              prev.forEach(r => {
+                if (r.id) currentMap.set(r.id, r);
+                if (r.reportNumber) currentMap.set(r.reportNumber, r);
+                if (r.patient?.barcode) currentMap.set(r.patient.barcode, r);
+              });
+
+              let hasChanged = false;
+              const nextReports = [...prev];
+
+              data.reports.forEach((remoteRep: LabReport) => {
+                const existing = currentMap.get(remoteRep.id) ||
+                  (remoteRep.reportNumber && currentMap.get(remoteRep.reportNumber)) ||
+                  (remoteRep.patient?.barcode && currentMap.get(remoteRep.patient.barcode));
+
+                if (!existing) {
+                  nextReports.unshift(remoteRep);
+                  currentMap.set(remoteRep.id, remoteRep);
+                  hasChanged = true;
+                } else {
+                  const merged = mergeTwoReports(existing, remoteRep);
+                  // Check if merged is different from existing
+                  const existingIdx = nextReports.findIndex(r => r.id === existing.id);
+                  if (existingIdx !== -1 && JSON.stringify(merged) !== JSON.stringify(existing)) {
+                    nextReports[existingIdx] = merged;
+                    hasChanged = true;
+                  }
                 }
               });
-              return hasNew ? Array.from(currentMap.values()) : prev;
+
+              return hasChanged ? nextReports : prev;
             });
           }
+
           if (Array.isArray(data.incomeRecords) && data.incomeRecords.length > 0) {
             setIncomeRecords(prev => {
-              const currentMap = new Map(prev.map(i => [i.id, i]));
-              let hasNew = false;
-              data.incomeRecords.forEach((i: IncomeRecord) => {
-                if (!currentMap.has(i.id)) {
-                  currentMap.set(i.id, i);
-                  hasNew = true;
+              const currentMap = new Map<string, IncomeRecord>();
+              prev.forEach(i => {
+                if (i.id) currentMap.set(i.id, i);
+                if (i.invoiceNumber) currentMap.set(i.invoiceNumber, i);
+                if (i.barcode) currentMap.set(i.barcode, i);
+              });
+
+              let hasChanged = false;
+              const nextInvoices = [...prev];
+
+              data.incomeRecords.forEach((remoteInv: IncomeRecord) => {
+                const existing = currentMap.get(remoteInv.id) ||
+                  (remoteInv.invoiceNumber && currentMap.get(remoteInv.invoiceNumber)) ||
+                  (remoteInv.barcode && currentMap.get(remoteInv.barcode));
+
+                if (!existing) {
+                  nextInvoices.unshift(remoteInv);
+                  currentMap.set(remoteInv.id, remoteInv);
+                  hasChanged = true;
+                } else {
+                  const merged = mergeTwoInvoices(existing, remoteInv);
+                  const existingIdx = nextInvoices.findIndex(i => i.id === existing.id);
+                  if (existingIdx !== -1 && JSON.stringify(merged) !== JSON.stringify(existing)) {
+                    nextInvoices[existingIdx] = merged;
+                    hasChanged = true;
+                  }
                 }
               });
-              return hasNew ? Array.from(currentMap.values()) : prev;
+
+              return hasChanged ? nextInvoices : prev;
             });
           }
+
           if (Array.isArray(data.packages) && data.packages.length > 0) {
             setPackages(prev => mergePackagesWithDefaults(data.packages, prev));
           }
@@ -920,7 +1187,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           }
         }
       }).catch(() => {});
-    }, 35000);
+    }, 12000);
 
     return () => clearInterval(interval);
   }, [githubConfig]);
@@ -930,42 +1197,46 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useEffect(() => {
     const onVisible = () => {
       if (document.visibilityState === 'visible') {
-        realtimeSyncManager.pullMasterSnapshot().then(res => {
-          if (res.success && res.data) {
-            const data = res.data;
-            if (Array.isArray(data.reports) && data.reports.length > 0) {
+        pullFullStoreFromGitHub(githubConfig).then(ghRes => {
+          if (ghRes.success && ghRes.data) {
+            if (Array.isArray(ghRes.data.reports) && ghRes.data.reports.length > 0) {
               setReports(prev => {
-                const map = new Map(prev.map((r: any) => [r.id, r]));
-                data.reports.forEach((r: any) => map.set(r.id, r));
-                return Array.from(map.values());
+                const map = new Map<string, LabReport>();
+                prev.forEach(r => {
+                  if (r.id) map.set(r.id, r);
+                  if (r.reportNumber) map.set(r.reportNumber, r);
+                  if (r.patient?.barcode) map.set(r.patient.barcode, r);
+                });
+                ghRes.data.reports.forEach((r: LabReport) => {
+                  const existing = map.get(r.id) || (r.reportNumber && map.get(r.reportNumber)) || (r.patient?.barcode && map.get(r.patient.barcode));
+                  if (existing) {
+                    map.set(existing.id, mergeTwoReports(existing, r));
+                  } else {
+                    map.set(r.id, r);
+                  }
+                });
+                return Array.from(new Set(map.values()));
               });
             }
-            if (Array.isArray(data.incomeRecords) && data.incomeRecords.length > 0) {
+            if (Array.isArray(ghRes.data.incomeRecords) && ghRes.data.incomeRecords.length > 0) {
               setIncomeRecords(prev => {
-                const map = new Map(prev.map((i: any) => [i.id, i]));
-                data.incomeRecords.forEach((i: any) => map.set(i.id, i));
-                return Array.from(map.values());
+                const map = new Map<string, IncomeRecord>();
+                prev.forEach(i => {
+                  if (i.id) map.set(i.id, i);
+                  if (i.invoiceNumber) map.set(i.invoiceNumber, i);
+                  if (i.barcode) map.set(i.barcode, i);
+                });
+                ghRes.data.incomeRecords.forEach((i: IncomeRecord) => {
+                  const existing = map.get(i.id) || (i.invoiceNumber && map.get(i.invoiceNumber)) || (i.barcode && map.get(i.barcode));
+                  if (existing) {
+                    map.set(existing.id, mergeTwoInvoices(existing, i));
+                  } else {
+                    map.set(i.id, i);
+                  }
+                });
+                return Array.from(new Set(map.values()));
               });
             }
-          } else {
-            pullFullStoreFromGitHub(githubConfig).then(ghRes => {
-              if (ghRes.success && ghRes.data) {
-                if (Array.isArray(ghRes.data.reports) && ghRes.data.reports.length > 0) {
-                  setReports(prev => {
-                    const map = new Map(prev.map(r => [r.id, r]));
-                    ghRes.data.reports.forEach((r: LabReport) => map.set(r.id, r));
-                    return Array.from(map.values());
-                  });
-                }
-                if (Array.isArray(ghRes.data.incomeRecords) && ghRes.data.incomeRecords.length > 0) {
-                  setIncomeRecords(prev => {
-                    const map = new Map(prev.map(i => [i.id, i]));
-                    ghRes.data.incomeRecords.forEach((i: IncomeRecord) => map.set(i.id, i));
-                    return Array.from(map.values());
-                  });
-                }
-              }
-            }).catch(() => {});
           }
         }).catch(() => {});
       }
@@ -976,7 +1247,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       document.removeEventListener('visibilitychange', onVisible);
       window.removeEventListener('focus', onVisible);
     };
-  }, []);
+  }, [githubConfig]);
 
   // Debounced cloud save whenever critical lab data changes (Push to Firebase Firestore & GitHub)
   useEffect(() => {
@@ -1088,11 +1359,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Report CRUD
   const addReport = useCallback((report: LabReport) => {
-    setReports(prev => [report, ...prev]);
+    setReports(prev => {
+      const next = [report, ...prev];
+      triggerAutoCloudPush(next);
+      return next;
+    });
     setSelectedReportId(report.id);
     realtimeSyncManager.broadcastAction('UPDATE_REPORT', report);
     logAction('CREATE', 'DIAGNOSTIC', `إنشاء تقرير طبي جديد للمريض ${report.patient.fullName} برقم ${report.reportNumber}`);
-  }, [logAction]);
+  }, [logAction, triggerAutoCloudPush]);
 
   const updateReport = useCallback((id: string, updates: Partial<LabReport>) => {
     setReports(prev => {
@@ -1101,44 +1376,57 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (target) {
         realtimeSyncManager.broadcastAction('UPDATE_REPORT', target);
       }
+      triggerAutoCloudPush(updatedList);
       return updatedList;
     });
     logAction('UPDATE', 'DIAGNOSTIC', `تحديث التقرير الطبي رقم ${id}`);
-  }, [logAction]);
+  }, [logAction, triggerAutoCloudPush]);
 
   const deleteReport = useCallback((id: string) => {
     const reportToDelete = reports.find(r => r.id === id);
-    setReports(prev => prev.filter(r => r.id !== id));
+    setReports(prev => {
+      const next = prev.filter(r => r.id !== id);
+      triggerAutoCloudPush(next);
+      return next;
+    });
     realtimeSyncManager.broadcastAction('DELETE_REPORT', id);
     if (selectedReportId === id) {
       setSelectedReportId(null);
     }
     logAction('DELETE', 'DIAGNOSTIC', `حذف التقرير الطبي للمريض ${reportToDelete?.patient.fullName || id}`);
-  }, [reports, selectedReportId, logAction]);
+  }, [reports, selectedReportId, logAction, triggerAutoCloudPush]);
 
   const verifyReport = useCallback((id: string) => {
-    setReports(prev => prev.map(r => {
-      if (r.id === id) {
-        return {
-          ...r,
-          status: 'verified',
-          staff: {
-            ...r.staff,
-            verifiedBy: currentUser.nameAr,
-            pathologist: r.staff.pathologist || "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
-          },
-          updatedAt: new Date().toISOString()
-        };
+    setReports(prev => {
+      const updatedList = prev.map(r => {
+        if (r.id === id) {
+          return {
+            ...r,
+            status: 'verified' as const,
+            staff: {
+              ...r.staff,
+              verifiedBy: currentUser.nameAr,
+              pathologist: r.staff.pathologist || "أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني"
+            },
+            updatedAt: new Date().toISOString()
+          };
+        }
+        return r;
+      });
+      const target = updatedList.find(r => r.id === id);
+      if (target) {
+        realtimeSyncManager.broadcastAction('UPDATE_REPORT', target);
       }
-      return r;
-    }));
+      triggerAutoCloudPush(updatedList);
+      return updatedList;
+    });
     logAction('UPDATE', 'DIAGNOSTIC', `اعتماد التقرير الطبي رسمياً بواسطة ${currentUser.nameAr}`);
     addNotification({
       title: "تم اعتماد التقرير الطبي",
       message: `تم اعتماد تقرير المريض برقم ${id} وأصبح جاهزاً للطباعة والإرسال.`,
       type: "success"
     });
-  }, [currentUser, logAction, addNotification]);
+  }, [currentUser, logAction, addNotification, triggerAutoCloudPush]);
 
   // Financial CRUD
   const addIncomeRecord = useCallback((record: Omit<IncomeRecord, 'id' | 'createdAt' | 'updatedAt'>): IncomeRecord => {
@@ -1149,11 +1437,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       updatedAt: new Date().toISOString(),
       syncStatus: 'synced'
     };
-    setIncomeRecords(prev => [newRecord, ...prev]);
+    setIncomeRecords(prev => {
+      const next = [newRecord, ...prev];
+      triggerAutoCloudPush(undefined, next);
+      return next;
+    });
     realtimeSyncManager.broadcastAction('UPDATE_INVOICE', newRecord);
     logAction('CREATE', 'INCOME', `إصدار فاتورة جديدة رقم ${newRecord.invoiceNumber} للمريض ${newRecord.patientName} بقيمة صافية ${newRecord.netAmount} ج.م`);
     return newRecord;
-  }, [logAction]);
+  }, [logAction, triggerAutoCloudPush]);
 
   const updateIncomeRecord = useCallback((id: string, updates: Partial<IncomeRecord>) => {
     setIncomeRecords(prev => {
@@ -1162,17 +1454,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (target) {
         realtimeSyncManager.broadcastAction('UPDATE_INVOICE', target);
       }
+      triggerAutoCloudPush(undefined, updatedList);
       return updatedList;
     });
     logAction('UPDATE', 'INCOME', `تعديل الفاتورة رقم ${id}`);
-  }, [logAction]);
+  }, [logAction, triggerAutoCloudPush]);
 
   const deleteIncomeRecord = useCallback((id: string) => {
     const inv = incomeRecords.find(i => i.id === id);
-    setIncomeRecords(prev => prev.filter(i => i.id !== id));
+    setIncomeRecords(prev => {
+      const next = prev.filter(i => i.id !== id);
+      triggerAutoCloudPush(undefined, next);
+      return next;
+    });
     realtimeSyncManager.broadcastAction('DELETE_INVOICE', id);
     logAction('DELETE', 'INCOME', `حذف الفاتورة رقم ${inv?.invoiceNumber || id} للمريض ${inv?.patientName}`);
-  }, [incomeRecords, logAction]);
+  }, [incomeRecords, logAction, triggerAutoCloudPush]);
 
   // Test Catalog CRUD with instant real-time broadcast
   const addCatalogTest = useCallback((test: InvoiceTestItem) => {
@@ -2655,7 +2952,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             if (!existing) {
               map.set(r.id, r);
             } else {
-              map.set(existing.id, { ...existing, ...r });
+              const merged = mergeTwoReports(existing, r);
+              map.set(existing.id, merged);
+              if (merged.reportNumber) map.set(merged.reportNumber, merged);
+              if (merged.patient?.barcode) map.set(merged.patient.barcode, merged);
             }
           });
           mergedReports = Array.from(new Set(map.values()));
@@ -2674,7 +2974,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             if (!existing) {
               map.set(i.id, i);
             } else {
-              map.set(existing.id, { ...existing, ...i });
+              const merged = mergeTwoInvoices(existing, i);
+              map.set(existing.id, merged);
+              if (merged.invoiceNumber) map.set(merged.invoiceNumber, merged);
+              if (merged.barcode) map.set(merged.barcode, merged);
             }
           });
           mergedInvoices = Array.from(new Set(map.values()));
@@ -2730,6 +3033,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           const invNum = c.invoiceNumber || `INV-${c.labNumber.replace('RT-', '')}`;
           const net = c.totalCost || 0;
           const paid = c.paidAmount !== undefined ? c.paidAmount : (c.paymentStatus === 'paid' ? net : 0);
+          const isHome = c.isHomeVisit ?? (c.bookingType === 'home_visit' || (c.visitFee && c.visitFee > 0));
+          const vFee = c.visitFee || 0;
+          const vAddr = c.visitAddress || c.homeAddress || '';
+          const bType = c.bookingType || (isHome ? 'home_visit' : 'branch');
+          const disc = c.discount || 0;
+          const testsSub = c.testsSubtotal || net;
+
           const actualTests = (Array.isArray(c.tests) && c.tests.length > 0)
             ? c.tests
             : (c.testNames || ['تحاليل مخبرية']).map((tName: string, idx: number) => ({
@@ -2755,17 +3065,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               referringDoctor: c.referringDoctorName || 'كشف معمل',
               tests: actualTests,
               subtotal: net,
-              discount: 0,
+              discount: disc,
               netAmount: net,
               paidAmount: paid,
               remainingAmount: Math.max(0, net - paid),
-              paymentMethod: 'cash',
+              paymentMethod: c.paymentMethod || 'cash',
               paymentStatus: (c.paymentStatus as any) || (paid >= net ? 'paid' : 'pending'),
               cashierName: 'مزامنة سحابية',
               branch: 'الفرع الرئيسي - بهتيم',
               syncStatus: 'synced',
               createdAt: c.sampleDate || new Date().toISOString(),
-              updatedAt: c.sampleDate || new Date().toISOString()
+              updatedAt: c.sampleDate || new Date().toISOString(),
+              isHomeVisit: isHome,
+              bookingType: bType,
+              visitFee: vFee,
+              visitAddress: vAddr,
+              homeAddress: vAddr,
+              deliveryNotes: c.deliveryNotes || '',
+              visitSpecialist: c.visitSpecialist || '',
+              testsSubtotal: testsSub,
+              discountApplied: disc
             }) as unknown as LabReport;
             mergedReports = [newRep, ...mergedReports];
             if (c.barcode) existingBarcodes.add(c.barcode);
@@ -2785,14 +3104,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               referringDoctor: c.referringDoctorName || 'كشف معمل',
               tests: actualTests,
               subtotal: net,
-              testsSubtotal: net,
-              discount: 0,
-              visitFee: 0,
-              isHomeVisit: false,
+              testsSubtotal: testsSub,
+              discount: disc,
+              visitFee: vFee,
+              isHomeVisit: isHome,
+              bookingType: bType,
+              visitAddress: vAddr,
+              deliveryNotes: c.deliveryNotes || '',
+              visitSpecialist: c.visitSpecialist || '',
               netAmount: net,
               paidAmount: paid,
               remainingAmount: Math.max(0, net - paid),
-              paymentMethod: 'cash',
+              paymentMethod: (c.paymentMethod as any) || 'cash',
               paymentStatus: (c.paymentStatus as any) || (paid >= net ? 'paid' : 'pending'),
               cashierName: 'مزامنة سحابية',
               branch: 'الفرع الرئيسي - بهتيم',

@@ -127,7 +127,10 @@
     "paidAmount": 1050,
     "paymentStatus": "paid",
     "financialClearance": "CLEARED_FOR_RELEASE",
-    "createdAt": "2026-10-24T20:18:40.495Z"
+    "createdAt": "2026-10-24T20:18:40.495Z",
+    "bookingType": "branch",
+    "isHomeVisit": false,
+    "visitFee": 0
   },
   {
     "id": "rep-inv-1792872977386",
@@ -257,7 +260,10 @@
     "paidAmount": 1050,
     "paymentStatus": "paid",
     "financialClearance": "CLEARED_FOR_RELEASE",
-    "createdAt": "2026-10-24T20:16:17.386Z"
+    "createdAt": "2026-10-24T20:16:17.386Z",
+    "bookingType": "branch",
+    "isHomeVisit": false,
+    "visitFee": 0
   },
   {
     "id": "rep-inv-1792872659277",
@@ -411,7 +417,10 @@
     "paidAmount": 521,
     "paymentStatus": "paid",
     "financialClearance": "CLEARED_FOR_RELEASE",
-    "createdAt": "2026-10-24T20:10:59.277Z"
+    "createdAt": "2026-10-24T20:10:59.277Z",
+    "bookingType": "branch",
+    "isHomeVisit": false,
+    "visitFee": 0
   },
   {
     "id": "rep-inv-1792859713342",
@@ -565,7 +574,10 @@
     "paidAmount": 521,
     "paymentStatus": "paid",
     "financialClearance": "CLEARED_FOR_RELEASE",
-    "createdAt": "2026-10-24T16:35:13.342Z"
+    "createdAt": "2026-10-24T16:35:13.342Z",
+    "bookingType": "branch",
+    "isHomeVisit": false,
+    "visitFee": 0
   },
   {
     "id": "rep-inv-1792853252178",
@@ -719,7 +731,14 @@
     "paidAmount": 641,
     "paymentStatus": "paid",
     "financialClearance": "CLEARED_FOR_RELEASE",
-    "createdAt": "2026-10-24T14:47:32.178Z"
+    "createdAt": "2026-10-24T14:47:32.178Z",
+    "bookingType": "home_visit",
+    "isHomeVisit": true,
+    "visitFee": 70,
+    "visitAddress": "حدائق القبه 42 ش الخليل المتفرع من ش المدينه المنوره خلف مسجد الشيخ الغراب الدور الاول القه 3",
+    "homeAddress": "حدائق القبه 42 ش الخليل المتفرع من ش المدينه المنوره خلف مسجد الشيخ الغراب الدور الاول القه 3",
+    "testsSubtotal": 571,
+    "totalCost": 641
   },
   {
     "id": "rep-inv-1792845681826",
@@ -873,7 +892,14 @@
     "paidAmount": 641,
     "paymentStatus": "paid",
     "financialClearance": "CLEARED_FOR_RELEASE",
-    "createdAt": "2026-10-24T12:41:21.827Z"
+    "createdAt": "2026-10-24T12:41:21.827Z",
+    "bookingType": "home_visit",
+    "isHomeVisit": true,
+    "visitFee": 60,
+    "visitAddress": "٥ش امتداد امون من ش الحنفيه الدور الرابع ",
+    "homeAddress": "٥ش امتداد امون من ش الحنفيه الدور الرابع ",
+    "testsSubtotal": 581,
+    "totalCost": 641
   },
   {
     "id": "rep-inv-1792776774493",
@@ -907,7 +933,10 @@
     "paidAmount": 0,
     "paymentStatus": "paid",
     "financialClearance": "CLEARED_FOR_RELEASE",
-    "createdAt": "2026-10-23T17:32:54.494Z"
+    "createdAt": "2026-10-23T17:32:54.494Z",
+    "bookingType": "branch",
+    "isHomeVisit": false,
+    "visitFee": 0
   },
   {
     "id": "rep-inv-1792699877460",
@@ -989,7 +1018,10 @@
     "paidAmount": 300,
     "paymentStatus": "paid",
     "financialClearance": "CLEARED_FOR_RELEASE",
-    "createdAt": "2026-10-22T20:11:17.460Z"
+    "createdAt": "2026-10-22T20:11:17.460Z",
+    "bookingType": "branch",
+    "isHomeVisit": false,
+    "visitFee": 0
   },
   {
     "id": "rep-inv-1792699476123",
@@ -1143,7 +1175,14 @@
     "paidAmount": 821,
     "paymentStatus": "paid",
     "financialClearance": "CLEARED_FOR_RELEASE",
-    "createdAt": "2026-10-22T20:04:36.123Z"
+    "createdAt": "2026-10-22T20:04:36.123Z",
+    "bookingType": "home_visit",
+    "isHomeVisit": true,
+    "visitFee": 150,
+    "visitAddress": " ٢٨ ش الشباب حجر الأساس ٦٠ متر الشروق ٢",
+    "homeAddress": " ٢٨ ش الشباب حجر الأساس ٦٠ متر الشروق ٢",
+    "testsSubtotal": 671,
+    "totalCost": 821
   },
   {
     "id": "rep-inv-1792699192842",
@@ -1193,7 +1232,14 @@
     "paidAmount": 62,
     "paymentStatus": "paid",
     "financialClearance": "CLEARED_FOR_RELEASE",
-    "createdAt": "2026-10-22T19:59:52.842Z"
+    "createdAt": "2026-10-22T19:59:52.842Z",
+    "bookingType": "home_visit",
+    "isHomeVisit": true,
+    "visitFee": 0,
+    "visitAddress": "م. نصر",
+    "homeAddress": "م. نصر",
+    "testsSubtotal": 62,
+    "totalCost": 62
   },
   {
     "id": "rep-inv-1792521201957",
@@ -1347,7 +1393,10 @@
     "paidAmount": 521,
     "paymentStatus": "paid",
     "financialClearance": "CLEARED_FOR_RELEASE",
-    "createdAt": "2026-10-20T18:33:21.957Z"
+    "createdAt": "2026-10-20T18:33:21.957Z",
+    "bookingType": "branch",
+    "isHomeVisit": false,
+    "visitFee": 0
   },
   {
     "id": "rep-inv-1792520370358",
@@ -1501,7 +1550,10 @@
     "paidAmount": 521,
     "paymentStatus": "paid",
     "financialClearance": "CLEARED_FOR_RELEASE",
-    "createdAt": "2026-10-20T18:19:30.358Z"
+    "createdAt": "2026-10-20T18:19:30.358Z",
+    "bookingType": "branch",
+    "isHomeVisit": false,
+    "visitFee": 0
   },
   {
     "id": "rep-inv-1792515070911",
@@ -1655,7 +1707,14 @@
     "paidAmount": 661,
     "paymentStatus": "paid",
     "financialClearance": "CLEARED_FOR_RELEASE",
-    "createdAt": "2026-10-20T16:51:10.911Z"
+    "createdAt": "2026-10-20T16:51:10.911Z",
+    "bookingType": "home_visit",
+    "isHomeVisit": true,
+    "visitFee": 70,
+    "visitAddress": "حدائق القبه 42 ش الخليل المتفرع من ش المدينه المنوره خلف مسجد الشيخ الغراب الدور الاول القه 3",
+    "homeAddress": "حدائق القبه 42 ش الخليل المتفرع من ش المدينه المنوره خلف مسجد الشيخ الغراب الدور الاول القه 3",
+    "testsSubtotal": 591,
+    "totalCost": 661
   },
   {
     "id": "rep-inv-1792482321561",
@@ -1809,7 +1868,10 @@
     "paidAmount": 521,
     "paymentStatus": "paid",
     "financialClearance": "CLEARED_FOR_RELEASE",
-    "createdAt": "2026-10-20T07:45:21.561Z"
+    "createdAt": "2026-10-20T07:45:21.561Z",
+    "bookingType": "branch",
+    "isHomeVisit": false,
+    "visitFee": 0
   },
   {
     "id": "rep-inv-1792482240252",
@@ -1963,7 +2025,10 @@
     "paidAmount": 521,
     "paymentStatus": "paid",
     "financialClearance": "CLEARED_FOR_RELEASE",
-    "createdAt": "2026-10-20T07:44:00.252Z"
+    "createdAt": "2026-10-20T07:44:00.252Z",
+    "bookingType": "branch",
+    "isHomeVisit": false,
+    "visitFee": 0
   },
   {
     "id": "rep-inv-1792482113809",
@@ -2054,6 +2119,9 @@
     "paidAmount": 0,
     "paymentStatus": "paid",
     "financialClearance": "CLEARED_FOR_RELEASE",
-    "createdAt": "2026-10-20T07:41:53.809Z"
+    "createdAt": "2026-10-20T07:41:53.809Z",
+    "bookingType": "branch",
+    "isHomeVisit": false,
+    "visitFee": 0
   }
 ]
