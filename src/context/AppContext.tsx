@@ -1122,7 +1122,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
   }, [githubConfig]);
 
-  // مزامنة خلفية تلقائية كل 5 ثوانٍ (مع فحص بصمة الملف لتقليل الاستهلاك)
+  // مزامنة خلفية تلقائية كل 8 ثوانٍ (مع فحص بصمة الملف السحابي لتقليل الاستهلاك)
   useEffect(() => {
     if (!githubConfig.token || !githubConfig.autoSync) return;
 
@@ -1217,7 +1217,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           }
         }
       }).catch(() => {});
-    }, 5000);
+    }, 8000);
 
     return () => clearInterval(interval);
   }, [githubConfig]);
