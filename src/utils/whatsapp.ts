@@ -28,6 +28,39 @@ export function openWhatsApp(phone: string, message: string): void {
   window.open(url, '_blank');
 }
 
+/** شروط واحتياطات التحاليل: تُبنى تلقائياً حسب نوع كل تحليل */
+export function buildTestPrecautions(
+  tests: { nameAr?: string; nameEn?: string; code?: string }[] = [],
+  fastingHours = 0
+): string[] {
+  const haystack = tests.map(t => `${t.nameAr || ''} ${t.nameEn || ''} ${t.code || ''}`).join(' | ');
+  const tips: string[] = [];
+  const add = (...items: string[]) => items.forEach(item => { if (!tips.includes(item)) tips.push(item); });
+  const rules: { pattern: RegExp; tips: string[] }[] = [
+    { pattern: /سكر صائم|سكر عشوائي|جلوكوز|glucose|fbs|rbs|ogtt|gtt/i, tips: ['صيام ٨–١٢ ساعة لتحليل السكر (الماء مسموح فقط)'] },
+    { pattern: /سكر تراكمي|hba1c|glycated/i, tips: ['السكر التراكمي لا يشترط الصيام — يمكن السحب في أي وقت'] },
+    { pattern: /دهون|كوليسترول|triglycer|lipid|chol|ldl|hdl/i, tips: ['صيام ١٢–١٤ ساعة لتحاليل دهون الدم'] },
+    { pattern: /وظائف كبد|liver|alt|ast|bilirubin|alp|ggt/i, tips: ['يفضل صيام ٤ ساعات قبل وظائف الكبد'] },
+    { pattern: /وظائف كلى|kidney|creatinine|urea|uric/i, tips: ['شرب ماء كافٍ قبل السحب وإبلاغ الفريق بالأدوية المزمنة'] },
+    { pattern: /صورة دم|دم كاملة|cbc|esr|crp|هيموجلوبين|hemoglobin/i, tips: ['صورة الدم لا تشترط الصيام'] },
+    { pattern: /هرمون|hormone|tsh|t3|t4|prolactin|testosterone|estradiol|fsh|lh|cortisol|amh/i, tips: ['يفضل السحب صباحاً بين ٨ و١٠ صباحاً للتحاليل الهرمونية', 'إبلاغ الفريق بأي أدوية هرمونية تُؤخذ حالياً'] },
+    { pattern: /فيتامين د|vitamin d|vit d|كالسيوم|calcium/i, tips: ['فيتامين د والكالسيوم لا يشترطان الصيام'] },
+    { pattern: /حديد|ferritin|iron|transferrin/i, tips: ['يفضل السحب صباحاً وقبل تناول مكملات الحديد'] },
+    { pattern: /سيولة|pt\b|inr|aptt|d.?dimer|fibrinogen/i, tips: ['إبلاغ الفريق إذا كنت تتناول أدوية سيولة مثل الأسبرين أو الماريفان'] },
+    { pattern: /مزرعة|culture|حساسية|sensitivity/i, tips: ['يجب التجميع قبل بدء المضاد الحيوي إن أمكن'] },
+    { pattern: /بول|urine|microalbumin/i, tips: ['عينة بول وسطى في حاوية معقمة — يفضل أول بول في الصباح'] },
+    { pattern: /براز|stool|parasite/i, tips: ['عينة براز طازجة في حاوية نظيفة وجافة'] },
+    { pattern: /حمل|pregnancy|hcg|beta/i, tips: ['تحليل الحمل يمكن إجراؤه في أي وقت من اليوم'] },
+    { pattern: /psa|prostate/i, tips: ['يُفضل الامتناع عن المجهود البدني والجماع ٤٨ ساعة قبل تحليل PSA'] },
+    { pattern: /سائل منوي|semen|sperm/i, tips: ['الامتناع ٣–٥ أيام قبل سحب عينة السائل المنوي'] }
+  ];
+  rules.forEach(rule => { if (rule.pattern.test(haystack)) add(...rule.tips); });
+  if (fastingHours > 0) add(`الصيام ${fastingHours} ساعة قبل سحب العينة (الماء مسموح)`);
+  add('الحضور قبل الموعد بـ ١٠ دقائق لاستكمال بيانات السحب');
+  add('إبلاغ فريق السحب بالأدوية التي تتناولها أو الأمراض المزمنة أو الحمل');
+  return tips.slice(0, 7);
+}
+
 /** Professional, concise & comprehensive Medical Booking Confirmation Message */
 export function formatBookingConfirmationWhatsAppMessage(params: {
   patientName: string;
@@ -98,15 +131,22 @@ export function formatBookingConfirmationWhatsAppMessage(params: {
   const visitFee = params.visitFee || 0;
   const discount = Math.max(0, params.discountAmount || 0);
   const net = params.netAmount;
-  const rawSubtotal = Math.max(net, params.subtotal || (net + discount - visitFee));
+  const testsValue = Math.max(0, params.subtotal || 0) || Math.max(0, net + discount - visitFee);
+  // بعض الشاشات تمرر الإجمالي شاملاً رسوم الزيارة، وأخرى تمرر قيمة التحاليل فقط
+  const subtotalIncludesFee = Math.abs(testsValue - discount - net) < 1 && Math.abs(testsValue + visitFee - discount - net) >= 1;
+  const beforeDiscount = subtotalIncludesFee ? testsValue : testsValue + visitFee;
+  const discountBase = Math.max(1, subtotalIncludesFee ? Math.max(1, testsValue - visitFee) : testsValue);
+  const discountPercent = discount > 0 ? Math.round((discount / discountBase) * 100) : 0;
+  const rawSubtotal = beforeDiscount;
   const paid = params.paidAmount !== undefined ? params.paidAmount : net;
   const remaining = params.remainingAmount !== undefined ? params.remainingAmount : Math.max(0, net - paid);
   const remainingText = remaining > 0 ? `*متبقي ${remaining} ج.م*` : 'مسدد بالكامل ✅';
 
-  // 4. Fasting
-  const fastingText = params.fastingHours && params.fastingHours > 0
-    ? `صيام *${params.fastingHours} ساعات* قبل سحب العينة (يُسمح بشرب الماء فقط)`
-    : `يُرجى الصيام في حال طلبت التحاليل ذلك (شرب الماء مسموح دائماً)`;
+  // 4. الشروط والاحتياطات الخاصة بكل تحليل
+  const precautions = buildTestPrecautions(
+    [...(params.testsDetails || []), ...(params.extraTestsDetails || [])],
+    params.fastingHours || 0
+  );
 
   return `🔬 *${labTitle}*
 *أ.د. رامي مختار — استشاريو الباثولوجيا الإكلينيكية (طب قصر العيني)*
@@ -117,20 +157,21 @@ export function formatBookingConfirmationWhatsAppMessage(params: {
 📋 *بيانات الموعد:*
 • رقم الملف: *#${params.labNumber}*${params.barcode ? ` | باركود: *${params.barcode}*` : ''}
 • الموعد: *${params.date}* — الساعة *${params.time}*
+${params.phone ? `• تليفون المريض: *${params.phone}*\n` : ''}
 ${locBlock}
 
 🧪 *الفحوصات المطلوبة:*
 ${testsBlock.trimEnd()}
 
 💰 *البيان المالي:*
-• إجمالي الفحوصات: *${rawSubtotal} ج.م*
-${discount > 0 ? `• الخصم المطبق (${params.discountLabel}): *- ${discount} ج.م*\n` : ''}${visitFee > 0 ? `• رسوم الزيارة المنزلية: *+ ${visitFee} ج.م*\n` : ''}• *الصافي المطلوب:* *${net} ج.م*
+• القيمة قبل الخصم: *${beforeDiscount} ج.م*
+${discount > 0 ? `• نسبة الخصم: *${discountPercent}%*${params.discountLabel ? ` (${params.discountLabel})` : ''}\n` : ''}${discount > 0 ? `• قيمة الخصم: *- ${discount} ج.م*\n` : ''}${visitFee > 0 ? `• رسوم الزيارة المنزلية: *+ ${visitFee} ج.م*\n` : ''}• *الصافي المطلوب:* *${net} ج.م*
 • المبلغ المسدد: *${paid} ج.م*
 • حالة السداد: ${remainingText}
 • طريقة الدفع: ${params.paymentMethod}
 
-⚠️ *تعليمات هامة:*
-• ${fastingText}.
+⚠️ *الشروط والاحتياطات الخاصة بتحاليلك:*
+${precautions.map(tip => `• ${tip}`).join('\n')}
 
 📞 *للتواصل أو الاستفسار:* ${contactPhone}
 نسأل الله لكم دوام الصحة والعافية 🌸`;

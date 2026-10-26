@@ -805,7 +805,7 @@ async function pushSingleCaseToGitHub(
   });
 }
 
-// Push full unified database store to GitHub
+// Push full unified database store to GitHub (Git Data API — يدعم الملفات الكبيرة ويتجنب حد 1MB)
 export async function pushFullStoreToGitHub(
   arg1: string | GitHubSyncConfig,
   storePayload: Record<string, any>
@@ -813,42 +813,45 @@ export async function pushFullStoreToGitHub(
   try {
     const creds = resolveCredentials(arg1);
     if (!creds.token) {
-      return { success: false, message: 'لا يوجد رمز GitHub صالح' };
+      return { success: false, message: 'لا يوجد رمز GitHub صالح — أدخل الرمز من إعدادات المزامنة' };
     }
 
     const filePath = 'public/rt-database-sync.json';
-    const apiUrl = `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/${filePath}`;
+    const repoApi = `https://api.github.com/repos/${creds.owner}/${creds.repo}`;
+    const authHeaders: Record<string, string> = {
+      Authorization: `token ${creds.token}`,
+      Accept: 'application/vnd.github+json',
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache, no-store'
+    };
 
-    // Union with the newest cloud snapshot before writing: a device that is a few seconds
-    // behind must never erase cases registered on another device.
-    let safePayload: Record<string, any> = { ...storePayload };
+    // نقرأ أحدث نسخة سحابية وندمجها قبل الكتابة: جهاز متأخر ثوانٍ لا يمسح حجوزات جهاز آخر
+    let cloudData: Record<string, any> | null = null;
     try {
-      const cloudStore = await pullFullStoreFromGitHub({
-        token: creds.token,
-        repoOwner: creds.owner,
-        repoName: creds.repo
-      } as unknown as GitHubSyncConfig);
+      const cloudStore = await pullFullStoreFromGitHub(
+        { token: creds.token, repoOwner: creds.owner, repoName: creds.repo } as unknown as GitHubSyncConfig,
+        { force: true }
+      );
       if (cloudStore.success && cloudStore.data) {
-        importDeletionTombstones(cloudStore.data.deletedReports, cloudStore.data.deletedInvoices);
-        safePayload = {
-          ...storePayload,
-          reports: unionReports(storePayload.reports, cloudStore.data.reports),
-          incomeRecords: unionInvoices(storePayload.incomeRecords, cloudStore.data.incomeRecords),
-          packages: Array.isArray(storePayload.packages) && storePayload.packages.length > 0
-            ? mergePackagesWithDefaults(cloudStore.data.packages, storePayload.packages)
-            : storePayload.packages
-        };
+        cloudData = cloudStore.data;
+        importDeletionTombstones(cloudData.deletedReports, cloudData.deletedInvoices);
       }
     } catch {
-      // keep the local snapshot when the cloud cannot be read
+      // نكمل بالبيانات المحلية إذا تعذر قراءة السحابة
     }
 
-    // سجل المحذوفات: يمنع إعادة إدخال أي حالة أو فاتورة محذوفة من نسخ الأجهزة الأخرى
     const tombstones = getDeletionTombstones();
-    safePayload = {
-      ...safePayload,
-      reports: filterDeletedReports(Array.isArray(safePayload.reports) ? safePayload.reports : []),
-      incomeRecords: filterDeletedInvoices(Array.isArray(safePayload.incomeRecords) ? safePayload.incomeRecords : []),
+    const cloudReports = Array.isArray(cloudData?.reports) ? cloudData.reports : [];
+    const cloudInvoices = Array.isArray(cloudData?.incomeRecords) ? cloudData.incomeRecords : [];
+
+    const safePayload: Record<string, any> = {
+      ...(cloudData || {}),
+      ...storePayload,
+      reports: filterDeletedReports(unionReports(Array.isArray(storePayload.reports) ? storePayload.reports : [], cloudReports)),
+      incomeRecords: filterDeletedInvoices(unionInvoices(Array.isArray(storePayload.incomeRecords) ? storePayload.incomeRecords : [], cloudInvoices)),
+      packages: Array.isArray(storePayload.packages) && storePayload.packages.length > 0
+        ? mergePackagesWithDefaults(cloudData?.packages || [], storePayload.packages)
+        : storePayload.packages,
       deletedReports: tombstones.reports,
       deletedInvoices: tombstones.invoices
     };
@@ -859,61 +862,69 @@ export async function pushFullStoreToGitHub(
       ...safePayload
     };
 
-    // Minify JSON to drastically reduce byte size and prevent GitHub 1MB Contents API limit
-    const jsonString = JSON.stringify(fullData);
-    const contentBase64 = encodeBase64Utf8(jsonString);
+    const contentBase64 = encodeBase64Utf8(JSON.stringify(fullData));
+    const commitMessage = `مزامنة سحابية شاملة لقاعدة بيانات المعمل: ${new Date().toLocaleTimeString('en-US')} [skip ci]`;
 
-    // Helper to attempt commit with SHA
-    async function attemptCommit(retryCount = 0): Promise<{ success: boolean; message: string }> {
-      let existingSha: string | undefined;
-      try {
-        const checkRes = await fetch(`${apiUrl}?ref=main&_=${Date.now()}`, {
-          headers: {
-            Authorization: `token ${creds.token}`,
-            Accept: 'application/vnd.github.v3+json',
-            'Cache-Control': 'no-cache, no-store'
-          }
-        });
-        if (checkRes.ok) {
-          const checkData = await checkRes.json();
-          existingSha = checkData.sha;
-        }
-      } catch {
-        // file might not exist yet
-      }
+    async function writeSnapshot(retryCount = 0): Promise<{ success: boolean; message: string }> {
+      const blobRes = await fetch(`${repoApi}/git/blobs`, {
+        method: 'POST',
+        headers: authHeaders,
+        body: JSON.stringify({ content: contentBase64, encoding: 'base64' })
+      });
+      if (!blobRes.ok) return { success: false, message: `فشل تجهيز نسخة البيانات: ${blobRes.status}` };
+      const blob = await blobRes.json();
 
-      const putRes = await fetch(apiUrl, {
-        method: 'PUT',
-        headers: {
-          Authorization: `token ${creds.token}`,
-          Accept: 'application/vnd.github.v3+json',
-          'Content-Type': 'application/json'
-        },
+      const refRes = await fetch(`${repoApi}/git/ref/heads/main?t=${Date.now()}`, { headers: authHeaders });
+      if (!refRes.ok) return { success: false, message: `تعذر قراءة فرع المزامنة: ${refRes.status}` };
+      const headSha = (await refRes.json()).object.sha;
+
+      const baseCommitRes = await fetch(`${repoApi}/git/commits/${headSha}`, { headers: authHeaders });
+      const baseTreeSha = baseCommitRes.ok ? (await baseCommitRes.json()).tree.sha : undefined;
+
+      const treeRes = await fetch(`${repoApi}/git/trees`, {
+        method: 'POST',
+        headers: authHeaders,
         body: JSON.stringify({
-          message: `مزامنة سحابية شاملة لقاعدة بيانات المعمل: ${new Date().toLocaleTimeString('en-US')} [skip ci]`,
-          content: contentBase64,
-          branch: 'main',
-          ...(existingSha ? { sha: existingSha } : {})
+          ...(baseTreeSha ? { base_tree: baseTreeSha } : {}),
+          tree: [{ path: filePath, mode: '100644', type: 'blob', sha: blob.sha }]
         })
       });
+      if (!treeRes.ok) return { success: false, message: `فشل بناء نسخة الملف: ${treeRes.status}` };
+      const tree = await treeRes.json();
 
-      if (putRes.ok) {
-        if (typeof window !== 'undefined') {
+      const newCommitRes = await fetch(`${repoApi}/git/commits`, {
+        method: 'POST',
+        headers: authHeaders,
+        body: JSON.stringify({ message: commitMessage, tree: tree.sha, parents: [headSha] })
+      });
+      if (!newCommitRes.ok) return { success: false, message: `فشل إنشاء الإصدار: ${newCommitRes.status}` };
+      const newCommit = await newCommitRes.json();
+
+      const updateRes = await fetch(`${repoApi}/git/refs/heads/main`, {
+        method: 'PATCH',
+        headers: authHeaders,
+        body: JSON.stringify({ sha: newCommit.sha, force: false })
+      });
+
+      if (updateRes.ok) {
+        try {
           localStorage.setItem('rt_lab_last_cloud_sync', new Date().toISOString());
+          localStorage.setItem('rt_cloud_store_sha', blob.sha);
+        } catch {
+          // التخزين المحلي غير متاح
         }
         return { success: true, message: 'تم حفظ ومزامنة قاعدة البيانات سحابياً بنجاح!' };
       }
 
-      // If conflict (409) or pre-condition, retry with latest SHA
-      if ((putRes.status === 409 || putRes.status === 422) && retryCount < 2) {
-        await new Promise(r => setTimeout(r, 600));
-        return attemptCommit(retryCount + 1);
+      if ((updateRes.status === 409 || updateRes.status === 422) && retryCount < 3) {
+        await new Promise(r => setTimeout(r, 700));
+        return writeSnapshot(retryCount + 1);
       }
 
-      return { success: false, message: `فشل الحفظ السحابي: ${putRes.statusText}` };
+      return { success: false, message: `فشل تحديث فرع المزامنة: ${updateRes.status}` };
     }
 
-    return await attemptCommit();
+    return await writeSnapshot();
   } catch (err) {
     return { success: false, message: `خطأ: ${(err as Error).message}` };
   }
@@ -921,56 +932,70 @@ export async function pushFullStoreToGitHub(
 
 // Pull full unified database store from GitHub
 export async function pullFullStoreFromGitHub(
-  arg1: string | GitHubSyncConfig
-): Promise<{ success: boolean; data?: any; message: string }> {
+  arg1: string | GitHubSyncConfig,
+  options: { force?: boolean } = {}
+): Promise<{ success: boolean; data?: any; unchanged?: boolean; message: string }> {
   try {
     const creds = resolveCredentials(arg1);
     const filePath = 'public/rt-database-sync.json';
     const apiUrl = `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/${filePath}`;
+    const authHeaders: Record<string, string> = creds.token ? { Authorization: `token ${creds.token}` } : {};
 
-    // 0. Primary & Most Reliable: Direct raw GitHub API (Supports ANY file size up to 100MB, zero CDN cache)
+    // 1) فحص سريع لحالة الملف: إن لم يتغير لا نعيد تنزيل البيانات كاملة
+    let latestSha: string | undefined;
+    try {
+      const metaRes = await fetch(`${apiUrl}?ref=main&_=${Date.now()}`, {
+        headers: { ...authHeaders, Accept: 'application/vnd.github.v3+json', 'Cache-Control': 'no-cache, no-store' }
+      });
+      if (metaRes.ok) {
+        const meta = await metaRes.json();
+        latestSha = typeof meta?.sha === 'string' ? meta.sha : undefined;
+        if (!options.force && latestSha && localStorage.getItem('rt_cloud_store_sha') === latestSha) {
+          return { success: true, data: null, unchanged: true, message: 'لا توجد تغييرات جديدة' };
+        }
+      }
+    } catch {
+      // نكمل بالطرق الأخرى أدناه
+    }
+
+    const finish = (data: any, message: string) => {
+      try {
+        if (latestSha) localStorage.setItem('rt_cloud_store_sha', latestSha);
+      } catch {
+        // التخزين المحلي غير متاح
+      }
+      return { success: true, data, message };
+    };
+
+    // 2) GitHub API المباشر (بدون كاش ويدعم الملفات الكبيرة)
     try {
       const rawApiRes = await fetch(`${apiUrl}?ref=main&_=${Date.now()}`, {
-        headers: creds.token ? {
-          Authorization: `token ${creds.token}`,
-          Accept: 'application/vnd.github.v3.raw',
-          'Cache-Control': 'no-cache, no-store'
-        } : {
-          Accept: 'application/vnd.github.v3.raw'
-        }
+        headers: { ...authHeaders, Accept: 'application/vnd.github.v3.raw', 'Cache-Control': 'no-cache, no-store' }
       });
       if (rawApiRes.ok) {
         const rawJson = await rawApiRes.json();
         if (rawJson && (Array.isArray(rawJson.reports) || Array.isArray(rawJson.incomeRecords))) {
-          return { success: true, data: rawJson, message: 'تم استرداد وتحديث البيانات سحابياً بنجاح!' };
+          return finish(rawJson, 'تم استرداد وتحديث البيانات سحابياً بنجاح!');
         }
       }
     } catch (rawApiErr) {
       console.warn('Raw GitHub API direct fetch note:', rawApiErr);
     }
 
-    // 1. Try GitHub Contents API with download_url fallback
+    // 3) واجهة Contents مع download_url
     try {
       const res = await fetch(`${apiUrl}?ref=main&_=${Date.now()}`, {
-        headers: creds.token ? {
-          Authorization: `token ${creds.token}`,
-          Accept: 'application/vnd.github.v3+json'
-        } : {
-          Accept: 'application/vnd.github.v3+json'
-        }
+        headers: { ...authHeaders, Accept: 'application/vnd.github.v3+json' }
       });
-
       if (res.ok) {
         const data = await res.json();
         if (typeof data.content === 'string' && data.content.length > 0) {
-          const content = decodeBase64Utf8(data.content);
-          const parsed = JSON.parse(content);
-          return { success: true, data: parsed, message: 'تم استرداد وتحديث البيانات سحابياً بنجاح!' };
-        } else if (data.download_url) {
+          return finish(JSON.parse(decodeBase64Utf8(data.content)), 'تم استرداد وتحديث البيانات سحابياً بنجاح!');
+        }
+        if (data.download_url) {
           const downloadRes = await fetch(`${data.download_url}?t=${Date.now()}`);
           if (downloadRes.ok) {
-            const parsed = await downloadRes.json();
-            return { success: true, data: parsed, message: 'تم استرداد وتحديث البيانات سحابياً بنجاح!' };
+            return finish(await downloadRes.json(), 'تم استرداد وتحديث البيانات سحابياً بنجاح!');
           }
         }
       }
@@ -978,38 +1003,25 @@ export async function pullFullStoreFromGitHub(
       console.warn('GitHub Contents API fetch note:', apiErr);
     }
 
-    // 2. Direct fast raw CDN fallback (fetches newest commit instantly)
+    // 4) raw CDN مباشرة
     try {
-      const rawUrl = `https://raw.githubusercontent.com/${creds.owner}/${creds.repo}/main/public/rt-database-sync.json?t=${Date.now()}`;
-      const rawRes = await fetch(rawUrl);
+      const rawRes = await fetch(`https://raw.githubusercontent.com/${creds.owner}/${creds.repo}/main/public/rt-database-sync.json?t=${Date.now()}`, { cache: 'no-store' });
       if (rawRes.ok) {
-        const parsed = await rawRes.json();
-        return { success: true, data: parsed, message: 'تم استرداد البيانات من السحابة مباشرة بنجاح!' };
+        return finish(await rawRes.json(), 'تم استرداد البيانات من السحابة مباشرة بنجاح!');
       }
-    } catch (rawErr) {
-      console.warn('Raw GitHub CDN fetch note:', rawErr);
+    } catch {
+      // المتابعة للخيار الاحتياطي
     }
 
-    // 3. Fallback to repository backup file if available
-    try {
-      const backupUrl = `https://raw.githubusercontent.com/${creds.owner}/${creds.repo}/main/rt_lab_unified_backup.json?t=${Date.now()}`;
-      const backupRes = await fetch(backupUrl);
-      if (backupRes.ok) {
-        const parsed = await backupRes.json();
-        return { success: true, data: parsed, message: 'تم استرداد البيانات من النسخة الاحتياطية السحابية بنجاح!' };
-      }
-    } catch (backupErr) {
-      console.warn('Backup fetch note:', backupErr);
-    }
-
-    // 4. Local static public file fallback
+    // 5) الملف الاحتياطي المرفق مع التطبيق
     try {
       const publicRes = await fetch(`./rt-database-sync.json?t=${Date.now()}`);
       if (publicRes.ok) {
-        const json = await publicRes.json();
-        return { success: true, data: json, message: 'تم استرداد البيانات من الملف المخبري بنجاح' };
+        return { success: true, data: await publicRes.json(), message: 'تم استرداد البيانات من الملف المخبري بنجاح' };
       }
-    } catch {}
+    } catch {
+      // لا يوجد ملف احتياطي
+    }
 
     return { success: false, message: 'لم يتم العثور على نسخة سحابية بعد' };
   } catch (err) {

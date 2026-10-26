@@ -886,7 +886,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
       } else {
         // Fallback to GitHub repo store directly
-        pullFullStoreFromGitHub(githubConfig).then(ghRes => {
+        pullFullStoreFromGitHub(githubConfig, { force: true }).then(ghRes => {
           if (ghRes.success && ghRes.data) {
             importDeletionTombstones(ghRes.data.deletedReports, ghRes.data.deletedInvoices);
             if (Array.isArray(ghRes.data.reports) && ghRes.data.reports.length > 0) {
@@ -1122,7 +1122,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
   }, [githubConfig]);
 
-  // Periodic automatic background sync every 12 seconds to keep all devices updated bidirectionally
+  // مزامنة خلفية تلقائية كل 5 ثوانٍ (مع فحص بصمة الملف لتقليل الاستهلاك)
   useEffect(() => {
     if (!githubConfig.token || !githubConfig.autoSync) return;
 
@@ -1217,7 +1217,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           }
         }
       }).catch(() => {});
-    }, 12000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [githubConfig]);
@@ -2979,7 +2979,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const syncAllDevicesNow = useCallback(async (): Promise<{ success: boolean; message: string; reportsCount?: number; invoicesCount?: number }> => {
     try {
       // 1. Pull latest database from GitHub directly via raw API
-      const ghRes = await pullFullStoreFromGitHub(githubConfig);
+      const ghRes = await pullFullStoreFromGitHub(githubConfig, { force: true });
       let mergedReports = [...reports];
       let mergedInvoices = [...incomeRecords];
       let mergedPackages = [...packages];
