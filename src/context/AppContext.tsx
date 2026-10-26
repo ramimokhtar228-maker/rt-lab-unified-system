@@ -58,6 +58,7 @@ import { INITIAL_INDIVIDUAL_TESTS } from '../data/individualTestsData';
 import { INITIAL_INSTRUMENTS, SAMPLE_INSTRUMENT_TRANSMISSIONS } from '../data/instrumentsData';
 import { realtimeSyncManager } from '../utils/realtimeMultiDeviceSync';
 import { pushFullStoreToGitHub, pullFullStoreFromGitHub, syncInvoiceToDiagnostic, fetchDiagnosticCases, convertIncomeRecordToDiagnosticReport } from '../utils/githubSync';
+import { resolveUniqueLabIdentity, dedupeReports, dedupeInvoices } from '../utils/labNumbering';
 import {
   mergeCatalogWithDefaults,
   mergePackagesWithDefaults,
@@ -640,6 +641,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }, 1200);
   }, [githubConfig, reports, incomeRecords, expenses, loyaltyProfiles, inventory, dailyCloseouts, labInfo, staffSignatures, staffSignatureOptions, testCatalog, packages, diagnosticProfiles]);
 
+  // Collapse any case or invoice that multi-device sync delivered twice (same barcode /
+  // lab number and patient) instead of letting duplicates pile up.
+  useEffect(() => {
+    setReports(prev => dedupeReports(prev));
+  }, [reports]);
+
+  useEffect(() => {
+    setIncomeRecords(prev => dedupeInvoices(prev));
+  }, [incomeRecords]);
+
   // Persistence Effects
   useEffect(() => { try { localStorage.setItem(REPORTS_KEY, JSON.stringify(reports)); } catch (e) { console.error(e); } }, [reports]);
   useEffect(() => { try { localStorage.setItem(INCOME_KEY, JSON.stringify(incomeRecords)); } catch (e) { console.error(e); } }, [incomeRecords]);
@@ -946,13 +957,24 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               if (casesRes.success && Array.isArray(casesRes.cases) && casesRes.cases.length > 0) {
                 // 1. Sync reports
                 setReports(curReports => {
-                  const existingCodes = new Set(curReports.map(r => r.patient?.barcode || r.reportNumber));
+                  const existingCodes = new Set<string>();
+                  curReports.forEach(r => {
+                    if (r.patient?.barcode) existingCodes.add(r.patient.barcode);
+                    if (r.patient?.labNumber) existingCodes.add(r.patient.labNumber);
+                    if (r.reportNumber) existingCodes.add(r.reportNumber);
+                  });
                   let addedCount = 0;
                   const newOnes: LabReport[] = [];
                   casesRes.cases!.forEach(c => {
                     const code = c.barcode || c.labNumber;
-                    if (code && !existingCodes.has(code)) {
-                      existingCodes.add(code);
+                    // A case already exists when either its barcode or its lab number is registered
+                    const alreadyRegistered =
+                      (c.barcode && existingCodes.has(c.barcode)) ||
+                      (c.labNumber && existingCodes.has(c.labNumber)) ||
+                      !code;
+                    if (!alreadyRegistered) {
+                      if (c.barcode) existingCodes.add(c.barcode);
+                      if (c.labNumber) existingCodes.add(c.labNumber);
                       addedCount++;
                       const actualTests = (Array.isArray(c.tests) && c.tests.length > 0)
                         ? c.tests
@@ -1875,6 +1897,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Unified Admission: Register patient -> Create Lab Report -> Create Income Invoice -> Update Loyalty
   const createReportFromAdmission = useCallback((patient: Patient, selectedTests: InvoiceTestItem[], packageApplied?: any): LabReport => {
     const today = new Date().toISOString().split('T')[0];
+
+    // Never reuse a lab number / barcode that is already registered: if another device took it
+    // (or the sequence restarted after a deletion) both cases would collapse into one on sync.
+    const caseIdentity = resolveUniqueLabIdentity(reports, patient.labNumber, patient.barcode);
+    patient = { ...patient, labNumber: caseIdentity.labNumber, barcode: caseIdentity.barcode };
     const generatedProfiles: TestProfile[] = [];
 
     // 1. If a Package was applied: Collect ALL its tests into ONE unified comprehensive profile (لا يفرد في صفحات منفصلة)
@@ -3052,7 +3079,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                 cost: 30
               }));
 
-          if ((c.barcode && !existingBarcodes.has(c.barcode)) || (c.labNumber && !existingNumbers.has(c.labNumber))) {
+          const alreadyRegistered =
+            (c.barcode && existingBarcodes.has(c.barcode)) ||
+            (c.labNumber && existingNumbers.has(c.labNumber)) ||
+            (!c.barcode && !c.labNumber);
+          if (!alreadyRegistered) {
             const newRep = convertIncomeRecordToDiagnosticReport({
               id: c.id,
               invoiceNumber: invNum,

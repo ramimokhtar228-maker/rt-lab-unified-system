@@ -1,4 +1,6 @@
 import { IncomeRecord, GitHubSyncConfig, InvoiceTestItem } from '../types';
+import { unionReports, unionInvoices } from './labNumbering';
+import { mergePackagesWithDefaults } from './upgradeSavedData';
 
 export interface DiagnosticPatientCase {
   id: string;
@@ -815,10 +817,33 @@ export async function pushFullStoreToGitHub(
     const filePath = 'public/rt-database-sync.json';
     const apiUrl = `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/${filePath}`;
 
+    // Union with the newest cloud snapshot before writing: a device that is a few seconds
+    // behind must never erase cases registered on another device.
+    let safePayload: Record<string, any> = { ...storePayload };
+    try {
+      const cloudStore = await pullFullStoreFromGitHub({
+        token: creds.token,
+        repoOwner: creds.owner,
+        repoName: creds.repo
+      } as unknown as GitHubSyncConfig);
+      if (cloudStore.success && cloudStore.data) {
+        safePayload = {
+          ...storePayload,
+          reports: unionReports(storePayload.reports, cloudStore.data.reports),
+          incomeRecords: unionInvoices(storePayload.incomeRecords, cloudStore.data.incomeRecords),
+          packages: Array.isArray(storePayload.packages) && storePayload.packages.length > 0
+            ? mergePackagesWithDefaults(cloudStore.data.packages, storePayload.packages)
+            : storePayload.packages
+        };
+      }
+    } catch {
+      // keep the local snapshot when the cloud cannot be read
+    }
+
     const fullData = {
       system: 'RT Lab Unified Medical & Financial ERP',
       syncedAt: new Date().toISOString(),
-      ...storePayload
+      ...safePayload
     };
 
     // Minify JSON to drastically reduce byte size and prevent GitHub 1MB Contents API limit

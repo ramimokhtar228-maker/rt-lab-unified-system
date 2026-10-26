@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useApp } from '../context/AppContext';
+import { getNextLabIdentity } from '../utils/labNumbering';
 import {
   UserPlus,
   Search,
@@ -59,8 +60,12 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
   } = useApp();
 
   const today = new Date().toISOString().split('T')[0];
-  const nextLabNumber = `RT-2026-${String(reports.length + 1).padStart(3, '0')}`;
-  const nextBarcode = `RT-${10030 + reports.length + 1}`;
+  // Continue the lab-number sequence from the highest case already registered (on any device),
+  // so two devices can never issue the same number and overwrite each other's cases on sync.
+  const { labNumber: nextLabNumber, barcode: nextBarcode } = useMemo(
+    () => getNextLabIdentity(reports),
+    [reports]
+  );
 
   // Form State
   const [fullName, setFullName] = useState('');

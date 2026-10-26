@@ -25,6 +25,7 @@ import { PatientInvoiceModal } from './components/PatientInvoiceModal';
 import { TestCatalogModal } from './components/TestCatalogModal';
 import { ManualTestModal } from './components/ManualTestModal';
 import { OfflineIndicator } from './components/OfflineIndicator';
+import { getNextLabIdentity } from './utils/labNumbering';
 import {
   LabReport,
   ReportStatus,
@@ -96,7 +97,7 @@ const AppContent: React.FC = () => {
   };
 
   const handleDuplicateReport = (report: LabReport) => {
-    const nextLabNum = `RT-2026-${String(reports.length + 1).padStart(3, '0')}`;
+    const { labNumber: nextLabNum, barcode: nextLabBarcode } = getNextLabIdentity(reports);
     const duplicated: LabReport = {
       ...report,
       id: `rep-${Date.now()}`,
@@ -105,7 +106,7 @@ const AppContent: React.FC = () => {
         ...report.patient,
         id: `pat-${Date.now()}`,
         labNumber: nextLabNum,
-        barcode: `RT-${10030 + reports.length + 1}`
+        barcode: nextLabBarcode
       },
       status: 'draft',
       createdAt: new Date().toISOString(),
