@@ -120,7 +120,7 @@ class RealtimeMultiDeviceSyncEngine {
   private supabaseConnected: boolean = false;
   private lastSyncedAt: Date | null = null;
   private isSyncing: boolean = false;
-  private lastProcessedTimestamp: number = 0;
+  private seenMessageIds: Set<string> = new Set();
   private activeDevices: Map<string, DevicePresence> = new Map();
   private eventLogs: SyncEventLogItem[] = [];
   private masterSnapshotProvider: (() => any) | null = null;
@@ -261,11 +261,20 @@ class RealtimeMultiDeviceSyncEngine {
   }
 
   private handleIncomingMessage(msg: SyncMessage, source: 'supabase' | 'local') {
-    if (!msg || msg.timestamp <= this.lastProcessedTimestamp) {
+    if (!msg || !msg.action) return;
+    const msgKey = `${msg.senderDeviceId}_${msg.action}_${msg.timestamp}_${msg.payload?.id || msg.payload?.report?.id || msg.payload?.invoice?.id || ''}`;
+    if (this.seenMessageIds.has(msgKey)) {
       return;
     }
-    this.lastProcessedTimestamp = msg.timestamp;
-    this.lastSyncedAt = new Date(msg.timestamp);
+    this.seenMessageIds.add(msgKey);
+    if (this.seenMessageIds.size > 800) {
+      const iter = this.seenMessageIds.values();
+      for (let i = 0; i < 200; i++) {
+        const val = iter.next().value;
+        if (val) this.seenMessageIds.delete(val);
+      }
+    }
+    this.lastSyncedAt = new Date();
 
     // If a remote peer is requesting the latest state and we have a snapshot provider, reply with INIT_STATE!
     if (msg.action === 'REQUEST_LATEST_STATE' && this.masterSnapshotProvider) {
@@ -484,7 +493,8 @@ class RealtimeMultiDeviceSyncEngine {
       meta,
     };
 
-    this.lastProcessedTimestamp = msg.timestamp;
+    const outKey = `${this.deviceId}_${action}_${msg.timestamp}_${payload?.id || payload?.report?.id || payload?.invoice?.id || ''}`;
+    this.seenMessageIds.add(outKey);
     this.lastSyncedAt = new Date();
 
     // 1. Instant local BroadcastChannel (tabs on same device)

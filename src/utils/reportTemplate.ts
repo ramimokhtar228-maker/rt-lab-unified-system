@@ -1057,8 +1057,8 @@ function pageHtml(report: LabReport, profile: TestProfile, idx: number, total: n
       <div class="f wide"><label>Patient Name</label><span class="v name" dir="auto">${esc(p.fullName || 'Patient')}</span></div>
       <div class="f"><label>Lab / Reg No.</label><span class="v font-mono">${esc(p.labNumber)}</span></div>
       <div class="f"><label>Age / Gender</label><span class="v">${esc(ageText(p.age, p.ageUnit))} / ${esc(formatGenderEn(p.gender))}</span></div>
-      <div class="f"><label>Collected</label><span class="v">${esc(fmtDate(p.sampleDate))}</span></div>
-      <div class="f"><label>Reported</label><span class="v">${esc(fmtDate(p.reportingDate))}</span></div>
+      <div class="f"><label>Collected</label><span class="v">${esc(fmtDate(p.sampleDate || report.createdAt || new Date().toISOString()))}</span></div>
+      <div class="f"><label>Reported</label><span class="v">${esc(fmtDate(p.reportingDate || new Date().toISOString()))}</span></div>
       <div class="f wide"><label>Referred By</label><span class="v">${esc(doctor)}</span></div>
       ${diagnosis ? `<div class="f wide" style="grid-column: span 2;"><label>Clinical Diagnosis / Indication</label><span class="v" style="color: ${BRAND.red}; font-weight: 700;">${esc(diagnosis)}</span></div>` : ''}
     </div>

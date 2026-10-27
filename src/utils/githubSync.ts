@@ -1343,16 +1343,16 @@ export async function pullFullStoreFromGitHub(
     const casesApiUrl = `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/${casesPath}`;
     const authHeaders: Record<string, string> = creds.token ? { Authorization: `token ${creds.token}` } : {};
 
-    // 1) فحص سريع لحالة المستودع
+    // 1) فحص سريع لحالة المستودع الشاملة (تتبع آخر Commit على الفرع الرئيسي)
     let latestSha: string | undefined;
     try {
-      const metaRes = await fetch(`${apiUrl}?ref=main&_=${Date.now()}`, {
+      const headRes = await fetch(`https://api.github.com/repos/${creds.owner}/${creds.repo}/git/ref/heads/main?_=${Date.now()}`, {
         headers: { ...authHeaders, Accept: 'application/vnd.github.v3+json', 'Cache-Control': 'no-cache, no-store' }
       });
-      if (metaRes.ok) {
-        const meta = await metaRes.json();
-        latestSha = typeof meta?.sha === 'string' ? meta.sha : undefined;
-        if (!options.force && latestSha && localStorage.getItem('rt_cloud_store_sha') === latestSha) {
+      if (headRes.ok) {
+        const headData = await headRes.json();
+        latestSha = typeof headData?.object?.sha === 'string' ? headData.object.sha : undefined;
+        if (!options.force && latestSha && localStorage.getItem('rt_head_commit_sha') === latestSha) {
           return { success: true, data: null, unchanged: true, message: 'لا توجد تغييرات جديدة' };
         }
       }
@@ -1369,7 +1369,12 @@ export async function pullFullStoreFromGitHub(
           headers: { ...authHeaders, Accept: 'application/vnd.github.v3.raw', 'Cache-Control': 'no-cache, no-store' }
         });
         if (casesRes.ok) {
-          const casesList = await casesRes.json();
+          let casesList: any = await casesRes.json();
+          if (casesList && typeof casesList === 'object' && !Array.isArray(casesList) && casesList.content) {
+            try {
+              casesList = JSON.parse(decodeBase64Utf8(casesList.content));
+            } catch {}
+          }
           if (Array.isArray(casesList) && casesList.length > 0) {
             mergeCasesQueueIntoStore(data, casesList);
           }
@@ -1388,7 +1393,10 @@ export async function pullFullStoreFromGitHub(
       }
 
       try {
-        if (latestSha) localStorage.setItem('rt_cloud_store_sha', latestSha);
+        if (latestSha) {
+          localStorage.setItem('rt_head_commit_sha', latestSha);
+          localStorage.setItem('rt_cloud_store_sha', latestSha);
+        }
       } catch {
         // التخزين المحلي غير متاح
       }

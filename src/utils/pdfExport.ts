@@ -10,8 +10,14 @@ export function reportFileName(report: LabReport, ext: string): string {
 
 /** Renders the report off-screen from the shared template and returns a PDF Blob. */
 export async function buildReportPDFBlob(report: LabReport, labInfo?: LabInfo): Promise<Blob> {
+  const nowIso = new Date().toISOString();
   const safeReport: LabReport = {
     ...report,
+    patient: {
+      ...report.patient,
+      sampleDate: report.patient?.sampleDate || report.createdAt || nowIso,
+      reportingDate: nowIso
+    },
     staff: {
       ...DEFAULT_STAFF,
       ...(labInfo as any)?.staffSignatures,

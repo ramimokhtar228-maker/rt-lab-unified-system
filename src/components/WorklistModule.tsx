@@ -258,7 +258,7 @@ export const WorklistModule: React.FC = () => {
                     <span>·</span>
                     <span>الطبيب: {rep.patient.referringDoctorName || 'أطباء قصر العيني'}</span>
                     <span>·</span>
-                    <span>تاريخ السحب: {rep.patient.sampleDate}</span>
+                    <span>تاريخ السحب: <strong className="font-mono text-slate-800">{rep.patient.sampleDate ? new Date(rep.patient.sampleDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'اليوم'}</strong></span>
                   </div>
 
                   {/* Tests Badges */}

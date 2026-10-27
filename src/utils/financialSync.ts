@@ -10,7 +10,7 @@ const getGitHubToken = (): string => {
 };
 const GITHUB_TOKEN = getGitHubToken();
 const REPO_OWNER = 'ramimokhtar228-maker';
-const REPO_NAME = 'rt-lab-diagnostic-system';
+const REPO_NAME = 'rt-lab-unified-system';
 
 export interface IncomingFinancialOrder {
   id: string;

@@ -4,8 +4,14 @@ import { DEFAULT_STAFF } from '../data/labCatalog';
 
 /** Opens the unified English-only report in a print-ready window (A4). */
 export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo): void {
+  const nowIso = new Date().toISOString();
   const safeReport: LabReport = {
     ...report,
+    patient: {
+      ...report.patient,
+      sampleDate: report.patient?.sampleDate || report.createdAt || nowIso,
+      reportingDate: nowIso
+    },
     staff: {
       ...DEFAULT_STAFF,
       ...(labInfo as any)?.staffSignatures,

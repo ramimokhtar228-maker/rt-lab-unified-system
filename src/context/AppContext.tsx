@@ -2326,9 +2326,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     });
     if (githubConfig.token && githubConfig.autoSync) {
       pushFullStoreToGitHub(githubConfig, instantSyncPayload).catch(err => {
-        console.warn('Instant GitHub backup push error:', err);
+        console.warn('Instant GitHub full push error, falling back to single case push:', err);
+        syncInvoiceToDiagnostic(newInvoice, githubConfig).catch(() => {});
       });
-      syncInvoiceToDiagnostic(newInvoice, githubConfig).catch(() => {});
     }
 
     logAction('CREATE', 'DIAGNOSTIC', `تسجيل مريض جديد ${patient.fullName} وحجز تحاليل وربط التقرير بالفاتورة المالية ومزامنة البيانات سحابياً فوراً`);

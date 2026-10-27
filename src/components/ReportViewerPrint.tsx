@@ -61,18 +61,37 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
   const [isLabModalOpen, setIsLabModalOpen] = useState(false);
   const p = report.patient;
   const totalPages = report.profiles.length;
-  const safeReport = useMemo<LabReport>(() => ({
-    ...report,
-    staff: {
-      ...DEFAULT_STAFF,
-      ...report.staff,
-      ...staffSignatures
-    }
-  }), [report, staffSignatures]);
+  const safeReport = useMemo<LabReport>(() => {
+    const nowIso = new Date().toISOString();
+    return {
+      ...report,
+      patient: {
+        ...report.patient,
+        sampleDate: report.patient?.sampleDate || report.createdAt || nowIso,
+        reportingDate: report.patient?.reportingDate || nowIso
+      },
+      staff: {
+        ...DEFAULT_STAFF,
+        ...report.staff,
+        ...staffSignatures
+      }
+    };
+  }, [report, staffSignatures]);
   const staff = safeReport.staff;
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   const handleDownloadPDF = async () => {
+    const nowIso = new Date().toISOString();
+    try {
+      updateReport(report.id, {
+        patient: {
+          ...report.patient,
+          reportingDate: nowIso,
+          sampleDate: report.patient?.sampleDate || report.createdAt || nowIso
+        },
+        updatedAt: nowIso
+      });
+    } catch {}
     try {
       setIsGeneratingPDF(true);
       await downloadReportPDF(safeReport, labInfo);
@@ -85,6 +104,17 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
   };
 
   const handlePrint = () => {
+    const nowIso = new Date().toISOString();
+    try {
+      updateReport(report.id, {
+        patient: {
+          ...report.patient,
+          reportingDate: nowIso,
+          sampleDate: report.patient?.sampleDate || report.createdAt || nowIso
+        },
+        updatedAt: nowIso
+      });
+    } catch {}
     try {
       openPrintReportWindow(safeReport, labInfo);
     } catch {

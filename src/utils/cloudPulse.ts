@@ -2,6 +2,8 @@
 export interface PulseCreds {
   owner?: string;
   repo?: string;
+  repoOwner?: string;
+  repoName?: string;
   token?: string;
   branch?: string;
 }
@@ -10,19 +12,24 @@ let lastEtag = '';
 let lastSha = '';
 let pulseTarget = '';
 
-function targetKey(cfg: PulseCreds) {
-  return `${cfg.owner}/${cfg.repo}/${cfg.branch || 'main'}`;
+function targetKey(owner: string, repo: string, branch: string) {
+  return `${owner}/${repo}/${branch}`;
 }
 
 export async function cloudVersionChanged(cfg: PulseCreds): Promise<boolean> {
-  if (!cfg || !cfg.token || !cfg.owner || !cfg.repo) return true;
-  const key = targetKey(cfg);
+  const token = cfg?.token;
+  const owner = cfg?.owner || cfg?.repoOwner || 'ramimokhtar228-maker';
+  const repo = cfg?.repo || cfg?.repoName || 'rt-lab-unified-system';
+  const branch = cfg?.branch || 'main';
+
+  if (!token || !owner || !repo) return true;
+  const key = targetKey(owner, repo, branch);
   if (key !== pulseTarget) {
     pulseTarget = key;
     lastEtag = '';
     lastSha = '';
   }
-  const url = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/git/ref/heads/${cfg.branch || 'main'}`;
+  const url = `https://api.github.com/repos/${owner}/${repo}/git/ref/heads/${branch}`;
   const headers: Record<string, string> = {
     Authorization: `Bearer ${cfg.token}`,
     Accept: 'application/vnd.github+json',

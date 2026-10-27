@@ -395,12 +395,18 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
 
   // Activate & Verify Report
   const handleActivateReport = () => {
+    const nowIso = new Date().toISOString();
     onUpdateReport({
       ...report,
       status: 'verified',
-      updatedAt: new Date().toISOString()
+      patient: {
+        ...report.patient,
+        reportingDate: nowIso,
+        sampleDate: report.patient.sampleDate || report.createdAt || nowIso
+      },
+      updatedAt: nowIso
     });
-    setActivationSuccessAlert('✅ تم تفعيل واعتماد التقرير بنجاح! كافة الجداول والنتائج معتمدة وجاهزة للطباعة والتسليم.');
+    setActivationSuccessAlert('✅ تم تفعيل واعتماد التقرير بنجاح وتحديث تاريخ الطباعة والتسليم تلقائياً!');
     setTimeout(() => setActivationSuccessAlert(null), 6000);
   };
 
@@ -748,7 +754,21 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
           <span className="text-xs font-bold text-slate-500">حالة التقرير:</span>
           <select
             value={report.status}
-            onChange={(e) => onUpdateReport({ ...report, status: e.target.value as ReportStatus })}
+            onChange={(e) => {
+              const newStatus = e.target.value as ReportStatus;
+              const nowIso = new Date().toISOString();
+              const isVerifiedOrReleased = newStatus === 'verified' || newStatus === 'released';
+              onUpdateReport({
+                ...report,
+                status: newStatus,
+                patient: {
+                  ...report.patient,
+                  reportingDate: isVerifiedOrReleased ? nowIso : (report.patient.reportingDate || nowIso),
+                  sampleDate: report.patient.sampleDate || report.createdAt || nowIso
+                },
+                updatedAt: nowIso
+              });
+            }}
             className={`text-xs font-bold px-3 py-1.5 rounded-lg border focus:outline-none ${
               report.status === 'released'
                 ? 'bg-emerald-50 text-emerald-900 border-emerald-300'
