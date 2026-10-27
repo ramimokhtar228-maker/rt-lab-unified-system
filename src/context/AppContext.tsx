@@ -1,4 +1,4 @@
-import { markDeleted, importDeletedMap, importSettingsStamps, getDeletedMap, getSettingsStamps, stampSetting, mergeCollection, mergeSettingsObject } from '@/utils/cloudStore';
+import { markDeleted, importDeletedMap, importSettingsStamps, getDeletedMap, getSettingsStamps, stampSetting, mergeCollection, mergeSettingsObject } from '../utils/cloudStore';
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import {
   Language,
@@ -629,7 +629,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           expenses,
           profitConfig,
           loyaltyProfiles,
-          loyaltyConfig,
           inventory,
           instruments,
           transmissions,
@@ -639,8 +638,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           payroll,
           dailyCloseouts,
           labInfo,
-          facilities,
-          staffMembers,
           staffSignatures,
           staffSignatureOptions,
           testCatalog,
@@ -655,7 +652,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         console.warn('Auto cloud push error:', err);
       }
     }, 1200);
-  }, [githubConfig, reports, incomeRecords, expenses, profitConfig, loyaltyProfiles, loyaltyConfig, inventory, instruments, transmissions, labToLabOrders, employees, attendance, payroll, dailyCloseouts, labInfo, facilities, staffMembers, staffSignatures, staffSignatureOptions, testCatalog, packages, diagnosticProfiles, auditLogs]);
+  }, [githubConfig, reports, incomeRecords, expenses, profitConfig, loyaltyProfiles, inventory, instruments, transmissions, labToLabOrders, employees, attendance, payroll, dailyCloseouts, labInfo, staffSignatures, staffSignatureOptions, testCatalog, packages, diagnosticProfiles, auditLogs]);
 
   // ── تطبيق النسخة السحابية على كل حقول البرنامج بدمج دقيق ──
   const applyCloudCollections = useCallback((data: Record<string, any>) => {
@@ -685,11 +682,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     applyList('testCatalog', setTestCatalog);
     applyList('packages', setPackages);
     applyList('diagnosticProfiles', setDiagnosticProfiles);
-    applyList('staffMembers', setStaffMembers);
-    applyList('facilities', setFacilities);
     applyList('auditLogs', setAuditLogs);
     setProfitConfig((prev: any) => mergeSettingsObject('profitConfig', prev, data.profitConfig, data.settingsStamps));
-    setLoyaltyConfig((prev: any) => mergeSettingsObject('loyaltyConfig', prev, data.loyaltyConfig, data.settingsStamps));
     setLabInfo((prev: any) => mergeSettingsObject('labInfo', prev, data.labInfo, data.settingsStamps));
     setStaffSignatures((prev: any) => mergeSettingsObject('staffSignatures', prev, data.staffSignatures, data.settingsStamps));
     setStaffSignatureOptions((prev: any) => mergeSettingsObject('staffSignatureOptions', prev, data.staffSignatureOptions, data.settingsStamps));
@@ -701,16 +695,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (!githubConfig.token || !githubConfig.autoSync) return;
     const signature = JSON.stringify([
       expenses, profitConfig, inventory, instruments, transmissions, labToLabOrders,
-      employees, attendance, payroll, dailyCloseouts, loyaltyProfiles, loyaltyConfig,
-      testCatalog, packages, diagnosticProfiles, labInfo, facilities, staffMembers,
-      staffSignatures, staffSignatureOptions
+      employees, attendance, payroll, dailyCloseouts, loyaltyProfiles,
+      testCatalog, packages, diagnosticProfiles, labInfo, staffSignatures, staffSignatureOptions
     ]);
     if (signature === lastCollectionSignatureRef.current) return;
     const isFirstRun = lastCollectionSignatureRef.current === '';
     lastCollectionSignatureRef.current = signature;
     if (isFirstRun) return;
     triggerAutoCloudPush();
-  }, [githubConfig, expenses, profitConfig, inventory, instruments, transmissions, labToLabOrders, employees, attendance, payroll, dailyCloseouts, loyaltyProfiles, loyaltyConfig, testCatalog, packages, diagnosticProfiles, labInfo, facilities, staffMembers, staffSignatures, staffSignatureOptions, triggerAutoCloudPush]);
+  }, [githubConfig, expenses, profitConfig, inventory, instruments, transmissions, labToLabOrders, employees, attendance, payroll, dailyCloseouts, loyaltyProfiles, testCatalog, packages, diagnosticProfiles, labInfo, staffSignatures, staffSignatureOptions, triggerAutoCloudPush]);
 
   // ── طبع وقت آخر تعديل للإعدادات المفردة لمعرفة الأحدث بين الأجهزة ──
   const settingsSnapshotRef = useRef<Record<string, string>>({});
@@ -719,8 +712,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       labInfo: JSON.stringify(labInfo),
       staffSignatures: JSON.stringify(staffSignatures),
       staffSignatureOptions: JSON.stringify(staffSignatureOptions),
-      profitConfig: JSON.stringify(profitConfig),
-      loyaltyConfig: JSON.stringify(loyaltyConfig)
+      profitConfig: JSON.stringify(profitConfig)
     };
     const previous = settingsSnapshotRef.current;
     const isFirstRun = Object.keys(previous).length === 0;
@@ -728,7 +720,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (!isFirstRun && previous[key] !== undefined && previous[key] !== current[key]) stampSetting(key);
     });
     settingsSnapshotRef.current = current;
-  }, [labInfo, staffSignatures, staffSignatureOptions, profitConfig, loyaltyConfig]);
+  }, [labInfo, staffSignatures, staffSignatureOptions, profitConfig]);
 
   // Collapse any case or invoice that multi-device sync delivered twice (same barcode /
   // lab number and patient) instead of letting duplicates pile up.
