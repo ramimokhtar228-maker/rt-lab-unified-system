@@ -40,7 +40,9 @@ import {
   Clock,
   Search,
   Eye,
-  ListFilter
+  ListFilter,
+  RefreshCw,
+  Users
 } from 'lucide-react';
 
 interface ReportEditorProps {
@@ -70,7 +72,9 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
   onOpenIllustrationsModal,
   onOpenSmartReport
 }) => {
-  const { packages, applyPackageToReport } = useApp();
+  const { packages, applyPackageToReport, reports, setSelectedReportId, syncAllDevicesNow } = useApp();
+  const [isManualSyncing, setIsManualSyncing] = useState(false);
+  const [syncMessage, setSyncMessage] = useState<string | null>(null);
   const [activeProfileTab, setActiveProfileTab] = useState<string>(report.profiles[0]?.id || '');
   const [modalParamToEdit, setModalParamToEdit] = useState<TestParameter | null>(null);
   const [modalParamProfileId, setModalParamProfileId] = useState<string>('');
@@ -663,6 +667,81 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
 
   return (
     <div className="space-y-6">
+      {/* Patient Switcher & Instant Cloud Sync Bar */}
+      <div className="bg-gradient-to-r from-slate-900 via-rose-950 to-slate-900 text-white rounded-xl p-3 shadow-md border border-rose-900/40 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <Users className="w-4 h-4 text-rose-300" />
+            <span className="text-xs font-bold text-slate-200">تبديل الحالة / المريض:</span>
+          </div>
+
+          <select
+            value={report.id}
+            onChange={(e) => {
+              const selected = reports.find(r => r.id === e.target.value);
+              if (selected) {
+                setSelectedReportId(selected.id);
+              }
+            }}
+            className="text-xs font-bold bg-slate-800 text-white border border-slate-700 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-rose-500 max-w-[320px] truncate cursor-pointer"
+            title="اختيار مريض مباشرة للانتقال لتقريره وإدخال النتائج دون الحاجة للخروج من الشاشة"
+          >
+            {reports.map((r) => (
+              <option key={r.id} value={r.id} className="bg-slate-900 text-white">
+                {r.patient.fullName} — [{r.patient.labNumber || r.patient.barcode || r.reportNumber}] ({r.profiles?.map(p => p.titleAr || p.titleEn).filter(Boolean).join(', ') || 'فحوصات'})
+              </option>
+            ))}
+          </select>
+
+          <span className="text-xs font-mono bg-rose-900/50 text-rose-200 px-2.5 py-1 rounded-md border border-rose-700/50">
+            إجمالي الحالات: {reports.length}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            disabled={isManualSyncing}
+            onClick={async () => {
+              setIsManualSyncing(true);
+              setSyncMessage('جاري سحب الحالات المسجلة من الموبايل والاستقبال...');
+              try {
+                const res = await syncAllDevicesNow();
+                if (res.success) {
+                  setSyncMessage(`تمت المزامنة بنجاح! تم فحص وتحديث ${res.reportsCount || reports.length} حالة في النظام.`);
+                } else {
+                  setSyncMessage(res.message || 'البيانات محدثة مع السحابة.');
+                }
+              } catch (err: any) {
+                setSyncMessage('تعذر سحب البيانات السحابية — تأكد من الاتصال بالإنترنت.');
+              } finally {
+                setTimeout(() => {
+                  setIsManualSyncing(false);
+                  setSyncMessage(null);
+                }, 4000);
+              }
+            }}
+            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer shadow-sm ${
+              isManualSyncing
+                ? 'bg-blue-600 text-white animate-pulse'
+                : 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white'
+            }`}
+            title="سحب فوري لكافة الحجوزات والحالات المحجوزة من الموبايل أو أجهزة الاستقبال الأخرى"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${isManualSyncing ? 'animate-spin' : ''}`} />
+            <span>{isManualSyncing ? 'جاري السحب...' : 'سحب الحالات من الموبايل فوراً'}</span>
+          </button>
+        </div>
+      </div>
+
+      {syncMessage && (
+        <div className="p-3 bg-emerald-50 border border-emerald-300 rounded-xl text-emerald-900 text-xs font-bold flex items-center gap-2 shadow-xs animate-in fade-in">
+          <CheckCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+          <span>{syncMessage}</span>
+        </div>
+      )}
+
       {/* Top Action Ribbon */}
       <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-xs flex flex-wrap items-center justify-between gap-3 sticky top-28 z-30">
         <div className="flex items-center gap-3 flex-wrap">

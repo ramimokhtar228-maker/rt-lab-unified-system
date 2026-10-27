@@ -498,6 +498,156 @@ function getSampleTypeForTest(code: string): string {
 
 // Get standard parameters
 function getStandardParametersForTest(code: string, nameAr: string, nameEn: string, testItem?: any): Array<Record<string, unknown>> {
+  const c = (code || '').toUpperCase();
+  const nAr = nameAr || '';
+  const nEn = (nameEn || '').toLowerCase();
+
+  // 1. Vitamin D
+  if (c.includes('VIT_D') || nAr.includes('فيتامين د') || nEn.includes('vitamin d')) {
+    return [
+      {
+        id: `p-vitd-${Date.now()}`,
+        name: '25-Hydroxy Vitamin D Total',
+        result: '',
+        unit: 'ng/mL',
+        minNormal: 30,
+        maxNormal: 100,
+        textReference: 'Deficiency: < 20 ng/mL | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 | Toxicity: > 100',
+        method: 'CLIA (Chemiluminescence Immunoassay)',
+        flag: ''
+      }
+    ];
+  }
+
+  // 2. Fasting Blood Glucose
+  if (c === 'GLU_F' || nAr.includes('سكر صائم') || nEn.includes('fasting') && nEn.includes('glucose')) {
+    return [
+      {
+        id: `p-gluf-${Date.now()}`,
+        name: 'Fasting Blood Sugar (Glucose)',
+        result: '',
+        unit: 'mg/dL',
+        minNormal: 70,
+        maxNormal: 100,
+        textReference: 'Normal: 70 - 100 mg/dL | Pre-diabetic: 100 - 125 | Diabetic: >= 126',
+        method: 'Hexokinase / GOD-PAP',
+        flag: ''
+      }
+    ];
+  }
+
+  // 3. HbA1c
+  if (c === 'HBA1C' || nAr.includes('تراكمي') || nEn.includes('hba1c') || nEn.includes('glycated')) {
+    return [
+      {
+        id: `p-hba1c-${Date.now()}`,
+        name: 'Glycated Hemoglobin (HbA1c)',
+        result: '',
+        unit: '%',
+        minNormal: 4.0,
+        maxNormal: 5.6,
+        textReference: 'Normal: < 5.7 % | Pre-diabetic: 5.7 - 6.4 % | Diabetic: >= 6.5 %',
+        method: 'HPLC (High Performance Liquid Chromatography)',
+        flag: ''
+      }
+    ];
+  }
+
+  // 4. Thyroid TSH, FT3, FT4
+  if (c === 'TSH' || nAr.includes('TSH') || nEn.includes('thyroid stimulating')) {
+    return [
+      {
+        id: `p-tsh-${Date.now()}`,
+        name: 'Thyroid Stimulating Hormone (TSH)',
+        result: '',
+        unit: 'uIU/mL',
+        minNormal: 0.55,
+        maxNormal: 4.78,
+        textReference: 'Adults: 0.55 - 4.78 uIU/mL (Pregnancy 1st trim: 0.1 - 2.5)',
+        method: 'CLIA (3rd Generation Chemiluminescence)',
+        flag: ''
+      }
+    ];
+  }
+  if (c === 'FREE_T4' || nAr.includes('Free T4') || nEn.includes('free t4')) {
+    return [
+      {
+        id: `p-ft4-${Date.now()}`,
+        name: 'Free Thyroxine (FT4)',
+        result: '',
+        unit: 'ng/dL',
+        minNormal: 0.89,
+        maxNormal: 1.76,
+        textReference: '0.89 - 1.76 ng/dL (11.5 - 22.7 pmol/L)',
+        method: 'CLIA (Chemiluminescence Immunoassay)',
+        flag: ''
+      }
+    ];
+  }
+  if (c === 'FREE_T3' || nAr.includes('Free T3') || nEn.includes('free t3')) {
+    return [
+      {
+        id: `p-ft3-${Date.now()}`,
+        name: 'Free Triiodothyronine (FT3)',
+        result: '',
+        unit: 'pg/mL',
+        minNormal: 2.3,
+        maxNormal: 4.2,
+        textReference: '2.3 - 4.2 pg/mL (3.5 - 6.5 pmol/L)',
+        method: 'CLIA (Chemiluminescence Immunoassay)',
+        flag: ''
+      }
+    ];
+  }
+
+  // 5. Fertility Hormones: FSH, LH, Prolactin
+  if (c === 'FSH' || nAr.includes('FSH')) {
+    return [
+      {
+        id: `p-fsh-${Date.now()}`,
+        name: 'Follicle Stimulating Hormone (FSH)',
+        result: '',
+        unit: 'mIU/mL',
+        minNormal: 3.5,
+        maxNormal: 12.5,
+        textReference: 'Males: 1.5 - 12.4 | Females: Follicular 3.5 - 12.5, Ovulatory 4.7 - 21.5, Postmeno 25.8 - 134.8',
+        method: 'CLIA (Chemiluminescence Immunoassay)',
+        flag: ''
+      }
+    ];
+  }
+  if (c === 'LH' || nAr.includes('LH')) {
+    return [
+      {
+        id: `p-lh-${Date.now()}`,
+        name: 'Luteinizing Hormone (LH)',
+        result: '',
+        unit: 'mIU/mL',
+        minNormal: 2.4,
+        maxNormal: 12.6,
+        textReference: 'Males: 1.7 - 8.6 | Females: Follicular 2.4 - 12.6, Mid-cycle 14.0 - 95.6, Postmeno 7.7 - 58.5',
+        method: 'CLIA (Chemiluminescence Immunoassay)',
+        flag: ''
+      }
+    ];
+  }
+  if (c === 'PROLACTIN' || nAr.includes('برولاكتين') || nEn.includes('prolactin')) {
+    return [
+      {
+        id: `p-prl-${Date.now()}`,
+        name: 'Serum Prolactin',
+        result: '',
+        unit: 'ng/mL',
+        minNormal: 4.8,
+        maxNormal: 23.3,
+        textReference: 'Males: 4.0 - 15.2 ng/mL | Non-pregnant Females: 4.8 - 23.3 ng/mL',
+        method: 'CLIA (Chemiluminescence Immunoassay)',
+        flag: ''
+      }
+    ];
+  }
+
+  // 6. Complete Blood Count
   if (code === 'CBC' || nameAr.includes('صورة دم') || nameEn.toLowerCase().includes('blood count')) {
     return [
       { id: `p-hb-${Date.now()}`, name: 'Hemoglobin (Hb)', result: '', unit: 'g/dL', minNormal: 12.0, maxNormal: 16.5, flag: '' },
@@ -512,6 +662,7 @@ function getStandardParametersForTest(code: string, nameAr: string, nameEn: stri
     ];
   }
 
+  // 7. Liver Functions
   if (code === 'LFT' || nameAr.includes('كبد') || nameEn.toLowerCase().includes('liver')) {
     return [
       { id: `p-alt-${Date.now()}`, name: 'ALT (SGPT)', result: '', unit: 'U/L', minNormal: 0, maxNormal: 45, flag: '' },
@@ -523,6 +674,7 @@ function getStandardParametersForTest(code: string, nameAr: string, nameEn: stri
     ];
   }
 
+  // 8. Kidney Functions
   if (code === 'KFT' || nameAr.includes('كلى') || nameEn.toLowerCase().includes('kidney')) {
     return [
       { id: `p-creat-${Date.now()}`, name: 'Serum Creatinine', result: '', unit: 'mg/dL', minNormal: 0.6, maxNormal: 1.3, flag: '' },
@@ -531,6 +683,7 @@ function getStandardParametersForTest(code: string, nameAr: string, nameEn: stri
     ];
   }
 
+  // 9. Lipid Profile
   if (code === 'LIPID' || nameAr.includes('دهون') || nameEn.toLowerCase().includes('lipid')) {
     return [
       { id: `p-chol-${Date.now()}`, name: 'Total Cholesterol', result: '', unit: 'mg/dL', minNormal: 0, maxNormal: 200, flag: '' },
@@ -549,7 +702,7 @@ function getStandardParametersForTest(code: string, nameAr: string, nameEn: stri
       unit: testItem?.unit || '',
       minNormal: testItem?.minNormal,
       maxNormal: testItem?.maxNormal,
-      textReference: testItem?.textReference || 'قيد الفحص المخبري',
+      textReference: testItem?.textReference || (testItem?.minNormal !== undefined && testItem?.maxNormal !== undefined ? `${testItem.minNormal} - ${testItem.maxNormal} ${testItem.unit || ''}` : 'قيد الفحص المخبري'),
       method: testItem?.method || 'Automated Clinical Assay',
       flag: 'NORMAL'
     }
@@ -705,10 +858,162 @@ export async function syncInvoiceToDiagnostic(
   }
 }
 
-// Push single case update to public/rt-cases-sync.json on GitHub
+// Helper to merge cases from public/rt-cases-sync.json into database store
+export function mergeCasesQueueIntoStore(storeData: any, rawCases: any[]) {
+  if (!storeData || !Array.isArray(rawCases) || rawCases.length === 0) return;
+
+  if (!Array.isArray(storeData.reports)) storeData.reports = [];
+  if (!Array.isArray(storeData.incomeRecords)) storeData.incomeRecords = [];
+
+  const existingRepCodes = new Set<string>();
+  const existingRepNums = new Set<string>();
+  storeData.reports.forEach((r: any) => {
+    if (r.id) existingRepNums.add(r.id);
+    if (r.reportNumber) existingRepNums.add(r.reportNumber);
+    if (r.patient?.barcode) existingRepCodes.add(r.patient.barcode);
+    if (r.patient?.labNumber) existingRepNums.add(r.patient.labNumber);
+  });
+
+  const existingInvNums = new Set<string>();
+  storeData.incomeRecords.forEach((i: any) => {
+    if (i.id) existingInvNums.add(i.id);
+    if (i.invoiceNumber) existingInvNums.add(i.invoiceNumber);
+    if (i.barcode) existingInvNums.add(i.barcode);
+    if (i.labNumber) existingInvNums.add(i.labNumber);
+  });
+
+  rawCases.forEach((c: any) => {
+    const code = c.barcode || (c.patient && c.patient.barcode) || '';
+    const num = c.reportNumber || c.labNumber || c.id || '';
+    const invNum = c.invoiceNumber || (c.patient && c.patient.invoiceNumber) || `INV-${num.replace('RT-', '')}`;
+
+    const alreadyInReports =
+      (code && existingRepCodes.has(code)) ||
+      (num && existingRepNums.has(num)) ||
+      (c.id && existingRepNums.has(c.id));
+
+    const net = c.netAmount ?? (c.patient && c.patient.totalCost) ?? c.totalCost ?? 0;
+    const paid = c.paidAmount ?? (c.patient && c.patient.paidAmount) ?? (c.paymentStatus === 'paid' ? net : 0);
+    const pStatus = c.paymentStatus || (c.patient && c.patient.paymentStatus) || (paid >= net ? 'paid' : 'pending');
+    const isHome = Boolean(c.isHomeVisit ?? (c.patient && c.patient.isHomeVisit) ?? (c.bookingType === 'home_visit'));
+    const bType = c.bookingType || (c.patient && c.patient.bookingType) || (isHome ? 'home_visit' : 'branch');
+    const vFee = c.visitFee ?? (c.patient && c.patient.visitFee) ?? 0;
+    const vAddr = c.visitAddress || c.homeAddress || (c.patient && c.patient.homeAddress) || '';
+    const pName = c.patientName || (c.patient && c.patient.fullName) || c.fullName || 'مريض';
+    const phone = c.phone || (c.patient && c.patient.phone) || '';
+    const doctor = c.referringDoctor || (c.patient && c.patient.referringDoctorName) || c.referringDoctorName || 'كشف معمل';
+    const age = c.age ?? (c.patient && c.patient.age) ?? 30;
+    const gender = c.gender || (c.patient && c.patient.gender) || 'female';
+    const disc = c.discount ?? (c.patient && c.patient.discountApplied) ?? 0;
+    const testsSub = c.testsSubtotal ?? (c.patient && c.patient.testsSubtotal) ?? net;
+    const createdDate = c.createdAt || c.sampleDate || new Date().toISOString();
+
+    const actualTests = (Array.isArray(c.tests) && c.tests.length > 0)
+      ? c.tests
+      : (Array.isArray(c.testNames) && c.testNames.length > 0)
+        ? c.testNames.map((tName: string, idx: number) => ({
+            id: `tst-${idx}-${c.id || Date.now()}`,
+            code: `TST-${idx}`,
+            nameAr: tName,
+            nameEn: tName,
+            category: 'Clinical',
+            price: 150,
+            cost: 30
+          }))
+        : [{ id: 'tst-def', code: 'GENERAL', nameAr: 'تحاليل مخبرية', nameEn: 'Lab Tests', category: 'Clinical', price: net, cost: 20 }];
+
+    if (!alreadyInReports) {
+      const generatedReport = convertIncomeRecordToDiagnosticReport({
+        id: c.id || `rep-${num}`,
+        invoiceNumber: invNum,
+        labNumber: num,
+        barcode: code,
+        patientName: pName,
+        patientAge: age,
+        patientGender: gender as any,
+        patientPhone: phone,
+        referringDoctor: doctor,
+        tests: actualTests,
+        subtotal: net,
+        discount: disc,
+        netAmount: net,
+        paidAmount: paid,
+        remainingAmount: Math.max(0, net - paid),
+        paymentMethod: (c.paymentMethod as any) || 'cash',
+        paymentStatus: pStatus as any,
+        cashierName: 'حجز موبايل (الفرع)',
+        branch: 'الفرع الرئيسي - بهتيم',
+        syncStatus: 'synced',
+        createdAt: createdDate,
+        updatedAt: createdDate,
+        isHomeVisit: isHome,
+        bookingType: bType,
+        visitFee: vFee,
+        visitAddress: vAddr,
+        homeAddress: vAddr,
+        deliveryNotes: c.deliveryNotes || '',
+        visitSpecialist: c.visitSpecialist || '',
+        testsSubtotal: testsSub,
+        discountApplied: disc
+      }) as any;
+
+      storeData.reports.unshift(generatedReport);
+      if (code) existingRepCodes.add(code);
+      if (num) existingRepNums.add(num);
+      if (c.id) existingRepNums.add(c.id);
+    }
+
+    const alreadyInInvoices =
+      (invNum && existingInvNums.has(invNum)) ||
+      (code && existingInvNums.has(code)) ||
+      (num && existingInvNums.has(num)) ||
+      (c.id && existingInvNums.has(c.id));
+
+    if (!alreadyInInvoices) {
+      const generatedInvoice: IncomeRecord = {
+        id: c.id || `inv-${num}`,
+        invoiceNumber: invNum,
+        patientName: pName,
+        patientPhone: phone,
+        patientAge: age,
+        patientGender: gender as any,
+        barcode: code,
+        labNumber: num,
+        referringDoctor: doctor,
+        tests: actualTests,
+        subtotal: net,
+        testsSubtotal: testsSub,
+        discount: disc,
+        visitFee: vFee,
+        isHomeVisit: isHome,
+        bookingType: bType,
+        visitAddress: vAddr,
+        deliveryNotes: c.deliveryNotes || '',
+        visitSpecialist: c.visitSpecialist || '',
+        netAmount: net,
+        paidAmount: paid,
+        remainingAmount: Math.max(0, net - paid),
+        paymentMethod: (c.paymentMethod as any) || 'cash',
+        paymentStatus: pStatus as any,
+        cashierName: 'حجز موبايل (الفرع)',
+        branch: 'الفرع الرئيسي - بهتيم',
+        syncStatus: 'synced',
+        createdAt: createdDate,
+        updatedAt: createdDate
+      };
+      storeData.incomeRecords.unshift(generatedInvoice);
+      if (invNum) existingInvNums.add(invNum);
+      if (code) existingInvNums.add(code);
+      if (num) existingInvNums.add(num);
+    }
+  });
+}
+
+// Push single case update to public/rt-cases-sync.json on GitHub with retry and conflict resolution
 async function pushSingleCaseToGitHub(
   creds: { token: string; owner: string; repo: string },
-  record: IncomeRecord
+  record: IncomeRecord,
+  retryCount = 0
 ): Promise<void> {
   const filePath = 'public/rt-cases-sync.json';
   const apiUrl = `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/${filePath}`;
@@ -717,10 +1022,11 @@ async function pushSingleCaseToGitHub(
   let existingSha: string | undefined;
 
   try {
-    const res = await fetch(apiUrl, {
+    const res = await fetch(`${apiUrl}?_=${Date.now()}`, {
       headers: {
         Authorization: `token ${creds.token}`,
-        Accept: 'application/vnd.github.v3+json'
+        Accept: 'application/vnd.github.v3+json',
+        'Cache-Control': 'no-cache, no-store'
       }
     });
 
@@ -796,7 +1102,7 @@ async function pushSingleCaseToGitHub(
     body.sha = existingSha;
   }
 
-  await fetch(apiUrl, {
+  const putRes = await fetch(apiUrl, {
     method: 'PUT',
     headers: {
       Authorization: `token ${creds.token}`,
@@ -805,9 +1111,14 @@ async function pushSingleCaseToGitHub(
     },
     body: JSON.stringify(body)
   });
+
+  if (!putRes.ok && (putRes.status === 409 || putRes.status === 422) && retryCount < 3) {
+    await new Promise(r => setTimeout(r, 600 * (retryCount + 1)));
+    return pushSingleCaseToGitHub(creds, record, retryCount + 1);
+  }
 }
 
-// Push full unified database store to GitHub (Git Data API — يدعم الملفات الكبيرة ويتجنب حد 1MB)
+// Push full unified database store to GitHub (Git Data API — يدعم الملفات الكبيرة والدمج الآلي للفرعين)
 export async function pushFullStoreToGitHub(
   arg1: string | GitHubSyncConfig,
   storePayload: Record<string, any>
@@ -818,7 +1129,6 @@ export async function pushFullStoreToGitHub(
       return { success: false, message: 'لا يوجد رمز GitHub صالح — أدخل الرمز من إعدادات المزامنة' };
     }
 
-    const filePath = 'public/rt-database-sync.json';
     const repoApi = `https://api.github.com/repos/${creds.owner}/${creds.repo}`;
     const authHeaders: Record<string, string> = {
       Authorization: `token ${creds.token}`,
@@ -881,18 +1191,78 @@ export async function pushFullStoreToGitHub(
       ...safePayload
     };
 
-    const contentBase64 = encodeBase64Utf8(JSON.stringify(fullData));
+    // Prepare cases-sync array from all active reports
+    const casesPayload = (safePayload.reports || []).map((r: any) => {
+      const pat = r.patient || {};
+      const testsList = (r.profiles || []).map((p: any) => {
+        const firstParam = p.parameters?.[0];
+        return {
+          id: p.id,
+          code: p.profileCode || p.code,
+          nameAr: p.titleAr,
+          nameEn: p.titleEn,
+          category: p.category,
+          sampleType: p.sampleType,
+          unit: firstParam?.unit || '',
+          minNormal: firstParam?.minNormal,
+          maxNormal: firstParam?.maxNormal,
+          textReference: firstParam?.textReference || ''
+        };
+      });
+      return {
+        id: r.id,
+        reportNumber: r.reportNumber,
+        invoiceNumber: r.invoiceId || pat.invoiceNumber || `INV-${(r.reportNumber || '').replace('RT-', '')}`,
+        barcode: pat.barcode || r.barcode || '',
+        patientName: pat.fullName || 'مريض',
+        age: pat.age || 30,
+        gender: pat.gender || 'male',
+        phone: pat.phone || '',
+        referringDoctor: pat.referringDoctorName || 'كشف معمل',
+        tests: testsList,
+        netAmount: pat.totalCost || 0,
+        paidAmount: pat.paidAmount || 0,
+        paymentStatus: pat.paymentStatus || 'paid',
+        financialClearance: pat.paymentStatus === 'paid' ? 'CLEARED_FOR_RELEASE' : 'PAYMENT_PENDING',
+        bookingType: pat.bookingType || (pat.isHomeVisit ? 'home_visit' : 'branch'),
+        isHomeVisit: Boolean(pat.isHomeVisit),
+        visitFee: pat.visitFee || 0,
+        visitAddress: pat.homeAddress || '',
+        homeAddress: pat.homeAddress || '',
+        deliveryNotes: pat.deliveryNotes || '',
+        visitSpecialist: pat.visitSpecialist || '',
+        discount: pat.discountApplied || 0,
+        testsSubtotal: pat.testsSubtotal || pat.totalCost || 0,
+        subtotal: pat.totalCost || 0,
+        remainingAmount: pat.remainingAmount || 0,
+        paymentMethod: pat.paymentMethod || 'cash',
+        createdAt: r.createdAt || new Date().toISOString()
+      };
+    });
+
+    const dbBase64 = encodeBase64Utf8(JSON.stringify(fullData));
+    const casesBase64 = encodeBase64Utf8(JSON.stringify(casesPayload, null, 2));
     const commitMessage = `مزامنة سحابية شاملة لقاعدة بيانات المعمل: ${new Date().toLocaleTimeString('en-US')} [skip ci]`;
 
     async function writeSnapshot(retryCount = 0): Promise<{ success: boolean; message: string }> {
-      const blobRes = await fetch(`${repoApi}/git/blobs`, {
+      // 1. Create DB blob
+      const dbBlobRes = await fetch(`${repoApi}/git/blobs`, {
         method: 'POST',
         headers: authHeaders,
-        body: JSON.stringify({ content: contentBase64, encoding: 'base64' })
+        body: JSON.stringify({ content: dbBase64, encoding: 'base64' })
       });
-      if (!blobRes.ok) return { success: false, message: `فشل تجهيز نسخة البيانات: ${blobRes.status}` };
-      const blob = await blobRes.json();
+      if (!dbBlobRes.ok) return { success: false, message: `فشل تجهيز نسخة البيانات: ${dbBlobRes.status}` };
+      const dbBlob = await dbBlobRes.json();
 
+      // 2. Create Cases blob
+      const casesBlobRes = await fetch(`${repoApi}/git/blobs`, {
+        method: 'POST',
+        headers: authHeaders,
+        body: JSON.stringify({ content: casesBase64, encoding: 'base64' })
+      });
+      const casesBlob = casesBlobRes.ok ? await casesBlobRes.json() : null;
+
+      // 3. Re-fetch current main ref on EVERY attempt to ensure fresh parent sha
       const refRes = await fetch(`${repoApi}/git/ref/heads/main?t=${Date.now()}`, { headers: authHeaders });
       if (!refRes.ok) return { success: false, message: `تعذر قراءة فرع المزامنة: ${refRes.status}` };
       const headSha = (await refRes.json()).object.sha;
@@ -900,12 +1270,20 @@ export async function pushFullStoreToGitHub(
       const baseCommitRes = await fetch(`${repoApi}/git/commits/${headSha}`, { headers: authHeaders });
       const baseTreeSha = baseCommitRes.ok ? (await baseCommitRes.json()).tree.sha : undefined;
 
+      const treeItems = [
+        { path: 'public/rt-database-sync.json', mode: '100644', type: 'blob', sha: dbBlob.sha },
+        { path: 'rt-database-sync.json', mode: '100644', type: 'blob', sha: dbBlob.sha }
+      ];
+      if (casesBlob && casesBlob.sha) {
+        treeItems.push({ path: 'public/rt-cases-sync.json', mode: '100644', type: 'blob', sha: casesBlob.sha });
+      }
+
       const treeRes = await fetch(`${repoApi}/git/trees`, {
         method: 'POST',
         headers: authHeaders,
         body: JSON.stringify({
           ...(baseTreeSha ? { base_tree: baseTreeSha } : {}),
-          tree: [{ path: filePath, mode: '100644', type: 'blob', sha: blob.sha }]
+          tree: treeItems
         })
       });
       if (!treeRes.ok) return { success: false, message: `فشل بناء نسخة الملف: ${treeRes.status}` };
@@ -929,15 +1307,17 @@ export async function pushFullStoreToGitHub(
         broadcastCloudChange('push');
         try {
           localStorage.setItem('rt_lab_last_cloud_sync', new Date().toISOString());
-          localStorage.setItem('rt_cloud_store_sha', blob.sha);
+          localStorage.setItem('rt_cloud_store_sha', dbBlob.sha);
+          localStorage.setItem('rt_head_commit_sha', newCommit.sha);
         } catch {
           // التخزين المحلي غير متاح
         }
-        return { success: true, message: 'تم حفظ ومزامنة قاعدة البيانات سحابياً بنجاح!' };
+        return { success: true, message: 'تم حفظ ومزامنة قاعدة البيانات والحالات سحابياً بنجاح!' };
       }
 
-      if ((updateRes.status === 409 || updateRes.status === 422) && retryCount < 3) {
-        await new Promise(r => setTimeout(r, 700));
+      // Retry on 409 Conflict with fresh HEAD fetch
+      if ((updateRes.status === 409 || updateRes.status === 422) && retryCount < 4) {
+        await new Promise(r => setTimeout(r, 700 * (retryCount + 1)));
         return writeSnapshot(retryCount + 1);
       }
 
@@ -950,7 +1330,7 @@ export async function pushFullStoreToGitHub(
   }
 }
 
-// Pull full unified database store from GitHub
+// Pull full unified database store from GitHub (Dual-Fetch: merges database + mobile cases queue)
 export async function pullFullStoreFromGitHub(
   arg1: string | GitHubSyncConfig,
   options: { force?: boolean } = {}
@@ -958,10 +1338,12 @@ export async function pullFullStoreFromGitHub(
   try {
     const creds = resolveCredentials(arg1);
     const filePath = 'public/rt-database-sync.json';
+    const casesPath = 'public/rt-cases-sync.json';
     const apiUrl = `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/${filePath}`;
+    const casesApiUrl = `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/${casesPath}`;
     const authHeaders: Record<string, string> = creds.token ? { Authorization: `token ${creds.token}` } : {};
 
-    // 1) فحص سريع لحالة الملف: إن لم يتغير لا نعيد تنزيل البيانات كاملة
+    // 1) فحص سريع لحالة المستودع
     let latestSha: string | undefined;
     try {
       const metaRes = await fetch(`${apiUrl}?ref=main&_=${Date.now()}`, {
@@ -978,7 +1360,33 @@ export async function pullFullStoreFromGitHub(
       // نكمل بالطرق الأخرى أدناه
     }
 
-    const finish = (data: any, message: string) => {
+    const finish = async (data: any, message: string) => {
+      if (!data) return { success: true, data, message };
+
+      // دمج الحالات المحجوزة من الموبايل والفروع فوراً داخل البيانات المستلمة
+      try {
+        const casesRes = await fetch(`${casesApiUrl}?ref=main&_=${Date.now()}`, {
+          headers: { ...authHeaders, Accept: 'application/vnd.github.v3.raw', 'Cache-Control': 'no-cache, no-store' }
+        });
+        if (casesRes.ok) {
+          const casesList = await casesRes.json();
+          if (Array.isArray(casesList) && casesList.length > 0) {
+            mergeCasesQueueIntoStore(data, casesList);
+          }
+        }
+      } catch (casesErr) {
+        // Fallback to local raw if GitHub API has rate limit
+        try {
+          const fallbackRes = await fetch(`./rt-cases-sync.json?_=${Date.now()}`);
+          if (fallbackRes.ok) {
+            const casesList = await fallbackRes.json();
+            if (Array.isArray(casesList) && casesList.length > 0) {
+              mergeCasesQueueIntoStore(data, casesList);
+            }
+          }
+        } catch {}
+      }
+
       try {
         if (latestSha) localStorage.setItem('rt_cloud_store_sha', latestSha);
       } catch {
@@ -995,7 +1403,7 @@ export async function pullFullStoreFromGitHub(
       if (rawApiRes.ok) {
         const rawJson = await rawApiRes.json();
         if (rawJson && (Array.isArray(rawJson.reports) || Array.isArray(rawJson.incomeRecords))) {
-          return finish(rawJson, 'تم استرداد وتحديث البيانات سحابياً بنجاح!');
+          return await finish(rawJson, 'تم استرداد وتحديث البيانات سحابياً بنجاح!');
         }
       }
     } catch (rawApiErr) {
@@ -1010,12 +1418,12 @@ export async function pullFullStoreFromGitHub(
       if (res.ok) {
         const data = await res.json();
         if (typeof data.content === 'string' && data.content.length > 0) {
-          return finish(JSON.parse(decodeBase64Utf8(data.content)), 'تم استرداد وتحديث البيانات سحابياً بنجاح!');
+          return await finish(JSON.parse(decodeBase64Utf8(data.content)), 'تم استرداد وتحديث البيانات سحابياً بنجاح!');
         }
         if (data.download_url) {
           const downloadRes = await fetch(`${data.download_url}?t=${Date.now()}`);
           if (downloadRes.ok) {
-            return finish(await downloadRes.json(), 'تم استرداد وتحديث البيانات سحابياً بنجاح!');
+            return await finish(await downloadRes.json(), 'تم استرداد وتحديث البيانات سحابياً بنجاح!');
           }
         }
       }
@@ -1027,7 +1435,7 @@ export async function pullFullStoreFromGitHub(
     try {
       const rawRes = await fetch(`https://raw.githubusercontent.com/${creds.owner}/${creds.repo}/main/public/rt-database-sync.json?t=${Date.now()}`, { cache: 'no-store' });
       if (rawRes.ok) {
-        return finish(await rawRes.json(), 'تم استرداد البيانات من السحابة مباشرة بنجاح!');
+        return await finish(await rawRes.json(), 'تم استرداد البيانات من السحابة مباشرة بنجاح!');
       }
     } catch {
       // المتابعة للخيار الاحتياطي
@@ -1037,7 +1445,8 @@ export async function pullFullStoreFromGitHub(
     try {
       const publicRes = await fetch(`./rt-database-sync.json?t=${Date.now()}`);
       if (publicRes.ok) {
-        return { success: true, data: await publicRes.json(), message: 'تم استرداد البيانات من الملف المخبري بنجاح' };
+        const localData = await publicRes.json();
+        return await finish(localData, 'تم استرداد البيانات من الملف المخبري بنجاح');
       }
     } catch {
       // لا يوجد ملف احتياطي
@@ -1048,6 +1457,7 @@ export async function pullFullStoreFromGitHub(
     return { success: false, message: `خطأ أثناء الجلب: ${(err as Error).message}` };
   }
 }
+
 
 // Helpers for UTF-8 Base64 handling
 function encodeBase64Utf8(str: string): string {

@@ -63,6 +63,7 @@ import { realtimeSyncManager } from '../utils/realtimeMultiDeviceSync';
 import { pushFullStoreToGitHub, pullFullStoreFromGitHub, syncInvoiceToDiagnostic, fetchDiagnosticCases, convertIncomeRecordToDiagnosticReport } from '../utils/githubSync';
 import { resolveUniqueLabIdentity, dedupeReports, dedupeInvoices } from '../utils/labNumbering';
 import { notifyReportApproved } from '../utils/whatsappNotify';
+import { playSyncChime } from '../utils/criticalAlerts';
 import { registerReportDeletion, registerInvoiceDeletion, importDeletionTombstones, filterDeletedReports, filterDeletedInvoices } from '../utils/deletionRegistry';
 import {
   mergeCatalogWithDefaults,
@@ -1275,7 +1276,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (typeof navigator !== 'undefined' && !navigator.onLine) return;
 
       cloudVersionChanged(githubConfig)
-        .then(changed => (changed ? pullFullStoreFromGitHub(githubConfig) : null))
+        .then(changed => (changed ? pullFullStoreFromGitHub(githubConfig, { force: true }) : null))
         .then(ghRes => {
         if (!ghRes) return;
         if (ghRes.success && ghRes.data) {
@@ -1293,6 +1294,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
               let hasChanged = false;
               const nextReports = [...prev];
+              const newlyArrived: LabReport[] = [];
 
               data.reports.forEach((remoteRep: LabReport) => {
                 const existing = currentMap.get(remoteRep.id) ||
@@ -1302,6 +1304,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                 if (!existing) {
                   nextReports.unshift(remoteRep);
                   currentMap.set(remoteRep.id, remoteRep);
+                  newlyArrived.push(remoteRep);
                   hasChanged = true;
                 } else {
                   const merged = mergeTwoReports(existing, remoteRep);
@@ -1313,6 +1316,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                   }
                 }
               });
+
+              if (newlyArrived.length > 0) {
+                playSyncChime();
+                const latest = newlyArrived[0];
+                addNotification({
+                  title: '⚡ حجز حالة جديدة وصل من الموبايل',
+                  message: `وصلت حالة ${latest.patient.fullName} (${latest.reportNumber}) بنجاح — جاهزة لإدخال النتائج الطبية.`,
+                  type: 'success'
+                });
+              }
 
               if (hasChanged) return filterDeletedReports(nextReports);
               const cleanedReports = filterDeletedReports(prev);
@@ -1381,7 +1394,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useEffect(() => {
     const onVisible = () => {
       if (document.visibilityState === 'visible') {
-        pullFullStoreFromGitHub(githubConfig).then(ghRes => {
+        pullFullStoreFromGitHub(githubConfig, { force: true }).then(ghRes => {
           if (ghRes.success && ghRes.data) {
             importDeletionTombstones(ghRes.data.deletedReports, ghRes.data.deletedInvoices);
             if (Array.isArray(ghRes.data.reports) && ghRes.data.reports.length > 0) {
@@ -2285,6 +2298,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setIncomeRecords(prev => [newInvoice, ...prev]);
     newReport.invoiceId = newInvoice.id;
 
+    realtimeSyncManager.broadcastAction('ADMIT_PATIENT', {
+      report: newReport,
+      invoice: newInvoice,
+      name: patient.fullName,
+      labNumber: newReport.reportNumber
+    });
     realtimeSyncManager.broadcastAction('UPDATE_REPORT', newReport);
     realtimeSyncManager.broadcastAction('UPDATE_INVOICE', newInvoice);
 
