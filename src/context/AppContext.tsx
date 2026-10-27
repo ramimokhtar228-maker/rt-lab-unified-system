@@ -1,3 +1,4 @@
+import { cloudVersionChanged } from '../utils/cloudPulse';
 import { markDeleted, importDeletedMap, importSettingsStamps, getDeletedMap, getSettingsStamps, stampSetting, mergeCollection, mergeSettingsObject } from '../utils/cloudStore';
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import {
@@ -1201,7 +1202,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
   }, [githubConfig]);
 
-  // مزامنة خلفية تلقائية كل 8 ثوانٍ (مع فحص بصمة الملف السحابي لتقليل الاستهلاك)
+  // مزامنة خلفية شبه لحظية كل 3 ثوانٍ (نبضة شرطية خفيفة ثم تنزيل عند وجود تحديث فقط)
   useEffect(() => {
     if (!githubConfig.token || !githubConfig.autoSync) return;
 
@@ -1209,7 +1210,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (typeof document !== 'undefined' && document.hidden) return;
       if (typeof navigator !== 'undefined' && !navigator.onLine) return;
 
-      pullFullStoreFromGitHub(githubConfig).then(ghRes => {
+      cloudVersionChanged(githubConfig)
+        .then(changed => (changed ? pullFullStoreFromGitHub(githubConfig) : null))
+        .then(ghRes => {
+        if (!ghRes) return;
         if (ghRes.success && ghRes.data) {
           const data = ghRes.data;
           importDeletionTombstones(data.deletedReports, data.deletedInvoices);
@@ -1297,7 +1301,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           }
         }
       }).catch(() => {});
-    }, 8000);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [githubConfig]);
