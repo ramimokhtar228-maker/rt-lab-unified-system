@@ -1,3 +1,4 @@
+import { markDeleted, importDeletedMap, importSettingsStamps, getDeletedMap, getSettingsStamps, stampSetting, mergeCollection, mergeSettingsObject } from '@/utils/cloudStore';
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import {
   Language,
@@ -626,22 +627,108 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           reports: currentReps,
           incomeRecords: currentInvs,
           expenses,
+          profitConfig,
           loyaltyProfiles,
+          loyaltyConfig,
           inventory,
+          instruments,
+          transmissions,
+          labToLabOrders,
+          employees,
+          attendance,
+          payroll,
           dailyCloseouts,
           labInfo,
+          facilities,
+          staffMembers,
           staffSignatures,
           staffSignatureOptions,
           testCatalog,
           packages,
-          diagnosticProfiles
+          diagnosticProfiles,
+          auditLogs: auditLogs.slice(0, 500),
+          deletedMap: getDeletedMap(),
+          settingsStamps: getSettingsStamps()
         };
         await pushFullStoreToGitHub(githubConfig, snapshot);
       } catch (err) {
         console.warn('Auto cloud push error:', err);
       }
     }, 1200);
-  }, [githubConfig, reports, incomeRecords, expenses, loyaltyProfiles, inventory, dailyCloseouts, labInfo, staffSignatures, staffSignatureOptions, testCatalog, packages, diagnosticProfiles]);
+  }, [githubConfig, reports, incomeRecords, expenses, profitConfig, loyaltyProfiles, loyaltyConfig, inventory, instruments, transmissions, labToLabOrders, employees, attendance, payroll, dailyCloseouts, labInfo, facilities, staffMembers, staffSignatures, staffSignatureOptions, testCatalog, packages, diagnosticProfiles, auditLogs]);
+
+  // ── تطبيق النسخة السحابية على كل حقول البرنامج بدمج دقيق ──
+  const applyCloudCollections = useCallback((data: Record<string, any>) => {
+    if (!data || typeof data !== 'object') return;
+    importDeletedMap(data.deletedMap);
+    importSettingsStamps(data.settingsStamps);
+    const applyList = (key: string, setter: any) => {
+      const cloud = (data as any)[key];
+      if (!Array.isArray(cloud)) return;
+      setter((prev: any[]) => {
+        const merged = mergeCollection(key, Array.isArray(prev) ? prev : [], cloud);
+        return merged === prev ? prev : merged;
+      });
+    };
+    applyList('reports', setReports);
+    applyList('incomeRecords', setIncomeRecords);
+    applyList('expenses', setExpenses);
+    applyList('inventory', setInventory);
+    applyList('instruments', setInstruments);
+    applyList('transmissions', setTransmissions);
+    applyList('labToLabOrders', setLabToLabOrders);
+    applyList('employees', setEmployees);
+    applyList('attendance', setAttendance);
+    applyList('payroll', setPayroll);
+    applyList('dailyCloseouts', setDailyCloseouts);
+    applyList('loyaltyProfiles', setLoyaltyProfiles);
+    applyList('testCatalog', setTestCatalog);
+    applyList('packages', setPackages);
+    applyList('diagnosticProfiles', setDiagnosticProfiles);
+    applyList('staffMembers', setStaffMembers);
+    applyList('facilities', setFacilities);
+    applyList('auditLogs', setAuditLogs);
+    setProfitConfig((prev: any) => mergeSettingsObject('profitConfig', prev, data.profitConfig, data.settingsStamps));
+    setLoyaltyConfig((prev: any) => mergeSettingsObject('loyaltyConfig', prev, data.loyaltyConfig, data.settingsStamps));
+    setLabInfo((prev: any) => mergeSettingsObject('labInfo', prev, data.labInfo, data.settingsStamps));
+    setStaffSignatures((prev: any) => mergeSettingsObject('staffSignatures', prev, data.staffSignatures, data.settingsStamps));
+    setStaffSignatureOptions((prev: any) => mergeSettingsObject('staffSignatureOptions', prev, data.staffSignatureOptions, data.settingsStamps));
+  }, []);
+
+  // ── رفع تلقائي عند تغيّر أي مجموعة بيانات (لا التقارير والفواتير فقط) ──
+  const lastCollectionSignatureRef = useRef('');
+  useEffect(() => {
+    if (!githubConfig.token || !githubConfig.autoSync) return;
+    const signature = JSON.stringify([
+      expenses, profitConfig, inventory, instruments, transmissions, labToLabOrders,
+      employees, attendance, payroll, dailyCloseouts, loyaltyProfiles, loyaltyConfig,
+      testCatalog, packages, diagnosticProfiles, labInfo, facilities, staffMembers,
+      staffSignatures, staffSignatureOptions
+    ]);
+    if (signature === lastCollectionSignatureRef.current) return;
+    const isFirstRun = lastCollectionSignatureRef.current === '';
+    lastCollectionSignatureRef.current = signature;
+    if (isFirstRun) return;
+    triggerAutoCloudPush();
+  }, [githubConfig, expenses, profitConfig, inventory, instruments, transmissions, labToLabOrders, employees, attendance, payroll, dailyCloseouts, loyaltyProfiles, loyaltyConfig, testCatalog, packages, diagnosticProfiles, labInfo, facilities, staffMembers, staffSignatures, staffSignatureOptions, triggerAutoCloudPush]);
+
+  // ── طبع وقت آخر تعديل للإعدادات المفردة لمعرفة الأحدث بين الأجهزة ──
+  const settingsSnapshotRef = useRef<Record<string, string>>({});
+  useEffect(() => {
+    const current: Record<string, string> = {
+      labInfo: JSON.stringify(labInfo),
+      staffSignatures: JSON.stringify(staffSignatures),
+      staffSignatureOptions: JSON.stringify(staffSignatureOptions),
+      profitConfig: JSON.stringify(profitConfig),
+      loyaltyConfig: JSON.stringify(loyaltyConfig)
+    };
+    const previous = settingsSnapshotRef.current;
+    const isFirstRun = Object.keys(previous).length === 0;
+    Object.keys(current).forEach(key => {
+      if (!isFirstRun && previous[key] !== undefined && previous[key] !== current[key]) stampSetting(key);
+    });
+    settingsSnapshotRef.current = current;
+  }, [labInfo, staffSignatures, staffSignatureOptions, profitConfig, loyaltyConfig]);
 
   // Collapse any case or invoice that multi-device sync delivered twice (same barcode /
   // lab number and patient) instead of letting duplicates pile up.
@@ -1134,6 +1221,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (ghRes.success && ghRes.data) {
           const data = ghRes.data;
           importDeletionTombstones(data.deletedReports, data.deletedInvoices);
+          applyCloudCollections(data);
           if (Array.isArray(data.reports) && data.reports.length > 0) {
             setReports(prev => {
               const currentMap = new Map<string, LabReport>();
@@ -2456,6 +2544,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [logAction]);
 
   const deleteExpense = useCallback((id: string) => {
+    markDeleted('expenses', id);
     setExpenses(prev => prev.filter(e => e.id !== id));
     logAction('DELETE', 'EXPENSES', `حذف بند المصروف رقم ${id}`);
   }, [logAction]);
@@ -2518,6 +2607,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [logAction]);
 
   const deleteInventoryItem = useCallback((id: string) => {
+    markDeleted('inventory', id);
     setInventory(prev => prev.filter(i => i.id !== id));
     logAction('DELETE', 'INVENTORY', `حذف مادة من المخزون رقم ${id}`);
   }, [logAction]);
@@ -2663,6 +2753,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [logAction]);
 
   const deleteLabToLabOrder = useCallback((id: string) => {
+    markDeleted('labToLabOrders', id);
     setLabToLabOrders(prev => prev.filter(o => o.id !== id));
     logAction('DELETE', 'LAB_TO_LAB', `حذف طلب معمل الإحالة رقم ${id}`);
   }, [logAction]);
@@ -2683,6 +2774,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [logAction]);
 
   const deleteEmployee = useCallback((id: string) => {
+    markDeleted('employees', id);
     setEmployees(prev => prev.filter(e => e.id !== id));
     logAction('DELETE', 'HR', `حذف موظف رقم ${id}`);
   }, [logAction]);
@@ -2989,6 +3081,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (ghRes.success && ghRes.data) {
         const data = ghRes.data;
         importDeletionTombstones(data.deletedReports, data.deletedInvoices);
+        applyCloudCollections(data);
         if (Array.isArray(data.reports) && data.reports.length > 0) {
           const map = new Map<string, LabReport>();
           mergedReports.forEach(r => {

@@ -1,3 +1,4 @@
+import { mergeCollection, getDeletedMap } from './cloudStore';
 import { IncomeRecord, GitHubSyncConfig, InvoiceTestItem } from '../types';
 import { unionReports, unionInvoices } from './labNumbering';
 import { mergePackagesWithDefaults } from './upgradeSavedData';
@@ -844,16 +845,31 @@ export async function pushFullStoreToGitHub(
     const cloudReports = Array.isArray(cloudData?.reports) ? cloudData.reports : [];
     const cloudInvoices = Array.isArray(cloudData?.incomeRecords) ? cloudData.incomeRecords : [];
 
+    // دمج كل مجموعة مع النسخة السحابية: لا يضيع أي تعديل من أي جهاز
+    const mergedCollections: Record<string, any> = {};
+    Object.keys(storePayload).forEach(key => {
+      if (key === 'reports' || key === 'incomeRecords' || key === 'deletedMap' || key === 'settingsStamps') return;
+      const localValue: any = (storePayload as any)[key];
+      if (Array.isArray(localValue)) {
+        const cloudValue = (cloudData as any)?.[key];
+        mergedCollections[key] = mergeCollection(key, localValue, Array.isArray(cloudValue) ? cloudValue : []);
+      } else {
+        mergedCollections[key] = localValue;
+      }
+    });
+
     const safePayload: Record<string, any> = {
       ...(cloudData || {}),
       ...storePayload,
+      ...mergedCollections,
       reports: filterDeletedReports(unionReports(Array.isArray(storePayload.reports) ? storePayload.reports : [], cloudReports)),
       incomeRecords: filterDeletedInvoices(unionInvoices(Array.isArray(storePayload.incomeRecords) ? storePayload.incomeRecords : [], cloudInvoices)),
       packages: Array.isArray(storePayload.packages) && storePayload.packages.length > 0
         ? mergePackagesWithDefaults(cloudData?.packages || [], storePayload.packages)
         : storePayload.packages,
       deletedReports: tombstones.reports,
-      deletedInvoices: tombstones.invoices
+      deletedInvoices: tombstones.invoices,
+      deletedMap: getDeletedMap()
     };
 
     const fullData = {
