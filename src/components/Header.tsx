@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import {
   User,
@@ -13,10 +13,20 @@ import {
   Calendar,
   Layers,
   ChevronDown,
-  X
+  X,
+  Zap,
+  Activity,
+  Smartphone,
+  Laptop
 } from 'lucide-react';
 import { RTLogo } from './RTLogo';
 import { PWAInstallButton } from './PWAInstallButton';
+import {
+  realtimeSyncManager,
+  SyncStatus,
+  DevicePresence,
+  getDeviceName
+} from '../utils/realtimeMultiDeviceSync';
 
 export const Header: React.FC = () => {
   const {
@@ -29,6 +39,7 @@ export const Header: React.FC = () => {
     setIsPatientFormOpen,
     setIsBarcodeScannerOpen,
     setIsLabInfoModalOpen,
+    setIsCloudSyncOpen,
     notifications,
     markNotificationRead,
     clearNotifications,
@@ -39,6 +50,17 @@ export const Header: React.FC = () => {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncStatusMsg, setSyncStatusMsg] = useState<string | null>(null);
+  const [syncStatus, setSyncStatus] = useState<SyncStatus>(realtimeSyncManager.getStatus());
+  const [activeDevices, setActiveDevices] = useState<DevicePresence[]>(realtimeSyncManager.getActiveDevices());
+
+  useEffect(() => {
+    const unsubStatus = realtimeSyncManager.subscribeStatus((st) => setSyncStatus(st));
+    const unsubPresence = realtimeSyncManager.subscribePresence((devs) => setActiveDevices(devs));
+    return () => {
+      unsubStatus();
+      unsubPresence();
+    };
+  }, []);
 
   const todayStr = new Date().toISOString().split('T')[0];
   const todayIncome = incomeRecords.filter(r => r.createdAt.startsWith(todayStr));
@@ -46,7 +68,8 @@ export const Header: React.FC = () => {
   const todaySamples = reports.filter(r => r.createdAt.startsWith(todayStr)).length;
   const unreadCount = notifications.filter(n => !n.read).length;
 
-  const handleCloudSync = async () => {
+  const handleQuickSync = async (e: React.MouseEvent) => {
+    e.stopPropagation();
     setIsSyncing(true);
     setSyncStatusMsg(null);
     try {
@@ -108,7 +131,7 @@ export const Header: React.FC = () => {
               title="تعديل بيانات المعمل، الفروع، التوقيعات، الهواتف، والاعتماد"
             >
               <Building2 className="w-4 h-4 text-blue-300" />
-              <span>بيانات المعمل والفروع</span>
+              <span className="hidden sm:inline">بيانات المعمل والفروع</span>
             </button>
 
             {/* Quick Action: Barcode Scanner */}
@@ -120,24 +143,32 @@ export const Header: React.FC = () => {
               <Barcode className="w-4 h-4" />
             </button>
 
-            {/* Multi-Device Live Sync Status Button */}
+            {/* Multi-Device Live Sync Status Button (Opens Realtime Center) */}
             <div className="relative">
               <button
-                onClick={handleCloudSync}
-                disabled={isSyncing}
-                title="تسميع ومزامنة حية فورية بين الموبايل واللاب توب وجميع الأجهزة (الإصدار v4.3)"
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 border border-emerald-500/40 text-xs font-bold transition-all cursor-pointer active:scale-95 shadow-xs"
+                onClick={() => setIsCloudSyncOpen(true)}
+                title="فتح مركز التزامن السحابي والربط اللحظي بين الفروع والأجهزة"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 border border-emerald-500/40 text-xs font-bold transition-all cursor-pointer active:scale-95 shadow-xs group"
               >
-                {isSyncing ? (
-                  <RefreshCw className="w-3.5 h-3.5 animate-spin text-rose-400" />
-                ) : (
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-xs shadow-emerald-500 animate-pulse" />
-                )}
-                <span>مزامنة الأجهزة</span>
-                <span className="px-1.5 py-0.5 rounded text-[10px] bg-emerald-900/60 text-emerald-300 font-mono font-bold border border-emerald-500/30">
-                  v4.3 نشط
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
+                </span>
+                <span className="flex items-center gap-1">
+                  <span>تسميع سحابي</span>
+                  <span className="px-1.5 py-0.2 rounded text-[10px] bg-emerald-950 text-emerald-300 font-mono font-bold border border-emerald-500/30">
+                    {activeDevices.length} {activeDevices.length === 1 ? 'جهاز' : 'أجهزة'}
+                  </span>
+                </span>
+                <span
+                  onClick={handleQuickSync}
+                  className="p-1 -ml-1 text-slate-400 hover:text-white rounded hover:bg-slate-600 transition-colors"
+                  title="مزامنة فورية سريعة"
+                >
+                  <RefreshCw className={`w-3 h-3 ${isSyncing ? 'animate-spin text-rose-400' : ''}`} />
                 </span>
               </button>
+
               {syncStatusMsg && (
                 <div className="absolute left-0 top-full mt-2 w-64 bg-slate-800 text-emerald-400 border border-slate-700 text-[11px] p-2.5 rounded-xl shadow-2xl z-50">
                   {syncStatusMsg}

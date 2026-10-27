@@ -14,7 +14,8 @@ import {
   Package,
   Users2,
   BookOpen,
-  ShieldCheck
+  ShieldCheck,
+  Zap
 } from 'lucide-react';
 
 interface NavItem {
@@ -34,7 +35,8 @@ export const Navigation: React.FC = () => {
     reports,
     incomeRecords,
     inventory,
-    setIsLabInfoModalOpen
+    setIsLabInfoModalOpen,
+    setIsCloudSyncOpen
   } = useApp();
 
   const pendingReportsCount = reports.filter(r => r.status === 'draft' || r.status === 'in_progress').length;
@@ -123,6 +125,12 @@ export const Navigation: React.FC = () => {
       group: 'admin'
     },
     {
+      id: 'cloud_sync',
+      labelAr: 'تزامن الفروع والأجهزة',
+      icon: Zap,
+      group: 'admin'
+    },
+    {
       id: 'lab_info',
       labelAr: 'بيانات المعمل والفروع',
       icon: Building2,
@@ -141,7 +149,7 @@ export const Navigation: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-1.5 py-2 min-w-max">
           {navItems.map(item => {
-            const allowed = hasPermission(item.id);
+            const allowed = item.id === 'cloud_sync' ? true : hasPermission(item.id);
             if (!allowed) return null;
             const isActive = activeTab === item.id;
             const Icon = item.icon;
@@ -152,17 +160,21 @@ export const Navigation: React.FC = () => {
                 onClick={() => {
                   if (item.id === 'lab_info') {
                     setIsLabInfoModalOpen(true);
+                  } else if (item.id === 'cloud_sync') {
+                    setIsCloudSyncOpen(true);
                   } else {
                     setActiveTab(item.id);
                   }
                 }}
                 className={`relative px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer select-none ${
-                  isActive
+                  item.id === 'cloud_sync'
+                    ? 'text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200'
+                    : isActive
                     ? 'bg-rose-900 text-white shadow-md shadow-rose-900/20 ring-1 ring-rose-800'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                 }`}
               >
-                <Icon className={`w-4 h-4 ${isActive ? 'text-rose-200' : 'text-slate-500'}`} />
+                <Icon className={`w-4 h-4 ${item.id === 'cloud_sync' ? 'text-emerald-600 animate-pulse' : isActive ? 'text-rose-200' : 'text-slate-500'}`} />
                 <span>{item.labelAr}</span>
 
                 {item.badge !== undefined && (

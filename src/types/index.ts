@@ -75,7 +75,6 @@ export interface IncomeRecord {
   testsSubtotal?: number;
   discount: number;
   visitFee?: number;
-  isHomeVisit?: boolean;
   visitAddress?: string;
   visitSpecialist?: string;
   branchId?: string;
@@ -95,6 +94,12 @@ export interface IncomeRecord {
   externalReportId?: string;
   createdAt: string;
   updatedAt: string;
+
+  isHomeVisit?: boolean;
+  bookingType?: 'branch' | 'home_visit';
+  discountApplied?: number;
+  homeAddress?: string;
+  deliveryNotes?: string;
 }
 
 export type ExpenseCategory =
@@ -403,6 +408,8 @@ export interface Patient {
   paidAmount?: number;
   remainingAmount?: number;
   paymentStatus?: PaymentStatus;
+
+  isHomeVisit?: boolean;
 }
 
 export interface TestParameter {

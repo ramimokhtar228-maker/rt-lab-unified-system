@@ -271,6 +271,8 @@ interface AppContextType {
   setIsBarcodeScannerOpen: (open: boolean) => void;
   isLabInfoModalOpen: boolean;
   setIsLabInfoModalOpen: (open: boolean) => void;
+  isCloudSyncOpen: boolean;
+  setIsCloudSyncOpen: (open: boolean) => void;
 }
 
 export function mergeTwoReports(localRep: LabReport, remoteRep: LabReport): LabReport {
@@ -314,7 +316,7 @@ export function mergeTwoReports(localRep: LabReport, remoteRep: LabReport): LabR
     ...localRep.patient,
     ...remoteRep.patient,
     bookingType: bType,
-    isHomeVisit: isHome,
+    isHomeVisit: Boolean(isHome),
     visitFee: vFee,
     homeAddress: hAddr,
     deliveryNotes: remoteRep.patient?.deliveryNotes || localRep.patient?.deliveryNotes,
@@ -355,7 +357,7 @@ export function mergeTwoInvoices(localInv: IncomeRecord, remoteInv: IncomeRecord
   return {
     ...localInv,
     ...remoteInv,
-    isHomeVisit: isHome,
+    isHomeVisit: Boolean(isHome),
     bookingType: bType,
     visitFee: vFee,
     visitAddress: vAddr,
@@ -390,6 +392,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [isPatientFormOpen, setIsPatientFormOpen] = useState(false);
   const [isBarcodeScannerOpen, setIsBarcodeScannerOpen] = useState(false);
   const [isLabInfoModalOpen, setIsLabInfoModalOpen] = useState(false);
+  const [isCloudSyncOpen, setIsCloudSyncOpen] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState<IncomeRecord | null>(null);
 
   // 4. Reports (Unified Diagnostic Worklist)
@@ -789,7 +792,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   }, []);
 
-  // Real-Time Multi-Device Cloud Synchronization (Firebase Firestore + GitHub Cloud Backup)
+  // Register Master Snapshot Provider for instant multi-device bootstrapping
+  useEffect(() => {
+    realtimeSyncManager.setMasterSnapshotProvider(() => ({
+      reports,
+      incomeRecords,
+      expenses,
+      loyaltyProfiles,
+      labInfo,
+      packages,
+      diagnosticProfiles,
+      testCatalog,
+      inventory,
+      staffSignatures,
+      staffSignatureOptions,
+      facilities,
+      staffMembers,
+    }));
+  }, [reports, incomeRecords, expenses, loyaltyProfiles, labInfo, packages, diagnosticProfiles, testCatalog, inventory, staffSignatures, staffSignatureOptions, facilities, staffMembers]);
+
+  // Real-Time Multi-Device Cloud Synchronization (Supabase Realtime WebSockets + GitHub Cloud Backup)
   useEffect(() => {
     // 1. Subscribe to real-time events from other devices via Firebase Firestore live channel
     const unsubscribe = realtimeSyncManager.subscribe((msg) => {
@@ -861,13 +883,52 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setPackages(prev => mergePackagesWithDefaults(msg.payload));
       } else if (msg.action === 'UPDATE_PROFILES' && Array.isArray(msg.payload)) {
         setDiagnosticProfiles(prev => mergeProfilesWithDefaults(msg.payload));
+      } else if (msg.action === 'ADMIT_PATIENT' && msg.payload) {
+        if (msg.payload.report) {
+          const rep = msg.payload.report as LabReport;
+          setReports(prev => [rep, ...prev.filter(r => r.id !== rep.id)]);
+        }
+        if (msg.payload.invoice) {
+          const inv = msg.payload.invoice as IncomeRecord;
+          setIncomeRecords(prev => [inv, ...prev.filter(i => i.id !== inv.id)]);
+        }
+        addNotification({
+          title: '⚡ تسجيل حالة جديدة من فرع آخر',
+          message: `تم تسجيل مريض من ${msg.senderDeviceName || 'فرع آخر'}: ${msg.payload.report?.patient?.fullName || msg.payload.name || ''}`,
+          type: 'info'
+        });
+      } else if (msg.action === 'UPDATE_TEST_RESULT' && msg.payload) {
+        const { reportId, parameterCode, value, flag, status } = msg.payload;
+        setReports(prev => prev.map(r => {
+          if (r.id !== reportId) return r;
+          const updatedProfiles = r.profiles.map(p => {
+            const updatedParams = p.parameters.map(param => {
+              const pAny = param as any;
+              if (param.id === parameterCode || pAny.code === parameterCode || param.name === parameterCode) {
+                return {
+                  ...param,
+                  result: value !== undefined ? String(value) : param.result,
+                  flag: flag || param.flag
+                };
+              }
+              return param;
+            });
+            return { ...p, parameters: updatedParams };
+          });
+          return {
+            ...r,
+            profiles: updatedProfiles,
+            status: status || r.status,
+            updatedAt: new Date().toISOString()
+          };
+        }));
       } else if (msg.action === 'PING_TEST') {
         addNotification({
-          title: '⚡ تسميع لحظي متزامن فوري',
-          message: `تم استلام إشارة اتصال وتسميع فوري بنجاح من جهاز: ${msg.senderDeviceName}`,
+          title: '⚡ نبضة فحص التسميع اللحظي',
+          message: `تم استلام إشارة اختبار فورية من: ${msg.senderDeviceName} (${msg.senderBranchName || 'الفرع'})`,
           type: 'success'
         });
-      } else if (msg.action === 'FULL_SYNC' && msg.payload) {
+      } else if ((msg.action === 'FULL_SYNC' || msg.action === 'INIT_STATE') && msg.payload) {
         if (Array.isArray(msg.payload.reports)) {
           setReports(prev => {
             const map = new Map(prev.map(r => [r.id, r]));
@@ -1087,7 +1148,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                         barcode: c.barcode,
                         patientName: c.fullName,
                         patientAge: c.age || 30,
-                        patientGender: c.gender || 'male',
+                        patientGender: (c.gender as any) || 'male',
                         patientPhone: c.phone || '',
                         referringDoctor: c.referringDoctorName || 'كشف معمل',
                         tests: actualTests,
@@ -1096,14 +1157,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                         netAmount: net,
                         paidAmount: paid,
                         remainingAmount: Math.max(0, net - paid),
-                        paymentMethod: c.paymentMethod || 'cash',
+                        paymentMethod: (c.paymentMethod as any) || 'cash',
                         paymentStatus: (c.paymentStatus as any) || (paid >= net ? 'paid' : 'pending'),
                         cashierName: 'مزامنة سحابية',
                         branch: 'الفرع الرئيسي - بهتيم',
                         syncStatus: 'synced',
                         createdAt: c.sampleDate || new Date().toISOString(),
                         updatedAt: c.sampleDate || new Date().toISOString(),
-                        isHomeVisit: isHome,
+                        isHomeVisit: Boolean(isHome),
                         bookingType: bType,
                         visitFee: vFee,
                         visitAddress: vAddr,
@@ -1156,7 +1217,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                         patientName: c.fullName,
                         patientPhone: c.phone || '',
                         patientAge: c.age || 30,
-                        patientGender: c.gender || 'male',
+                        patientGender: (c.gender as any) || 'male',
                         barcode: c.barcode,
                         labNumber: c.labNumber,
                         referringDoctor: c.referringDoctorName || 'كشف معمل',
@@ -1165,7 +1226,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                         testsSubtotal: testsSub,
                         discount: disc,
                         visitFee: vFee,
-                        isHomeVisit: isHome,
+                        isHomeVisit: Boolean(isHome),
                         bookingType: bType,
                         visitAddress: vAddr,
                         deliveryNotes: c.deliveryNotes || '',
@@ -3212,7 +3273,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               barcode: c.barcode,
               patientName: c.fullName,
               patientAge: c.age || 30,
-              patientGender: c.gender || 'male',
+              patientGender: (c.gender as any) || 'male',
               patientPhone: c.phone || '',
               referringDoctor: c.referringDoctorName || 'كشف معمل',
               tests: actualTests,
@@ -3221,14 +3282,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               netAmount: net,
               paidAmount: paid,
               remainingAmount: Math.max(0, net - paid),
-              paymentMethod: c.paymentMethod || 'cash',
+              paymentMethod: (c.paymentMethod as any) || 'cash',
               paymentStatus: (c.paymentStatus as any) || (paid >= net ? 'paid' : 'pending'),
               cashierName: 'مزامنة سحابية',
               branch: 'الفرع الرئيسي - بهتيم',
               syncStatus: 'synced',
               createdAt: c.sampleDate || new Date().toISOString(),
               updatedAt: c.sampleDate || new Date().toISOString(),
-              isHomeVisit: isHome,
+              isHomeVisit: Boolean(isHome),
               bookingType: bType,
               visitFee: vFee,
               visitAddress: vAddr,
@@ -3250,7 +3311,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               patientName: c.fullName,
               patientPhone: c.phone || '',
               patientAge: c.age || 30,
-              patientGender: c.gender || 'male',
+              patientGender: (c.gender as any) || 'male',
               barcode: c.barcode,
               labNumber: c.labNumber,
               referringDoctor: c.referringDoctorName || 'كشف معمل',
@@ -3259,7 +3320,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               testsSubtotal: testsSub,
               discount: disc,
               visitFee: vFee,
-              isHomeVisit: isHome,
+              isHomeVisit: Boolean(isHome),
               bookingType: bType,
               visitAddress: vAddr,
               deliveryNotes: c.deliveryNotes || '',
@@ -3488,7 +3549,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     isBarcodeScannerOpen,
     setIsBarcodeScannerOpen,
     isLabInfoModalOpen,
-    setIsLabInfoModalOpen
+    setIsLabInfoModalOpen,
+    isCloudSyncOpen,
+    setIsCloudSyncOpen
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

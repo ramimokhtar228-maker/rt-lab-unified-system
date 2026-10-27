@@ -18,6 +18,7 @@ import { CatalogBrowser } from './components/CatalogBrowser';
 import { SettingsBackupModule } from './components/SettingsBackupModule';
 import { BarcodeScannerModal } from './components/BarcodeScannerModal';
 import { RoleLoginModal } from './components/RoleLoginModal';
+import { CloudSyncModal } from './components/CloudSyncModal';
 import { SmartReportModal } from './components/SmartReportModal';
 import { DiseaseIllustrationsModal } from './components/DiseaseIllustrationsModal';
 import { LabInfoEditModal } from './components/LabInfoEditModal';
@@ -57,6 +58,8 @@ const AppContent: React.FC = () => {
     setIsPatientFormOpen,
     isLabInfoModalOpen,
     setIsLabInfoModalOpen,
+    isCloudSyncOpen,
+    setIsCloudSyncOpen,
     labInfo,
     updateLabInfo,
     staffSignatures,
@@ -434,6 +437,14 @@ const AppContent: React.FC = () => {
             }
             setManualTestModalOpen(false);
           }}
+        />
+      )}
+
+      {/* Real-time Multi-Device Cloud Sync Modal */}
+      {isCloudSyncOpen && (
+        <CloudSyncModal
+          isOpen={isCloudSyncOpen}
+          onClose={() => setIsCloudSyncOpen(false)}
         />
       )}
 

@@ -836,7 +836,9 @@ export async function pushFullStoreToGitHub(
       );
       if (cloudStore.success && cloudStore.data) {
         cloudData = cloudStore.data;
-        importDeletionTombstones(cloudData.deletedReports, cloudData.deletedInvoices);
+        if (cloudData) {
+          importDeletionTombstones(cloudData.deletedReports, cloudData.deletedInvoices);
+        }
       }
     } catch {
       // نكمل بالبيانات المحلية إذا تعذر قراءة السحابة
