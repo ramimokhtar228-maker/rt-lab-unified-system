@@ -3072,6 +3072,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       if (ghRes.success && ghRes.data) {
         const data = ghRes.data;
+        applyCloudCollections(data);
         importDeletionTombstones(data.deletedReports, data.deletedInvoices);
         applyCloudCollections(data);
         if (Array.isArray(data.reports) && data.reports.length > 0) {
