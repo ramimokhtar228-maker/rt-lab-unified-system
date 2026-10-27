@@ -1,4 +1,5 @@
 import { cloudVersionChanged } from '../utils/cloudPulse';
+import { startRealtimeChannel } from '../utils/realtimeChannel';
 import { markDeleted, importDeletedMap, importSettingsStamps, getDeletedMap, getSettingsStamps, stampSetting, mergeCollection, mergeSettingsObject } from '../utils/cloudStore';
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import {
@@ -1203,10 +1204,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [githubConfig]);
 
   // مزامنة خلفية شبه لحظية كل 3 ثوانٍ (نبضة شرطية خفيفة ثم تنزيل عند وجود تحديث فقط)
+  const pullNowRef = useRef<(() => void) | null>(null);
+
   useEffect(() => {
     if (!githubConfig.token || !githubConfig.autoSync) return;
 
-    const interval = setInterval(() => {
+    const doCloudPull = () => {
       if (typeof document !== 'undefined' && document.hidden) return;
       if (typeof navigator !== 'undefined' && !navigator.onLine) return;
 
@@ -1301,7 +1304,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           }
         }
       }).catch(() => {});
-    }, 3000);
+    };
+
+    pullNowRef.current = doCloudPull;
+    const interval = setInterval(doCloudPull, 3000);
+    startRealtimeChannel(() => {
+      if (pullNowRef.current) pullNowRef.current();
+    });
 
     return () => clearInterval(interval);
   }, [githubConfig]);

@@ -1,3 +1,4 @@
+import { broadcastCloudChange } from './realtimeChannel';
 import { mergeCollection, getDeletedMap } from './cloudStore';
 import { IncomeRecord, GitHubSyncConfig, InvoiceTestItem } from '../types';
 import { unionReports, unionInvoices } from './labNumbering';
@@ -923,6 +924,7 @@ export async function pushFullStoreToGitHub(
       });
 
       if (updateRes.ok) {
+        broadcastCloudChange('push');
         try {
           localStorage.setItem('rt_lab_last_cloud_sync', new Date().toISOString());
           localStorage.setItem('rt_cloud_store_sha', blob.sha);
