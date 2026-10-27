@@ -168,11 +168,11 @@ export const CloudSyncModal: React.FC<CloudSyncModalProps> = ({ isOpen, onClose 
                   مركز التزامن السحابي والربط اللحظي بين الفروع
                 </h2>
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-900/60 text-emerald-300 border border-emerald-500/30">
-                  Supabase Realtime WebSockets
+                  Realtime WebSockets + Cloud Mesh
                 </span>
               </div>
               <p className="text-xs text-slate-400 mt-0.5">
-                تسميع لحظي فوري (&lt; 50ms) بين كمبيوتر الإدارة، هواتف الفروع، ولاب توبات الأطباء
+                تسميع لحظي فوري (&lt; 50ms) بين كمبيوتر الإدارة وهواتف الفروع ولاب توبات الأطباء (2 موبايل + لاب توب)
               </p>
             </div>
           </div>

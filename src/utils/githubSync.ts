@@ -1154,97 +1154,105 @@ export async function pushFullStoreToGitHub(
       // نكمل بالبيانات المحلية إذا تعذر قراءة السحابة
     }
 
-    const tombstones = getDeletionTombstones();
-    const cloudReports = Array.isArray(cloudData?.reports) ? cloudData.reports : [];
-    const cloudInvoices = Array.isArray(cloudData?.incomeRecords) ? cloudData.incomeRecords : [];
+    // بناء نسخة آمنة مدمجة تماماً مع أحدث بيانات السحابة
+    const buildSafeFullData = (remoteData: Record<string, any> | null) => {
+      const tombstones = getDeletionTombstones();
+      const cloudReports = Array.isArray(remoteData?.reports) ? remoteData.reports : [];
+      const cloudInvoices = Array.isArray(remoteData?.incomeRecords) ? remoteData.incomeRecords : [];
 
-    // دمج كل مجموعة مع النسخة السحابية: لا يضيع أي تعديل من أي جهاز
-    const mergedCollections: Record<string, any> = {};
-    Object.keys(storePayload).forEach(key => {
-      if (key === 'reports' || key === 'incomeRecords' || key === 'deletedMap' || key === 'settingsStamps') return;
-      const localValue: any = (storePayload as any)[key];
-      if (Array.isArray(localValue)) {
-        const cloudValue = (cloudData as any)?.[key];
-        mergedCollections[key] = mergeCollection(key, localValue, Array.isArray(cloudValue) ? cloudValue : []);
-      } else {
-        mergedCollections[key] = localValue;
-      }
-    });
+      // دمج كل مجموعة مع النسخة السحابية: لا يضيع أي تعديل من أي جهاز
+      const mergedCollections: Record<string, any> = {};
+      Object.keys(storePayload).forEach(key => {
+        if (key === 'reports' || key === 'incomeRecords' || key === 'deletedMap' || key === 'settingsStamps') return;
+        const localValue: any = (storePayload as any)[key];
+        if (Array.isArray(localValue)) {
+          const cloudValue = (remoteData as any)?.[key];
+          mergedCollections[key] = mergeCollection(key, localValue, Array.isArray(cloudValue) ? cloudValue : []);
+        } else {
+          mergedCollections[key] = localValue;
+        }
+      });
 
-    const safePayload: Record<string, any> = {
-      ...(cloudData || {}),
-      ...storePayload,
-      ...mergedCollections,
-      reports: filterDeletedReports(unionReports(Array.isArray(storePayload.reports) ? storePayload.reports : [], cloudReports)),
-      incomeRecords: filterDeletedInvoices(unionInvoices(Array.isArray(storePayload.incomeRecords) ? storePayload.incomeRecords : [], cloudInvoices)),
-      packages: Array.isArray(storePayload.packages) && storePayload.packages.length > 0
-        ? mergePackagesWithDefaults(cloudData?.packages || [], storePayload.packages)
-        : storePayload.packages,
-      deletedReports: tombstones.reports,
-      deletedInvoices: tombstones.invoices,
-      deletedMap: getDeletedMap()
-    };
+      const safePayload: Record<string, any> = {
+        ...(remoteData || {}),
+        ...storePayload,
+        ...mergedCollections,
+        reports: filterDeletedReports(unionReports(Array.isArray(storePayload.reports) ? storePayload.reports : [], cloudReports)),
+        incomeRecords: filterDeletedInvoices(unionInvoices(Array.isArray(storePayload.incomeRecords) ? storePayload.incomeRecords : [], cloudInvoices)),
+        packages: Array.isArray(storePayload.packages) && storePayload.packages.length > 0
+          ? mergePackagesWithDefaults(remoteData?.packages || [], storePayload.packages)
+          : storePayload.packages,
+        deletedReports: tombstones.reports,
+        deletedInvoices: tombstones.invoices,
+        deletedMap: getDeletedMap()
+      };
 
-    const fullData = {
-      system: 'RT Lab Unified Medical & Financial ERP',
-      syncedAt: new Date().toISOString(),
-      ...safePayload
-    };
+      const fullData = {
+        system: 'RT Lab Unified Medical & Financial ERP',
+        syncedAt: new Date().toISOString(),
+        ...safePayload
+      };
 
-    // Prepare cases-sync array from all active reports
-    const casesPayload = (safePayload.reports || []).map((r: any) => {
-      const pat = r.patient || {};
-      const testsList = (r.profiles || []).map((p: any) => {
-        const firstParam = p.parameters?.[0];
+      // Prepare cases-sync array from all active reports
+      const casesPayload = (safePayload.reports || []).map((r: any) => {
+        const pat = r.patient || {};
+        const testsList = (r.profiles || []).map((p: any) => {
+          const firstParam = p.parameters?.[0];
+          return {
+            id: p.id,
+            code: p.profileCode || p.code,
+            nameAr: p.titleAr,
+            nameEn: p.titleEn,
+            category: p.category,
+            sampleType: p.sampleType,
+            unit: firstParam?.unit || '',
+            minNormal: firstParam?.minNormal,
+            maxNormal: firstParam?.maxNormal,
+            textReference: firstParam?.textReference || ''
+          };
+        });
         return {
-          id: p.id,
-          code: p.profileCode || p.code,
-          nameAr: p.titleAr,
-          nameEn: p.titleEn,
-          category: p.category,
-          sampleType: p.sampleType,
-          unit: firstParam?.unit || '',
-          minNormal: firstParam?.minNormal,
-          maxNormal: firstParam?.maxNormal,
-          textReference: firstParam?.textReference || ''
+          id: r.id,
+          reportNumber: r.reportNumber,
+          invoiceNumber: r.invoiceId || pat.invoiceNumber || `INV-${(r.reportNumber || '').replace('RT-', '')}`,
+          barcode: pat.barcode || r.barcode || '',
+          patientName: pat.fullName || 'مريض',
+          age: pat.age || 30,
+          gender: pat.gender || 'male',
+          phone: pat.phone || '',
+          referringDoctor: pat.referringDoctorName || 'كشف معمل',
+          tests: testsList,
+          netAmount: pat.totalCost || 0,
+          paidAmount: pat.paidAmount || 0,
+          paymentStatus: pat.paymentStatus || 'paid',
+          financialClearance: pat.paymentStatus === 'paid' ? 'CLEARED_FOR_RELEASE' : 'PAYMENT_PENDING',
+          bookingType: pat.bookingType || (pat.isHomeVisit ? 'home_visit' : 'branch'),
+          isHomeVisit: Boolean(pat.isHomeVisit),
+          visitFee: pat.visitFee || 0,
+          visitAddress: pat.homeAddress || '',
+          homeAddress: pat.homeAddress || '',
+          deliveryNotes: pat.deliveryNotes || '',
+          visitSpecialist: pat.visitSpecialist || '',
+          discount: pat.discountApplied || 0,
+          testsSubtotal: pat.testsSubtotal || pat.totalCost || 0,
+          subtotal: pat.totalCost || 0,
+          remainingAmount: pat.remainingAmount || 0,
+          paymentMethod: pat.paymentMethod || 'cash',
+          createdAt: r.createdAt || new Date().toISOString()
         };
       });
-      return {
-        id: r.id,
-        reportNumber: r.reportNumber,
-        invoiceNumber: r.invoiceId || pat.invoiceNumber || `INV-${(r.reportNumber || '').replace('RT-', '')}`,
-        barcode: pat.barcode || r.barcode || '',
-        patientName: pat.fullName || 'مريض',
-        age: pat.age || 30,
-        gender: pat.gender || 'male',
-        phone: pat.phone || '',
-        referringDoctor: pat.referringDoctorName || 'كشف معمل',
-        tests: testsList,
-        netAmount: pat.totalCost || 0,
-        paidAmount: pat.paidAmount || 0,
-        paymentStatus: pat.paymentStatus || 'paid',
-        financialClearance: pat.paymentStatus === 'paid' ? 'CLEARED_FOR_RELEASE' : 'PAYMENT_PENDING',
-        bookingType: pat.bookingType || (pat.isHomeVisit ? 'home_visit' : 'branch'),
-        isHomeVisit: Boolean(pat.isHomeVisit),
-        visitFee: pat.visitFee || 0,
-        visitAddress: pat.homeAddress || '',
-        homeAddress: pat.homeAddress || '',
-        deliveryNotes: pat.deliveryNotes || '',
-        visitSpecialist: pat.visitSpecialist || '',
-        discount: pat.discountApplied || 0,
-        testsSubtotal: pat.testsSubtotal || pat.totalCost || 0,
-        subtotal: pat.totalCost || 0,
-        remainingAmount: pat.remainingAmount || 0,
-        paymentMethod: pat.paymentMethod || 'cash',
-        createdAt: r.createdAt || new Date().toISOString()
-      };
-    });
 
-    const dbBase64 = encodeBase64Utf8(JSON.stringify(fullData));
-    const casesBase64 = encodeBase64Utf8(JSON.stringify(casesPayload, null, 2));
+      return {
+        dbBase64: encodeBase64Utf8(JSON.stringify(fullData)),
+        casesBase64: encodeBase64Utf8(JSON.stringify(casesPayload, null, 2))
+      };
+    };
+
     const commitMessage = `مزامنة سحابية شاملة لقاعدة بيانات المعمل: ${new Date().toLocaleTimeString('en-US')} [skip ci]`;
 
-    async function writeSnapshot(retryCount = 0): Promise<{ success: boolean; message: string }> {
+    async function writeSnapshot(currentCloud: Record<string, any> | null, retryCount = 0): Promise<{ success: boolean; message: string }> {
+      const { dbBase64, casesBase64 } = buildSafeFullData(currentCloud);
+
       // 1. Create DB blob
       const dbBlobRes = await fetch(`${repoApi}/git/blobs`, {
         method: 'POST',
@@ -1315,16 +1323,23 @@ export async function pushFullStoreToGitHub(
         return { success: true, message: 'تم حفظ ومزامنة قاعدة البيانات والحالات سحابياً بنجاح!' };
       }
 
-      // Retry on 409 Conflict with fresh HEAD fetch
-      if ((updateRes.status === 409 || updateRes.status === 422) && retryCount < 4) {
-        await new Promise(r => setTimeout(r, 700 * (retryCount + 1)));
-        return writeSnapshot(retryCount + 1);
+      // Retry on 409 Conflict: another device pushed! Re-pull fresh cloud data and re-merge
+      if ((updateRes.status === 409 || updateRes.status === 422) && retryCount < 5) {
+        await new Promise(r => setTimeout(r, 600 * (retryCount + 1)));
+        let freshCloud: Record<string, any> | null = null;
+        try {
+          const freshRes = await pullFullStoreFromGitHub(creds, { force: true });
+          if (freshRes.success && freshRes.data) {
+            freshCloud = freshRes.data;
+          }
+        } catch {}
+        return writeSnapshot(freshCloud, retryCount + 1);
       }
 
       return { success: false, message: `فشل تحديث فرع المزامنة: ${updateRes.status}` };
     }
 
-    return await writeSnapshot();
+    return await writeSnapshot(cloudData);
   } catch (err) {
     return { success: false, message: `خطأ: ${(err as Error).message}` };
   }

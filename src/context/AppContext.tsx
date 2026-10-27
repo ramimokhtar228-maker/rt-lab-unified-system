@@ -1390,49 +1390,25 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [githubConfig]);
 
 
-  // Re-pull latest cloud state when user returns to the tab (multi-device immediate catch-up)
+  // Re-pull latest cloud state when user returns to the tab or mobile wakes up (multi-device immediate catch-up)
   useEffect(() => {
     const onVisible = () => {
-      if (document.visibilityState === 'visible') {
+      if (document.visibilityState === 'visible' && githubConfig.token && githubConfig.autoSync) {
         pullFullStoreFromGitHub(githubConfig, { force: true }).then(ghRes => {
           if (ghRes.success && ghRes.data) {
             importDeletionTombstones(ghRes.data.deletedReports, ghRes.data.deletedInvoices);
+            applyCloudCollections(ghRes.data);
+
             if (Array.isArray(ghRes.data.reports) && ghRes.data.reports.length > 0) {
               setReports(prev => {
-                const map = new Map<string, LabReport>();
-                prev.forEach(r => {
-                  if (r.id) map.set(r.id, r);
-                  if (r.reportNumber) map.set(r.reportNumber, r);
-                  if (r.patient?.barcode) map.set(r.patient.barcode, r);
-                });
-                ghRes.data.reports.forEach((r: LabReport) => {
-                  const existing = map.get(r.id) || (r.reportNumber && map.get(r.reportNumber)) || (r.patient?.barcode && map.get(r.patient.barcode));
-                  if (existing) {
-                    map.set(existing.id, mergeTwoReports(existing, r));
-                  } else {
-                    map.set(r.id, r);
-                  }
-                });
-                return filterDeletedReports(Array.from(new Set(map.values())));
+                const combined = unionReports(prev, ghRes.data.reports);
+                return filterDeletedReports(combined);
               });
             }
             if (Array.isArray(ghRes.data.incomeRecords) && ghRes.data.incomeRecords.length > 0) {
               setIncomeRecords(prev => {
-                const map = new Map<string, IncomeRecord>();
-                prev.forEach(i => {
-                  if (i.id) map.set(i.id, i);
-                  if (i.invoiceNumber) map.set(i.invoiceNumber, i);
-                  if (i.barcode) map.set(i.barcode, i);
-                });
-                ghRes.data.incomeRecords.forEach((i: IncomeRecord) => {
-                  const existing = map.get(i.id) || (i.invoiceNumber && map.get(i.invoiceNumber)) || (i.barcode && map.get(i.barcode));
-                  if (existing) {
-                    map.set(existing.id, mergeTwoInvoices(existing, i));
-                  } else {
-                    map.set(i.id, i);
-                  }
-                });
-                return filterDeletedInvoices(Array.from(new Set(map.values())));
+                const combined = unionInvoices(prev, ghRes.data.incomeRecords);
+                return filterDeletedInvoices(combined);
               });
             }
           }
@@ -1441,11 +1417,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
     document.addEventListener('visibilitychange', onVisible);
     window.addEventListener('focus', onVisible);
+    window.addEventListener('online', onVisible);
     return () => {
       document.removeEventListener('visibilitychange', onVisible);
       window.removeEventListener('focus', onVisible);
+      window.removeEventListener('online', onVisible);
     };
-  }, [githubConfig]);
+  }, [githubConfig, applyCloudCollections]);
 
   // Debounced cloud save whenever critical lab data changes (Push to Firebase Firestore & GitHub)
   useEffect(() => {

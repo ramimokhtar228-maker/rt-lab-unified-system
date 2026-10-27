@@ -97,22 +97,16 @@ function reportDuplicateKey(report: LabReport): string {
   return `${identity}|${normalizeName(report?.patient?.fullName)}`;
 }
 
-/** Union of two case lists so nothing that already exists in the cloud is dropped. */
+/** Union of two case lists so nothing that already exists in the cloud is dropped, and cases are merged deeply. */
 export function unionReports(localReports?: LabReport[], cloudReports?: LabReport[]): LabReport[] {
-  const merged: LabReport[] = [];
-  const seen = new Set<string>();
+  const localList = Array.isArray(localReports) ? localReports.filter(Boolean) : [];
+  const cloudList = Array.isArray(cloudReports) ? cloudReports.filter(Boolean) : [];
+  if (localList.length === 0) return cloudList;
+  if (cloudList.length === 0) return localList;
 
-  const add = (report?: LabReport | null) => {
-    if (!report) return;
-    const values = reportIdentityValues(report);
-    if (values.some(value => seen.has(value))) return;
-    values.forEach(value => seen.add(value));
-    merged.push(report);
-  };
-
-  (localReports || []).forEach(add);
-  (cloudReports || []).forEach(add);
-  return merged;
+  // We combine both lists with cloud first then local, and run dedupeReports
+  // so any matching case merges test parameters, entered results, and patient info
+  return dedupeReports([...cloudList, ...localList]);
 }
 
 /** Collapses cases that sync delivered twice (same barcode / lab number and patient name). */
@@ -136,6 +130,9 @@ export function dedupeReports(reports: LabReport[]): LabReport[] {
 
     changed = true;
     const kept = collapsed[existingIndex];
+    const keptTime = reportTimestamp(kept);
+    const repTime = reportTimestamp(report);
+    // Base is the one with more entered results or newer timestamp
     const base = countEnteredResults(kept) >= countEnteredResults(report) ? kept : report;
     const twin = base === kept ? report : kept;
 
@@ -156,10 +153,24 @@ export function dedupeReports(reports: LabReport[]): LabReport[] {
       };
     });
 
+    const isHome = twin.patient?.isHomeVisit ?? base.patient?.isHomeVisit;
+    const bType = twin.patient?.bookingType || base.patient?.bookingType || (isHome ? 'home_visit' : 'branch');
+
     collapsed[existingIndex] = {
+      ...twin,
       ...base,
+      status: (base.status === 'verified' || twin.status === 'verified') ? 'verified' : (base.status || twin.status || 'draft'),
+      patient: {
+        ...(twin.patient || {}),
+        ...(base.patient || {}),
+        phone: base.patient?.phone || twin.patient?.phone || '',
+        homeAddress: base.patient?.homeAddress || twin.patient?.homeAddress || '',
+        bookingType: bType,
+        isHomeVisit: Boolean(isHome),
+        paidAmount: Math.max(base.patient?.paidAmount || 0, twin.patient?.paidAmount || 0)
+      },
       profiles,
-      updatedAt: new Date(Math.max(reportTimestamp(kept), reportTimestamp(report), Date.now())).toISOString()
+      updatedAt: new Date(Math.max(keptTime, repTime, Date.now())).toISOString()
     };
   });
 
@@ -178,22 +189,14 @@ function invoiceDuplicateKey(invoice: IncomeRecord): string {
   return `${barcode}|${number || `id:${invoice?.id}`}`;
 }
 
-/** Union of two invoice lists so nothing that already exists in the cloud is dropped. */
+/** Union of two invoice lists so nothing that already exists in the cloud is dropped, and values are merged. */
 export function unionInvoices(localInvoices?: IncomeRecord[], cloudInvoices?: IncomeRecord[]): IncomeRecord[] {
-  const merged: IncomeRecord[] = [];
-  const seen = new Set<string>();
+  const localList = Array.isArray(localInvoices) ? localInvoices.filter(Boolean) : [];
+  const cloudList = Array.isArray(cloudInvoices) ? cloudInvoices.filter(Boolean) : [];
+  if (localList.length === 0) return cloudList;
+  if (cloudList.length === 0) return localList;
 
-  const add = (invoice?: IncomeRecord | null) => {
-    if (!invoice) return;
-    const values = invoiceIdentityValues(invoice);
-    if (values.some(value => seen.has(value))) return;
-    values.forEach(value => seen.add(value));
-    merged.push(invoice);
-  };
-
-  (localInvoices || []).forEach(add);
-  (cloudInvoices || []).forEach(add);
-  return merged;
+  return dedupeInvoices([...cloudList, ...localList]);
 }
 
 /** Collapses invoices that sync delivered twice (same barcode + invoice / lab number). */
