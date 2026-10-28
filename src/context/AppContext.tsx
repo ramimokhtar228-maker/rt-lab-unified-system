@@ -3,6 +3,7 @@ import { cloudVersionChanged } from '../utils/cloudPulse';
 import { startRealtimeChannel } from '../utils/realtimeChannel';
 import { markDeleted, importDeletedMap, importSettingsStamps, getDeletedMap, getSettingsStamps, stampSetting, mergeCollection, mergeSettingsObject } from '../utils/cloudStore';
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { hasEarnedForInvoice, pointsForAmount } from '../utils/loyaltyEngine';
 import {
   Language,
   UserProfile,
@@ -2357,6 +2358,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const existing = prev.find(p => p.phone.replace(/\s+/g, '') === cleanPhone);
 
       if (existing) {
+    // لا تُمنح نقاط الفاتورة نفسها مرتين (مسارات دفع متعددة + مزامنة الأجهزة)
+    if (hasEarnedForInvoice(existing, invoiceNumber)) return prev;
         const newTotal = existing.totalPoints + pointsToEarn;
         const newSpent = existing.lifetimeSpent + amount;
         const newTier = calculateLoyaltyTier(newTotal);
@@ -2409,6 +2412,43 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     logAction('LOYALTY', 'LOYALTY', `إضافة ${pointsToEarn} نقطة ولاء للمريض ${patientName} برقم هاتف ${patientPhone}`);
   }, [loyaltyConfig, calculateLoyaltyTier, logAction]);
+
+  // النقاط التلقائية: تُمنح لكل فاتورة جديدة مرة واحدة فقط أياً كان مسار إنشاء الفاتورة
+  const loyaltyAutoEarnSinceRef = useRef<number>(0);
+  const loyaltyAutoEarnSeenRef = useRef<Set<string>>(new Set());
+  useEffect(() => {
+    if (!loyaltyAutoEarnSinceRef.current) {
+      let savedSince = 0;
+      try { savedSince = Number(localStorage.getItem(`${STORAGE_PREFIX}loyalty_auto_since`) || 0); } catch (e) { savedSince = 0; }
+      const since = savedSince || Date.now();
+      loyaltyAutoEarnSinceRef.current = since;
+      if (!savedSince) {
+        try { localStorage.setItem(`${STORAGE_PREFIX}loyalty_auto_since`, String(since)); } catch (e) { /* ignore */ }
+      }
+    }
+    const sinceStamp = loyaltyAutoEarnSinceRef.current;
+    const normalizePhone = (v?: string) => (v || '').replace(/\s+/g, '');
+    incomeRecords.forEach(inv => {
+      const invNo = inv.invoiceNumber;
+      if (!invNo || loyaltyAutoEarnSeenRef.current.has(invNo)) return;
+      const created = new Date(inv.createdAt || inv.updatedAt || '').getTime();
+      if (!created || isNaN(created) || created < sinceStamp) {
+        loyaltyAutoEarnSeenRef.current.add(invNo);
+        return;
+      }
+      if (!inv.patientPhone || pointsForAmount(inv.paidAmount || 0, loyaltyConfig) <= 0) return;
+      const profile = loyaltyProfiles.find(p => normalizePhone(p.phone) === normalizePhone(inv.patientPhone));
+      if (profile && hasEarnedForInvoice(profile, invNo)) {
+        loyaltyAutoEarnSeenRef.current.add(invNo);
+        return;
+      }
+      // إن كانت النقاط مُنحت لحظة إنشاء الفاتورة (نفس الزيارة) فلا نكررها
+      const alreadyCredited = profile?.transactions?.some(t => t.points > 0 && Math.abs(new Date(t.date).getTime() - created) < 5 * 60 * 1000);
+      loyaltyAutoEarnSeenRef.current.add(invNo);
+      if (alreadyCredited) return;
+      earnLoyaltyPoints(inv.patientPhone, inv.paidAmount, invNo, inv.patientName, inv.barcode);
+    });
+  }, [incomeRecords, loyaltyProfiles, loyaltyConfig, earnLoyaltyPoints]);
 
   // Financial Metrics
   const financialMetrics = useMemo(() => {
