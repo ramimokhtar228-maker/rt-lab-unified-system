@@ -1513,7 +1513,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const hasPermission = useCallback((module: string): boolean => {
     if (currentUser.role === 'admin_ceo') return true;
     if (currentUser.role === 'accountant') {
-      return ['dashboard', 'admission', 'financial_income', 'expenses_profit', 'loyalty', 'reports_archive', 'audit_settings'].includes(module);
+      return ['dashboard', 'admission', 'financial_income', 'expenses_profit', 'management_reports', 'loyalty', 'reports_archive', 'audit_settings'].includes(module);
     }
     if (currentUser.role === 'chemist') {
       return ['dashboard', 'worklist', 'diagnostic_editor', 'reports_archive', 'instruments', 'catalog', 'loyalty'].includes(module);

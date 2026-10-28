@@ -9,6 +9,7 @@ import {
   FolderArchive,
   Wallet,
   Receipt,
+  BarChart3,
   CreditCard,
   Network,
   Package,
@@ -90,6 +91,12 @@ export const Navigation: React.FC = () => {
       id: 'expenses_profit',
       labelAr: 'المصروفات والأرباح (P&L)',
       icon: Receipt,
+      group: 'financial'
+    },
+    {
+      id: 'management_reports',
+      labelAr: 'تقارير الإدارة (الفروع والإدارات)',
+      icon: BarChart3,
       group: 'financial'
     },
     {

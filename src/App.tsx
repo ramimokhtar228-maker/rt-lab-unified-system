@@ -14,6 +14,7 @@ import { LoyaltyModule } from './components/LoyaltyModule';
 import { LabToLabModule } from './components/LabToLabModule';
 import { InventoryModule } from './components/InventoryModule';
 import { HRModule } from './components/HRModule';
+import { ManagementReportsModule } from './components/ManagementReportsModule';
 import { CatalogBrowser } from './components/CatalogBrowser';
 import { SettingsBackupModule } from './components/SettingsBackupModule';
 import { BarcodeScannerModal } from './components/BarcodeScannerModal';
@@ -267,6 +268,7 @@ const AppContent: React.FC = () => {
             {/* Admin Modules */}
             {activeTab === 'inventory' && <InventoryModule />}
             {activeTab === 'hr' && <HRModule />}
+          {activeTab === 'management_reports' && <ManagementReportsModule />}
             {activeTab === 'catalog' && (
               <CatalogBrowser
                 catalog={diagnosticProfiles}
