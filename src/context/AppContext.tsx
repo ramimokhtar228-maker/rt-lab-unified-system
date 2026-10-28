@@ -2883,41 +2883,103 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     logAction('DELETE', 'HR', `حذف موظف رقم ${id}`);
   }, [logAction]);
 
-  const recordAttendance = useCallback((employeeId: string, status: AttendanceRecord['status'], checkIn?: string, checkOut?: string, notes?: string) => {
+  const timeToMinutes = (time?: string): number | null => {
+  if (!time) return null;
+  const parts = time.trim().match(/^(\d{1,2}):(\d{2})\s*([AP]M)?$/i);
+  if (!parts) return null;
+  let h = parseInt(parts[1], 10);
+  const m = parseInt(parts[2], 10);
+  const ap = parts[3] ? parts[3].toUpperCase() : null;
+  if (ap === 'PM' && h < 12) h += 12;
+  if (ap === 'AM' && h === 12) h = 0;
+  return h * 60 + m;
+};
+
+const calculateWorkedHours = (checkIn?: string, checkOut?: string): number => {
+  const a = timeToMinutes(checkIn);
+  const b = timeToMinutes(checkOut);
+  if (a === null || b === null) return 0;
+  const diff = (b - a + 1440) % 1440;
+  return Math.round((diff / 60) * 100) / 100;
+};
+
+const calculateOvertimeHours = (shiftHours: number, worked: number): number => {
+  const extra = worked - (shiftHours || 8);
+  return extra > 0 ? Math.round(extra * 100) / 100 : 0;
+};
+
+const recordAttendance = useCallback((employeeId: string, status: AttendanceRecord['status'], checkIn?: string, checkOut?: string, notes?: string) => {
     const emp = employees.find(e => e.id === employeeId);
     if (!emp) return;
     const today = new Date().toISOString().split('T')[0];
+    const inTime = checkIn || new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    const worked = calculateWorkedHours(inTime, checkOut);
     const newAtt: AttendanceRecord = {
       id: `att-${Date.now()}`,
       employeeId,
       employeeName: emp.fullName,
       date: today,
-      checkInTime: checkIn || new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+      checkInTime: inTime,
       checkOutTime: checkOut,
       status,
-      hoursWorked: checkOut ? 8 : 0,
-      overtimeHours: 0,
+      hoursWorked: worked,
+      overtimeHours: calculateOvertimeHours(emp.shiftHours, worked),
       notes
     };
     setAttendance(prev => [newAtt, ...prev.filter(a => !(a.employeeId === employeeId && a.date === today))]);
   }, [employees]);
 
   const generatePayrollForMonth = useCallback((monthYear: string) => {
-    const newPayroll: PayrollRecord[] = employees.filter(e => e.isActive).map(emp => ({
-      id: `pay-${emp.id}-${monthYear}`,
-      monthYear,
-      employeeId: emp.id,
-      employeeName: emp.fullName,
-      basicSalary: emp.basicSalary,
-      bonusAmount: 0,
-      deductionAmount: 0,
-      advancePayment: 0,
-      overtimePay: 0,
-      netSalary: emp.basicSalary,
-      paymentStatus: 'draft'
-    }));
+    const year = parseInt(monthYear.split('-')[0], 10);
+    const month = parseInt(monthYear.split('-')[1], 10);
+    const daysInMonth = new Date(year, month, 0).getDate() || 30;
+    const monthAttendance = attendance.filter(a => a.date && a.date.startsWith(monthYear));
+
+    const newPayroll: PayrollRecord[] = employees.filter(e => e.isActive).map(emp => {
+      const id = `pay-${emp.id}-${monthYear}`;
+      const prev = payroll.find(p => p.id === id);
+      const shift = emp.shiftHours || 8;
+      const dailyRate = emp.basicSalary / daysInMonth;
+      const hourlyRate = dailyRate / shift;
+      const records = monthAttendance.filter(a => a.employeeId === emp.id);
+      const absentDays = records.filter(a => a.status === 'absent').length;
+      const lateDays = records.filter(a => a.status === 'late').length;
+      let shortageHours = 0;
+      let overtimeHours = 0;
+      records.forEach(a => {
+        const worked = a.hoursWorked || 0;
+        if (a.status === 'present' || a.status === 'late') {
+          if (worked > 0 && worked < shift) shortageHours += shift - worked;
+          overtimeHours += a.overtimeHours || 0;
+        }
+      });
+      const computedDeduction = Math.round(absentDays * dailyRate + shortageHours * hourlyRate + lateDays * hourlyRate);
+      const manualDeduction = prev ? Math.max(0, (prev.deductionAmount || 0) - (prev.computedDeduction || 0)) : 0;
+      const deductionAmount = Math.round(manualDeduction + computedDeduction);
+      const bonusAmount = prev?.bonusAmount || 0;
+      const advancePayment = prev?.advancePayment || 0;
+      const overtimePay = Math.round(overtimeHours * hourlyRate * 1.5);
+      const total = emp.basicSalary + bonusAmount + overtimePay - deductionAmount - advancePayment;
+      return {
+        id,
+        monthYear,
+        employeeId: emp.id,
+        employeeName: emp.fullName,
+        basicSalary: emp.basicSalary,
+        bonusAmount,
+        deductionAmount,
+        advancePayment,
+        overtimePay,
+        computedDeduction,
+        attendanceSummary: `${absentDays} غياب · ${lateDays} تأخير · ${Math.round(overtimeHours * 100) / 100} ساعة إضافي`,
+        netSalary: Math.round(total * 100) / 100,
+        paymentStatus: prev?.paymentStatus || 'draft',
+        paymentDate: prev?.paymentDate,
+        notes: prev?.notes
+      };
+    });
     setPayroll(newPayroll);
-  }, [employees]);
+  }, [employees, attendance, payroll]);
 
   const updatePayrollRecord = useCallback((id: string, updates: Partial<PayrollRecord>) => {
     setPayroll(prev => prev.map(p => p.id === id ? { ...p, ...updates } : p));
@@ -2929,17 +2991,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const clockOutEmployee = useCallback((empId: string) => {
     const today = new Date().toISOString().split('T')[0];
+    const emp = employees.find(e => e.id === empId);
+    const outTime = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
     setAttendance(prev => prev.map(a => {
       if (a.employeeId === empId && a.date === today && !a.checkOutTime) {
+        const worked = calculateWorkedHours(a.checkInTime, outTime);
         return {
           ...a,
-          checkOutTime: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
-          hoursWorked: 8
+          checkOutTime: outTime,
+          hoursWorked: worked,
+          overtimeHours: calculateOvertimeHours(emp?.shiftHours || 8, worked)
         };
       }
       return a;
     }));
-  }, []);
+  }, [employees]);
 
   // Lab Info Update
   const updateLabInfo = useCallback((info: LabInfo) => {

@@ -235,6 +235,8 @@ export interface PayrollRecord {
   paymentStatus: 'draft' | 'approved' | 'paid';
   paymentDate?: string;
   notes?: string;
+  computedDeduction?: number;
+  attendanceSummary?: string;
 }
 
 export interface LabToLabOrder {
