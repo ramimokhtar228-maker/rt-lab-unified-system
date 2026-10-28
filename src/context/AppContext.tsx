@@ -1,3 +1,4 @@
+import { useStampedCollection } from '../hooks/useStampedCollection';
 import { cloudVersionChanged } from '../utils/cloudPulse';
 import { startRealtimeChannel } from '../utils/realtimeChannel';
 import { markDeleted, importDeletedMap, importSettingsStamps, getDeletedMap, getSettingsStamps, stampSetting, mergeCollection, mergeSettingsObject } from '../utils/cloudStore';
@@ -397,7 +398,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [selectedInvoice, setSelectedInvoice] = useState<IncomeRecord | null>(null);
 
   // 4. Reports (Unified Diagnostic Worklist)
-  const [reports, setReports] = useState<LabReport[]>(() => {
+  const [reports, setReports] = useStampedCollection<LabReport>(() => {
     try {
       const saved = localStorage.getItem(REPORTS_KEY) || localStorage.getItem('rt_lab_reports_v2');
       if (saved) {
@@ -415,7 +416,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
 
   // 5. Income & Invoices (Financial Records)
-  const [incomeRecords, setIncomeRecords] = useState<IncomeRecord[]>(() => {
+  const [incomeRecords, setIncomeRecords] = useStampedCollection<IncomeRecord>(() => {
     try {
       const saved = localStorage.getItem(INCOME_KEY) || localStorage.getItem('rt_lab_income_records_v1');
       if (saved) {
@@ -429,7 +430,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
 
   // 6. Test Catalog (Auto-merged to guarantee all 142 individual tests)
-  const [testCatalog, setTestCatalog] = useState<InvoiceTestItem[]>(() => {
+  const [testCatalog, setTestCatalog] = useStampedCollection<InvoiceTestItem>(() => {
     try {
       const saved = localStorage.getItem(CATALOG_KEY) || localStorage.getItem('rt_lab_individual_tests_v2');
       const parsed = saved ? JSON.parse(saved) : null;
@@ -440,7 +441,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
 
   // 6b. Comprehensive Packages (Auto-merged to guarantee 15 packages)
-  const [packages, setPackages] = useState<ComprehensivePackage[]>(() => {
+  const [packages, setPackages] = useStampedCollection<ComprehensivePackage>(() => {
     try {
       const saved = localStorage.getItem(PACKAGES_KEY);
       const parsed = saved ? JSON.parse(saved) : null;
@@ -451,7 +452,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
 
   // 6c. Diagnostic Profile Templates (Auto-merged to guarantee 24 comprehensive profiles)
-  const [diagnosticProfiles, setDiagnosticProfiles] = useState<CatalogProfileTemplate[]>(() => {
+  const [diagnosticProfiles, setDiagnosticProfiles] = useStampedCollection<CatalogProfileTemplate>(() => {
     try {
       const saved = localStorage.getItem(DIAGNOSTIC_PROFILES_KEY) || localStorage.getItem('rt_lab_custom_catalog_v3') || localStorage.getItem('rt_lab_catalog_v2');
       const parsed = saved ? JSON.parse(saved) : null;
@@ -462,7 +463,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
 
   // 7. Loyalty Profiles
-  const [loyaltyProfiles, setLoyaltyProfiles] = useState<PatientLoyaltyProfile[]>(() => {
+  const [loyaltyProfiles, setLoyaltyProfiles] = useStampedCollection<PatientLoyaltyProfile>(() => {
     try {
       const saved = localStorage.getItem(LOYALTY_KEY) || localStorage.getItem('rt_lab_loyalty_profiles_v2');
       if (saved) {
@@ -478,7 +479,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [loyaltyConfig] = useState<LoyaltyConfig>(DEFAULT_LOYALTY_CONFIG);
 
   // 8. Expenses & Profit Config & Closeouts
-  const [expenses, setExpenses] = useState<ExpenseRecord[]>(() => {
+  const [expenses, setExpenses] = useStampedCollection<ExpenseRecord>(() => {
     try {
       const saved = localStorage.getItem(EXPENSES_KEY) || localStorage.getItem('rt_lab_expense_records_v1');
       return saved ? JSON.parse(saved) : [];
@@ -488,7 +489,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
 
   const [profitConfig, setProfitConfig] = useState<ProfitShareConfig>(INITIAL_PROFIT_CONFIG);
-  const [dailyCloseouts, setDailyCloseouts] = useState<DailyCloseout[]>(() => {
+  const [dailyCloseouts, setDailyCloseouts] = useStampedCollection<DailyCloseout>(() => {
     try {
       const saved = localStorage.getItem(CLOSEOUTS_KEY) || localStorage.getItem('rt_lab_daily_closeouts_v1');
       return saved ? JSON.parse(saved) : [];
@@ -498,7 +499,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
 
   // 9. Inventory & Reagents
-  const [inventory, setInventory] = useState<InventoryItem[]>(() => {
+  const [inventory, setInventory] = useStampedCollection<InventoryItem>(() => {
     try {
       const saved = localStorage.getItem(INVENTORY_KEY) || localStorage.getItem('rt_lab_inventory_items_v1');
       if (saved) {
@@ -512,7 +513,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
 
   // 10. Lab Instruments & Interfacing
-  const [instruments, setInstruments] = useState<LabInstrument[]>(() => {
+  const [instruments, setInstruments] = useStampedCollection<LabInstrument>(() => {
     try {
       const saved = localStorage.getItem(INSTRUMENTS_KEY);
       return saved ? JSON.parse(saved) : INITIAL_INSTRUMENTS;
@@ -521,7 +522,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   });
 
-  const [transmissions, setTransmissions] = useState<InstrumentTransmission[]>(() => {
+  const [transmissions, setTransmissions] = useStampedCollection<InstrumentTransmission>(() => {
     try {
       const saved = localStorage.getItem(TRANSMISSIONS_KEY);
       return saved ? JSON.parse(saved) : SAMPLE_INSTRUMENT_TRANSMISSIONS;
@@ -531,7 +532,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
 
   // 11. Lab to Lab
-  const [labToLabOrders, setLabToLabOrders] = useState<LabToLabOrder[]>(() => {
+  const [labToLabOrders, setLabToLabOrders] = useStampedCollection<LabToLabOrder>(() => {
     try {
       const saved = localStorage.getItem(LAB_TO_LAB_KEY) || localStorage.getItem('rt_lab_lab_to_lab_orders_v1');
       return saved ? JSON.parse(saved) : INITIAL_LAB_TO_LAB;
@@ -541,7 +542,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
 
   // 12. HR Employees, Attendance, Payroll
-  const [employees, setEmployees] = useState<Employee[]>(() => {
+  const [employees, setEmployees] = useStampedCollection<Employee>(() => {
     try {
       const saved = localStorage.getItem(EMPLOYEES_KEY) || localStorage.getItem('rt_lab_employees_v1');
       return saved ? JSON.parse(saved) : INITIAL_EMPLOYEES;
@@ -549,8 +550,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       return INITIAL_EMPLOYEES;
     }
   });
-  const [attendance, setAttendance] = useState<AttendanceRecord[]>(INITIAL_ATTENDANCE);
-  const [payroll, setPayroll] = useState<PayrollRecord[]>(INITIAL_PAYROLL);
+  const [attendance, setAttendance] = useStampedCollection<AttendanceRecord>(INITIAL_ATTENDANCE);
+  const [payroll, setPayroll] = useStampedCollection<PayrollRecord>(INITIAL_PAYROLL);
 
   // 13. Lab Info & Branches
   const [labInfo, setLabInfo] = useState<LabInfo>(() => {
@@ -1077,13 +1078,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               });
             }
             if (Array.isArray(ghRes.data.expenses) && ghRes.data.expenses.length > 0) {
-              setExpenses(ghRes.data.expenses);
+              setExpenses(prev => mergeCollection('expenses', prev, ghRes.data.expenses));
             }
             if (Array.isArray(ghRes.data.loyaltyProfiles) && ghRes.data.loyaltyProfiles.length > 0) {
-              setLoyaltyProfiles(ghRes.data.loyaltyProfiles);
+              setLoyaltyProfiles(prev => mergeCollection('loyaltyProfiles', prev, ghRes.data.loyaltyProfiles));
             }
             if (Array.isArray(ghRes.data.inventory) && ghRes.data.inventory.length > 0) {
-              setInventory(ghRes.data.inventory);
+              setInventory(prev => mergeCollection('inventory', prev, ghRes.data.inventory));
             }
             if (ghRes.data.labInfo) {
               setLabInfo(ghRes.data.labInfo);

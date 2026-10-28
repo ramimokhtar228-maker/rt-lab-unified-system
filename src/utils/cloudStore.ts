@@ -120,7 +120,10 @@ export function mergeCollection(collection: string, local: AnyRecord[] = [], clo
       changed = true;
       return;
     }
-    const merged = recordStamp(record) > recordStamp(existing) ? fillGaps(record, existing) : fillGaps(existing, record);
+    // عند تساوي الطوابع (سجل قديم بلا طابع زمني) تفوز النسخة السحابية لأنها المصدر الموحّد
+    const cloudStamp = recordStamp(record);
+    const localStamp = recordStamp(existing);
+    const merged = cloudStamp >= localStamp ? fillGaps(record, existing) : fillGaps(existing, record);
     if (JSON.stringify(merged) !== JSON.stringify(existing)) {
       map.set(key, merged);
       changed = true;
