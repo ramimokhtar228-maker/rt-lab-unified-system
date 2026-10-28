@@ -2,7 +2,22 @@
 // Powered by MQTT over WebSockets + BroadcastChannel + GitHub Cloud Sync
 // Guaranteed instantaneous synchronization across mobiles, tablets, and laptops (< 50ms).
 
-import mqtt, { MqttClient } from 'mqtt';
+// تحميل مكتبة MQTT عند الحاجة فقط من شبكة توصيل (لا تُحزَّم مع التطبيق حتى لا تعطّل البناء)
+type MqttClient = any;
+let mqttLib: any = null;
+let mqttLoader: Promise<any> | null = null;
+async function loadMqtt(): Promise<any> {
+  if (mqttLib) return mqttLib;
+  if (!mqttLoader) {
+    mqttLoader = import(/* @vite-ignore */ 'https://esm.sh/mqtt@5.10.4')
+      .then((mod: any) => {
+        mqttLib = mod?.default || mod;
+        return mqttLib;
+      })
+      .catch(() => null);
+  }
+  return mqttLoader;
+}
 
 export type SyncActionType =
   | 'INIT_STATE'
@@ -207,7 +222,7 @@ class RealtimeMultiDeviceSyncEngine {
     }
   }
 
-  private initMqttRealtime() {
+  private async initMqttRealtime() {
     if (typeof window === 'undefined') return;
 
     try {
@@ -215,6 +230,13 @@ class RealtimeMultiDeviceSyncEngine {
         try {
           this.mqttClient.end(true);
         } catch {}
+      }
+
+      const mqtt = await loadMqtt();
+      if (!mqtt) {
+        this.cloudConnected = false;
+        this.notifyStatus();
+        return;
       }
 
       const brokerUrl = this.brokers[this.currentBrokerIndex % this.brokers.length];
