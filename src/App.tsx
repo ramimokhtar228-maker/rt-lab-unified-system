@@ -193,7 +193,7 @@ const AppContent: React.FC = () => {
         ) : (
           <>
             {activeTab === 'dashboard' && <DashboardModule />}
-            {activeTab === 'admission' && <AdmissionModule />}
+            {activeTab === 'admission' && <AdmissionModule onOpenInvoice={(rep) => setPatientInvoiceModalReport(rep)} />}
             {activeTab === 'worklist' && <WorklistModule />}
 
             {/* Diagnostic Report Editor */}
@@ -318,7 +318,7 @@ const AppContent: React.FC = () => {
             >
               <X className="w-5 h-5" />
             </button>
-            <AdmissionModule isModal onSuccess={() => setIsPatientFormOpen(false)} />
+            <AdmissionModule isModal onSuccess={() => setIsPatientFormOpen(false)} onOpenInvoice={(rep) => setPatientInvoiceModalReport(rep)} />
           </div>
         </div>
       )}

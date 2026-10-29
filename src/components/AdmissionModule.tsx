@@ -37,9 +37,10 @@ import { WhatsAppBookingModal } from './WhatsAppBookingModal';
 interface AdmissionModuleProps {
   onSuccess?: () => void;
   isModal?: boolean;
+  onOpenInvoice?: (report: LabReport) => void;
 }
 
-export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isModal = false }) => {
+export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isModal = false, onOpenInvoice }) => {
   const {
     labInfo,
     createReportFromAdmission,
@@ -62,10 +63,18 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
   const today = new Date().toISOString().split('T')[0];
   // Continue the lab-number sequence from the highest case already registered (on any device),
   // so two devices can never issue the same number and overwrite each other's cases on sync.
-  const { labNumber: nextLabNumber, barcode: nextBarcode } = useMemo(
+  const { labNumber: suggestedLabNumber, barcode: suggestedBarcode } = useMemo(
     () => getNextLabIdentity(reports),
     [reports]
   );
+
+  const [customLabNumber, setCustomLabNumber] = useState('');
+  const [customBarcode, setCustomBarcode] = useState('');
+  const [isEditingIdentity, setIsEditingIdentity] = useState(false);
+  const [createdReportObj, setCreatedReportObj] = useState<LabReport | null>(null);
+
+  const nextLabNumber = customLabNumber.trim() || suggestedLabNumber;
+  const nextBarcode = customBarcode.trim() || suggestedBarcode;
 
   // Form State
   const [fullName, setFullName] = useState('');
@@ -301,7 +310,8 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
     const pkgTests: InvoiceTestItem[] = [];
 
     pkg.includedProfiles.forEach(code => {
-      const foundProfile = LAB_CATALOG.find(p => p.code.toUpperCase() === code.toUpperCase());
+      const foundProfile = (diagnosticProfiles || []).find(p => p.code.toUpperCase() === code.toUpperCase())
+                        || LAB_CATALOG.find(p => p.code.toUpperCase() === code.toUpperCase());
       if (foundProfile) {
         pkgTests.push({
           id: `prof-${foundProfile.code}`,
@@ -336,11 +346,29 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
       return;
     }
     if (!selectedTests || selectedTests.length === 0) {
-      setFormError("يرجى اختيار تحليل واحد على الأقل للمريض.");
+      setFormError("يرجى اختيار تحليل واحد على الأقل أو باقة للمريض.");
+      return;
+    }
+    if (bookingType === 'home_visit' && !homeAddress.trim()) {
+      setFormError("يرجى إدخال عنوان الزيارة المنزلية بالكامل.");
       return;
     }
 
     try {
+      // Safe appointment date calculation
+      let safeSampleDate = new Date().toISOString();
+      try {
+        if (appointmentDate) {
+          const timePart = (appointmentTime && appointmentTime.match(/^\d{1,2}:\d{2}$/)) ? appointmentTime : '09:00';
+          const dt = new Date(`${appointmentDate}T${timePart}:00`);
+          if (!isNaN(dt.getTime())) {
+            safeSampleDate = dt.toISOString();
+          }
+        }
+      } catch {
+        safeSampleDate = new Date().toISOString();
+      }
+
       const patientRecord: Patient = {
         id: `pat-${Date.now()}`,
         labNumber: nextLabNumber,
@@ -352,17 +380,17 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
         gender,
         nationalId: nationalId.trim() || undefined,
         referringDoctorTitle: "Dr.",
-        referringDoctorName: referringDoctor.trim(),
-        sampleDate: appointmentDate && appointmentDate !== today ? `${appointmentDate}T${appointmentTime || '09:00'}:00.000Z` : new Date().toISOString(),
+        referringDoctorName: referringDoctor.trim() || 'أطباء كلية طب قصر العيني',
+        sampleDate: safeSampleDate,
         reportingDate: new Date().toISOString(),
         clinicalHistory: clinicalHistory.trim() || undefined,
         fastingHours: Number(fastingHours) || 0,
         bookingType,
-        homeAddress: bookingType === 'home_visit' ? homeAddress : undefined,
+        homeAddress: bookingType === 'home_visit' ? homeAddress.trim() : undefined,
         visitFee: effectiveVisitFee,
-        appointmentDate,
-        appointmentTime,
-        deliveryNotes: bookingType === 'home_visit' ? deliveryNotes : undefined,
+        appointmentDate: appointmentDate || today,
+        appointmentTime: appointmentTime || '09:00',
+        deliveryNotes: bookingType === 'home_visit' ? deliveryNotes.trim() : undefined,
         testsSubtotal,
         totalCost: netTotal,
         discountApplied: totalDiscount,
@@ -394,9 +422,10 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
         }
       }
 
+      setCreatedReportObj(createdReport);
       setCreatedLabNum(createdReport ? createdReport.reportNumber : nextLabNumber);
       setIsSubmitted(true);
-      if (onSuccess) onSuccess();
+      // NOTE: Do NOT immediately close the modal via onSuccess() so the user can see the confirmation and send WhatsApp/print
     } catch (err: any) {
       console.error("Admission submission error:", err);
       setFormError(`حدث خطأ أثناء حفظ وتسجيل المريض: ${err?.message || 'يرجى مراجعة البيانات'}`);
@@ -438,76 +467,143 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
     openWhatsApp(phone, text);
   };
 
-
   if (isSubmitted) {
     return (
-      <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-xl text-center space-y-6 max-w-2xl mx-auto my-6 animate-in zoom-in-95">
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl text-center space-y-6 max-w-2xl mx-auto my-4 animate-in zoom-in-95">
         <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-inner">
           <CheckCircle2 className="w-10 h-10" />
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-1.5">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
+            <Check className="w-3.5 h-3.5" />
+            <span>تم التسجيل والفوترة وتأكيد الحجز</span>
+          </div>
           <h2 className="text-2xl font-black text-slate-900">تم تسجيل المريض وحجز التحاليل بنجاح!</h2>
-          <p className="text-slate-500 text-sm">
-            تم إصدار الفاتورة وإدراج العينة في قائمة عمل المعمل برقم: <strong className="text-rose-900 font-mono text-base">{createdLabNum}</strong>
+          <p className="text-slate-500 text-xs sm:text-sm">
+            تم إصدار الفاتورة وإدراج العينة في قائمة عمل المعمل برقم كود: <strong className="text-rose-900 font-mono text-base">{createdLabNum}</strong>
           </p>
         </div>
 
-        <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs text-right space-y-2 font-medium">
-          <div className="flex justify-between">
+        <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs text-right space-y-2.5 font-medium">
+          <div className="flex justify-between items-center border-b border-slate-200/60 pb-2">
             <span className="text-slate-500">اسم المريض:</span>
-            <strong className="text-slate-800">{fullName}</strong>
+            <strong className="text-slate-900 text-sm">{fullName}</strong>
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center border-b border-slate-200/60 pb-2">
+            <span className="text-slate-500">رقم التحليل بالمختبر (Lab No):</span>
+            <strong className="font-mono text-rose-900 font-black text-sm">{createdLabNum}</strong>
+          </div>
+          <div className="flex justify-between items-center border-b border-slate-200/60 pb-2">
             <span className="text-slate-500">باركود العينة:</span>
-            <strong className="font-mono text-rose-900">{nextBarcode}</strong>
+            <strong className="font-mono text-slate-800 font-bold">{nextBarcode}</strong>
           </div>
-          <div className="flex justify-between">
-            <span className="text-slate-500">الصافي المطلوب:</span>
-            <strong className="font-mono text-emerald-700">{netTotal} ج.م (المدفوع: {paidAmount} ج.م)</strong>
+          <div className="flex justify-between items-center border-b border-slate-200/60 pb-2">
+            <span className="text-slate-500">التحاليل المحجوزة:</span>
+            <strong className="text-slate-800">{selectedTests.length} فحص {selectedPackage ? `(باقة: ${selectedPackage.titleAr})` : ''}</strong>
           </div>
-          <div className="flex justify-between">
-            <span className="text-slate-500">نقاط الولاء المكتسبة:</span>
-            <strong className="font-mono text-amber-700">+{Math.floor(paidAmount * loyaltyConfig.pointsPerEGP)} نقطة</strong>
+          <div className="flex justify-between items-center border-b border-slate-200/60 pb-2">
+            <span className="text-slate-500">الحساب المالي:</span>
+            <strong className="font-mono text-emerald-700">المطلوب: {netTotal} ج.م | المدفوع: {paidAmount} ج.م | المتبقي: {remainingAmount} ج.م</strong>
           </div>
+          {phone.trim() && (
+            <div className="flex justify-between items-center">
+              <span className="text-slate-500">نقاط الولاء المكتسبة:</span>
+              <strong className="font-mono text-amber-700">+{Math.floor(paidAmount * loyaltyConfig.pointsPerEGP)} نقطة (رقم الهاتف: {phone})</strong>
+            </div>
+          )}
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+          {/* WhatsApp Button */}
           <button
             type="button"
             onClick={() => setIsWhatsAppModalOpen(true)}
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-black text-xs shadow-lg shadow-emerald-950/20 transition-all cursor-pointer active:scale-98"
+            className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-black text-xs shadow-md shadow-emerald-950/20 transition-all cursor-pointer active:scale-98"
           >
             <MessageCircle className="w-4 h-4 text-emerald-200" />
-            <span>إرسال رسالة تأكيد الحجز بالواتساب (معاينة واحترافية)</span>
+            <span>إرسال رسالة الحجز عبر واتساب</span>
           </button>
 
+          {/* Go to Diagnostic Editor */}
           <button
+            type="button"
             onClick={() => {
+              if (createdReportObj) {
+                setSelectedReportId(createdReportObj.id);
+              }
               setActiveTab('diagnostic_editor');
-              if (isModal) setIsPatientFormOpen(false);
+              if (isModal && onSuccess) onSuccess();
             }}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-rose-900 hover:bg-rose-800 text-white font-bold text-xs shadow-md transition-colors cursor-pointer"
+            className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-rose-900 hover:bg-rose-800 text-white font-black text-xs shadow-md transition-colors cursor-pointer"
           >
             <FlaskConical className="w-4 h-4" />
-            <span>الانتقال لإدخال النتائج الطبية</span>
+            <span>الانتقال لإدخال نتائج التحاليل</span>
           </button>
 
+          {/* Print Invoice */}
           <button
+            type="button"
+            onClick={() => {
+              if (createdReportObj && onOpenInvoice) {
+                onOpenInvoice(createdReportObj);
+              }
+            }}
+            className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs transition-colors cursor-pointer"
+          >
+            <Printer className="w-4 h-4 text-slate-300" />
+            <span>طباعة الفاتورة والإيصال</span>
+          </button>
+
+          {/* Register Another Patient */}
+          <button
+            type="button"
             onClick={() => {
               setIsSubmitted(false);
               setFullName('');
               setPhone('');
               setNationalId('');
               setClinicalHistory('');
-              setSelectedTests([]);
-              if (isModal) setIsPatientFormOpen(false);
+              setSelectedPackageId('');
+              setSelectedTests([
+                INITIAL_INDIVIDUAL_TESTS.find(t => t.code === 'CBC') || {
+                  id: 't-cbc',
+                  code: 'CBC',
+                  nameAr: 'صورة الدم الكاملة (CBC 5-Diff)',
+                  nameEn: 'Complete Blood Count',
+                  price: 180,
+                  category: 'Hematology',
+                  cost: 30,
+                  sampleType: 'EDTA Whole Blood',
+                  unit: 'Multi-parameter',
+                  textReference: 'Normal'
+                }
+              ]);
+              setCustomLabNumber('');
+              setCustomBarcode('');
+              setCreatedReportObj(null);
             }}
-            className="px-4 py-2.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs transition-colors cursor-pointer"
+            className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs border border-slate-300 transition-colors cursor-pointer"
           >
-            تسجيل مريض آخر
+            <Plus className="w-4 h-4" />
+            <span>تسجيل حالة جديدة أخرى</span>
           </button>
         </div>
+
+        {isModal && (
+          <div className="pt-2">
+            <button
+              type="button"
+              onClick={() => {
+                if (onSuccess) onSuccess();
+              }}
+              className="px-4 py-2 text-xs text-slate-400 hover:text-slate-600 font-bold cursor-pointer"
+            >
+              إغلاق النافذة
+            </button>
+          </div>
+        )}
+
         <WhatsAppBookingModal isOpen={isWhatsAppModalOpen} onClose={() => setIsWhatsAppModalOpen(false)} bookingData={bookingModalData} />
       </div>
     );
@@ -551,6 +647,59 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
               <User className="w-5 h-5 text-rose-700" />
               <h2 className="font-black text-slate-800 text-base">البيانات الشخصية والطبية للمريض</h2>
             </div>
+
+            {/* Lab Number & Barcode Identity Row */}
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-4 flex-wrap">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[11px] text-slate-500 font-bold">رقم المعمل:</span>
+                  <span className="font-mono font-black text-rose-900 bg-rose-50 px-2 py-0.5 rounded border border-rose-200 text-xs">
+                    {nextLabNumber}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[11px] text-slate-500 font-bold">باركود العينة:</span>
+                  <span className="font-mono font-bold text-slate-800 bg-white px-2 py-0.5 rounded border border-slate-200 text-xs">
+                    {nextBarcode}
+                  </span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setIsEditingIdentity(!isEditingIdentity)}
+                className="text-[11px] font-bold text-rose-700 hover:text-rose-900 underline cursor-pointer"
+              >
+                {isEditingIdentity ? 'إلغاء التعديل اليدوي' : 'تعديل رقم المعمل أو الباركود يدوياً'}
+              </button>
+            </div>
+
+            {isEditingIdentity && (
+              <div className="p-3 bg-amber-50/70 border border-amber-200 rounded-xl grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs animate-in fade-in">
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">رقم المعمل اليدوي:</label>
+                  <input
+                    type="text"
+                    value={customLabNumber}
+                    onChange={(e) => setCustomLabNumber(e.target.value)}
+                    placeholder={suggestedLabNumber}
+                    className="w-full bg-white border border-amber-300 rounded-lg p-2 font-mono text-xs"
+                  />
+                  <span className="text-[10px] text-slate-500">اتركه فارغاً للاعتماد على التسلسل التلقائي</span>
+                </div>
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">باركود العينة اليدوي:</label>
+                  <input
+                    type="text"
+                    value={customBarcode}
+                    onChange={(e) => setCustomBarcode(e.target.value)}
+                    placeholder={suggestedBarcode}
+                    className="w-full bg-white border border-amber-300 rounded-lg p-2 font-mono text-xs"
+                  />
+                  <span className="text-[10px] text-slate-500">اتركه فارغاً للاعتماد على باركود المعمل التلقائي</span>
+                </div>
+              </div>
+            )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="sm:col-span-2">

@@ -19,7 +19,10 @@ export function getHighestLabCounter(reports: LabReport[] = []): { year: number;
       const match = LAB_NUMBER_RE.exec(String(value || '').trim());
       if (match) {
         const parsed = Number(match[2]);
-        if (parsed > counter) {
+        // Guard against timestamps (e.g. 9827351826) or out-of-order test jumps (0910, 8988).
+        // Standard serial lab numbers follow sequence 001..068, allowing up to 500 or consecutive progression.
+        const isSequential = (parsed <= 500) || (counter > 0 && parsed <= counter + 20);
+        if (isSequential && parsed > counter) {
           counter = parsed;
           year = Number(match[1]);
         }
@@ -29,7 +32,8 @@ export function getHighestLabCounter(reports: LabReport[] = []): { year: number;
     const barcodeMatch = BARCODE_RE.exec(String(report?.patient?.barcode || '').trim());
     if (barcodeMatch) {
       const parsed = Number(barcodeMatch[1]) - BARCODE_BASE;
-      if (parsed > counter) counter = parsed;
+      const isSequential = (parsed <= 500) || (counter > 0 && parsed <= counter + 20);
+      if (isSequential && parsed > counter) counter = parsed;
     }
   });
 

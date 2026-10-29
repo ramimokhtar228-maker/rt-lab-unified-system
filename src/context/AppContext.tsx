@@ -2193,6 +2193,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         const richTest = INITIAL_INDIVIDUAL_TESTS.find(t => t.code && t.code.toUpperCase() === testCode) || test;
         const nameAr = richTest.nameAr || richTest.nameEn || testCode;
         const nameEn = richTest.nameEn || richTest.nameAr || testCode;
+        const displayName = (nameAr.trim().toLowerCase() === nameEn.trim().toLowerCase()) 
+          ? nameAr 
+          : `${nameAr} (${nameEn})`;
+
         generatedProfiles.push({
           id: `prof-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
           profileCode: richTest.code || testCode,
@@ -2203,7 +2207,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           parameters: [
             {
               id: `p-${Date.now()}-${Math.random().toString(36).substring(2, 5)}`,
-              name: `${nameAr} (${nameEn})`,
+              name: displayName,
               result: '',
               unit: richTest.unit || '',
               minNormal: richTest.minNormal,
@@ -2236,13 +2240,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       });
     }
 
+    let safeSampleDate = patient.sampleDate;
+    try {
+      if (!safeSampleDate || isNaN(new Date(safeSampleDate).getTime())) {
+        safeSampleDate = new Date().toISOString();
+      }
+    } catch {
+      safeSampleDate = new Date().toISOString();
+    }
+
     const newReport: LabReport = {
       id: `rep-${Date.now()}`,
       reportNumber: patient.labNumber,
       patient: {
         ...patient,
-        sampleDate: patient.sampleDate || today,
-        reportingDate: patient.reportingDate || today,
+        sampleDate: safeSampleDate,
+        reportingDate: patient.reportingDate || new Date().toISOString(),
         assignedPackageId: packageApplied ? packageApplied.id : patient.assignedPackageId
       },
       packageApplied: packageApplied ? {
