@@ -60,7 +60,18 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
     forceSyncCatalog
   } = useApp();
 
-  const today = new Date().toISOString().split('T')[0];
+  // Use local date (Egypt / regional timezone) instead of UTC toISOString to avoid day shift
+  const today = useMemo(() => {
+    try {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    } catch {
+      return new Date().toISOString().split('T')[0];
+    }
+  }, []);
   // Continue the lab-number sequence from the highest case already registered (on any device),
   // so two devices can never issue the same number and overwrite each other's cases on sync.
   const { labNumber: suggestedLabNumber, barcode: suggestedBarcode } = useMemo(
@@ -194,10 +205,14 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
   const totalDiscount = percentageDiscountAmount + pointsRedeemValue;
   const netTotal = Math.max(0, grossSubtotal - totalDiscount);
 
-  // Auto set paid amount to netTotal
+  // Auto set paid amount to netTotal unless deferred payment is chosen
   useEffect(() => {
-    setPaidAmount(netTotal);
-  }, [netTotal]);
+    if (paymentMethod === 'deferred') {
+      setPaidAmount(0);
+    } else {
+      setPaidAmount(netTotal);
+    }
+  }, [netTotal, paymentMethod]);
 
   const remainingAmount = Math.max(0, netTotal - paidAmount);
 
@@ -208,6 +223,9 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
       : (discountPercent > 0
           ? `${discountPercent}%${loyaltyProfile ? ' (خصم كارت الولاء)' : ''}`
           : (totalDiscount > 0 ? 'خصم مطبق' : 'لا يوجد'));
+
+    const safeTests = (selectedTests || []).filter(Boolean);
+    const safeExtras = (extraItems || []).filter(Boolean);
 
     return {
       patientName: fullName.trim() || 'العميل الكريم',
@@ -222,19 +240,19 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
       branchName: 'الفرع الرئيسي - بهتيم',
       branchAddress: labInfo?.mainAddress,
       branchPhone: labInfo?.phone,
-      testsDetails: selectedTests.map(t => ({
-        nameAr: t.nameAr,
-        nameEn: t.nameEn,
-        code: t.code,
-        price: t.price
+      testsDetails: safeTests.map(t => ({
+        nameAr: t.nameAr || t.nameEn || t.code || 'تحليل معملي',
+        nameEn: t.nameEn || t.nameAr || t.code || 'Lab Test',
+        code: t.code || 'TEST',
+        price: Number(t.price) || 0
       })),
       packageName: selectedPackage?.titleAr,
       packagePrice: selectedPackage?.packagePrice,
-      extraTestsDetails: selectedPackage ? extraItems.map(t => ({
-        nameAr: t.nameAr,
-        nameEn: t.nameEn,
-        code: t.code,
-        price: t.price
+      extraTestsDetails: selectedPackage ? safeExtras.map(t => ({
+        nameAr: t.nameAr || t.nameEn || t.code || 'تحليل إضافي',
+        nameEn: t.nameEn || t.nameAr || t.code || 'Extra Test',
+        code: t.code || 'TEST',
+        price: Number(t.price) || 0
       })) : undefined,
       subtotal: testsSubtotal,
       discountAmount: totalDiscount,
@@ -243,14 +261,13 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
       netAmount: netTotal,
       paidAmount,
       remainingAmount,
-      paymentMethod: paymentMethod === 'cash' ? 'نقداً بالخزينة' : paymentMethod === 'visa' ? 'بطاقة ائتمانية / فيزا' : paymentMethod === 'instapay' ? 'إنستا باي InstaPay' : String(paymentMethod),
+      paymentMethod: paymentMethod === 'cash' ? 'نقداً بالخزينة' : paymentMethod === 'visa' ? 'بطاقة ائتمانية / فيزا' : paymentMethod === 'instapay' ? 'إنستا باي InstaPay' : paymentMethod === 'deferred' ? 'آجل / غير مسدد' : String(paymentMethod),
       fastingHours: Number(fastingHours) || 0
     };
   }, [
     fullName, createdLabNum, nextLabNumber, nextBarcode, phone, appointmentDate, today,
     appointmentTime, bookingType, homeAddress, deliveryNotes, labInfo, selectedTests,
     selectedPackage, testsSubtotal, totalDiscount, discountPercent, loyaltyProfile,
-    effectiveVisitFee, netTotal, paidAmount, remainingAmount, paymentMethod, fastingHours
   ]);
 
   // Add/Remove Tests
@@ -638,7 +655,24 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
       )}
 
       {/* Main Form */}
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <form onSubmit={handleSubmit} noValidate className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {formError && (
+          <div className="lg:col-span-12 p-4 bg-rose-50 border-2 border-rose-300 text-rose-900 rounded-2xl text-xs font-bold flex items-start gap-2.5 shadow-sm animate-in fade-in">
+            <AlertCircle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <span className="font-black text-rose-950 block text-sm">تنبيه في استكمال البيانات:</span>
+              <span>{formError}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setFormError(null)}
+              className="text-rose-500 hover:text-rose-800 text-xs font-bold px-2 py-0.5 rounded cursor-pointer"
+            >
+              ✕
+            </button>
+          </div>
+        )}
+
         {/* Left Column: Demographics & Test Selector (Col 7) */}
         <div className="lg:col-span-7 space-y-6">
           {/* Card 1: Patient Demographics */}
@@ -1251,12 +1285,12 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
                 <div>
                   <label className="font-bold text-slate-700 block mb-1 text-xs">يوم الحجز:</label>
                   <input type="date" value={appointmentDate} onChange={(e) => setAppointmentDate(e.target.value)}
-                    className="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs font-mono" required />
+                    className="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs font-mono" />
                 </div>
                 <div>
                   <label className="font-bold text-slate-700 block mb-1 text-xs">ساعة الحجز:</label>
                   <input type="time" value={appointmentTime} onChange={(e) => setAppointmentTime(e.target.value)}
-                    className="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs font-mono" required />
+                    className="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs font-mono" />
                 </div>
               </div>
 
@@ -1266,7 +1300,7 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
                     <label className="font-bold text-slate-700 block mb-1">عنوان الزيارة المنزلية:</label>
                     <input type="text" value={homeAddress} onChange={(e) => setHomeAddress(e.target.value)}
                       placeholder="رقم العقار، الشارع، المنطقة، الدور، الشقة"
-                      className="w-full bg-white border border-rose-200 rounded-lg p-2 text-xs" required />
+                      className="w-full bg-white border border-rose-200 rounded-lg p-2 text-xs" />
                   </div>
                   <div>
                     <label className="font-bold text-slate-700 block mb-1">تفاصيل الزيارة / ملاحظات الوصول:</label>
@@ -1379,7 +1413,6 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
                   <input
                     type="number"
                     min={0}
-                    max={netTotal}
                     value={paidAmount}
                     onChange={(e) => setPaidAmount(Number(e.target.value))}
                     className="w-full text-xs font-mono font-bold bg-slate-50 border border-slate-200 rounded-xl p-2.5 focus:ring-2 focus:ring-rose-500 focus:outline-none"
