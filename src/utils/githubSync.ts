@@ -137,52 +137,77 @@ export async function fetchDiagnosticCases(
 
     // 1. Priority: pull from public/rt-database-sync.json which contains ALL registered cases and reports
     try {
-      const dbRes = await fetch(
-        `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/public/rt-database-sync.json`,
-        {
-          headers: creds.token ? {
-            Authorization: `token ${creds.token}`,
-            Accept: 'application/vnd.github.v3.raw',
-            'Cache-Control': 'no-cache'
-          } : {
-            Accept: 'application/vnd.github.v3.raw'
+      let dbData: any = null;
+      const rawDbRes = await fetch(
+        `https://raw.githubusercontent.com/${creds.owner}/${creds.repo}/main/public/rt-database-sync.json?_=${Date.now()}`,
+        { headers: creds.token ? { Authorization: `token ${creds.token}` } : {}, cache: 'no-store' }
+      );
+      if (rawDbRes.ok) {
+        dbData = await rawDbRes.json();
+      } else {
+        const dbRes = await fetch(
+          `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/public/rt-database-sync.json`,
+          {
+            headers: creds.token ? {
+              Authorization: `token ${creds.token}`,
+              Accept: 'application/vnd.github.v3.raw',
+              'Cache-Control': 'no-cache'
+            } : {
+              Accept: 'application/vnd.github.v3.raw'
+            }
+          }
+        );
+        if (dbRes.ok) {
+          const resJson = await dbRes.json();
+          if (resJson && Array.isArray(resJson.reports)) {
+            dbData = resJson;
+          } else if (resJson && resJson.download_url) {
+            const dlRes = await fetch(`${resJson.download_url}?_=${Date.now()}`);
+            if (dlRes.ok) dbData = await dlRes.json();
           }
         }
-      );
-      if (dbRes.ok) {
-        const dbData = await dbRes.json();
-        if (Array.isArray(dbData.reports)) {
-          for (const rep of dbData.reports) {
-            const pat = rep.patient || {};
-            const key = rep.reportNumber || rep.id || pat.barcode || pat.fullName;
-            if (key && !seenIds.has(key)) {
-              seenIds.add(key);
-              const testNames: string[] = [];
-              if (Array.isArray(rep.profiles)) {
-                rep.profiles.forEach((p: any) => {
-                  if (p.titleAr || p.titleEn) testNames.push(p.titleAr || p.titleEn);
-                });
-              }
-              if (rep.packageApplied?.titleAr) {
-                testNames.unshift(`باقة: ${rep.packageApplied.titleAr}`);
-              }
-              cases.push({
-                id: rep.id || `rep-${cases.length + 1}`,
-                labNumber: rep.reportNumber || pat.labNumber || `RT-${cases.length + 1}`,
-                barcode: pat.barcode || rep.barcode || '',
-                fullName: pat.fullName || 'مريض غير مسمى',
-                age: pat.age || 30,
-                gender: pat.gender || 'male',
-                phone: pat.phone || '',
-                referringDoctorName: pat.referringDoctorName || 'كشف معمل',
-                sampleDate: pat.sampleDate || rep.createdAt || new Date().toISOString(),
-                totalCost: pat.totalCost || rep.totalCost,
-                paidAmount: pat.paidAmount || rep.paidAmount,
-                paymentStatus: rep.paymentStatus || (rep.financialClearance === 'CLEARED' ? 'paid' : 'pending'),
-                invoiceNumber: rep.invoiceNumber || pat.invoiceNumber,
-                testNames: testNames.length > 0 ? testNames : ['تحاليل مخبرية']
+      }
+
+      // Local fallback if remote failed
+      if (!dbData) {
+        try {
+          const localRes = await fetch(`./rt-database-sync.json?_=${Date.now()}`);
+          if (localRes.ok) dbData = await localRes.json();
+        } catch {}
+      }
+
+      if (dbData && Array.isArray(dbData.reports)) {
+        for (const rep of dbData.reports) {
+          const pat = rep.patient || {};
+          const key = rep.reportNumber || rep.id || pat.barcode || pat.fullName;
+          if (key && !seenIds.has(key)) {
+            seenIds.add(key);
+            const testNames: string[] = [];
+            if (Array.isArray(rep.profiles)) {
+              rep.profiles.forEach((p: any) => {
+                if (p.titleAr || p.titleEn) testNames.push(p.titleAr || p.titleEn);
               });
             }
+            if (rep.packageApplied?.titleAr) {
+              testNames.unshift(`باقة: ${rep.packageApplied.titleAr}`);
+            }
+            const safeLab = rep.reportNumber || pat.labNumber || `RT-${cases.length + 1}`;
+            cases.push({
+              id: rep.id || `rep-${cases.length + 1}`,
+              labNumber: safeLab,
+              barcode: pat.barcode || rep.barcode || '',
+              fullName: pat.fullName || 'مريض غير مسمى',
+              age: pat.age || 30,
+              gender: pat.gender || 'male',
+              phone: pat.phone || '',
+              referringDoctorName: pat.referringDoctorName || 'كشف معمل',
+              sampleDate: pat.sampleDate || rep.createdAt || new Date().toISOString(),
+              totalCost: pat.totalCost || rep.totalCost,
+              paidAmount: pat.paidAmount || rep.paidAmount,
+              paymentStatus: rep.paymentStatus || (rep.financialClearance === 'CLEARED' ? 'paid' : 'pending'),
+              invoiceNumber: rep.invoiceNumber || pat.invoiceNumber || `INV-${String(safeLab).replace('RT-', '')}`,
+              testNames: testNames.length > 0 ? testNames : ['تحاليل مخبرية']
+            });
           }
         }
       }
@@ -190,64 +215,88 @@ export async function fetchDiagnosticCases(
       console.warn('Database sync fetch note:', e);
     }
 
-    // 2. Also check public/rt-cases-sync.json
+    // 2. Also check public/rt-cases-sync.json (Priority queue for new incoming bookings)
     try {
-      const syncRes = await fetch(
-        `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/public/rt-cases-sync.json`,
-        {
-          headers: creds.token ? {
-            Authorization: `token ${creds.token}`,
-            Accept: 'application/vnd.github.v3+json'
-          } : {
-            Accept: 'application/vnd.github.v3+json'
+      let syncParsed: any = null;
+      const rawCasesRes = await fetch(
+        `https://raw.githubusercontent.com/${creds.owner}/${creds.repo}/main/public/rt-cases-sync.json?_=${Date.now()}`,
+        { headers: creds.token ? { Authorization: `token ${creds.token}` } : {}, cache: 'no-store' }
+      );
+      if (rawCasesRes.ok) {
+        syncParsed = await rawCasesRes.json();
+      } else {
+        const syncRes = await fetch(
+          `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/public/rt-cases-sync.json`,
+          {
+            headers: creds.token ? {
+              Authorization: `token ${creds.token}`,
+              Accept: 'application/vnd.github.v3+json'
+            } : {
+              Accept: 'application/vnd.github.v3+json'
+            }
+          }
+        );
+
+        if (syncRes.ok) {
+          const syncData = await syncRes.json();
+          const contentStr = syncData.content ? decodeBase64Utf8(syncData.content) : '';
+          syncParsed = contentStr ? JSON.parse(contentStr) : null;
+          if (!syncParsed && syncData.download_url) {
+            const dlRes = await fetch(`${syncData.download_url}?_=${Date.now()}`);
+            if (dlRes.ok) syncParsed = await dlRes.json();
           }
         }
-      );
+      }
 
-      if (syncRes.ok) {
-        const syncData = await syncRes.json();
-        const contentStr = syncData.content ? decodeBase64Utf8(syncData.content) : '';
-        const parsed = contentStr ? JSON.parse(contentStr) : null;
-        if (Array.isArray(parsed)) {
-          for (const item of parsed) {
-            const key = item.reportNumber || item.labNumber || item.barcode;
-            if (key && !seenIds.has(key)) {
-              seenIds.add(key);
-              const isHome = item.isHomeVisit ?? (item.patient && item.patient.isHomeVisit) ?? (item.bookingType === 'home_visit' || (item.patient && item.patient.bookingType === 'home_visit'));
-              const bType = item.bookingType || (item.patient && item.patient.bookingType) || (isHome ? 'home_visit' : 'branch');
-              const vFee = item.visitFee ?? (item.patient && item.patient.visitFee) ?? 0;
-              const vAddr = item.visitAddress || item.homeAddress || (item.patient && item.patient.homeAddress) || '';
-              cases.unshift({
-                id: item.id || `diag-${cases.length + 1}`,
-                labNumber: item.reportNumber || item.labNumber || `RT-${cases.length + 1}`,
-                barcode: item.barcode || (item.patient && item.patient.barcode) || '',
-                fullName: item.patientName || (item.patient && item.patient.fullName) || 'مريض غير مسمى',
-                age: (item.patient && item.patient.age) || item.age || 35,
-                gender: (item.patient && item.patient.gender) || item.gender || 'male',
-                phone: (item.patient && item.patient.phone) || item.phone || '',
-                referringDoctorName: (item.patient && item.patient.referringDoctorName) || item.referringDoctor || 'فحص ذاتي / كشف معمل',
-                sampleDate: (item.patient && item.patient.sampleDate) || item.createdAt || new Date().toISOString(),
-                totalCost: (item.patient && item.patient.totalCost) || item.totalCost || item.netAmount,
-                paidAmount: item.paidAmount,
-                paymentStatus: item.paymentStatus,
-                invoiceNumber: item.invoiceNumber,
-                testNames: Array.isArray(item.tests)
-                  ? item.tests.map((t: InvoiceTestItem | { nameAr?: string; titleAr?: string; name?: string }) => t.nameAr || (t as { titleAr?: string }).titleAr || (t as { name?: string }).name || 'فحص')
-                  : (item.testNames || ['تحاليل مخبرية']),
-                tests: Array.isArray(item.tests) && item.tests.length > 0 ? item.tests : undefined,
-                bookingType: bType,
-                isHomeVisit: isHome,
-                visitFee: vFee,
-                visitAddress: vAddr,
-                homeAddress: vAddr,
-                deliveryNotes: item.deliveryNotes || (item.patient && item.patient.deliveryNotes),
-                visitSpecialist: item.visitSpecialist || (item.patient && item.patient.visitSpecialist),
-                discount: item.discount ?? (item.patient && item.patient.discountApplied) ?? 0,
-                testsSubtotal: item.testsSubtotal ?? (item.patient && item.patient.testsSubtotal) ?? item.netAmount,
-                remainingAmount: item.remainingAmount ?? (item.patient && item.patient.remainingAmount) ?? 0,
-                paymentMethod: item.paymentMethod || (item.patient && item.patient.paymentMethod) || 'cash'
-              });
-            }
+      // Local fallback for cases if remote failed
+      if (!syncParsed) {
+        try {
+          const locRes = await fetch(`./rt-cases-sync.json?_=${Date.now()}`);
+          if (locRes.ok) syncParsed = await locRes.json();
+        } catch {}
+      }
+
+      if (Array.isArray(syncParsed)) {
+        for (const item of syncParsed) {
+          const key = item.reportNumber || item.labNumber || item.barcode || item.id;
+          if (key && !seenIds.has(key)) {
+            seenIds.add(key);
+            const isHome = item.isHomeVisit ?? (item.patient && item.patient.isHomeVisit) ?? (item.bookingType === 'home_visit' || (item.patient && item.patient.bookingType === 'home_visit'));
+            const bType = item.bookingType || (item.patient && item.patient.bookingType) || (isHome ? 'home_visit' : 'branch');
+            const vFee = item.visitFee ?? (item.patient && item.patient.visitFee) ?? 0;
+            const vAddr = item.visitAddress || item.homeAddress || (item.patient && item.patient.homeAddress) || '';
+            const safeLab = item.reportNumber || item.labNumber || (item.barcode ? `RT-${String(item.barcode).replace('RT-', '')}` : `RT-${cases.length + 1}`);
+            const safeInv = item.invoiceNumber || (item.patient && item.patient.invoiceNumber) || `INV-${String(safeLab).replace('RT-', '')}`;
+            cases.unshift({
+              id: item.id || `diag-${cases.length + 1}`,
+              labNumber: safeLab,
+              barcode: item.barcode || (item.patient && item.patient.barcode) || '',
+              fullName: item.patientName || (item.patient && item.patient.fullName) || item.fullName || 'مريض غير مسمى',
+              age: (item.patient && item.patient.age) || item.age || 35,
+              gender: (item.patient && item.patient.gender) || item.gender || 'male',
+              phone: (item.patient && item.patient.phone) || item.phone || '',
+              referringDoctorName: (item.patient && item.patient.referringDoctorName) || item.referringDoctor || 'فحص ذاتي / كشف معمل',
+              sampleDate: (item.patient && item.patient.sampleDate) || item.createdAt || new Date().toISOString(),
+              totalCost: (item.patient && item.patient.totalCost) || item.totalCost || item.netAmount,
+              paidAmount: item.paidAmount,
+              paymentStatus: item.paymentStatus,
+              invoiceNumber: safeInv,
+              testNames: Array.isArray(item.tests)
+                ? item.tests.map((t: InvoiceTestItem | { nameAr?: string; titleAr?: string; name?: string }) => t.nameAr || (t as { titleAr?: string }).titleAr || (t as { name?: string }).name || 'فحص')
+                : (item.testNames || ['تحاليل مخبرية']),
+              tests: Array.isArray(item.tests) && item.tests.length > 0 ? item.tests : undefined,
+              bookingType: bType,
+              isHomeVisit: isHome,
+              visitFee: vFee,
+              visitAddress: vAddr,
+              homeAddress: vAddr,
+              deliveryNotes: item.deliveryNotes || (item.patient && item.patient.deliveryNotes),
+              visitSpecialist: item.visitSpecialist || (item.patient && item.patient.visitSpecialist),
+              discount: item.discount ?? (item.patient && item.patient.discountApplied) ?? 0,
+              testsSubtotal: item.testsSubtotal ?? (item.patient && item.patient.testsSubtotal) ?? item.netAmount,
+              remainingAmount: item.remainingAmount ?? (item.patient && item.patient.remainingAmount) ?? 0,
+              paymentMethod: item.paymentMethod || (item.patient && item.patient.paymentMethod) || 'cash'
+            });
           }
         }
       }
@@ -884,8 +933,8 @@ export function mergeCasesQueueIntoStore(storeData: any, rawCases: any[]) {
 
   rawCases.forEach((c: any) => {
     const code = c.barcode || (c.patient && c.patient.barcode) || '';
-    const num = c.reportNumber || c.labNumber || c.id || '';
-    const invNum = c.invoiceNumber || (c.patient && c.patient.invoiceNumber) || `INV-${num.replace('RT-', '')}`;
+    const num = String(c.reportNumber || c.labNumber || c.id || '');
+    const invNum = c.invoiceNumber || (c.patient && c.patient.invoiceNumber) || (num ? `INV-${num.replace('RT-', '')}` : `INV-${Date.now()}`);
 
     const alreadyInReports =
       (code && existingRepCodes.has(code)) ||

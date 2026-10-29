@@ -1144,10 +1144,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                       const disc = c.discount || 0;
                       const testsSub = c.testsSubtotal || net;
 
+                      const safeCaseLab = c.labNumber || c.reportNumber || (c.barcode ? `RT-${String(c.barcode).replace('RT-', '')}` : `RT-${Date.now()}`);
                       const rep = convertIncomeRecordToDiagnosticReport({
                         id: c.id,
-                        invoiceNumber: c.invoiceNumber || `INV-${c.labNumber.replace('RT-', '')}`,
-                        labNumber: c.labNumber,
+                        invoiceNumber: c.invoiceNumber || `INV-${String(safeCaseLab).replace('RT-', '')}`,
+                        labNumber: safeCaseLab,
                         barcode: c.barcode,
                         patientName: c.fullName,
                         patientAge: c.age || 30,
@@ -1189,10 +1190,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                   let addedInvoices = 0;
                   const newInvoices: IncomeRecord[] = [];
                   casesRes.cases!.forEach(c => {
-                    const invNumber = c.invoiceNumber || `INV-${c.labNumber.replace('RT-', '')}`;
-                    if (!existingCodes.has(invNumber) && !existingCodes.has(c.labNumber)) {
+                    const safeCaseLab = c.labNumber || c.reportNumber || (c.barcode ? `RT-${String(c.barcode).replace('RT-', '')}` : `RT-${Date.now()}`);
+                    const invNumber = c.invoiceNumber || `INV-${String(safeCaseLab).replace('RT-', '')}`;
+                    if (!existingCodes.has(invNumber) && !existingCodes.has(safeCaseLab)) {
                       existingCodes.add(invNumber);
-                      existingCodes.add(c.labNumber);
+                      existingCodes.add(safeCaseLab);
                       addedInvoices++;
                       const net = c.totalCost || 200;
                       const paid = c.paidAmount !== undefined ? c.paidAmount : (c.paymentStatus === 'paid' ? net : 0);
@@ -3343,7 +3345,8 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
         const existingInvNumbers = new Set(mergedInvoices.map(i => i.invoiceNumber || i.labNumber));
 
         diagCasesRes.cases.forEach((c: any) => {
-          const invNum = c.invoiceNumber || `INV-${c.labNumber.replace('RT-', '')}`;
+          const safeCaseLab = c.labNumber || c.reportNumber || (c.barcode ? `RT-${String(c.barcode).replace('RT-', '')}` : `RT-${Date.now()}`);
+          const invNum = c.invoiceNumber || `INV-${String(safeCaseLab).replace('RT-', '')}`;
           const net = c.totalCost || 0;
           const paid = c.paidAmount !== undefined ? c.paidAmount : (c.paymentStatus === 'paid' ? net : 0);
           const isHome = c.isHomeVisit ?? (c.bookingType === 'home_visit' || (c.visitFee && c.visitFee > 0));
@@ -3367,13 +3370,12 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
 
           const alreadyRegistered =
             (c.barcode && existingBarcodes.has(c.barcode)) ||
-            (c.labNumber && existingNumbers.has(c.labNumber)) ||
-            (!c.barcode && !c.labNumber);
+            (safeCaseLab && existingNumbers.has(safeCaseLab));
           if (!alreadyRegistered) {
             const newRep = convertIncomeRecordToDiagnosticReport({
               id: c.id,
               invoiceNumber: invNum,
-              labNumber: c.labNumber,
+              labNumber: safeCaseLab,
               barcode: c.barcode,
               patientName: c.fullName,
               patientAge: c.age || 30,
@@ -3405,10 +3407,10 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
             }) as unknown as LabReport;
             mergedReports = [newRep, ...mergedReports];
             if (c.barcode) existingBarcodes.add(c.barcode);
-            if (c.labNumber) existingNumbers.add(c.labNumber);
+            if (safeCaseLab) existingNumbers.add(safeCaseLab);
           }
 
-          if (!existingInvNumbers.has(invNum) && !existingInvNumbers.has(c.labNumber)) {
+          if (!existingInvNumbers.has(invNum) && !existingInvNumbers.has(safeCaseLab)) {
             const newInv: IncomeRecord = {
               id: `inv-${c.id || c.labNumber}-${Date.now()}`,
               invoiceNumber: invNum,

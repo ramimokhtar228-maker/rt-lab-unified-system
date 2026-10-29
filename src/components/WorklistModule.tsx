@@ -76,7 +76,7 @@ export const WorklistModule: React.FC = () => {
       const matchesCategory =
         categoryFilter === 'all'
           ? true
-          : r.profiles.some(p => p.category.toLowerCase().includes(categoryFilter.toLowerCase()));
+          : Array.isArray(r.profiles) && r.profiles.some(p => (p.category || '').toLowerCase().includes(categoryFilter.toLowerCase()));
 
       return matchesSearch && matchesStatus && matchesCategory;
     });

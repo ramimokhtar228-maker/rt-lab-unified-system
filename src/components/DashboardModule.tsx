@@ -141,12 +141,17 @@ export const DashboardModule: React.FC = () => {
   // Filtered Today's Patients for quick interactive table
   const displayedPatients = useMemo(() => {
     return reports.filter(rep => {
-      const matchSearch =
-        rep.patient.fullName.includes(searchTerm) ||
-        rep.reportNumber.includes(searchTerm) ||
-        rep.patient.phone.includes(searchTerm);
-      return matchSearch;
-    }).slice(0, 15);
+      const name = rep.patient?.fullName || '';
+      const num = rep.reportNumber || rep.patient?.labNumber || '';
+      const phone = rep.patient?.phone || '';
+      const barcode = rep.patient?.barcode || '';
+      return (
+        name.includes(searchTerm) ||
+        num.includes(searchTerm) ||
+        phone.includes(searchTerm) ||
+        barcode.includes(searchTerm)
+      );
+    });
   }, [reports, searchTerm]);
 
   const handleManualSyncNow = async () => {

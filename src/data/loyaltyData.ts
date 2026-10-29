@@ -1,6 +1,12 @@
 import { PatientLoyaltyProfile } from '../types/lab';
+import seedDatabase from '../../public/rt-database-sync.json';
 
-export const INITIAL_LOYALTY_PROFILES: PatientLoyaltyProfile[] = [];
+const SEED_LOYALTY = (seedDatabase && Array.isArray((seedDatabase as any).loyaltyProfiles) && (seedDatabase as any).loyaltyProfiles.length > 0)
+  ? ((seedDatabase as any).loyaltyProfiles as PatientLoyaltyProfile[])
+  : [];
+
+export const INITIAL_LOYALTY_PROFILES: PatientLoyaltyProfile[] = SEED_LOYALTY;
+export const INITIAL_LOYALTY_DATA: PatientLoyaltyProfile[] = SEED_LOYALTY;
 
 export const TIER_BENEFITS = {
   Silver: {

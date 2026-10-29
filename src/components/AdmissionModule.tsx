@@ -380,10 +380,7 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
 
     setCreatedLabNum(createdReport.reportNumber);
     setIsSubmitted(true);
-
-    if (onSuccess) {
-      onSuccess();
-    }
+    // Modal stays open to show confirmation screen and WhatsApp button
   };
 
   const handleSendWhatsApp = () => {
