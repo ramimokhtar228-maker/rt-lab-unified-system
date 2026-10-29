@@ -611,18 +611,39 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
       flag: ''
     };
 
-    const updatedProfiles = report.profiles.map(prof => {
-      if (prof.id === activeProfileTab) {
-        return {
-          ...prof,
-          parameters: [...prof.parameters, paramWithId]
-        };
-      }
-      return prof;
-    });
+      if (report.profiles.length === 0) {
+    const newProfileId = `prof-${Date.now()}`;
+    const newProfile: TestProfile = {
+      id: newProfileId,
+      profileCode: 'CUSTOM',
+      titleEn: 'New Diagnostic Profile',
+      titleAr: 'بروفايل تشخيصي جديد',
+      category: 'General',
+      sampleType: 'Serum',
+      parameters: [paramWithId]
+    };
+    onUpdateReport({ ...report, profiles: [newProfile], updatedAt: new Date().toISOString() });
+    setActiveProfileTab(newProfileId);
+    return;
+  }
 
-    onUpdateReport({ ...report, profiles: updatedProfiles, updatedAt: new Date().toISOString() });
-  };
+  // التبويب النشط قد يشير لبروفايل تقرير آخر — نرجع لأول بروفايل متاح
+  const targetProfileId = report.profiles.some(prof => prof.id === activeProfileTab)
+    ? activeProfileTab
+    : report.profiles[0].id;
+  const updatedProfiles = report.profiles.map(prof => {
+    if (prof.id === targetProfileId) {
+      return {
+        ...prof,
+        parameters: [...prof.parameters, paramWithId]
+      };
+    }
+    return prof;
+  });
+
+  onUpdateReport({ ...report, profiles: updatedProfiles, updatedAt: new Date().toISOString() });
+  setActiveProfileTab(targetProfileId);
+};
 
   // Move parameter up / down inside profile
   const handleMoveParameter = (profileId: string, paramIndex: number, direction: 'up' | 'down') => {
