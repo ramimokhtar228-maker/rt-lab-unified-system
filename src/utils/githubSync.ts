@@ -821,7 +821,7 @@ export async function syncInvoiceToDiagnostic(
         // Dedicated incoming orders queue for immediate instant sync
         try {
           const incomingQueueStr = localStorage.getItem('rt_lab_incoming_orders_queue');
-          let incomingQueue = [];
+          let incomingQueue: any[] = [];
           if (incomingQueueStr) {
             try { incomingQueue = JSON.parse(incomingQueueStr); } catch {}
           }
@@ -1377,7 +1377,7 @@ export async function pushFullStoreToGitHub(
         await new Promise(r => setTimeout(r, 600 * (retryCount + 1)));
         let freshCloud: Record<string, any> | null = null;
         try {
-          const freshRes = await pullFullStoreFromGitHub(creds, { force: true });
+          const freshRes = await pullFullStoreFromGitHub(creds as any, { force: true });
           if (freshRes.success && freshRes.data) {
             freshCloud = freshRes.data;
           }

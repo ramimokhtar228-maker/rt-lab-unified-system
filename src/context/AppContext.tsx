@@ -63,7 +63,7 @@ import { INITIAL_INDIVIDUAL_TESTS } from '../data/individualTestsData';
 import { INITIAL_INSTRUMENTS, SAMPLE_INSTRUMENT_TRANSMISSIONS } from '../data/instrumentsData';
 import { realtimeSyncManager } from '../utils/realtimeMultiDeviceSync';
 import { pushFullStoreToGitHub, pullFullStoreFromGitHub, syncInvoiceToDiagnostic, fetchDiagnosticCases, convertIncomeRecordToDiagnosticReport } from '../utils/githubSync';
-import { resolveUniqueLabIdentity, dedupeReports, dedupeInvoices } from '../utils/labNumbering';
+import { resolveUniqueLabIdentity, dedupeReports, dedupeInvoices, unionReports, unionInvoices } from '../utils/labNumbering';
 import { notifyReportApproved } from '../utils/whatsappNotify';
 import { playSyncChime } from '../utils/criticalAlerts';
 import { registerReportDeletion, registerInvoiceDeletion, importDeletionTombstones, filterDeletedReports, filterDeletedInvoices } from '../utils/deletionRegistry';
@@ -1144,7 +1144,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                       const disc = c.discount || 0;
                       const testsSub = c.testsSubtotal || net;
 
-                      const safeCaseLab = c.labNumber || c.reportNumber || (c.barcode ? `RT-${String(c.barcode).replace('RT-', '')}` : `RT-${Date.now()}`);
+                      const safeCaseLab = c.labNumber || (c as any).reportNumber || (c.barcode ? `RT-${String(c.barcode).replace('RT-', '')}` : `RT-${Date.now()}`);
                       const rep = convertIncomeRecordToDiagnosticReport({
                         id: c.id,
                         invoiceNumber: c.invoiceNumber || `INV-${String(safeCaseLab).replace('RT-', '')}`,
@@ -1190,7 +1190,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                   let addedInvoices = 0;
                   const newInvoices: IncomeRecord[] = [];
                   casesRes.cases!.forEach(c => {
-                    const safeCaseLab = c.labNumber || c.reportNumber || (c.barcode ? `RT-${String(c.barcode).replace('RT-', '')}` : `RT-${Date.now()}`);
+                    const safeCaseLab = c.labNumber || (c as any).reportNumber || (c.barcode ? `RT-${String(c.barcode).replace('RT-', '')}` : `RT-${Date.now()}`);
                     const invNumber = c.invoiceNumber || `INV-${String(safeCaseLab).replace('RT-', '')}`;
                     if (!existingCodes.has(invNumber) && !existingCodes.has(safeCaseLab)) {
                       existingCodes.add(invNumber);

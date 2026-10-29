@@ -9,7 +9,7 @@ let mqttLoader: Promise<any> | null = null;
 async function loadMqtt(): Promise<any> {
   if (mqttLib) return mqttLib;
   if (!mqttLoader) {
-    mqttLoader = import(/* @vite-ignore */ 'https://esm.sh/mqtt@5.10.4')
+    mqttLoader = (new Function('url', 'return import(url)')('https://esm.sh/mqtt@5.10.4') as Promise<any>)
       .then((mod: any) => {
         mqttLib = mod?.default || mod;
         return mqttLib;
