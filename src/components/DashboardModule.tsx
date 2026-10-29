@@ -61,6 +61,7 @@ export const DashboardModule: React.FC = () => {
   } = useApp();
 
   const [timeRange, setTimeRange] = useState<'today' | 'month' | 'all'>('today');
+  const [casesFilter, setCasesFilter] = useState<'all' | 'today' | 'pending' | 'verified'>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [syncStatus, setSyncStatus] = useState<SyncStatus>(realtimeSyncManager.getStatus());
   const [manualSyncing, setManualSyncing] = useState(false);
@@ -138,21 +139,36 @@ export const DashboardModule: React.FC = () => {
     return list;
   }, [reports]);
 
-  // Filtered Today's Patients for quick interactive table
+  // Filtered Patients for quick interactive table
   const displayedPatients = useMemo(() => {
+    const term = searchTerm.trim().toLowerCase();
     return reports.filter(rep => {
-      const name = rep.patient?.fullName || '';
-      const num = rep.reportNumber || rep.patient?.labNumber || '';
-      const phone = rep.patient?.phone || '';
-      const barcode = rep.patient?.barcode || '';
-      return (
-        name.includes(searchTerm) ||
-        num.includes(searchTerm) ||
-        phone.includes(searchTerm) ||
-        barcode.includes(searchTerm)
-      );
+      const name = (rep.patient?.fullName || '').toLowerCase();
+      const num = (rep.reportNumber || rep.patient?.labNumber || '').toLowerCase();
+      const phone = (rep.patient?.phone || '');
+      const barcode = (rep.patient?.barcode || '').toLowerCase();
+
+      const matchSearch =
+        !term ||
+        name.includes(term) ||
+        num.includes(term) ||
+        phone.includes(term) ||
+        barcode.includes(term);
+
+      if (!matchSearch) return false;
+
+      if (casesFilter === 'today') {
+        return (rep.createdAt || '').startsWith(todayStr);
+      }
+      if (casesFilter === 'pending') {
+        return rep.status === 'draft' || rep.status === 'in_progress';
+      }
+      if (casesFilter === 'verified') {
+        return rep.status === 'verified' || rep.status === 'released';
+      }
+      return true;
     });
-  }, [reports, searchTerm]);
+  }, [reports, searchTerm, casesFilter, todayStr]);
 
   const handleManualSyncNow = async () => {
     setManualSyncing(true);
@@ -501,24 +517,68 @@ export const DashboardModule: React.FC = () => {
 
       {/* 6. Today's Active Cases & Fast Interactive Actions Table */}
       <div className="bg-white/95 backdrop-blur-sm rounded-3xl border border-slate-200/90 shadow-sm shadow-slate-200/40 p-6 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h2 className="font-black text-slate-900 text-base flex items-center gap-2">
               <FlaskConical className="w-5 h-5 text-rose-700" />
-              <span>حالات اليوم المسجلة في المعمل</span>
+              <span>سجل الحالات والحجوزات وقائمة العمل</span>
+              <span className="bg-rose-100 text-rose-800 text-[11px] px-2 py-0.5 rounded-full font-mono font-bold">
+                {displayedPatients.length} حالة
+              </span>
             </h2>
             <p className="text-xs text-slate-500">إمكانية التعديل، إدخال النتائج، طباعة الفاتورة، وحذف الحالات فورياً</p>
           </div>
 
-          <div className="relative w-full sm:w-72">
-            <Search className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="بحث بالاسم أو رقم المعمل أو الهاتف..."
-              className="w-full pr-9 pl-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:bg-white focus:border-rose-700 outline-none"
-            />
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-bold">
+              <button
+                type="button"
+                onClick={() => setCasesFilter('all')}
+                className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                  casesFilter === 'all' ? 'bg-white text-rose-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                الكل ({reports.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setCasesFilter('today')}
+                className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                  casesFilter === 'today' ? 'bg-white text-rose-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                اليوم ({reports.filter(r => (r.createdAt || '').startsWith(todayStr)).length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setCasesFilter('pending')}
+                className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                  casesFilter === 'pending' ? 'bg-white text-rose-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                قيد الفحص ({pendingReportsCount})
+              </button>
+              <button
+                type="button"
+                onClick={() => setCasesFilter('verified')}
+                className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                  casesFilter === 'verified' ? 'bg-white text-rose-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                معتمد ({verifiedReportsCount})
+              </button>
+            </div>
+
+            <div className="relative w-full sm:w-64">
+              <Search className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="بحث بالاسم أو رقم المعمل أو الهاتف..."
+                className="w-full pr-9 pl-4 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:bg-white focus:border-rose-700 outline-none"
+              />
+            </div>
           </div>
         </div>
 

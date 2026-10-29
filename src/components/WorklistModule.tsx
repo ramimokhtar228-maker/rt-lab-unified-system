@@ -59,12 +59,19 @@ export const WorklistModule: React.FC = () => {
   };
 
   const filteredReports = useMemo(() => {
+    const term = searchTerm.trim().toLowerCase();
     return reports.filter(r => {
+      const fullName = (r.patient?.fullName || '').toLowerCase();
+      const reportNum = (r.reportNumber || r.patient?.labNumber || '').toLowerCase();
+      const barcode = (r.patient?.barcode || '').toLowerCase();
+      const phone = (r.patient?.phone || '');
+
       const matchesSearch =
-        r.patient.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        r.reportNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        r.patient.barcode.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        r.patient.phone.includes(searchTerm);
+        !term ||
+        fullName.includes(term) ||
+        reportNum.includes(term) ||
+        barcode.includes(term) ||
+        phone.includes(term);
 
       const matchesStatus =
         statusFilter === 'all'
