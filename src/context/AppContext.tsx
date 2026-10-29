@@ -2073,25 +2073,37 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const createReportFromAdmission = useCallback((patient: Patient, selectedTests: InvoiceTestItem[], packageApplied?: any): LabReport => {
     const today = new Date().toISOString().split('T')[0];
 
-    // Never reuse a lab number / barcode that is already registered: if another device took it
-    // (or the sequence restarted after a deletion) both cases would collapse into one on sync.
+    // Guarantee unique lab identity
     const caseIdentity = resolveUniqueLabIdentity(reports, patient.labNumber, patient.barcode);
-    patient = { ...patient, labNumber: caseIdentity.labNumber, barcode: caseIdentity.barcode };
+    const resolvedLabNumber = caseIdentity.labNumber || `RT-${new Date().getFullYear()}-${Date.now().toString().slice(-4)}`;
+    const resolvedBarcode = caseIdentity.barcode || `RT-${Math.floor(10000 + Math.random() * 90000)}`;
+
+    patient = {
+      ...patient,
+      labNumber: resolvedLabNumber,
+      barcode: resolvedBarcode,
+      fullName: (patient.fullName || '').trim() || 'مريض مسجل'
+    };
+
     const generatedProfiles: TestProfile[] = [];
 
-    // 1. If a Package was applied: Collect ALL its tests into ONE unified comprehensive profile (لا يفرد في صفحات منفصلة)
+    // 1. If a Package was applied: Collect ALL its tests into ONE unified comprehensive profile
     if (packageApplied) {
       const packageParams: TestParameter[] = [];
 
       // A) All included profiles parameters
       (packageApplied.includedProfiles || []).forEach((pCode: string) => {
-        const template = LAB_CATALOG.find(c => c.code.toUpperCase() === pCode.toUpperCase());
-        if (template) {
+        if (!pCode) return;
+        const template = (diagnosticProfiles || []).find(c => c.code && c.code.toUpperCase() === pCode.toUpperCase())
+                      || LAB_CATALOG.find(c => c.code && c.code.toUpperCase() === pCode.toUpperCase());
+        if (template && Array.isArray(template.parameters)) {
           template.parameters.forEach((p, idx) => {
-            if (!packageParams.some(ep => ep.name.toLowerCase() === p.name.toLowerCase())) {
+            const pName = p?.name ? p.name.trim() : `فحص-${idx + 1}`;
+            if (!packageParams.some(ep => ep.name && ep.name.toLowerCase() === pName.toLowerCase())) {
               packageParams.push({
                 ...p,
-                id: `param-${pCode}-${idx}-${Date.now()}-${Math.random().toString(36).substr(2, 3)}`,
+                name: pName,
+                id: `param-${pCode}-${idx}-${Date.now()}-${Math.random().toString(36).substring(2, 5)}`,
                 result: '',
                 flag: 'NORMAL',
                 notes: p.notes || template.titleAr
@@ -2103,82 +2115,95 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
       // B) All complementary individual tests
       (packageApplied.includedIndividualTestCodes || []).forEach((tCode: string, idx: number) => {
-        const indTest = INITIAL_INDIVIDUAL_TESTS.find(t => t.code.toUpperCase() === tCode.toUpperCase())
-                     || testCatalog.find(t => t.code.toUpperCase() === tCode.toUpperCase());
-        if (indTest && !packageParams.some(ep => ep.name.toLowerCase().includes(indTest.nameEn.toLowerCase()))) {
-          packageParams.push({
-            id: `p-pkg-${idx}-${Date.now()}-${Math.random().toString(36).substr(2, 3)}`,
-            name: `${indTest.nameAr} (${indTest.nameEn})`,
-            result: '',
-            unit: indTest.unit || '',
-            minNormal: indTest.minNormal,
-            maxNormal: indTest.maxNormal,
-            textReference: indTest.textReference || 'Normal',
-            flag: 'NORMAL',
-            method: indTest.method || 'Automated Clinical Assay',
-            notes: 'فحوصات وفيتامينات إضافية للباقة'
-          });
+        if (!tCode) return;
+        const indTest = INITIAL_INDIVIDUAL_TESTS.find(t => t.code && t.code.toUpperCase() === tCode.toUpperCase())
+                     || testCatalog.find(t => t.code && t.code.toUpperCase() === tCode.toUpperCase());
+        if (indTest) {
+          const testNameAr = indTest.nameAr || indTest.nameEn || tCode;
+          const testNameEn = indTest.nameEn || indTest.nameAr || tCode;
+          const checkTarget = (testNameEn || testNameAr).toLowerCase();
+          if (!packageParams.some(ep => ep.name && ep.name.toLowerCase().includes(checkTarget))) {
+            packageParams.push({
+              id: `p-pkg-${idx}-${Date.now()}-${Math.random().toString(36).substring(2, 5)}`,
+              name: `${testNameAr} (${testNameEn})`,
+              result: '',
+              unit: indTest.unit || '',
+              minNormal: indTest.minNormal,
+              maxNormal: indTest.maxNormal,
+              textReference: indTest.textReference || 'Normal',
+              flag: 'NORMAL',
+              method: indTest.method || 'Automated Clinical Assay',
+              notes: 'فحوصات وفيتامينات إضافية للباقة'
+            });
+          }
         }
       });
 
       generatedProfiles.push({
         id: `prof-pkg-${Date.now()}`,
-        profileCode: packageApplied.code,
-        titleAr: packageApplied.titleAr,
-        titleEn: packageApplied.titleEn,
+        profileCode: packageApplied.code || 'PKG',
+        titleAr: packageApplied.titleAr || 'باقة فحوصات شاملة',
+        titleEn: packageApplied.titleEn || 'Comprehensive Package',
         category: 'باقة فحوصات شاملة',
-        sampleType: packageApplied.sampleTypes?.join(' + ') || 'Serum / EDTA / Urine',
+        sampleType: Array.isArray(packageApplied.sampleTypes) ? packageApplied.sampleTypes.join(' + ') : 'Serum / EDTA / Urine',
         interpretation: 'جميع تحاليل وفحوصات الباقة الشاملة تم تقييمها وتدقيقها طبقاً للمعدلات المرجعية المعتمدة دولياً.',
         parameters: packageParams
       });
     }
 
     // 2. Any additional tests selected outside the package
-    selectedTests.forEach(test => {
-      const testCode = test.code.toUpperCase();
+    (selectedTests || []).forEach(test => {
+      if (!test) return;
+      const testCode = String(test.code || '').trim().toUpperCase();
+      if (!testCode) return;
+
       // If a package was applied, skip tests already included in the package
       if (packageApplied) {
-        const inPkgProfiles = (packageApplied.includedProfiles || []).map((c: string) => c.toUpperCase());
-        const inPkgInd = (packageApplied.includedIndividualTestCodes || []).map((c: string) => c.toUpperCase());
+        const inPkgProfiles = (packageApplied.includedProfiles || []).map((c: string) => String(c || '').toUpperCase());
+        const inPkgInd = (packageApplied.includedIndividualTestCodes || []).map((c: string) => String(c || '').toUpperCase());
         if (inPkgProfiles.includes(testCode) || inPkgInd.includes(testCode)) return;
       }
-      if (generatedProfiles.some(gp => gp.profileCode.toUpperCase() === testCode)) return;
+      if (generatedProfiles.some(gp => gp.profileCode && gp.profileCode.toUpperCase() === testCode)) return;
 
-      const catalogTemplate = LAB_CATALOG.find(c => 
-        c.code.toUpperCase() === testCode || 
-        c.titleEn.toLowerCase().includes(test.code.toLowerCase())
+      const catalogTemplate = (diagnosticProfiles || []).find(c => 
+        c.code && c.code.toUpperCase() === testCode
+      ) || LAB_CATALOG.find(c => 
+        (c.code && c.code.toUpperCase() === testCode) || 
+        (c.titleEn && testCode && c.titleEn.toLowerCase().includes(testCode.toLowerCase()))
       );
 
-      if (catalogTemplate) {
+      if (catalogTemplate && Array.isArray(catalogTemplate.parameters)) {
         generatedProfiles.push({
-          id: `prof-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
-          profileCode: catalogTemplate.code,
-          titleEn: catalogTemplate.titleEn,
-          titleAr: catalogTemplate.titleAr,
-          category: catalogTemplate.category,
-          sampleType: catalogTemplate.sampleType,
+          id: `prof-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+          profileCode: catalogTemplate.code || testCode,
+          titleEn: catalogTemplate.titleEn || test.nameEn || testCode,
+          titleAr: catalogTemplate.titleAr || test.nameAr || testCode,
+          category: catalogTemplate.category || 'General Diagnostic',
+          sampleType: catalogTemplate.sampleType || 'Serum',
           interpretation: catalogTemplate.defaultInterpretation || '',
           parameters: catalogTemplate.parameters.map((p, idx) => ({
             ...p,
-            id: `param-${idx}-${Date.now()}-${Math.random().toString(36).substr(2, 3)}`,
+            id: `param-${idx}-${Date.now()}-${Math.random().toString(36).substring(2, 5)}`,
             result: '',
             flag: 'NORMAL'
           }))
         });
       } else {
         // Detailed individual test
-        const richTest = INITIAL_INDIVIDUAL_TESTS.find(t => t.code.toUpperCase() === testCode) || test;
+        const richTest = INITIAL_INDIVIDUAL_TESTS.find(t => t.code && t.code.toUpperCase() === testCode) || test;
+        const nameAr = richTest.nameAr || richTest.nameEn || testCode;
+        const nameEn = richTest.nameEn || richTest.nameAr || testCode;
         generatedProfiles.push({
-          id: `prof-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
-          profileCode: richTest.code,
-          titleEn: richTest.nameEn,
-          titleAr: richTest.nameAr,
+          id: `prof-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+          profileCode: richTest.code || testCode,
+          titleEn: nameEn,
+          titleAr: nameAr,
           category: richTest.category || 'General Diagnostic',
           sampleType: richTest.sampleType || 'Serum',
           parameters: [
             {
-              id: `p-${Date.now()}-${Math.random().toString(36).substr(2, 3)}`,
-              name: `${richTest.nameAr} (${richTest.nameEn})`,
+              id: `p-${Date.now()}-${Math.random().toString(36).substring(2, 5)}`,
+              name: `${nameAr} (${nameEn})`,
               result: '',
               unit: richTest.unit || '',
               minNormal: richTest.minNormal,
@@ -2202,7 +2227,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         titleAr: defaultTpl.titleAr,
         category: defaultTpl.category,
         sampleType: defaultTpl.sampleType,
-        parameters: defaultTpl.parameters.map((p, idx) => ({
+        parameters: (defaultTpl.parameters || []).map((p, idx) => ({
           ...p,
           id: `p-${idx}-${Date.now()}`,
           result: '',
@@ -2227,106 +2252,124 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         originalPrice: packageApplied.originalPrice
       } as any : undefined,
       profiles: generatedProfiles,
-      staff: { ...staffSignatures },
+      staff: staffSignatures ? { ...staffSignatures } : { ...DEFAULT_STAFF },
       status: 'draft',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
 
-    setReports(prev => [newReport, ...prev]);
+    setReports(prev => [newReport, ...(prev || [])]);
     setSelectedReportId(newReport.id);
 
-    // Matching financial invoice with 100% accurate price calculations
-    const rawSubtotal = patient.testsSubtotal || patient.totalCost || 0;
-    const fee = patient.visitFee || 0;
-    const disc = patient.discountApplied || 0;
+    // Matching financial invoice with accurate price calculations
+    const rawSubtotal = Number(patient.testsSubtotal || patient.totalCost || 0);
+    const fee = Number(patient.visitFee || 0);
+    const disc = Number(patient.discountApplied || 0);
     const gross = rawSubtotal + fee;
     const net = (patient as any).netAmount !== undefined 
-      ? (patient as any).netAmount 
+      ? Number((patient as any).netAmount) 
       : Math.max(0, gross - disc);
     const paid = (patient as any).paidAmount !== undefined 
-      ? (patient as any).paidAmount 
+      ? Number((patient as any).paidAmount) 
       : net;
     const remaining = (patient as any).remainingAmount !== undefined 
-      ? (patient as any).remainingAmount 
+      ? Number((patient as any).remainingAmount) 
       : Math.max(0, net - paid);
     const pStatus = (patient as any).paymentStatus 
       || (paid >= net ? 'paid' : (paid > 0 ? 'partial' : 'pending'));
 
     const newInvoice: IncomeRecord = {
       id: `inv-${Date.now()}`,
-      invoiceNumber: `INV-${patient.labNumber.replace('RT-', '')}`,
+      invoiceNumber: `INV-${String(patient.labNumber || '').replace('RT-', '') || Date.now().toString().slice(-6)}`,
       patientName: patient.fullName,
-      patientPhone: patient.phone,
-      patientAge: patient.age,
-      patientGender: patient.gender,
-      barcode: patient.barcode,
-      labNumber: patient.labNumber,
+      patientPhone: patient.phone || '',
+      patientAge: patient.age || 30,
+      patientGender: patient.gender || 'male',
+      barcode: patient.barcode || '',
+      labNumber: patient.labNumber || '',
       referringDoctor: patient.referringDoctorName || 'أطباء كلية طب قصر العيني',
-      tests: selectedTests,
+      tests: selectedTests || [],
       subtotal: gross,
       testsSubtotal: rawSubtotal,
       discount: disc,
       visitFee: fee,
       isHomeVisit: patient.bookingType === 'home_visit',
-      visitAddress: patient.homeAddress,
+      visitAddress: patient.homeAddress || '',
       netAmount: net,
       paidAmount: paid,
       remainingAmount: remaining,
       paymentMethod: (patient.paymentMethod as any) || 'cash',
       paymentStatus: pStatus,
-      cashierName: currentUser.nameAr,
+      cashierName: currentUser?.nameAr || 'المسؤول',
       branch: patient.branchAddress || 'الفرع الرئيسي - بهتيم',
       syncStatus: 'synced',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
 
-    setIncomeRecords(prev => [newInvoice, ...prev]);
+    setIncomeRecords(prev => [newInvoice, ...(prev || [])]);
     newReport.invoiceId = newInvoice.id;
 
-    realtimeSyncManager.broadcastAction('ADMIT_PATIENT', {
-      report: newReport,
-      invoice: newInvoice,
-      name: patient.fullName,
-      labNumber: newReport.reportNumber
-    });
-    realtimeSyncManager.broadcastAction('UPDATE_REPORT', newReport);
-    realtimeSyncManager.broadcastAction('UPDATE_INVOICE', newInvoice);
-
-    // 1. Instant Cloud & Multi-device Sync for newly admitted case
-    const updatedReports = [newReport, ...reports];
-    const updatedInvoices = [newInvoice, ...incomeRecords];
-    const instantSyncPayload = {
-      reports: updatedReports,
-      incomeRecords: updatedInvoices,
-      expenses,
-      loyaltyProfiles,
-      inventory,
-      dailyCloseouts,
-      labInfo,
-      testCatalog,
-      packages
-    };
-    realtimeSyncManager.pushMasterSnapshot(instantSyncPayload).catch(err => {
-      console.warn('Instant Firestore push error:', err);
-    });
-    if (githubConfig.token && githubConfig.autoSync) {
-      pushFullStoreToGitHub(githubConfig, instantSyncPayload).catch(err => {
-        console.warn('Instant GitHub full push error, falling back to single case push:', err);
-        syncInvoiceToDiagnostic(newInvoice, githubConfig).catch(() => {});
+    try {
+      realtimeSyncManager.broadcastAction('ADMIT_PATIENT', {
+        report: newReport,
+        invoice: newInvoice,
+        name: patient.fullName,
+        labNumber: newReport.reportNumber
       });
+      realtimeSyncManager.broadcastAction('UPDATE_REPORT', newReport);
+      realtimeSyncManager.broadcastAction('UPDATE_INVOICE', newInvoice);
+    } catch (bcErr) {
+      console.warn('Realtime broadcast warning:', bcErr);
     }
 
-    logAction('CREATE', 'DIAGNOSTIC', `تسجيل مريض جديد ${patient.fullName} وحجز تحاليل وربط التقرير بالفاتورة المالية ومزامنة البيانات سحابياً فوراً`);
-    addNotification({
-      title: "تم تسجيل المريض بنجاح",
-      message: `تم حجز التحاليل للمريض ${patient.fullName} وإصدار فاتورة وإدراج العينة في قائمة عمل المعمل.`,
-      type: "success"
-    });
+    try {
+      // Instant Cloud & Multi-device Sync for newly admitted case
+      const updatedReports = [newReport, ...reports];
+      const updatedInvoices = [newInvoice, ...incomeRecords];
+      const instantSyncPayload = {
+        reports: updatedReports,
+        incomeRecords: updatedInvoices,
+        expenses,
+        loyaltyProfiles,
+        inventory,
+        dailyCloseouts,
+        labInfo,
+        testCatalog,
+        packages
+      };
+      realtimeSyncManager.pushMasterSnapshot(instantSyncPayload).catch(err => {
+        console.warn('Instant Firestore push error:', err);
+      });
+      if (githubConfig?.token && githubConfig?.autoSync) {
+        pushFullStoreToGitHub(githubConfig, instantSyncPayload).catch(err => {
+          console.warn('Instant GitHub full push error, falling back to single case push:', err);
+          syncInvoiceToDiagnostic(newInvoice, githubConfig).catch(() => {});
+        });
+      }
+    } catch (syncErr) {
+      console.warn('Sync error during admission:', syncErr);
+    }
+
+    try {
+      logAction('CREATE', 'DIAGNOSTIC', `تسجيل مريض جديد ${patient.fullName} وحجز تحاليل وربط التقرير بالفاتورة المالية ومزامنة البيانات سحابياً فوراً`);
+    } catch (logErr) {
+      console.warn('Audit log warning:', logErr);
+    }
+
+    try {
+      addNotification({
+        title: "تم تسجيل المريض بنجاح",
+        message: `تم حجز التحاليل للمريض ${patient.fullName} وإصدار فاتورة وإدراج العينة في قائمة عمل المعمل.`,
+        type: "success"
+      });
+    } catch (notifErr) {
+      console.warn('Notification warning:', notifErr);
+    }
 
     return newReport;
-  }, [currentUser, logAction, addNotification, reports, incomeRecords, expenses, loyaltyProfiles, inventory, dailyCloseouts, labInfo, testCatalog, packages, githubConfig]);
+  }, [currentUser, logAction, addNotification, reports, incomeRecords, expenses, loyaltyProfiles, inventory, dailyCloseouts, labInfo, testCatalog, packages, diagnosticProfiles, staffSignatures, githubConfig]);
+
 
   // Loyalty Program Helpers
   const calculateLoyaltyTier = useCallback((points: number): LoyaltyTier => {
@@ -2386,16 +2429,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               invoiceNumber,
               amountEGP: amount
             },
-            ...p.transactions
+            ...(p.transactions || [])
           ]
         } : p);
       } else {
+        const safeBarcode = String(barcode || '').trim() || `RT-${Math.floor(10000 + Math.random() * 90000)}`;
         const newProfile: PatientLoyaltyProfile = {
           patientId: `pat-loyalty-${Date.now()}`,
-          patientName,
+          patientName: patientName || 'مريض مسجل',
           phone: patientPhone,
-          barcode,
-          cardNumber: `RT-${calculateLoyaltyTier(pointsToEarn).toUpperCase()}-${barcode.replace('RT-', '') || Math.floor(10000 + Math.random() * 90000)}`,
+          barcode: safeBarcode,
+          cardNumber: `RT-${calculateLoyaltyTier(pointsToEarn).toUpperCase()}-${safeBarcode.replace('RT-', '') || Math.floor(10000 + Math.random() * 90000)}`,
           bloodGroup: '',
           totalPoints: pointsToEarn,
           tier: calculateLoyaltyTier(pointsToEarn),
@@ -2554,7 +2598,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                   invoiceNumber,
                   amountEGP
                 },
-                ...p.transactions
+                ...(p.transactions || [])
               ]
             };
           }
@@ -2593,7 +2637,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               invoiceNumber,
               amountEGP: cashValue
             },
-            ...p.transactions
+            ...(p.transactions || [])
           ]
         };
       }

@@ -107,6 +107,7 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
   const [discountPercent, setDiscountPercent] = useState<number>(0);
   const [redeemPoints, setRedeemPoints] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
   const [createdLabNum, setCreatedLabNum] = useState<string>('');
   const [isWhatsAppModalOpen, setIsWhatsAppModalOpen] = useState(false);
 
@@ -124,45 +125,50 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
   // Auto apply loyalty discount if profile found (and no package)
   useEffect(() => {
     if (loyaltyProfile && discountPercent === 0 && !selectedPackage) {
-      const tierDiscount = loyaltyConfig.tiers[loyaltyProfile.tier].discountRate;
-      setDiscountPercent(tierDiscount);
+      const tierConfig = loyaltyConfig?.tiers?.[loyaltyProfile.tier];
+      const tierDiscount = tierConfig?.discountRate || 0;
+      if (tierDiscount > 0) {
+        setDiscountPercent(tierDiscount);
+      }
     }
   }, [loyaltyProfile, loyaltyConfig, discountPercent, selectedPackage]);
 
   // Financial Calculations
-  const getTestDetails = (code: string) => {
-    return testCatalog.find(t => t.code.toUpperCase() === code.toUpperCase())
-        || INITIAL_INDIVIDUAL_TESTS.find(t => t.code.toUpperCase() === code.toUpperCase());
+  const getTestDetails = (code?: string) => {
+    if (!code) return undefined;
+    const upper = code.toUpperCase();
+    return testCatalog.find(t => t.code && t.code.toUpperCase() === upper)
+        || INITIAL_INDIVIDUAL_TESTS.find(t => t.code && t.code.toUpperCase() === upper);
   };
 
   const { packageItems, extraItems } = useMemo(() => {
     if (!selectedPackage) {
-      return { packageItems: [], extraItems: selectedTests };
+      return { packageItems: [], extraItems: selectedTests || [] };
     }
     const packageCodes = new Set([
-      ...selectedPackage.includedProfiles.map(c => c.toUpperCase()),
-      ...selectedPackage.includedIndividualTestCodes.map(c => c.toUpperCase())
+      ...(selectedPackage.includedProfiles || []).map(c => String(c || '').toUpperCase()),
+      ...(selectedPackage.includedIndividualTestCodes || []).map(c => String(c || '').toUpperCase())
     ]);
-    const pkg = selectedTests.filter(t => packageCodes.has(t.code.toUpperCase()));
-    const extra = selectedTests.filter(t => !packageCodes.has(t.code.toUpperCase()));
+    const pkg = (selectedTests || []).filter(t => t?.code && packageCodes.has(String(t.code).toUpperCase()));
+    const extra = (selectedTests || []).filter(t => t?.code && !packageCodes.has(String(t.code).toUpperCase()));
     return { packageItems: pkg, extraItems: extra };
   }, [selectedPackage, selectedTests]);
 
   const testsSubtotal = useMemo(() => {
     if (selectedPackage) {
       const packageCodes = new Set([
-        ...selectedPackage.includedProfiles.map(c => c.toUpperCase()),
-        ...selectedPackage.includedIndividualTestCodes.map(c => c.toUpperCase())
+        ...(selectedPackage.includedProfiles || []).map(c => String(c || '').toUpperCase()),
+        ...(selectedPackage.includedIndividualTestCodes || []).map(c => String(c || '').toUpperCase())
       ]);
 
-      const extraTestsCost = selectedTests
-        .filter(t => !packageCodes.has(t.code.toUpperCase()))
-        .reduce((sum, t) => sum + t.price, 0);
+      const extraTestsCost = (selectedTests || [])
+        .filter(t => t?.code && !packageCodes.has(String(t.code).toUpperCase()))
+        .reduce((sum, t) => sum + (Number(t?.price) || 0), 0);
 
-      return selectedPackage.packagePrice + extraTestsCost;
+      return (Number(selectedPackage.packagePrice) || 0) + extraTestsCost;
     }
 
-    return selectedTests.reduce((sum, t) => sum + t.price, 0);
+    return (selectedTests || []).reduce((sum, t) => sum + (Number(t?.price) || 0), 0);
   }, [selectedPackage, selectedTests]);
 
   const effectiveVisitFee = bookingType === 'home_visit' ? homeVisitFee : 0;
@@ -323,64 +329,78 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
   // Submit Admission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError(null);
+
     if (!fullName.trim()) {
-      alert("يرجى إدخال اسم المريض بالكامل.");
+      setFormError("يرجى إدخال اسم المريض بالكامل قبل إتمام الحفظ.");
       return;
     }
-    if (selectedTests.length === 0) {
-      alert("يرجى اختيار تحليل واحد على الأقل للمريض.");
+    if (!selectedTests || selectedTests.length === 0) {
+      setFormError("يرجى اختيار تحليل واحد على الأقل للمريض.");
       return;
     }
 
-    const patientRecord: Patient = {
-      id: `pat-${Date.now()}`,
-      labNumber: nextLabNumber,
-      barcode: nextBarcode,
-      fullName: fullName.trim(),
-      phone: phone.trim(),
-      age: Number(age) || 30,
-      ageUnit,
-      gender,
-      nationalId: nationalId.trim() || undefined,
-      referringDoctorTitle: "Dr.",
-      referringDoctorName: referringDoctor.trim(),
-      sampleDate: appointmentDate && appointmentDate !== today ? `${appointmentDate}T${appointmentTime || '09:00'}:00.000Z` : new Date().toISOString(),
-      reportingDate: new Date().toISOString(),
-      clinicalHistory: clinicalHistory.trim() || undefined,
-      fastingHours: Number(fastingHours) || 0,
-      bookingType,
-      homeAddress: bookingType === 'home_visit' ? homeAddress : undefined,
-      visitFee: effectiveVisitFee,
-      appointmentDate,
-      appointmentTime,
-      deliveryNotes: bookingType === 'home_visit' ? deliveryNotes : undefined,
-      testsSubtotal,
-      totalCost: netTotal,
-      discountApplied: totalDiscount,
-      paidAmount,
-      remainingAmount,
-      paymentStatus: paidAmount >= netTotal ? 'paid' : (paidAmount > 0 ? 'partial' : 'pending'),
-      paymentMethod: (paymentMethod as any) || 'cash'
-    };
+    try {
+      const patientRecord: Patient = {
+        id: `pat-${Date.now()}`,
+        labNumber: nextLabNumber,
+        barcode: nextBarcode,
+        fullName: fullName.trim(),
+        phone: phone.trim(),
+        age: Number(age) || 30,
+        ageUnit,
+        gender,
+        nationalId: nationalId.trim() || undefined,
+        referringDoctorTitle: "Dr.",
+        referringDoctorName: referringDoctor.trim(),
+        sampleDate: appointmentDate && appointmentDate !== today ? `${appointmentDate}T${appointmentTime || '09:00'}:00.000Z` : new Date().toISOString(),
+        reportingDate: new Date().toISOString(),
+        clinicalHistory: clinicalHistory.trim() || undefined,
+        fastingHours: Number(fastingHours) || 0,
+        bookingType,
+        homeAddress: bookingType === 'home_visit' ? homeAddress : undefined,
+        visitFee: effectiveVisitFee,
+        appointmentDate,
+        appointmentTime,
+        deliveryNotes: bookingType === 'home_visit' ? deliveryNotes : undefined,
+        testsSubtotal,
+        totalCost: netTotal,
+        discountApplied: totalDiscount,
+        paidAmount,
+        remainingAmount,
+        paymentStatus: paidAmount >= netTotal ? 'paid' : (paidAmount > 0 ? 'partial' : 'pending'),
+        paymentMethod: (paymentMethod as any) || 'cash'
+      };
 
-    // Create Report & Invoice via AppContext
-    const createdReport = createReportFromAdmission(
-      patientRecord,
-      selectedTests,
-      selectedPackage || undefined
-    );
+      // Create Report & Invoice via AppContext
+      const createdReport = createReportFromAdmission(
+        patientRecord,
+        selectedTests,
+        selectedPackage || undefined
+      );
 
-    // Apply loyalty points redemption or earning
-    if (phone.trim()) {
-      if (redeemPoints && pointsRedeemValue > 0) {
-        redeemLoyaltyPoints(phone.trim(), Math.floor(loyaltyProfile!.totalPoints / 100) * 100, createdReport.reportNumber, pointsRedeemValue);
+      // Apply loyalty points redemption or earning safely
+      if (phone.trim() && createdReport) {
+        try {
+          if (redeemPoints && pointsRedeemValue > 0 && loyaltyProfile && (loyaltyProfile.totalPoints || 0) >= 100) {
+            const pointsToRedeem = Math.floor(loyaltyProfile.totalPoints / 100) * 100;
+            if (pointsToRedeem > 0) {
+              redeemLoyaltyPoints(phone.trim(), pointsToRedeem, createdReport.reportNumber, pointsRedeemValue);
+            }
+          }
+          earnLoyaltyPoints(phone.trim(), paidAmount, createdReport.reportNumber, fullName.trim(), nextBarcode);
+        } catch (lErr) {
+          console.warn("Loyalty sync non-fatal warning:", lErr);
+        }
       }
-      earnLoyaltyPoints(phone.trim(), paidAmount, createdReport.reportNumber, fullName.trim(), nextBarcode);
-    }
 
-    setCreatedLabNum(createdReport.reportNumber);
-    setIsSubmitted(true);
-    // Modal stays open to show confirmation screen and WhatsApp button
+      setCreatedLabNum(createdReport ? createdReport.reportNumber : nextLabNumber);
+      setIsSubmitted(true);
+      if (onSuccess) onSuccess();
+    } catch (err: any) {
+      console.error("Admission submission error:", err);
+      setFormError(`حدث خطأ أثناء حفظ وتسجيل المريض: ${err?.message || 'يرجى مراجعة البيانات'}`);
+    }
   };
 
   const handleSendWhatsApp = () => {
@@ -1238,6 +1258,13 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
               <MessageCircle className="w-4 h-4 text-emerald-700" />
               <span>معاينة وإرسال رسالة الحجز عبر واتساب للمريض</span>
             </button>
+
+            {formError && (
+              <div className="p-3.5 bg-rose-50 border-2 border-rose-300 text-rose-900 rounded-xl text-xs font-bold flex items-start gap-2 shadow-xs animate-in fade-in">
+                <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                <span>{formError}</span>
+              </div>
+            )}
 
             {/* Submit Button */}
             <button
