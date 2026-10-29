@@ -66,7 +66,7 @@ import { pushFullStoreToGitHub, pullFullStoreFromGitHub, syncInvoiceToDiagnostic
 import { resolveUniqueLabIdentity, dedupeReports, dedupeInvoices, unionReports, unionInvoices } from '../utils/labNumbering';
 import { notifyReportApproved } from '../utils/whatsappNotify';
 import { playSyncChime } from '../utils/criticalAlerts';
-import { registerReportDeletion, registerInvoiceDeletion, importDeletionTombstones, filterDeletedReports, filterDeletedInvoices } from '../utils/deletionRegistry';
+import { registerReportDeletion, registerInvoiceDeletion, importDeletionTombstones, filterDeletedReports, filterDeletedInvoices, purgeProtectedTombstones } from '../utils/deletionRegistry';
 import {
   mergeCatalogWithDefaults,
   mergePackagesWithDefaults,
@@ -260,6 +260,7 @@ interface AppContextType {
   updateGithubConfig: (config: Partial<GitHubSyncConfig>) => void;
   syncUnifiedDataToGitHub: () => Promise<{ success: boolean; message: string }>;
   syncAllDevicesNow: () => Promise<{ success: boolean; message: string; reportsCount?: number; invoicesCount?: number }>;
+  healAndRestoreCases: () => Promise<{ success: boolean; message: string; count: number }>;
 
   // Backups
   exportBackup: (password?: string) => Promise<string>;
@@ -3511,9 +3512,138 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
     }
   }, [reports, incomeRecords, packages, diagnosticProfiles, testCatalog, expenses, loyaltyProfiles, inventory, labInfo, githubConfig, addNotification]);
 
+  const healAndRestoreCases = useCallback(async (): Promise<{ success: boolean; message: string; count: number }> => {
+    try {
+      // 1. Purge any stale tombstones for required cases
+      purgeProtectedTombstones();
+      try {
+        localStorage.removeItem('rt_head_commit_sha');
+        localStorage.removeItem('rt_cloud_store_sha');
+      } catch {}
+
+      // 2. Filter target seed records
+      const requiredNames = ['دينا', 'هند', 'منار'];
+      const targetReps = INITIAL_REPORTS.filter(r => {
+        const name = r.patient?.fullName || '';
+        return requiredNames.some(rn => name.includes(rn));
+      });
+      const targetInvs = INITIAL_INCOME_RECORDS.filter(i => {
+        return requiredNames.some(rn => (i.patientName || '').includes(rn));
+      });
+
+      // 3. Guarantee they are in state and localStorage
+      setReports(prev => {
+        const map = new Map<string, LabReport>();
+        prev.forEach(r => {
+          if (r.id) map.set(r.id, r);
+          if (r.reportNumber) map.set(r.reportNumber, r);
+          if (r.patient?.barcode) map.set(r.patient.barcode, r);
+        });
+        targetReps.forEach(r => {
+          const existing = map.get(r.id) || (r.reportNumber && map.get(r.reportNumber)) || (r.patient?.barcode && map.get(r.patient.barcode));
+          if (!existing) {
+            map.set(r.id, r);
+          } else {
+            const merged = mergeTwoReports(existing, r);
+            map.set(existing.id, merged);
+          }
+        });
+        const finalReps = Array.from(new Set(map.values()));
+        try {
+          localStorage.setItem(REPORTS_KEY, JSON.stringify(finalReps));
+        } catch {}
+        return finalReps;
+      });
+
+      setIncomeRecords(prev => {
+        const map = new Map<string, IncomeRecord>();
+        prev.forEach(i => {
+          if (i.id) map.set(i.id, i);
+          if (i.invoiceNumber) map.set(i.invoiceNumber, i);
+          if (i.barcode) map.set(i.barcode, i);
+        });
+        targetInvs.forEach(i => {
+          const existing = map.get(i.id) || (i.invoiceNumber && map.get(i.invoiceNumber)) || (i.barcode && map.get(i.barcode));
+          if (!existing) {
+            map.set(i.id, i);
+          } else {
+            const merged = mergeTwoInvoices(existing, i);
+            map.set(existing.id, merged);
+          }
+        });
+        const finalInvs = Array.from(new Set(map.values()));
+        try {
+          localStorage.setItem(INCOME_KEY, JSON.stringify(finalInvs));
+        } catch {}
+        return finalInvs;
+      });
+
+      // 4. Trigger cloud pull & sync
+      await syncAllDevicesNow();
+
+      addNotification({
+        title: '✅ تم استعادة وتثبيت الحالات بنجاح',
+        message: 'تم استرجاع حالات (دينا سامي، هند مرسي عبدالرحمن، منار اشرف) وتثبيتها بقائمة العمل والنتائج والفواتير.',
+        type: 'success'
+      });
+
+      return {
+        success: true,
+        message: 'تم بنجاح تثبيت واسترجاع الحالات المسجلة (دينا سامي · هند مرسي · منار اشرف) بالكامل!',
+        count: targetReps.length
+      };
+    } catch (err: any) {
+      return {
+        success: false,
+        message: `تعذر استرجاع الحالات: ${err.message || 'خطأ غير متوقع'}`,
+        count: 0
+      };
+    }
+  }, [syncAllDevicesNow, addNotification]);
+
   const syncUnifiedDataToGitHub = useCallback(async (): Promise<{ success: boolean; message: string }> => {
     return await syncAllDevicesNow();
   }, [syncAllDevicesNow]);
+
+  // Automatic Data Healing Effect for Dina, Hind, Manar
+  useEffect(() => {
+    try {
+      purgeProtectedTombstones();
+      const requiredNames = ['دينا', 'هند', 'منار'];
+      const missingReps = INITIAL_REPORTS.filter(r => {
+        const name = r.patient?.fullName || '';
+        return requiredNames.some(rn => name.includes(rn));
+      }).filter(seedRep => {
+        return !reports.some(r =>
+          r.id === seedRep.id ||
+          r.reportNumber === seedRep.reportNumber ||
+          r.patient?.barcode === seedRep.patient?.barcode ||
+          (r.patient?.fullName && r.patient.fullName.includes(seedRep.patient?.fullName || ''))
+        );
+      });
+
+      if (missingReps.length > 0) {
+        setReports(prev => unionReports(prev, missingReps));
+      }
+
+      const missingInvs = INITIAL_INCOME_RECORDS.filter(i => {
+        return requiredNames.some(rn => (i.patientName || '').includes(rn));
+      }).filter(seedInv => {
+        return !incomeRecords.some(i =>
+          i.id === seedInv.id ||
+          i.invoiceNumber === seedInv.invoiceNumber ||
+          i.barcode === seedInv.barcode ||
+          (i.patientName && i.patientName.includes(seedInv.patientName))
+        );
+      });
+
+      if (missingInvs.length > 0) {
+        setIncomeRecords(prev => unionInvoices(prev, missingInvs));
+      }
+    } catch (e) {
+      console.warn('Auto healing error:', e);
+    }
+  }, [reports, incomeRecords]);
 
   const value: AppContextType = {
     language,
@@ -3648,6 +3778,7 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
     updateGithubConfig,
     syncUnifiedDataToGitHub,
     syncAllDevicesNow,
+    healAndRestoreCases,
 
     exportBackup,
     importBackup,

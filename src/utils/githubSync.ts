@@ -211,8 +211,39 @@ export async function fetchDiagnosticCases(
           }
         }
       }
-    } catch (e) {
-      console.warn('Database sync fetch note:', e);
+
+      // Also process any cases from dbData.cases
+      if (dbData && Array.isArray(dbData.cases)) {
+        for (const c of dbData.cases) {
+          const key = c.barcode || c.reportNumber || c.invoiceNumber || c.id || c.patientName;
+          if (key && !seenIds.has(key)) {
+            seenIds.add(key);
+            const safeLab = c.reportNumber || c.labNumber || (c.barcode ? `RT-${String(c.barcode).replace('RT-', '')}` : `RT-${cases.length + 1}`);
+            const testNames = Array.isArray(c.tests)
+              ? c.tests.map((t: any) => t.nameAr || t.nameEn)
+              : Array.isArray(c.testNames) ? c.testNames : ['تحاليل مخبرية'];
+            cases.push({
+              id: c.id || `rep-${safeLab}`,
+              labNumber: safeLab,
+              barcode: c.barcode || '',
+              fullName: c.patientName || c.fullName || 'مريض مسجل',
+              age: c.age || 30,
+              gender: c.gender || 'female',
+              phone: c.phone || '',
+              referringDoctorName: c.referringDoctor || 'كشف معمل',
+              sampleDate: c.createdAt || c.sampleDate || new Date().toISOString(),
+              totalCost: c.netAmount ?? c.totalCost ?? 0,
+              paidAmount: c.paidAmount ?? 0,
+              paymentStatus: c.paymentStatus || 'paid',
+              invoiceNumber: c.invoiceNumber || `INV-${String(safeLab).replace('RT-', '')}`,
+              tests: c.tests,
+              testNames
+            });
+          }
+        }
+      }
+    } catch {
+      // fallback
     }
 
     // 2. Also check public/rt-cases-sync.json (Priority queue for new incoming bookings)
@@ -1427,7 +1458,12 @@ export async function pullFullStoreFromGitHub(
     const finish = async (data: any, message: string) => {
       if (!data) return { success: true, data, message };
 
-      // دمج الحالات المحجوزة من الموبايل والفروع فوراً داخل البيانات المستلمة
+      // 1. دمج الحالات المخزنة في قاعدة البيانات مباشرة (data.cases)
+      if (Array.isArray(data.cases) && data.cases.length > 0) {
+        mergeCasesQueueIntoStore(data, data.cases);
+      }
+
+      // 2. دمج الحالات المحجوزة من الموبايل والفروع فوراً داخل البيانات المستلمة
       try {
         const casesRes = await fetch(`${casesApiUrl}?ref=main&_=${Date.now()}`, {
           headers: { ...authHeaders, Accept: 'application/vnd.github.v3.raw', 'Cache-Control': 'no-cache, no-store' }

@@ -56,15 +56,17 @@ export const DashboardModule: React.FC = () => {
     deleteReport,
     deleteIncomeRecord,
     syncAllDevicesNow,
+    healAndRestoreCases,
     currentUser,
     profitConfig
   } = useApp();
 
   const [timeRange, setTimeRange] = useState<'today' | 'month' | 'all'>('today');
-  const [casesFilter, setCasesFilter] = useState<'all' | 'today' | 'pending' | 'verified'>('all');
+  const [casesFilter, setCasesFilter] = useState<'all' | 'today' | 'pending' | 'verified' | 'requested_cases'>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [syncStatus, setSyncStatus] = useState<SyncStatus>(realtimeSyncManager.getStatus());
   const [manualSyncing, setManualSyncing] = useState(false);
+  const [isHealingCases, setIsHealingCases] = useState(false);
   const [syncFeedback, setSyncFeedback] = useState<string | null>(null);
 
   useEffect(() => {
@@ -139,10 +141,14 @@ export const DashboardModule: React.FC = () => {
     return list;
   }, [reports]);
 
+  const requestedCasesList = useMemo(() => {
+    return reports.filter(r => ['دينا', 'هند', 'منار'].some(n => (r.patient?.fullName || '').includes(n)));
+  }, [reports]);
+
   // Filtered Patients for quick interactive table
   const displayedPatients = useMemo(() => {
     const term = searchTerm.trim().toLowerCase();
-    return reports.filter(rep => {
+    const list = reports.filter(rep => {
       const name = (rep.patient?.fullName || '').toLowerCase();
       const num = (rep.reportNumber || rep.patient?.labNumber || '').toLowerCase();
       const phone = (rep.patient?.phone || '');
@@ -157,6 +163,18 @@ export const DashboardModule: React.FC = () => {
 
       if (!matchSearch) return false;
 
+      if (casesFilter === 'requested_cases') {
+        const reqNames = ['دينا', 'هند', 'منار'];
+        return reqNames.some(rn => name.includes(rn));
+      }
+
+      // If user typed search term, search across all dates
+      if (term) {
+        if (casesFilter === 'pending') return rep.status === 'draft' || rep.status === 'in_progress';
+        if (casesFilter === 'verified') return rep.status === 'verified' || rep.status === 'released';
+        return true;
+      }
+
       if (casesFilter === 'today') {
         return (rep.createdAt || '').startsWith(todayStr);
       }
@@ -168,7 +186,32 @@ export const DashboardModule: React.FC = () => {
       }
       return true;
     });
+
+    // Sort: prioritizes required cases (Dina, Hind, Manar), then newest createdAt
+    return list.sort((a, b) => {
+      const isReqA = ['دينا', 'هند', 'منار'].some(n => (a.patient?.fullName || '').includes(n));
+      const isReqB = ['دينا', 'هند', 'منار'].some(n => (b.patient?.fullName || '').includes(n));
+      if (isReqA && !isReqB) return -1;
+      if (!isReqA && isReqB) return 1;
+      const timeA = new Date(a.updatedAt || a.createdAt || 0).getTime();
+      const timeB = new Date(b.updatedAt || b.createdAt || 0).getTime();
+      return timeB - timeA;
+    });
   }, [reports, searchTerm, casesFilter, todayStr]);
+
+  const handleEmergencyHealCases = async () => {
+    setIsHealingCases(true);
+    setSyncFeedback(null);
+    try {
+      const res = await healAndRestoreCases();
+      setSyncFeedback(res.message);
+      setTimeout(() => setSyncFeedback(null), 6000);
+    } catch (e: any) {
+      setSyncFeedback(`تعذر الاسترجاع: ${e.message}`);
+    } finally {
+      setIsHealingCases(false);
+    }
+  };
 
   const handleManualSyncNow = async () => {
     setManualSyncing(true);
@@ -542,6 +585,15 @@ export const DashboardModule: React.FC = () => {
               </button>
               <button
                 type="button"
+                onClick={() => setCasesFilter('requested_cases')}
+                className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer font-bold ${
+                  casesFilter === 'requested_cases' ? 'bg-rose-700 text-white shadow-xs' : 'text-rose-700 bg-rose-50 hover:bg-rose-100'
+                }`}
+              >
+                ✨ دينا · هند · منار ({requestedCasesList.length})
+              </button>
+              <button
+                type="button"
                 onClick={() => setCasesFilter('today')}
                 className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
                   casesFilter === 'today' ? 'bg-white text-rose-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'
@@ -582,6 +634,101 @@ export const DashboardModule: React.FC = () => {
           </div>
         </div>
 
+        {/* Dedicated Highlight Box for Dina, Hind, and Manar */}
+        {requestedCasesList.length > 0 && (
+          <div className="bg-gradient-to-r from-rose-950 via-slate-900 to-indigo-950 text-white rounded-2xl p-4 shadow-md border border-amber-400/40 space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-amber-400 text-slate-950 shadow-sm shrink-0">
+                  <Sparkles className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-black text-sm text-amber-300 flex items-center gap-2">
+                    <span>الحالات المطلوبة فوراً (دينا سامي · هند مرسي · منار أشرف)</span>
+                    <span className="bg-amber-400/20 text-amber-200 text-[10px] px-2 py-0.5 rounded-full border border-amber-400/30">
+                      محفوظة ومؤكدة بالمعمل
+                    </span>
+                  </h3>
+                  <p className="text-xs text-slate-300 mt-0.5">
+                    جميع الحالات الثلاث جاهزة بالباركود والتحاليل والمبالغ المالية المسددة
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setCasesFilter('requested_cases')}
+                  className="px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs transition-colors cursor-pointer"
+                >
+                  عرض الحالات الثلاث فقط
+                </button>
+                <button
+                  type="button"
+                  onClick={handleHealCases}
+                  disabled={isHealingCases}
+                  className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-colors cursor-pointer flex items-center gap-1.5"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${isHealingCases ? 'animate-spin' : ''}`} />
+                  <span>تثبيت ومزامنة</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Quick Cards Grid for the 3 cases */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 pt-1">
+              {requestedCasesList.map(caseItem => {
+                const isItemVerified = caseItem.status === 'verified' || caseItem.status === 'released';
+                return (
+                  <div
+                    key={caseItem.id}
+                    className="bg-white/10 hover:bg-white/15 border border-white/10 rounded-xl p-3 flex flex-col justify-between gap-2 text-xs transition-all"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between">
+                        <span className="font-black text-sm text-white">{caseItem.patient?.fullName}</span>
+                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
+                          isItemVerified ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'
+                        }`}>
+                          {isItemVerified ? 'معتمد' : 'قيد الفحص'}
+                        </span>
+                      </div>
+                      <div className="text-[11px] font-mono text-amber-200 mt-1 flex items-center gap-2">
+                        <span>{caseItem.reportNumber}</span>
+                        <span>•</span>
+                        <span>باركود: {caseItem.patient?.barcode}</span>
+                      </div>
+                      <div className="text-[11px] text-slate-300 mt-1 line-clamp-1">
+                        {caseItem.profiles?.map(p => p.titleAr || p.titleEn).join('، ')}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 pt-2 border-t border-white/10">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedReportId(caseItem.id);
+                          setActiveTab('diagnostic_editor');
+                        }}
+                        className="flex-1 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold text-center text-[11px] cursor-pointer"
+                      >
+                        إدخال النتائج
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => openPrintReportWindow(caseItem, labInfo)}
+                        className="p-1.5 rounded-lg bg-white/15 hover:bg-white/25 text-white cursor-pointer"
+                        title="طباعة التقرير"
+                      >
+                        <Printer className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {displayedPatients.length === 0 ? (
           <div className="py-12 text-center text-slate-400 text-xs space-y-2">
             <FlaskConical className="w-8 h-8 mx-auto text-slate-300" />
@@ -604,16 +751,40 @@ export const DashboardModule: React.FC = () => {
                 {displayedPatients.map(rep => {
                   const testsCount = rep.profiles.reduce((sum, p) => sum + p.parameters.length, 0);
                   const isVerified = rep.status === 'verified' || rep.status === 'released';
+                  const isRequested = ['دينا', 'هند', 'منار'].some(n => (rep.patient?.fullName || '').includes(n));
 
                   return (
-                    <tr key={rep.id} className="hover:bg-slate-50/80 transition-colors">
+                    <tr
+                      key={rep.id}
+                      className={`transition-colors ${
+                        isRequested
+                          ? 'bg-amber-50/70 hover:bg-amber-100/70 border-r-4 border-r-amber-500'
+                          : 'hover:bg-slate-50/80'
+                      }`}
+                    >
                       <td className="py-3 px-3">
-                        <span className="font-mono font-bold text-slate-900 block">{rep.reportNumber}</span>
-                        <span className="text-[10px] font-mono text-slate-400">{rep.patient.barcode}</span>
+                        <div className="flex items-center gap-1.5">
+                          {isRequested && (
+                            <span className="p-1 rounded-md bg-amber-400 text-slate-950" title="حالة مطلوبة">
+                              <Sparkles className="w-3 h-3" />
+                            </span>
+                          )}
+                          <div>
+                            <span className="font-mono font-bold text-slate-900 block">{rep.reportNumber}</span>
+                            <span className="text-[10px] font-mono text-slate-400">{rep.patient.barcode}</span>
+                          </div>
+                        </div>
                       </td>
 
                       <td className="py-3 px-3">
-                        <span className="font-bold text-slate-900 block">{rep.patient.fullName}</span>
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-bold text-slate-900 block">{rep.patient.fullName}</span>
+                          {isRequested && (
+                            <span className="bg-amber-200 text-amber-900 text-[10px] font-black px-1.5 py-0.5 rounded">
+                              مطلوبة
+                            </span>
+                          )}
+                        </div>
                         <span className="text-[11px] text-slate-400">{rep.patient.phone}</span>
                       </td>
 

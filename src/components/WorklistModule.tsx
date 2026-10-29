@@ -38,7 +38,7 @@ export const WorklistModule: React.FC = () => {
   } = useApp();
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'verified'>('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'verified' | 'requested_cases'>('all');
   const [whatsAppReport, setWhatsAppReport] = useState<LabReport | null>(null);
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [isSyncingCases, setIsSyncingCases] = useState(false);
@@ -60,7 +60,7 @@ export const WorklistModule: React.FC = () => {
 
   const filteredReports = useMemo(() => {
     const term = searchTerm.trim().toLowerCase();
-    return reports.filter(r => {
+    const result = reports.filter(r => {
       const fullName = (r.patient?.fullName || '').toLowerCase();
       const reportNum = (r.reportNumber || r.patient?.labNumber || '').toLowerCase();
       const barcode = (r.patient?.barcode || '').toLowerCase();
@@ -76,6 +76,8 @@ export const WorklistModule: React.FC = () => {
       const matchesStatus =
         statusFilter === 'all'
           ? true
+          : statusFilter === 'requested_cases'
+          ? ['دينا', 'هند', 'منار'].some(n => fullName.includes(n))
           : statusFilter === 'pending'
           ? r.status === 'draft' || r.status === 'in_progress'
           : r.status === 'verified';
@@ -86,6 +88,13 @@ export const WorklistModule: React.FC = () => {
           : Array.isArray(r.profiles) && r.profiles.some(p => (p.category || '').toLowerCase().includes(categoryFilter.toLowerCase()));
 
       return matchesSearch && matchesStatus && matchesCategory;
+    });
+
+    const isReq = (r: LabReport) => ['دينا', 'هند', 'منار'].some(n => (r.patient?.fullName || '').includes(n));
+    return result.sort((a, b) => {
+      const aReq = isReq(a) ? 1 : 0;
+      const bReq = isReq(b) ? 1 : 0;
+      return bReq - aReq;
     });
   }, [reports, searchTerm, statusFilter, categoryFilter]);
 
@@ -176,6 +185,14 @@ export const WorklistModule: React.FC = () => {
               }`}
             >
               الكل ({reports.length})
+            </button>
+            <button
+              onClick={() => setStatusFilter('requested_cases')}
+              className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+                statusFilter === 'requested_cases' ? 'bg-rose-700 text-white shadow-sm' : 'text-rose-700 hover:text-rose-900 bg-rose-50'
+              }`}
+            >
+              ✨ دينا · هند · منار ({reports.filter(r => ['دينا', 'هند', 'منار'].some(n => (r.patient?.fullName || '').includes(n))).length})
             </button>
             <button
               onClick={() => setStatusFilter('pending')}
