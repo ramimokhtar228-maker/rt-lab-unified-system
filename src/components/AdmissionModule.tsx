@@ -268,44 +268,53 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
     fullName, createdLabNum, nextLabNumber, nextBarcode, phone, appointmentDate, today,
     appointmentTime, bookingType, homeAddress, deliveryNotes, labInfo, selectedTests,
     selectedPackage, testsSubtotal, totalDiscount, discountPercent, loyaltyProfile,
+    effectiveVisitFee, netTotal, paidAmount, remainingAmount, paymentMethod, fastingHours
   ]);
 
   // Add/Remove Tests
   const handleAddTest = (test: InvoiceTestItem) => {
-    if (!selectedTests.some(t => t.code.toUpperCase() === test.code.toUpperCase())) {
+    if (!test || !test.code) return;
+    const testCode = String(test.code).toUpperCase();
+    if (!selectedTests.some(t => t?.code && String(t.code).toUpperCase() === testCode)) {
       setSelectedTests(prev => [...prev, test]);
     }
   };
 
   const handleToggleTest = (test: InvoiceTestItem) => {
-    if (selectedTests.some(t => t.code.toUpperCase() === test.code.toUpperCase())) {
-      setSelectedTests(prev => prev.filter(t => t.code.toUpperCase() !== test.code.toUpperCase()));
+    if (!test || !test.code) return;
+    const testCode = String(test.code).toUpperCase();
+    if (selectedTests.some(t => t?.code && String(t.code).toUpperCase() === testCode)) {
+      setSelectedTests(prev => prev.filter(t => t?.code && String(t.code).toUpperCase() !== testCode));
     } else {
       setSelectedTests(prev => [...prev, test]);
     }
   };
 
   const handleToggleProfile = (profile: any) => {
-    if (selectedTests.some(t => t.code.toUpperCase() === profile.code.toUpperCase())) {
-      setSelectedTests(prev => prev.filter(t => t.code.toUpperCase() !== profile.code.toUpperCase()));
+    if (!profile || !profile.code) return;
+    const profCode = String(profile.code).toUpperCase();
+    if (selectedTests.some(t => t?.code && String(t.code).toUpperCase() === profCode)) {
+      setSelectedTests(prev => prev.filter(t => t?.code && String(t.code).toUpperCase() !== profCode));
     } else {
       setSelectedTests(prev => [
         ...prev,
         {
           id: `prof-${profile.code}`,
           code: profile.code,
-          nameAr: profile.titleAr,
-          nameEn: profile.titleEn,
-          category: profile.category,
-          price: profile.profilePrice || 250,
-          sampleType: profile.sampleType
+          nameAr: profile.titleAr || profile.titleEn || profile.code,
+          nameEn: profile.titleEn || profile.titleAr || profile.code,
+          category: profile.category || 'General Diagnostic',
+          price: Number(profile.profilePrice) || 250,
+          sampleType: profile.sampleType || 'Serum'
         }
       ]);
     }
   };
 
   const handleRemoveTest = (code: string) => {
-    setSelectedTests(prev => prev.filter(t => t.code.toUpperCase() !== code.toUpperCase()));
+    if (!code) return;
+    const target = String(code).toUpperCase();
+    setSelectedTests(prev => prev.filter(t => t?.code && String(t.code).toUpperCase() !== target));
   };
 
   // Add / Switch Package
@@ -318,34 +327,38 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
       return;
     }
 
-    const pkg = packages.find(p => p.id === pkgId);
+    const pkg = (packages || []).find(p => p?.id === pkgId);
     if (!pkg) return;
 
     setSelectedPackageId(pkg.id);
 
-    // Map all package profiles & individual tests
+    // Map all package profiles & individual tests safely
     const pkgTests: InvoiceTestItem[] = [];
 
-    pkg.includedProfiles.forEach(code => {
-      const foundProfile = (diagnosticProfiles || []).find(p => p.code.toUpperCase() === code.toUpperCase())
-                        || LAB_CATALOG.find(p => p.code.toUpperCase() === code.toUpperCase());
+    (pkg.includedProfiles || []).forEach(code => {
+      if (!code) return;
+      const targetCode = String(code).toUpperCase();
+      const foundProfile = (diagnosticProfiles || []).find(p => p?.code && String(p.code).toUpperCase() === targetCode)
+                        || LAB_CATALOG.find(p => p?.code && String(p.code).toUpperCase() === targetCode);
       if (foundProfile) {
         pkgTests.push({
           id: `prof-${foundProfile.code}`,
           code: foundProfile.code,
-          nameAr: foundProfile.titleAr,
-          nameEn: foundProfile.titleEn,
-          category: foundProfile.category,
-          price: foundProfile.profilePrice || 250,
-          sampleType: foundProfile.sampleType
+          nameAr: foundProfile.titleAr || foundProfile.titleEn || foundProfile.code,
+          nameEn: foundProfile.titleEn || foundProfile.titleAr || foundProfile.code,
+          category: foundProfile.category || 'General Diagnostic',
+          price: Number(foundProfile.profilePrice) || 250,
+          sampleType: foundProfile.sampleType || 'Serum'
         });
       }
     });
 
-    pkg.includedIndividualTestCodes.forEach(code => {
-      const found = INITIAL_INDIVIDUAL_TESTS.find(t => t.code.toUpperCase() === code.toUpperCase())
-                 || testCatalog.find(t => t.code.toUpperCase() === code.toUpperCase());
-      if (found && !pkgTests.some(t => t.code.toUpperCase() === found.code.toUpperCase())) {
+    (pkg.includedIndividualTestCodes || []).forEach(code => {
+      if (!code) return;
+      const targetCode = String(code).toUpperCase();
+      const found = INITIAL_INDIVIDUAL_TESTS.find(t => t?.code && String(t.code).toUpperCase() === targetCode)
+                 || (testCatalog || []).find(t => t?.code && String(t.code).toUpperCase() === targetCode);
+      if (found && !pkgTests.some(t => t?.code && String(t.code).toUpperCase() === targetCode)) {
         pkgTests.push(found);
       }
     });
@@ -466,10 +479,10 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
       address: homeAddress,
       deliveryNotes,
       branchAddress: labInfo?.mainAddress,
-      testsDetails: selectedTests.map(t => ({ nameAr: t.nameAr, nameEn: t.nameEn, code: t.code, price: t.price })),
+      testsDetails: (selectedTests || []).map(t => ({ nameAr: t?.nameAr || '', nameEn: t?.nameEn || '', code: t?.code || '', price: Number(t?.price) || 0 })),
       packageName: selectedPackage?.titleAr,
       packagePrice: selectedPackage?.packagePrice,
-      extraTestsDetails: selectedPackage ? extraItems.map(t => ({ nameAr: t.nameAr, nameEn: t.nameEn, code: t.code, price: t.price })) : undefined,
+      extraTestsDetails: selectedPackage ? (extraItems || []).map(t => ({ nameAr: t?.nameAr || '', nameEn: t?.nameEn || '', code: t?.code || '', price: Number(t?.price) || 0 })) : undefined,
       subtotal: grossSubtotal,
       discountAmount: totalDiscount,
       discountLabel,
@@ -563,6 +576,7 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
             type="button"
             onClick={() => {
               if (createdReportObj && onOpenInvoice) {
+                if (isModal && onSuccess) onSuccess();
                 onOpenInvoice(createdReportObj);
               }
             }}
@@ -967,11 +981,11 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-amber-200/60 text-xs">
                   <div className="flex items-center gap-1.5 text-amber-900 font-medium bg-amber-100/60 p-2 rounded-xl">
                     <Clock className="w-3.5 h-3.5 text-amber-700 flex-shrink-0" />
-                    <span><strong>التحضير:</strong> {selectedPackage.fastingRequired}</span>
+                    <span><strong>التحضير:</strong> {selectedPackage.fastingRequired || 'حسب الفحوصات'}</span>
                   </div>
                   <div className="flex items-center gap-1.5 text-slate-800 font-medium bg-white/70 p-2 rounded-xl border border-amber-200/50">
                     <FlaskConical className="w-3.5 h-3.5 text-rose-700 flex-shrink-0" />
-                    <span><strong>العينات:</strong> {selectedPackage.sampleTypes.join(' + ')}</span>
+                    <span><strong>العينات:</strong> {(selectedPackage.sampleTypes || []).join(' + ') || 'عينة دم / مصل'}</span>
                   </div>
                 </div>
 
@@ -981,12 +995,12 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
                     الفحوصات المشمولة التي سيتم تفريغها بجداول التقرير الطبي:
                   </span>
                   <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto pr-1">
-                    {selectedPackage.includedProfiles.map(pCode => (
+                    {(selectedPackage.includedProfiles || []).map(pCode => (
                       <span key={pCode} className="px-2 py-0.5 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-900 text-[11px] font-bold">
                         ✓ بروفايل {pCode}
                       </span>
                     ))}
-                    {selectedPackage.includedIndividualTestCodes.map(tCode => (
+                    {(selectedPackage.includedIndividualTestCodes || []).map(tCode => (
                       <span key={tCode} className="px-2 py-0.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-900 text-[11px] font-bold">
                         ✓ {tCode}
                       </span>
@@ -1024,7 +1038,7 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
                 packages={packages}
                 profiles={diagnosticProfiles && diagnosticProfiles.length > 0 ? diagnosticProfiles : LAB_CATALOG}
                 individualTests={testCatalog && testCatalog.length > 0 ? (testCatalog as any) : INITIAL_INDIVIDUAL_TESTS}
-                selectedItemCodes={selectedTests.map(t => t.code)}
+                selectedItemCodes={(selectedTests || []).map(t => t?.code || '').filter(Boolean)}
                 onToggleTest={handleToggleTest}
                 onSelectPackage={(pkg) => handleSelectPackage(pkg.id)}
                 onToggleProfile={handleToggleProfile}

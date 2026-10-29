@@ -60,8 +60,9 @@ interface SmartTestSearchProps {
 }
 
 // Arabic normalization helper for smart search
-const normalizeArabic = (text: string): string => {
-  return text
+const normalizeArabic = (text: string | null | undefined): string => {
+  if (!text) return '';
+  return String(text)
     .toLowerCase()
     .replace(/[أإآ]/g, 'ا')
     .replace(/ة/g, 'ه')
@@ -91,32 +92,40 @@ export const SmartTestSearch: React.FC<SmartTestSearchProps> = ({
     const list: UnifiedSearchItem[] = [];
 
     // 1. Packages
-    packages.forEach(pkg => {
+    (packages || []).forEach(pkg => {
+      if (!pkg) return;
+      const incProfiles = Array.isArray(pkg.includedProfiles) ? pkg.includedProfiles : [];
+      const incIndividual = Array.isArray(pkg.includedIndividualTestCodes) ? pkg.includedIndividualTestCodes : [];
+      const sampleTypes = Array.isArray(pkg.sampleTypes) ? pkg.sampleTypes : [];
+
       // Find names of included profiles & tests for deep search
-      const profNames = pkg.includedProfiles.map(pCode => {
-        const found = profiles.find(p => p.code.toLowerCase() === pCode.toLowerCase());
-        return found ? `${found.titleAr} (${found.code})` : pCode;
-      });
-      const indNames = pkg.includedIndividualTestCodes.map(tCode => {
-        const found = individualTests.find(t => t.code.toLowerCase() === tCode.toLowerCase());
-        return found ? `${found.nameAr} (${found.code})` : tCode;
-      });
+      const profNames = incProfiles.map(pCode => {
+        if (!pCode) return '';
+        const found = (profiles || []).find(p => p?.code && String(p.code).toLowerCase() === String(pCode).toLowerCase());
+        return found ? `${found.titleAr || found.titleEn || found.code} (${found.code})` : String(pCode);
+      }).filter(Boolean);
+
+      const indNames = incIndividual.map(tCode => {
+        if (!tCode) return '';
+        const found = (individualTests || []).find(t => t?.code && String(t.code).toLowerCase() === String(tCode).toLowerCase());
+        return found ? `${found.nameAr || found.nameEn || found.code} (${found.code})` : String(tCode);
+      }).filter(Boolean);
 
       list.push({
-        id: pkg.id,
+        id: pkg.id || `pkg-${Math.random().toString(36).substring(2, 7)}`,
         kind: 'package',
-        code: pkg.code,
-        nameAr: pkg.titleAr,
-        nameEn: pkg.titleEn,
+        code: pkg.code || 'PKG',
+        nameAr: pkg.titleAr || pkg.titleEn || pkg.code || 'باقة فحوصات',
+        nameEn: pkg.titleEn || pkg.titleAr || pkg.code || 'Package',
         category: 'باقات الفحص الشامل',
-        price: pkg.packagePrice,
-        originalPrice: pkg.originalPrice,
-        discountPercentage: pkg.discountPercentage,
-        sampleType: pkg.sampleTypes.join(', '),
+        price: Number(pkg.packagePrice) || 0,
+        originalPrice: pkg.originalPrice ? Number(pkg.originalPrice) : undefined,
+        discountPercentage: pkg.discountPercentage ? Number(pkg.discountPercentage) : undefined,
+        sampleType: sampleTypes.length > 0 ? sampleTypes.join(', ') : 'Serum / EDTA / Urine',
         turnaroundTime: 'خلال 4-24 ساعة',
-        fastingInstructions: pkg.fastingRequired,
-        includedProfilesCount: pkg.includedProfiles.length,
-        includedIndividualCount: pkg.includedIndividualTestCodes.length,
+        fastingInstructions: pkg.fastingRequired || 'حسب اشتراطات الفحوصات المتضمنة',
+        includedProfilesCount: incProfiles.length,
+        includedIndividualCount: incIndividual.length,
         includedProfileNames: profNames,
         includedIndividualNames: indNames,
         isPopular: pkg.isPopular,
@@ -125,42 +134,50 @@ export const SmartTestSearch: React.FC<SmartTestSearchProps> = ({
     });
 
     // 2. Complete Profiles
-    profiles.forEach(prof => {
-      const paramNames = prof.parameters.map(p => p.name).join(', ');
+    (profiles || []).forEach(prof => {
+      if (!prof) return;
+      const params = Array.isArray(prof.parameters) ? prof.parameters : [];
+      const paramNames = params.map(p => p?.name || '').filter(Boolean).join(', ');
+      const pCode = String(prof.code || '').trim();
+
       list.push({
-        id: `prof-${prof.code}`,
+        id: `prof-${pCode || Math.random().toString(36).substring(2, 7)}`,
         kind: 'profile',
-        code: prof.code,
-        nameAr: prof.titleAr,
-        nameEn: prof.titleEn,
-        category: prof.category,
-        price: prof.profilePrice || 250,
-        sampleType: prof.sampleType,
+        code: pCode || 'PROFILE',
+        nameAr: prof.titleAr || prof.titleEn || pCode || 'بروفايل تحاليل متكامل',
+        nameEn: prof.titleEn || prof.titleAr || pCode || 'Diagnostic Profile',
+        category: prof.category || 'General Diagnostic',
+        price: Number(prof.profilePrice) || 250,
+        sampleType: prof.sampleType || 'Serum',
         turnaroundTime: 'خلال ساعتين إلى يوم',
-        fastingInstructions: prof.code === 'GLYCEMIC' || prof.code === 'LIPID' ? 'صيام 10-12 ساعة' : 'لا يشترط صيام',
+        fastingInstructions: pCode.toUpperCase() === 'GLYCEMIC' || pCode.toUpperCase() === 'LIPID' ? 'صيام 10-12 ساعة' : 'لا يشترط صيام',
         includedProfilesCount: 1,
-        includedIndividualCount: prof.parameters.length,
-        includedIndividualNames: prof.parameters.map(p => `${p.name} (${p.unit})`),
-        textReference: `يشمل ${prof.parameters.length} تحليلاً ومعاملاً مخبرياً متكاملاً (${paramNames.slice(0, 80)}...)`,
+        includedIndividualCount: params.length,
+        includedIndividualNames: params.map(p => `${p?.name || 'فحص'} (${p?.unit || ''})`),
+        textReference: params.length > 0 
+          ? `يشمل ${params.length} تحليلاً ومعاملاً مخبرياً متكاملاً (${paramNames.slice(0, 80)}...)`
+          : 'بروفايل مخبري معتمد',
         rawProfile: prof
       });
     });
 
     // 3. Individual Tests
-    individualTests.forEach(test => {
+    (individualTests || []).forEach(test => {
+      if (!test) return;
+      const tCode = String(test.code || '').trim();
       list.push({
-        id: test.id || `test-${test.code}`,
+        id: test.id || `test-${tCode || Math.random().toString(36).substring(2, 7)}`,
         kind: 'individual',
-        code: test.code,
-        nameAr: test.nameAr,
-        nameEn: test.nameEn,
-        category: test.category,
-        price: test.price,
-        sampleType: test.sampleType,
+        code: tCode || 'TEST',
+        nameAr: test.nameAr || test.nameEn || tCode || 'تحليل مخبري',
+        nameEn: test.nameEn || test.nameAr || tCode || 'Lab Test',
+        category: test.category || 'تحاليل عامة',
+        price: Number(test.price) || 0,
+        sampleType: test.sampleType || 'Serum',
         turnaroundTime: test.turnaroundTime || 'خلال ساعتين',
         fastingInstructions: test.fastingInstructions || 'لا يشترط صيام',
-        unit: test.unit,
-        textReference: test.textReference,
+        unit: test.unit || '',
+        textReference: test.textReference || '',
         minNormal: test.minNormal,
         maxNormal: test.maxNormal,
         rawTest: test
