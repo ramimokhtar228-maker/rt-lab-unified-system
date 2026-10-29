@@ -43,10 +43,10 @@ export const TestCatalogModal: React.FC<TestCatalogModalProps> = ({
   // Filter individual tests
   const filteredIndividualTests = individualTests.filter(t => {
     const matchesSearch = 
-      t.nameAr.includes(searchTerm) ||
-      t.nameEn.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      t.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      t.category.toLowerCase().includes(searchTerm.toLowerCase());
+      (t.nameAr || '').includes(searchTerm) ||
+      (t.nameEn || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (t.code || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (t.category || '').toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCat = selectedCategory === 'All' || t.category === selectedCategory;
     return matchesSearch && matchesCat;
   });
@@ -54,19 +54,19 @@ export const TestCatalogModal: React.FC<TestCatalogModalProps> = ({
   // Filter profiles
   const filteredProfiles = activeCatalog.filter(item => {
     const matchesSearch =
-      item.titleEn.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.titleAr.includes(searchTerm) ||
-      item.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.parameters.some(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
+      (item.titleEn || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (item.titleAr || '').includes(searchTerm) ||
+      (item.code || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (item.parameters || []).some(p => (p?.name || '').toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
   // Filter packages
   const filteredPackages = packages.filter(p => 
-    p.titleAr.includes(searchTerm) ||
-    p.titleEn.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    p.code.toLowerCase().includes(searchTerm.toLowerCase())
+    (p.titleAr || '').includes(searchTerm) ||
+    (p.titleEn || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (p.code || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleAddProfile = (template: CatalogProfileTemplate) => {

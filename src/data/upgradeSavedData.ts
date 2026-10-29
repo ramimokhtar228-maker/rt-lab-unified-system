@@ -238,19 +238,19 @@ export function upgradeSingleReport(report: LabReport): LabReport {
   // 2. Check and upgrade profiles
   const cbcCatalog = LAB_CATALOG.find(p => p.code === 'CBC');
 
-  updatedReport.profiles = updatedReport.profiles.map(prof => {
+  updatedReport.profiles = (updatedReport.profiles || []).map(prof => {
     const isCBC = prof.profileCode === 'CBC' || 
-                  prof.titleEn.toLowerCase().includes('complete blood') || 
-                  prof.titleAr.includes('صورة دم');
+                  (prof.titleEn || '').toLowerCase().includes('complete blood') || 
+                  (prof.titleAr || '').includes('صورة دم');
 
     if (isCBC) {
       // Merge CBC parameters with complete CBC catalog if needed
-      let params = [...prof.parameters];
+      let params = [...(prof.parameters || [])];
 
       if (cbcCatalog && params.length < 25) {
         // Old CBC lacking full parameters -> Merge
         const existingMap = new Map<string, TestParameter>();
-        params.forEach(p => existingMap.set(p.name.toLowerCase().trim(), p));
+        params.forEach(p => existingMap.set((p.name || '').toLowerCase().trim(), p));
 
         const mergedParams: TestParameter[] = cbcCatalog.parameters.map((catParam, idx) => {
           const match = Array.from(existingMap.entries()).find(([k]) => 
@@ -314,7 +314,7 @@ export function upgradeSingleReport(report: LabReport): LabReport {
       }
 
       // Run auto calculations if relevant (e.g. Lipid, LFT, KFT, HOMA-IR)
-      const { updatedParams } = runAutomaticCalculations(prof.parameters, {
+      const { updatedParams } = runAutomaticCalculations(prof.parameters || [], {
         age: report.patient.age,
         gender: report.patient.gender
       });

@@ -50,7 +50,7 @@ export const IncomeModule: React.FC = () => {
         inv.patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         inv.invoiceNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
         inv.barcode.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        inv.patientPhone.includes(searchTerm) ||
+        (inv.patientPhone || '').includes(searchTerm) ||
         inv.labNumber.toLowerCase().includes(searchTerm.toLowerCase());
 
       const matchesStatus = statusFilter === 'all' ? true : inv.paymentStatus === statusFilter;

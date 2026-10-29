@@ -60,9 +60,9 @@ export const PackagesManager: React.FC<PackagesManagerProps> = ({
 
   const filteredPackages = packages.filter(pkg => {
     const matchesSearch = 
-      pkg.titleAr.includes(searchTerm) ||
+      (pkg.titleAr || '').includes(searchTerm) ||
       pkg.titleEn.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      pkg.descriptionAr.includes(searchTerm) ||
+      (pkg.descriptionAr || '').includes(searchTerm) ||
       pkg.code.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesPopular = filterPopular === null || pkg.isPopular === filterPopular;

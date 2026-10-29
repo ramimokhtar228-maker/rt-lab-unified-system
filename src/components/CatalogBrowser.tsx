@@ -120,10 +120,10 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
   // Filter individual tests
   const filteredIndividualTests = activeTests.filter(t => {
     const matchesSearch = 
-      t.nameAr.includes(searchTerm) ||
-      t.nameEn.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      t.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      t.category.toLowerCase().includes(searchTerm.toLowerCase());
+      (t.nameAr || '').includes(searchTerm) ||
+      (t.nameEn || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (t.code || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (t.category || '').toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesCat = selectedCategory === 'All' || t.category === selectedCategory;
     return matchesSearch && matchesCat;
@@ -132,10 +132,10 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
   // Filter profiles
   const filteredProfiles = catalog.filter(item => {
     const matchesSearch =
-      item.titleEn.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.titleAr.includes(searchTerm) ||
-      item.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.parameters.some(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
+      (item.titleEn || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (item.titleAr || '').includes(searchTerm) ||
+      (item.code || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (item.parameters || []).some(p => (p?.name || '').toLowerCase().includes(searchTerm.toLowerCase()));
 
     const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
     return matchesSearch && matchesCategory;

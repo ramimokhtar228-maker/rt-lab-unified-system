@@ -73,7 +73,7 @@ export function convertOrderToLabReport(order: IncomingFinancialOrder): LabRepor
     const catalogMatch = LAB_CATALOG.find(cat => 
       cat.code === testCode || 
       nameAr.includes(cat.titleAr) || 
-      cat.titleAr.includes(nameAr) ||
+      (cat.titleAr || '').includes(nameAr) ||
       (cat.code === 'CBC' && nameAr.includes('صورة دم')) ||
       (cat.code === 'LFT' && nameAr.includes('كبد')) ||
       (cat.code === 'KFT' && nameAr.includes('كلى')) ||
@@ -108,7 +108,7 @@ export function convertOrderToLabReport(order: IncomingFinancialOrder): LabRepor
         t.nameAr === nameAr ||
         t.nameEn.toLowerCase() === nameEn.toLowerCase() ||
         nameAr.includes(t.nameAr) ||
-        t.nameAr.includes(nameAr)
+        (t.nameAr || '').includes(nameAr)
       );
 
       profiles.push({

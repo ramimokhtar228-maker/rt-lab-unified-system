@@ -2312,9 +2312,9 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
             <div className="max-h-96 overflow-y-auto divide-y divide-slate-100 space-y-2 pr-1">
               {packages
                 .filter(p => 
-                  p.titleAr.includes(packageSearchTerm) || 
-                  p.titleEn.toLowerCase().includes(packageSearchTerm.toLowerCase()) ||
-                  p.code.toLowerCase().includes(packageSearchTerm.toLowerCase())
+                  (p.titleAr || '').includes(packageSearchTerm) || 
+                  (p.titleEn || '').toLowerCase().includes(packageSearchTerm.toLowerCase()) ||
+                  (p.code || '').toLowerCase().includes(packageSearchTerm.toLowerCase())
                 )
                 .map(pkg => {
                   const isCurrent = report.packageApplied?.code.toUpperCase() === pkg.code.toUpperCase();

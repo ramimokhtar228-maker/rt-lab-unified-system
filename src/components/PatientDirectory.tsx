@@ -29,8 +29,8 @@ export const PatientDirectory: React.FC<PatientDirectoryProps> = ({
       p.fullName.toLowerCase().includes(q) ||
       p.fullNameEn.toLowerCase().includes(q) ||
       p.mrn.toLowerCase().includes(q) ||
-      p.nationalId.includes(q) ||
-      p.phone.includes(q)
+      (p.nationalId || '').includes(q) ||
+      (p.phone || '').includes(q)
     );
   });
 
