@@ -82,6 +82,40 @@ function fillGaps(winner: AnyRecord, other: AnyRecord): AnyRecord {
 }
 
 /** دمج مجموعة كاملة: الأحدث يفوز، الحقول الناقصة تُكمّل، والمحذوف لا يعود */
+/** Keeps already entered results when two copies of the same report are merged. */
+function mergeReportProfiles(winner: AnyRecord, other: AnyRecord): any[] {
+  const winnerProfiles = Array.isArray(winner?.profiles) ? winner.profiles : [];
+  const otherProfiles = Array.isArray(other?.profiles) ? other.profiles : [];
+  if (winnerProfiles.length === 0) return otherProfiles;
+  if (otherProfiles.length === 0) return winnerProfiles;
+  const used = new Set<number>();
+  const hasValue = (value: any) => value !== undefined && value !== null && String(value).trim() !== "";
+  const mergedProfiles = winnerProfiles.map((prof: any) => {
+    const twinIdx = otherProfiles.findIndex((p: any, i: number) => !used.has(i) && (
+      (p?.id && prof?.id && p.id === prof.id) ||
+      (p?.profileCode && prof?.profileCode && p.profileCode === prof.profileCode) ||
+      (p?.titleEn && prof?.titleEn && p.titleEn === prof.titleEn) ||
+      (p?.titleAr && prof?.titleAr && p.titleAr === prof.titleAr)
+    ));
+    if (twinIdx < 0) return prof;
+    used.add(twinIdx);
+    const twin = otherProfiles[twinIdx];
+    const twinParams = Array.isArray(twin?.parameters) ? twin.parameters : [];
+    const parameters = (Array.isArray(prof?.parameters) ? prof.parameters : []).map((param: any) => {
+      if (hasValue(param?.result)) return param;
+      const twinParam = twinParams.find((p: any) =>
+        (p?.id && param?.id && p.id === param.id) || (p?.name && param?.name && p.name === param.name));
+      if (twinParam && hasValue(twinParam.result)) {
+        return { ...param, result: twinParam.result, flag: twinParam.flag || param?.flag };
+      }
+      return param;
+    });
+    return { ...prof, parameters };
+  });
+  const extras = otherProfiles.filter((_: any, i: number) => !used.has(i));
+  return [...mergedProfiles, ...extras];
+}
+
 export function mergeCollection(collection: string, local: AnyRecord[] = [], cloud: AnyRecord[] = []): AnyRecord[] {
   const localList = Array.isArray(local) ? local.filter(Boolean) : [];
   const cloudList = Array.isArray(cloud) ? cloud.filter(Boolean) : [];
@@ -123,7 +157,12 @@ export function mergeCollection(collection: string, local: AnyRecord[] = [], clo
     // عند تساوي الطوابع (سجل قديم بلا طابع زمني) تفوز النسخة السحابية لأنها المصدر الموحّد
     const cloudStamp = recordStamp(record);
     const localStamp = recordStamp(existing);
-    const merged = cloudStamp >= localStamp ? fillGaps(record, existing) : fillGaps(existing, record);
+    const winner = cloudStamp >= localStamp ? record : existing;
+    const loser = winner === record ? existing : record;
+    const baseMerged = fillGaps(winner, loser);
+    const merged = collection === 'reports'
+      ? { ...baseMerged, profiles: mergeReportProfiles(baseMerged, loser) }
+      : baseMerged;
     if (JSON.stringify(merged) !== JSON.stringify(existing)) {
       map.set(key, merged);
       changed = true;
