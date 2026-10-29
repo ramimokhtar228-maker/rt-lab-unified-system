@@ -255,6 +255,20 @@ export const DashboardModule: React.FC = () => {
     }
   };
 
+  const handleHealCases = async () => {
+    try {
+      setIsHealingCases(true);
+      const res = await healAndRestoreCases();
+      setSyncFeedback(res.message);
+      setTimeout(() => setSyncFeedback(null), 4000);
+    } catch (e: any) {
+      setSyncFeedback(e?.message || 'خطأ أثناء المعالجة والمزامنة');
+      setTimeout(() => setSyncFeedback(null), 4000);
+    } finally {
+      setIsHealingCases(false);
+    }
+  };
+
   const handleDeleteCase = (reportId: string, invoiceId?: string) => {
     if (window.confirm('هل أنت متأكد من رغبتك في حذف هذا المريض والتقرير نهائياً؟')) {
       deleteReport(reportId);
