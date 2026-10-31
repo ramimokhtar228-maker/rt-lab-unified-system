@@ -30,6 +30,7 @@ import {
   LoyaltyConfig,
   PatientLoyaltyProfile,
   LoyaltyTier,
+  LoyaltyTransaction,
   LabInfo,
   LabFacility,
   StaffMember,
@@ -2608,7 +2609,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       console.warn('Failed to save loyaltyConfig to localStorage:', e);
     }
     try {
-      realtimeSyncManager.broadcastAction('UPDATE_LOYALTY_CONFIG', newConfig);
+      realtimeSyncManager.broadcastAction('UPDATE_LOYALTY', newConfig);
     } catch {}
     logAction('LOYALTY', 'LOYALTY', `تحديث إعدادات كروت الولاء وقواعد احتساب النقاط (استبعاد رسوم الزيارة: ${newConfig.excludeVisitFee !== false ? 'مفعّل' : 'معطّل'})`);
   }, [logAction]);

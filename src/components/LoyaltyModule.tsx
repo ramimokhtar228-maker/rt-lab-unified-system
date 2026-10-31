@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { PatientLoyaltyProfile, LoyaltyTier, LoyaltyTransaction, LoyaltyConfig } from '../types';
 import { DEFAULT_LOYALTY_CONFIG } from '../data/catalog';

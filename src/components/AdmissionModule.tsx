@@ -28,7 +28,7 @@ import {
   ChevronUp,
   FileText
 } from 'lucide-react';
-import { Patient, InvoiceTestItem, PaymentMethod, ComprehensivePackage } from '../types';
+import { Patient, InvoiceTestItem, PaymentMethod, ComprehensivePackage, LabReport } from '../types';
 import { LAB_CATALOG } from '../data/labCatalog';
 import { INITIAL_INDIVIDUAL_TESTS } from '../data/individualTestsData';
 import { SmartTestSearch } from './SmartTestSearch';
