@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { PatientLoyaltyProfile, LoyaltyTier, LoyaltyTransaction, LoyaltyConfig } from '../types';
+import { DEFAULT_LOYALTY_CONFIG } from '../data/catalog';
+import { pointsForAmount, calculateTestsOnlyPaidAmount } from '../utils/loyaltyEngine';
 import { RTLogo } from './RTLogo';
 import { generateAndDownloadLoyaltyCard, CardCustomFields } from '../utils/loyaltyCardCanvas';
 import {
@@ -61,6 +63,7 @@ export const LoyaltyModule: React.FC = () => {
     loyaltyProfiles,
     loyaltyConfig,
     updateLoyaltyConfig,
+    recalculateAllLoyaltyPoints,
     addLoyaltyProfile,
     updateLoyaltyProfile,
     deleteLoyaltyProfile,
@@ -142,6 +145,16 @@ export const LoyaltyModule: React.FC = () => {
   // Config modal
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [tempConfig, setTempConfig] = useState<LoyaltyConfig>(loyaltyConfig);
+  const [recalcSummary, setRecalcSummary] = useState<{
+    updatedProfilesCount: number;
+    newCardsCreatedCount: number;
+    totalPointsCalculated: number;
+    totalInvoicesProcessed: number;
+  } | null>(null);
+
+  useEffect(() => {
+    setTempConfig(loyaltyConfig);
+  }, [loyaltyConfig]);
 
   // Add points modal
   const [isAddPointsOpen, setIsAddPointsOpen] = useState(false);
@@ -268,10 +281,8 @@ export const LoyaltyModule: React.FC = () => {
 
   // RETROACTIVE SYNC ALL INVOICES
   const handleRetroactiveSync = () => {
-    const res = retroactiveSyncAllInvoicesToLoyalty();
-    alert(`✅ تمت مزامنة وتفعيل كروت ونقاط الولاء بأثر رجعي!
-• تم فحص ${res.syncedCount} فاتورة وحالة مسجلة.
-• تم إنشاء وإدراج ${res.newProfilesCount} كارت ولاء جديد بحسابات المرضى.`);
+    const res = recalculateAllLoyaltyPoints();
+    setRecalcSummary(res);
   };
 
   // Single-Sided Isolated Card Print
@@ -540,6 +551,63 @@ export const LoyaltyModule: React.FC = () => {
             <Sliders className="w-4 h-4 text-slate-500" />
             <span>سياسة النقاط والاستبدال</span>
           </button>
+        </div>
+      </div>
+
+      {/* Dynamic Points Calculation & Auto-Card Status Banner */}
+      <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl p-4 sm:p-5 shadow-md border border-amber-500/30">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div className="space-y-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                <span>قاعدة احتساب النقاط الحالية</span>
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                <Check className="w-3.5 h-3.5" />
+                <span>إصدار الكروت تلقائي لجميع الحجوزات</span>
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>رسوم الزيارة المنزلية مستبعدة تلقائياً</span>
+              </span>
+            </div>
+
+            <div className="text-base sm:text-lg font-black text-amber-200 flex flex-wrap items-center gap-2">
+              <span>
+                كل {loyaltyConfig.pointsPerEGP >= 1 
+                  ? `1 ج.م مدفوع للتحاليل = ${loyaltyConfig.pointsPerEGP} نقطة ولاء` 
+                  : `${(1 / (loyaltyConfig.pointsPerEGP || 0.1)).toFixed(0)} ج.م مدفوعة للتحاليل = 1 نقطة ولاء`}
+              </span>
+              <span className="text-xs font-normal text-slate-300 bg-black/40 px-2 py-0.5 rounded-lg border border-white/10">
+                (المبلغ المدفوع للتحاليل فقط وبدون احتساب رسوم الزيارة)
+              </span>
+            </div>
+
+            <p className="text-xs text-slate-300 leading-relaxed max-w-4xl">
+              النظام يقوم تلقائياً بإنشاء كارت ذكي لكل مريض يحجز على المنظومة، واحتساب نقاط ولائه فوراً على مدفوعات التحاليل فقط. يمكنك تعديل معدل النقاط بالنسبة للقيمة المدفوعة من الإدارة، وتحديث كافة الحجوزات السابقة بنقرة واحدة بأثر رجعي.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            <button
+              onClick={() => {
+                setTempConfig(loyaltyConfig);
+                setIsSettingsOpen(true);
+              }}
+              className="px-4 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs rounded-xl shadow-md transition-all cursor-pointer flex items-center gap-2 active:scale-95"
+            >
+              <Sliders className="w-4 h-4 text-slate-950" />
+              <span>تعديل سياسة وحساب النقاط</span>
+            </button>
+            <button
+              onClick={handleRetroactiveSync}
+              className="px-4 py-2.5 bg-indigo-600/80 hover:bg-indigo-600 text-white font-bold text-xs rounded-xl border border-indigo-400/30 transition-all cursor-pointer flex items-center gap-2 active:scale-95"
+            >
+              <RefreshCw className="w-4 h-4 text-amber-300" />
+              <span>تحديث الحساب لجميع الحجوزات ⚡</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -1459,41 +1527,181 @@ export const LoyaltyModule: React.FC = () => {
         </div>
       )}
 
-      {/* MODAL 5: SETTINGS */}
+      {/* MODAL 5: SETTINGS & POINTS CALCULATION RULE */}
       {isSettingsOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
-          <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 space-y-4 text-xs">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/70 backdrop-blur-xs p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-6 space-y-5 text-xs animate-in zoom-in-95 my-8">
             <div className="flex items-center justify-between border-b pb-3">
-              <h3 className="font-bold text-sm text-slate-900">سياسة احتساب النقاط واستبدال الخصومات</h3>
-              <button onClick={() => setIsSettingsOpen(false)} className="text-slate-400 hover:text-slate-600">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-700 flex items-center justify-center font-bold">
+                  <Sliders className="w-5 h-5 text-amber-600" />
+                </div>
+                <div>
+                  <h3 className="font-black text-sm text-slate-900">إعدادات الإدارة: قواعد احتساب النقاط وكروت الولاء</h3>
+                  <p className="text-[11px] text-slate-500">تعديل معادلة النقاط للتحاليل فقط، واستبعاد رسوم الزيارة، وإعادة الحساب للأثر الرجعي</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setIsSettingsOpen(false)} 
+                className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
-                <div>
-                  <label className="block text-slate-700 font-bold mb-1">النقاط المكتسبة لكل 1 ج.م:</label>
-                  <input
-                    type="number"
-                    value={tempConfig.pointsPerEGP}
-                    onChange={e => setTempConfig(prev => ({ ...prev, pointsPerEGP: Number(e.target.value) }))}
-                    className="w-full px-3 py-1.5 border rounded-lg font-mono"
-                  />
-                  <span className="text-[10px] text-slate-500">الافتراضي: 1 نقطة / 1 ج.م</span>
+            <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-1">
+              {/* 1. Points per paid amount rule */}
+              <div className="bg-gradient-to-br from-amber-50/60 to-orange-50/60 p-4 rounded-2xl border border-amber-200/80 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="font-black text-xs text-amber-950 flex items-center gap-1.5">
+                    <DollarSign className="w-4 h-4 text-amber-600" />
+                    <span>طريقة احتساب النقاط بالنسبة للقيمة المدفوعة (للتحاليل فقط):</span>
+                  </span>
+                  <span className="text-[10px] font-bold text-amber-800 bg-amber-200/60 px-2 py-0.5 rounded-full">
+                    معدل مرن للإدارة
+                  </span>
                 </div>
-                <div>
-                  <label className="block text-slate-700 font-bold mb-1">قيمة الخصم لكل 100 نقطة (ج.م):</label>
-                  <input
-                    type="number"
-                    value={tempConfig.egpPer100Points}
-                    onChange={e => setTempConfig(prev => ({ ...prev, egpPer100Points: Number(e.target.value) }))}
-                    className="w-full px-3 py-1.5 border rounded-lg font-mono"
-                  />
-                  <span className="text-[10px] text-slate-500">الافتراضي: 10 ج.م / 100 نقطة</span>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="bg-white p-3 rounded-xl border border-amber-200 shadow-2xs">
+                    <label className="block text-slate-700 font-bold mb-1">
+                      النقاط المكتسبة لكل 1 ج.م مدفوع:
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        step="any"
+                        min="0"
+                        value={tempConfig.pointsPerEGP}
+                        onChange={e => {
+                          const val = Math.max(0, Number(e.target.value));
+                          setTempConfig(prev => ({ 
+                            ...prev, 
+                            pointsPerEGP: val,
+                            egpUnitForPoints: val > 0 ? Number((1 / val).toFixed(2)) : 0
+                          }));
+                        }}
+                        className="w-full px-3 py-1.5 border border-slate-300 rounded-lg font-mono font-bold text-slate-900 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                      />
+                      <span className="font-bold text-slate-600 shrink-0">نقطة / ج.م</span>
+                    </div>
+                    <span className="text-[10px] text-slate-500 mt-1 block">مثال: 1 = كل جنيه نقطة | 0.5 = كل جنيهين نقطة</span>
+                  </div>
+
+                  <div className="bg-white p-3 rounded-xl border border-amber-200 shadow-2xs">
+                    <label className="block text-slate-700 font-bold mb-1">
+                      أو: كم جنيه مدفوع يكافئ نقطة واحدة:
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        step="any"
+                        min="0"
+                        value={tempConfig.pointsPerEGP > 0 ? Number((1 / tempConfig.pointsPerEGP).toFixed(2)) : 0}
+                        onChange={e => {
+                          const egpVal = Math.max(0.01, Number(e.target.value));
+                          const pointsVal = egpVal > 0 ? Number((1 / egpVal).toFixed(4)) : 0;
+                          setTempConfig(prev => ({ 
+                            ...prev, 
+                            pointsPerEGP: pointsVal,
+                            egpUnitForPoints: egpVal
+                          }));
+                        }}
+                        className="w-full px-3 py-1.5 border border-slate-300 rounded-lg font-mono font-bold text-slate-900 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                      />
+                      <span className="font-bold text-slate-600 shrink-0">ج.م / نقطة</span>
+                    </div>
+                    <span className="text-[10px] text-slate-500 mt-1 block">مثال: 10 = كل 10 جنيه نقطة | 1 = كل جنيه نقطة</span>
+                  </div>
+                </div>
+
+                {/* Live Simulation Card */}
+                <div className="bg-white/90 p-3 rounded-xl border border-amber-200/90 text-[11px] text-amber-950 space-y-1">
+                  <div className="font-bold flex items-center gap-1.5 text-amber-900">
+                    <Calculator className="w-3.5 h-3.5 text-amber-600" />
+                    <span>معاينة فورية لتطبيق القاعدة:</span>
+                  </div>
+                  <p className="text-slate-600 leading-relaxed">
+                    إذا حجز مريض تحاليل بقيمة <strong className="text-slate-900">500 ج.م</strong> + رسوم زيارة منزلية <strong className="text-rose-700">100 ج.م</strong> وسدد الفاتورة بالكامل (600 ج.م):
+                  </p>
+                  <p className="font-bold text-emerald-800 bg-emerald-50 p-2 rounded-lg border border-emerald-200">
+                    ✓ سيكتسب المريض: <span className="font-mono text-sm font-black text-emerald-900">+{Math.floor(500 * (tempConfig.pointsPerEGP || 0))} نقطة ولاء</span> (محسوبة على الـ 500 ج.م للتحاليل فقط، ورسوم الزيارة 100 ج.م مستبعدة بالكامل).
+                  </p>
                 </div>
               </div>
 
+              {/* 2. Automation and Exclusion Rules */}
+              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
+                <h4 className="font-black text-xs text-slate-900">الضوابط الذكية والاستبعاد التلقائي:</h4>
+                
+                <div className="space-y-2.5">
+                  <label className="flex items-start gap-2.5 p-2.5 bg-white rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-50/80 transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={tempConfig.excludeVisitFee !== false}
+                      onChange={e => setTempConfig(prev => ({ ...prev, excludeVisitFee: e.target.checked }))}
+                      className="w-4 h-4 text-emerald-600 rounded mt-0.5 cursor-pointer"
+                    />
+                    <div>
+                      <span className="font-bold text-slate-800 block">
+                        استبعاد رسوم الزيارة والسحب المنزلي من احتساب النقاط (قيمة التحاليل فقط) [موصى به]
+                      </span>
+                      <span className="text-[10px] text-slate-500 block mt-0.5">
+                        يضمن عدم احتساب أي نقاط ولاء على تكلفة انتقال التمريض أو رسوم الزيارة، واقتصار النقاط على مبالغ التحاليل المدفوعة فقط.
+                      </span>
+                    </div>
+                  </label>
+
+                  <label className="flex items-start gap-2.5 p-2.5 bg-white rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-50/80 transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={tempConfig.autoCreateCardOnBooking !== false}
+                      onChange={e => setTempConfig(prev => ({ ...prev, autoCreateCardOnBooking: e.target.checked }))}
+                      className="w-4 h-4 text-emerald-600 rounded mt-0.5 cursor-pointer"
+                    />
+                    <div>
+                      <span className="font-bold text-slate-800 block">
+                        تفعيل إصدار كارت ولاء ذكي تلقائياً لكل حجز جديد على السيستم
+                      </span>
+                      <span className="text-[10px] text-slate-500 block mt-0.5">
+                        أي حجز جديد لمريض غير مسجل في برنامج الولاء يتم فوراً إنشاء كارت ذكي له وتوثيق نقاطه في أرشيف كروت المرضى.
+                      </span>
+                    </div>
+                  </label>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                  <div>
+                    <label className="block text-slate-700 font-bold mb-1">
+                      نقاط ترحيبية هدية عند إصدار الكارت التلقائي لأول مرة:
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={tempConfig.welcomeBonusPoints ?? 50}
+                      onChange={e => setTempConfig(prev => ({ ...prev, welcomeBonusPoints: Number(e.target.value) }))}
+                      className="w-full px-3 py-1.5 border border-slate-300 rounded-lg font-mono font-bold"
+                    />
+                    <span className="text-[10px] text-slate-500">الافتراضي: 50 نقطة ترحيبية</span>
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-700 font-bold mb-1">
+                      قيمة الخصم النقدي لكل 100 نقطة (ج.م):
+                    </label>
+                    <input
+                      type="number"
+                      min="1"
+                      value={tempConfig.egpPer100Points}
+                      onChange={e => setTempConfig(prev => ({ ...prev, egpPer100Points: Number(e.target.value) }))}
+                      className="w-full px-3 py-1.5 border border-slate-300 rounded-lg font-mono font-bold"
+                    />
+                    <span className="text-[10px] text-slate-500">الافتراضي: 10 ج.م / 100 نقطة</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* 3. Tiers & Discounts */}
               <div>
                 <h4 className="font-bold text-slate-800 mb-2">نسب الخصم الدائم ومستويات العضوية:</h4>
                 <div className="space-y-2">
@@ -1564,32 +1772,97 @@ export const LoyaltyModule: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex justify-between items-center pt-3 border-t">
+            {/* Modal Actions */}
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-3 pt-3 border-t">
               <button
                 type="button"
-                onClick={() => setTempConfig(loyaltyConfig)}
-                className="text-slate-500 hover:text-slate-700 text-xs font-semibold"
+                onClick={() => setTempConfig(DEFAULT_LOYALTY_CONFIG)}
+                className="text-slate-500 hover:text-slate-800 text-xs font-semibold underline underline-offset-2 cursor-pointer"
               >
-                استعادة القيم السابقة
+                استعادة القيم الافتراضية
               </button>
 
-              <div className="flex gap-2">
+              <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-end">
                 <button
+                  type="button"
                   onClick={() => setIsSettingsOpen(false)}
-                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-bold"
+                  className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold cursor-pointer"
                 >
                   إلغاء
                 </button>
                 <button
+                  type="button"
                   onClick={() => {
                     updateLoyaltyConfig(tempConfig);
                     setIsSettingsOpen(false);
                   }}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold"
+                  className="px-4 py-2.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl font-bold cursor-pointer transition-all active:scale-95 shadow-sm"
                 >
-                  حفظ وتطبيق السياسة
+                  حفظ للحجوزات القادمة
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    updateLoyaltyConfig(tempConfig);
+                    const res = recalculateAllLoyaltyPoints(tempConfig);
+                    setIsSettingsOpen(false);
+                    setRecalcSummary(res);
+                  }}
+                  className="px-5 py-2.5 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white rounded-xl font-black cursor-pointer transition-all active:scale-95 shadow-md flex items-center gap-1.5"
+                >
+                  <RefreshCw className="w-4 h-4 text-amber-200" />
+                  <span>حفظ وتحديث نقاط كافة الحجوزات بأثر رجعي ⚡</span>
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL 6: RECALCULATION & SYNC SUMMARY */}
+      {recalcSummary && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/70 backdrop-blur-xs p-4 animate-in fade-in">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 text-center space-y-5 animate-in zoom-in-95">
+            <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-inner">
+              <Check className="w-9 h-9 stroke-[3]" />
+            </div>
+
+            <div className="space-y-1.5">
+              <h3 className="text-xl font-black text-slate-900">
+                تم بنجاح تحديث وإعادة احتساب نقاط الولاء!
+              </h3>
+              <p className="text-xs text-slate-500">
+                تم تطبيق القاعدة الجديدة واحتساب النقاط بناءً على المبلغ المدفوع للتحاليل فقط مع استبعاد رسوم الزيارة تلقائياً.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 text-right">
+              <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
+                <span className="text-[11px] text-slate-500 block mb-1">الحجوزات والفواتير المفحوصة:</span>
+                <strong className="text-base font-black font-mono text-slate-900">{recalcSummary.totalInvoicesProcessed} حجز</strong>
+              </div>
+              <div className="bg-emerald-50 p-3.5 rounded-2xl border border-emerald-200">
+                <span className="text-[11px] text-emerald-700 block mb-1">كروت جديدة أُصدرت تلقائياً:</span>
+                <strong className="text-base font-black font-mono text-emerald-900">+{recalcSummary.newCardsCreatedCount} كارت</strong>
+              </div>
+              <div className="bg-amber-50 p-3.5 rounded-2xl border border-amber-200">
+                <span className="text-[11px] text-amber-700 block mb-1">بروفايلات المرضى المحدثة:</span>
+                <strong className="text-base font-black font-mono text-amber-900">{recalcSummary.updatedProfilesCount} مريض</strong>
+              </div>
+              <div className="bg-indigo-50 p-3.5 rounded-2xl border border-indigo-200">
+                <span className="text-[11px] text-indigo-700 block mb-1">إجمالي النقاط المحتسبة:</span>
+                <strong className="text-base font-black font-mono text-indigo-900">{recalcSummary.totalPointsCalculated.toLocaleString()} نقطة</strong>
+              </div>
+            </div>
+
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => setRecalcSummary(null)}
+                className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs transition-colors cursor-pointer shadow-md"
+              >
+                إغلاق وتأكيد البيانات المحدثة
+              </button>
             </div>
           </div>
         </div>

@@ -292,8 +292,13 @@ export interface PatientLoyaltyProfile {
 }
 
 export interface LoyaltyConfig {
-  pointsPerEGP: number;
-  egpPer100Points: number;
+  pointsPerEGP: number; // e.g. 1 (1 point per 1 EGP) or 0.1 (10 EGP = 1 point)
+  egpPer100Points: number; // Cash discount per 100 points
+  excludeVisitFee?: boolean; // Whether to exclude home visit/visit fees from points calculation (defaults to true)
+  autoCreateCardOnBooking?: boolean; // Automatically issue a loyalty card for every booking (defaults to true)
+  welcomeBonusPoints?: number; // Welcome bonus points given when a new card is issued (defaults to 50)
+  minBookingAmountForPoints?: number; // Minimum tests amount required to earn points (defaults to 0)
+  egpUnitForPoints?: number; // Friendly representation: every N EGP = 1 point
   tiers: {
     Silver: { discountRate: number; minPoints: number };
     Gold: { discountRate: number; minPoints: number };

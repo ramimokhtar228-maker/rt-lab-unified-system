@@ -64,8 +64,13 @@ export const INITIAL_GITHUB_CONFIG: GitHubSyncConfig = {
 };
 
 export const DEFAULT_LOYALTY_CONFIG: LoyaltyConfig = {
-  pointsPerEGP: 1, // كل 1 جنيه مصري = 1 نقطة ولاء
+  pointsPerEGP: 1, // كل 1 جنيه مصري = 1 نقطة ولاء (أو حسب رغبة الإدارة)
   egpPer100Points: 10, // كل 100 نقطة ولاء = 10 جنيه مصري خصم نقدي
+  excludeVisitFee: true, // استبعاد رسوم الزيارة والسحب المنزلي من احتساب النقاط
+  autoCreateCardOnBooking: true, // إصدار كارت تلقائي لكل حجز جديد على السيستم
+  welcomeBonusPoints: 50, // نقاط ترحيبية هدية مع كل كارت جديد
+  minBookingAmountForPoints: 0,
+  egpUnitForPoints: 1,
   tiers: {
     Silver: { discountRate: 5, minPoints: 0 },
     Gold: { discountRate: 10, minPoints: 500 },

@@ -41,27 +41,9 @@ import {
   Check
 } from 'lucide-react';
 
-export interface LoyaltyConfig {
-  pointsPerEGP: number; // 1 point per 1 EGP spent
-  egpPer100Points: number; // 10 EGP cash discount for each 100 points
-  tiers: {
-    Silver: { discountRate: number; minPoints: number };
-    Gold: { discountRate: number; minPoints: number };
-    Platinum: { discountRate: number; minPoints: number };
-    VIP: { discountRate: number; minPoints: number };
-  };
-}
-
-const DEFAULT_LOYALTY_CONFIG: LoyaltyConfig = {
-  pointsPerEGP: 1,
-  egpPer100Points: 10,
-  tiers: {
-    Silver: { discountRate: 5, minPoints: 0 },
-    Gold: { discountRate: 10, minPoints: 500 },
-    Platinum: { discountRate: 15, minPoints: 1500 },
-    VIP: { discountRate: 20, minPoints: 3000 }
-  }
-};
+import { LoyaltyConfig } from '../types';
+import { DEFAULT_LOYALTY_CONFIG } from '../data/catalog';
+import { pointsForAmount, calculateTestsOnlyPaidAmount } from '../utils/loyaltyEngine';
 
 interface PatientCardsAndPointsProps {
   loyaltyProfiles: PatientLoyaltyProfile[];

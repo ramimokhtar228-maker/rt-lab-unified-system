@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useApp } from '../context/AppContext';
 import { getNextLabIdentity } from '../utils/labNumbering';
+import { calculateTestsOnlyPaidAmount, pointsForAmount } from '../utils/loyaltyEngine';
 import {
   UserPlus,
   Search,
@@ -446,7 +447,26 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
               redeemLoyaltyPoints(phone.trim(), pointsToRedeem, createdReport.reportNumber, pointsRedeemValue);
             }
           }
-          earnLoyaltyPoints(phone.trim(), paidAmount, createdReport.reportNumber, fullName.trim(), nextBarcode);
+          const testsOnlyPaid = calculateTestsOnlyPaidAmount({
+            paidAmount,
+            visitFee: effectiveVisitFee,
+            testsSubtotal,
+            netAmount: netTotal
+          }, loyaltyConfig);
+
+          earnLoyaltyPoints(
+            phone.trim(),
+            testsOnlyPaid,
+            createdReport.reportNumber,
+            fullName.trim(),
+            nextBarcode,
+            {
+              isBooking: true,
+              visitFee: effectiveVisitFee,
+              testsSubtotal,
+              netAmount: netTotal
+            }
+          );
         } catch (lErr) {
           console.warn("Loyalty sync non-fatal warning:", lErr);
         }
@@ -537,9 +557,17 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
             <strong className="font-mono text-emerald-700">المطلوب: {netTotal} ج.م | المدفوع: {paidAmount} ج.م | المتبقي: {remainingAmount} ج.م</strong>
           </div>
           {phone.trim() && (
-            <div className="flex justify-between items-center">
-              <span className="text-slate-500">نقاط الولاء المكتسبة:</span>
-              <strong className="font-mono text-amber-700">+{Math.floor(paidAmount * loyaltyConfig.pointsPerEGP)} نقطة (رقم الهاتف: {phone})</strong>
+            <div className="flex flex-col gap-1 border-t border-slate-200/60 pt-2 text-right">
+              <div className="flex justify-between items-center">
+                <span className="text-slate-500 font-bold">كارت ونقاط الولاء التلقائية:</span>
+                <span className="inline-flex items-center gap-1 font-mono text-amber-700 font-bold bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">
+                  <Gift className="w-3.5 h-3.5 text-amber-600" />
+                  +{pointsForAmount(calculateTestsOnlyPaidAmount({ paidAmount, visitFee: effectiveVisitFee, testsSubtotal, netAmount: netTotal }, loyaltyConfig), loyaltyConfig)} نقطة
+                </span>
+              </div>
+              <p className="text-[10px] text-slate-500">
+                تم احتساب النقاط بناءً على المبلغ المدفوع للتحاليل فقط ({calculateTestsOnlyPaidAmount({ paidAmount, visitFee: effectiveVisitFee, testsSubtotal, netAmount: netTotal }, loyaltyConfig)} ج.م) {effectiveVisitFee > 0 ? `(مع استبعاد رسوم الزيارة ${effectiveVisitFee} ج.م)` : ''}، وتم إنشاء/تحديث كارت الولاء الذكي للمريض تلقائياً.
+              </p>
             </div>
           )}
         </div>
@@ -1444,6 +1472,31 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
                 </div>
               </div>
             </div>
+
+            {/* Live Loyalty Points & Auto Card Indicator */}
+            {phone.trim() && (
+              <div className="p-3 bg-amber-50/90 rounded-2xl border border-amber-200 text-xs space-y-1.5 animate-in fade-in">
+                <div className="flex items-center justify-between font-bold text-amber-950">
+                  <div className="flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                    <span>نقاط الولاء المكتسبة مع هذا الحجز:</span>
+                  </div>
+                  <span className="font-mono text-sm font-black text-amber-900 bg-amber-100/80 px-2 py-0.5 rounded-lg border border-amber-300/60">
+                    +{pointsForAmount(calculateTestsOnlyPaidAmount({ paidAmount, visitFee: effectiveVisitFee, testsSubtotal, netAmount: netTotal }, loyaltyConfig), loyaltyConfig)} نقطة
+                  </span>
+                </div>
+                <div className="text-[10px] text-amber-800 leading-relaxed space-y-0.5">
+                  <p>
+                    {loyaltyProfile 
+                      ? `المريض مسجل برقم كارت (${loyaltyProfile.cardNumber || loyaltyProfile.tier}) - ستضاف النقاط مباشرة إلى رصيده.`
+                      : 'سيتم تلقائياً إنشاء كارت ولاء ذكي جديد للمريض وحفظ كافة بياناته.'}
+                  </p>
+                  <p className="font-medium text-amber-900/90">
+                    • الحساب مبني على قيمة التحاليل المدفوعة فقط ({calculateTestsOnlyPaidAmount({ paidAmount, visitFee: effectiveVisitFee, testsSubtotal, netAmount: netTotal }, loyaltyConfig)} ج.م) {effectiveVisitFee > 0 ? `| تم استبعاد رسوم الزيارة (${effectiveVisitFee} ج.م) تلقائياً` : ''}.
+                  </p>
+                </div>
+              </div>
+            )}
 
             {/* WhatsApp Booking Message Preview & Dispatch Button */}
             <button
