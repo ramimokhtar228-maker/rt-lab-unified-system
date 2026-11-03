@@ -10,6 +10,8 @@ import { ParameterEditModal } from './ParameterEditModal';
 import { AddParameterModal } from './AddParameterModal';
 import { StaffSignaturesPicker } from './StaffSignaturesPicker';
 import { DiseaseIllustrationsModal } from './DiseaseIllustrationsModal';
+import { OGTTEditorSection } from './OGTTEditorSection';
+import { isOgttProfile } from '../utils/ogttEngine';
 import { useApp } from '../context/AppContext';
 import { 
   Plus, 
@@ -1574,6 +1576,15 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                   </button>
                 </div>
               </div>
+            )}
+
+            {/* OGTT Live Protocol, Sampling Guide (75g Glucose), and Dynamic Auto-Generated Curve */}
+            {isOgttProfile(currentProfile) && (
+              <OGTTEditorSection
+                profile={currentProfile}
+                onUpdateProfile={(upd) => handleUpdateProfile(currentProfile.id, upd)}
+                onUpdateParameters={(params) => handleUpdateProfile(currentProfile.id, { parameters: params })}
+              />
             )}
 
             {/* CBC Peripheral Blood Film Findings Editor */}

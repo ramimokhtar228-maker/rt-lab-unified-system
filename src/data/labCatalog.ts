@@ -4,6 +4,7 @@ export { INITIAL_LAB_INFO, INITIAL_FACILITIES, INITIAL_STAFF_MEMBERS } from "./s
 export { INITIAL_LOYALTY_PROFILES, TIER_BENEFITS } from "./loyaltyData";
 
 import { CatalogProfileTemplate, LabStaffSignatures, StaffOptionItem } from '../types/lab';
+import { OGTT_CATALOG_TEMPLATE } from '../utils/ogttEngine';
 
 export const DEFAULT_STAFF: LabStaffSignatures = {
   labChemist: "Dr. Omar Fouad El-Kady",
@@ -928,6 +929,7 @@ export const LAB_CATALOG: CatalogProfileTemplate[] = [
       }
     ]
   },
+  OGTT_CATALOG_TEMPLATE,
   {
     "code": "ACR",
     "titleEn": "Urine Albumin / Creatinine Ratio (ACR)",

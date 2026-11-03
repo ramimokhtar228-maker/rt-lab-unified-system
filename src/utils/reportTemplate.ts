@@ -3,6 +3,7 @@ import { formatReferenceDisplay } from './cbcCalculator';
 import { formatGenderEn } from './calculator';
 import { DEFAULT_STAFF } from '../data/labCatalog';
 import { DISEASE_ILLUSTRATIONS } from '../data/diseaseIllustrations';
+import { isOgttProfile, extractOgttData, generateOgttSvgChart, generateOgttProtocolHtml } from './ogttEngine';
 
 /**
  * Single source of truth for the patient-facing report.
@@ -1034,6 +1035,43 @@ function pageHtml(report: LabReport, profile: TestProfile, idx: number, total: n
       </div>`
     : '';
 
+  // OGTT Dynamic Curve and Protocol (GLUCOSE 75g, 8h fasting, 3-hour curve)
+  const isOgtt = isOgttProfile(profile);
+  let ogttBlockHtml = '';
+  if (isOgtt) {
+    const ogttEval = extractOgttData(profile.parameters);
+    const svgChart = generateOgttSvgChart(ogttEval, 680, 215);
+    const protocolHtml = generateOgttProtocolHtml();
+    ogttBlockHtml = `
+      <div class="rt-ogtt-wrapper avoid-break-inside" style="margin-top: 3mm; margin-bottom: 2mm; page-break-inside: avoid; break-inside: avoid;">
+        ${protocolHtml}
+        
+        <div style="margin-top: 2.5mm; margin-bottom: 2.5mm;">
+          ${svgChart}
+        </div>
+
+        <div style="background: ${ogttEval.badgeBg}; border: 1.5px solid ${ogttEval.statusColor}33; border-radius: 6px; padding: 2.5mm 3.5mm; display: flex; align-items: center; justify-content: space-between; gap: 4mm;">
+          <div>
+            <div style="font-weight: 800; font-size: 10px; color: ${ogttEval.statusColor}; display: flex; align-items: center; gap: 6px;">
+              <span>📈 DIAGNOSTIC EVALUATION (التقييم التشخيصي للمنحنى):</span>
+              <span style="background: ${ogttEval.statusColor}; color: #ffffff; padding: 1.5px 6.5px; border-radius: 3px; font-size: 9px; font-weight: 800;">
+                ${esc(ogttEval.statusEn)}
+              </span>
+            </div>
+            <div style="font-size: 8.5px; color: #1e293b; margin-top: 1mm; line-height: 1.45;">
+              ${esc(ogttEval.clinicalSummaryEn)} • <b>${esc(ogttEval.clinicalSummaryAr)}</b>
+            </div>
+          </div>
+          <div style="text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 8.5px; flex-shrink: 0; color: #334155;">
+            <div>Fasting: <b>${ogttEval.fastingVal !== null ? `${ogttEval.fastingVal} mg/dL` : '—'}</b></div>
+            <div>2-Hour: <b>${ogttEval.twoHourVal !== null ? `${ogttEval.twoHourVal} mg/dL` : '—'}</b></div>
+            <div>Peak: <b>${ogttEval.peakVal !== null ? `${ogttEval.peakVal} mg/dL` : '—'}</b></div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
   return `
   <section class="rt-page report-page-container">
     <div class="rt-topbar"></div>
@@ -1085,6 +1123,7 @@ function pageHtml(report: LabReport, profile: TestProfile, idx: number, total: n
     </table>
 
     ${film}
+    ${ogttBlockHtml}
 
     ${interpretationsHtml}
     ${commentsHtml}

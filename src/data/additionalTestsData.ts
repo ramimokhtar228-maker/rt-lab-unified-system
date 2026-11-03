@@ -68,19 +68,19 @@ export const ADDITIONAL_TESTS: IndividualTest[] = [
   {
     "id": "t-147",
     "code": "OGTT_75",
-    "nameAr": "Oral Glucose Tolerance Test (75 g, 2 h)",
-    "nameEn": "Oral Glucose Tolerance Test (75 g, 2 h)",
+    "nameAr": "منحنى السكر بالدم بعد 75 جم جلوكوز (صائم 8 ساعات وكل 30 دقيقة حتى 3 ساعات)",
+    "nameEn": "Oral Glucose Tolerance Test (OGTT 75g - 3 Hours Serial Curve)",
     "category": "Diabetes",
-    "price": 250,
-    "cost": 40,
-    "sampleType": "Fluoride Plasma",
+    "price": 280,
+    "cost": 45,
+    "sampleType": "Fluoride Oxalate Plasma (Venous)",
     "turnaroundTime": "Within 3 hours",
     "unit": "mg/dL",
     "minNormal": 70,
     "maxNormal": 140,
-    "textReference": "Normal 2h: < 140 | Impaired: 140 - 199 | Diabetic: >= 200 mg/dL",
-    "method": "Hexokinase",
-    "fastingInstructions": "Fasting 8-12 hours; three days of unrestricted carbohydrate intake"
+    "textReference": "Fasting: < 100 | 2h Normal: < 140 | Impaired: 140 - 199 | Diabetic: >= 200 mg/dL",
+    "method": "Hexokinase / GOD-PAP",
+    "fastingInstructions": "صيام تام لمدة 8 ساعات (شرب الماء مسموح فقط)؛ تناول 75 جم جلوكوز مذاب في 300 مل ماء خلال 5 دقائق؛ سحب عينات كل 30 دقيقة متتالية حتى 3 ساعات (0، 30، 60، 90، 120، 150، 180 دقيقة) مع الراحة التامة بالمعمل."
   },
   {
     "id": "t-148",
