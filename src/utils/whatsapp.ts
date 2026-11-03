@@ -3,6 +3,8 @@ import { LabReport, LabInfo } from '../types/lab';
 export const BRANCH_MAIN_ADDRESS = 'ميدان بهتيم — برج صيدلية العزبي — الدور الثالث (أمام الأسانسير) — شبرا الخيمة';
 export const LAB_NAME_AR = 'معامل RT للتحاليل الطبية والتشخيصية';
 export const LAB_PHONE = '01100874444';
+export const LAB_PHONE_SECONDARY = '01100046841';
+export const LAB_PHONES_DISPLAY = '01100874444 — 01100046841';
 export const LAB_WHATSAPP = '01100874444';
 export const INSTAPAY_IPA = 'ramirtlab@instapay';
 export const GOOGLE_MAPS_BRANCH_URL = 'https://maps.google.com/?q=30.1287,31.2842';
@@ -172,8 +174,9 @@ ${discount > 0 ? `• نسبة الخصم: *${discountPercent}%*${params.discoun
 
 ⚠️ *الشروط والاحتياطات الخاصة بتحاليلك:*
 ${precautions.map(tip => `• ${tip}`).join('\n')}
+• *تنبيه المواعيد والحضور:* عدم الحضور فى الموعد المحدد دون تأجيل مسبق سيتم إلغاء الحجز بعد ٢٤ ساعه من تاريخه.
 
-📞 *للتواصل أو الاستفسار:* ${contactPhone}
+📞 *أرقام التواصل والاستفسار أو تعديل الموعد:* 01100874444 / 01100046841
 نسأل الله لكم دوام الصحة والعافية 🌸`;
 }
 

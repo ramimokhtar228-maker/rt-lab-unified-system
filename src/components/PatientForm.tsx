@@ -23,7 +23,8 @@ import {
   Coins,
   Smartphone,
   Percent,
-  Edit2
+  Edit2,
+  Check
 } from 'lucide-react';
 import { 
   BRANCH_MAIN_ADDRESS, 
@@ -365,6 +366,57 @@ export const PatientForm: React.FC<PatientFormProps> = ({ patient, onChange, onR
             onChange={(e) => updateField('fastingHours', e.target.value ? parseInt(e.target.value) : undefined)}
             className="w-full text-sm font-mono-numbers bg-slate-50 hover:bg-white focus:bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-900"
           />
+        </div>
+
+        {/* Referring Doctor: Himself / Herself / Prof. Dr / خانة الإضافة اليدوية */}
+        <div className="lg:col-span-2">
+          <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center justify-between">
+            <span className="flex items-center gap-1">
+              <User className="w-3.5 h-3.5 text-slate-500" />
+              الطبيب المعالج / جهة التحويل
+            </span>
+          </label>
+          <div className="grid grid-cols-1 sm:grid-cols-12 gap-2">
+            <div className="sm:col-span-5">
+              <select
+                value={patient.referringDoctorTitle === 'Herself' ? 'Herself' : (patient.referringDoctorTitle === 'Himself' ? 'Himself' : (patient.referringDoctorTitle === 'Prof. Dr.' ? 'Prof. Dr.' : 'manual'))}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (val === 'Himself') {
+                    onChange({ ...patient, referringDoctorTitle: 'Himself', referringDoctorName: 'Himself' });
+                  } else if (val === 'Herself') {
+                    onChange({ ...patient, referringDoctorTitle: 'Herself', referringDoctorName: 'Herself' });
+                  } else if (val === 'Prof. Dr.') {
+                    onChange({ ...patient, referringDoctorTitle: 'Prof. Dr.', referringDoctorName: patient.referringDoctorName && patient.referringDoctorName !== 'Himself' && patient.referringDoctorName !== 'Herself' ? patient.referringDoctorName : 'أ.د. رامي مختار' });
+                  } else {
+                    onChange({ ...patient, referringDoctorTitle: 'Dr.', referringDoctorName: patient.referringDoctorName && patient.referringDoctorName !== 'Himself' && patient.referringDoctorName !== 'Herself' ? patient.referringDoctorName : '' });
+                  }
+                }}
+                className="w-full text-xs font-bold bg-slate-50 hover:bg-white focus:bg-white border border-slate-300 focus:border-rose-600 rounded-lg px-2 py-2 text-slate-900"
+              >
+                <option value="Himself">Himself (طلب فحص ذاتي)</option>
+                <option value="Herself">Herself (طلب فحص ذاتي)</option>
+                <option value="Prof. Dr.">Prof. Dr. (أستاذ دكتور)</option>
+                <option value="manual">خانة الإضافة اليدوية (كتابة اسم الطبيب)</option>
+              </select>
+            </div>
+            <div className="sm:col-span-7">
+              {patient.referringDoctorTitle === 'Himself' || patient.referringDoctorTitle === 'Herself' ? (
+                <div className="flex items-center gap-2 h-full px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-800 text-xs font-bold">
+                  <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  <span>طلب فحص ذاتي ({patient.referringDoctorTitle}) — معتمد بدون طبيب خارجي</span>
+                </div>
+              ) : (
+                <input
+                  type="text"
+                  placeholder={patient.referringDoctorTitle === 'Prof. Dr.' ? 'اسم الطبيب (مثال: أ.د. رامي مختار)' : 'اكتب اسم الطبيب أو العيادة أو المستشفى يدوياً...'}
+                  value={patient.referringDoctorName || ''}
+                  onChange={(e) => updateField('referringDoctorName', e.target.value)}
+                  className="w-full text-sm font-semibold bg-slate-50 hover:bg-white focus:bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-900"
+                />
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Clinical History */}

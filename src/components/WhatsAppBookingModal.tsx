@@ -289,10 +289,17 @@ export const WhatsAppBookingModal: React.FC<WhatsAppBookingModalProps> = ({
                 </button>
                 <button
                   type="button"
-                  onClick={() => handleAppendSnippet('يرجى إحضار بطاقة الرقم القومي أو الروشتة الطبية السابقة')}
+                  onClick={() => handleAppendSnippet('عدم الحضور فى الموعد المحدد دون تأجيل مسبق سيتم إلغاء الحجز بعد ٢٤ ساعه من تاريخه')}
+                  className="text-[10px] font-bold bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 px-2.5 py-1 rounded-lg transition"
+                >
+                  ⏰ سياسة إلغاء الحجز (24 ساعة)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleAppendSnippet('أرقام التواصل والاستفسار: 01100874444 - 01100046841')}
                   className="text-[10px] font-bold bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-800 border border-slate-200 hover:border-emerald-300 px-2.5 py-1 rounded-lg transition"
                 >
-                  🪪 إحضار البطاقة والروشتة
+                  📞 أرقام التواصل (01100874444 / 01100046841)
                 </button>
                 <button
                   type="button"

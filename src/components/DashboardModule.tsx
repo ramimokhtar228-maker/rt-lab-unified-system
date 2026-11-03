@@ -33,7 +33,8 @@ import {
   MessageCircle,
   Check,
   Smartphone,
-  Laptop
+  Laptop,
+  ArrowDownAZ
 } from 'lucide-react';
 import { RTLogo } from './RTLogo';
 import { realtimeSyncManager, SyncStatus } from '../utils/realtimeMultiDeviceSync';
@@ -64,6 +65,7 @@ export const DashboardModule: React.FC = () => {
   const [timeRange, setTimeRange] = useState<'today' | 'month' | 'all'>('today');
   const [casesFilter, setCasesFilter] = useState<'all' | 'today' | 'pending' | 'verified' | 'requested_cases'>('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [sortMode, setSortMode] = useState<'alphabetical' | 'latest'>('alphabetical');
   const [syncStatus, setSyncStatus] = useState<SyncStatus>(realtimeSyncManager.getStatus());
   const [manualSyncing, setManualSyncing] = useState(false);
   const [isHealingCases, setIsHealingCases] = useState(false);
@@ -187,17 +189,27 @@ export const DashboardModule: React.FC = () => {
       return true;
     });
 
-    // Sort: prioritizes required cases (Dina, Hind, Manar), then newest createdAt
+    // Sort: Alphabetical (A-Z) by patient name for easy searching, or latest timestamp
     return list.sort((a, b) => {
-      const isReqA = ['دينا', 'هند', 'منار'].some(n => (a.patient?.fullName || '').includes(n));
-      const isReqB = ['دينا', 'هند', 'منار'].some(n => (b.patient?.fullName || '').includes(n));
-      if (isReqA && !isReqB) return -1;
-      if (!isReqA && isReqB) return 1;
-      const timeA = new Date(a.updatedAt || a.createdAt || 0).getTime();
-      const timeB = new Date(b.updatedAt || b.createdAt || 0).getTime();
-      return timeB - timeA;
+      if (sortMode === 'alphabetical') {
+        const nameA = (a.patient?.fullName || '').trim();
+        const nameB = (b.patient?.fullName || '').trim();
+        const comp = nameA.localeCompare(nameB, 'ar', { sensitivity: 'base' });
+        if (comp !== 0) return comp;
+        const timeA = new Date(a.updatedAt || a.createdAt || 0).getTime();
+        const timeB = new Date(b.updatedAt || b.createdAt || 0).getTime();
+        return timeB - timeA;
+      } else {
+        const isReqA = ['دينا', 'هند', 'منار'].some(n => (a.patient?.fullName || '').includes(n));
+        const isReqB = ['دينا', 'هند', 'منار'].some(n => (b.patient?.fullName || '').includes(n));
+        if (isReqA && !isReqB) return -1;
+        if (!isReqA && isReqB) return 1;
+        const timeA = new Date(a.updatedAt || a.createdAt || 0).getTime();
+        const timeB = new Date(b.updatedAt || b.createdAt || 0).getTime();
+        return timeB - timeA;
+      }
     });
-  }, [reports, searchTerm, casesFilter, todayStr]);
+  }, [reports, searchTerm, casesFilter, todayStr, sortMode]);
 
   const handleEmergencyHealCases = async () => {
     setIsHealingCases(true);
@@ -635,15 +647,31 @@ export const DashboardModule: React.FC = () => {
               </button>
             </div>
 
-            <div className="relative w-full sm:w-64">
-              <Search className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="بحث بالاسم أو رقم المعمل أو الهاتف..."
-                className="w-full pr-9 pl-4 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:bg-white focus:border-rose-700 outline-none"
-              />
+            <div className="flex items-center gap-2 w-full sm:w-auto">
+              <button
+                type="button"
+                onClick={() => setSortMode(prev => prev === 'alphabetical' ? 'latest' : 'alphabetical')}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer shrink-0 ${
+                  sortMode === 'alphabetical'
+                    ? 'bg-rose-50 border-rose-300 text-rose-900 shadow-xs'
+                    : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                }`}
+                title="ترتيب الحجوزات: اضغط للتبديل بين الترتيب الأبجدي والأحدث"
+              >
+                <ArrowDownAZ className="w-3.5 h-3.5 text-rose-700" />
+                <span>{sortMode === 'alphabetical' ? 'أبجدياً (أ - ي)' : 'الأحدث تاريخاً'}</span>
+              </button>
+
+              <div className="relative w-full sm:w-60">
+                <Search className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="بحث سريع بالاسم أو الرقم أو الهاتف..."
+                  className="w-full pr-9 pl-4 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:bg-white focus:border-rose-700 outline-none"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -754,7 +782,24 @@ export const DashboardModule: React.FC = () => {
               <thead>
                 <tr className="bg-slate-50 text-slate-500 font-bold border-b border-slate-200">
                   <th className="py-3 px-3">رقم المعمل والباركود</th>
-                  <th className="py-3 px-3">اسم المريض</th>
+                  <th 
+                    className="py-3 px-3 cursor-pointer hover:text-rose-900 transition-colors select-none"
+                    onClick={() => setSortMode(prev => prev === 'alphabetical' ? 'latest' : 'alphabetical')}
+                    title="اضغط للتبديل بين الترتيب الأبجدي والأحدث"
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span>اسم المريض</span>
+                      {sortMode === 'alphabetical' ? (
+                        <span className="text-[10px] bg-rose-100 text-rose-800 px-1.5 py-0.5 rounded font-bold font-mono">
+                          أ - ي
+                        </span>
+                      ) : (
+                        <span className="text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded font-mono">
+                          الأحدث
+                        </span>
+                      )}
+                    </div>
+                  </th>
                   <th className="py-3 px-3">السن / النوع</th>
                   <th className="py-3 px-3">التحاليل المطلوبة</th>
                   <th className="py-3 px-3">الحالة التشخيصية</th>

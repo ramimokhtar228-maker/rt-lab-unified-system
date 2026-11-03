@@ -2044,38 +2044,45 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
   }, [testCatalog, packages, diagnosticProfiles, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, githubConfig, logAction]);
 
-  // Apply Package Directly to Any Report (Lists all package tests in one unified profile - لا يفرد في صفحات منفصلة)
+  // Apply Package Directly to Any Report: Each profile is generated as an independent profile on its own page (الباقات الشاملة تنزل كل بروفايل في صفحة مستقلة)
   const applyPackageToReport = useCallback((reportId: string, pkg: ComprehensivePackage) => {
     setReports(prev => prev.map(rep => {
       if (rep.id !== reportId) return rep;
       
-      const packageParams: TestParameter[] = [];
+      const independentProfiles: TestProfile[] = [];
 
-      // 1. Gather all parameters from included profiles
-      (pkg.includedProfiles || []).forEach(pCode => {
-        const template = LAB_CATALOG.find(c => c.code.toUpperCase() === pCode.toUpperCase());
-        if (template) {
-          template.parameters.forEach((p, idx) => {
-            if (!packageParams.some(ep => ep.name.toLowerCase() === p.name.toLowerCase())) {
-              packageParams.push({
-                ...p,
-                id: `param-${pCode}-${idx}-${Date.now()}-${Math.random().toString(36).substr(2, 3)}`,
-                result: '',
-                flag: 'NORMAL',
-                notes: p.notes || template.titleAr
-              });
-            }
+      // 1. Create an independent profile for each included profile in the package
+      (pkg.includedProfiles || []).forEach((pCode, pIdx) => {
+        const template = (diagnosticProfiles || []).find(c => c.code && c.code.toUpperCase() === pCode.toUpperCase())
+                      || LAB_CATALOG.find(c => c.code && c.code.toUpperCase() === pCode.toUpperCase());
+        if (template && Array.isArray(template.parameters)) {
+          independentProfiles.push({
+            id: `prof-${pCode}-${Date.now()}-${pIdx}-${Math.random().toString(36).substring(2, 5)}`,
+            profileCode: template.code,
+            titleAr: template.titleAr,
+            titleEn: template.titleEn,
+            category: template.category || 'فحوصات الباقة الشاملة',
+            sampleType: template.sampleType || 'Serum',
+            interpretation: template.defaultInterpretation || '',
+            parameters: template.parameters.map((p, idx) => ({
+              ...p,
+              id: `param-${pCode}-${idx}-${Date.now()}-${Math.random().toString(36).substring(2, 5)}`,
+              result: '',
+              flag: 'NORMAL',
+              notes: p.notes || template.titleAr
+            }))
           });
         }
       });
 
-      // 2. Gather all included individual tests
+      // 2. Gather included individual tests into an independent complementary profile
+      const indParams: TestParameter[] = [];
       (pkg.includedIndividualTestCodes || []).forEach((tCode, idx) => {
         const indTest = INITIAL_INDIVIDUAL_TESTS.find(t => t.code.toUpperCase() === tCode.toUpperCase())
                      || testCatalog.find(t => t.code.toUpperCase() === tCode.toUpperCase());
-        if (indTest && !packageParams.some(ep => ep.name.toLowerCase().includes(indTest.nameEn.toLowerCase()))) {
-          packageParams.push({
-            id: `p-pkg-${idx}-${Date.now()}-${Math.random().toString(36).substr(2, 3)}`,
+        if (indTest) {
+          indParams.push({
+            id: `p-pkg-${idx}-${Date.now()}-${Math.random().toString(36).substring(2, 5)}`,
             name: `${indTest.nameAr} (${indTest.nameEn})`,
             result: '',
             unit: indTest.unit || '',
@@ -2084,21 +2091,23 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             textReference: indTest.textReference || 'Normal',
             flag: 'NORMAL',
             method: indTest.method || 'Automated Clinical Assay',
-            notes: 'فحوصات وفيتامينات إضافية للباقة'
+            notes: 'فحوصات وفيتامينات إضافية للباقة الشاملة'
           });
         }
       });
 
-      const unifiedPackageProfile: TestProfile = {
-        id: `prof-pkg-${Date.now()}`,
-        profileCode: pkg.code,
-        titleAr: pkg.titleAr,
-        titleEn: pkg.titleEn,
-        category: 'باقة فحوصات شاملة',
-        sampleType: pkg.sampleTypes?.join(' + ') || 'Serum / EDTA / Urine',
-        interpretation: 'جميع تحاليل وفحوصات الباقة الشاملة تم تقييمها ومطابقتها للمعدلات المرجعية المعتمدة دولياً.',
-        parameters: packageParams
-      };
+      if (indParams.length > 0) {
+        independentProfiles.push({
+          id: `prof-extra-${Date.now()}-${Math.random().toString(36).substring(2, 5)}`,
+          profileCode: `${pkg.code}-EXTRA`,
+          titleAr: `فحوصات وفيتامينات إضافية (${pkg.titleAr})`,
+          titleEn: `Special Investigations (${pkg.titleEn})`,
+          category: 'باقة فحوصات شاملة',
+          sampleType: 'Serum / Whole Blood',
+          interpretation: 'جميع الفحوصات التخصصية الإضافية للباقة تم فحصها طبقاً للمعايير الدولية المعتمدة.',
+          parameters: indParams
+        });
+      }
 
       return {
         ...rep,
@@ -2108,13 +2117,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           packagePrice: pkg.packagePrice,
           originalPrice: pkg.originalPrice
         } as any,
-        profiles: [unifiedPackageProfile],
+        profiles: independentProfiles.length > 0 ? independentProfiles : rep.profiles,
         status: rep.status === 'draft' ? 'in_progress' : rep.status,
         updatedAt: new Date().toISOString()
       };
     }));
-    logAction('UPDATE', 'DIAGNOSTIC', `تطبيق باقة "${pkg.titleAr}" على التقرير وحفظها مسرودة بالكامل في بروفايل موحد`);
-  }, [testCatalog, logAction]);
+    logAction('UPDATE', 'DIAGNOSTIC', `تطبيق باقة "${pkg.titleAr}" على التقرير وتوزيع كافة البروفايلات في صفحات مستقلة (${pkg.includedProfiles.length} بروفايل مستقل)`);
+  }, [diagnosticProfiles, testCatalog, logAction]);
 
   // Unified Admission: Register patient -> Create Lab Report -> Create Income Invoice -> Update Loyalty
   const createReportFromAdmission = useCallback((patient: Patient, selectedTests: InvoiceTestItem[], packageApplied?: any): LabReport => {
@@ -2134,33 +2143,35 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     const generatedProfiles: TestProfile[] = [];
 
-    // 1. If a Package was applied: Collect ALL its tests into ONE unified comprehensive profile
+    // 1. If a Package was applied: Create each profile in an independent page/profile (الباقات الشاملة تنزل كل بروفايل في صفحة مستقلة)
     if (packageApplied) {
-      const packageParams: TestParameter[] = [];
-
-      // A) All included profiles parameters
-      (packageApplied.includedProfiles || []).forEach((pCode: string) => {
+      // A) All included profiles as independent profiles
+      (packageApplied.includedProfiles || []).forEach((pCode: string, pIdx: number) => {
         if (!pCode) return;
         const template = (diagnosticProfiles || []).find(c => c.code && c.code.toUpperCase() === pCode.toUpperCase())
                       || LAB_CATALOG.find(c => c.code && c.code.toUpperCase() === pCode.toUpperCase());
         if (template && Array.isArray(template.parameters)) {
-          template.parameters.forEach((p, idx) => {
-            const pName = p?.name ? p.name.trim() : `فحص-${idx + 1}`;
-            if (!packageParams.some(ep => ep.name && ep.name.toLowerCase() === pName.toLowerCase())) {
-              packageParams.push({
-                ...p,
-                name: pName,
-                id: `param-${pCode}-${idx}-${Date.now()}-${Math.random().toString(36).substring(2, 5)}`,
-                result: '',
-                flag: 'NORMAL',
-                notes: p.notes || template.titleAr
-              });
-            }
+          generatedProfiles.push({
+            id: `prof-${pCode}-${Date.now()}-${pIdx}-${Math.random().toString(36).substring(2, 5)}`,
+            profileCode: template.code,
+            titleAr: template.titleAr,
+            titleEn: template.titleEn,
+            category: template.category || 'فحوصات الباقة الشاملة',
+            sampleType: template.sampleType || 'Serum',
+            interpretation: template.defaultInterpretation || '',
+            parameters: template.parameters.map((p, idx) => ({
+              ...p,
+              id: `param-${pCode}-${idx}-${Date.now()}-${Math.random().toString(36).substring(2, 5)}`,
+              result: '',
+              flag: 'NORMAL',
+              notes: p.notes || template.titleAr
+            }))
           });
         }
       });
 
-      // B) All complementary individual tests
+      // B) All complementary individual tests as a separate profile
+      const extraParams: TestParameter[] = [];
       (packageApplied.includedIndividualTestCodes || []).forEach((tCode: string, idx: number) => {
         if (!tCode) return;
         const indTest = INITIAL_INDIVIDUAL_TESTS.find(t => t.code && t.code.toUpperCase() === tCode.toUpperCase())
@@ -2168,34 +2179,33 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (indTest) {
           const testNameAr = indTest.nameAr || indTest.nameEn || tCode;
           const testNameEn = indTest.nameEn || indTest.nameAr || tCode;
-          const checkTarget = (testNameEn || testNameAr).toLowerCase();
-          if (!packageParams.some(ep => ep.name && ep.name.toLowerCase().includes(checkTarget))) {
-            packageParams.push({
-              id: `p-pkg-${idx}-${Date.now()}-${Math.random().toString(36).substring(2, 5)}`,
-              name: `${testNameAr} (${testNameEn})`,
-              result: '',
-              unit: indTest.unit || '',
-              minNormal: indTest.minNormal,
-              maxNormal: indTest.maxNormal,
-              textReference: indTest.textReference || 'Normal',
-              flag: 'NORMAL',
-              method: indTest.method || 'Automated Clinical Assay',
-              notes: 'فحوصات وفيتامينات إضافية للباقة'
-            });
-          }
+          extraParams.push({
+            id: `p-pkg-${idx}-${Date.now()}-${Math.random().toString(36).substring(2, 5)}`,
+            name: `${testNameAr} (${testNameEn})`,
+            result: '',
+            unit: indTest.unit || '',
+            minNormal: indTest.minNormal,
+            maxNormal: indTest.maxNormal,
+            textReference: indTest.textReference || 'Normal',
+            flag: 'NORMAL',
+            method: indTest.method || 'Automated Clinical Assay',
+            notes: 'فحوصات وفيتامينات إضافية للباقة الشاملة'
+          });
         }
       });
 
-      generatedProfiles.push({
-        id: `prof-pkg-${Date.now()}`,
-        profileCode: packageApplied.code || 'PKG',
-        titleAr: packageApplied.titleAr || 'باقة فحوصات شاملة',
-        titleEn: packageApplied.titleEn || 'Comprehensive Package',
-        category: 'باقة فحوصات شاملة',
-        sampleType: Array.isArray(packageApplied.sampleTypes) ? packageApplied.sampleTypes.join(' + ') : 'Serum / EDTA / Urine',
-        interpretation: 'جميع تحاليل وفحوصات الباقة الشاملة تم تقييمها وتدقيقها طبقاً للمعدلات المرجعية المعتمدة دولياً.',
-        parameters: packageParams
-      });
+      if (extraParams.length > 0) {
+        generatedProfiles.push({
+          id: `prof-extra-${Date.now()}-${Math.random().toString(36).substring(2, 5)}`,
+          profileCode: `${packageApplied.code || 'PKG'}-EXTRA`,
+          titleAr: `فحوصات وفيتامينات إضافية (${packageApplied.titleAr || 'الباقة الشاملة'})`,
+          titleEn: `Special Investigations (${packageApplied.titleEn || 'Comprehensive Package'})`,
+          category: 'باقة فحوصات شاملة',
+          sampleType: 'Serum / Whole Blood',
+          interpretation: 'جميع الفحوصات التخصصية الإضافية للباقة تم فحصها طبقاً للمعايير الدولية المعتمدة.',
+          parameters: extraParams
+        });
+      }
     }
 
     // 2. Any additional tests selected outside the package

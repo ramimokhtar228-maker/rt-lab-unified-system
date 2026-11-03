@@ -94,8 +94,8 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
   const [age, setAge] = useState<number>(30);
   const [ageUnit, setAgeUnit] = useState<Patient['ageUnit']>('years');
   const [gender, setGender] = useState<Patient['gender']>('male');
-  const [nationalId, setNationalId] = useState('');
-  const [referringDoctor, setReferringDoctor] = useState('أطباء كلية طب قصر العيني');
+  const [doctorSelectionType, setDoctorSelectionType] = useState<'Himself' | 'Herself' | 'Prof. Dr.' | 'manual'>('Prof. Dr.');
+  const [referringDoctor, setReferringDoctor] = useState('أ.د. رامي مختار');
   const [clinicalHistory, setClinicalHistory] = useState('');
   const [fastingHours, setFastingHours] = useState<number>(0);
   const [bookingType, setBookingType] = useState<'branch' | 'home_visit'>('branch');
@@ -409,9 +409,12 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
         age: Number(age) || 30,
         ageUnit,
         gender,
-        nationalId: nationalId.trim() || undefined,
-        referringDoctorTitle: "Dr.",
-        referringDoctorName: referringDoctor.trim() || 'أطباء كلية طب قصر العيني',
+        referringDoctorTitle: (doctorSelectionType === 'Himself' || doctorSelectionType === 'Herself') 
+          ? doctorSelectionType 
+          : (doctorSelectionType === 'Prof. Dr.' ? 'Prof. Dr.' : 'Dr.'),
+        referringDoctorName: (doctorSelectionType === 'Himself' || doctorSelectionType === 'Herself')
+          ? doctorSelectionType
+          : (referringDoctor.trim() || 'أ.د. رامي مختار'),
         sampleDate: safeSampleDate,
         reportingDate: new Date().toISOString(),
         clinicalHistory: clinicalHistory.trim() || undefined,
@@ -815,21 +818,6 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
                 )}
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">
-                  الرقم القومي (اختياري):
-                </label>
-                <input
-                  type="text"
-                  value={nationalId}
-                  onChange={(e) => setNationalId(e.target.value)}
-                  placeholder="14 رقماً"
-                  maxLength={14}
-                  className="w-full text-xs font-mono bg-slate-50 border border-slate-200 rounded-xl p-2.5 focus:ring-2 focus:ring-rose-500 focus:outline-none text-left"
-                  dir="ltr"
-                />
-              </div>
-
               <div className="flex gap-2">
                 <div className="flex-1">
                   <label className="block text-xs font-bold text-slate-700 mb-1">السن:</label>
@@ -860,7 +848,17 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
                 <label className="block text-xs font-bold text-slate-700 mb-1">الجنس:</label>
                 <select
                   value={gender}
-                  onChange={(e) => setGender(e.target.value as any)}
+                  onChange={(e) => {
+                    const g = e.target.value as any;
+                    setGender(g);
+                    if (g === 'female' && doctorSelectionType === 'Himself') {
+                      setDoctorSelectionType('Herself');
+                      setReferringDoctor('Herself');
+                    } else if (g === 'male' && doctorSelectionType === 'Herself') {
+                      setDoctorSelectionType('Himself');
+                      setReferringDoctor('Himself');
+                    }
+                  }}
                   className="w-full text-xs font-bold bg-slate-50 border border-slate-200 rounded-xl p-2.5 focus:ring-2 focus:ring-rose-500 focus:outline-none"
                 >
                   <option value="male">ذكر (Male)</option>
@@ -870,15 +868,54 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
                 </select>
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">الطبيب المعالج / المحول:</label>
-                <input
-                  type="text"
-                  value={referringDoctor}
-                  onChange={(e) => setReferringDoctor(e.target.value)}
-                  placeholder="مثال: أ.د. رامي مختار أو عيادات خارجية"
-                  className="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl p-2.5 focus:ring-2 focus:ring-rose-500 focus:outline-none"
-                />
+              {/* Referring Doctor: Himself / Herself / Prof. Dr / خانة الإضافة اليدوية */}
+              <div className="sm:col-span-2 space-y-1.5">
+                <label className="block text-xs font-bold text-slate-700">
+                  الطبيب المعالج / جهة التحويل:
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-12 gap-2">
+                  <div className="sm:col-span-5">
+                    <select
+                      value={doctorSelectionType}
+                      onChange={(e) => {
+                        const val = e.target.value as 'Himself' | 'Herself' | 'Prof. Dr.' | 'manual';
+                        setDoctorSelectionType(val);
+                        if (val === 'Himself') {
+                          setReferringDoctor('Himself');
+                        } else if (val === 'Herself') {
+                          setReferringDoctor('Herself');
+                        } else if (val === 'Prof. Dr.') {
+                          if (referringDoctor === 'Himself' || referringDoctor === 'Herself' || !referringDoctor) {
+                            setReferringDoctor('أ.د. رامي مختار');
+                          }
+                        }
+                      }}
+                      className="w-full text-xs font-bold bg-slate-50 border border-slate-200 rounded-xl p-2.5 focus:ring-2 focus:ring-rose-500 focus:outline-none"
+                    >
+                      <option value="Himself">Himself (طلب فحص ذاتي)</option>
+                      <option value="Herself">Herself (طلب فحص ذاتي)</option>
+                      <option value="Prof. Dr.">Prof. Dr. (أستاذ دكتور)</option>
+                      <option value="manual">خانة الإضافة اليدوية (كتابة اسم الطبيب)</option>
+                    </select>
+                  </div>
+
+                  <div className="sm:col-span-7">
+                    {doctorSelectionType === 'Himself' || doctorSelectionType === 'Herself' ? (
+                      <div className="flex items-center gap-2 h-full px-3 py-2 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs font-bold">
+                        <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <span>طلب فحص ذاتي ({doctorSelectionType}) — تم اعتماده بدون طبيب خارجي</span>
+                      </div>
+                    ) : (
+                      <input
+                        type="text"
+                        value={referringDoctor}
+                        onChange={(e) => setReferringDoctor(e.target.value)}
+                        placeholder={doctorSelectionType === 'Prof. Dr.' ? 'اسم الطبيب (مثال: أ.د. رامي مختار)' : 'اكتب اسم الطبيب أو العيادة أو المستشفى يدوياً...'}
+                        className="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl p-2.5 focus:ring-2 focus:ring-rose-500 focus:outline-none font-semibold text-slate-800"
+                      />
+                    )}
+                  </div>
+                </div>
               </div>
 
               <div>
