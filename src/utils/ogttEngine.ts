@@ -536,7 +536,6 @@ export const OGTT_CATALOG_TEMPLATE: CatalogProfileTemplate = {
       minNormal: 0,
       maxNormal: 0,
       textReference: "Negative (Renal threshold ~ 180 mg/dL)",
-      result: "Negative",
       method: "Enzymatic Dipstick",
       notes: "فحص السكر بالبول مع المنحنى"
     }

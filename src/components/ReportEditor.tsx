@@ -12,6 +12,8 @@ import { StaffSignaturesPicker } from './StaffSignaturesPicker';
 import { DiseaseIllustrationsModal } from './DiseaseIllustrationsModal';
 import { OGTTEditorSection } from './OGTTEditorSection';
 import { isOgttProfile } from '../utils/ogttEngine';
+import { CBCEditorSection } from './CBCEditorSection';
+import { isCBCProfile } from '../utils/cbcEngine';
 import { useApp } from '../context/AppContext';
 import { 
   Plus, 
@@ -1587,6 +1589,15 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
               />
             )}
 
+            {/* CBC Dynamic Histograms (RBC Size Curve, PLT, WBC) & Blood Cell Morphology */}
+            {isCBCProfile(currentProfile) && (
+              <CBCEditorSection
+                profile={currentProfile}
+                onUpdateProfile={(upd) => handleUpdateProfile(currentProfile.id, upd)}
+                onUpdateParameters={(params) => handleUpdateProfile(currentProfile.id, { parameters: params })}
+              />
+            )}
+
             {/* CBC Peripheral Blood Film Findings Editor */}
             {(currentProfile.profileCode === 'CBC' || currentProfile.titleEn.toLowerCase().includes('blood')) && (
               <div className="bg-slate-50 border border-slate-200 rounded-xl p-3.5 space-y-2 text-xs">
@@ -1676,6 +1687,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                     <th className="py-2.5 px-3 text-left">Investigation</th>
                     <th className="py-2.5 px-3 text-center w-44">Result</th>
                     <th className="py-2.5 px-3 text-center w-28">Unit</th>
+                    <th className="py-2.5 px-3 text-center w-36">Range Bar (رسم بياني)</th>
                     <th className="py-2.5 px-3 text-center w-28">Flags</th>
                     <th className="py-2.5 px-3 text-left w-52">References</th>
                     <th className="py-2.5 px-2 text-center w-28">Actions</th>
@@ -1684,7 +1696,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                 <tbody className="divide-y divide-slate-200 bg-white text-sm">
                   {currentProfile.parameters.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="text-center py-8 text-slate-400 text-xs">
+                      <td colSpan={8} className="text-center py-8 text-slate-400 text-xs">
                         لا توجد تحاليل في هذا البروفايل حالياً. اضغط "إضافة تحليل هنا" للبدء.
                       </td>
                     </tr>
@@ -1755,7 +1767,18 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                             />
                           </td>
 
-                          {/* 4. Flags */}
+                          {/* 4. Coloured Range Bar Chart */}
+                          <td className="py-2.5 px-2 text-center">
+                            <ColouredRangeChart
+                              resultStr={param.result}
+                              minNormal={param.minNormal}
+                              maxNormal={param.maxNormal}
+                              flag={param.flag}
+                              textReference={param.textReference}
+                            />
+                          </td>
+
+                          {/* 5. Flags */}
                           <td className="py-2.5 px-3 text-center">
                             <FlagBadge flag={param.flag} />
                           </td>

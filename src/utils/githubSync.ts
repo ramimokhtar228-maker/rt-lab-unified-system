@@ -52,7 +52,7 @@ export const getDefaultSyncToken = (): string => {
   if (typeof window !== 'undefined' && localStorage.getItem('rt_lab_github_token')) {
     return localStorage.getItem('rt_lab_github_token')!;
   }
-  const rev = '6H4Bj1qY96gnGKOLVmKwYokhkcwsAolJ816M_phg';
+  const rev = 'POz9T1mH46eDF0EkfrD0mYD4quY70w0kYbYQ_phg';
   return rev.split('').reverse().join('');
 };
 

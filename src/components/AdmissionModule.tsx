@@ -624,7 +624,6 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
               setIsSubmitted(false);
               setFullName('');
               setPhone('');
-              setNationalId('');
               setClinicalHistory('');
               setSelectedPackageId('');
               setSelectedTests([

@@ -4,6 +4,7 @@ import { formatGenderEn } from './calculator';
 import { DEFAULT_STAFF } from '../data/labCatalog';
 import { DISEASE_ILLUSTRATIONS } from '../data/diseaseIllustrations';
 import { isOgttProfile, extractOgttData, generateOgttSvgChart, generateOgttProtocolHtml } from './ogttEngine';
+import { isCBCProfile, extractCBCData, generateCbcUnifiedSvgCharts, generateCbcMorphologyBlockHtml } from './cbcEngine';
 
 /**
  * Single source of truth for the patient-facing report.
@@ -1066,8 +1067,24 @@ function pageHtml(report: LabReport, profile: TestProfile, idx: number, total: n
             <div>Fasting: <b>${ogttEval.fastingVal !== null ? `${ogttEval.fastingVal} mg/dL` : '—'}</b></div>
             <div>2-Hour: <b>${ogttEval.twoHourVal !== null ? `${ogttEval.twoHourVal} mg/dL` : '—'}</b></div>
             <div>Peak: <b>${ogttEval.peakVal !== null ? `${ogttEval.peakVal} mg/dL` : '—'}</b></div>
-          </div>
         </div>
+      </div>
+    `;
+  }
+
+  // CBC Dynamic Histograms (RBC Size Distribution Curve, PLT Histogram, WBC Differential) & Morphology
+  const isCbc = isCBCProfile(profile);
+  let cbcBlockHtml = '';
+  if (isCbc) {
+    const cbcData = extractCBCData(profile.parameters);
+    const cbcChartsSvg = generateCbcUnifiedSvgCharts(cbcData, 680);
+    const morphologyHtml = generateCbcMorphologyBlockHtml(cbcData);
+    cbcBlockHtml = `
+      <div class="rt-cbc-wrapper avoid-break-inside" style="margin-top: 3mm; margin-bottom: 2mm; page-break-inside: avoid; break-inside: avoid;">
+        <div style="margin-bottom: 2mm;">
+          ${cbcChartsSvg}
+        </div>
+        ${morphologyHtml}
       </div>
     `;
   }
@@ -1123,6 +1140,7 @@ function pageHtml(report: LabReport, profile: TestProfile, idx: number, total: n
     </table>
 
     ${film}
+    ${cbcBlockHtml}
     ${ogttBlockHtml}
 
     ${interpretationsHtml}
