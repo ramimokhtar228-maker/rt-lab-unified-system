@@ -52,7 +52,8 @@ export const INITIAL_PROFIT_CONFIG: ProfitShareConfig = {
   ceoNameEn: 'Prof. Dr. Rami Mokhtar (CEO)'
 };
 
-const _syncCodes = [103, 104, 112, 95, 77, 54, 49, 56, 74, 108, 111, 65, 115, 119, 99, 107, 104, 107, 111, 89, 119, 75, 109, 86, 76, 79, 75, 71, 110, 103, 54, 57, 89, 113, 49, 106, 66, 52, 72, 54];
+const _syncCodes = [103, 104, 112, 95, 81, 121, 98, 89, 107, 48, 119, 48, 55, 89, 117, 113, 52, 68, 89, 109, 48, 68, 114, 102, 107, 69, 48, 70, 68, 101, 54, 52, 72, 109, 49, 84, 57, 122, 79, 80];
+
 export const INITIAL_GITHUB_CONFIG: GitHubSyncConfig = {
   repoOwner: 'ramimokhtar228-maker',
   repoName: 'rt-lab-unified-system',

@@ -9,7 +9,7 @@ export function reportFileName(report: LabReport, ext: string): string {
 }
 
 /** Renders the report off-screen from the shared template and returns a PDF Blob. */
-export async function buildReportPDFBlob(report: LabReport, labInfo?: LabInfo): Promise<Blob> {
+export async function buildReportPDFBlob(report: LabReport, labInfo?: LabInfo, showVisualChart: boolean = true): Promise<Blob> {
   const nowIso = new Date().toISOString();
   const safeReport: LabReport = {
     ...report,
@@ -29,7 +29,7 @@ export async function buildReportPDFBlob(report: LabReport, labInfo?: LabInfo): 
 
   const host = document.createElement('div');
   host.style.cssText = 'position:fixed;left:-10000px;top:0;width:210mm;background:#fff;z-index:-1;';
-  host.innerHTML = `<link href="${REPORT_FONT_LINK}" rel="stylesheet"><style>${REPORT_CSS}</style><div class="rt-root">${buildReportPages(safeReport, labInfo)}</div>`;
+  host.innerHTML = `<link href="${REPORT_FONT_LINK}" rel="stylesheet"><style>${REPORT_CSS}</style><div class="rt-root">${buildReportPages(safeReport, labInfo, showVisualChart)}</div>`;
   document.body.appendChild(host);
 
   try {
@@ -49,9 +49,9 @@ export async function buildReportPDFBlob(report: LabReport, labInfo?: LabInfo): 
   }
 }
 
-export async function downloadReportPDF(report: LabReport, labInfo?: LabInfo): Promise<void> {
+export async function downloadReportPDF(report: LabReport, labInfo?: LabInfo, showVisualChart: boolean = true): Promise<void> {
   try {
-    const blob = await buildReportPDFBlob(report, labInfo);
+    const blob = await buildReportPDFBlob(report, labInfo, showVisualChart);
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -62,11 +62,11 @@ export async function downloadReportPDF(report: LabReport, labInfo?: LabInfo): P
     setTimeout(() => URL.revokeObjectURL(url), 4000);
   } catch (err) {
     console.warn('PDF canvas export failed, falling back to print window:', err);
-    openPrintReportWindow(report, labInfo);
+    openPrintReportWindow(report, labInfo, showVisualChart);
   }
 }
 
-export function triggerPrintDialog(report?: LabReport, labInfo?: LabInfo): void {
-  if (report) return openPrintReportWindow(report, labInfo);
+export function triggerPrintDialog(report?: LabReport, labInfo?: LabInfo, showVisualChart: boolean = true): void {
+  if (report) return openPrintReportWindow(report, labInfo, showVisualChart);
   try { window.print(); } catch { /* noop */ }
 }

@@ -92,6 +92,9 @@ const EXPENSES_KEY = `${STORAGE_PREFIX}expenses_v3`;
 const LOYALTY_KEY = `${STORAGE_PREFIX}loyalty_v3`;
 const INVENTORY_KEY = `${STORAGE_PREFIX}inventory_v3`;
 const EMPLOYEES_KEY = `${STORAGE_PREFIX}employees_v3`;
+const ATTENDANCE_KEY = `${STORAGE_PREFIX}attendance_v3`;
+const PAYROLL_KEY = `${STORAGE_PREFIX}payroll_v3`;
+const CUSTOM_NORMALS_KEY = `${STORAGE_PREFIX}custom_normals_v1`;
 const LAB_TO_LAB_KEY = `${STORAGE_PREFIX}lab_to_lab_v3`;
 const CLOSEOUTS_KEY = `${STORAGE_PREFIX}closeouts_v3`;
 const AUDIT_KEY = `${STORAGE_PREFIX}audit_v3`;
@@ -175,6 +178,17 @@ interface AppContextType {
   diagnosticProfiles: CatalogProfileTemplate[];
   updateDiagnosticProfiles: (profiles: CatalogProfileTemplate[]) => void;
   resetDiagnosticProfiles: () => void;
+  saveParameterNormalPermanently: (param: {
+    name: string;
+    code?: string;
+    unit?: string;
+    minNormal?: number;
+    maxNormal?: number;
+    textReference?: string;
+    panicLow?: number;
+    panicHigh?: number;
+    method?: string;
+  }) => void;
 
   // Laboratory Instruments & Hardware Interfacing
   instruments: LabInstrument[];
@@ -603,8 +617,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       return INITIAL_EMPLOYEES;
     }
   });
-  const [attendance, setAttendance] = useStampedCollection<AttendanceRecord>(INITIAL_ATTENDANCE);
-  const [payroll, setPayroll] = useStampedCollection<PayrollRecord>(INITIAL_PAYROLL);
+  const [attendance, setAttendance] = useStampedCollection<AttendanceRecord>(() => {
+    try {
+      const saved = localStorage.getItem(ATTENDANCE_KEY);
+      return saved ? JSON.parse(saved) : INITIAL_ATTENDANCE;
+    } catch {
+      return INITIAL_ATTENDANCE;
+    }
+  });
+  const [payroll, setPayroll] = useStampedCollection<PayrollRecord>(() => {
+    try {
+      const saved = localStorage.getItem(PAYROLL_KEY);
+      return saved ? JSON.parse(saved) : INITIAL_PAYROLL;
+    } catch {
+      return INITIAL_PAYROLL;
+    }
+  });
 
   // 13. Lab Info & Branches
   const [labInfo, setLabInfo] = useState<LabInfo>(() => {
@@ -835,6 +863,48 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useEffect(() => {
     try { localStorage.setItem(STAFF_OPTIONS_KEY, JSON.stringify(staffSignatureOptions)); } catch (e) { console.error(e); }
   }, [staffSignatureOptions]);
+
+  // HR Employees & Attendance & Payroll Persistence
+  useEffect(() => {
+    try {
+      localStorage.setItem(EMPLOYEES_KEY, JSON.stringify(employees));
+      localStorage.setItem('rt_lab_employees_v1', JSON.stringify(employees));
+    } catch (e) {
+      console.error('Failed to save employees:', e);
+    }
+  }, [employees]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(ATTENDANCE_KEY, JSON.stringify(attendance));
+    } catch (e) {
+      console.error('Failed to save attendance:', e);
+    }
+  }, [attendance]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(PAYROLL_KEY, JSON.stringify(payroll));
+    } catch (e) {
+      console.error('Failed to save payroll:', e);
+    }
+  }, [payroll]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(LAB_TO_LAB_KEY, JSON.stringify(labToLabOrders));
+    } catch (e) {
+      console.error('Failed to save labToLabOrders:', e);
+    }
+  }, [labToLabOrders]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(CLOSEOUTS_KEY, JSON.stringify(dailyCloseouts));
+    } catch (e) {
+      console.error('Failed to save closeouts:', e);
+    }
+  }, [dailyCloseouts]);
 
   // Automatic Migration Run on Mount
   useEffect(() => {
@@ -1131,13 +1201,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               });
             }
             if (Array.isArray(ghRes.data.expenses) && ghRes.data.expenses.length > 0) {
-              setExpenses(prev => mergeCollection('expenses', prev, ghRes.data.expenses));
+              setExpenses(prev => mergeCollection('expenses', prev, ghRes.data.expenses) as ExpenseRecord[]);
             }
             if (Array.isArray(ghRes.data.loyaltyProfiles) && ghRes.data.loyaltyProfiles.length > 0) {
-              setLoyaltyProfiles(prev => mergeCollection('loyaltyProfiles', prev, ghRes.data.loyaltyProfiles));
+              setLoyaltyProfiles(prev => mergeCollection('loyaltyProfiles', prev, ghRes.data.loyaltyProfiles) as PatientLoyaltyProfile[]);
             }
             if (Array.isArray(ghRes.data.inventory) && ghRes.data.inventory.length > 0) {
-              setInventory(prev => mergeCollection('inventory', prev, ghRes.data.inventory));
+              setInventory(prev => mergeCollection('inventory', prev, ghRes.data.inventory) as InventoryItem[]);
             }
             if (ghRes.data.labInfo) {
               setLabInfo(ghRes.data.labInfo);
@@ -1994,6 +2064,100 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
     logAction('CATALOG_UPDATE', 'CATALOG', 'استعادة بروفايلات التحاليل الافتراضية (24 بروفايل طبي)');
   }, [logAction, githubConfig, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, packages]);
+
+  const saveParameterNormalPermanently = useCallback((param: {
+    name: string;
+    code?: string;
+    unit?: string;
+    minNormal?: number;
+    maxNormal?: number;
+    textReference?: string;
+    panicLow?: number;
+    panicHigh?: number;
+    method?: string;
+  }) => {
+    try {
+      // 1. Save to custom normals registry
+      const normKey = (param.code || param.name).toLowerCase().replace(/[\(\)\[\]\/\-_\s]/g, '').trim();
+      const raw = localStorage.getItem(CUSTOM_NORMALS_KEY);
+      const registry: Record<string, any> = raw ? JSON.parse(raw) : {};
+      registry[normKey] = {
+        name: param.name,
+        code: param.code,
+        unit: param.unit,
+        minNormal: param.minNormal,
+        maxNormal: param.maxNormal,
+        textReference: param.textReference,
+        panicLow: param.panicLow,
+        panicHigh: param.panicHigh,
+        method: param.method
+      };
+      localStorage.setItem(CUSTOM_NORMALS_KEY, JSON.stringify(registry));
+
+      // 2. Propagate to diagnosticProfiles in state and storage
+      setDiagnosticProfiles(prevProfiles => {
+        const next = prevProfiles.map(prof => {
+          const hasParam = prof.parameters.some(p => 
+            p.name.toLowerCase().trim() === param.name.toLowerCase().trim() ||
+            (param.code && ((p as any).code || '').toLowerCase() === param.code.toLowerCase())
+          );
+          if (!hasParam) return prof;
+          const newParams = prof.parameters.map(p => {
+            const matches = p.name.toLowerCase().trim() === param.name.toLowerCase().trim() ||
+                            (param.code && ((p as any).code || '').toLowerCase() === param.code.toLowerCase());
+            if (matches) {
+              return {
+                ...p,
+                unit: param.unit !== undefined ? param.unit : p.unit,
+                minNormal: param.minNormal !== undefined ? param.minNormal : p.minNormal,
+                maxNormal: param.maxNormal !== undefined ? param.maxNormal : p.maxNormal,
+                panicLow: param.panicLow !== undefined ? param.panicLow : p.panicLow,
+                panicHigh: param.panicHigh !== undefined ? param.panicHigh : p.panicHigh,
+                textReference: param.textReference !== undefined ? param.textReference : p.textReference,
+                method: param.method !== undefined ? param.method : p.method
+              };
+            }
+            return p;
+          });
+          return { ...prof, parameters: newParams };
+        });
+        try {
+          localStorage.setItem(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(next));
+          localStorage.setItem('rt_lab_catalog_v2', JSON.stringify(next));
+        } catch {}
+        return next;
+      });
+
+      // 3. Propagate to testCatalog in state and storage
+      setTestCatalog(prevTests => {
+        const next = prevTests.map(t => {
+          const matches = (t.code && param.code && t.code.toUpperCase() === param.code.toUpperCase()) ||
+                          t.nameEn.toLowerCase().trim() === param.name.toLowerCase().trim() ||
+                          t.nameAr.includes(param.name);
+          if (matches) {
+            return {
+              ...t,
+              unit: param.unit !== undefined ? param.unit : t.unit,
+              minNormal: param.minNormal !== undefined ? param.minNormal : t.minNormal,
+              maxNormal: param.maxNormal !== undefined ? param.maxNormal : t.maxNormal,
+              textReference: param.textReference !== undefined ? param.textReference : t.textReference,
+              method: param.method !== undefined ? param.method : t.method
+            };
+          }
+          return t;
+        });
+        try {
+          localStorage.setItem(CATALOG_KEY, JSON.stringify(next));
+          localStorage.setItem('rt_lab_individual_tests_v2', JSON.stringify(next));
+        } catch {}
+        return next;
+      });
+
+      logAction('CATALOG_UPDATE', 'CATALOG', `حفظ المعدل الطبيعي بشكل دائم للتحليل: ${param.name}`);
+    } catch (e) {
+      console.error('Failed to save permanent normal:', e);
+    }
+  }, [logAction, setDiagnosticProfiles, setTestCatalog]);
 
   const forceSyncCatalog = useCallback(() => {
     const refreshedTests = mergeCatalogWithDefaults(testCatalog);
@@ -3125,20 +3289,47 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       ...emp,
       id: `emp-${Date.now()}`
     };
-    setEmployees(prev => [newEmp, ...prev]);
+    setEmployees(prev => {
+      const next = [newEmp, ...prev];
+      try {
+        localStorage.setItem(EMPLOYEES_KEY, JSON.stringify(next));
+        localStorage.setItem('rt_lab_employees_v1', JSON.stringify(next));
+      } catch (err) {
+        console.error('Error saving new employee:', err);
+      }
+      return next;
+    });
     logAction('CREATE', 'HR', `إضافة موظف جديد: ${emp.fullName}`);
-  }, [logAction]);
+  }, [logAction, setEmployees]);
 
   const updateEmployee = useCallback((id: string, updates: Partial<Employee>) => {
-    setEmployees(prev => prev.map(e => e.id === id ? { ...e, ...updates } : e));
+    setEmployees(prev => {
+      const next = prev.map(e => e.id === id ? { ...e, ...updates } : e);
+      try {
+        localStorage.setItem(EMPLOYEES_KEY, JSON.stringify(next));
+        localStorage.setItem('rt_lab_employees_v1', JSON.stringify(next));
+      } catch (err) {
+        console.error('Error updating employee:', err);
+      }
+      return next;
+    });
     logAction('UPDATE', 'HR', `تعديل بيانات الموظف رقم ${id}`);
-  }, [logAction]);
+  }, [logAction, setEmployees]);
 
   const deleteEmployee = useCallback((id: string) => {
     markDeleted('employees', id);
-    setEmployees(prev => prev.filter(e => e.id !== id));
+    setEmployees(prev => {
+      const next = prev.filter(e => e.id !== id);
+      try {
+        localStorage.setItem(EMPLOYEES_KEY, JSON.stringify(next));
+        localStorage.setItem('rt_lab_employees_v1', JSON.stringify(next));
+      } catch (err) {
+        console.error('Error deleting employee:', err);
+      }
+      return next;
+    });
     logAction('DELETE', 'HR', `حذف موظف رقم ${id}`);
-  }, [logAction]);
+  }, [logAction, setEmployees]);
 
   const timeToMinutes = (time?: string): number | null => {
   if (!time) return null;
@@ -3585,10 +3776,42 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
           } catch {}
         }
         if (data.staffSignatureOptions) {
-          setStaffSignatureOptions(data.staffSignatureOptions);
-          try {
-            localStorage.setItem(STAFF_OPTIONS_KEY, JSON.stringify(data.staffSignatureOptions));
-          } catch {}
+          setStaffSignatureOptions(prev => {
+            const mergeRoleOptions = (local: StaffOptionItem[] = [], remote: StaffOptionItem[] = []) => {
+              const map = new Map<string, StaffOptionItem>();
+              local.forEach(item => map.set(item.name.toLowerCase().trim(), item));
+              remote.forEach(item => {
+                const k = item.name.toLowerCase().trim();
+                if (!map.has(k)) map.set(k, item);
+              });
+              return Array.from(map.values());
+            };
+            const merged = {
+              chemists: mergeRoleOptions(prev.chemists, data.staffSignatureOptions.chemists),
+              verifiers: mergeRoleOptions(prev.verifiers, data.staffSignatureOptions.verifiers),
+              consultants: mergeRoleOptions(prev.consultants, data.staffSignatureOptions.consultants)
+            };
+            try {
+              localStorage.setItem(STAFF_OPTIONS_KEY, JSON.stringify(merged));
+            } catch {}
+            return merged;
+          });
+        }
+        if (Array.isArray(data.employees) && data.employees.length > 0) {
+          setEmployees(prev => {
+            const map = new Map<string, Employee>();
+            prev.forEach(e => map.set(e.id || e.fullName, e));
+            data.employees.forEach((e: Employee) => {
+              const k = e.id || e.fullName;
+              if (!map.has(k)) map.set(k, e);
+            });
+            const merged = Array.from(map.values());
+            try {
+              localStorage.setItem(EMPLOYEES_KEY, JSON.stringify(merged));
+              localStorage.setItem('rt_lab_employees_v1', JSON.stringify(merged));
+            } catch {}
+            return merged;
+          });
         }
       }
 
@@ -3664,7 +3887,6 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
             if (c.barcode) existingBarcodes.add(c.barcode);
             if (safeCaseLab) existingNumbers.add(safeCaseLab);
           }
-
           if (!existingInvNumbers.has(invNum) && !existingInvNumbers.has(safeCaseLab)) {
             const newInv: IncomeRecord = {
               id: `inv-${c.id || c.labNumber}-${Date.now()}`,
@@ -3715,6 +3937,9 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
         localStorage.setItem(CATALOG_KEY, JSON.stringify(mergedCatalog));
         localStorage.setItem(STAFF_SIGNATURES_KEY, JSON.stringify(staffSignatures));
         localStorage.setItem(STAFF_OPTIONS_KEY, JSON.stringify(staffSignatureOptions));
+        localStorage.setItem(EMPLOYEES_KEY, JSON.stringify(employees));
+        localStorage.setItem(ATTENDANCE_KEY, JSON.stringify(attendance));
+        localStorage.setItem(PAYROLL_KEY, JSON.stringify(payroll));
       } catch (e) {
         console.warn('Storage save note:', e);
       }
@@ -3727,6 +3952,9 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
         loyaltyProfiles,
         inventory,
         labInfo,
+        employees,
+        attendance,
+        payroll,
         staffSignatures,
         staffSignatureOptions,
         testCatalog: mergedCatalog,
@@ -3949,6 +4177,7 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
     diagnosticProfiles,
     updateDiagnosticProfiles,
     resetDiagnosticProfiles,
+    saveParameterNormalPermanently,
 
     instruments,
     transmissions,

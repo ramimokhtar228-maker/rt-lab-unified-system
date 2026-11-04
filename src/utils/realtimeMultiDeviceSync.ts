@@ -256,7 +256,7 @@ class RealtimeMultiDeviceSyncEngine {
         this.notifyStatus();
 
         // Subscribe to action broadcasts and device presence
-        this.mqttClient?.subscribe([TOPIC_ACTIONS, TOPIC_PRESENCE], { qos: 1 }, (err) => {
+        this.mqttClient?.subscribe([TOPIC_ACTIONS, TOPIC_PRESENCE], { qos: 1 }, (err: any) => {
           if (!err) {
             this.sendPresencePing();
             // Discover active peers and request state
@@ -267,7 +267,7 @@ class RealtimeMultiDeviceSyncEngine {
         this.startPresenceHeartbeat();
       });
 
-      this.mqttClient.on('message', (topic, payloadBuffer) => {
+      this.mqttClient.on('message', (topic: string, payloadBuffer: any) => {
         try {
           const payloadStr = payloadBuffer.toString();
           if (!payloadStr) return;
@@ -286,8 +286,8 @@ class RealtimeMultiDeviceSyncEngine {
         }
       });
 
-      this.mqttClient.on('error', (err) => {
-        console.warn('MQTT Connection Warning:', err.message);
+      this.mqttClient.on('error', (err: any) => {
+        console.warn('MQTT Connection Warning:', err?.message || err);
         this.cloudConnected = false;
         this.notifyStatus();
       });

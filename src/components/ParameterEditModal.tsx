@@ -6,7 +6,7 @@ interface ParameterEditModalProps {
   isOpen: boolean;
   onClose: () => void;
   parameter: TestParameter | null;
-  onSave: (updated: Partial<TestParameter>) => void;
+  onSave: (updated: Partial<TestParameter>, savePermanently?: boolean) => void;
 }
 
 export const ParameterEditModal: React.FC<ParameterEditModalProps> = ({
@@ -26,6 +26,7 @@ export const ParameterEditModal: React.FC<ParameterEditModalProps> = ({
   const [textReference, setTextReference] = useState(parameter.textReference || '');
   const [method, setMethod] = useState(parameter.method || '');
   const [notes, setNotes] = useState(parameter.notes || '');
+  const [savePermanently, setSavePermanently] = useState(true);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,7 +62,7 @@ export const ParameterEditModal: React.FC<ParameterEditModalProps> = ({
       textReference: computedTextRef || undefined,
       method: method.trim() || undefined,
       notes: notes.trim() || undefined
-    });
+    }, savePermanently);
     onClose();
   };
 
@@ -202,6 +203,26 @@ export const ParameterEditModal: React.FC<ParameterEditModalProps> = ({
               className="w-full text-xs p-2.5 border border-slate-300 rounded-lg"
               placeholder="أي ملاحظة تظهر أسفل التحليل في التقرير"
             />
+          </div>
+
+          {/* Permanent Save Toggle */}
+          <div className="bg-emerald-50 border border-emerald-300 rounded-xl p-3 flex items-start gap-2.5 shadow-xs">
+            <input
+              type="checkbox"
+              id="savePermanentlyCheckbox"
+              checked={savePermanently}
+              onChange={(e) => setSavePermanently(e.target.checked)}
+              className="mt-0.5 rounded text-emerald-700 focus:ring-emerald-500 w-4 h-4 cursor-pointer"
+            />
+            <label htmlFor="savePermanentlyCheckbox" className="text-xs text-emerald-950 font-bold cursor-pointer select-none">
+              <span className="flex items-center gap-1.5 text-emerald-900 font-extrabold">
+                <Check className="w-3.5 h-3.5 text-emerald-600 inline" />
+                حفظ هذا المعدل الطبيعي كمرجع دائم وعدم الرجوع للقديم
+              </span>
+              <span className="block text-[11px] font-medium text-emerald-700 mt-0.5">
+                تثبيت النورمال الجديد في الكتالوج وكافة البروفايلات والفحوصات القادمة تلقائياً.
+              </span>
+            </label>
           </div>
 
           {/* Buttons */}

@@ -65,6 +65,12 @@ export const HRModule: React.FC = () => {
 
   // Payslip Print Preview
   const [payslipPrint, setPayslipPrint] = useState<PayrollRecord | null>(null);
+  const [saveSuccessMsg, setSaveSuccessMsg] = useState<string>('');
+
+  const showNotification = (msg: string) => {
+    setSaveSuccessMsg(msg);
+    setTimeout(() => setSaveSuccessMsg(''), 4500);
+  };
 
   // Filter attendance for selected date
   const dateAttendance = useMemo(() => {
@@ -112,15 +118,17 @@ export const HRModule: React.FC = () => {
       shiftHours: editStaffShift
     });
     setEditingStaff(null);
+    showNotification(`تم تحديث وحفظ بيانات الموظف ${editStaffName} بنجاح`);
   };
 
   const handleSaveStaff = (e: React.FormEvent) => {
     e.preventDefault();
     if (!fullName.trim()) return;
 
+    const empName = fullName.trim();
     addEmployee({
       code: `EMP-00${employees.length + 1}`,
-      fullName: fullName.trim(),
+      fullName: empName,
       role: 'chemist',
       jobTitleAr: jobTitleAr.trim() || 'أخصائي تحاليل طبية',
       jobTitleEn: 'Clinical Laboratory Specialist',
@@ -137,6 +145,7 @@ export const HRModule: React.FC = () => {
     setIsAddStaffOpen(false);
     setFullName('');
     setJobTitleAr('');
+    showNotification(`✓ تم إضافة وحفظ الموظف "${empName}" بنجاح في قاعدة البيانات ولن يُفقد.`);
   };
 
   const handleQuickAttendance = (employeeId: string, status: AttendanceRecord['status']) => {
@@ -226,6 +235,22 @@ export const HRModule: React.FC = () => {
             )}
           </div>
         </div>
+
+        {saveSuccessMsg && (
+          <div className="mt-3 p-3 bg-emerald-50 border border-emerald-300 rounded-lg text-xs font-bold text-emerald-800 flex items-center justify-between animate-fadeIn">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+              <span>{saveSuccessMsg}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setSaveSuccessMsg('')}
+              className="text-emerald-700 hover:text-emerald-950 text-xs px-2 py-0.5"
+            >
+              ✕
+            </button>
+          </div>
+        )}
       </div>
 
       {/* VIEW 1: DAILY ATTENDANCE */}
@@ -566,8 +591,10 @@ export const HRModule: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => {
-                    if (window.confirm()) {
+                    const ok = window.confirm ? window.confirm(`هل أنت متأكد من حذف الموظف "${emp.fullName}"؟`) : true;
+                    if (ok) {
                       deleteEmployee(emp.id);
+                      showNotification(`تم حذف الموظف "${emp.fullName}"`);
                     }
                   }}
                   className="px-2.5 py-1 text-xs font-bold text-rose-600 hover:bg-rose-50 rounded-lg border border-rose-200 flex items-center gap-1 transition-colors"

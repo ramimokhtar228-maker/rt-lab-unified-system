@@ -4,7 +4,7 @@ import { formatGenderEn } from './calculator';
 import { DEFAULT_STAFF } from '../data/labCatalog';
 import { DISEASE_ILLUSTRATIONS } from '../data/diseaseIllustrations';
 import { isOgttProfile, extractOgttData, generateOgttSvgChart, generateOgttProtocolHtml } from './ogttEngine';
-import { isCBCProfile, extractCBCData, generateCbcUnifiedSvgCharts, generateCbcMorphologyBlockHtml } from './cbcEngine';
+import { isCBCProfile, extractCBCData, generateCbcRbcSvgChart, generateCbcPltSvgChart } from './cbcEngine';
 
 /**
  * Single source of truth for the patient-facing report.
@@ -442,22 +442,26 @@ export const REPORT_CSS = `
     color: ${BRAND.muted};
   }
 
-  /* EXACT TABLE ORDER: Test / result / unit / flags / references */
+  /* EXACT TABLE ORDER: Test / result / unit / flags / references / (visual gauge) */
   table.rt-table {
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
-    margin-top: 1mm;
+    margin-top: 1.5mm;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    overflow: hidden;
   }
   .rt-table thead th {
     text-align: left;
-    font-size: 10px;
+    font-size: 10.5px;
     font-weight: 800;
-    letter-spacing: 0.07em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: #ffffff;
-    background: ${BRAND.navy};
-    padding: 7px 10px;
+    background: linear-gradient(135deg, #0e2747 0%, #1a3c63 100%);
+    padding: 8px 10px;
+    border-bottom: 2.5px solid #2563eb;
   }
   .rt-table thead th:first-child {
     border-top-left-radius: 4px;
@@ -470,10 +474,19 @@ export const REPORT_CSS = `
   .rt-table th.c-unit { width: 14%; }
   .rt-table th.c-flag { width: 12%; text-align: center; }
   .rt-table th.c-ref { width: 24%; }
+  .rt-table th.c-chart { display: none; }
+
+  /* When visual chart / gauge column is active */
+  .rt-table.has-chart th.c-test { width: 29%; }
+  .rt-table.has-chart th.c-result { width: 16%; }
+  .rt-table.has-chart th.c-unit { width: 11%; }
+  .rt-table.has-chart th.c-flag { width: 12%; text-align: center; }
+  .rt-table.has-chart th.c-ref { width: 17%; }
+  .rt-table.has-chart th.c-chart { width: 15%; text-align: center; display: table-cell; }
 
   .rt-table tbody td {
-    padding: 6px 10px;
-    border-bottom: 1px solid ${BRAND.line};
+    padding: 6.5px 10px;
+    border-bottom: 1px solid #e2e8f0;
     vertical-align: middle;
     font-size: 11.5px;
   }
@@ -482,39 +495,56 @@ export const REPORT_CSS = `
     break-inside: avoid;
   }
   .rt-table tbody tr:nth-child(even) td {
-    background: #fafafa;
+    background: #f8fafc;
+  }
+  .rt-table tbody tr:hover td {
+    background: #f1f5f9;
   }
   .rt-table td.test {
     font-weight: 700;
-    color: ${BRAND.ink};
+    color: #0f172a;
+    font-size: 12px;
   }
   .rt-table td.test small {
     display: block;
-    font-weight: 400;
+    font-weight: 500;
     font-size: 9px;
-    color: ${BRAND.muted};
+    color: #64748b;
     margin-top: 1px;
   }
   .rt-table td.result {
     font-family: 'JetBrains Mono', 'Inter', monospace;
     font-size: 12.5px;
     font-weight: 800;
-    color: ${BRAND.ink};
+    color: #0f172a;
   }
   .rt-table td.result.h {
-    color: ${BRAND.high};
+    color: #b91c1c;
+    background: #fef2f2;
+    border-radius: 4px;
+    padding: 2px 6px;
+    display: inline-block;
   }
   .rt-table td.result.l {
-    color: ${BRAND.low};
+    color: #1e40af;
+    background: #eff6ff;
+    border-radius: 4px;
+    padding: 2px 6px;
+    display: inline-block;
   }
   .rt-table td.result.c {
-    color: ${BRAND.critical};
+    color: #ffffff;
+    background: #991b1b;
+    border-radius: 4px;
+    padding: 2px 6px;
+    display: inline-block;
     font-weight: 900;
   }
   .rt-table td.unit {
-    color: ${BRAND.muted};
+    color: #475569;
     font-size: 11px;
     font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
   }
   .rt-table td.flag {
     text-align: center;
@@ -522,40 +552,302 @@ export const REPORT_CSS = `
   .rt-table td.ref {
     color: #334155;
     font-size: 11px;
+    font-weight: 600;
     font-family: 'JetBrains Mono', 'Inter', monospace;
   }
+  .rt-table td.gauge-col {
+    text-align: center;
+  }
 
-  /* Flags styling: clean, anti-slop text indicators */
+  /* Flags styling: clean, high contrast badges */
   .flag-tag {
-    font-size: 9.5px;
+    font-size: 9px;
     font-weight: 800;
     letter-spacing: 0.05em;
-    padding: 1.5px 6px;
+    padding: 2px 7px;
     border-radius: 4px;
     display: inline-block;
+    text-align: center;
   }
   .flag-high {
     background: #fee2e2;
-    color: ${BRAND.high};
+    color: #991b1b;
+    border: 1px solid #fca5a5;
   }
   .flag-low {
     background: #dbeafe;
-    color: ${BRAND.low};
+    color: #1e40af;
+    border: 1px solid #bfdbfe;
   }
   .flag-panic {
     background: #991b1b;
     color: #ffffff;
+    font-weight: 900;
+    box-shadow: 0 1px 3px rgba(153, 27, 27, 0.4);
   }
   .flag-abnormal {
     background: #fef3c7;
     color: #b45309;
+    border: 1px solid #fde68a;
   }
   .flag-normal {
-    color: #059669;
+    color: #065f46;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
     font-weight: 700;
   }
   .flag-none {
     color: #94a3b8;
+  }
+
+  /* Inline mini-gauge range bar */
+  .rt-gauge-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 85px;
+    margin: 0 auto;
+  }
+  .rt-gauge-track {
+    position: relative;
+    width: 100%;
+    height: 7px;
+    border-radius: 4px;
+    background: #e2e8f0;
+    display: flex;
+    overflow: hidden;
+    border: 1px solid #cbd5e1;
+  }
+  .rt-gauge-seg.low { width: 25%; height: 100%; background: #fed7aa; }
+  .rt-gauge-seg.norm { width: 50%; height: 100%; background: #86efac; }
+  .rt-gauge-seg.high { width: 25%; height: 100%; background: #fca5a5; }
+  .rt-gauge-pin {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 1.5px solid #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  }
+  .rt-gauge-labels {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 7px;
+    color: #64748b;
+    font-weight: 700;
+    margin-top: 1px;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* CBC Diagnostic Visual Panel */
+  .cbc-visual-panel {
+    margin-top: 3.5mm;
+    padding: 3mm 4mm;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .cbc-visual-panel h3 {
+    margin: 0 0 2mm;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    color: #0e2747;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1.5px solid #cbd5e1;
+    padding-bottom: 1.5mm;
+  }
+  .cbc-diff-bar {
+    display: flex;
+    height: 14px;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.15);
+    border: 1px solid #94a3b8;
+    margin: 2mm 0 1.5mm;
+  }
+  .cbc-diff-seg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-weight: 800;
+    color: #ffffff;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .cbc-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 8.5px;
+    font-weight: 700;
+    color: #334155;
+    margin-top: 1.5mm;
+  }
+  .cbc-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .cbc-legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+  }
+  .cbc-indices-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px 10px;
+    margin-top: 2.5mm;
+    padding-top: 2mm;
+    border-top: 1px dashed #cbd5e1;
+  }
+  .cbc-index-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    padding: 4px 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .cbc-index-label {
+    font-size: 8px;
+    font-weight: 700;
+    color: #475569;
+  }
+  .cbc-index-val {
+    font-size: 11px;
+    font-weight: 900;
+    font-family: 'JetBrains Mono', monospace;
+    color: #0f172a;
+    margin: 1px 0;
+  }
+  .flag-none {
+    color: #94a3b8;
+  }
+
+  /* Diagnostic Visual Panels (Applicable across all profiles) */
+  .rt-diag-panel {
+    margin-top: 3mm;
+    margin-bottom: 2mm;
+    padding: 2.5mm 3.5mm;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .rt-diag-panel h3 {
+    margin: 0 0 1.5mm;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.03em;
+    color: #0e2747;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1.5px solid #cbd5e1;
+    padding-bottom: 1mm;
+  }
+  .rt-diag-grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px 8px;
+    margin-top: 1.5mm;
+  }
+  .rt-diag-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px 8px;
+    margin-top: 1.5mm;
+  }
+  .rt-diag-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px 10px;
+    margin-top: 1.5mm;
+  }
+  .rt-diag-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    padding: 3.5px 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .rt-diag-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 8px;
+    font-weight: 700;
+    color: #475569;
+  }
+  .rt-diag-val {
+    font-size: 11px;
+    font-weight: 900;
+    font-family: 'JetBrains Mono', monospace;
+    color: #0f172a;
+    margin: 1px 0;
+  }
+  .rt-diag-sub {
+    font-size: 7.5px;
+    color: #64748b;
+    font-weight: 500;
+  }
+  .rt-diag-badge {
+    font-size: 7.5px;
+    font-weight: 800;
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+  .rt-diag-badge.opt { background: #dcfce7; color: #15803d; }
+  .rt-diag-badge.warn { background: #fef3c7; color: #b45309; }
+  .rt-diag-badge.alert { background: #fee2e2; color: #b91c1c; }
+  .rt-diag-badge.panic { background: #991b1b; color: #ffffff; }
+  .rt-diag-badge.info { background: #eff6ff; color: #1e40af; }
+  .rt-multi-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 2.5px 0;
+    border-bottom: 1px dashed #e2e8f0;
+    font-size: 8.5px;
+  }
+  .rt-multi-bar-row:last-child {
+    border-bottom: none;
+  }
+  .rt-multi-bar-label {
+    width: 32%;
+    font-weight: 700;
+    color: #1e293b;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .rt-multi-bar-track-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .rt-multi-bar-val {
+    width: 22%;
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 800;
+    color: #0f172a;
   }
 
   /* Uncluttered Notes & Clinical Interpretation */
@@ -914,7 +1206,709 @@ function cleanInvestigationName(raw?: string | null): string {
   return str;
 }
 
-function rowHtml(p: TestParameter): string {
+function calcPos(val: number | null, min: number, max: number): number {
+  if (val === null || isNaN(val)) return 50;
+  if (val < min) {
+    const range = min * 0.5 || 1;
+    return Math.max(5, 25 - ((min - val) / range) * 20);
+  } else if (val > max) {
+    const range = (max * 0.5) || 1;
+    return Math.min(95, 75 + ((val - max) / range) * 20);
+  } else {
+    const span = max - min || 1;
+    return 25 + ((val - min) / span) * 50;
+  }
+}
+
+function calcColor(val: number | null, min: number, max: number): string {
+  if (val === null || isNaN(val)) return '#94a3b8';
+  if (val < min) return '#d97706'; // amber
+  if (val > max) return '#dc2626'; // rose red
+  return '#10b981'; // emerald
+}
+
+function renderRowGaugeHtml(p: TestParameter): string {
+  const val = parseFloat(p.result || '');
+  if (isNaN(val) || p.minNormal === undefined || p.maxNormal === undefined) {
+    if (p.flag === 'NORMAL') {
+      return `<span style="font-size: 8.5px; font-weight: 700; color: #059669; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 1.5px 6px; border-radius: 3px;">Normal</span>`;
+    }
+    if (p.flag === 'HIGH' || p.flag === 'ABNORMAL') {
+      return `<span style="font-size: 8.5px; font-weight: 700; color: #dc2626; background: #fee2e2; border: 1px solid #fca5a5; padding: 1.5px 6px; border-radius: 3px;">Reactive</span>`;
+    }
+    return `<span style="color: #cbd5e1; text-align: center; display: block; font-size: 9px;">—</span>`;
+  }
+  const min = p.minNormal;
+  const max = p.maxNormal;
+  const pos = calcPos(val, min, max);
+  const color = calcColor(val, min, max);
+
+  return `<div class="rt-gauge-wrap">
+    <div class="rt-gauge-track">
+      <div class="rt-gauge-seg low" title="Low (< ${min})"></div>
+      <div class="rt-gauge-seg norm" title="Normal (${min} - ${max})"></div>
+      <div class="rt-gauge-seg high" title="High (> ${max})"></div>
+      <div class="rt-gauge-pin" style="left: ${pos}%; background: ${color};" title="Value: ${val} (Ref: ${min} - ${max})"></div>
+    </div>
+    <div class="rt-gauge-labels">
+      <span>L</span>
+      <span style="color: #059669; font-weight: 800;">NOR</span>
+      <span>H</span>
+    </div>
+  </div>`;
+}
+
+function getParam(params: TestParameter[], names: string[]): TestParameter | undefined {
+  return params.find(p => {
+    const pName = (p.name || '').toLowerCase();
+    const pCode = ((p as any).code || '').toLowerCase();
+    return names.some(n => pName.includes(n.toLowerCase()) || pCode === n.toLowerCase());
+  });
+}
+
+function getNum(params: TestParameter[], names: string[]): number | null {
+  const p = getParam(params, names);
+  if (!p || !p.result) return null;
+  const n = parseFloat(String(p.result).replace(/[^0-9.-]/g, ''));
+  return isNaN(n) ? null : n;
+}
+
+export function isCbcProfile(profile: TestProfile): boolean {
+  const code = (profile.profileCode || (profile as any).code || '').toUpperCase();
+  const tEn = (profile.titleEn || '').toLowerCase();
+  const tAr = (profile.titleAr || '');
+  return code === 'CBC' || tEn.includes('complete blood') || tEn.includes('cbc') || tAr.includes('صورة دم');
+}
+
+export function isLipidProfile(profile: TestProfile): boolean {
+  const code = (profile.profileCode || (profile as any).code || '').toUpperCase();
+  const tEn = (profile.titleEn || '').toLowerCase();
+  const tAr = (profile.titleAr || '');
+  return code === 'LIPID' || tEn.includes('lipid') || tEn.includes('cholesterol') || tAr.includes('دهون') || tAr.includes('كوليسترول');
+}
+
+export function isLiverProfile(profile: TestProfile): boolean {
+  const code = (profile.profileCode || (profile as any).code || '').toUpperCase();
+  const tEn = (profile.titleEn || '').toLowerCase();
+  const tAr = (profile.titleAr || '');
+  return code === 'LFT' || tEn.includes('liver') || tEn.includes('hepatic') || tAr.includes('كبد') || tAr.includes('وظائف كبد');
+}
+
+export function isKidneyProfile(profile: TestProfile): boolean {
+  const code = (profile.profileCode || (profile as any).code || '').toUpperCase();
+  const tEn = (profile.titleEn || '').toLowerCase();
+  const tAr = (profile.titleAr || '');
+  return code === 'KFT' || code === 'RFT' || tEn.includes('kidney') || tEn.includes('renal') || tAr.includes('كلى') || tAr.includes('وظائف كلى');
+}
+
+export function isDiabetesProfile(profile: TestProfile): boolean {
+  const code = (profile.profileCode || (profile as any).code || '').toUpperCase();
+  const tEn = (profile.titleEn || '').toLowerCase();
+  const tAr = (profile.titleAr || '');
+  return code === 'GLYCEMIC' || code === 'DIABETES' || tEn.includes('diabetes') || tEn.includes('glycemic') || tEn.includes('glucose') || tEn.includes('hba1c') || tAr.includes('سكر');
+}
+
+export function isThyroidProfile(profile: TestProfile): boolean {
+  const code = (profile.profileCode || (profile as any).code || '').toUpperCase();
+  const tEn = (profile.titleEn || '').toLowerCase();
+  const tAr = (profile.titleAr || '');
+  return code === 'THYROID' || tEn.includes('thyroid') || tAr.includes('غدة') || tAr.includes('درقية');
+}
+
+export function isElectrolytesProfile(profile: TestProfile): boolean {
+  const code = (profile.profileCode || (profile as any).code || '').toUpperCase();
+  const tEn = (profile.titleEn || '').toLowerCase();
+  const tAr = (profile.titleAr || '');
+  return code === 'ELECTROLYTES' || tEn.includes('electrolyte') || tEn.includes('minerals') || tAr.includes('أملاح') || tAr.includes('شوارد');
+}
+
+export function isCoagulationProfile(profile: TestProfile): boolean {
+  const code = (profile.profileCode || (profile as any).code || '').toUpperCase();
+  const tEn = (profile.titleEn || '').toLowerCase();
+  const tAr = (profile.titleAr || '');
+  return code === 'COAG' || code === 'PT' || tEn.includes('coagulation') || tEn.includes('prothrombin') || tAr.includes('سيولة') || tAr.includes('تجلط');
+}
+
+export function isCardiacProfile(profile: TestProfile): boolean {
+  const code = (profile.profileCode || (profile as any).code || '').toUpperCase();
+  const tEn = (profile.titleEn || '').toLowerCase();
+  const tAr = (profile.titleAr || '');
+  return code === 'CARDIAC' || tEn.includes('cardiac') || tEn.includes('troponin') || tAr.includes('قلب');
+}
+
+export function isIronProfile(profile: TestProfile): boolean {
+  const code = (profile.profileCode || (profile as any).code || '').toUpperCase();
+  const tEn = (profile.titleEn || '').toLowerCase();
+  const tAr = (profile.titleAr || '');
+  return code === 'IRON' || code === 'ANEMIA' || tEn.includes('iron') || tEn.includes('ferritin') || tAr.includes('حديد') || tAr.includes('أنيميا');
+}
+
+export function isVitaminProfile(profile: TestProfile): boolean {
+  const code = (profile.profileCode || (profile as any).code || '').toUpperCase();
+  const tEn = (profile.titleEn || '').toLowerCase();
+  const tAr = (profile.titleAr || '');
+  return code === 'VITAMINS' || tEn.includes('vitamin') || tAr.includes('فيتامين');
+}
+
+export function renderCbcVisualsHtml(params: TestParameter[]): string {
+  const cbcData = extractCBCData(params);
+  const rbcSvg = generateCbcRbcSvgChart(cbcData, 320, 145);
+  const pltSvg = generateCbcPltSvgChart(cbcData, 320, 145);
+
+  const hb = cbcData.hb;
+  const hct = cbcData.pcv;
+  const mcv = cbcData.mcv;
+  const plt = cbcData.plt;
+  const wbc = cbcData.wbc;
+
+  const neu = cbcData.neutrophils ?? 60;
+  const lym = cbcData.lymphocytes ?? 30;
+  const mono = cbcData.monocytes ?? 5;
+  const eos = cbcData.eosinophils ?? 3;
+  const baso = cbcData.basophils ?? 1;
+
+  const diffTotal = (neu + lym + mono + eos + baso) || 100;
+  const pNeu = ((neu / diffTotal) * 100).toFixed(1);
+  const pLym = ((lym / diffTotal) * 100).toFixed(1);
+  const pMono = ((mono / diffTotal) * 100).toFixed(1);
+  const pEos = ((eos / diffTotal) * 100).toFixed(1);
+  const pBaso = ((baso / diffTotal) * 100).toFixed(1);
+
+  return `
+  <div class="rt-diag-panel">
+    <h3>
+      <span>📊 Complete Blood Count (CBC) Diagnostic Graphics & Differential Spectrum</span>
+      <span style="font-size: 8.5px; color: #2563eb; font-weight: 700;">Hematology Consensus</span>
+    </h3>
+
+    <!-- 5-Part Differential Histogram Bar -->
+    <div style="font-size: 8.5px; font-weight: 800; color: #334155; margin-bottom: 1.5px; display: flex; justify-content: space-between;">
+      <span>Automated Leukocyte Differential Spectrum ${wbc ? `(Total WBC: ${wbc} x10³/µL)` : ''}</span>
+      <span>${cbcData.sizeClassification ? `RBC Morphology: <strong style="color: ${cbcData.sizeColor};">${cbcData.sizeClassification}</strong>` : ''}</span>
+    </div>
+    <div class="cbc-diff-bar">
+      <div class="cbc-diff-seg" style="width: ${pNeu}%; background: #2563eb;" title="Neutrophils: ${neu}%">${neu >= 8 ? `Neu ${pNeu}%` : ''}</div>
+      <div class="cbc-diff-seg" style="width: ${pLym}%; background: #7c3aed;" title="Lymphocytes: ${lym}%">${lym >= 8 ? `Lym ${pLym}%` : ''}</div>
+      <div class="cbc-diff-seg" style="width: ${pMono}%; background: #d97706;" title="Monocytes: ${mono}%">${mono >= 4 ? `Mon` : ''}</div>
+      <div class="cbc-diff-seg" style="width: ${pEos}%; background: #059669;" title="Eosinophils: ${eos}%">${eos >= 3 ? `Eos` : ''}</div>
+      <div class="cbc-diff-seg" style="width: ${pBaso}%; background: #e11d48;" title="Basophils: ${baso}%"></div>
+    </div>
+    <div class="cbc-legend">
+      <div class="cbc-legend-item"><span class="cbc-legend-dot" style="background:#2563eb;"></span> Neu: <strong>${neu}%</strong> (40-75%)</div>
+      <div class="cbc-legend-item"><span class="cbc-legend-dot" style="background:#7c3aed;"></span> Lym: <strong>${lym}%</strong> (20-45%)</div>
+      <div class="cbc-legend-item"><span class="cbc-legend-dot" style="background:#d97706;"></span> Mono: <strong>${mono}%</strong> (2-8%)</div>
+      <div class="cbc-legend-item"><span class="cbc-legend-dot" style="background:#059669;"></span> Eos: <strong>${eos}%</strong> (1-5%)</div>
+      <div class="cbc-legend-item"><span class="cbc-legend-dot" style="background:#e11d48;"></span> Baso: <strong>${baso}%</strong> (0-1%)</div>
+    </div>
+
+    <!-- Dual Histograms: RBC Price-Jones Curve & PLT Volume Curve -->
+    <div style="display: flex; gap: 8px; justify-content: space-between; margin-top: 2mm;">
+      <div style="flex: 1; border: 1px solid #e2e8f0; border-radius: 4px; padding: 2px; background: #ffffff;">
+        ${rbcSvg}
+      </div>
+      <div style="flex: 1; border: 1px solid #e2e8f0; border-radius: 4px; padding: 2px; background: #ffffff;">
+        ${pltSvg}
+      </div>
+    </div>
+
+    <!-- Key Erythrocyte & Platelet Cards -->
+    <div class="rt-diag-grid-4" style="margin-top: 2mm;">
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Hemoglobin (Hb)</span><span class="rt-diag-sub">12-17.5 g/dL</span></div>
+        <div class="rt-diag-val">${hb !== null ? `${hb} g/dL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low"></div><div class="rt-gauge-seg norm"></div><div class="rt-gauge-seg high"></div><div class="rt-gauge-pin" style="left:${calcPos(hb, 12, 17.5)}%; background:${calcColor(hb, 12, 17.5)};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Hematocrit (HCT)</span><span class="rt-diag-sub">36-52 %</span></div>
+        <div class="rt-diag-val">${hct !== null ? `${hct} %` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low"></div><div class="rt-gauge-seg norm"></div><div class="rt-gauge-seg high"></div><div class="rt-gauge-pin" style="left:${calcPos(hct, 36, 52)}%; background:${calcColor(hct, 36, 52)};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>MCV (Size Index)</span><span class="rt-diag-sub">80-100 fL</span></div>
+        <div class="rt-diag-val">${mcv !== null ? `${mcv} fL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low"></div><div class="rt-gauge-seg norm"></div><div class="rt-gauge-seg high"></div><div class="rt-gauge-pin" style="left:${calcPos(mcv, 80, 100)}%; background:${calcColor(mcv, 80, 100)};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Platelets (PLT)</span><span class="rt-diag-sub">150-450k</span></div>
+        <div class="rt-diag-val">${plt !== null ? `${plt} x10³/µL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low"></div><div class="rt-gauge-seg norm"></div><div class="rt-gauge-seg high"></div><div class="rt-gauge-pin" style="left:${calcPos(plt, 150, 450)}%; background:${calcColor(plt, 150, 450)};"></div></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+export function renderLipidVisualsHtml(params: TestParameter[]): string {
+  const chol = getNum(params, ['cholesterol', 'total chol']);
+  const trig = getNum(params, ['triglyceride', 'tg']);
+  const hdl = getNum(params, ['hdl', 'high density']);
+  const ldl = getNum(params, ['ldl', 'low density']);
+  const ratio = (chol && hdl) ? +(chol / hdl).toFixed(2) : null;
+
+  const isHighRisk = (chol && chol >= 240) || (ldl && ldl >= 160) || (trig && trig >= 200) || (ratio && ratio >= 5.0);
+  const isBorderline = !isHighRisk && ((chol && chol >= 200) || (ldl && ldl >= 130) || (trig && trig >= 150) || (ratio && ratio >= 4.0));
+  const statusText = isHighRisk ? 'Atherogenic Risk: High' : isBorderline ? 'Atherogenic Risk: Borderline' : 'Atherogenic Risk: Desirable';
+
+  return `
+  <div class="rt-diag-panel">
+    <h3>
+      <span>📊 Lipid Profile & Atherogenic Cardiovascular Risk Evaluation</span>
+      <span class="rt-diag-badge ${isHighRisk ? 'alert' : isBorderline ? 'warn' : 'opt'}">${statusText}</span>
+    </h3>
+    <div class="rt-diag-grid-4">
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Total Cholesterol</span><span class="rt-diag-sub">< 200 mg/dL</span></div>
+        <div class="rt-diag-val" style="color:${(chol && chol >= 200)?'#b91c1c':'#0f172a'};">${chol !== null ? `${chol} mg/dL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg norm" style="width:65%;"></div><div class="rt-gauge-seg high" style="width:35%;"></div><div class="rt-gauge-pin" style="left:${calcPos(chol, 120, 260)}%; background:${(chol&&chol>=200)?'#b91c1c':'#15803d'};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Triglycerides</span><span class="rt-diag-sub">< 150 mg/dL</span></div>
+        <div class="rt-diag-val" style="color:${(trig && trig >= 150)?'#b91c1c':'#0f172a'};">${trig !== null ? `${trig} mg/dL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg norm" style="width:60%;"></div><div class="rt-gauge-seg high" style="width:40%;"></div><div class="rt-gauge-pin" style="left:${calcPos(trig, 50, 250)}%; background:${(trig&&trig>=150)?'#b91c1c':'#15803d'};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>HDL-C (Protective)</span><span class="rt-diag-sub">> 40 mg/dL</span></div>
+        <div class="rt-diag-val" style="color:${(hdl && hdl < 40)?'#b91c1c':'#15803d'};">${hdl !== null ? `${hdl} mg/dL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low" style="width:40%;"></div><div class="rt-gauge-seg norm" style="width:60%;"></div><div class="rt-gauge-pin" style="left:${calcPos(hdl, 25, 75)}%; background:${(hdl&&hdl<40)?'#b91c1c':'#15803d'};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>LDL-C (Atherogenic)</span><span class="rt-diag-sub">< 100 mg/dL</span></div>
+        <div class="rt-diag-val" style="color:${(ldl && ldl >= 100)?'#b91c1c':'#0f172a'};">${ldl !== null ? `${ldl} mg/dL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg norm" style="width:55%;"></div><div class="rt-gauge-seg high" style="width:45%;"></div><div class="rt-gauge-pin" style="left:${calcPos(ldl, 60, 190)}%; background:${(ldl&&ldl>=100)?'#b91c1c':'#15803d'};"></div></div>
+      </div>
+    </div>
+    ${ratio !== null ? `
+      <div style="margin-top: 1.5mm; padding-top: 1.5mm; border-top: 1px dashed #cbd5e1; display:flex; justify-content:space-between; align-items:center; font-size:8.5px;">
+        <span>Cardiovascular Risk Ratio (Chol / HDL): <strong style="font-family:'JetBrains Mono'; font-size:10px; color:${ratio>=4.5?'#b91c1c':'#15803d'};">${ratio}</strong> (Desirable < 4.5)</span>
+        <span style="color:#64748b;">NCEP ATP III / ACC Guidelines</span>
+      </div>
+    ` : ''}
+  </div>`;
+}
+
+export function renderLiverVisualsHtml(params: TestParameter[]): string {
+  const alt = getNum(params, ['alt', 'sgpt']);
+  const ast = getNum(params, ['ast', 'sgot']);
+  const tb = getNum(params, ['total bilirubin', 't. bili']);
+  const alb = getNum(params, ['albumin']);
+  const deRitis = (alt && ast) ? +(ast / alt).toFixed(2) : null;
+
+  return `
+  <div class="rt-diag-panel">
+    <h3>
+      <span>📊 Hepatic Biomarkers & Hepatocellular Integrity Evaluation (LFTs)</span>
+      <span class="rt-diag-badge info">De Ritis Ratio (AST/ALT): <strong>${deRitis ?? '—'}</strong></span>
+    </h3>
+    <div class="rt-diag-grid-4">
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>ALT / SGPT</span><span class="rt-diag-sub">Up to 45 U/L</span></div>
+        <div class="rt-diag-val" style="color:${(alt && alt > 45)?'#b91c1c':'#0f172a'};">${alt !== null ? `${alt} U/L` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg norm" style="width:65%;"></div><div class="rt-gauge-seg high" style="width:35%;"></div><div class="rt-gauge-pin" style="left:${calcPos(alt, 10, 80)}%; background:${(alt&&alt>45)?'#b91c1c':'#15803d'};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>AST / SGOT</span><span class="rt-diag-sub">Up to 40 U/L</span></div>
+        <div class="rt-diag-val" style="color:${(ast && ast > 40)?'#b91c1c':'#0f172a'};">${ast !== null ? `${ast} U/L` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg norm" style="width:65%;"></div><div class="rt-gauge-seg high" style="width:35%;"></div><div class="rt-gauge-pin" style="left:${calcPos(ast, 10, 80)}%; background:${(ast&&ast>40)?'#b91c1c':'#15803d'};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Total Bilirubin</span><span class="rt-diag-sub">0.2 - 1.2 mg/dL</span></div>
+        <div class="rt-diag-val" style="color:${(tb && tb > 1.2)?'#b91c1c':'#0f172a'};">${tb !== null ? `${tb} mg/dL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg norm" style="width:65%;"></div><div class="rt-gauge-seg high" style="width:35%;"></div><div class="rt-gauge-pin" style="left:${calcPos(tb, 0.2, 2.0)}%; background:${(tb&&tb>1.2)?'#b91c1c':'#15803d'};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Serum Albumin</span><span class="rt-diag-sub">3.5 - 5.0 g/dL</span></div>
+        <div class="rt-diag-val" style="color:${(alb && alb < 3.5)?'#b91c1c':'#0f172a'};">${alb !== null ? `${alb} g/dL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low" style="width:30%;"></div><div class="rt-gauge-seg norm" style="width:70%;"></div><div class="rt-gauge-pin" style="left:${calcPos(alb, 2.5, 5.5)}%; background:${(alb&&alb<3.5)?'#b91c1c':'#15803d'};"></div></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+export function renderKidneyVisualsHtml(params: TestParameter[], patient?: { age?: number; gender?: string }): string {
+  const cr = getNum(params, ['creatinine', 'serum creatinine']);
+  const urea = getNum(params, ['urea', 'blood urea']);
+  const bun = getNum(params, ['bun']);
+  const ua = getNum(params, ['uric acid']);
+
+  let egfr: number | null = null;
+  if (cr && patient?.age) {
+    const age = patient.age;
+    const isFemale = (patient.gender || '').toLowerCase().includes('f') || (patient.gender || '').includes('أنثى');
+    const factor = isFemale ? 0.85 : 1.0;
+    egfr = Math.round((((140 - age) * 72) / (72 * cr)) * factor);
+  }
+
+  const ckdStage = egfr === null ? '' :
+    egfr >= 90 ? 'G1 (Normal / High)' :
+    egfr >= 60 ? 'G2 (Mild Decrease)' :
+    egfr >= 30 ? 'G3 (Moderate Decrease)' :
+    egfr >= 15 ? 'G4 (Severe Decrease)' : 'G5 (Kidney Failure)';
+
+  return `
+  <div class="rt-diag-panel">
+    <h3>
+      <span>📊 Renal Function Biomarkers & Glomerular Clearance (KFT)</span>
+      <span class="rt-diag-badge ${egfr !== null && egfr < 60 ? 'alert' : 'opt'}">${egfr !== null ? `Estimated eGFR: ${egfr} mL/min/1.73m² (${ckdStage})` : 'Renal Profile'}</span>
+    </h3>
+    <div class="rt-diag-grid-3">
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Serum Creatinine</span><span class="rt-diag-sub">0.6 - 1.2 mg/dL</span></div>
+        <div class="rt-diag-val" style="color:${(cr && cr > 1.2)?'#b91c1c':'#0f172a'};">${cr !== null ? `${cr} mg/dL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg norm" style="width:65%;"></div><div class="rt-gauge-seg high" style="width:35%;"></div><div class="rt-gauge-pin" style="left:${calcPos(cr, 0.4, 2.0)}%; background:${(cr&&cr>1.2)?'#b91c1c':'#15803d'};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Blood Urea / BUN</span><span class="rt-diag-sub">15 - 45 mg/dL</span></div>
+        <div class="rt-diag-val" style="color:${(urea && urea > 45)?'#b91c1c':'#0f172a'};">${urea !== null ? `${urea} mg/dL` : (bun !== null ? `${bun} mg/dL (BUN)` : '—')}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg norm" style="width:65%;"></div><div class="rt-gauge-seg high" style="width:35%;"></div><div class="rt-gauge-pin" style="left:${calcPos(urea || (bun ? bun * 2.14 : null), 15, 65)}%; background:${((urea&&urea>45)||(bun&&bun>25))?'#b91c1c':'#15803d'};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Uric Acid</span><span class="rt-diag-sub">3.5 - 7.2 mg/dL</span></div>
+        <div class="rt-diag-val" style="color:${(ua && ua > 7.2)?'#b91c1c':'#0f172a'};">${ua !== null ? `${ua} mg/dL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg norm" style="width:65%;"></div><div class="rt-gauge-seg high" style="width:35%;"></div><div class="rt-gauge-pin" style="left:${calcPos(ua, 2.5, 9.5)}%; background:${(ua&&ua>7.2)?'#b91c1c':'#15803d'};"></div></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+export function renderDiabetesVisualsHtml(params: TestParameter[]): string {
+  const fbs = getNum(params, ['fasting blood sugar', 'fasting glucose', 'fbs']);
+  const pps = getNum(params, ['2 hours post', 'post prandial', 'ppbs', 'rbs', 'random blood']);
+  const a1c = getNum(params, ['hba1c', 'glycated hemoglobin', 'a1c']);
+  const eag = a1c ? Math.round(28.7 * a1c - 46.7) : null;
+
+  const a1cStatus = !a1c ? '' :
+    a1c < 5.7 ? 'Normal Glycemia' :
+    a1c <= 6.4 ? 'Pre-diabetes (Impaired Glucose)' :
+    a1c <= 7.0 ? 'Diabetes: Well Controlled' :
+    a1c <= 8.0 ? 'Diabetes: Fair Control' : 'Diabetes: Uncontrolled';
+
+  return `
+  <div class="rt-diag-panel">
+    <h3>
+      <span>📊 Glycemic Target Spectrum & Diabetes Control Index</span>
+      <span class="rt-diag-badge ${a1c && a1c >= 6.5 ? 'alert' : (a1c && a1c >= 5.7 ? 'warn' : 'opt')}">${a1c ? a1cStatus : 'Diabetes Profile'}</span>
+    </h3>
+    <div class="rt-diag-grid-3">
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Fasting Plasma Glucose</span><span class="rt-diag-sub">70 - 100 mg/dL</span></div>
+        <div class="rt-diag-val" style="color:${(fbs && fbs >= 100)?'#b91c1c':'#0f172a'};">${fbs !== null ? `${fbs} mg/dL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg norm" style="width:55%;"></div><div class="rt-gauge-seg high" style="width:45%;"></div><div class="rt-gauge-pin" style="left:${calcPos(fbs, 60, 160)}%; background:${(fbs&&fbs>=100)?'#b91c1c':'#15803d'};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Post-Prandial / Random</span><span class="rt-diag-sub">< 140 mg/dL</span></div>
+        <div class="rt-diag-val" style="color:${(pps && pps >= 140)?'#b91c1c':'#0f172a'};">${pps !== null ? `${pps} mg/dL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg norm" style="width:60%;"></div><div class="rt-gauge-seg high" style="width:40%;"></div><div class="rt-gauge-pin" style="left:${calcPos(pps, 70, 220)}%; background:${(pps&&pps>=140)?'#b91c1c':'#15803d'};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>HbA1c (Glycated Hb)</span><span class="rt-diag-sub">Normal < 5.7 %</span></div>
+        <div class="rt-diag-val" style="color:${(a1c && a1c >= 5.7)?'#b91c1c':'#0f172a'};">${a1c !== null ? `${a1c} %` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg norm" style="width:45%;"></div><div class="rt-gauge-seg high" style="width:55%;"></div><div class="rt-gauge-pin" style="left:${calcPos(a1c, 4.0, 11.0)}%; background:${(a1c&&a1c>=5.7)?'#b91c1c':'#15803d'};"></div></div>
+      </div>
+    </div>
+    ${eag !== null ? `
+      <div style="margin-top: 1.5mm; padding-top: 1.5mm; border-top: 1px dashed #cbd5e1; display:flex; justify-content:space-between; align-items:center; font-size:8.5px;">
+        <span>Estimated Average Glucose (eAG): <strong style="font-family:'JetBrains Mono'; font-size:10px; color:${eag>154?'#b91c1c':'#15803d'};">${eag} mg/dL</strong></span>
+        <span style="color:#64748b;">American Diabetes Association (ADA) Consensus</span>
+      </div>
+    ` : ''}
+  </div>`;
+}
+
+export function renderThyroidVisualsHtml(params: TestParameter[]): string {
+  const tsh = getNum(params, ['tsh', 'thyroid stimulating']);
+  const ft4 = getNum(params, ['free t4', 'ft4']);
+  const ft3 = getNum(params, ['free t3', 'ft3']);
+
+  const status = (!tsh) ? 'Thyroid Hormonal Axis' :
+    (tsh > 4.5 && ft4 && ft4 < 0.8) ? 'Primary Hypothyroidism' :
+    (tsh > 4.5) ? 'Subclinical Hypothyroidism' :
+    (tsh < 0.4 && ft4 && ft4 > 1.8) ? 'Primary Hyperthyroidism' :
+    (tsh < 0.4) ? 'Subclinical Hyperthyroidism' : 'Euthyroid State (Normal Function)';
+
+  return `
+  <div class="rt-diag-panel">
+    <h3>
+      <span>📊 Thyroid Hormonal Axis & Pituitary Feedback (TSH, FT3, FT4)</span>
+      <span class="rt-diag-badge ${tsh && (tsh > 4.5 || tsh < 0.4) ? 'warn' : 'opt'}">${status}</span>
+    </h3>
+    <div class="rt-diag-grid-3">
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>TSH (Thyrotropin)</span><span class="rt-diag-sub">0.4 - 4.5 µIU/mL</span></div>
+        <div class="rt-diag-val">${tsh !== null ? `${tsh} µIU/mL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low"></div><div class="rt-gauge-seg norm"></div><div class="rt-gauge-seg high"></div><div class="rt-gauge-pin" style="left:${calcPos(tsh, 0.4, 4.5)}%; background:${calcColor(tsh, 0.4, 4.5)};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Free T4</span><span class="rt-diag-sub">0.8 - 1.8 ng/dL</span></div>
+        <div class="rt-diag-val">${ft4 !== null ? `${ft4} ng/dL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low"></div><div class="rt-gauge-seg norm"></div><div class="rt-gauge-seg high"></div><div class="rt-gauge-pin" style="left:${calcPos(ft4, 0.8, 1.8)}%; background:${calcColor(ft4, 0.8, 1.8)};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Free T3</span><span class="rt-diag-sub">2.0 - 4.4 pg/mL</span></div>
+        <div class="rt-diag-val">${ft3 !== null ? `${ft3} pg/mL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low"></div><div class="rt-gauge-seg norm"></div><div class="rt-gauge-seg high"></div><div class="rt-gauge-pin" style="left:${calcPos(ft3, 2.0, 4.4)}%; background:${calcColor(ft3, 2.0, 4.4)};"></div></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+export function renderElectrolytesVisualsHtml(params: TestParameter[]): string {
+  const na = getNum(params, ['sodium', 'na']);
+  const k = getNum(params, ['potassium', 'k']);
+  const cl = getNum(params, ['chloride', 'cl']);
+  const ca = getNum(params, ['calcium', 'ca']);
+
+  return `
+  <div class="rt-diag-panel">
+    <h3>
+      <span>📊 Serum Electrolytes & Mineral Homeostasis Scale</span>
+      <span class="rt-diag-badge ${k && (k < 3.5 || k > 5.1) ? 'alert' : 'opt'}">Ion Balance</span>
+    </h3>
+    <div class="rt-diag-grid-4">
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Sodium (Na+)</span><span class="rt-diag-sub">135 - 145 mmol/L</span></div>
+        <div class="rt-diag-val">${na !== null ? `${na} mmol/L` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low"></div><div class="rt-gauge-seg norm"></div><div class="rt-gauge-seg high"></div><div class="rt-gauge-pin" style="left:${calcPos(na, 135, 145)}%; background:${calcColor(na, 135, 145)};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Potassium (K+)</span><span class="rt-diag-sub">3.5 - 5.1 mmol/L</span></div>
+        <div class="rt-diag-val">${k !== null ? `${k} mmol/L` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low"></div><div class="rt-gauge-seg norm"></div><div class="rt-gauge-seg high"></div><div class="rt-gauge-pin" style="left:${calcPos(k, 3.5, 5.1)}%; background:${calcColor(k, 3.5, 5.1)};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Chloride (Cl-)</span><span class="rt-diag-sub">98 - 107 mmol/L</span></div>
+        <div class="rt-diag-val">${cl !== null ? `${cl} mmol/L` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low"></div><div class="rt-gauge-seg norm"></div><div class="rt-gauge-seg high"></div><div class="rt-gauge-pin" style="left:${calcPos(cl, 98, 107)}%; background:${calcColor(cl, 98, 107)};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Total Calcium (Ca++)</span><span class="rt-diag-sub">8.5 - 10.5 mg/dL</span></div>
+        <div class="rt-diag-val">${ca !== null ? `${ca} mg/dL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low"></div><div class="rt-gauge-seg norm"></div><div class="rt-gauge-seg high"></div><div class="rt-gauge-pin" style="left:${calcPos(ca, 8.5, 10.5)}%; background:${calcColor(ca, 8.5, 10.5)};"></div></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+export function renderCoagulationVisualsHtml(params: TestParameter[]): string {
+  const pt = getNum(params, ['prothrombin time', 'pt']);
+  const inr = getNum(params, ['inr']);
+  const ptt = getNum(params, ['ptt', 'aptt']);
+
+  const inrStatus = inr === null ? '' :
+    inr < 0.8 ? 'Hypercoagulable Risk' :
+    inr <= 1.2 ? 'Normal (Non-Anticoagulated)' :
+    inr <= 3.0 ? 'Therapeutic Window (Warfarin Target)' :
+    inr <= 3.5 ? 'Mechanical Valve Target' : 'High Bleeding Risk (Action Advised)';
+
+  return `
+  <div class="rt-diag-panel">
+    <h3>
+      <span>📊 Coagulation Cascade & Anticoagulant Monitoring (PT / INR)</span>
+      <span class="rt-diag-badge ${inr && inr > 3.5 ? 'alert' : 'opt'}">${inr ? inrStatus : 'Coagulation Profile'}</span>
+    </h3>
+    <div class="rt-diag-grid-3">
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>INR (Ratio)</span><span class="rt-diag-sub">0.8 - 1.2 (Norm)</span></div>
+        <div class="rt-diag-val">${inr !== null ? inr : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg norm" style="width:40%;"></div><div class="rt-gauge-seg low" style="width:35%; background:#a7f3d0;" title="Warfarin 2-3"></div><div class="rt-gauge-seg high" style="width:25%;"></div><div class="rt-gauge-pin" style="left:${calcPos(inr, 0.8, 3.5)}%; background:${(inr&&inr>3.5)?'#b91c1c':'#15803d'};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>PT (Prothrombin Time)</span><span class="rt-diag-sub">11.0 - 14.5 sec</span></div>
+        <div class="rt-diag-val">${pt !== null ? `${pt} sec` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low"></div><div class="rt-gauge-seg norm"></div><div class="rt-gauge-seg high"></div><div class="rt-gauge-pin" style="left:${calcPos(pt, 11.0, 14.5)}%; background:${calcColor(pt, 11.0, 14.5)};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>aPTT / PTT</span><span class="rt-diag-sub">25.0 - 38.0 sec</span></div>
+        <div class="rt-diag-val">${ptt !== null ? `${ptt} sec` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low"></div><div class="rt-gauge-seg norm"></div><div class="rt-gauge-seg high"></div><div class="rt-gauge-pin" style="left:${calcPos(ptt, 25.0, 38.0)}%; background:${calcColor(ptt, 25.0, 38.0)};"></div></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+export function renderCardiacVisualsHtml(params: TestParameter[]): string {
+  const trop = getNum(params, ['troponin', 'trop']);
+  const ckmb = getNum(params, ['ck-mb', 'ckmb']);
+  const ck = getNum(params, ['total ck', 'cpk']);
+
+  return `
+  <div class="rt-diag-panel">
+    <h3>
+      <span>📊 Cardiac Biomarkers & Myocardial Necrosis Surveillance</span>
+      <span class="rt-diag-badge ${trop && trop > 0.04 ? 'panic' : 'opt'}">${trop && trop > 0.04 ? 'Critical: Myocardial Injury Detected' : 'Cardiac Baseline'}</span>
+    </h3>
+    <div class="rt-diag-grid-3">
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Troponin I / T</span><span class="rt-diag-sub">< 0.04 ng/mL</span></div>
+        <div class="rt-diag-val" style="color:${(trop && trop > 0.04)?'#b91c1c':'#0f172a'};">${trop !== null ? `${trop} ng/mL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg norm" style="width:70%;"></div><div class="rt-gauge-seg high" style="width:30%;"></div><div class="rt-gauge-pin" style="left:${calcPos(trop, 0, 0.1)}%; background:${(trop&&trop>0.04)?'#b91c1c':'#15803d'};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>CK-MB</span><span class="rt-diag-sub">< 25 U/L</span></div>
+        <div class="rt-diag-val" style="color:${(ckmb && ckmb > 25)?'#b91c1c':'#0f172a'};">${ckmb !== null ? `${ckmb} U/L` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg norm" style="width:70%;"></div><div class="rt-gauge-seg high" style="width:30%;"></div><div class="rt-gauge-pin" style="left:${calcPos(ckmb, 0, 50)}%; background:${(ckmb&&ckmb>25)?'#b91c1c':'#15803d'};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Total CK</span><span class="rt-diag-sub">24 - 195 U/L</span></div>
+        <div class="rt-diag-val">${ck !== null ? `${ck} U/L` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg norm" style="width:70%;"></div><div class="rt-gauge-seg high" style="width:30%;"></div><div class="rt-gauge-pin" style="left:${calcPos(ck, 24, 195)}%; background:${calcColor(ck, 24, 195)};"></div></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+export function renderIronVisualsHtml(params: TestParameter[]): string {
+  const fe = getNum(params, ['serum iron', 'iron']);
+  const ferr = getNum(params, ['ferritin']);
+  const tibc = getNum(params, ['tibc', 'total iron']);
+  const sat = (fe && tibc) ? Math.round((fe / tibc) * 100) : null;
+
+  return `
+  <div class="rt-diag-panel">
+    <h3>
+      <span>📊 Iron Metabolism & Storage Capacity Scale</span>
+      <span class="rt-diag-badge ${sat && sat < 15 ? 'alert' : 'opt'}">${sat !== null ? `Transferrin Saturation: ${sat}%` : 'Iron Studies'}</span>
+    </h3>
+    <div class="rt-diag-grid-4">
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Serum Iron</span><span class="rt-diag-sub">60 - 170 µg/dL</span></div>
+        <div class="rt-diag-val">${fe !== null ? `${fe} µg/dL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low"></div><div class="rt-gauge-seg norm"></div><div class="rt-gauge-seg high"></div><div class="rt-gauge-pin" style="left:${calcPos(fe, 60, 170)}%; background:${calcColor(fe, 60, 170)};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Serum Ferritin</span><span class="rt-diag-sub">20 - 250 ng/mL</span></div>
+        <div class="rt-diag-val">${ferr !== null ? `${ferr} ng/mL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low"></div><div class="rt-gauge-seg norm"></div><div class="rt-gauge-seg high"></div><div class="rt-gauge-pin" style="left:${calcPos(ferr, 20, 250)}%; background:${calcColor(ferr, 20, 250)};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>T.I.B.C</span><span class="rt-diag-sub">240 - 450 µg/dL</span></div>
+        <div class="rt-diag-val">${tibc !== null ? `${tibc} µg/dL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low"></div><div class="rt-gauge-seg norm"></div><div class="rt-gauge-seg high"></div><div class="rt-gauge-pin" style="left:${calcPos(tibc, 240, 450)}%; background:${calcColor(tibc, 240, 450)};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Iron Saturation</span><span class="rt-diag-sub">20 - 50 %</span></div>
+        <div class="rt-diag-val">${sat !== null ? `${sat} %` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low"></div><div class="rt-gauge-seg norm"></div><div class="rt-gauge-seg high"></div><div class="rt-gauge-pin" style="left:${calcPos(sat, 20, 50)}%; background:${calcColor(sat, 20, 50)};"></div></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+export function renderVitaminsVisualsHtml(params: TestParameter[]): string {
+  const vitD = getNum(params, ['vitamin d', '25-oh', 'vit d']);
+  const vitB12 = getNum(params, ['vitamin b12', 'vit b12', 'b12']);
+
+  const dStatus = vitD === null ? '' :
+    vitD < 10 ? 'Severe Deficiency' :
+    vitD < 20 ? 'Deficiency' :
+    vitD < 30 ? 'Insufficiency' : 'Optimal Sufficiency (30-100 ng/mL)';
+
+  return `
+  <div class="rt-diag-panel">
+    <h3>
+      <span>📊 Vitamin Bioavailability & Nutritional Sufficiency Scale</span>
+      <span class="rt-diag-badge ${vitD && vitD < 20 ? 'alert' : 'opt'}">${vitD ? dStatus : 'Vitamins Profile'}</span>
+    </h3>
+    <div class="rt-diag-grid-2">
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Vitamin D (25-OH D3)</span><span class="rt-diag-sub">30 - 100 ng/mL (Optimal)</span></div>
+        <div class="rt-diag-val" style="color:${(vitD && vitD < 30)?'#b45309':'#15803d'};">${vitD !== null ? `${vitD} ng/mL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low" style="width:30%;"></div><div class="rt-gauge-seg high" style="width:20%; background:#fef3c7;"></div><div class="rt-gauge-seg norm" style="width:50%;"></div><div class="rt-gauge-pin" style="left:${calcPos(vitD, 10, 80)}%; background:${(vitD&&vitD<20)?'#b91c1c':((vitD&&vitD<30)?'#b45309':'#15803d')};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Vitamin B12</span><span class="rt-diag-sub">200 - 900 pg/mL</span></div>
+        <div class="rt-diag-val">${vitB12 !== null ? `${vitB12} pg/mL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low"></div><div class="rt-gauge-seg norm"></div><div class="rt-gauge-seg high"></div><div class="rt-gauge-pin" style="left:${calcPos(vitB12, 200, 900)}%; background:${calcColor(vitB12, 200, 900)};"></div></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+export function renderGenericProfileDistributionChart(profile: TestProfile): string {
+  const numericParams = profile.parameters.filter(p => {
+    if (!p.result) return false;
+    const n = parseFloat(String(p.result).replace(/[^0-9.-]/g, ''));
+    return !isNaN(n) && (p.minNormal !== undefined || p.maxNormal !== undefined);
+  });
+
+  if (numericParams.length === 0) return '';
+
+  return `
+  <div class="rt-diag-panel">
+    <h3>
+      <span>📊 Analytical Result Distribution & Normal Corridor Gauge (${esc(latin(profile.titleEn, profile.titleAr))})</span>
+      <span style="font-size: 8.5px; color: #2563eb; font-weight: 700;">Quantitative Reference Scale</span>
+    </h3>
+    <div style="display: flex; flex-direction: column; gap: 3px; margin-top: 1.5mm;">
+      ${numericParams.slice(0, 10).map(p => {
+        const n = parseFloat(String(p.result).replace(/[^0-9.-]/g, ''));
+        const min = p.minNormal ?? (n * 0.5);
+        const max = p.maxNormal ?? (n * 1.5);
+        const pos = calcPos(n, min, max);
+        const col = calcColor(n, min, max);
+        const k = flagKind(p);
+        const badgeCls = k === 'H' || k === 'CH' ? 'alert' : k === 'L' || k === 'CL' ? 'low' : 'opt';
+        return `
+          <div class="rt-multi-bar-row">
+            <div class="rt-multi-bar-label" title="${esc(p.name)}">${esc(cleanInvestigationName(p.name))}</div>
+            <div class="rt-multi-bar-track-wrap">
+              <span style="font-size: 7.5px; color: #64748b; width: 14px; text-align: right;">L</span>
+              <div class="rt-gauge-track" style="flex: 1; height: 7px;">
+                <div class="rt-gauge-seg low"></div>
+                <div class="rt-gauge-seg norm"></div>
+                <div class="rt-gauge-seg high"></div>
+                <div class="rt-gauge-pin" style="left: ${pos}%; background: ${col};"></div>
+              </div>
+              <span style="font-size: 7.5px; color: #64748b; width: 14px;">H</span>
+            </div>
+            <div class="rt-multi-bar-val">
+              <span style="color: ${col}; font-weight: 900;">${esc(p.result)}</span>
+              <span style="font-size: 7.5px; color: #64748b; font-weight: 600;">${esc(latin(p.unit, ''))}</span>
+              <span class="rt-diag-badge ${badgeCls}" style="margin-left: 3px;">${k || 'NOR'}</span>
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  </div>`;
+}
+
+export function renderProfileDiagnosticChartHtml(profile: TestProfile, patient: any): string {
+  if (isCbcProfile(profile)) {
+    return renderCbcVisualsHtml(profile.parameters);
+  }
+  if (isLipidProfile(profile)) {
+    return renderLipidVisualsHtml(profile.parameters);
+  }
+  if (isLiverProfile(profile)) {
+    return renderLiverVisualsHtml(profile.parameters);
+  }
+  if (isKidneyProfile(profile)) {
+    return renderKidneyVisualsHtml(profile.parameters, patient);
+  }
+  if (isDiabetesProfile(profile)) {
+    return renderDiabetesVisualsHtml(profile.parameters);
+  }
+  if (isThyroidProfile(profile)) {
+    return renderThyroidVisualsHtml(profile.parameters);
+  }
+  if (isElectrolytesProfile(profile)) {
+    return renderElectrolytesVisualsHtml(profile.parameters);
+  }
+  if (isCoagulationProfile(profile)) {
+    return renderCoagulationVisualsHtml(profile.parameters);
+  }
+  if (isCardiacProfile(profile)) {
+    return renderCardiacVisualsHtml(profile.parameters);
+  }
+  if (isIronProfile(profile)) {
+    return renderIronVisualsHtml(profile.parameters);
+  }
+  if (isVitaminProfile(profile)) {
+    return renderVitaminsVisualsHtml(profile.parameters);
+  }
+  return renderGenericProfileDistributionChart(profile);
+}
+
+function rowHtml(p: TestParameter, showVisualChart: boolean = true): string {
   const k = flagKind(p);
   const cls = k === 'H' ? 'h' : k === 'L' ? 'l' : k === 'CH' || k === 'CL' ? 'c' : k === 'A' ? 'h' : '';
   const ref = latin(formatReferenceDisplay(p), '—');
@@ -928,10 +1922,11 @@ function rowHtml(p: TestParameter): string {
     <td class="unit">${esc(latin(p.unit, '—'))}</td>
     <td class="flag">${flagCell(k)}</td>
     <td class="ref">${esc(ref)}</td>
+    ${showVisualChart ? `<td class="gauge-col">${renderRowGaugeHtml(p)}</td>` : ''}
   </tr>`;
 }
 
-function pageHtml(report: LabReport, profile: TestProfile, idx: number, total: number, lab: LabInfo | undefined): string {
+function pageHtml(report: LabReport, profile: TestProfile, idx: number, total: number, lab: LabInfo | undefined, showVisualChart: boolean = true): string {
   const p = report.patient;
   const labName = latin(lab?.labNameEn, 'RT Diagnostic Laboratories');
   const supervision = latin(lab?.supervisionEn, 'Kasr Al Ainy Faculty of Medicine Consultants');
@@ -1067,27 +2062,16 @@ function pageHtml(report: LabReport, profile: TestProfile, idx: number, total: n
             <div>Fasting: <b>${ogttEval.fastingVal !== null ? `${ogttEval.fastingVal} mg/dL` : '—'}</b></div>
             <div>2-Hour: <b>${ogttEval.twoHourVal !== null ? `${ogttEval.twoHourVal} mg/dL` : '—'}</b></div>
             <div>Peak: <b>${ogttEval.peakVal !== null ? `${ogttEval.peakVal} mg/dL` : '—'}</b></div>
+          </div>
         </div>
       </div>
     `;
   }
 
-  // CBC Dynamic Histograms (RBC Size Distribution Curve, PLT Histogram, WBC Differential) & Morphology
-  const isCbc = isCBCProfile(profile);
-  let cbcBlockHtml = '';
-  if (isCbc) {
-    const cbcData = extractCBCData(profile.parameters);
-    const cbcChartsSvg = generateCbcUnifiedSvgCharts(cbcData, 680);
-    const morphologyHtml = generateCbcMorphologyBlockHtml(cbcData);
-    cbcBlockHtml = `
-      <div class="rt-cbc-wrapper avoid-break-inside" style="margin-top: 3mm; margin-bottom: 2mm; page-break-inside: avoid; break-inside: avoid;">
-        <div style="margin-bottom: 2mm;">
-          ${cbcChartsSvg}
-        </div>
-        ${morphologyHtml}
-      </div>
-    `;
-  }
+  // Diagnostic Visual Dashboard (CBC, Lipid, Liver, Kidney, Diabetes, Thyroid, Electrolytes, Coagulation, Cardiac, Iron, Vitamins, or Generic Distribution Chart)
+  const profileDashboardHtml = showVisualChart
+    ? renderProfileDiagnosticChartHtml(profile, p)
+    : '';
 
   return `
   <section class="rt-page report-page-container">
@@ -1123,8 +2107,8 @@ function pageHtml(report: LabReport, profile: TestProfile, idx: number, total: n
       <div class="meta">Specimen: ${esc(latin(profile.sampleType, 'Serum / Whole Blood'))}</div>
     </div>
 
-    <!-- STRICT COLUMN ORDER: Investigation | Result | Unit | Flags | References -->
-    <table class="rt-table">
+    <!-- STRICT COLUMN ORDER: Investigation | Result | Unit | Flags | References | (Visual Gauge) -->
+    <table class="rt-table ${showVisualChart ? 'has-chart' : ''}">
       <thead>
         <tr>
           <th class="c-test">Investigation</th>
@@ -1132,15 +2116,16 @@ function pageHtml(report: LabReport, profile: TestProfile, idx: number, total: n
           <th class="c-unit">Unit</th>
           <th class="c-flag">Flags</th>
           <th class="c-ref">References</th>
+          ${showVisualChart ? '<th class="c-chart">Visual Gauge</th>' : ''}
         </tr>
       </thead>
       <tbody>
-        ${profile.parameters.map(rowHtml).join('')}
+        ${profile.parameters.map(param => rowHtml(param, showVisualChart)).join('')}
       </tbody>
     </table>
 
+    ${profileDashboardHtml}
     ${film}
-    ${cbcBlockHtml}
     ${ogttBlockHtml}
 
     ${interpretationsHtml}
@@ -1168,16 +2153,16 @@ function pageHtml(report: LabReport, profile: TestProfile, idx: number, total: n
 }
 
 /** The report pages only (for embedding in the in-app preview). Wrap in <div class="rt-root">. */
-export function buildReportPages(report: LabReport, lab?: LabInfo): string {
+export function buildReportPages(report: LabReport, lab?: LabInfo, showVisualChart: boolean = true): string {
   const total = report.profiles.length;
-  return report.profiles.map((pr, i) => pageHtml(report, pr, i, total, lab)).join('');
+  return report.profiles.map((pr, i) => pageHtml(report, pr, i, total, lab, showVisualChart)).join('');
 }
 
 export const REPORT_FONT_LINK =
-  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap';
+  'https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap';
 
 /** Full standalone HTML document (print window, PDF render, email attachment). */
-export function buildReportDocument(report: LabReport, lab?: LabInfo, autoPrint = false): string {
+export function buildReportDocument(report: LabReport, lab?: LabInfo, autoPrint = false, showVisualChart: boolean = true): string {
   const patientSafe = latin(report.patient.fullName, 'Patient');
   const title = `Lab Report - ${esc(patientSafe)} - ${esc(report.reportNumber)}`;
   return `<!DOCTYPE html>
@@ -1190,7 +2175,7 @@ export function buildReportDocument(report: LabReport, lab?: LabInfo, autoPrint 
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="${REPORT_FONT_LINK}" rel="stylesheet">
 <style>
-  body { margin: 0; background: #e2e8f0; }
+  body { margin: 0; background: #e2e8f0; font-family: 'Cairo', 'Inter', sans-serif; }
   .rt-page { box-shadow: 0 4px 20px rgba(0,0,0,.15); margin: 16px auto; }
   .bar { position: fixed; top: 12px; right: 12px; z-index: 99; display: flex; gap: 8px; }
   .bar button {
@@ -1199,12 +2184,12 @@ export function buildReportDocument(report: LabReport, lab?: LabInfo, autoPrint 
     border: 0;
     padding: 10px 18px;
     border-radius: 8px;
-    font: 700 13px 'Inter', sans-serif;
+    font: 700 13px 'Cairo', 'Inter', sans-serif;
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(136,19,55,0.3);
   }
   @media print {
-    body { background: #ffffff !important; }
+    body { background: #ffffff !important; font-family: 'Cairo', 'Inter', sans-serif !important; }
     .bar { display: none !important; }
     .rt-page { box-shadow: none !important; margin: 0 !important; width: 100% !important; min-height: auto !important; }
   }
@@ -1216,7 +2201,7 @@ export function buildReportDocument(report: LabReport, lab?: LabInfo, autoPrint 
   <button onclick="window.print()">Print / Save as PDF</button>
 </div>
 <div class="rt-root">
-  ${buildReportPages(report, lab)}
+  ${buildReportPages(report, lab, showVisualChart)}
 </div>
 ${autoPrint ? '<script>window.onload=function(){setTimeout(function(){window.print()},600)}</script>' : ''}
 </body>

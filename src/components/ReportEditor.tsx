@@ -76,7 +76,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
   onOpenIllustrationsModal,
   onOpenSmartReport
 }) => {
-  const { packages, applyPackageToReport, reports, setSelectedReportId, syncAllDevicesNow } = useApp();
+  const { packages, applyPackageToReport, reports, setSelectedReportId, syncAllDevicesNow, saveParameterNormalPermanently } = useApp();
   const [isManualSyncing, setIsManualSyncing] = useState(false);
   const [syncMessage, setSyncMessage] = useState<string | null>(null);
   const [activeProfileTab, setActiveProfileTab] = useState<string>(report.profiles[0]?.id || '');
@@ -573,12 +573,19 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
   };
 
   // Update single parameter
-  const handleUpdateParameter = (profileId: string, paramId: string, updates: Partial<TestParameter>) => {
+  const handleUpdateParameter = (
+    profileId: string,
+    paramId: string,
+    updates: Partial<TestParameter>,
+    savePermanently?: boolean
+  ) => {
+    let affectedParamName = '';
     const updatedProfiles = report.profiles.map(prof => {
       const hasParam = prof.parameters.some(param => param.id === paramId);
       if (prof.id === profileId || hasParam) {
         let updatedParams = prof.parameters.map(param => {
           if (param.id === paramId) {
+            affectedParamName = param.name;
             const merged = { ...param, ...updates };
             // Recalculate flag if result or ranges changed
             if (updates.result !== undefined || updates.minNormal !== undefined || updates.maxNormal !== undefined) {
@@ -604,6 +611,21 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
     });
 
     onUpdateReport({ ...report, profiles: updatedProfiles, updatedAt: new Date().toISOString() });
+
+    // Save permanently to catalog and templates if requested
+    if (savePermanently && saveParameterNormalPermanently && (updates.minNormal !== undefined || updates.maxNormal !== undefined || updates.textReference !== undefined || updates.unit !== undefined)) {
+      saveParameterNormalPermanently({
+        name: updates.name || affectedParamName,
+        code: (updates as any).code,
+        minNormal: updates.minNormal,
+        maxNormal: updates.maxNormal,
+        textReference: updates.textReference,
+        unit: updates.unit,
+        panicLow: updates.panicLow,
+        panicHigh: updates.panicHigh,
+        method: updates.method
+      });
+    }
   };
 
   // Add new parameter to current profile
@@ -1783,7 +1805,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                             <FlagBadge flag={param.flag} />
                           </td>
 
-                          {/* 5. References */}
+                          {/* 6. References */}
                           <td className="py-2.5 px-3 text-left">
                             <span className="text-xs text-slate-700 font-mono-numbers block font-medium">
                               {formatReferenceDisplay(param)}
@@ -2289,9 +2311,9 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
           setModalParamProfileId('');
         }}
         parameter={modalParamToEdit}
-        onSave={(updated) => {
+        onSave={(updated, savePermanently) => {
           if (modalParamToEdit) {
-            handleUpdateParameter(modalParamProfileId || currentProfile.id, modalParamToEdit.id, updated);
+            handleUpdateParameter(modalParamProfileId || currentProfile.id, modalParamToEdit.id, updated, savePermanently);
           }
         }}
       />

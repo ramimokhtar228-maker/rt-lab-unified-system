@@ -1,16 +1,18 @@
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 /**
  * حالة مجموعة بيانات مع طابع زمني تلقائي لكل سجل يتغيّر محلياً.
  * يضمن أن أحدث تعديل من أي جهاز هو الذي يفوز عند المزامنة،
  * ولا يُعاد ختم السجلات القادمة من السحابة (حتى لا تدور المزامنة بلا نهاية).
  */
-export function useStampedCollection<T extends Record<string, any>>(initial: T[] | (() => T[])) {
-  const [items, setItems] = useState<T[]>(initial as T[]);
+export function useStampedCollection<T extends Record<string, any>>(
+  initial: T[] | (() => T[])
+): [T[], React.Dispatch<React.SetStateAction<T[]>>] {
+  const [items, setItems] = useState<T[]>(initial);
 
-  const setItemsStamped = useCallback((action: any) => {
-    setItems(prev => {
-      const next = typeof action === 'function' ? action(prev) : action;
+  const setItemsStamped: React.Dispatch<React.SetStateAction<T[]>> = useCallback((action: React.SetStateAction<T[]>) => {
+    setItems((prev: T[]) => {
+      const next = typeof action === 'function' ? (action as (prev: T[]) => T[])(prev) : action;
       if (!Array.isArray(next)) return next;
       if (!Array.isArray(prev) || prev.length === 0) return next;
 
@@ -37,5 +39,6 @@ export function useStampedCollection<T extends Record<string, any>>(initial: T[]
     });
   }, []);
 
-  return [items, setItemsStamped] as const;
+  return [items, setItemsStamped];
 }
+

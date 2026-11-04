@@ -5,14 +5,42 @@ import { runAutomaticCalculations } from './calculator';
 
 export const MIGRATION_VERSION_KEY = 'rt_lab_migration_v9_booking_sync_fix_2026';
 
+export const CUSTOM_NORMALS_STORAGE_KEY = 'rt_lab_custom_normals_v1';
+
+/**
+ * Retrieves all user-customized normal ranges saved by the user
+ */
+export function getStoredCustomNormals(): Record<string, Partial<TestParameter>> {
+  if (typeof window === 'undefined') return {};
+  try {
+    const raw = localStorage.getItem(CUSTOM_NORMALS_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+export function normalizeTestKey(nameOrCode?: string): string {
+  if (!nameOrCode) return '';
+  return nameOrCode
+    .toLowerCase()
+    .replace(/[\(\)\[\]\/\-_\s]/g, '')
+    .trim();
+}
+
 /**
  * Merges any existing test catalog with the full default catalog (142 tests)
- * Preserves user modifications to prices/names, but guarantees all 142 tests are present
- * with rich medical reference data, units, turnaround times, and sample types.
+ * Preserves user modifications to prices/names and normal ranges, guaranteeing no custom edits revert!
  */
 export function mergeCatalogWithDefaults(savedCatalog?: InvoiceTestItem[]): InvoiceTestItem[] {
+  const customNormals = getStoredCustomNormals();
+
   if (!Array.isArray(savedCatalog) || savedCatalog.length === 0) {
-    return [...INITIAL_INDIVIDUAL_TESTS];
+    return INITIAL_INDIVIDUAL_TESTS.map(t => {
+      const normKey = normalizeTestKey(t.code) || normalizeTestKey(t.nameEn);
+      const custom = customNormals[normKey] || customNormals[normalizeTestKey(t.nameAr)];
+      return custom ? { ...t, ...custom } : { ...t };
+    });
   }
 
   const savedMap = new Map<string, InvoiceTestItem>();
@@ -26,6 +54,9 @@ export function mergeCatalogWithDefaults(savedCatalog?: InvoiceTestItem[]): Invo
   const merged: InvoiceTestItem[] = INITIAL_INDIVIDUAL_TESTS.map(defTest => {
     const codeKey = defTest.code.toUpperCase().trim();
     const existing = savedMap.get(codeKey);
+    const normKey = normalizeTestKey(defTest.code) || normalizeTestKey(defTest.nameEn);
+    const custom = customNormals[normKey] || customNormals[normalizeTestKey(defTest.nameAr)];
+
     if (existing) {
       savedMap.delete(codeKey);
       return {
@@ -35,24 +66,28 @@ export function mergeCatalogWithDefaults(savedCatalog?: InvoiceTestItem[]): Invo
         nameAr: existing.nameAr || defTest.nameAr,
         nameEn: existing.nameEn || defTest.nameEn,
         sampleType: existing.sampleType || defTest.sampleType,
-        textReference: existing.textReference !== undefined ? existing.textReference : defTest.textReference,
-        minNormal: existing.minNormal !== undefined ? existing.minNormal : defTest.minNormal,
-        maxNormal: existing.maxNormal !== undefined ? existing.maxNormal : defTest.maxNormal,
+        textReference: custom?.textReference !== undefined ? custom.textReference : (existing.textReference !== undefined ? existing.textReference : defTest.textReference),
+        minNormal: custom?.minNormal !== undefined ? custom.minNormal : (existing.minNormal !== undefined ? existing.minNormal : defTest.minNormal),
+        maxNormal: custom?.maxNormal !== undefined ? custom.maxNormal : (existing.maxNormal !== undefined ? existing.maxNormal : defTest.maxNormal),
+        panicLow: custom?.panicLow !== undefined ? custom.panicLow : (existing as any).panicLow,
+        panicHigh: custom?.panicHigh !== undefined ? custom.panicHigh : (existing as any).panicHigh,
         turnaroundTime: existing.turnaroundTime || defTest.turnaroundTime,
         fastingInstructions: (existing as any).fastingInstructions || defTest.fastingInstructions,
         price: typeof existing.price === 'number' && existing.price > 0 ? existing.price : defTest.price,
         cost: typeof existing.cost === 'number' && existing.cost > 0 ? existing.cost : defTest.cost,
         category: existing.category || defTest.category,
-        unit: existing.unit || defTest.unit,
-        method: existing.method || defTest.method
+        unit: custom?.unit || existing.unit || defTest.unit,
+        method: custom?.method || existing.method || defTest.method
       };
     }
-    return { ...defTest };
+    return custom ? { ...defTest, ...custom } : { ...defTest };
   });
 
   // Append custom user-created tests
   savedMap.forEach(customTest => {
-    merged.push(customTest);
+    const normKey = normalizeTestKey(customTest.code) || normalizeTestKey(customTest.nameEn);
+    const custom = customNormals[normKey];
+    merged.push(custom ? { ...customTest, ...custom } : customTest);
   });
 
   return merged;
@@ -141,11 +176,38 @@ export function mergePackagesWithDefaults(
 }
 
 /**
- * Merges any existing diagnostic profiles with 24 default profiles
+ * Merges any existing diagnostic profiles with 24 default profiles,
+ * strictly preserving all customized reference ranges, units, and panic values.
  */
 export function mergeProfilesWithDefaults(savedProfiles?: CatalogProfileTemplate[]): CatalogProfileTemplate[] {
+  const customNormals = getStoredCustomNormals();
+
+  const applyCustomNormalsToParams = <T extends { name: string; unit?: string; minNormal?: number; maxNormal?: number; panicLow?: number; panicHigh?: number; textReference?: string; method?: string }>(params: T[]): T[] => {
+    return params.map(param => {
+      const pCode = (param as any).code || '';
+      const pKey = normalizeTestKey(pCode) || normalizeTestKey(param.name);
+      const custom = customNormals[pKey];
+      if (custom) {
+        return {
+          ...param,
+          unit: custom.unit !== undefined ? custom.unit : param.unit,
+          minNormal: custom.minNormal !== undefined ? custom.minNormal : param.minNormal,
+          maxNormal: custom.maxNormal !== undefined ? custom.maxNormal : param.maxNormal,
+          panicLow: custom.panicLow !== undefined ? custom.panicLow : param.panicLow,
+          panicHigh: custom.panicHigh !== undefined ? custom.panicHigh : param.panicHigh,
+          textReference: custom.textReference !== undefined ? custom.textReference : param.textReference,
+          method: custom.method !== undefined ? custom.method : param.method
+        };
+      }
+      return param;
+    });
+  };
+
   if (!Array.isArray(savedProfiles) || savedProfiles.length === 0) {
-    return [...LAB_CATALOG];
+    return LAB_CATALOG.map(prof => ({
+      ...prof,
+      parameters: applyCustomNormalsToParams(prof.parameters || [])
+    }));
   }
 
   const savedMap = new Map<string, CatalogProfileTemplate>();
@@ -158,6 +220,10 @@ export function mergeProfilesWithDefaults(savedProfiles?: CatalogProfileTemplate
     const existing = savedMap.get(key);
     if (existing) {
       savedMap.delete(key);
+      const rawParams = Array.isArray(existing.parameters) && existing.parameters.length > 0
+        ? existing.parameters
+        : defProf.parameters;
+
       return {
         ...defProf,
         ...existing,
@@ -166,18 +232,22 @@ export function mergeProfilesWithDefaults(savedProfiles?: CatalogProfileTemplate
         category: existing.category || defProf.category,
         sampleType: existing.sampleType || defProf.sampleType,
         defaultInterpretation: existing.defaultInterpretation !== undefined ? existing.defaultInterpretation : defProf.defaultInterpretation,
-        // Always preserve the user's customized parameters list!
-        parameters: Array.isArray(existing.parameters)
-          ? existing.parameters
-          : defProf.parameters
+        // Always preserve and apply customized parameters and normal ranges!
+        parameters: applyCustomNormalsToParams(rawParams)
       };
     }
-    return { ...defProf };
+    return {
+      ...defProf,
+      parameters: applyCustomNormalsToParams(defProf.parameters || [])
+    };
   });
 
   // Append user's custom created profiles
   savedMap.forEach(customProf => {
-    merged.push(customProf);
+    merged.push({
+      ...customProf,
+      parameters: applyCustomNormalsToParams(customProf.parameters || [])
+    });
   });
 
   return merged;
@@ -252,23 +322,30 @@ export function upgradeSingleReport(report: LabReport): LabReport {
         const existingMap = new Map<string, TestParameter>();
         params.forEach(p => existingMap.set((p.name || '').toLowerCase().trim(), p));
 
+        const customNormals = getStoredCustomNormals();
         const mergedParams: TestParameter[] = cbcCatalog.parameters.map((catParam, idx) => {
           const match = Array.from(existingMap.entries()).find(([k]) => 
             k.includes(catParam.name.toLowerCase().trim()) || catParam.name.toLowerCase().includes(k)
           );
-          if (match && match[1].result) {
-            return {
-              ...catParam,
-              id: `p-mig-${idx}-${Date.now()}`,
-              result: match[1].result,
-              flag: match[1].flag || ''
-            };
-          }
+          const catCode = (catParam as any).code || '';
+          const pKey = normalizeTestKey(catCode) || normalizeTestKey(catParam.name);
+          const custom = customNormals[pKey];
+
+          const base: any = match ? { ...catParam, ...match[1] } : { ...catParam };
+          const finalMin = custom?.minNormal !== undefined ? custom.minNormal : base.minNormal;
+          const finalMax = custom?.maxNormal !== undefined ? custom.maxNormal : base.maxNormal;
+          const finalTextRef = custom?.textReference !== undefined ? custom.textReference : base.textReference;
+          const finalUnit = custom?.unit || base.unit;
+
           return {
-            ...catParam,
-            id: `p-mig-${idx}-${Date.now()}`,
-            result: '',
-            flag: ''
+            ...base,
+            minNormal: finalMin,
+            maxNormal: finalMax,
+            textReference: finalTextRef,
+            unit: finalUnit,
+            id: base.id || `p-mig-${idx}-${Date.now()}`,
+            result: match ? (match[1].result || '') : '',
+            flag: (match && match[1].flag) ? match[1].flag : 'NORMAL'
           };
         });
         params = mergedParams;

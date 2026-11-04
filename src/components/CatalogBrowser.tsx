@@ -63,7 +63,8 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
     addCatalogTest,
     updateCatalogTest,
     deleteCatalogTest,
-    forceSyncCatalog
+    forceSyncCatalog,
+    saveParameterNormalPermanently
   } = useApp();
 
   const [catalogViewMode, setCatalogViewMode] = useState<'individual' | 'profiles' | 'packages'>('individual');
@@ -1015,7 +1016,7 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
         <ParameterEditModal
           isOpen={true}
           parameter={paramToEdit.param}
-          onSave={(updated) => {
+          onSave={(updated, savePermanently) => {
             const updatedCatalog = catalog.map(p => {
               if (p.code === paramToEdit.profileCode) {
                 const newParams = [...p.parameters];
@@ -1029,6 +1030,21 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
               return p;
             });
             onUpdateCatalog(updatedCatalog);
+
+            if (savePermanently !== false && saveParameterNormalPermanently) {
+              saveParameterNormalPermanently({
+                name: updated.name || paramToEdit.param.name,
+                code: (updated as any).code || (paramToEdit.param as any).code,
+                minNormal: updated.minNormal,
+                maxNormal: updated.maxNormal,
+                textReference: updated.textReference,
+                unit: updated.unit,
+                panicLow: updated.panicLow,
+                panicHigh: updated.panicHigh,
+                method: updated.method
+              });
+            }
+
             setParamToEdit(null);
           }}
           onClose={() => setParamToEdit(null)}

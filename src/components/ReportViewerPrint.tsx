@@ -28,7 +28,8 @@ import {
   Settings,
   Microscope,
   Sparkles,
-  User
+  User,
+  BarChart2
 } from 'lucide-react';
 
 interface ReportViewerPrintProps {
@@ -59,6 +60,7 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
   } = useApp();
   const [isClientModalOpen, setIsClientModalOpen] = useState(false);
   const [isLabModalOpen, setIsLabModalOpen] = useState(false);
+  const [showVisualChart, setShowVisualChart] = useState<boolean>(true);
   const p = report.patient;
   const totalPages = report.profiles.length;
   const safeReport = useMemo<LabReport>(() => {
@@ -94,10 +96,10 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
     } catch {}
     try {
       setIsGeneratingPDF(true);
-      await downloadReportPDF(safeReport, labInfo);
+      await downloadReportPDF(safeReport, labInfo, showVisualChart);
     } catch (err) {
       console.error('Failed to generate PDF:', err);
-      openPrintReportWindow(safeReport, labInfo);
+      openPrintReportWindow(safeReport, labInfo, showVisualChart);
     } finally {
       setIsGeneratingPDF(false);
     }
@@ -116,7 +118,7 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
       });
     } catch {}
     try {
-      openPrintReportWindow(safeReport, labInfo);
+      openPrintReportWindow(safeReport, labInfo, showVisualChart);
     } catch {
       window.print();
     }
@@ -176,6 +178,21 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
           >
             <FileSpreadsheet className="w-3.5 h-3.5" />
             <span>تصدير PowerPoint</span>
+          </button>
+
+          {/* Visual Chart / CBC Dashboard Toggle */}
+          <button
+            type="button"
+            onClick={() => setShowVisualChart(prev => !prev)}
+            className={`flex items-center gap-1.5 px-3 py-2 text-xs font-bold rounded-lg border transition-all ${
+              showVisualChart
+                ? 'bg-blue-600/30 text-blue-200 border-blue-500/60 shadow-sm'
+                : 'bg-slate-800 text-slate-400 border-slate-700 hover:text-slate-200'
+            }`}
+            title="تفعيل أو إلغاء الرسم البياني ومؤشرات النتائج ومخطط الـ CBC"
+          >
+            <BarChart2 className={`w-3.5 h-3.5 ${showVisualChart ? 'text-blue-400' : 'text-slate-400'}`} />
+            <span>{showVisualChart ? 'الرسم البياني: مفعل ✓' : 'الرسم البياني: معطل'}</span>
           </button>
 
           {/* Edit Client / Patient Data */}
@@ -250,7 +267,7 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
       */}
       <div className="overflow-x-auto rounded-xl bg-slate-200 p-3 print:p-0">
         <style>{REPORT_CSS}</style>
-        <div className="rt-root" dangerouslySetInnerHTML={{ __html: buildReportPages(safeReport, labInfo) }} />
+        <div className="rt-root" dangerouslySetInnerHTML={{ __html: buildReportPages(safeReport, labInfo, showVisualChart) }} />
       </div>
 
       {/* Edit Client Modal */}
