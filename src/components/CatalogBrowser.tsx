@@ -64,14 +64,24 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
     updateCatalogTest,
     deleteCatalogTest,
     forceSyncCatalog,
-    saveParameterNormalPermanently
+    saveParameterNormalPermanently,
+    catalogViewMode,
+    setCatalogViewMode,
+    canEditCatalog,
+    currentUser,
+    setLoginModalOpen
   } = useApp();
 
-  const [catalogViewMode, setCatalogViewMode] = useState<'individual' | 'profiles' | 'packages'>('individual');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [expandedCode, setExpandedCode] = useState<string | null>(catalog[0]?.code || null);
   const [isSyncing, setIsSyncing] = useState(false);
+  const [catalogFeedback, setCatalogFeedback] = useState<string | null>(null);
+
+  const showFeedback = (msg: string) => {
+    setCatalogFeedback(msg);
+    setTimeout(() => setCatalogFeedback(null), 4000);
+  };
 
   // Active tests source: prioritize AppContext testCatalog if available
   const activeTests: IndividualTest[] = (testCatalog && testCatalog.length > 0)
@@ -252,6 +262,28 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
   };
 
   // PROFILE HANDLERS
+  const handleOpenAddProfile = () => {
+    setEditingProfileCode(null);
+    setNewProfCode('');
+    setNewProfTitleEn('');
+    setNewProfTitleAr('');
+    setNewProfCategory('Clinical Chemistry');
+    setNewProfSample('Serum');
+    setNewProfInterp('');
+    setIsNewProfileModalOpen(true);
+  };
+
+  const handleOpenEditProfile = (template: CatalogProfileTemplate) => {
+    setEditingProfileCode(template.code);
+    setNewProfCode(template.code || '');
+    setNewProfTitleEn(template.titleEn || '');
+    setNewProfTitleAr(template.titleAr || '');
+    setNewProfCategory(template.category || 'Clinical Chemistry');
+    setNewProfSample(template.sampleType || 'Serum');
+    setNewProfInterp(template.defaultInterpretation || '');
+    setIsNewProfileModalOpen(true);
+  };
+
   const handleCreateProfile = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newProfCode.trim() || !newProfTitleEn.trim()) {
@@ -260,6 +292,38 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
     }
 
     const cleanCode = newProfCode.trim().toUpperCase();
+
+    if (editingProfileCode) {
+      const duplicate = catalog.some(c => c.code === cleanCode && c.code !== editingProfileCode);
+      if (duplicate) {
+        alert(`الرمز (${cleanCode}) موجود بالفعل لبروفايل آخر، يرجى اختيار رمز مختلف.`);
+        return;
+      }
+      const updatedCatalog = catalog.map(c =>
+        c.code === editingProfileCode
+          ? {
+              ...c,
+              code: cleanCode,
+              titleEn: newProfTitleEn.trim(),
+              titleAr: newProfTitleAr.trim() || newProfTitleEn.trim(),
+              category: newProfCategory.trim() || 'General',
+              sampleType: newProfSample.trim() || 'Serum',
+              defaultInterpretation: newProfInterp.trim() || undefined
+            }
+          : c
+      );
+      onUpdateCatalog(updatedCatalog);
+      setExpandedCode(cleanCode);
+      setEditingProfileCode(null);
+      setNewProfCode('');
+      setNewProfTitleEn('');
+      setNewProfTitleAr('');
+      setNewProfInterp('');
+      setIsNewProfileModalOpen(false);
+      showFeedback(`تم تعديل البروفايل (${cleanCode}) وحفظ التغييرات بنجاح.`);
+      return;
+    }
+
     if (catalog.some(c => c.code === cleanCode)) {
       alert(`الرمز (${cleanCode}) موجود بالفعل في الكتالوج، يرجى اختيار رمز آخر.`);
       return;
@@ -280,12 +344,15 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
     setNewProfCode('');
     setNewProfTitleEn('');
     setNewProfTitleAr('');
+    setNewProfInterp('');
     setIsNewProfileModalOpen(false);
+    showFeedback(`تم إنشاء البروفايل (${cleanCode}) بنجاح.`);
   };
 
   const handleDeleteProfile = (code: string) => {
     if (confirm(`هل أنت متأكد من حذف بروفايل (${code}) وجميع عناصره من الكتالوج؟`)) {
       onUpdateCatalog(catalog.filter(c => c.code !== code));
+      showFeedback(`تم حذف البروفايل (${code}) ومزامنة التغيير.`);
     }
   };
 
@@ -370,6 +437,32 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
         </div>
       </div>
 
+      {/* Permission Warning Banner if role is view-only */}
+      {!canEditCatalog && (
+        <div className="bg-amber-50 border border-amber-300 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+          <div className="flex items-center gap-2 text-amber-900 font-semibold">
+            <Info className="w-4 h-4 text-amber-600 shrink-0" />
+            <span>
+              أنت مسجل حالياً بصلاحية <strong>{currentUser.titleAr}</strong> (عرض فقط). لتعديل أو إضافة الباقات والبروفايلات، يرجى تسجيل الدخول بحساب المدير الطبي أو الكيميائي أو المحاسب.
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setLoginModalOpen(true)}
+            className="px-3.5 py-1.5 bg-rose-900 hover:bg-rose-800 text-white font-bold rounded-lg shadow-xs shrink-0"
+          >
+            تبديل الحساب / فتح الصلاحيات
+          </button>
+        </div>
+      )}
+
+      {catalogFeedback && (
+        <div className="p-3 bg-emerald-50 border border-emerald-300 text-emerald-800 rounded-xl text-xs font-bold flex items-center gap-2 shadow-sm">
+          <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
+          <span>{catalogFeedback}</span>
+        </div>
+      )}
+
       {/* Control Bar: Search, Category Filter, and Add Actions */}
       <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-3">
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto flex-1">
@@ -421,7 +514,7 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
             <span>{isSyncing ? 'جارِ المزامنة...' : 'تحديث ومزامنة الكتالوج الآن'}</span>
           </button>
 
-          {catalogViewMode === 'individual' && (
+          {catalogViewMode === 'individual' && canEditCatalog && (
             <button
               onClick={handleOpenAddTest}
               className="flex items-center gap-1.5 px-4 py-2 bg-rose-900 hover:bg-rose-800 text-white text-xs font-bold rounded-lg shadow-sm transition-all"
@@ -431,9 +524,9 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
             </button>
           )}
 
-          {catalogViewMode === 'profiles' && (
+          {catalogViewMode === 'profiles' && canEditCatalog && (
             <button
-              onClick={() => setIsNewProfileModalOpen(true)}
+              onClick={handleOpenAddProfile}
               className="flex items-center gap-1.5 px-4 py-2 bg-rose-900 hover:bg-rose-800 text-white text-xs font-bold rounded-lg shadow-sm transition-all"
             >
               <Plus className="w-4 h-4" />
@@ -441,20 +534,22 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
             </button>
           )}
 
-          <button
-            onClick={() => {
-              if (confirm('هل تريد استعادة الكتالوج الافتراضي الشامل بالكامل (142 تحليل + 15 باقة + 24 بروفايل)؟')) {
-                onResetCatalog();
-                resetCatalog();
-                resetPackages();
-                handleForceSync();
-              }
-            }}
-            className="p-2 text-slate-500 hover:text-rose-700 hover:bg-slate-100 rounded-lg transition-colors"
-            title="استعادة المعدلات الافتراضية للكتالوج"
-          >
-            <RotateCcw className="w-4 h-4" />
-          </button>
+          {canEditCatalog && (
+            <button
+              onClick={() => {
+                if (confirm('هل تريد استعادة الكتالوج الافتراضي الشامل بالكامل (142 تحليل + 15 باقة + 24 بروفايل)؟')) {
+                  onResetCatalog();
+                  resetCatalog();
+                  resetPackages();
+                  handleForceSync();
+                }
+              }}
+              className="p-2 text-slate-500 hover:text-rose-700 hover:bg-slate-100 rounded-lg transition-colors"
+              title="استعادة المعدلات الافتراضية للكتالوج"
+            >
+              <RotateCcw className="w-4 h-4" />
+            </button>
+          )}
         </div>
       </div>
 
@@ -482,7 +577,7 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
                       {test.code}
                     </span>
 
-                    {editingPriceCode === test.code ? (
+                    {canEditCatalog && editingPriceCode === test.code ? (
                       <div className="flex items-center gap-1">
                         <input
                           type="number"
@@ -512,14 +607,17 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
                     ) : (
                       <span
                         onClick={() => {
+                          if (!canEditCatalog) return;
                           setEditingPriceCode(test.code);
                           setTempPriceValue(String(test.price));
                         }}
-                        className="text-[11px] font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-200 font-mono cursor-pointer transition flex items-center gap-1 group/p"
-                        title="اضغط لتعديل سعر هذا الفحص فورياً"
+                        className={`text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 font-mono transition flex items-center gap-1 group/p ${
+                          canEditCatalog ? 'hover:bg-emerald-100 cursor-pointer' : ''
+                        }`}
+                        title={canEditCatalog ? 'اضغط لتعديل سعر هذا الفحص فورياً' : ''}
                       >
                         <span>{test.price} EGP</span>
-                        <Edit2 className="w-2.5 h-2.5 text-emerald-600 opacity-60 group-hover/p:opacity-100" />
+                        {canEditCatalog && <Edit2 className="w-2.5 h-2.5 text-emerald-600 opacity-60 group-hover/p:opacity-100" />}
                       </span>
                     )}
                   </div>
@@ -563,22 +661,26 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
                 </div>
 
                 <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
-                  <div className="flex items-center gap-1">
-                    <button
-                      onClick={() => handleOpenEditTest(test)}
-                      className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg"
-                      title="تعديل التحليل"
-                    >
-                      <Edit2 className="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteTest(test.id, test.nameAr)}
-                      className="p-1.5 text-rose-600 hover:text-rose-800 hover:bg-rose-50 rounded-lg"
-                      title="حذف التحليل"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
+                  {canEditCatalog ? (
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => handleOpenEditTest(test)}
+                        className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg"
+                        title="تعديل التحليل"
+                      >
+                        <Edit2 className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteTest(test.id, test.nameAr)}
+                        className="p-1.5 text-rose-600 hover:text-rose-800 hover:bg-rose-50 rounded-lg"
+                        title="حذف التحليل"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ) : (
+                    <span className="text-[10px] text-slate-400 font-semibold">عرض فقط</span>
+                  )}
 
                   {onSelectIndividualTestForNewCase && (
                     <button
@@ -632,7 +734,7 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
                           <span>·</span>
                           <span>{template.sampleType}</span>
                           <span>·</span>
-                          <span className="text-rose-900 font-bold">{template.parameters.length} معيار قياس</span>
+                          <span className="text-rose-900 font-bold">{(template.parameters || []).length} معيار قياس</span>
                         </div>
                       </div>
                     </div>
@@ -648,16 +750,30 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
                         بدء حالة بهذا البروفايل
                       </button>
 
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteProfile(template.code);
-                        }}
-                        className="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg"
-                        title="حذف البروفايل"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                      {canEditCatalog && (
+                        <>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleOpenEditProfile(template);
+                            }}
+                            className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg"
+                            title="تعديل بيانات البروفايل"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteProfile(template.code);
+                            }}
+                            className="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg"
+                            title="حذف البروفايل"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </>
+                      )}
 
                       {isExpanded ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
                     </div>
@@ -671,16 +787,18 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
                           المعايير المرجعية لبروفايل {template.titleAr}:
                         </span>
 
-                        <button
-                          onClick={() => {
-                            setActiveProfileForParam(template.code);
-                            setIsAddParamModalOpen(true);
-                          }}
-                          className="flex items-center gap-1 px-3 py-1 bg-rose-50 text-rose-900 hover:bg-rose-100 border border-rose-200 rounded-lg text-xs font-bold"
-                        >
-                          <Plus className="w-3.5 h-3.5" />
-                          <span>إضافة معيار جديد للبروفايل</span>
-                        </button>
+                        {canEditCatalog && (
+                          <button
+                            onClick={() => {
+                              setActiveProfileForParam(template.code);
+                              setIsAddParamModalOpen(true);
+                            }}
+                            className="flex items-center gap-1 px-3 py-1 bg-rose-50 text-rose-900 hover:bg-rose-100 border border-rose-200 rounded-lg text-xs font-bold"
+                          >
+                            <Plus className="w-3.5 h-3.5" />
+                            <span>إضافة معيار جديد للبروفايل</span>
+                          </button>
+                        )}
                       </div>
 
                       <div className="border border-slate-200 rounded-xl overflow-hidden bg-white text-xs">
@@ -696,7 +814,7 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-slate-100">
-                            {template.parameters.map((param, pIdx) => (
+                            {(template.parameters || []).map((param, pIdx) => (
                               <tr key={pIdx} className="hover:bg-slate-50/80">
                                 <td className="p-2.5 font-bold text-slate-900">{param.name}</td>
                                 <td className="p-2.5 font-mono text-slate-600">{param.unit || '-'}</td>
@@ -708,26 +826,32 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
                                 </td>
                                 <td className="p-2.5 text-slate-500">{param.method || '-'}</td>
                                 <td className="p-2.5 text-center">
-                                  <div className="flex items-center justify-center gap-1">
-                                    <button
-                                      onClick={() => {
-                                        setParamToEdit({
-                                          profileCode: template.code,
-                                          paramIndex: pIdx,
-                                          param: { ...param, id: `p-${pIdx}`, result: '', flag: '' }
-                                        });
-                                      }}
-                                      className="p-1 text-slate-500 hover:text-slate-900 rounded"
-                                    >
-                                      <Edit2 className="w-3.5 h-3.5" />
-                                    </button>
-                                    <button
-                                      onClick={() => handleDeleteParameter(template.code, pIdx)}
-                                      className="p-1 text-rose-500 hover:text-rose-700 rounded"
-                                    >
-                                      <Trash2 className="w-3.5 h-3.5" />
-                                    </button>
-                                  </div>
+                                  {canEditCatalog ? (
+                                    <div className="flex items-center justify-center gap-1">
+                                      <button
+                                        onClick={() => {
+                                          setParamToEdit({
+                                            profileCode: template.code,
+                                            paramIndex: pIdx,
+                                            param: { ...param, id: `p-${pIdx}`, result: '', flag: '' }
+                                          });
+                                        }}
+                                        className="p-1 text-slate-500 hover:text-slate-900 rounded"
+                                        title="تعديل المعيار"
+                                      >
+                                        <Edit2 className="w-3.5 h-3.5" />
+                                      </button>
+                                      <button
+                                        onClick={() => handleDeleteParameter(template.code, pIdx)}
+                                        className="p-1 text-rose-500 hover:text-rose-700 rounded"
+                                        title="حذف المعيار"
+                                      >
+                                        <Trash2 className="w-3.5 h-3.5" />
+                                      </button>
+                                    </div>
+                                  ) : (
+                                    <span className="text-[10px] text-slate-400">-</span>
+                                  )}
                                 </td>
                               </tr>
                             ))}
@@ -755,8 +879,8 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
 
       {/* MODAL: ADD / EDIT INDIVIDUAL TEST */}
       {isTestModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4 text-xs">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-start sm:items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4 text-xs my-auto max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b pb-3">
               <h3 className="text-sm font-bold text-slate-900">
                 {editingTest ? 'تعديل بيانات التحليل المنفرد' : 'إضافة تحليل منفرد جديد للكتالوج'}
@@ -923,13 +1047,25 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
         </div>
       )}
 
-      {/* MODAL: ADD PROFILE */}
+      {/* MODAL: ADD / EDIT PROFILE */}
       {isNewProfileModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4 text-xs">
-            <h3 className="text-sm font-bold text-slate-900 border-b pb-2">
-              إضافة بروفايل تحاليل جديد
-            </h3>
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-start sm:items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4 text-xs my-auto max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b pb-2">
+              <h3 className="text-sm font-bold text-slate-900">
+                {editingProfileCode ? `تعديل بيانات البروفايل (${editingProfileCode})` : 'إضافة بروفايل تحاليل جديد'}
+              </h3>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsNewProfileModalOpen(false);
+                  setEditingProfileCode(null);
+                }}
+                className="text-slate-400 hover:text-slate-600"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
             <form onSubmit={handleCreateProfile} className="space-y-3">
               <div>
                 <label className="block font-bold text-slate-700 mb-1">رمز البروفايل (Code) *</label>
@@ -991,10 +1127,24 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
                 </div>
               </div>
 
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">التفسير الطبي الافتراضي (اختياري)</label>
+                <textarea
+                  rows={2}
+                  value={newProfInterp}
+                  onChange={(e) => setNewProfInterp(e.target.value)}
+                  placeholder="ملاحظات وتفسير سريري يظهر في التقرير..."
+                  className="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg"
+                />
+              </div>
+
               <div className="flex items-center justify-end gap-2 pt-3 border-t">
                 <button
                   type="button"
-                  onClick={() => setIsNewProfileModalOpen(false)}
+                  onClick={() => {
+                    setIsNewProfileModalOpen(false);
+                    setEditingProfileCode(null);
+                  }}
                   className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg"
                 >
                   إلغاء
@@ -1003,7 +1153,7 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
                   type="submit"
                   className="px-4 py-2 bg-rose-900 hover:bg-rose-800 text-white font-bold rounded-lg shadow-sm"
                 >
-                  إنشاء البروفايل
+                  {editingProfileCode ? 'حفظ تعديلات البروفايل' : 'إنشاء البروفايل'}
                 </button>
               </div>
             </form>

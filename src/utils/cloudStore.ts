@@ -61,6 +61,28 @@ export function markDeleted(collection: string, id?: string) {
   writeJSON(DELETED_KEY, map);
 }
 
+export function unmarkDeleted(collection: string, id?: string) {
+  if (!collection || !id) return;
+  const map = readJSON<Record<string, string[]>>(DELETED_KEY, {});
+  const list = map[collection];
+  if (!Array.isArray(list) || list.length === 0) return;
+  const upper = id.toUpperCase().trim();
+  const next = list.filter(x => x !== id && x.toUpperCase().trim() !== upper);
+  if (next.length !== list.length) {
+    map[collection] = next;
+    writeJSON(DELETED_KEY, map);
+  }
+}
+
+export function clearDeletedCollection(collection: string) {
+  if (!collection) return;
+  const map = readJSON<Record<string, string[]>>(DELETED_KEY, {});
+  if (map[collection]) {
+    delete map[collection];
+    writeJSON(DELETED_KEY, map);
+  }
+}
+
 /** طابع زمني لكل سجل لمعرفة الأحدث عند التعارض بين الأجهزة */
 export function recordStamp(record: AnyRecord): number {
   if (!record || typeof record !== 'object') return 0;
@@ -119,12 +141,18 @@ function mergeReportProfiles(winner: AnyRecord, other: AnyRecord): any[] {
 export function mergeCollection(collection: string, local: AnyRecord[] = [], cloud: AnyRecord[] = []): AnyRecord[] {
   const localList = Array.isArray(local) ? local.filter(Boolean) : [];
   const cloudList = Array.isArray(cloud) ? cloud.filter(Boolean) : [];
-  const deleted = new Set(getDeletedMap()[collection] || []);
+  const deletedRaw = getDeletedMap()[collection] || [];
+  const deleted = new Set(deletedRaw);
+  const deletedUpper = new Set(deletedRaw.map(d => String(d).toUpperCase().trim()));
+  const isRecordDeleted = (record: AnyRecord, key: string) => {
+    const candidates = [record.id, record.code, key].filter(Boolean).map(v => String(v));
+    return candidates.some(c => deleted.has(c) || deletedUpper.has(c.toUpperCase().trim()));
+  };
   const keyOf = (record: AnyRecord, index: number) =>
     record.id || record.code || record.barcode || record.invoiceNumber || record.reportNumber || `idx-${index}`;
 
   if (cloudList.length === 0) {
-    const filteredLocal = localList.filter((record, index) => !deleted.has(record.id || keyOf(record, index)));
+    const filteredLocal = localList.filter((record, index) => !isRecordDeleted(record, keyOf(record, index)));
     return filteredLocal.length === localList.length ? local : filteredLocal;
   }
 
@@ -132,7 +160,7 @@ export function mergeCollection(collection: string, local: AnyRecord[] = [], clo
   const order: string[] = [];
   localList.forEach((record, index) => {
     const key = keyOf(record, index);
-    if (deleted.has(record.id || key)) return;
+    if (isRecordDeleted(record, key)) return;
     map.set(key, record);
     order.push(key);
   });
@@ -140,7 +168,7 @@ export function mergeCollection(collection: string, local: AnyRecord[] = [], clo
   let changed = false;
   cloudList.forEach((record, index) => {
     const key = keyOf(record, index);
-    if (deleted.has(record.id || key)) {
+    if (isRecordDeleted(record, key)) {
       if (map.has(key)) {
         map.delete(key);
         changed = true;

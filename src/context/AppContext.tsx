@@ -1,7 +1,7 @@
 import { useStampedCollection } from '../hooks/useStampedCollection';
 import { cloudVersionChanged } from '../utils/cloudPulse';
 import { startRealtimeChannel } from '../utils/realtimeChannel';
-import { markDeleted, importDeletedMap, importSettingsStamps, getDeletedMap, getSettingsStamps, stampSetting, mergeCollection, mergeSettingsObject } from '../utils/cloudStore';
+import { markDeleted, unmarkDeleted, clearDeletedCollection, importDeletedMap, importSettingsStamps, getDeletedMap, getSettingsStamps, stampSetting, mergeCollection, mergeSettingsObject } from '../utils/cloudStore';
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import {
   hasEarnedForInvoice,
@@ -118,10 +118,13 @@ interface AppContextType {
   loginUser: (username: string, pin: string) => boolean;
   logout: () => void;
   hasPermission: (module: string) => boolean;
+  canEditCatalog: boolean;
 
-  // Active Navigation Tab
+  // Active Navigation Tab & Catalog Sub-View
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  catalogViewMode: 'individual' | 'profiles' | 'packages';
+  setCatalogViewMode: (mode: 'individual' | 'profiles' | 'packages') => void;
 
   // Reports & Laboratory Diagnostic Worklist
   reports: LabReport[];
@@ -430,8 +433,75 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [currentUser, setCurrentUser] = useState<UserProfile>(INITIAL_USERS[0]);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
 
-  // 2. Active Tab
-  const [activeTab, setActiveTab] = useState<string>('dashboard');
+  // 2. Active Tab & Catalog Sub-View (Synced with URL Hash & Query Params for direct links)
+  const resolveInitialRoute = (): { tab: string; view: 'individual' | 'profiles' | 'packages' } => {
+    if (typeof window === 'undefined') return { tab: 'dashboard', view: 'individual' };
+    try {
+      const hash = (window.location.hash || '').replace(/^#\/?/, '').toLowerCase();
+      const params = new URLSearchParams(window.location.search || '');
+      const paramTab = (params.get('tab') || '').toLowerCase();
+      const paramView = (params.get('view') || '').toLowerCase();
+
+      if (hash === 'packages' || hash === 'catalog/packages' || paramTab === 'packages' || paramView === 'packages') {
+        return { tab: 'catalog', view: 'packages' };
+      }
+      if (hash === 'profiles' || hash === 'catalog/profiles' || paramTab === 'profiles' || paramView === 'profiles') {
+        return { tab: 'catalog', view: 'profiles' };
+      }
+      if (hash === 'catalog' || hash === 'catalog/individual' || paramTab === 'catalog') {
+        return { tab: 'catalog', view: 'individual' };
+      }
+      const validTabs = ['dashboard', 'admission', 'worklist', 'diagnostic_editor', 'reports_archive', 'financial_income', 'expenses_profit', 'management_reports', 'loyalty', 'lab_to_lab', 'inventory', 'hr', 'catalog', 'audit_settings'];
+      if (hash && validTabs.includes(hash)) {
+        return { tab: hash, view: 'individual' };
+      }
+      if (paramTab && validTabs.includes(paramTab)) {
+        return { tab: paramTab, view: 'individual' };
+      }
+    } catch {}
+    return { tab: 'dashboard', view: 'individual' };
+  };
+
+  const initialRoute = resolveInitialRoute();
+  const [activeTab, setActiveTabState] = useState<string>(initialRoute.tab);
+  const [catalogViewMode, setCatalogViewModeState] = useState<'individual' | 'profiles' | 'packages'>(initialRoute.view);
+
+  const setActiveTab = useCallback((tab: string) => {
+    setActiveTabState(tab);
+    if (typeof window !== 'undefined') {
+      try {
+        const nextHash = tab === 'catalog' ? `#catalog/${catalogViewMode}` : `#${tab}`;
+        if (window.location.hash !== nextHash) {
+          window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}${nextHash}`);
+        }
+      } catch {}
+    }
+  }, [catalogViewMode]);
+
+  const setCatalogViewMode = useCallback((mode: 'individual' | 'profiles' | 'packages') => {
+    setCatalogViewModeState(mode);
+    if (typeof window !== 'undefined') {
+      try {
+        const nextHash = `#catalog/${mode}`;
+        if (window.location.hash !== nextHash) {
+          window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}${nextHash}`);
+        }
+      } catch {}
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const handleHashChange = () => {
+      const next = resolveInitialRoute();
+      setActiveTabState(next.tab);
+      if (next.tab === 'catalog') {
+        setCatalogViewModeState(next.view);
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   // 3. Quick Action Modals
   const [isPatientFormOpen, setIsPatientFormOpen] = useState(false);
@@ -1003,11 +1073,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           setInventory(msg.payload);
         }
       } else if (msg.action === 'UPDATE_CATALOG' && Array.isArray(msg.payload)) {
-        setTestCatalog(prev => mergeCatalogWithDefaults(msg.payload));
+        setTestCatalog(prev => mergeCatalogWithDefaults(msg.payload, prev));
       } else if (msg.action === 'UPDATE_PACKAGES' && Array.isArray(msg.payload)) {
-        setPackages(prev => mergePackagesWithDefaults(msg.payload));
+        setPackages(prev => mergePackagesWithDefaults(msg.payload, prev));
       } else if (msg.action === 'UPDATE_PROFILES' && Array.isArray(msg.payload)) {
-        setDiagnosticProfiles(prev => mergeProfilesWithDefaults(msg.payload));
+        setDiagnosticProfiles(prev => mergeProfilesWithDefaults(msg.payload, prev));
       } else if (msg.action === 'ADMIT_PATIENT' && msg.payload) {
         if (msg.payload.report) {
           const rep = msg.payload.report as LabReport;
@@ -1078,10 +1148,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           setLabInfo(msg.payload.labInfo);
         }
         if (Array.isArray(msg.payload.packages) && msg.payload.packages.length > 0) {
-          setPackages(prev => mergePackagesWithDefaults(msg.payload.packages));
+          setPackages(prev => mergePackagesWithDefaults(msg.payload.packages, prev));
         }
         if (Array.isArray(msg.payload.diagnosticProfiles) && msg.payload.diagnosticProfiles.length > 0) {
-          setDiagnosticProfiles(prev => mergeProfilesWithDefaults(msg.payload.diagnosticProfiles));
+          setDiagnosticProfiles(prev => mergeProfilesWithDefaults(msg.payload.diagnosticProfiles, prev));
         }
       }
     });
@@ -1143,13 +1213,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           setLabInfo(res.data.labInfo);
         }
         if (Array.isArray(res.data.testCatalog) && res.data.testCatalog.length > 0) {
-          setTestCatalog(prev => mergeCatalogWithDefaults(res.data.testCatalog));
+          setTestCatalog(prev => mergeCatalogWithDefaults(res.data.testCatalog, prev));
         }
         if (Array.isArray(res.data.packages) && res.data.packages.length > 0) {
-          setPackages(prev => mergePackagesWithDefaults(res.data.packages));
+          setPackages(prev => mergePackagesWithDefaults(res.data.packages, prev));
         }
         if (Array.isArray(res.data.diagnosticProfiles) && res.data.diagnosticProfiles.length > 0) {
-          setDiagnosticProfiles(prev => mergeProfilesWithDefaults(res.data.diagnosticProfiles));
+          setDiagnosticProfiles(prev => mergeProfilesWithDefaults(res.data.diagnosticProfiles, prev));
         }
       } else {
         // Fallback to GitHub repo store directly
@@ -1213,13 +1283,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               setLabInfo(ghRes.data.labInfo);
             }
             if (Array.isArray(ghRes.data.testCatalog) && ghRes.data.testCatalog.length > 0) {
-              setTestCatalog(prev => mergeCatalogWithDefaults(ghRes.data.testCatalog));
+              setTestCatalog(prev => mergeCatalogWithDefaults(ghRes.data.testCatalog, prev));
             }
             if (Array.isArray(ghRes.data.packages) && ghRes.data.packages.length > 0) {
               setPackages(prev => mergePackagesWithDefaults(ghRes.data.packages, prev));
             }
             if (Array.isArray(ghRes.data.diagnosticProfiles) && ghRes.data.diagnosticProfiles.length > 0) {
-              setDiagnosticProfiles(prev => mergeProfilesWithDefaults(ghRes.data.diagnosticProfiles));
+              setDiagnosticProfiles(prev => mergeProfilesWithDefaults(ghRes.data.diagnosticProfiles, prev));
             }
 
             // Also check for pending incoming diagnostic cases from GitHub queue (sync cases 50 to 68+)
@@ -1500,7 +1570,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             setPackages(prev => mergePackagesWithDefaults(data.packages, prev));
           }
           if (Array.isArray(data.diagnosticProfiles) && data.diagnosticProfiles.length > 0) {
-            setDiagnosticProfiles(prev => mergeProfilesWithDefaults(data.diagnosticProfiles));
+            setDiagnosticProfiles(prev => mergeProfilesWithDefaults(data.diagnosticProfiles, prev));
           }
         }
       }).catch(() => {});
@@ -1637,21 +1707,25 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const hasPermission = useCallback((module: string): boolean => {
     if (currentUser.role === 'admin_ceo') return true;
     if (currentUser.role === 'accountant') {
-      return ['dashboard', 'admission', 'financial_income', 'expenses_profit', 'management_reports', 'loyalty', 'reports_archive', 'audit_settings'].includes(module);
+      return ['dashboard', 'admission', 'financial_income', 'expenses_profit', 'management_reports', 'loyalty', 'reports_archive', 'catalog', 'audit_settings'].includes(module);
     }
     if (currentUser.role === 'chemist') {
       return ['dashboard', 'worklist', 'diagnostic_editor', 'reports_archive', 'instruments', 'catalog', 'loyalty'].includes(module);
     }
     if (currentUser.role === 'receptionist') {
-      return ['dashboard', 'admission', 'financial_income', 'loyalty', 'reports_archive'].includes(module);
+      return ['dashboard', 'admission', 'financial_income', 'loyalty', 'reports_archive', 'catalog'].includes(module);
     }
     if (currentUser.role === 'lab_tech') {
-      return ['dashboard', 'worklist', 'instruments', 'inventory'].includes(module);
+      return ['dashboard', 'worklist', 'instruments', 'inventory', 'catalog'].includes(module);
     }
     if (currentUser.role === 'hr_officer') {
-      return ['dashboard', 'hr', 'audit_settings'].includes(module);
+      return ['dashboard', 'hr', 'catalog', 'audit_settings'].includes(module);
     }
     return true;
+  }, [currentUser]);
+
+  const canEditCatalog = useMemo(() => {
+    return ['admin_ceo', 'chemist', 'accountant'].includes(currentUser.role);
   }, [currentUser]);
 
   // Selected Report
@@ -1787,8 +1861,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Test Catalog CRUD with instant real-time broadcast
   const addCatalogTest = useCallback((test: InvoiceTestItem) => {
+    unmarkDeleted('testCatalog', test.code);
+    unmarkDeleted('testCatalog', test.id);
+    const stamped = { ...test, updatedAt: new Date().toISOString() };
     setTestCatalog(prev => {
-      const next = [test, ...prev];
+      const next = [stamped, ...prev];
       realtimeSyncManager.broadcastAction('UPDATE_CATALOG', next);
       return next;
     });
@@ -1878,19 +1955,45 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [logAction]);
 
   const updateIndividualTests = useCallback((tests: InvoiceTestItem[]) => {
-    setTestCatalog(tests);
-    try {
-      localStorage.setItem(CATALOG_KEY, JSON.stringify(tests));
-      localStorage.setItem('rt_lab_individual_tests_v2', JSON.stringify(tests));
-    } catch (e) {
-      console.warn('Storage save error:', e);
-    }
-    realtimeSyncManager.broadcastAction('UPDATE_CATALOG', tests);
+    const nowIso = new Date().toISOString();
+    const nextCodes = new Set(tests.map(t => (t.code || '').toUpperCase().trim()).filter(Boolean));
+    setTestCatalog(prev => {
+      prev.forEach(oldTest => {
+        const c = (oldTest.code || '').toUpperCase().trim();
+        if (c && !nextCodes.has(c)) {
+          markDeleted('testCatalog', oldTest.code);
+          if (oldTest.id) markDeleted('testCatalog', oldTest.id);
+        }
+      });
+      tests.forEach(t => {
+        if (t.code) unmarkDeleted('testCatalog', t.code);
+        if (t.id) unmarkDeleted('testCatalog', t.id);
+      });
+      const prevMap = new Map(prev.map(t => [(t.code || t.id || '').toUpperCase(), t]));
+      const stamped = tests.map(t => {
+        const old = prevMap.get((t.code || t.id || '').toUpperCase());
+        if (!old || JSON.stringify(old) !== JSON.stringify(t)) {
+          return { ...t, updatedAt: nowIso };
+        }
+        return t;
+      });
+      try {
+        localStorage.setItem(CATALOG_KEY, JSON.stringify(stamped));
+        localStorage.setItem('rt_lab_individual_tests_v2', JSON.stringify(stamped));
+      } catch (e) {
+        console.warn('Storage save error:', e);
+      }
+      realtimeSyncManager.broadcastAction('UPDATE_CATALOG', stamped);
+      return stamped;
+    });
     logAction('CATALOG_UPDATE', 'CATALOG', `تحديث قائمة التحاليل (${tests.length} فحص)`);
   }, [logAction]);
 
   const deleteCatalogTest = useCallback((code: string) => {
+    markDeleted('testCatalog', code);
     setTestCatalog(prev => {
+      const target = prev.find(t => t.code === code);
+      if (target?.id) markDeleted('testCatalog', target.id);
       const next = prev.filter(t => t.code !== code);
       realtimeSyncManager.broadcastAction('UPDATE_CATALOG', next);
       return next;
@@ -1900,30 +2003,57 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Packages Management CRUD
   const updatePackages = useCallback((pkgs: ComprehensivePackage[]) => {
-    setPackages(pkgs);
-    try {
-      localStorage.setItem(PACKAGES_KEY, JSON.stringify(pkgs));
-    } catch {}
-    realtimeSyncManager.broadcastAction('UPDATE_PACKAGES', pkgs);
-    if (githubConfig.token && githubConfig.autoSync) {
-      pushFullStoreToGitHub(githubConfig, {
-        reports,
-        incomeRecords,
-        expenses,
-        loyaltyProfiles,
-        inventory,
-        labInfo,
-        testCatalog,
-        packages: pkgs,
-        diagnosticProfiles
-      }).catch(err => console.warn('Package sync note:', err));
-    }
+    const nowIso = new Date().toISOString();
+    const nextIds = new Set(pkgs.map(p => p.id).filter(Boolean));
+    const nextCodes = new Set(pkgs.map(p => (p.code || '').toUpperCase().trim()).filter(Boolean));
+    let stampedList = pkgs;
+
+    setPackages(prev => {
+      prev.forEach(oldPkg => {
+        const oldCode = (oldPkg.code || '').toUpperCase().trim();
+        if (!nextIds.has(oldPkg.id) && (!oldCode || !nextCodes.has(oldCode))) {
+          markDeleted('packages', oldPkg.id);
+          if (oldPkg.code) markDeleted('packages', oldPkg.code);
+        }
+      });
+      const prevById = new Map(prev.map(p => [p.id, p]));
+      stampedList = pkgs.map(p => {
+        unmarkDeleted('packages', p.id);
+        if (p.code) unmarkDeleted('packages', p.code);
+        const old = prevById.get(p.id);
+        if (!old || JSON.stringify(old) !== JSON.stringify(p)) {
+          return { ...p, updatedAt: nowIso } as ComprehensivePackage;
+        }
+        return p;
+      });
+      try {
+        localStorage.setItem(PACKAGES_KEY, JSON.stringify(stampedList));
+      } catch {}
+      realtimeSyncManager.broadcastAction('UPDATE_PACKAGES', stampedList);
+      if (githubConfig.token && githubConfig.autoSync) {
+        pushFullStoreToGitHub(githubConfig, {
+          reports,
+          incomeRecords,
+          expenses,
+          loyaltyProfiles,
+          inventory,
+          labInfo,
+          testCatalog,
+          packages: stampedList,
+          diagnosticProfiles
+        }).catch(err => console.warn('Package sync note:', err));
+      }
+      return stampedList;
+    });
     logAction('UPDATE', 'CATALOG', 'تحديث قائمة باقات الفحص الشامل المتاحة');
   }, [logAction, githubConfig, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, diagnosticProfiles]);
 
   const addPackage = useCallback((pkg: ComprehensivePackage) => {
+    unmarkDeleted('packages', pkg.id);
+    if (pkg.code) unmarkDeleted('packages', pkg.code);
+    const stampedPkg = { ...pkg, updatedAt: new Date().toISOString() } as ComprehensivePackage;
     setPackages(prev => {
-      const next = [pkg, ...prev];
+      const next = [stampedPkg, ...prev];
       try {
         localStorage.setItem(PACKAGES_KEY, JSON.stringify(next));
       } catch {}
@@ -1948,7 +2078,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const updateSinglePackage = useCallback((id: string, updates: Partial<ComprehensivePackage>) => {
     setPackages(prev => {
-      const next = prev.map(p => p.id === id ? { ...p, ...updates } : p);
+      const next = prev.map(p => p.id === id ? { ...p, ...updates, updatedAt: new Date().toISOString() } : p);
       try {
         localStorage.setItem(PACKAGES_KEY, JSON.stringify(next));
       } catch {}
@@ -1972,7 +2102,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [logAction, githubConfig, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, diagnosticProfiles]);
 
   const deletePackage = useCallback((id: string) => {
+    markDeleted('packages', id);
     setPackages(prev => {
+      const target = prev.find(p => p.id === id);
+      if (target?.code) markDeleted('packages', target.code);
       const next = prev.filter(p => p.id !== id);
       try {
         localStorage.setItem(PACKAGES_KEY, JSON.stringify(next));
@@ -1997,6 +2130,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [logAction, githubConfig, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, diagnosticProfiles]);
 
   const resetPackages = useCallback(() => {
+    clearDeletedCollection('packages');
     const fullPkgs = mergePackagesWithDefaults();
     setPackages(fullPkgs);
     try {
@@ -2020,29 +2154,51 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [logAction, githubConfig, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, diagnosticProfiles]);
 
   const updateDiagnosticProfiles = useCallback((profiles: CatalogProfileTemplate[]) => {
-    setDiagnosticProfiles(profiles);
-    try {
-      localStorage.setItem(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(profiles));
-      localStorage.setItem('rt_lab_catalog_v2', JSON.stringify(profiles));
-    } catch {}
-    realtimeSyncManager.broadcastAction('UPDATE_PROFILES', profiles);
-    if (githubConfig.token && githubConfig.autoSync) {
-      pushFullStoreToGitHub(githubConfig, {
-        reports,
-        incomeRecords,
-        expenses,
-        loyaltyProfiles,
-        inventory,
-        labInfo,
-        testCatalog,
-        packages,
-        diagnosticProfiles: profiles
-      }).catch(err => console.warn('Profile sync note:', err));
-    }
+    const nowIso = new Date().toISOString();
+    const nextCodes = new Set(profiles.map(p => (p.code || '').toUpperCase().trim()).filter(Boolean));
+    let stampedProfiles = profiles;
+
+    setDiagnosticProfiles(prev => {
+      prev.forEach(oldProf => {
+        const oldCode = (oldProf.code || '').toUpperCase().trim();
+        if (oldCode && !nextCodes.has(oldCode)) {
+          markDeleted('diagnosticProfiles', oldProf.code);
+        }
+      });
+      const prevMap = new Map(prev.map(p => [(p.code || '').toUpperCase().trim(), p]));
+      stampedProfiles = profiles.map(p => {
+        if (p.code) unmarkDeleted('diagnosticProfiles', p.code);
+        const old = prevMap.get((p.code || '').toUpperCase().trim());
+        if (!old || JSON.stringify(old) !== JSON.stringify(p)) {
+          return { ...p, updatedAt: nowIso } as CatalogProfileTemplate;
+        }
+        return p;
+      });
+      try {
+        localStorage.setItem(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(stampedProfiles));
+        localStorage.setItem('rt_lab_catalog_v2', JSON.stringify(stampedProfiles));
+      } catch {}
+      realtimeSyncManager.broadcastAction('UPDATE_PROFILES', stampedProfiles);
+      if (githubConfig.token && githubConfig.autoSync) {
+        pushFullStoreToGitHub(githubConfig, {
+          reports,
+          incomeRecords,
+          expenses,
+          loyaltyProfiles,
+          inventory,
+          labInfo,
+          testCatalog,
+          packages,
+          diagnosticProfiles: stampedProfiles
+        }).catch(err => console.warn('Profile sync note:', err));
+      }
+      return stampedProfiles;
+    });
     logAction('CATALOG_UPDATE', 'CATALOG', `تحديث بروفايلات التحاليل الشاملة (${profiles.length} بروفايل) ومزامنتها سحابياً`);
   }, [logAction, githubConfig, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, packages]);
 
   const resetDiagnosticProfiles = useCallback(() => {
+    clearDeletedCollection('diagnosticProfiles');
     setDiagnosticProfiles(LAB_CATALOG);
     try {
       localStorage.setItem(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(LAB_CATALOG));
@@ -2768,6 +2924,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [incomeRecords, expenses, profitConfig]);
 
   const resetCatalog = useCallback(() => {
+    clearDeletedCollection('testCatalog');
     const fullDefaults = mergeCatalogWithDefaults();
     setTestCatalog(fullDefaults);
     realtimeSyncManager.broadcastAction('UPDATE_CATALOG', fullDefaults);
@@ -3683,6 +3840,15 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
 
   // GitHub Cloud Sync
   const updateGithubConfig = useCallback((config: Partial<GitHubSyncConfig>) => {
+    if (typeof window !== 'undefined' && typeof config.token === 'string') {
+      try {
+        if (config.token.trim()) {
+          localStorage.setItem('rt_lab_github_token', config.token.trim());
+        } else {
+          localStorage.removeItem('rt_lab_github_token');
+        }
+      } catch {}
+    }
     setGithubConfig(prev => ({ ...prev, ...config }));
   }, []);
 
@@ -3751,12 +3917,12 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
         }
 
         if (Array.isArray(data.diagnosticProfiles) && data.diagnosticProfiles.length > 0) {
-          mergedProfiles = mergeProfilesWithDefaults(data.diagnosticProfiles);
+          mergedProfiles = mergeProfilesWithDefaults(data.diagnosticProfiles, diagnosticProfiles);
           setDiagnosticProfiles(mergedProfiles);
         }
 
         if (Array.isArray(data.testCatalog) && data.testCatalog.length > 0) {
-          mergedCatalog = mergeCatalogWithDefaults(data.testCatalog);
+          mergedCatalog = mergeCatalogWithDefaults(data.testCatalog, testCatalog);
           setTestCatalog(mergedCatalog);
         }
 
@@ -4133,9 +4299,12 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
     loginUser,
     logout,
     hasPermission,
+    canEditCatalog,
 
     activeTab,
     setActiveTab,
+    catalogViewMode,
+    setCatalogViewMode,
 
     reports,
     selectedReportId,

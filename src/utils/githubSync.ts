@@ -1,8 +1,8 @@
 import { broadcastCloudChange } from './realtimeChannel';
-import { mergeCollection, getDeletedMap } from './cloudStore';
+import { mergeCollection, getDeletedMap, importDeletedMap } from './cloudStore';
 import { IncomeRecord, GitHubSyncConfig, InvoiceTestItem } from '../types';
 import { unionReports, unionInvoices } from './labNumbering';
-import { mergePackagesWithDefaults } from './upgradeSavedData';
+import { mergePackagesWithDefaults, mergeProfilesWithDefaults } from './upgradeSavedData';
 
 import { getDeletionTombstones, importDeletionTombstones, filterDeletedReports, filterDeletedInvoices } from './deletionRegistry';
 
@@ -52,7 +52,7 @@ export const getDefaultSyncToken = (): string => {
   if (typeof window !== 'undefined' && localStorage.getItem('rt_lab_github_token')) {
     return localStorage.getItem('rt_lab_github_token')!;
   }
-  const rev = 'POz9T1mH46eDF0EkfrD0mYD4quY70w0kYbYQ_phg';
+  const rev = 'POz9T1mH46eDF0EkfrD0mYD4quY70w0kYbyQ_phg';
   return rev.split('').reverse().join('');
 };
 
@@ -79,35 +79,52 @@ function resolveCredentials(
   };
 }
 
-// Test GitHub API Connection
+// Test GitHub API Connection & Permissions
 export async function testGitHubConnection(
   arg1: string | GitHubSyncConfig,
   owner?: string,
   repo?: string
-): Promise<{ success: boolean; message: string; error?: string; repoInfo?: { name: string; stars: number; defaultBranch: string; updatedAt: string } }> {
+): Promise<{
+  success: boolean;
+  message: string;
+  error?: string;
+  scopes?: string;
+  canPush?: boolean;
+  repoInfo?: { name: string; stars: number; defaultBranch: string; updatedAt: string };
+}> {
   try {
     const creds = resolveCredentials(arg1, owner, repo);
-    const res = await fetch(`https://api.github.com/repos/${creds.owner}/${creds.repo}`, {
+    const res = await fetch(`https://api.github.com/repos/${creds.owner}/${creds.repo}?_=${Date.now()}`, {
       headers: {
         Authorization: `token ${creds.token}`,
         Accept: 'application/vnd.github.v3+json'
       }
     });
 
+    const scopes = res.headers.get('x-oauth-scopes') || '';
+
     if (!res.ok) {
       if (res.status === 401) {
-        return { success: false, message: 'رمز الدخول (Token) غير صالح أو منتهي الصلاحية.', error: 'Token 401 Unauthorized' };
+        return { success: false, message: 'رمز الدخول (Token) غير صالح أو منتهي الصلاحية.', error: 'Token 401 Unauthorized', scopes };
+      }
+      if (res.status === 403) {
+        return { success: false, message: 'رمز الدخول (Token) لا يملك الصلاحيات الكافية للوصول للمستودع.', error: 'Token 403 Forbidden', scopes };
       }
       if (res.status === 404) {
-        return { success: false, message: `المستودع ${creds.owner}/${creds.repo} غير موجود أو الحساب لا يملك صلاحية الوصول إليه.`, error: 'Repository 404 Not Found' };
+        return { success: false, message: `المستودع ${creds.owner}/${creds.repo} غير موجود أو الحساب لا يملك صلاحية الوصول إليه.`, error: 'Repository 404 Not Found', scopes };
       }
-      return { success: false, message: `خطأ من GitHub API (رمز ${res.status}): ${res.statusText}`, error: `HTTP ${res.status}` };
+      return { success: false, message: `خطأ من GitHub API (رمز ${res.status}): ${res.statusText}`, error: `HTTP ${res.status}`, scopes };
     }
 
     const data = await res.json();
+    const canPush = Boolean(data?.permissions?.push || data?.permissions?.admin || scopes.includes('repo'));
     return {
       success: true,
-      message: `تم الاتصال بنجاح بمستودع نظام التشخيص: ${data.full_name}`,
+      message: canPush
+        ? `تم الاتصال بنجاح بمستودع: ${data.full_name} (صلاحيات القراءة والكتابة مفعلة)`
+        : `تم الاتصال بالمستودع: ${data.full_name} (صلاحية قراءة فقط - يتطلب صلاحية repo للتعديل)`,
+      scopes,
+      canPush,
       repoInfo: {
         name: data.name,
         stars: data.stargazers_count,
@@ -139,19 +156,17 @@ export async function fetchDiagnosticCases(
     try {
       let dbData: any = null;
       const rawDbRes = await fetch(
-        `https://raw.githubusercontent.com/${creds.owner}/${creds.repo}/main/public/rt-database-sync.json?_=${Date.now()}`,
-        { headers: creds.token ? { Authorization: `token ${creds.token}` } : {}, cache: 'no-store' }
+        `https://raw.githubusercontent.com/${creds.owner}/${creds.repo}/main/public/rt-database-sync.json?_=${Date.now()}`
       );
       if (rawDbRes.ok) {
         dbData = await rawDbRes.json();
       } else {
         const dbRes = await fetch(
-          `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/public/rt-database-sync.json`,
+          `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/public/rt-database-sync.json?ref=main&_=${Date.now()}`,
           {
             headers: creds.token ? {
               Authorization: `token ${creds.token}`,
-              Accept: 'application/vnd.github.v3.raw',
-              'Cache-Control': 'no-cache'
+              Accept: 'application/vnd.github.v3.raw'
             } : {
               Accept: 'application/vnd.github.v3.raw'
             }
@@ -250,14 +265,13 @@ export async function fetchDiagnosticCases(
     try {
       let syncParsed: any = null;
       const rawCasesRes = await fetch(
-        `https://raw.githubusercontent.com/${creds.owner}/${creds.repo}/main/public/rt-cases-sync.json?_=${Date.now()}`,
-        { headers: creds.token ? { Authorization: `token ${creds.token}` } : {}, cache: 'no-store' }
+        `https://raw.githubusercontent.com/${creds.owner}/${creds.repo}/main/public/rt-cases-sync.json?_=${Date.now()}`
       );
       if (rawCasesRes.ok) {
         syncParsed = await rawCasesRes.json();
       } else {
         const syncRes = await fetch(
-          `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/public/rt-cases-sync.json`,
+          `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/public/rt-cases-sync.json?ref=main&_=${Date.now()}`,
           {
             headers: creds.token ? {
               Authorization: `token ${creds.token}`,
@@ -1105,8 +1119,7 @@ async function pushSingleCaseToGitHub(
     const res = await fetch(`${apiUrl}?_=${Date.now()}`, {
       headers: {
         Authorization: `token ${creds.token}`,
-        Accept: 'application/vnd.github.v3+json',
-        'Cache-Control': 'no-cache, no-store'
+        Accept: 'application/vnd.github.v3+json'
       }
     });
 
@@ -1213,8 +1226,7 @@ export async function pushFullStoreToGitHub(
     const authHeaders: Record<string, string> = {
       Authorization: `token ${creds.token}`,
       Accept: 'application/vnd.github+json',
-      'Content-Type': 'application/json',
-      'Cache-Control': 'no-cache, no-store'
+      'Content-Type': 'application/json'
     };
 
     // نقرأ أحدث نسخة سحابية وندمجها قبل الكتابة: جهاز متأخر ثوانٍ لا يمسح حجوزات جهاز آخر
@@ -1228,6 +1240,7 @@ export async function pushFullStoreToGitHub(
         cloudData = cloudStore.data;
         if (cloudData) {
           importDeletionTombstones(cloudData.deletedReports, cloudData.deletedInvoices);
+          importDeletedMap(cloudData.deletedMap);
         }
       }
     } catch {
@@ -1259,9 +1272,12 @@ export async function pushFullStoreToGitHub(
         ...mergedCollections,
         reports: filterDeletedReports(unionReports(Array.isArray(storePayload.reports) ? storePayload.reports : [], cloudReports)),
         incomeRecords: filterDeletedInvoices(unionInvoices(Array.isArray(storePayload.incomeRecords) ? storePayload.incomeRecords : [], cloudInvoices)),
-        packages: Array.isArray(storePayload.packages) && storePayload.packages.length > 0
+        packages: Array.isArray(storePayload.packages)
           ? mergePackagesWithDefaults(remoteData?.packages || [], storePayload.packages)
           : storePayload.packages,
+        diagnosticProfiles: Array.isArray(storePayload.diagnosticProfiles)
+          ? mergeProfilesWithDefaults(remoteData?.diagnosticProfiles || [], storePayload.diagnosticProfiles)
+          : storePayload.diagnosticProfiles,
         deletedReports: tombstones.reports,
         deletedInvoices: tombstones.invoices,
         deletedMap: getDeletedMap()
@@ -1442,7 +1458,7 @@ export async function pullFullStoreFromGitHub(
     let latestSha: string | undefined;
     try {
       const headRes = await fetch(`https://api.github.com/repos/${creds.owner}/${creds.repo}/git/ref/heads/main?_=${Date.now()}`, {
-        headers: { ...authHeaders, Accept: 'application/vnd.github.v3+json', 'Cache-Control': 'no-cache, no-store' }
+        headers: { ...authHeaders, Accept: 'application/vnd.github.v3+json' }
       });
       if (headRes.ok) {
         const headData = await headRes.json();
@@ -1466,7 +1482,7 @@ export async function pullFullStoreFromGitHub(
       // 2. دمج الحالات المحجوزة من الموبايل والفروع فوراً داخل البيانات المستلمة
       try {
         const casesRes = await fetch(`${casesApiUrl}?ref=main&_=${Date.now()}`, {
-          headers: { ...authHeaders, Accept: 'application/vnd.github.v3.raw', 'Cache-Control': 'no-cache, no-store' }
+          headers: { ...authHeaders, Accept: 'application/vnd.github.v3.raw' }
         });
         if (casesRes.ok) {
           let casesList: any = await casesRes.json();
@@ -1506,7 +1522,7 @@ export async function pullFullStoreFromGitHub(
     // 2) GitHub API المباشر (بدون كاش ويدعم الملفات الكبيرة)
     try {
       const rawApiRes = await fetch(`${apiUrl}?ref=main&_=${Date.now()}`, {
-        headers: { ...authHeaders, Accept: 'application/vnd.github.v3.raw', 'Cache-Control': 'no-cache, no-store' }
+        headers: { ...authHeaders, Accept: 'application/vnd.github.v3.raw' }
       });
       if (rawApiRes.ok) {
         const rawJson = await rawApiRes.json();
@@ -1541,7 +1557,7 @@ export async function pullFullStoreFromGitHub(
 
     // 4) raw CDN مباشرة
     try {
-      const rawRes = await fetch(`https://raw.githubusercontent.com/${creds.owner}/${creds.repo}/main/public/rt-database-sync.json?t=${Date.now()}`, { cache: 'no-store' });
+      const rawRes = await fetch(`https://raw.githubusercontent.com/${creds.owner}/${creds.repo}/main/public/rt-database-sync.json?t=${Date.now()}`);
       if (rawRes.ok) {
         return await finish(await rawRes.json(), 'تم استرداد البيانات من السحابة مباشرة بنجاح!');
       }

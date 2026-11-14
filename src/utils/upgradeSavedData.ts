@@ -2,10 +2,17 @@ import { LabReport, TestProfile, TestParameter, CatalogProfileTemplate, Comprehe
 import { LAB_CATALOG, DEFAULT_STAFF, INITIAL_INDIVIDUAL_TESTS, INITIAL_LAB_INFO, INITIAL_PACKAGES } from '../data/labCatalog';
 import { DISEASE_ILLUSTRATIONS, suggestHematologicalIllustration } from '../data/diseaseIllustrations';
 import { runAutomaticCalculations } from './calculator';
+import { getDeletedMap, recordStamp } from './cloudStore';
 
 export const MIGRATION_VERSION_KEY = 'rt_lab_migration_v9_booking_sync_fix_2026';
 
 export const CUSTOM_NORMALS_STORAGE_KEY = 'rt_lab_custom_normals_v1';
+
+function getDeletedSet(collection: string): Set<string> {
+  if (typeof window === 'undefined') return new Set();
+  const list = getDeletedMap()[collection] || [];
+  return new Set(list.map(x => String(x).toUpperCase().trim()));
+}
 
 /**
  * Retrieves all user-customized normal ranges saved by the user
@@ -30,28 +37,54 @@ export function normalizeTestKey(nameOrCode?: string): string {
 
 /**
  * Merges any existing test catalog with the full default catalog (142 tests)
- * Preserves user modifications to prices/names and normal ranges, guaranteeing no custom edits revert!
+ * Preserves user modifications to prices/names and normal ranges, and respects deletions!
  */
-export function mergeCatalogWithDefaults(savedCatalog?: InvoiceTestItem[]): InvoiceTestItem[] {
+export function mergeCatalogWithDefaults(
+  savedCatalog?: InvoiceTestItem[],
+  localCatalog?: InvoiceTestItem[]
+): InvoiceTestItem[] {
   const customNormals = getStoredCustomNormals();
+  const deletedTests = getDeletedSet('testCatalog');
+  const isDeletedTest = (t?: Partial<InvoiceTestItem>) => {
+    if (!t) return false;
+    return (t.code && deletedTests.has(t.code.toUpperCase().trim())) ||
+           (t.id && deletedTests.has(String(t.id).toUpperCase().trim()));
+  };
 
-  if (!Array.isArray(savedCatalog) || savedCatalog.length === 0) {
-    return INITIAL_INDIVIDUAL_TESTS.map(t => {
-      const normKey = normalizeTestKey(t.code) || normalizeTestKey(t.nameEn);
-      const custom = customNormals[normKey] || customNormals[normalizeTestKey(t.nameAr)];
-      return custom ? { ...t, ...custom } : { ...t };
-    });
+  const hasSaved = Array.isArray(savedCatalog) && savedCatalog.length > 0;
+  const hasLocal = Array.isArray(localCatalog) && localCatalog.length > 0;
+
+  if (!hasSaved && !hasLocal) {
+    return INITIAL_INDIVIDUAL_TESTS
+      .filter(t => !isDeletedTest(t))
+      .map(t => {
+        const normKey = normalizeTestKey(t.code) || normalizeTestKey(t.nameEn);
+        const custom = customNormals[normKey] || customNormals[normalizeTestKey(t.nameAr)];
+        return custom ? { ...t, ...custom } : { ...t };
+      });
   }
 
   const savedMap = new Map<string, InvoiceTestItem>();
-  savedCatalog.forEach(item => {
-    if (item && item.code) {
-      savedMap.set(item.code.toUpperCase().trim(), item);
+  const addCandidate = (item: InvoiceTestItem) => {
+    if (!item || !item.code || isDeletedTest(item)) return;
+    const key = item.code.toUpperCase().trim();
+    const existing = savedMap.get(key);
+    if (!existing) {
+      savedMap.set(key, item);
+    } else {
+      const winner = recordStamp(item) >= recordStamp(existing) ? item : existing;
+      const loser = winner === item ? existing : item;
+      savedMap.set(key, { ...loser, ...winner });
     }
-  });
+  };
 
-  // Guarantee every test from INITIAL_INDIVIDUAL_TESTS is present
-  const merged: InvoiceTestItem[] = INITIAL_INDIVIDUAL_TESTS.map(defTest => {
+  if (hasSaved) savedCatalog!.forEach(addCandidate);
+  if (hasLocal) localCatalog!.forEach(addCandidate);
+
+  // Guarantee every non-deleted test from INITIAL_INDIVIDUAL_TESTS is present
+  const merged: InvoiceTestItem[] = [];
+  INITIAL_INDIVIDUAL_TESTS.forEach(defTest => {
+    if (isDeletedTest(defTest)) return;
     const codeKey = defTest.code.toUpperCase().trim();
     const existing = savedMap.get(codeKey);
     const normKey = normalizeTestKey(defTest.code) || normalizeTestKey(defTest.nameEn);
@@ -59,10 +92,9 @@ export function mergeCatalogWithDefaults(savedCatalog?: InvoiceTestItem[]): Invo
 
     if (existing) {
       savedMap.delete(codeKey);
-      return {
+      merged.push({
         ...defTest,
         ...existing,
-        // Ensure clinical reference and metadata are preserved if existing lacked them
         nameAr: existing.nameAr || defTest.nameAr,
         nameEn: existing.nameEn || defTest.nameEn,
         sampleType: existing.sampleType || defTest.sampleType,
@@ -73,14 +105,15 @@ export function mergeCatalogWithDefaults(savedCatalog?: InvoiceTestItem[]): Invo
         panicHigh: custom?.panicHigh !== undefined ? custom.panicHigh : (existing as any).panicHigh,
         turnaroundTime: existing.turnaroundTime || defTest.turnaroundTime,
         fastingInstructions: (existing as any).fastingInstructions || defTest.fastingInstructions,
-        price: typeof existing.price === 'number' && existing.price > 0 ? existing.price : defTest.price,
-        cost: typeof existing.cost === 'number' && existing.cost > 0 ? existing.cost : defTest.cost,
+        price: typeof existing.price === 'number' && existing.price >= 0 ? existing.price : defTest.price,
+        cost: typeof existing.cost === 'number' && existing.cost >= 0 ? existing.cost : defTest.cost,
         category: existing.category || defTest.category,
         unit: custom?.unit || existing.unit || defTest.unit,
         method: custom?.method || existing.method || defTest.method
-      };
+      } as InvoiceTestItem);
+    } else {
+      merged.push(custom ? { ...defTest, ...custom } : { ...defTest });
     }
-    return custom ? { ...defTest, ...custom } : { ...defTest };
   });
 
   // Append custom user-created tests
@@ -95,21 +128,29 @@ export function mergeCatalogWithDefaults(savedCatalog?: InvoiceTestItem[]): Invo
 
 /**
  * Merges any existing packages with the 15 comprehensive default packages,
- * ensuring any custom-added user packages are NEVER lost during cloud sync or refresh.
+ * preserving user edits (by updatedAt) and respecting deletion tombstones.
  */
 export function mergePackagesWithDefaults(
   savedPackages?: ComprehensivePackage[],
   localPackages?: ComprehensivePackage[]
 ): ComprehensivePackage[] {
+  const deletedPkgs = getDeletedSet('packages');
+  const isDeletedPkg = (pkg?: Partial<ComprehensivePackage>) => {
+    if (!pkg) return false;
+    return (pkg.id && deletedPkgs.has(String(pkg.id).toUpperCase().trim())) ||
+           (pkg.code && deletedPkgs.has(String(pkg.code).toUpperCase().trim()));
+  };
+
   const allCandidates: ComprehensivePackage[] = [];
-  
+
   if (Array.isArray(savedPackages)) {
     allCandidates.push(...savedPackages);
   }
   if (Array.isArray(localPackages)) {
     allCandidates.push(...localPackages);
   }
-  if (typeof window !== 'undefined') {
+  // Fallback to legacy localStorage key only if neither savedPackages nor localPackages was supplied
+  if (allCandidates.length === 0 && typeof window !== 'undefined') {
     try {
       const stored = localStorage.getItem('rt_lab_packages_v3');
       if (stored) {
@@ -120,28 +161,42 @@ export function mergePackagesWithDefaults(
   }
 
   if (allCandidates.length === 0) {
-    return [...INITIAL_PACKAGES];
+    return INITIAL_PACKAGES.filter(p => !isDeletedPkg(p));
   }
 
   const savedMap = new Map<string, ComprehensivePackage>();
   allCandidates.forEach(pkg => {
-    if (pkg && (pkg.code || pkg.id || pkg.titleAr)) {
+    if (!pkg || isDeletedPkg(pkg)) return;
+    if (pkg.id || pkg.code || pkg.titleAr) {
+      // Key by code when available so default packages match cleanly; keep custom id distinct if code changed
       const key = (pkg.code || pkg.id || pkg.titleAr).toUpperCase().trim();
       const existing = savedMap.get(key);
       if (!existing) {
         savedMap.set(key, pkg);
       } else {
-        savedMap.set(key, { ...existing, ...pkg });
+        const winner = recordStamp(pkg) >= recordStamp(existing) ? pkg : existing;
+        const loser = winner === pkg ? existing : pkg;
+        savedMap.set(key, { ...loser, ...winner });
       }
     }
   });
 
-  const merged: ComprehensivePackage[] = INITIAL_PACKAGES.map(defPkg => {
-    const key = (defPkg.code || defPkg.id || '').toUpperCase().trim();
-    const existing = savedMap.get(key);
+  // Also index by id in case a default package's code was edited by the user
+  const savedById = new Map<string, ComprehensivePackage>();
+  savedMap.forEach(pkg => {
+    if (pkg.id) savedById.set(pkg.id.toUpperCase().trim(), pkg);
+  });
+
+  const merged: ComprehensivePackage[] = [];
+  INITIAL_PACKAGES.forEach(defPkg => {
+    if (isDeletedPkg(defPkg)) return;
+    const codeKey = (defPkg.code || '').toUpperCase().trim();
+    const idKey = (defPkg.id || '').toUpperCase().trim();
+    const existing = savedMap.get(codeKey) || (idKey ? savedById.get(idKey) : undefined);
     if (existing) {
-      savedMap.delete(key);
-      return {
+      savedMap.delete(codeKey);
+      if (existing.code) savedMap.delete(existing.code.toUpperCase().trim());
+      merged.push({
         ...defPkg,
         ...existing,
         nameAr: (existing as any).nameAr || existing.titleAr || defPkg.titleAr,
@@ -159,28 +214,42 @@ export function mergePackagesWithDefaults(
         fastingRequired: existing.fastingRequired || defPkg.fastingRequired,
         sampleTypes: Array.isArray(existing.sampleTypes) && existing.sampleTypes.length > 0 ? existing.sampleTypes : defPkg.sampleTypes,
         isPopular: existing.isPopular !== undefined ? existing.isPopular : defPkg.isPopular
-      };
+      } as ComprehensivePackage);
+    } else {
+      merged.push({ ...defPkg });
     }
-    return { ...defPkg };
   });
 
-  // Append custom packages created by user
+  // Append custom packages created by user (preserving order, custom ones first if newly added)
+  const customList: ComprehensivePackage[] = [];
   savedMap.forEach(customPkg => {
-    const cKey = (customPkg.code || customPkg.id || '').toUpperCase().trim();
-    if (!merged.some(m => (m.code || m.id || '').toUpperCase().trim() === cKey)) {
-      merged.push(customPkg);
+    if (isDeletedPkg(customPkg)) return;
+    const cId = (customPkg.id || '').toUpperCase().trim();
+    const cCode = (customPkg.code || '').toUpperCase().trim();
+    const alreadyInMerged = merged.some(m =>
+      (cId && (m.id || '').toUpperCase().trim() === cId) ||
+      (cCode && (m.code || '').toUpperCase().trim() === cCode)
+    );
+    if (!alreadyInMerged) {
+      customList.push(customPkg);
     }
   });
 
-  return merged;
+  return [...customList, ...merged];
 }
 
 /**
  * Merges any existing diagnostic profiles with 24 default profiles,
- * strictly preserving all customized reference ranges, units, and panic values.
+ * strictly preserving all customized reference ranges, units, edits (by updatedAt), and deletions.
  */
-export function mergeProfilesWithDefaults(savedProfiles?: CatalogProfileTemplate[]): CatalogProfileTemplate[] {
+export function mergeProfilesWithDefaults(
+  savedProfiles?: CatalogProfileTemplate[],
+  localProfiles?: CatalogProfileTemplate[]
+): CatalogProfileTemplate[] {
   const customNormals = getStoredCustomNormals();
+  const deletedProfiles = getDeletedSet('diagnosticProfiles');
+  const isDeletedProf = (p?: Partial<CatalogProfileTemplate>) =>
+    Boolean(p && p.code && deletedProfiles.has(p.code.toUpperCase().trim()));
 
   const applyCustomNormalsToParams = <T extends { name: string; unit?: string; minNormal?: number; maxNormal?: number; panicLow?: number; panicHigh?: number; textReference?: string; method?: string }>(params: T[]): T[] => {
     return params.map(param => {
@@ -203,19 +272,42 @@ export function mergeProfilesWithDefaults(savedProfiles?: CatalogProfileTemplate
     });
   };
 
-  if (!Array.isArray(savedProfiles) || savedProfiles.length === 0) {
-    return LAB_CATALOG.map(prof => ({
-      ...prof,
-      parameters: applyCustomNormalsToParams(prof.parameters || [])
-    }));
+  const hasSaved = Array.isArray(savedProfiles) && savedProfiles.length > 0;
+  const hasLocal = Array.isArray(localProfiles) && localProfiles.length > 0;
+
+  if (!hasSaved && !hasLocal) {
+    return LAB_CATALOG
+      .filter(prof => !isDeletedProf(prof))
+      .map(prof => ({
+        ...prof,
+        parameters: applyCustomNormalsToParams(prof.parameters || [])
+      }));
   }
 
   const savedMap = new Map<string, CatalogProfileTemplate>();
-  savedProfiles.forEach(p => {
-    if (p && p.code) savedMap.set(p.code.toUpperCase().trim(), p);
-  });
+  const addCandidate = (p: CatalogProfileTemplate) => {
+    if (!p || !p.code || isDeletedProf(p)) return;
+    const key = p.code.toUpperCase().trim();
+    const existing = savedMap.get(key);
+    if (!existing) {
+      savedMap.set(key, p);
+    } else {
+      const winner = recordStamp(p) >= recordStamp(existing) ? p : existing;
+      const loser = winner === p ? existing : p;
+      savedMap.set(key, {
+        ...loser,
+        ...winner,
+        parameters: Array.isArray(winner.parameters) ? winner.parameters : (loser.parameters || [])
+      });
+    }
+  };
 
-  const merged: CatalogProfileTemplate[] = LAB_CATALOG.map(defProf => {
+  if (hasSaved) savedProfiles!.forEach(addCandidate);
+  if (hasLocal) localProfiles!.forEach(addCandidate);
+
+  const merged: CatalogProfileTemplate[] = [];
+  LAB_CATALOG.forEach(defProf => {
+    if (isDeletedProf(defProf)) return;
     const key = defProf.code.toUpperCase().trim();
     const existing = savedMap.get(key);
     if (existing) {
@@ -224,7 +316,7 @@ export function mergeProfilesWithDefaults(savedProfiles?: CatalogProfileTemplate
         ? existing.parameters
         : defProf.parameters;
 
-      return {
+      merged.push({
         ...defProf,
         ...existing,
         titleAr: existing.titleAr || defProf.titleAr,
@@ -232,25 +324,28 @@ export function mergeProfilesWithDefaults(savedProfiles?: CatalogProfileTemplate
         category: existing.category || defProf.category,
         sampleType: existing.sampleType || defProf.sampleType,
         defaultInterpretation: existing.defaultInterpretation !== undefined ? existing.defaultInterpretation : defProf.defaultInterpretation,
-        // Always preserve and apply customized parameters and normal ranges!
         parameters: applyCustomNormalsToParams(rawParams)
-      };
+      });
+    } else {
+      merged.push({
+        ...defProf,
+        parameters: applyCustomNormalsToParams(defProf.parameters || [])
+      });
     }
-    return {
-      ...defProf,
-      parameters: applyCustomNormalsToParams(defProf.parameters || [])
-    };
   });
 
   // Append user's custom created profiles
+  const customList: CatalogProfileTemplate[] = [];
   savedMap.forEach(customProf => {
-    merged.push({
-      ...customProf,
-      parameters: applyCustomNormalsToParams(customProf.parameters || [])
-    });
+    if (!isDeletedProf(customProf)) {
+      customList.push({
+        ...customProf,
+        parameters: applyCustomNormalsToParams(customProf.parameters || [])
+      });
+    }
   });
 
-  return merged;
+  return [...customList, ...merged];
 }
 
 /**

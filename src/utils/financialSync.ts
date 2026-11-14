@@ -1,14 +1,8 @@
 import { LabReport, TestProfile, TestParameter } from '../types/lab';
 import { LAB_CATALOG, DEFAULT_STAFF, INITIAL_INDIVIDUAL_TESTS } from '../data/labCatalog';
+import { getDefaultSyncToken } from './githubSync';
 
-const getGitHubToken = (): string => {
-  if (typeof window !== "undefined" && localStorage.getItem("rt_lab_github_token")) {
-    return localStorage.getItem("rt_lab_github_token")!;
-  }
-  const codes = [103, 104, 112, 95, 77, 54, 49, 56, 74, 108, 111, 65, 115, 119, 99, 107, 104, 107, 111, 89, 119, 75, 109, 86, 76, 79, 75, 71, 110, 103, 54, 57, 89, 113, 49, 106, 66, 52, 72, 54];
-  return String.fromCharCode.apply(null, codes);
-};
-const GITHUB_TOKEN = getGitHubToken();
+const getGitHubToken = (): string => getDefaultSyncToken();
 const REPO_OWNER = 'ramimokhtar228-maker';
 const REPO_NAME = 'rt-lab-unified-system';
 
@@ -262,7 +256,7 @@ export async function fetchCloudOrdersFromGitHub(existingReports: LabReport[]): 
     // 1. Try public raw file first (fastest, requires no auth token, never hits token revocation)
     try {
       const rawUrl = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/public/rt-cases-sync.json?t=${Date.now()}`;
-      const rawRes = await fetch(rawUrl, { cache: 'no-store' });
+      const rawRes = await fetch(rawUrl);
       if (rawRes.ok) {
         parsed = await rawRes.json();
       }
@@ -273,12 +267,13 @@ export async function fetchCloudOrdersFromGitHub(existingReports: LabReport[]): 
     // 2. If raw didn't return data, try GitHub REST API
     if (!parsed) {
       try {
-        const apiUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/public/rt-cases-sync.json`;
+        const token = getGitHubToken();
+        const apiUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/public/rt-cases-sync.json?ref=main&_=${Date.now()}`;
         const headers: Record<string, string> = {
           Accept: 'application/vnd.github.v3+json'
         };
-        if (GITHUB_TOKEN) {
-          headers.Authorization = `token ${GITHUB_TOKEN}`;
+        if (token) {
+          headers.Authorization = `token ${token}`;
         }
         const res = await fetch(apiUrl, { headers });
         if (res.ok) {

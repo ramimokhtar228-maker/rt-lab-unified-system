@@ -16,15 +16,18 @@ export function useStampedCollection<T extends Record<string, any>>(
       if (!Array.isArray(next)) return next;
       if (!Array.isArray(prev) || prev.length === 0) return next;
 
+      const keyOf = (r: T) => (r.id ? String(r.id) : r.code ? String(r.code) : '');
       const prevById = new Map<string, T>();
       prev.forEach(record => {
-        if (record && record.id) prevById.set(String(record.id), record);
+        const k = record ? keyOf(record) : '';
+        if (k) prevById.set(k, record);
       });
 
       let changed = false;
       const out = next.map((record: T) => {
-        if (!record || !record.id) return record;
-        const before = prevById.get(String(record.id));
+        const k = record ? keyOf(record) : '';
+        if (!record || !k) return record;
+        const before = prevById.get(k);
         if (before && JSON.stringify(before) === JSON.stringify(record)) return record;
 
         const incomingStamp = (record as any).updatedAt;

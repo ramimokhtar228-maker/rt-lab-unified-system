@@ -17,7 +17,9 @@ import {
   Send,
   Building,
   Check,
-  AlertCircle
+  AlertCircle,
+  KeyRound,
+  Link2
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import {
@@ -29,6 +31,7 @@ import {
   getBranchName
 } from '../utils/realtimeMultiDeviceSync';
 import { downloadFile } from '../utils/exportFormats';
+import { testGitHubConnection } from '../utils/githubSync';
 
 interface CloudSyncModalProps {
   isOpen: boolean;
@@ -45,6 +48,7 @@ export const CloudSyncModal: React.FC<CloudSyncModalProps> = ({ isOpen, onClose 
     exportBackup,
     importBackup,
     githubConfig,
+    updateGithubConfig,
     currentUser
   } = useApp();
 
@@ -54,6 +58,14 @@ export const CloudSyncModal: React.FC<CloudSyncModalProps> = ({ isOpen, onClose 
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [syncSuccessMsg, setSyncSuccessMsg] = useState<string | null>(null);
   const [pingSent, setPingSent] = useState<boolean>(false);
+  const [tokenInput, setTokenInput] = useState<string>('');
+  const [isTestingConn, setIsTestingConn] = useState<boolean>(false);
+  const [connCheckResult, setConnCheckResult] = useState<{
+    success: boolean;
+    message: string;
+    scopes?: string;
+    canPush?: boolean;
+  } | null>(null);
 
   // Device customization
   const [deviceName, setDeviceName] = useState<string>(getDeviceName());
@@ -104,6 +116,34 @@ export const CloudSyncModal: React.FC<CloudSyncModalProps> = ({ isOpen, onClose 
       setSyncSuccessMsg(`فشلت المزامنة: ${err?.message || 'تعذر الاتصال بالسحابة'}`);
     } finally {
       setIsSyncing(false);
+    }
+  };
+
+  const handleCheckGitHubPermissions = async () => {
+    setIsTestingConn(true);
+    setConnCheckResult(null);
+    try {
+      const effectiveToken = tokenInput.trim() || githubConfig.token;
+      if (tokenInput.trim()) {
+        updateGithubConfig({ token: tokenInput.trim() });
+      }
+      const res = await testGitHubConnection({
+        ...githubConfig,
+        token: effectiveToken
+      });
+      setConnCheckResult({
+        success: res.success,
+        message: res.message,
+        scopes: res.scopes,
+        canPush: res.canPush
+      });
+    } catch (err: any) {
+      setConnCheckResult({
+        success: false,
+        message: `تعذر التحقق: ${err?.message || 'خطأ في الاتصال'}`
+      });
+    } finally {
+      setIsTestingConn(false);
     }
   };
 
@@ -401,6 +441,54 @@ export const CloudSyncModal: React.FC<CloudSyncModalProps> = ({ isOpen, onClose 
                   className="hidden"
                 />
               </label>
+            </div>
+
+            {/* GitHub Token & Permission Verification */}
+            <div className="mt-4 pt-4 border-t border-slate-800 space-y-2.5">
+              <div className="flex flex-wrap items-center justify-between gap-2 text-[11px]">
+                <span className="font-bold text-slate-200 flex items-center gap-1.5">
+                  <KeyRound className="w-3.5 h-3.5 text-amber-400" />
+                  <span>إعدادات وصلاحيات GitHub Access Token والروابط المباشرة:</span>
+                </span>
+                <div className="flex items-center gap-2 text-[10px] font-mono text-cyan-300">
+                  <Link2 className="w-3 h-3" />
+                  <span>#catalog/packages · #catalog/profiles</span>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-2">
+                <input
+                  type="password"
+                  value={tokenInput}
+                  onChange={(e) => setTokenInput(e.target.value)}
+                  placeholder={githubConfig.token ? '•••••••••••••••••••• (محفوظ ومفعّل - أدخل رمزاً جديداً للتحديث فقط)' : 'أدخل GitHub Access Token (ghp_...)'}
+                  dir="ltr"
+                  className="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white font-mono focus:ring-1 focus:ring-amber-500 focus:border-amber-500"
+                />
+                <button
+                  type="button"
+                  onClick={handleCheckGitHubPermissions}
+                  disabled={isTestingConn}
+                  className="px-4 py-2 bg-amber-600 hover:bg-amber-500 disabled:opacity-50 text-slate-950 font-black text-xs rounded-xl transition-colors shrink-0 cursor-pointer"
+                >
+                  {isTestingConn ? 'جاري فحص الصلاحيات...' : 'حفظ وفحص الصلاحيات'}
+                </button>
+              </div>
+
+              {connCheckResult && (
+                <div className={`p-2.5 rounded-xl text-[11px] font-bold border ${
+                  connCheckResult.success
+                    ? 'bg-emerald-950/60 border-emerald-500/40 text-emerald-200'
+                    : 'bg-rose-950/60 border-rose-500/40 text-rose-200'
+                }`}>
+                  <div>{connCheckResult.message}</div>
+                  {connCheckResult.scopes && (
+                    <div className="text-[10px] font-mono mt-1 opacity-80" dir="ltr">
+                      OAuth Scopes: {connCheckResult.scopes}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ComprehensivePackage, CatalogProfileTemplate, IndividualTest } from '../types/lab';
+import { useApp } from '../context/AppContext';
 import { 
   Package, 
   Plus, 
@@ -34,6 +35,7 @@ export const PackagesManager: React.FC<PackagesManagerProps> = ({
   catalogProfiles,
   individualTests
 }) => {
+  const { canEditCatalog } = useApp();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterPopular, setFilterPopular] = useState<boolean | null>(null);
   
@@ -58,12 +60,13 @@ export const PackagesManager: React.FC<PackagesManagerProps> = ({
     isPopular: false
   });
 
-  const filteredPackages = packages.filter(pkg => {
+  const filteredPackages = (packages || []).filter(pkg => {
+    if (!pkg) return false;
     const matchesSearch = 
       (pkg.titleAr || '').includes(searchTerm) ||
-      pkg.titleEn.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (pkg.titleEn || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
       (pkg.descriptionAr || '').includes(searchTerm) ||
-      pkg.code.toLowerCase().includes(searchTerm.toLowerCase());
+      (pkg.code || '').toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesPopular = filterPopular === null || pkg.isPopular === filterPopular;
 
@@ -195,13 +198,15 @@ export const PackagesManager: React.FC<PackagesManagerProps> = ({
           </p>
         </div>
 
-        <button
-          onClick={handleOpenAddModal}
-          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-red-700 to-rose-600 hover:from-red-600 hover:to-rose-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-red-950/40 hover:shadow-xl transition-all"
-        >
-          <Plus className="w-4 h-4" />
-          <span>إضافة باقة فحص جديدة</span>
-        </button>
+        {canEditCatalog && (
+          <button
+            onClick={handleOpenAddModal}
+            className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-red-700 to-rose-600 hover:from-red-600 hover:to-rose-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-red-950/40 hover:shadow-xl transition-all"
+          >
+            <Plus className="w-4 h-4" />
+            <span>إضافة باقة فحص جديدة</span>
+          </button>
+        )}
       </div>
 
       {saveSuccessMsg && (
@@ -269,7 +274,7 @@ export const PackagesManager: React.FC<PackagesManagerProps> = ({
                   <div className="flex items-center gap-2 text-rose-800 text-[11px] font-bold">
                     <span className="font-mono">{pkg.code}</span>
                     <span>·</span>
-                    <span>{pkg.sampleTypes.join(' + ')}</span>
+                    <span>{(pkg.sampleTypes || []).join(' + ') || 'Serum'}</span>
                   </div>
                   <h3 className="text-base font-black text-slate-900 mt-1 line-clamp-1">
                     {pkg.titleAr}
@@ -303,12 +308,12 @@ export const PackagesManager: React.FC<PackagesManagerProps> = ({
                     التحاليل والبروفايلات المشمولة بالباقة:
                   </span>
                   <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto scrollbar-thin">
-                    {pkg.includedProfiles.map(code => (
+                    {(pkg.includedProfiles || []).map(code => (
                       <span key={code} className="text-[10px] font-bold bg-rose-50 text-rose-900 border border-rose-200 px-2 py-0.5 rounded-md">
                         بروفايل {code}
                       </span>
                     ))}
-                    {pkg.includedIndividualTestCodes.map(code => (
+                    {(pkg.includedIndividualTestCodes || []).map(code => (
                       <span key={code} className="text-[10px] font-semibold bg-slate-100 text-slate-700 border border-slate-200 px-2 py-0.5 rounded-md">
                         {code}
                       </span>
@@ -336,22 +341,26 @@ export const PackagesManager: React.FC<PackagesManagerProps> = ({
 
               {/* Actions Footer */}
               <div className="bg-slate-50 border-t border-slate-100 p-3 flex items-center justify-between gap-2">
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={() => handleOpenEditModal(pkg)}
-                    className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-200 rounded-lg transition-colors"
-                    title="تعديل الباقة"
-                  >
-                    <Edit3 className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => handleDeletePackage(pkg.id, pkg.titleAr)}
-                    className="p-1.5 text-rose-600 hover:text-rose-800 hover:bg-rose-50 rounded-lg transition-colors"
-                    title="حذف الباقة"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
+                {canEditCatalog ? (
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => handleOpenEditModal(pkg)}
+                      className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-200 rounded-lg transition-colors"
+                      title="تعديل الباقة"
+                    >
+                      <Edit3 className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => handleDeletePackage(pkg.id, pkg.titleAr)}
+                      className="p-1.5 text-rose-600 hover:text-rose-800 hover:bg-rose-50 rounded-lg transition-colors"
+                      title="حذف الباقة"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <span className="text-[10px] text-slate-400 font-semibold">عرض فقط</span>
+                )}
 
                 {onApplyPackageToReport && (
                   <button
@@ -370,8 +379,8 @@ export const PackagesManager: React.FC<PackagesManagerProps> = ({
 
       {/* Modal: Add / Edit Package */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 space-y-5 my-8">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-start sm:items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 space-y-5 my-auto max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2">
                 <Package className="w-5 h-5 text-rose-700" />

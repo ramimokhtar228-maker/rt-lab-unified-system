@@ -13,8 +13,6 @@ export const AddParameterModal: React.FC<AddParameterModalProps> = ({
   onClose,
   onAdd
 }) => {
-  if (!isOpen) return null;
-
   const [name, setName] = useState('');
   const [unit, setUnit] = useState('');
   const [minNormal, setMinNormal] = useState('');
@@ -22,6 +20,8 @@ export const AddParameterModal: React.FC<AddParameterModalProps> = ({
   const [textReference, setTextReference] = useState('');
   const [method, setMethod] = useState('');
   const [notes, setNotes] = useState('');
+
+  if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,9 +51,9 @@ export const AddParameterModal: React.FC<AddParameterModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-md overflow-hidden text-right">
-        <div className="bg-slate-900 text-white p-4 flex items-center justify-between">
+    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-black/60 backdrop-blur-xs p-4 overflow-y-auto">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-md overflow-hidden text-right my-auto max-h-[90vh] flex flex-col">
+        <div className="bg-slate-900 text-white p-4 flex items-center justify-between shrink-0">
           <h3 className="font-bold text-sm flex items-center gap-2">
             <Plus className="w-4 h-4 text-rose-400" />
             <span>إضافة تحليل جديد للبروفايل الحالي</span>
@@ -63,7 +63,7 @@ export const AddParameterModal: React.FC<AddParameterModalProps> = ({
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-5 space-y-3.5">
+        <form onSubmit={handleSubmit} className="p-5 space-y-3.5 overflow-y-auto">
           <div>
             <label className="block text-xs font-bold text-slate-700 mb-1">اسم الفحص / التحليل (Test Name):</label>
             <input

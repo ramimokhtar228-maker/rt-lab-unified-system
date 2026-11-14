@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TestParameter } from '../types/lab';
 import { X, Save, Check } from 'lucide-react';
 
@@ -15,18 +15,33 @@ export const ParameterEditModal: React.FC<ParameterEditModalProps> = ({
   parameter,
   onSave
 }) => {
-  if (!isOpen || !parameter) return null;
-
-  const [name, setName] = useState(parameter.name);
-  const [unit, setUnit] = useState(parameter.unit || '');
-  const [minNormal, setMinNormal] = useState<string>(parameter.minNormal !== undefined ? String(parameter.minNormal) : '');
-  const [maxNormal, setMaxNormal] = useState<string>(parameter.maxNormal !== undefined ? String(parameter.maxNormal) : '');
-  const [panicLow, setPanicLow] = useState<string>(parameter.panicLow !== undefined ? String(parameter.panicLow) : '');
-  const [panicHigh, setPanicHigh] = useState<string>(parameter.panicHigh !== undefined ? String(parameter.panicHigh) : '');
-  const [textReference, setTextReference] = useState(parameter.textReference || '');
-  const [method, setMethod] = useState(parameter.method || '');
-  const [notes, setNotes] = useState(parameter.notes || '');
+  const [name, setName] = useState(parameter?.name || '');
+  const [unit, setUnit] = useState(parameter?.unit || '');
+  const [minNormal, setMinNormal] = useState<string>(parameter?.minNormal !== undefined ? String(parameter.minNormal) : '');
+  const [maxNormal, setMaxNormal] = useState<string>(parameter?.maxNormal !== undefined ? String(parameter.maxNormal) : '');
+  const [panicLow, setPanicLow] = useState<string>(parameter?.panicLow !== undefined ? String(parameter.panicLow) : '');
+  const [panicHigh, setPanicHigh] = useState<string>(parameter?.panicHigh !== undefined ? String(parameter.panicHigh) : '');
+  const [textReference, setTextReference] = useState(parameter?.textReference || '');
+  const [method, setMethod] = useState(parameter?.method || '');
+  const [notes, setNotes] = useState(parameter?.notes || '');
   const [savePermanently, setSavePermanently] = useState(true);
+
+  useEffect(() => {
+    if (parameter) {
+      setName(parameter.name || '');
+      setUnit(parameter.unit || '');
+      setMinNormal(parameter.minNormal !== undefined ? String(parameter.minNormal) : '');
+      setMaxNormal(parameter.maxNormal !== undefined ? String(parameter.maxNormal) : '');
+      setPanicLow(parameter.panicLow !== undefined ? String(parameter.panicLow) : '');
+      setPanicHigh(parameter.panicHigh !== undefined ? String(parameter.panicHigh) : '');
+      setTextReference(parameter.textReference || '');
+      setMethod(parameter.method || '');
+      setNotes(parameter.notes || '');
+      setSavePermanently(true);
+    }
+  }, [parameter, isOpen]);
+
+  if (!isOpen || !parameter) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

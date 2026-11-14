@@ -37,17 +37,16 @@ export async function cloudVersionChanged(cfg: PulseCreds): Promise<boolean> {
     lastSha = '';
   }
 
-  const url = `https://api.github.com/repos/${owner}/${repo}/git/ref/heads/${branch}`;
+  const url = `https://api.github.com/repos/${owner}/${repo}/git/ref/heads/${branch}?_=${Date.now()}`;
   const headers: Record<string, string> = {
     Authorization: `token ${cfg.token}`,
     Accept: 'application/vnd.github+json',
-    'User-Agent': 'rt-lab-sync',
   };
 
   if (lastEtag) headers['If-None-Match'] = lastEtag;
 
   try {
-    const res = await fetch(url, { headers, cache: 'no-store' });
+    const res = await fetch(url, { headers });
 
     // Update remaining rate limit if available
     const rlRem = res.headers.get('x-ratelimit-remaining');

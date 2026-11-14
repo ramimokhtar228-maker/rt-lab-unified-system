@@ -284,7 +284,7 @@ const AppContent: React.FC = () => {
                       category: template.category,
                       sampleType: template.sampleType,
                       interpretation: template.defaultInterpretation || '',
-                      parameters: template.parameters.map((p, idx) => ({
+                      parameters: (template.parameters || []).map((p, idx) => ({
                         ...p,
                         id: `p-${Date.now()}-${idx}`,
                         result: '',
@@ -295,6 +295,8 @@ const AppContent: React.FC = () => {
                       profiles: [...currentReport.profiles, newProfile]
                     });
                     setActiveTab('diagnostic_editor');
+                  } else {
+                    setIsPatientFormOpen(true);
                   }
                 }}
                 individualTests={testCatalog as any}

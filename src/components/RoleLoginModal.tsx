@@ -25,6 +25,7 @@ export const RoleLoginModal: React.FC = () => {
     } else {
       setPin('');
       setErrorMsg(null);
+      setLoginModalOpen(false);
     }
   };
 
