@@ -6674,7 +6674,7 @@
     "paymentStatus": "paid",
     "financialClearance": "CLEARED_FOR_RELEASE",
     "bookingType": "home_visit",
-    "isHomeVisit": false,
+    "isHomeVisit": true,
     "visitFee": 0,
     "visitAddress": "10 عمارات الهيئة العربية للتصنيع مكرم عبيد مدينه نصر الدور 8 شقه 81",
     "homeAddress": "10 عمارات الهيئة العربية للتصنيع مكرم عبيد مدينه نصر الدور 8 شقه 81",
