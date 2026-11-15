@@ -44,9 +44,9 @@ export const LabInfoEditModal: React.FC<LabInfoEditModalProps> = ({
       supervisionAr: "أطباء واستشاريو كلية طب قصر العيني - جامعة القاهرة",
       supervisionEn: "Kasr Al Ainy Faculty of Medicine Consultants - Cairo University",
       accreditation: "ISO 15189 Certified Quality Management",
-      hotline: "01012345678",
-      phone: "0244667788",
-      whatsapp: "01012345678",
+      hotline: "01100874444",
+      phone: "01100874444 / 01100046841",
+      whatsapp: "01100874444",
       mainAddress: "ميدان بهتيم برج صيدليه العزبى الدور الثالث امام الأسانسير شبرا الخيمه",
       instapay: "ramirtlab@instapay",
       vodafoneCash: "01098765432"

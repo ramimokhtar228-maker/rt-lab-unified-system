@@ -121,6 +121,7 @@ export const LAB_CATALOG: CatalogProfileTemplate[] = [
     "titleAr": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
     "category": "Hematology",
     "sampleType": "EDTA Whole Blood",
+    "profilePrice": 180,
     "defaultInterpretation": "Automated 5-part differential and erythrocytic/thrombocytic indices evaluated according to international hematology consensus guidelines (ICSH / CLSI).",
     "parameters": [
       {
@@ -332,6 +333,7 @@ export const LAB_CATALOG: CatalogProfileTemplate[] = [
     "titleAr": "Complete Urine Analysis",
     "category": "Clinical Microscopy",
     "sampleType": "Clean Catch Midstream Urine",
+    "profilePrice": 100,
     "defaultInterpretation": "Routine urinalysis shows clear appearance with no significant cellular or crystalline elements.",
     "parameters": [
       {
@@ -473,6 +475,7 @@ export const LAB_CATALOG: CatalogProfileTemplate[] = [
     "titleAr": "Complete Stool Examination",
     "category": "Clinical Parasitology",
     "sampleType": "Fresh Stool Specimen",
+    "profilePrice": 100,
     "defaultInterpretation": "No pathogenic protozoa, helminthic ova, or inflammatory elements identified.",
     "parameters": [
       {
@@ -576,6 +579,7 @@ export const LAB_CATALOG: CatalogProfileTemplate[] = [
     "titleAr": "Semen Analysis (WHO Criteria)",
     "category": "Andrology",
     "sampleType": "Complete Semen Ejaculate",
+    "profilePrice": 220,
     "defaultInterpretation": "Sperm parameters conform to WHO 5th/6th Reference Limits (Normozoospermia).",
     "parameters": [
       {
@@ -709,6 +713,7 @@ export const LAB_CATALOG: CatalogProfileTemplate[] = [
     "titleAr": "Culture & Antimicrobial Susceptibility (C&S)",
     "category": "Microbiology",
     "sampleType": "Clinical Specimen (Urine/Blood/Wound/Swab)",
+    "profilePrice": 250,
     "defaultInterpretation": "Significant bacterial pathogen isolated. Antimicrobial susceptibility profile detailed below.",
     "parameters": [
       {
@@ -824,6 +829,7 @@ export const LAB_CATALOG: CatalogProfileTemplate[] = [
     "titleAr": "Insulin Resistance & Beta-Cell Function (HOMA)",
     "category": "Endocrinology",
     "sampleType": "Serum & Fluoride Plasma (10-12h Fasting)",
+    "profilePrice": 330,
     "defaultInterpretation": "HOMA-IR calculated based on fasting glucose and insulin levels.",
     "parameters": [
       {
@@ -883,6 +889,7 @@ export const LAB_CATALOG: CatalogProfileTemplate[] = [
     "titleAr": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
     "category": "Clinical Chemistry",
     "sampleType": "Fluoride Plasma & EDTA Blood",
+    "profilePrice": 220,
     "defaultInterpretation": "Glycemic parameters evaluated according to ADA guidelines.",
     "parameters": [
       {
@@ -936,6 +943,7 @@ export const LAB_CATALOG: CatalogProfileTemplate[] = [
     "titleAr": "Urine Albumin / Creatinine Ratio (ACR)",
     "category": "Clinical Chemistry",
     "sampleType": "First Morning Urine Spot Specimen",
+    "profilePrice": 180,
     "defaultInterpretation": "ACR provides sensitive early detection of diabetic and hypertensive microalbuminuria.",
     "parameters": [
       {
@@ -981,9 +989,10 @@ export const LAB_CATALOG: CatalogProfileTemplate[] = [
   {
     "code": "CALCIUM_ELEC",
     "titleEn": "Electrolytes & Corrected Calcium (CA-I)",
-    "titleAr": "Electrolytes & Corrected Calcium (CA-I)",
+    "titleAr": "الأملاح والمعادن والكالسيوم المتأين والكلي",
     "category": "Clinical Chemistry",
     "sampleType": "Serum",
+    "profilePrice": 280,
     "defaultInterpretation": "Electrolyte balance and serum calcium status evaluated.",
     "parameters": [
       {
@@ -1067,6 +1076,7 @@ export const LAB_CATALOG: CatalogProfileTemplate[] = [
     "titleAr": "Lipid Profile",
     "category": "Clinical Chemistry",
     "sampleType": "Serum (12h Fasting)",
+    "profilePrice": 220,
     "defaultInterpretation": "Lipid ratios demonstrate favorable cardiovascular risk stratification.",
     "parameters": [
       {
@@ -1138,9 +1148,10 @@ export const LAB_CATALOG: CatalogProfileTemplate[] = [
   {
     "code": "LFT",
     "titleEn": "Liver Function Tests (LFT)",
-    "titleAr": "Liver Function Tests (LFT)",
+    "titleAr": "وظائف الكبد الشاملة (LFT)",
     "category": "Clinical Chemistry",
     "sampleType": "Serum",
+    "profilePrice": 250,
     "defaultInterpretation": "Enzyme activities and synthetic hepatic markers are within normal limits.",
     "parameters": [
       {
@@ -1242,9 +1253,10 @@ export const LAB_CATALOG: CatalogProfileTemplate[] = [
   {
     "code": "KFT",
     "titleEn": "Kidney Function Profile",
-    "titleAr": "Kidney Function Profile",
+    "titleAr": "وظائف الكلى الشاملة (KFT)",
     "category": "Clinical Chemistry",
     "sampleType": "Serum",
+    "profilePrice": 200,
     "defaultInterpretation": "Renal biomarkers indicate adequate glomerular filtration and nitrogenous clearance.",
     "parameters": [
       {
@@ -1304,6 +1316,7 @@ export const LAB_CATALOG: CatalogProfileTemplate[] = [
     "titleAr": "Cardiac Biomarkers Panel",
     "category": "Cardiac & Emergency",
     "sampleType": "Serum or Heparin Plasma",
+    "profilePrice": 550,
     "defaultInterpretation": "High-sensitivity myocardial necrosis markers within baseline reference thresholds.",
     "parameters": [
       {
@@ -1371,9 +1384,10 @@ export const LAB_CATALOG: CatalogProfileTemplate[] = [
   {
     "code": "THYROID",
     "titleEn": "Thyroid Function Full Panel",
-    "titleAr": "Thyroid Function Full Panel",
+    "titleAr": "وظائف الغدة الدرقية الكاملة (TSH, FT3, FT4)",
     "category": "Endocrinology",
     "sampleType": "Serum",
+    "profilePrice": 300,
     "defaultInterpretation": "Euthyroid state: TSH, Free T3, and Free T4 are within euthyroid reference ranges.",
     "parameters": [
       {
@@ -1438,6 +1452,7 @@ export const LAB_CATALOG: CatalogProfileTemplate[] = [
     "titleAr": "Coagulation & Hemostasis Profile",
     "category": "Hematology & Hemostasis",
     "sampleType": "Sodium Citrate Plasma (9:1 ratio)",
+    "profilePrice": 180,
     "defaultInterpretation": "Hemostatic integrity confirmed; extrinsic and intrinsic pathways within normal reference limits.",
     "parameters": [
       {
@@ -1494,6 +1509,7 @@ export const LAB_CATALOG: CatalogProfileTemplate[] = [
     "titleAr": "Iron Kinetics & Storage Profile",
     "category": "Clinical Chemistry",
     "sampleType": "Serum (Morning Fasting)",
+    "profilePrice": 420,
     "defaultInterpretation": "Iron indices and ferritin stores indicate adequate physiological iron reserves.",
     "parameters": [
       {
@@ -1541,9 +1557,10 @@ export const LAB_CATALOG: CatalogProfileTemplate[] = [
   {
     "code": "FERTILITY",
     "titleEn": "Fertility & Reproductive Hormones",
-    "titleAr": "Fertility & Reproductive Hormones",
+    "titleAr": "هرمونات الخصوبة والغدد التناسلية",
     "category": "Endocrinology",
     "sampleType": "Serum",
+    "profilePrice": 650,
     "defaultInterpretation": "Pituitary-gonadal endocrine markers documented for clinical correlation.",
     "parameters": [
       {
@@ -1618,9 +1635,10 @@ export const LAB_CATALOG: CatalogProfileTemplate[] = [
   {
     "code": "TUMOR",
     "titleEn": "Tumor Markers Panel",
-    "titleAr": "Tumor Markers Panel",
+    "titleAr": "دلالات الأورام الشاملة",
     "category": "Oncology & Immunodiagnostics",
     "sampleType": "Serum",
+    "profilePrice": 950,
     "defaultInterpretation": "Tumor biomarker concentrations within baseline non-malignant limits.",
     "parameters": [
       {
@@ -1689,6 +1707,7 @@ export const LAB_CATALOG: CatalogProfileTemplate[] = [
     "titleAr": "Rheumatology & Autoimmune Markers",
     "category": "Immunology",
     "sampleType": "Serum & Citrate Blood",
+    "profilePrice": 850,
     "defaultInterpretation": "Inflammatory and rheumatological serological markers assessed.",
     "parameters": [
       {
@@ -1753,9 +1772,10 @@ export const LAB_CATALOG: CatalogProfileTemplate[] = [
   {
     "code": "VIRAL",
     "titleEn": "Viral Hepatitis & Infectious Serology",
-    "titleAr": "Viral Hepatitis & Infectious Serology",
+    "titleAr": "الفيروسات الكبدية والمعدية (HBsAg, HCV, HIV)",
     "category": "Virology & Serology",
     "sampleType": "Serum",
+    "profilePrice": 480,
     "defaultInterpretation": "Specific antibody / antigen screening test results.",
     "parameters": [
       {

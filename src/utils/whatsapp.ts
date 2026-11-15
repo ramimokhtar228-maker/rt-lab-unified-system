@@ -33,7 +33,8 @@ export function openWhatsApp(phone: string, message: string): void {
 /** شروط واحتياطات التحاليل: تُبنى تلقائياً حسب نوع كل تحليل */
 export function buildTestPrecautions(
   tests: { nameAr?: string; nameEn?: string; code?: string }[] = [],
-  fastingHours = 0
+  fastingHours = 0,
+  isHomeVisit = false
 ): string[] {
   const haystack = tests.map(t => `${t.nameAr || ''} ${t.nameEn || ''} ${t.code || ''}`).join(' | ');
   const tips: string[] = [];
@@ -58,9 +59,26 @@ export function buildTestPrecautions(
   ];
   rules.forEach(rule => { if (rule.pattern.test(haystack)) add(...rule.tips); });
   if (fastingHours > 0) add(`الصيام ${fastingHours} ساعة قبل سحب العينة (الماء مسموح)`);
-  add('الحضور قبل الموعد بـ ١٠ دقائق لاستكمال بيانات السحب');
+  add(
+    isHomeVisit
+      ? 'تجهيز بطاقة الهوية أو روشتة الطبيب (إن وجدت) قبل وصول مندوب السحب بـ ١٠ دقائق'
+      : 'الحضور للفرع قبل الموعد بـ ١٠ دقائق لاستكمال بيانات السحب'
+  );
   add('إبلاغ فريق السحب بالأدوية التي تتناولها أو الأمراض المزمنة أو الحمل');
   return tips.slice(0, 7);
+}
+
+function formatTestAbbreviation(t: { nameAr?: string; nameEn?: string; code?: string }): string {
+  const code = (t.code || '').trim();
+  const en = (t.nameEn || '').trim();
+  const ar = (t.nameAr || '').trim();
+  const genericCodes = new Set(['TEST', 'INDIVIDUAL', 'PROFILE', 'LAB', 'PKG', '']);
+  if (code && !genericCodes.has(code.toUpperCase())) {
+    return code.toUpperCase();
+  }
+  if (en && en.length <= 28) return en;
+  if (ar && ar.length <= 28) return ar;
+  return en || ar || 'LAB';
 }
 
 /** Professional, concise & comprehensive Medical Booking Confirmation Message */
@@ -74,6 +92,8 @@ export function formatBookingConfirmationWhatsAppMessage(params: {
   isHomeVisit: boolean;
   address?: string;
   deliveryNotes?: string;
+  visitSpecialist?: string;
+  branchRepresentative?: string;
   branchName?: string;
   branchAddress?: string;
   branchPhone?: string;
@@ -85,6 +105,8 @@ export function formatBookingConfirmationWhatsAppMessage(params: {
   packageOriginalPrice?: number;
   extraTestsDetails?: { nameAr: string; nameEn?: string; code?: string; price?: number }[];
   subtotal: number;
+  testsSubtotal?: number;
+  grossTotal?: number;
   discountAmount: number;
   discountLabel: string;
   visitFee?: number;
@@ -100,83 +122,131 @@ export function formatBookingConfirmationWhatsAppMessage(params: {
   const contactPhone = params.branchPhone || params.customLabInfo?.phone || params.customLabInfo?.hotline || LAB_PHONE;
   const mapsLink = params.branchGoogleMapsUrl || GOOGLE_MAPS_BRANCH_URL;
 
-  // 1. Format Tests (Clear, concise, professional)
+  // 1. Format Tests — Abbreviations / short names ONLY (NO per-test or package prices)
   let testsBlock = '';
-  if (params.packageName) {
-    const pkgPrice = params.packagePrice !== undefined ? params.packagePrice : params.netAmount;
-    testsBlock += `• *باقة:* ${params.packageName} (${pkgPrice} ج.م)\n`;
+  const uniqueAbbrevs = (list: { nameAr?: string; nameEn?: string; code?: string }[]) => {
+    const seen = new Set<string>();
+    const out: string[] = [];
+    list.forEach(item => {
+      const abbr = formatTestAbbreviation(item);
+      if (abbr && !seen.has(abbr.toUpperCase())) {
+        seen.add(abbr.toUpperCase());
+        out.push(abbr);
+      }
+    });
+    return out;
+  };
 
+  if (params.packageName) {
+    testsBlock += `• *باقة:* ${params.packageName}\n`;
     if (params.extraTestsDetails && params.extraTestsDetails.length > 0) {
-      const extras = params.extraTestsDetails.map(t => (t.code || t.nameEn || t.nameAr).trim()).join('، ');
+      const extras = uniqueAbbrevs(params.extraTestsDetails).join(' · ');
       testsBlock += `• *تحاليل إضافية:* ${extras}\n`;
+    } else if (params.testsDetails && params.testsDetails.length > 0) {
+      const included = uniqueAbbrevs(params.testsDetails).join(' · ');
+      testsBlock += `• *الاختصارات:* ${included}\n`;
     }
   } else if (params.testsDetails && params.testsDetails.length > 0) {
-    const items = params.testsDetails.map(t => {
-      const codeOrEn = (t.code || t.nameEn || t.nameAr).trim();
-      const p = t.price ? ` (${t.price} ج.م)` : '';
-      return `• ${codeOrEn}${p}`;
-    }).join('\n');
-    testsBlock += items + '\n';
+    const abbrevs = uniqueAbbrevs(params.testsDetails);
+    testsBlock += abbrevs.map(a => `• ${a}`).join('\n') + '\n';
   } else if (params.testsList) {
-    const lines = params.testsList.split('\n').map(l => l.trim()).filter(Boolean);
-    testsBlock += lines.map(l => l.startsWith('•') ? l : `• ${l}`).join('\n') + '\n';
+    const cleanedLines = params.testsList
+      .split('\n')
+      .map(l => l.replace(/\(?\d[\d.,]*\s*(?:ج\.?م|EGP)\)?/gi, '').trim())
+      .filter(Boolean);
+    testsBlock += cleanedLines.map(l => (l.startsWith('•') ? l : `• ${l}`)).join('\n') + '\n';
   } else {
     testsBlock += '• فحوصات مخبرية شاملة\n';
   }
 
-  // 2. Location
-  const locBlock = params.isHomeVisit
-    ? `• نوع الحجز: *زيارة منزلية خاصة لسحب العينات* 🏠\n• عنوان الزيارة: *${params.address || 'مسجل لدى طاقم الزيارات'}*${params.deliveryNotes ? ` (${params.deliveryNotes})` : ''}`
-    : `• المقر: *${params.branchName || 'الفرع الرئيسي'}* 🏥\n• العنوان: ${branchAddr}\n• اللوكيشن: ${mapsLink}`;
+  // 2. Tailored wording & representative based on Home Visit vs Branch Attendance
+  const homeVisitSpecialist = (params.visitSpecialist || '').trim() || 'أخصائي السحب المنزلي المعتمد بالمعمل';
+  const branchRep = (params.branchRepresentative || '').trim() || 'مسؤول الاستقبال وخدمة العملاء بالفرع';
 
-  // 3. Financial calculations with 100% precision
-  const visitFee = params.visitFee || 0;
-  const discount = Math.max(0, params.discountAmount || 0);
-  const net = params.netAmount;
-  const testsValue = Math.max(0, params.subtotal || 0) || Math.max(0, net + discount - visitFee);
-  // بعض الشاشات تمرر الإجمالي شاملاً رسوم الزيارة، وأخرى تمرر قيمة التحاليل فقط
-  const subtotalIncludesFee = Math.abs(testsValue - discount - net) < 1 && Math.abs(testsValue + visitFee - discount - net) >= 1;
-  const beforeDiscount = subtotalIncludesFee ? testsValue : testsValue + visitFee;
-  const discountBase = Math.max(1, subtotalIncludesFee ? Math.max(1, testsValue - visitFee) : testsValue);
-  const discountPercent = discount > 0 ? Math.round((discount / discountBase) * 100) : 0;
-  const rawSubtotal = beforeDiscount;
-  const paid = params.paidAmount !== undefined ? params.paidAmount : net;
-  const remaining = params.remainingAmount !== undefined ? params.remainingAmount : Math.max(0, net - paid);
-  const remainingText = remaining > 0 ? `*متبقي ${remaining} ج.م*` : 'مسدد بالكامل ✅';
+  const introLine = params.isHomeVisit
+    ? 'تم تأكيد حجز موعد *الزيارة المنزلية لسحب العينات الطبية* بنجاح ✅'
+    : 'تم تأكيد حجز موعدكم *للحضور لفرع المعمل وإجراء التحاليل الطبية* بنجاح ✅';
+
+  const detailsHeading = params.isHomeVisit
+    ? '📋 *بيانات الزيارة المنزلية:*'
+    : '📋 *بيانات الحضور للفرع:*';
+
+  const locBlock = params.isHomeVisit
+    ? [
+        '• نوع الحجز: *زيارة منزلية خاصة لسحب العينات* 🏠',
+        `• عنوان الزيارة: *${params.address || 'مسجل لدى طاقم الزيارات'}*${params.deliveryNotes ? ` (${params.deliveryNotes})` : ''}`,
+        `• مندوب الزيارة المنزلية: *${homeVisitSpecialist}*`
+      ].join('\n')
+    : [
+        '• نوع الحجز: *حضور لفرع المعمل* 🏥',
+        `• الفرع: *${params.branchName || 'الفرع الرئيسي - بهتيم'}*`,
+        `• العنوان: ${branchAddr}`,
+        `• اللوكيشن: ${mapsLink}`,
+        `• مندوب استقبال الفرع: *${branchRep}*`
+      ].join('\n');
+
+  const visitSpecificNote = params.isHomeVisit
+    ? '• سيصل إليكم مندوب الزيارة المنزلية في الموعد المحدد بكامل أدوات السحب المعقمة والمغلقة لمرة واحدة.'
+    : '• عند الوصول للفرع يرجى التوجه لمندوب الاستقبال وإبراز رقم الملف لسرعة إنهاء السحب دون انتظار.';
+
+  // 3. Deterministic Pricing — ONLY Total Amount & Amount After Discount
+  const visitFee = params.isHomeVisit ? Math.max(0, Number(params.visitFee) || 0) : 0;
+  const discount = Math.max(0, Number(params.discountAmount) || 0);
+  const netAfterDiscount = Math.max(0, Math.round(Number(params.netAmount) || 0));
+
+  let totalBeforeDiscount = 0;
+  if (params.grossTotal !== undefined && params.grossTotal > 0) {
+    totalBeforeDiscount = Math.round(Number(params.grossTotal));
+  } else if (params.packageName && params.packageOriginalPrice && params.packageOriginalPrice > (params.packagePrice || 0)) {
+    const extraCost = (params.extraTestsDetails || []).reduce((s, t) => s + (Number(t.price) || 0), 0);
+    totalBeforeDiscount = Math.round(Number(params.packageOriginalPrice) + extraCost + visitFee);
+  } else if (params.testsSubtotal !== undefined) {
+    totalBeforeDiscount = Math.round(Number(params.testsSubtotal) + visitFee);
+  } else {
+    const rawSub = Math.max(0, Number(params.subtotal) || 0);
+    if (visitFee > 0 && Math.abs(rawSub - discount - netAfterDiscount) <= 1) {
+      totalBeforeDiscount = Math.round(rawSub);
+    } else if (rawSub > 0) {
+      totalBeforeDiscount = Math.round(rawSub + visitFee);
+    } else {
+      totalBeforeDiscount = Math.round(netAfterDiscount + discount);
+    }
+  }
+  if (totalBeforeDiscount < netAfterDiscount) {
+    totalBeforeDiscount = Math.round(netAfterDiscount + discount);
+  }
 
   // 4. الشروط والاحتياطات الخاصة بكل تحليل
   const precautions = buildTestPrecautions(
     [...(params.testsDetails || []), ...(params.extraTestsDetails || [])],
-    params.fastingHours || 0
+    params.fastingHours || 0,
+    params.isHomeVisit
   );
 
   return `🔬 *${labTitle}*
 *أ.د. رامي مختار — استشاريو الباثولوجيا الإكلينيكية (طب قصر العيني)*
 ━━━━━━━━━━━━━━━━━━━━
 أهلاً بحضرتك أ/ *${params.patientName.trim()}* 🌸
-تم تأكيد حجز موعد تحاليلكم الطبية بنجاح ✅
+${introLine}
 
-📋 *بيانات الموعد:*
+${detailsHeading}
 • رقم الملف: *#${params.labNumber}*${params.barcode ? ` | باركود: *${params.barcode}*` : ''}
 • الموعد: *${params.date}* — الساعة *${params.time}*
-${params.phone ? `• تليفون المريض: *${params.phone}*\n` : ''}
-${locBlock}
+${params.phone ? `• تليفون المريض: *${params.phone}*\n` : ''}${locBlock}
 
-🧪 *الفحوصات المطلوبة:*
+🧪 *التحاليل المطلوبة (الاختصارات):*
 ${testsBlock.trimEnd()}
 
 💰 *البيان المالي:*
-• القيمة قبل الخصم: *${beforeDiscount} ج.م*
-${discount > 0 ? `• نسبة الخصم: *${discountPercent}%*${params.discountLabel ? ` (${params.discountLabel})` : ''}\n` : ''}${discount > 0 ? `• قيمة الخصم: *- ${discount} ج.م*\n` : ''}${visitFee > 0 ? `• رسوم الزيارة المنزلية: *+ ${visitFee} ج.م*\n` : ''}• *الصافي المطلوب:* *${net} ج.م*
-• المبلغ المسدد: *${paid} ج.م*
-• حالة السداد: ${remainingText}
-• طريقة الدفع: ${params.paymentMethod}
+• المبلغ الكلي: *${totalBeforeDiscount} ج.م*
+• المبلغ بعد الخصم: *${netAfterDiscount} ج.م*
 
 ⚠️ *الشروط والاحتياطات الخاصة بتحاليلك:*
+${visitSpecificNote}
 ${precautions.map(tip => `• ${tip}`).join('\n')}
 • *تنبيه المواعيد والحضور:* عدم الحضور فى الموعد المحدد دون تأجيل مسبق سيتم إلغاء الحجز بعد ٢٤ ساعه من تاريخه.
 
-📞 *أرقام التواصل والاستفسار أو تعديل الموعد:* 01100874444 / 01100046841
+📞 *أرقام التواصل والاستفسار أو تعديل الموعد:* ${contactPhone || '01100874444 / 01100046841'}
 نسأل الله لكم دوام الصحة والعافية 🌸`;
 }
 

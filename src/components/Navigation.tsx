@@ -181,7 +181,7 @@ export const Navigation: React.FC = () => {
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                 }`}
               >
-                <Icon className={`w-4 h-4 ${item.id === 'cloud_sync' ? 'text-emerald-600 animate-pulse' : isActive ? 'text-rose-200' : 'text-slate-500'}`} />
+                <Icon className={`w-4 h-4 ${item.id === 'cloud_sync' ? 'text-emerald-600' : isActive ? 'text-rose-200' : 'text-slate-500'}`} />
                 <span>{item.labelAr}</span>
 
                 {item.badge !== undefined && (

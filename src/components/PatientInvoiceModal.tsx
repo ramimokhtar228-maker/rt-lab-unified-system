@@ -25,6 +25,7 @@ import { formatWhatsAppMessage, openWhatsApp } from '../utils/whatsapp';
 import { useApp } from '../context/AppContext';
 import { ClientEditModal } from './ClientEditModal';
 import { LabInfoEditModal } from './LabInfoEditModal';
+import { LAB_CATALOG } from '../data/labCatalog';
 
 interface PatientInvoiceModalProps {
   isOpen: boolean;
@@ -42,6 +43,7 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [isClientEditOpen, setIsClientEditOpen] = useState(false);
   const [isLabEditOpen, setIsLabEditOpen] = useState(false);
+  const [printNotice, setPrintNotice] = useState<string | null>(null);
   const invoiceContainerRef = useRef<HTMLDivElement>(null);
 
   const { 
@@ -99,16 +101,12 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
         price: t.price || 150
       }))
     : report.profiles.map((prof, idx) => {
-        let price = 150;
-        if (prof.profileCode === 'CBC') price = 180;
-        else if (prof.profileCode === 'LFT') price = 250;
-        else if (prof.profileCode === 'KFT') price = 200;
-        else if (prof.profileCode === 'LIPID') price = 220;
-        else if (prof.profileCode === 'GLYCEMIC') price = 120;
-        else if (prof.profileCode === 'THYROID') price = 300;
-        else if (prof.profileCode === 'COAG') price = 150;
-        else if (prof.parameters.length > 5) price = 200;
-        else price = Math.max(80, prof.parameters.length * 40);
+        const catMatch = LAB_CATALOG.find(c => c.code.toUpperCase() === (prof.profileCode || '').toUpperCase());
+        let price = catMatch?.profilePrice || 200;
+        if (!catMatch?.profilePrice) {
+          if (prof.parameters.length > 5) price = 220;
+          else price = Math.max(100, prof.parameters.length * 40);
+        }
 
         return {
           id: prof.id || `item-${idx}`,
@@ -125,7 +123,7 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
   const testsSubtotal = linkedInvoice?.testsSubtotal 
     || report.packageApplied?.packagePrice 
     || (p as any).testsSubtotal 
-    || (p.totalCost ? Math.max(0, p.totalCost - visitFee) : items.reduce((sum, item) => sum + item.price, 0));
+    || (p.totalCost ? Math.max(0, p.totalCost + (p.discountApplied || 0) - visitFee) : items.reduce((sum, item) => sum + item.price, 0));
   const subtotal = testsSubtotal + visitFee;
 
   const [activePercent, setActivePercent] = useState<number | null>(
@@ -236,7 +234,8 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
   const handlePrintInvoice = () => {
     const printWindow = window.open('', '_blank');
     if (!printWindow) {
-      alert('يرجى السماح بالنوافذ المنبثقة لطباعة الفاتورة.');
+      setPrintNotice('يرجى السماح بالنوافذ المنبثقة في المتصفح لطباعة الفاتورة، أو استخدام زر تحميل PDF.');
+      setTimeout(() => setPrintNotice(null), 5000);
       return;
     }
 
@@ -396,6 +395,12 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
             <span style="color: #64748b;">الهاتف:</span>
             <span style="font-family: monospace; margin-left: 4px;">${p.phone || '—'}</span>
           </div>
+          ${(p.visitSpecialist || p.branchRepresentative || linkedInvoice?.visitSpecialist || linkedInvoice?.branchRepresentative) ? `
+          <div style="grid-column: span 3; border-top: 1px dashed #e2e8f0; padding-top: 6px; margin-top: 2px;">
+            <span style="color: #64748b;">${(p.bookingType === 'home_visit' || p.isHomeVisit) ? 'مندوب الزيارة المنزلية:' : 'مندوب استقبال الفرع:'}</span>
+            <strong style="margin-right: 4px; color: #0f172a;">${(p.bookingType === 'home_visit' || p.isHomeVisit) ? (p.visitSpecialist || linkedInvoice?.visitSpecialist) : (p.branchRepresentative || linkedInvoice?.branchRepresentative)}</strong>
+            ${p.branchName ? `<span style="color: #64748b; margin-right: 10px;">| الفرع: <strong>${p.branchName}</strong></span>` : ''}
+          </div>` : ''}
         </div>
       </div>
 
@@ -678,6 +683,12 @@ ${discount > 0 ? `- الخصم: ${discount} ج.م\n` : ''}- الصافي الم�
           </div>
         </div>
 
+        {printNotice && (
+          <div className="bg-amber-50 border-b border-amber-300 px-6 py-2 text-xs font-bold text-amber-900">
+            {printNotice}
+          </div>
+        )}
+
                 {/* Interactive Discount Bar in Invoice Dialog (User Requested) */}
         <div className="bg-slate-800/95 border-b border-slate-700/80 px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs text-white">
           <div className="flex items-center gap-1.5 flex-wrap">
@@ -814,6 +825,26 @@ ${discount > 0 ? `- الخصم: ${discount} ج.م\n` : ''}- الصافي الم�
                     <span className="text-slate-500">الهاتف: </span>
                     <span className="font-mono">{p.phone || '—'}</span>
                   </div>
+                  {(p.visitSpecialist || p.branchRepresentative || linkedInvoice?.visitSpecialist || linkedInvoice?.branchRepresentative) && (
+                    <div className="sm:col-span-3 pt-2 border-t border-slate-200/70 flex flex-wrap gap-4">
+                      <span>
+                        <span className="text-slate-500">
+                          {p.bookingType === 'home_visit' || p.isHomeVisit ? 'مندوب الزيارة المنزلية: ' : 'مندوب استقبال الفرع: '}
+                        </span>
+                        <strong className="text-slate-900">
+                          {p.bookingType === 'home_visit' || p.isHomeVisit
+                            ? (p.visitSpecialist || linkedInvoice?.visitSpecialist)
+                            : (p.branchRepresentative || linkedInvoice?.branchRepresentative)}
+                        </strong>
+                      </span>
+                      {p.branchName && (
+                        <span>
+                          <span className="text-slate-500">الفرع: </span>
+                          <strong className="text-slate-800">{p.branchName}</strong>
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
 

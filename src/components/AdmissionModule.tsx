@@ -1,38 +1,34 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useApp } from '../context/AppContext';
 import { getNextLabIdentity } from '../utils/labNumbering';
 import { calculateTestsOnlyPaidAmount, pointsForAmount } from '../utils/loyaltyEngine';
 import {
   UserPlus,
-  Search,
   Plus,
   Trash2,
   Check,
   CreditCard,
   Gift,
   Printer,
-  Barcode,
   Sparkles,
   Phone,
   User,
-  Calendar,
   Clock,
-  DollarSign,
   AlertCircle,
   CheckCircle2,
   Package,
   Layers,
   FlaskConical,
   MessageCircle,
-  ChevronDown,
-  ChevronUp,
+  Building2,
+  Home,
+  UserCheck,
   FileText
 } from 'lucide-react';
-import { Patient, InvoiceTestItem, PaymentMethod, ComprehensivePackage, LabReport } from '../types';
+import { Patient, InvoiceTestItem, PaymentMethod, LabReport } from '../types';
 import { LAB_CATALOG } from '../data/labCatalog';
 import { INITIAL_INDIVIDUAL_TESTS } from '../data/individualTestsData';
 import { SmartTestSearch } from './SmartTestSearch';
-import { formatBookingConfirmationWhatsAppMessage, openWhatsApp } from '../utils/whatsapp';
 import { WhatsAppBookingModal } from './WhatsAppBookingModal';
 
 interface AdmissionModuleProps {
@@ -40,6 +36,20 @@ interface AdmissionModuleProps {
   isModal?: boolean;
   onOpenInvoice?: (report: LabReport) => void;
 }
+
+const DEFAULT_CBC_PROFILE_ITEM: InvoiceTestItem = {
+  id: 'prof-CBC',
+  code: 'CBC',
+  nameAr: 'صورة الدم الكاملة بالكمبيوتر (CBC 5-Diff)',
+  nameEn: 'Complete Blood Count (CBC)',
+  price: 180,
+  category: 'Hematology',
+  cost: 30,
+  sampleType: 'EDTA Whole Blood',
+  unit: 'Multi-parameter',
+  itemKind: 'profile',
+  textReference: 'Hb: Male 13.0-17.5 g/dL, Female 12.0-15.5 | WBC: 4.0-11.0 10^3/uL'
+};
 
 export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isModal = false, onOpenInvoice }) => {
   const {
@@ -49,16 +59,16 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
     redeemLoyaltyPoints,
     getLoyaltyByPhone,
     loyaltyConfig,
-    calculateLoyaltyTier,
     currentUser,
     reports,
     setActiveTab,
     setSelectedReportId,
-    setIsPatientFormOpen,
     packages,
     testCatalog,
     diagnosticProfiles,
-    forceSyncCatalog
+    forceSyncCatalog,
+    facilities,
+    staffMembers
   } = useApp();
 
   // Use local date (Egypt / regional timezone) instead of UTC toISOString to avoid day shift
@@ -105,32 +115,50 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
   const [appointmentTime, setAppointmentTime] = useState<string>('09:00');
   const [deliveryNotes, setDeliveryNotes] = useState<string>('');
 
-  // Selected Tests & Packages
-  const [selectedTests, setSelectedTests] = useState<InvoiceTestItem[]>([
-    INITIAL_INDIVIDUAL_TESTS.find(t => t.code === 'CBC') || {
-      id: 't-cbc',
-      code: 'CBC',
-      nameAr: 'صورة الدم الكاملة (CBC 5-Diff)',
-      nameEn: 'Complete Blood Count',
-      price: 180,
-      category: 'Hematology',
-      cost: 30,
-      sampleType: 'EDTA Whole Blood',
-      unit: 'Multi-parameter',
-      textReference: 'Hb: Male 13.0-17.5 g/dL, Female 12.0-15.5 | WBC: 4.0-11.0 10^3/uL'
-    }
-  ]);
+  // Staff & Branch Lists
+  const activeBranches = useMemo(() => (facilities || []).filter(f => f.isActive !== false), [facilities]);
+  const homeVisitTeam = useMemo(
+    () => (staffMembers || []).filter(s => s.isActive && (s.role === 'phlebotomist' || s.role === 'chemist')),
+    [staffMembers]
+  );
+  const branchReceptionTeam = useMemo(
+    () => (staffMembers || []).filter(s => s.isActive && (s.role === 'receptionist' || s.role === 'admin' || s.role === 'accountant')),
+    [staffMembers]
+  );
+
+  // Branch & Representatives State
+  const [selectedBranchId, setSelectedBranchId] = useState<string>(facilities?.[0]?.id || 'branch-behteem');
+  const [visitSpecialist, setVisitSpecialist] = useState<string>(
+    homeVisitTeam[0]?.name || 'أ/ يوسف طارق المنشاوي'
+  );
+  const [branchRepresentative, setBranchRepresentative] = useState<string>(
+    branchReceptionTeam[0]?.name || currentUser?.nameAr || 'أ/ هدى السيد رضوان'
+  );
+
+  const selectedBranch = useMemo(
+    () => activeBranches.find(b => b.id === selectedBranchId) || activeBranches[0],
+    [activeBranches, selectedBranchId]
+  );
+
+  // Selected Tests & Packages (multi-profile supported)
+  const [selectedTests, setSelectedTests] = useState<InvoiceTestItem[]>([DEFAULT_CBC_PROFILE_ITEM]);
   const [selectedPackageId, setSelectedPackageId] = useState<string>('');
+  const [profileQuickFilter, setProfileQuickFilter] = useState<string>('');
+  const [showProfilesGrid, setShowProfilesGrid] = useState<boolean>(true);
+  const [catalogSyncFeedback, setCatalogSyncFeedback] = useState<string | null>(null);
 
   // Payment State
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cash');
   const [paidAmount, setPaidAmount] = useState<number>(0);
   const [discountPercent, setDiscountPercent] = useState<number>(0);
+  const [flatDiscount, setFlatDiscount] = useState<number>(0);
   const [redeemPoints, setRedeemPoints] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [createdLabNum, setCreatedLabNum] = useState<string>('');
   const [isWhatsAppModalOpen, setIsWhatsAppModalOpen] = useState(false);
+
+  const autoLoyaltyAppliedForPhone = useRef<string>('');
 
   // Loyalty check by phone
   const loyaltyProfile = useMemo(() => {
@@ -143,16 +171,48 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
     return packages.find(p => p.id === selectedPackageId) || null;
   }, [selectedPackageId, packages]);
 
-  // Auto apply loyalty discount if profile found (and no package)
+  // Auto apply loyalty discount once per recognized loyalty phone (and no package)
   useEffect(() => {
-    if (loyaltyProfile && discountPercent === 0 && !selectedPackage) {
+    const cleanPhone = phone.trim();
+    if (!cleanPhone) {
+      autoLoyaltyAppliedForPhone.current = '';
+      return;
+    }
+    if (loyaltyProfile && !selectedPackage && autoLoyaltyAppliedForPhone.current !== cleanPhone) {
       const tierConfig = loyaltyConfig?.tiers?.[loyaltyProfile.tier];
       const tierDiscount = tierConfig?.discountRate || 0;
-      if (tierDiscount > 0) {
+      autoLoyaltyAppliedForPhone.current = cleanPhone;
+      if (tierDiscount > 0 && discountPercent === 0) {
         setDiscountPercent(tierDiscount);
       }
     }
-  }, [loyaltyProfile, loyaltyConfig, discountPercent, selectedPackage]);
+  }, [phone, loyaltyProfile, loyaltyConfig, discountPercent, selectedPackage]);
+
+  // Available Profiles Catalog
+  const availableProfiles = useMemo(
+    () => (diagnosticProfiles && diagnosticProfiles.length > 0 ? diagnosticProfiles : LAB_CATALOG),
+    [diagnosticProfiles]
+  );
+
+  const isProfileTestItem = (t?: InvoiceTestItem | null) =>
+    Boolean(t && (t.itemKind === 'profile' || (t.id && String(t.id).startsWith('prof-'))));
+
+  const selectedProfileCodes = useMemo(
+    () =>
+      (selectedTests || [])
+        .filter(isProfileTestItem)
+        .map(t => String(t.code || '').toUpperCase())
+        .filter(Boolean),
+    [selectedTests]
+  );
+
+  const selectedIndividualCount = useMemo(
+    () => (selectedTests || []).filter(t => t && !isProfileTestItem(t)).length,
+    [selectedTests]
+  );
+
+  // Estimated independent A4 report pages: 1 page per profile + 1 shared page if standalone individual tests exist
+  const estimatedReportPages = selectedProfileCodes.length + (selectedIndividualCount > 0 ? 1 : 0);
 
   // Financial Calculations
   const getTestDetails = (code?: string) => {
@@ -175,26 +235,35 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
     return { packageItems: pkg, extraItems: extra };
   }, [selectedPackage, selectedTests]);
 
+  const extraTestsCost = useMemo(() => {
+    if (!selectedPackage) return 0;
+    return (extraItems || []).reduce((sum, t) => sum + (Number(t?.price) || 0), 0);
+  }, [selectedPackage, extraItems]);
+
   const testsSubtotal = useMemo(() => {
     if (selectedPackage) {
-      const packageCodes = new Set([
-        ...(selectedPackage.includedProfiles || []).map(c => String(c || '').toUpperCase()),
-        ...(selectedPackage.includedIndividualTestCodes || []).map(c => String(c || '').toUpperCase())
-      ]);
-
-      const extraTestsCost = (selectedTests || [])
-        .filter(t => t?.code && !packageCodes.has(String(t.code).toUpperCase()))
-        .reduce((sum, t) => sum + (Number(t?.price) || 0), 0);
-
       return (Number(selectedPackage.packagePrice) || 0) + extraTestsCost;
     }
-
     return (selectedTests || []).reduce((sum, t) => sum + (Number(t?.price) || 0), 0);
-  }, [selectedPackage, selectedTests]);
+  }, [selectedPackage, selectedTests, extraTestsCost]);
 
-  const effectiveVisitFee = bookingType === 'home_visit' ? homeVisitFee : 0;
+  const effectiveVisitFee = bookingType === 'home_visit' ? Math.max(0, Number(homeVisitFee) || 0) : 0;
   const grossSubtotal = testsSubtotal + effectiveVisitFee;
-  const percentageDiscountAmount = selectedPackage ? 0 : Math.round((testsSubtotal * discountPercent) / 100);
+
+  const grossTotalForDisplay = useMemo(() => {
+    if (selectedPackage && Number(selectedPackage.originalPrice) > Number(selectedPackage.packagePrice)) {
+      return Math.round(Number(selectedPackage.originalPrice) + extraTestsCost + effectiveVisitFee);
+    }
+    return Math.round(grossSubtotal);
+  }, [selectedPackage, extraTestsCost, effectiveVisitFee, grossSubtotal]);
+
+  const percentageDiscountAmount = selectedPackage
+    ? 0
+    : Math.round((testsSubtotal * Math.max(0, Math.min(100, Number(discountPercent) || 0))) / 100);
+
+  const flatDiscountAmount = selectedPackage
+    ? 0
+    : Math.min(Math.max(0, testsSubtotal - percentageDiscountAmount), Math.max(0, Number(flatDiscount) || 0));
 
   // Points redemption value
   const pointsRedeemValue = useMemo(() => {
@@ -203,7 +272,7 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
     return maxRedeemable100s * loyaltyConfig.egpPer100Points;
   }, [redeemPoints, loyaltyProfile, loyaltyConfig]);
 
-  const totalDiscount = percentageDiscountAmount + pointsRedeemValue;
+  const totalDiscount = percentageDiscountAmount + flatDiscountAmount + pointsRedeemValue;
   const netTotal = Math.max(0, grossSubtotal - totalDiscount);
 
   // Auto set paid amount to netTotal unless deferred payment is chosen
@@ -238,9 +307,11 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
       isHomeVisit: bookingType === 'home_visit',
       address: homeAddress,
       deliveryNotes,
-      branchName: 'الفرع الرئيسي - بهتيم',
-      branchAddress: labInfo?.mainAddress,
-      branchPhone: labInfo?.phone,
+      visitSpecialist: visitSpecialist.trim(),
+      branchRepresentative: branchRepresentative.trim(),
+      branchName: selectedBranch?.nameAr || 'الفرع الرئيسي - بهتيم',
+      branchAddress: selectedBranch?.address || labInfo?.mainAddress,
+      branchPhone: selectedBranch?.phones?.join(' / ') || labInfo?.phone,
       testsDetails: safeTests.map(t => ({
         nameAr: t.nameAr || t.nameEn || t.code || 'تحليل معملي',
         nameEn: t.nameEn || t.nameAr || t.code || 'Lab Test',
@@ -249,14 +320,17 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
       })),
       packageName: selectedPackage?.titleAr,
       packagePrice: selectedPackage?.packagePrice,
+      packageOriginalPrice: selectedPackage?.originalPrice,
       extraTestsDetails: selectedPackage ? safeExtras.map(t => ({
         nameAr: t.nameAr || t.nameEn || t.code || 'تحليل إضافي',
         nameEn: t.nameEn || t.nameAr || t.code || 'Extra Test',
         code: t.code || 'TEST',
         price: Number(t.price) || 0
       })) : undefined,
-      subtotal: testsSubtotal,
-      discountAmount: totalDiscount,
+      subtotal: grossSubtotal,
+      testsSubtotal,
+      grossTotal: grossTotalForDisplay,
+      discountAmount: totalDiscount + (selectedPackage && selectedPackage.originalPrice > selectedPackage.packagePrice ? selectedPackage.originalPrice - selectedPackage.packagePrice : 0),
       discountLabel,
       visitFee: effectiveVisitFee,
       netAmount: netTotal,
@@ -267,35 +341,39 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
     };
   }, [
     fullName, createdLabNum, nextLabNumber, nextBarcode, phone, appointmentDate, today,
-    appointmentTime, bookingType, homeAddress, deliveryNotes, labInfo, selectedTests,
-    selectedPackage, testsSubtotal, totalDiscount, discountPercent, loyaltyProfile,
+    appointmentTime, bookingType, homeAddress, deliveryNotes, visitSpecialist, branchRepresentative,
+    selectedBranch, labInfo, selectedTests, extraItems, selectedPackage, grossSubtotal,
+    testsSubtotal, grossTotalForDisplay, totalDiscount, discountPercent, loyaltyProfile,
     effectiveVisitFee, netTotal, paidAmount, remainingAmount, paymentMethod, fastingHours
   ]);
 
-  // Add/Remove Tests
-  const handleAddTest = (test: InvoiceTestItem) => {
-    if (!test || !test.code) return;
-    const testCode = String(test.code).toUpperCase();
-    if (!selectedTests.some(t => t?.code && String(t.code).toUpperCase() === testCode)) {
-      setSelectedTests(prev => [...prev, test]);
-    }
-  };
-
+  // Toggle Individual Test (keeps separate from profiles so CBC test & CBC profile don't collide)
   const handleToggleTest = (test: InvoiceTestItem) => {
     if (!test || !test.code) return;
     const testCode = String(test.code).toUpperCase();
-    if (selectedTests.some(t => t?.code && String(t.code).toUpperCase() === testCode)) {
-      setSelectedTests(prev => prev.filter(t => t?.code && String(t.code).toUpperCase() !== testCode));
+    const exists = selectedTests.some(
+      t => !isProfileTestItem(t) && t?.code && String(t.code).toUpperCase() === testCode
+    );
+    if (exists) {
+      setSelectedTests(prev =>
+        prev.filter(t => !(!isProfileTestItem(t) && t?.code && String(t.code).toUpperCase() === testCode))
+      );
     } else {
-      setSelectedTests(prev => [...prev, test]);
+      setSelectedTests(prev => [...prev, { ...test, itemKind: 'individual' }]);
     }
   };
 
+  // Toggle Multi-Select Profile (each selected profile generates its own independent A4 page)
   const handleToggleProfile = (profile: any) => {
     if (!profile || !profile.code) return;
     const profCode = String(profile.code).toUpperCase();
-    if (selectedTests.some(t => t?.code && String(t.code).toUpperCase() === profCode)) {
-      setSelectedTests(prev => prev.filter(t => t?.code && String(t.code).toUpperCase() !== profCode));
+    const exists = selectedTests.some(
+      t => isProfileTestItem(t) && t?.code && String(t.code).toUpperCase() === profCode
+    );
+    if (exists) {
+      setSelectedTests(prev =>
+        prev.filter(t => !(isProfileTestItem(t) && t?.code && String(t.code).toUpperCase() === profCode))
+      );
     } else {
       setSelectedTests(prev => [
         ...prev,
@@ -306,41 +384,60 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
           nameEn: profile.titleEn || profile.titleAr || profile.code,
           category: profile.category || 'General Diagnostic',
           price: Number(profile.profilePrice) || 250,
-          sampleType: profile.sampleType || 'Serum'
+          sampleType: profile.sampleType || 'Serum',
+          itemKind: 'profile'
         }
       ]);
     }
   };
 
-  const handleRemoveTest = (code: string) => {
+  const handleRemoveTest = (code: string, itemId?: string) => {
+    if (itemId) {
+      setSelectedTests(prev => prev.filter(t => t?.id !== itemId));
+      return;
+    }
     if (!code) return;
     const target = String(code).toUpperCase();
     setSelectedTests(prev => prev.filter(t => t?.code && String(t.code).toUpperCase() !== target));
   };
 
-  // Add / Switch Package
+  // Add / Switch Package while preserving any extra user-chosen profiles or individual tests
   const handleSelectPackage = (pkgId: string) => {
     if (selectedPackageId === pkgId) {
-      // Deselect
+      const currentPkg = (packages || []).find(p => p?.id === pkgId);
+      const pkgCodes = new Set([
+        ...((currentPkg?.includedProfiles || []).map(c => String(c || '').toUpperCase())),
+        ...((currentPkg?.includedIndividualTestCodes || []).map(c => String(c || '').toUpperCase()))
+      ]);
       setSelectedPackageId('');
-      setSelectedTests([]);
+      setSelectedTests(prev => prev.filter(t => t?.code && !pkgCodes.has(String(t.code).toUpperCase())));
       setDiscountPercent(0);
+      setFlatDiscount(0);
       return;
     }
 
     const pkg = (packages || []).find(p => p?.id === pkgId);
     if (!pkg) return;
 
+    const prevPkg = selectedPackageId ? (packages || []).find(p => p?.id === selectedPackageId) : null;
+    const prevPkgCodes = new Set([
+      ...((prevPkg?.includedProfiles || []).map(c => String(c || '').toUpperCase())),
+      ...((prevPkg?.includedIndividualTestCodes || []).map(c => String(c || '').toUpperCase()))
+    ]);
+
     setSelectedPackageId(pkg.id);
 
-    // Map all package profiles & individual tests safely
+    const newPkgCodes = new Set([
+      ...(pkg.includedProfiles || []).map(c => String(c || '').toUpperCase()),
+      ...(pkg.includedIndividualTestCodes || []).map(c => String(c || '').toUpperCase())
+    ]);
+
     const pkgTests: InvoiceTestItem[] = [];
 
     (pkg.includedProfiles || []).forEach(code => {
       if (!code) return;
       const targetCode = String(code).toUpperCase();
-      const foundProfile = (diagnosticProfiles || []).find(p => p?.code && String(p.code).toUpperCase() === targetCode)
-                        || LAB_CATALOG.find(p => p?.code && String(p.code).toUpperCase() === targetCode);
+      const foundProfile = availableProfiles.find(p => p?.code && String(p.code).toUpperCase() === targetCode);
       if (foundProfile) {
         pkgTests.push({
           id: `prof-${foundProfile.code}`,
@@ -349,7 +446,8 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
           nameEn: foundProfile.titleEn || foundProfile.titleAr || foundProfile.code,
           category: foundProfile.category || 'General Diagnostic',
           price: Number(foundProfile.profilePrice) || 250,
-          sampleType: foundProfile.sampleType || 'Serum'
+          sampleType: foundProfile.sampleType || 'Serum',
+          itemKind: 'profile'
         });
       }
     });
@@ -360,11 +458,18 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
       const found = INITIAL_INDIVIDUAL_TESTS.find(t => t?.code && String(t.code).toUpperCase() === targetCode)
                  || (testCatalog || []).find(t => t?.code && String(t.code).toUpperCase() === targetCode);
       if (found && !pkgTests.some(t => t?.code && String(t.code).toUpperCase() === targetCode)) {
-        pkgTests.push(found);
+        pkgTests.push({ ...found, itemKind: 'individual' });
       }
     });
 
-    setSelectedTests(pkgTests);
+    // Preserve extra user-selected items that were NOT part of the previous package or the new package
+    const keptExtras = (selectedTests || []).filter(t => {
+      if (!t?.code) return false;
+      const c = String(t.code).toUpperCase();
+      return !prevPkgCodes.has(c) && !newPkgCodes.has(c);
+    });
+
+    setSelectedTests([...pkgTests, ...keptExtras]);
   };
 
   // Submit Admission
@@ -420,6 +525,11 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
         clinicalHistory: clinicalHistory.trim() || undefined,
         fastingHours: Number(fastingHours) || 0,
         bookingType,
+        isHomeVisit: bookingType === 'home_visit',
+        branchId: selectedBranch?.id,
+        branchName: selectedBranch?.nameAr || 'الفرع الرئيسي - بهتيم',
+        visitSpecialist: bookingType === 'home_visit' ? visitSpecialist.trim() : undefined,
+        branchRepresentative: bookingType === 'branch' ? branchRepresentative.trim() : undefined,
         homeAddress: bookingType === 'home_visit' ? homeAddress.trim() : undefined,
         visitFee: effectiveVisitFee,
         appointmentDate: appointmentDate || today,
@@ -485,41 +595,6 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
     }
   };
 
-  const handleSendWhatsApp = () => {
-    const discountLabel = selectedPackage
-      ? `باقة: ${selectedPackage.titleAr}`
-      : (discountPercent > 0
-          ? `${discountPercent}%${loyaltyProfile ? ' (كرت ولاء)' : ''}`
-          : (totalDiscount > 0 ? 'خصم مطبق' : 'لا يوجد'));
-    const text = formatBookingConfirmationWhatsAppMessage({
-      patientName: fullName,
-      labNumber: createdLabNum || nextLabNumber,
-      barcode: nextBarcode,
-      phone: phone.trim(),
-      date: appointmentDate || today,
-      time: appointmentTime || '09:00',
-      isHomeVisit: bookingType === 'home_visit',
-      address: homeAddress,
-      deliveryNotes,
-      branchAddress: labInfo?.mainAddress,
-      testsDetails: (selectedTests || []).map(t => ({ nameAr: t?.nameAr || '', nameEn: t?.nameEn || '', code: t?.code || '', price: Number(t?.price) || 0 })),
-      packageName: selectedPackage?.titleAr,
-      packagePrice: selectedPackage?.packagePrice,
-      extraTestsDetails: selectedPackage ? (extraItems || []).map(t => ({ nameAr: t?.nameAr || '', nameEn: t?.nameEn || '', code: t?.code || '', price: Number(t?.price) || 0 })) : undefined,
-      subtotal: grossSubtotal,
-      discountAmount: totalDiscount,
-      discountLabel,
-      visitFee: effectiveVisitFee,
-      netAmount: netTotal,
-      paidAmount,
-      remainingAmount,
-      paymentMethod: paymentMethod === 'cash' ? 'نقدي' : paymentMethod === 'visa' ? 'فيزا' : paymentMethod === 'instapay' ? 'إنستا باي' : String(paymentMethod),
-      fastingHours: Number(fastingHours) || 0,
-      customLabInfo: labInfo
-    });
-    openWhatsApp(phone, text);
-  };
-
   if (isSubmitted) {
     return (
       <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl text-center space-y-6 max-w-2xl mx-auto my-4 animate-in zoom-in-95">
@@ -552,8 +627,19 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
             <strong className="font-mono text-slate-800 font-bold">{nextBarcode}</strong>
           </div>
           <div className="flex justify-between items-center border-b border-slate-200/60 pb-2">
-            <span className="text-slate-500">التحاليل المحجوزة:</span>
-            <strong className="text-slate-800">{selectedTests.length} فحص {selectedPackage ? `(باقة: ${selectedPackage.titleAr})` : ''}</strong>
+            <span className="text-slate-500">التحاليل والصفحات بالتقرير:</span>
+            <strong className="text-slate-800">
+              {selectedTests.length} فحص ({createdReportObj?.profiles?.length || estimatedReportPages} صفحة A4 مستقلة)
+              {selectedPackage ? ` — باقة: ${selectedPackage.titleAr}` : ''}
+            </strong>
+          </div>
+          <div className="flex justify-between items-center border-b border-slate-200/60 pb-2">
+            <span className="text-slate-500">
+              {bookingType === 'home_visit' ? 'مندوب الزيارة المنزلية:' : 'مندوب استقبال الفرع:'}
+            </span>
+            <strong className="text-slate-800">
+              {bookingType === 'home_visit' ? visitSpecialist : `${branchRepresentative} (${selectedBranch?.nameAr || 'الفرع الرئيسي'})`}
+            </strong>
           </div>
           <div className="flex justify-between items-center border-b border-slate-200/60 pb-2">
             <span className="text-slate-500">الحساب المالي:</span>
@@ -626,20 +712,13 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
               setPhone('');
               setClinicalHistory('');
               setSelectedPackageId('');
-              setSelectedTests([
-                INITIAL_INDIVIDUAL_TESTS.find(t => t.code === 'CBC') || {
-                  id: 't-cbc',
-                  code: 'CBC',
-                  nameAr: 'صورة الدم الكاملة (CBC 5-Diff)',
-                  nameEn: 'Complete Blood Count',
-                  price: 180,
-                  category: 'Hematology',
-                  cost: 30,
-                  sampleType: 'EDTA Whole Blood',
-                  unit: 'Multi-parameter',
-                  textReference: 'Normal'
-                }
-              ]);
+              setDiscountPercent(0);
+              setFlatDiscount(0);
+              setRedeemPoints(false);
+              setHomeAddress('');
+              setDeliveryNotes('');
+              autoLoyaltyAppliedForPhone.current = '';
+              setSelectedTests([DEFAULT_CBC_PROFILE_ITEM]);
               setCustomLabNumber('');
               setCustomBarcode('');
               setCreatedReportObj(null);
@@ -1074,35 +1153,149 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
               </div>
             )}
 
+            {/* Multi-Profile Direct Selector (Each profile prints on an independent A4 page) */}
+            <div className="bg-indigo-50/50 border border-indigo-200/80 rounded-2xl p-3.5 space-y-2.5">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <Layers className="w-4 h-4 text-indigo-700" />
+                  <span className="text-xs font-black text-indigo-950">
+                    اختيار بروفايلات التحاليل (يمكن اختيار أكثر من بروفايل — كل بروفايل في صفحة مستقلة):
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-indigo-700 text-white font-mono">
+                    {selectedProfileCodes.length} بروفايل ({estimatedReportPages} {estimatedReportPages === 1 ? 'صفحة' : 'صفحات'})
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setShowProfilesGrid(prev => !prev)}
+                    className="text-[11px] font-bold text-indigo-800 hover:text-indigo-950 px-2 py-0.5 rounded bg-white border border-indigo-200 cursor-pointer"
+                  >
+                    {showProfilesGrid ? 'إخفاء القائمة' : 'عرض البروفايلات'}
+                  </button>
+                </div>
+              </div>
+
+              {showProfilesGrid && (
+                <>
+                  <input
+                    type="text"
+                    value={profileQuickFilter}
+                    onChange={(e) => setProfileQuickFilter(e.target.value)}
+                    placeholder="تصفية سريعة للبروفايلات (مثال: CBC, LFT, KFT, LIPID, THYROID...)"
+                    className="w-full text-[11px] bg-white border border-indigo-200 rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                  />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 max-h-56 overflow-y-auto pr-0.5">
+                    {availableProfiles
+                      .filter(p => {
+                        const q = profileQuickFilter.trim().toLowerCase();
+                        if (!q) return true;
+                        return (
+                          (p.code || '').toLowerCase().includes(q) ||
+                          (p.titleEn || '').toLowerCase().includes(q) ||
+                          (p.titleAr || '').toLowerCase().includes(q)
+                        );
+                      })
+                      .map(profile => {
+                        const isChecked = selectedProfileCodes.includes(String(profile.code).toUpperCase());
+                        return (
+                          <button
+                            key={profile.code}
+                            type="button"
+                            onClick={() => handleToggleProfile(profile)}
+                            className={`p-2 rounded-xl border text-right transition-all cursor-pointer flex items-center justify-between gap-2 ${
+                              isChecked
+                                ? 'bg-indigo-900 text-white border-indigo-900 shadow-xs'
+                                : 'bg-white hover:bg-indigo-50 text-slate-800 border-slate-200'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2 min-w-0">
+                              <span
+                                className={`w-4 h-4 rounded flex items-center justify-center shrink-0 border ${
+                                  isChecked
+                                    ? 'bg-emerald-500 border-emerald-400 text-white'
+                                    : 'bg-slate-50 border-slate-300'
+                                }`}
+                              >
+                                {isChecked && <Check className="w-3 h-3" />}
+                              </span>
+                              <div className="min-w-0">
+                                <div className="flex items-center gap-1.5">
+                                  <span
+                                    className={`font-mono text-[10px] font-black px-1.5 py-0.2 rounded ${
+                                      isChecked ? 'bg-white/20 text-white' : 'bg-indigo-100 text-indigo-900'
+                                    }`}
+                                  >
+                                    {profile.code}
+                                  </span>
+                                  <span className="text-[11px] font-bold truncate">
+                                    {profile.titleAr || profile.titleEn}
+                                  </span>
+                                </div>
+                                <span
+                                  className={`text-[10px] block truncate ${
+                                    isChecked ? 'text-indigo-200' : 'text-slate-500'
+                                  }`}
+                                  dir="ltr"
+                                >
+                                  {profile.titleEn} · {(profile.parameters || []).length} params · صفحة مستقلة
+                                </span>
+                              </div>
+                            </div>
+                            <span
+                              className={`font-mono text-[11px] font-black shrink-0 ${
+                                isChecked ? 'text-emerald-300' : 'text-emerald-700'
+                              }`}
+                            >
+                              {Number(profile.profilePrice) || 250} ج.م
+                            </span>
+                          </button>
+                        );
+                      })}
+                  </div>
+                </>
+              )}
+            </div>
+
             {/* Smart Test Search & Explorer */}
             <div className="space-y-2 pt-1">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between flex-wrap gap-2">
                 <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
                   <Sparkles className="w-4 h-4 text-rose-600" />
-                  البحث الذكي المباشر عن التحاليل والباقات:
+                  البحث الذكي المباشر عن التحاليل المنفردة والبروفايلات والباقات:
                 </span>
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
                     onClick={() => {
                       const res = forceSyncCatalog();
-                      alert(`✅ تم تحديث ومزامنة الكتالوج (${res.testsCount} فحص طبي + ${res.packagesCount} باقة).`);
+                      setCatalogSyncFeedback(`تم تحديث ومزامنة الكتالوج (${res.testsCount} فحص + ${res.profilesCount} بروفايل + ${res.packagesCount} باقة).`);
+                      setTimeout(() => setCatalogSyncFeedback(null), 4500);
                     }}
-                    className="text-[11px] font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-2 py-0.5 rounded border border-emerald-200 flex items-center gap-1 transition-colors"
+                    className="text-[11px] font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-2 py-0.5 rounded border border-emerald-200 flex items-center gap-1 transition-colors cursor-pointer"
                     title="مزامنة فورية للكتالوج"
                   >
-                    <Sparkles className="w-3 h-3 text-emerald-600 animate-pulse" />
+                    <Sparkles className="w-3 h-3 text-emerald-600" />
                     <span>مزامنة الكتالوج ({testCatalog.length})</span>
                   </button>
                   <span className="text-[11px] text-slate-400">ابحث بالعربي أو الإنجليزي أو كود التحليل</span>
                 </div>
               </div>
 
+              {catalogSyncFeedback && (
+                <div className="p-2.5 bg-emerald-50 border border-emerald-300 text-emerald-900 rounded-xl text-[11px] font-bold flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>{catalogSyncFeedback}</span>
+                </div>
+              )}
+
               <SmartTestSearch
                 packages={packages}
-                profiles={diagnosticProfiles && diagnosticProfiles.length > 0 ? diagnosticProfiles : LAB_CATALOG}
+                profiles={availableProfiles}
                 individualTests={testCatalog && testCatalog.length > 0 ? (testCatalog as any) : INITIAL_INDIVIDUAL_TESTS}
-                selectedItemCodes={(selectedTests || []).map(t => t?.code || '').filter(Boolean)}
+                selectedItemCodes={(selectedTests || []).filter(t => !isProfileTestItem(t)).map(t => t?.code || '').filter(Boolean)}
+                selectedProfileCodes={selectedProfileCodes}
+                selectedPackageId={selectedPackageId}
                 onToggleTest={handleToggleTest}
                 onSelectPackage={(pkg) => handleSelectPackage(pkg.id)}
                 onToggleProfile={handleToggleProfile}
@@ -1213,7 +1406,7 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
 
                           return (
                             <div
-                              key={test.code}
+                              key={test.id || test.code}
                               className="p-2.5 rounded-xl bg-white border border-slate-200 text-xs flex items-center justify-between hover:border-slate-300 transition-colors"
                             >
                               <div className="flex-1 min-w-0 pr-1">
@@ -1221,6 +1414,11 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
                                   <span className="font-mono font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 text-[10px]">
                                     {test.code}
                                   </span>
+                                  {isProfileTestItem(test) && (
+                                    <span className="px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-900 font-bold text-[10px]">
+                                      بروفايل (صفحة مستقلة)
+                                    </span>
+                                  )}
                                   <span className="font-bold text-slate-900">{test.nameAr}</span>
                                   <span className="text-[10px] text-slate-500">({test.nameEn})</span>
                                   <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">
@@ -1246,7 +1444,7 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
                                 <span className="font-mono font-bold text-slate-900">{test.price} ج.م</span>
                                 <button
                                   type="button"
-                                  onClick={() => handleRemoveTest(test.code)}
+                                  onClick={() => handleRemoveTest(test.code, test.id)}
                                   className="text-slate-400 hover:text-red-600 p-1 cursor-pointer"
                                   title="حذف هذا التحليل"
                                 >
@@ -1261,27 +1459,37 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
                   )}
                 </div>
               ) : (
-                /* Pure individual tests list */
+                /* Pure profiles & individual tests list */
                 <div className="space-y-1.5 max-h-64 overflow-y-auto pr-1">
                   {selectedTests.map(test => {
                     const details = getTestDetails(test.code);
+                    const isProf = isProfileTestItem(test);
                     const normalDisplay = details?.textReference 
                       || (details?.minNormal !== undefined && details?.maxNormal !== undefined 
                           ? `${details.minNormal} - ${details.maxNormal} ${details.unit || ''}`.trim()
-                          : 'معتمد طبياً');
-                    const unitDisplay = details?.unit || test.unit || 'Score / Units';
+                          : (isProf ? 'جداول البروفايل الكاملة (صفحة مستقلة)' : 'معتمد طبياً'));
+                    const unitDisplay = details?.unit || test.unit || 'Multi-parameter';
                     const sampleDisplay = details?.sampleType || test.sampleType || 'Serum';
 
                     return (
                       <div
-                        key={test.code}
-                        className="p-2.5 rounded-xl border border-slate-200 bg-white text-xs flex items-center justify-between hover:border-slate-300 transition-colors shadow-2xs"
+                        key={test.id || test.code}
+                        className={`p-2.5 rounded-xl border text-xs flex items-center justify-between transition-colors shadow-2xs ${
+                          isProf ? 'border-indigo-200 bg-indigo-50/30 hover:border-indigo-300' : 'border-slate-200 bg-white hover:border-slate-300'
+                        }`}
                       >
                         <div className="flex-1 min-w-0 pr-1">
                           <div className="flex items-center gap-1.5 flex-wrap">
-                            <span className="font-mono font-bold px-1.5 py-0.5 rounded bg-rose-50 text-rose-900 border border-rose-200 text-[10px]">
+                            <span className={`font-mono font-bold px-1.5 py-0.5 rounded border text-[10px] ${
+                              isProf ? 'bg-indigo-100 text-indigo-900 border-indigo-200' : 'bg-rose-50 text-rose-900 border-rose-200'
+                            }`}>
                               {test.code}
                             </span>
+                            {isProf && (
+                              <span className="px-1.5 py-0.5 rounded bg-indigo-700 text-white font-bold text-[10px]">
+                                صفحة A4 مستقلة
+                              </span>
+                            )}
                             <span className="font-bold text-slate-900">{test.nameAr}</span>
                             <span className="text-[10px] text-slate-500">({test.nameEn})</span>
                             <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">
@@ -1307,7 +1515,7 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
                           <span className="font-mono font-bold text-slate-900">{test.price} ج.م</span>
                           <button
                             type="button"
-                            onClick={() => handleRemoveTest(test.code)}
+                            onClick={() => handleRemoveTest(test.code, test.id)}
                             className="text-slate-400 hover:text-red-600 transition-colors p-1 cursor-pointer"
                             title="حذف هذا التحليل"
                           >
@@ -1332,30 +1540,32 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
             </div>
 
             {/* Booking Type: Branch or Home Visit */}
-            <div className="space-y-2">
-              <label className="block text-xs font-bold text-slate-700">نوع الحجز والمقر:</label>
+            <div className="space-y-2.5">
+              <label className="block text-xs font-bold text-slate-700">نوع الحجز ومقر السحب والمندوب المسؤول:</label>
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
                   onClick={() => setBookingType('branch')}
-                  className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+                  className={`py-2.5 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                     bookingType === 'branch'
                       ? 'bg-rose-900 text-white border-rose-900 shadow-sm'
                       : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                   }`}
                 >
-                  فحص بالمعمل
+                  <Building2 className="w-4 h-4" />
+                  <span>حضور لفرع المعمل</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setBookingType('home_visit')}
-                  className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+                  className={`py-2.5 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                     bookingType === 'home_visit'
                       ? 'bg-rose-900 text-white border-rose-900 shadow-sm'
                       : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                   }`}
                 >
-                  زيارة منزلية (+ رسوم)
+                  <Home className="w-4 h-4" />
+                  <span>زيارة منزلية (+{homeVisitFee} ج.م)</span>
                 </button>
               </div>
 
@@ -1372,10 +1582,87 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
                 </div>
               </div>
 
-              {bookingType === 'home_visit' && (
+              {bookingType === 'branch' ? (
+                <div className="p-3 bg-emerald-50/70 border border-emerald-200 rounded-xl space-y-2.5 text-xs">
+                  <div>
+                    <label className="font-bold text-emerald-950 block mb-1 flex items-center gap-1.5">
+                      <Building2 className="w-3.5 h-3.5 text-emerald-700" />
+                      <span>الفرع المختار للحضور:</span>
+                    </label>
+                    <select
+                      value={selectedBranch?.id || ''}
+                      onChange={(e) => setSelectedBranchId(e.target.value)}
+                      className="w-full bg-white border border-emerald-200 rounded-lg p-2 text-xs font-bold text-slate-800"
+                    >
+                      {activeBranches.map(b => (
+                        <option key={b.id} value={b.id}>{b.nameAr}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-emerald-950 block mb-1 flex items-center gap-1.5">
+                      <UserCheck className="w-3.5 h-3.5 text-emerald-700" />
+                      <span>مندوب استقبال الفرع (المسؤول عن الحضور):</span>
+                    </label>
+                    <div className="grid grid-cols-1 gap-1.5">
+                      <select
+                        value={branchReceptionTeam.some(s => s.name === branchRepresentative) ? branchRepresentative : '__custom__'}
+                        onChange={(e) => {
+                          if (e.target.value !== '__custom__') {
+                            setBranchRepresentative(e.target.value);
+                          }
+                        }}
+                        className="w-full bg-white border border-emerald-200 rounded-lg p-2 text-xs font-bold text-slate-800"
+                      >
+                        {branchReceptionTeam.map(m => (
+                          <option key={m.id} value={m.name}>{m.name} — {m.title}</option>
+                        ))}
+                        <option value="__custom__">إدخال اسم مندوب آخر يدوياً...</option>
+                      </select>
+                      <input
+                        type="text"
+                        value={branchRepresentative}
+                        onChange={(e) => setBranchRepresentative(e.target.value)}
+                        placeholder="اسم مندوب استقبال الفرع"
+                        className="w-full bg-white border border-emerald-200 rounded-lg p-1.5 text-xs font-semibold text-slate-800"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ) : (
                 <div className="p-3 bg-rose-50/70 border border-rose-200 rounded-xl space-y-2 text-xs">
                   <div>
-                    <label className="font-bold text-slate-700 block mb-1">عنوان الزيارة المنزلية:</label>
+                    <label className="font-bold text-rose-950 block mb-1 flex items-center gap-1.5">
+                      <UserCheck className="w-3.5 h-3.5 text-rose-700" />
+                      <span>مندوب الزيارة المنزلية (أخصائي السحب):</span>
+                    </label>
+                    <div className="grid grid-cols-1 gap-1.5">
+                      <select
+                        value={homeVisitTeam.some(s => s.name === visitSpecialist) ? visitSpecialist : '__custom__'}
+                        onChange={(e) => {
+                          if (e.target.value !== '__custom__') {
+                            setVisitSpecialist(e.target.value);
+                          }
+                        }}
+                        className="w-full bg-white border border-rose-200 rounded-lg p-2 text-xs font-bold text-slate-800"
+                      >
+                        {homeVisitTeam.map(m => (
+                          <option key={m.id} value={m.name}>{m.name} — {m.title}</option>
+                        ))}
+                        <option value="__custom__">إدخال اسم مندوب آخر يدوياً...</option>
+                      </select>
+                      <input
+                        type="text"
+                        value={visitSpecialist}
+                        onChange={(e) => setVisitSpecialist(e.target.value)}
+                        placeholder="اسم مندوب الزيارة المنزلية"
+                        className="w-full bg-white border border-rose-200 rounded-lg p-1.5 text-xs font-semibold text-slate-800"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="font-bold text-slate-700 block mb-1">عنوان الزيارة المنزلية: <span className="text-rose-600">*</span></label>
                     <input type="text" value={homeAddress} onChange={(e) => setHomeAddress(e.target.value)}
                       placeholder="رقم العقار، الشارع، المنطقة، الدور، الشقة"
                       className="w-full bg-white border border-rose-200 rounded-lg p-2 text-xs" />
@@ -1387,38 +1674,57 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
                       className="w-full bg-white border border-rose-200 rounded-lg p-2 text-xs" />
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-slate-600">رسوم الزيارة المنزلية:</span>
-                    <input type="number" value={homeVisitFee} onChange={(e) => setHomeVisitFee(Number(e.target.value))}
-                      className="w-20 font-mono font-bold bg-white border border-rose-200 rounded-lg p-1 text-center" />
+                    <span className="text-slate-600 font-bold">رسوم الزيارة المنزلية:</span>
+                    <input type="number" min={0} value={homeVisitFee} onChange={(e) => setHomeVisitFee(Number(e.target.value) || 0)}
+                      className="w-24 font-mono font-bold bg-white border border-rose-200 rounded-lg p-1 text-center" />
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Loyalty Card Discount Section */}
+            {/* Loyalty Card & Discounts Section */}
             <div className="p-4 bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent border border-amber-300 rounded-2xl space-y-3">
               <div className="flex items-center justify-between">
                 <span className="font-bold text-xs text-amber-950 flex items-center gap-1.5">
                   <Gift className="w-4 h-4 text-amber-700" />
-                  <span>كارت ونقاط الولاء (RT Club)</span>
+                  <span>الخصومات وكارت الولاء (RT Club)</span>
                 </span>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 font-mono">
                   {loyaltyProfile ? `كارت ${loyaltyProfile.tier}` : 'عضو جديد'}
                 </span>
               </div>
 
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-slate-600">نسبة الخصم المطبقة:</span>
-                <div className="flex items-center gap-1">
-                  <input
-                    type="number"
-                    min={0}
-                    max={100}
-                    value={discountPercent}
-                    onChange={(e) => setDiscountPercent(Number(e.target.value))}
-                    className="w-16 font-mono font-bold bg-white border border-slate-200 rounded-lg p-1 text-center text-xs"
-                  />
-                  <span className="font-bold text-slate-700">%</span>
+              <div className="grid grid-cols-2 gap-2.5 text-xs">
+                <div>
+                  <label className="text-slate-600 block mb-1 font-bold">نسبة الخصم (%):</label>
+                  <div className="flex items-center gap-1">
+                    <input
+                      type="number"
+                      min={0}
+                      max={100}
+                      disabled={!!selectedPackage}
+                      value={discountPercent}
+                      onChange={(e) => setDiscountPercent(Math.max(0, Math.min(100, Number(e.target.value) || 0)))}
+                      className="w-full font-mono font-bold bg-white border border-slate-200 rounded-lg p-1.5 text-center text-xs disabled:opacity-50"
+                    />
+                    <span className="font-bold text-slate-700">%</span>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-slate-600 block mb-1 font-bold">خصم نقدي إضافي (ج.م):</label>
+                  <div className="flex items-center gap-1">
+                    <input
+                      type="number"
+                      min={0}
+                      disabled={!!selectedPackage}
+                      value={flatDiscount || ''}
+                      placeholder="0"
+                      onChange={(e) => setFlatDiscount(Math.max(0, Number(e.target.value) || 0))}
+                      className="w-full font-mono font-bold bg-white border border-slate-200 rounded-lg p-1.5 text-center text-xs disabled:opacity-50"
+                    />
+                    <span className="font-bold text-slate-700 text-[10px]">ج.م</span>
+                  </div>
                 </div>
               </div>
 
@@ -1454,6 +1760,11 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
                 </div>
               )}
 
+              <div className="flex justify-between border-t border-slate-200/70 pt-1.5">
+                <span className="text-slate-700 font-bold">المبلغ الكلي:</span>
+                <span className="font-mono font-black text-slate-900">{grossTotalForDisplay} ج.م</span>
+              </div>
+
               {totalDiscount > 0 && (
                 <div className="flex justify-between text-rose-700">
                   <span>إجمالي الخصم الممنوح:</span>
@@ -1462,7 +1773,7 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
               )}
 
               <div className="pt-2 border-t border-slate-200 flex justify-between items-baseline text-sm">
-                <span className="font-black text-slate-900">الصافي المطلوب سداده:</span>
+                <span className="font-black text-slate-900">المبلغ بعد الخصم (الصافي):</span>
                 <span className="font-mono font-black text-emerald-800 text-lg">{netTotal} ج.م</span>
               </div>
             </div>

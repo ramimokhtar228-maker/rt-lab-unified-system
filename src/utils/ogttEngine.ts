@@ -461,6 +461,7 @@ export const OGTT_CATALOG_TEMPLATE: CatalogProfileTemplate = {
   titleAr: "منحنى السكر بالدم بعد 75 جم جلوكوز (صائم 8 ساعات وكل 30 دقيقة حتى 3 ساعات)",
   category: "Diabetes & Endocrinology",
   sampleType: "Fluoride Oxalate Plasma (Venous)",
+  profilePrice: 320,
   defaultInterpretation: "Standard 3-Hour Oral Glucose Tolerance Test (OGTT) using 75g anhydrous oral glucose load following an 8-hour overnight fasting period. Interpreted strictly in accordance with American Diabetes Association (ADA) and WHO guidelines.",
   parameters: [
     {

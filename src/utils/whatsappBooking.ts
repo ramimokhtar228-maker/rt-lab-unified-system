@@ -34,7 +34,8 @@ export function generateBookingWhatsAppMessage(params: {
   labNameAr?: string;
   visitFee?: number;
   visitSpecialist?: string;
-  tests: { nameAr: string; price: number }[];
+  branchRepresentative?: string;
+  tests: { nameAr: string; nameEn?: string; code?: string; price?: number }[];
   subtotal: number;
   testsSubtotal?: number;
   discountAmount: number;
@@ -42,20 +43,26 @@ export function generateBookingWhatsAppMessage(params: {
   netAmount: number;
   paymentMethod: string;
 }): string {
-  const testsList = params.tests.map((t, idx) => `  ${idx + 1}. ${t.nameAr} (${t.price} ج.م)`).join('\n');
-  
-  const loc = params.isHomeVisit
-    ? `🏠 *نوع الحجز: زيارة منزلية خاصة*\n📍 *العنوان:* ${params.address || 'العنوان بالتفصيل مسجل لدى المعمل'}${params.visitSpecialist ? `\n🩺 *المسؤول عن الزيارة:* ${params.visitSpecialist}` : ''}\n📝 *ملاحظات التوصيل:* ${params.deliveryNotes || 'لا توجد ملاحظات خاصة'}`
-    : `📍 *المقر:* ${params.branchName || 'الفرع الرئيسي لمعامل RT'}\n🏢 *العنوان:* ${params.branchAddress || BRANCH_MAIN_ADDRESS}\n📞 *هاتف الفرع:* ${params.branchPhone || LAB_PHONE}`;
+  const testsList = params.tests
+    .map(t => `• ${(t.code && t.code.toUpperCase() !== 'TEST' ? t.code.toUpperCase() : (t.nameEn || t.nameAr)).trim()}`)
+    .join('\n');
 
-  const visitFeeText = (params.visitFee && params.visitFee > 0)
-    ? `• *رسوم الزيارة المنزلية المستقلة:* +${params.visitFee} ج.م (ثابتة وغير خاضعة للخصم)\n`
-    : '';
+  const visitFee = params.isHomeVisit ? Math.max(0, Number(params.visitFee) || 0) : 0;
+  const totalBeforeDiscount = Math.round((params.testsSubtotal ?? params.subtotal ?? 0) + visitFee);
+  const netAfterDiscount = Math.max(0, Math.round(params.netAmount));
+
+  const intro = params.isHomeVisit
+    ? 'تم تأكيد حجز موعد *الزيارة المنزلية لسحب العينات الطبية* بنجاح ✅'
+    : 'تم تأكيد حجز موعدكم *للحضور لفرع المعمل وإجراء التحاليل الطبية* بنجاح ✅';
+
+  const loc = params.isHomeVisit
+    ? `🏠 *نوع الحجز:* زيارة منزلية خاصة\n📍 *العنوان:* ${params.address || 'مسجل لدى طاقم الزيارات'}${params.deliveryNotes ? ` (${params.deliveryNotes})` : ''}\n🩺 *مندوب الزيارة المنزلية:* *${params.visitSpecialist || 'أخصائي السحب المنزلي المعتمد بالمعمل'}*`
+    : `🏥 *نوع الحجز:* حضور للفرع\n📍 *الفرع:* ${params.branchName || 'الفرع الرئيسي - بهتيم'}\n🏢 *العنوان:* ${params.branchAddress || BRANCH_MAIN_ADDRESS}\n👤 *مندوب استقبال الفرع:* *${params.branchRepresentative || 'مسؤول الاستقبال وخدمة العملاء بالفرع'}*`;
 
   const labTitle = params.labNameAr || LAB_NAME_AR;
 
   return `*مرحباً بك في ${labTitle}* 🔬✨
-تم تأكيد حجز موعد التحاليل الطبية الخاص بكم بنجاح!
+${intro}
 
 📋 *بيانات الحجز:*
 • *رقم الحجز:* #${params.bookingNumber}
@@ -64,19 +71,16 @@ export function generateBookingWhatsAppMessage(params: {
 • *الساعة المحددة:* ${params.time}
 ${loc}
 
-🧪 *الفحوصات المطلوبة:*
+🧪 *التحاليل المطلوبة (الاختصارات):*
 ${testsList}
 
-💰 *تفاصيل التسعير والفوترة:*
-• *إجمالي التحاليل قبل الخصم:* ${params.testsSubtotal || params.subtotal} ج.م
-• *قيمة الخصم المطبق على التحاليل:* ${params.discountLabel} (-${params.discountAmount} ج.م)
-${visitFeeText}• *المبلغ الصافي المطلوب سداده:* *${params.netAmount} ج.م*
-• *طريقة الدفع:* ${params.paymentMethod}
+💰 *البيان المالي:*
+• *المبلغ الكلي:* *${totalBeforeDiscount} ج.م*
+• *المبلغ بعد الخصم:* *${netAfterDiscount} ج.م*
 
 ⚠️ *تعليمات هامة:* يرجى الصيام في حال طلبت التحاليل ذلك (يسمح بشرب الماء فقط).
 ⚠️ *تنبيه الحضور:* عدم الحضور فى الموعد المحدد دون تأجيل مسبق سيتم إلغاء الحجز بعد ٢٤ ساعه من تاريخه.
-🎁 *ملاحظة:* بعد سحب العينة سيتم تفعيل كارت الولاء RT بنسبة خصم دائمة ونقاط تراكمية على الفحوصات الطبية!
-📞 *أرقام التواصل أو تعديل الموعد:* 01100874444 / 01100046841
+📞 *أرقام التواصل أو تعديل الموعد:* ${params.branchPhone || '01100874444 / 01100046841'}
 
 نسعد دائماً بخدمتكم وتمنياتنا لكم بالصحة والعافية! ❤️`;
 }

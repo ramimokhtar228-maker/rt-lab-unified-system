@@ -7,6 +7,7 @@ interface TestCatalogModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAddProfile: (profile: TestProfile) => void;
+  onAddMultipleProfiles?: (profiles: TestProfile[]) => void;
   existingProfileCodes: string[];
   catalog?: CatalogProfileTemplate[];
   individualTests?: IndividualTest[];
@@ -19,6 +20,7 @@ export const TestCatalogModal: React.FC<TestCatalogModalProps> = ({
   isOpen,
   onClose,
   onAddProfile,
+  onAddMultipleProfiles,
   existingProfileCodes,
   catalog = LAB_CATALOG,
   individualTests = INITIAL_INDIVIDUAL_TESTS,
@@ -26,10 +28,11 @@ export const TestCatalogModal: React.FC<TestCatalogModalProps> = ({
   onAddIndividualTest,
   onApplyPackage
 }) => {
-  const [activeTab, setActiveTab] = useState<'individual' | 'profiles' | 'packages'>('individual');
+  const [activeTab, setActiveTab] = useState<'individual' | 'profiles' | 'packages'>('profiles');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [addedItems, setAddedItems] = useState<string[]>([]);
+  const [selectedProfileCodes, setSelectedProfileCodes] = useState<string[]>([]);
 
   if (!isOpen) return null;
 
@@ -69,23 +72,44 @@ export const TestCatalogModal: React.FC<TestCatalogModalProps> = ({
     (p.code || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleAddProfile = (template: CatalogProfileTemplate) => {
-    const newProfile: TestProfile = {
-      id: `prof-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
-      profileCode: template.code,
-      titleEn: template.titleEn,
-      titleAr: template.titleAr,
-      category: template.category,
-      sampleType: template.sampleType,
-      interpretation: template.defaultInterpretation || '',
-      parameters: template.parameters.map((p, idx) => ({
-        ...p,
-        id: `param-${Date.now()}-${idx}`,
-        result: '',
-        flag: ''
-      }))
-    };
+  const buildProfileFromTemplate = (template: CatalogProfileTemplate, idxOffset = 0): TestProfile => ({
+    id: `prof-${template.code}-${Date.now()}-${idxOffset}-${Math.random().toString(36).substring(2, 6)}`,
+    profileCode: template.code,
+    titleEn: template.titleEn,
+    titleAr: template.titleAr,
+    category: template.category,
+    sampleType: template.sampleType,
+    interpretation: template.defaultInterpretation || '',
+    parameters: template.parameters.map((p, idx) => ({
+      ...p,
+      id: `param-${template.code}-${Date.now()}-${idxOffset}-${idx}`,
+      result: '',
+      flag: ''
+    }))
+  });
 
+  const handleToggleQueuedProfile = (code: string) => {
+    setSelectedProfileCodes(prev =>
+      prev.includes(code) ? prev.filter(c => c !== code) : [...prev, code]
+    );
+  };
+
+  const handleAddSelectedProfilesBatch = () => {
+    const templates = activeCatalog.filter(t => selectedProfileCodes.includes(t.code));
+    if (templates.length === 0) return;
+    const newProfiles = templates.map((tpl, idx) => buildProfileFromTemplate(tpl, idx));
+    if (onAddMultipleProfiles) {
+      onAddMultipleProfiles(newProfiles);
+    } else {
+      newProfiles.forEach(p => onAddProfile(p));
+    }
+    setAddedItems(prev => [...prev, ...templates.map(t => t.code)]);
+    setSelectedProfileCodes([]);
+    onClose();
+  };
+
+  const handleAddProfile = (template: CatalogProfileTemplate) => {
+    const newProfile = buildProfileFromTemplate(template);
     onAddProfile(newProfile);
     setAddedItems(prev => [...prev, template.code]);
   };
@@ -297,60 +321,126 @@ export const TestCatalogModal: React.FC<TestCatalogModalProps> = ({
 
           {/* TAB 2: PROFILES */}
           {activeTab === 'profiles' && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {filteredProfiles.map((template) => {
-                const isAlreadyInReport = existingProfileCodes.includes(template.code);
-                const wasAdded = addedItems.includes(template.code);
-
-                return (
-                  <div
-                    key={template.code}
-                    className="p-4 bg-white rounded-xl border border-slate-200 hover:border-red-400 shadow-xs flex flex-col justify-between space-y-3"
+            <div className="space-y-4">
+              <div className="bg-indigo-50/80 border border-indigo-200 rounded-xl p-3 flex flex-wrap items-center justify-between gap-2 text-xs">
+                <div className="text-indigo-950 font-bold">
+                  يمكنك تحديد أكثر من بروفايل معاً — سيتم إنشاء <span className="text-rose-800 font-black">صفحة A4 مستقلة لكل بروفايل</span> داخل التقرير.
+                </div>
+                {selectedProfileCodes.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={handleAddSelectedProfilesBatch}
+                    className="px-4 py-2 rounded-lg bg-rose-900 hover:bg-rose-800 text-white font-black text-xs shadow-sm cursor-pointer flex items-center gap-1.5"
                   >
-                    <div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-mono font-bold text-rose-900 bg-rose-50 px-2 py-0.5 rounded">
-                          {template.code}
-                        </span>
-                        <span className="text-[11px] text-slate-500 font-semibold">
-                          {template.parameters.length} معيار
-                        </span>
-                      </div>
-                      <h4 className="text-sm font-bold text-slate-900 mt-1">
-                        {template.titleAr}
-                      </h4>
-                      <p className="text-xs text-slate-500" dir="ltr">
-                        {template.titleEn}
-                      </p>
-                      <p className="text-[11px] text-slate-600 mt-1">
-                        العينة: <strong>{template.sampleType}</strong>
-                      </p>
-                    </div>
+                    <Check className="w-4 h-4" />
+                    <span>إضافة البروفايلات المحددة ({selectedProfileCodes.length} صفحات مستقلة)</span>
+                  </button>
+                )}
+              </div>
 
-                    <button
-                      onClick={() => handleAddProfile(template)}
-                      disabled={isAlreadyInReport || wasAdded}
-                      className={`w-full py-2 px-4 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
-                        isAlreadyInReport || wasAdded
-                          ? 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200'
-                          : 'bg-rose-900 hover:bg-rose-800 text-white shadow-xs'
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {filteredProfiles.map((template) => {
+                  const isAlreadyInReport = existingProfileCodes.includes(template.code);
+                  const wasAdded = addedItems.includes(template.code);
+                  const isQueued = selectedProfileCodes.includes(template.code);
+
+                  return (
+                    <div
+                      key={template.code}
+                      onClick={() => {
+                        if (!isAlreadyInReport && !wasAdded) {
+                          handleToggleQueuedProfile(template.code);
+                        }
+                      }}
+                      className={`p-4 bg-white rounded-xl border shadow-xs flex flex-col justify-between space-y-3 transition-all ${
+                        isQueued
+                          ? 'border-rose-700 ring-2 ring-rose-300 bg-rose-50/40 cursor-pointer'
+                          : isAlreadyInReport || wasAdded
+                          ? 'border-emerald-200 bg-emerald-50/20'
+                          : 'border-slate-200 hover:border-red-400 cursor-pointer'
                       }`}
                     >
-                      {isAlreadyInReport || wasAdded ? (
-                        <>
-                          <Check className="w-4 h-4 text-emerald-600" />
-                          <span>مضاف مسبقاً للتقرير</span>
-                        </>
-                      ) : (
-                        <>
-                          <Plus className="w-4 h-4" />
-                          <span>إضافة البروفايل بالكامل</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-                );
-              })}
+                      <div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-mono font-bold text-rose-900 bg-rose-50 px-2 py-0.5 rounded">
+                            {template.code}
+                          </span>
+                          <div className="flex items-center gap-2">
+                            {template.profilePrice && (
+                              <span className="text-xs font-mono font-bold text-emerald-800">
+                                {template.profilePrice} ج.م
+                              </span>
+                            )}
+                            <span className="text-[11px] text-slate-500 font-semibold">
+                              {template.parameters.length} معيار
+                            </span>
+                          </div>
+                        </div>
+                        <h4 className="text-sm font-bold text-slate-900 mt-1">
+                          {template.titleAr}
+                        </h4>
+                        <p className="text-xs text-slate-500" dir="ltr">
+                          {template.titleEn}
+                        </p>
+                        <p className="text-[11px] text-slate-600 mt-1">
+                          العينة: <strong>{template.sampleType}</strong>
+                        </p>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (!isAlreadyInReport && !wasAdded) {
+                              handleToggleQueuedProfile(template.code);
+                            }
+                          }}
+                          disabled={isAlreadyInReport || wasAdded}
+                          className={`flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                            isAlreadyInReport || wasAdded
+                              ? 'bg-emerald-50 text-emerald-700 cursor-not-allowed border border-emerald-200'
+                              : isQueued
+                              ? 'bg-rose-900 text-white shadow-xs cursor-pointer'
+                              : 'bg-slate-100 hover:bg-slate-200 text-slate-800 cursor-pointer'
+                          }`}
+                        >
+                          {isAlreadyInReport || wasAdded ? (
+                            <>
+                              <Check className="w-4 h-4 text-emerald-600" />
+                              <span>مضاف بالتقرير</span>
+                            </>
+                          ) : isQueued ? (
+                            <>
+                              <Check className="w-4 h-4" />
+                              <span>محدد (صفحة مستقلة)</span>
+                            </>
+                          ) : (
+                            <>
+                              <Plus className="w-4 h-4" />
+                              <span>تحديد البروفايل</span>
+                            </>
+                          )}
+                        </button>
+
+                        {!isAlreadyInReport && !wasAdded && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleAddProfile(template);
+                            }}
+                            className="py-2 px-3 rounded-lg text-xs font-bold bg-rose-900 hover:bg-rose-800 text-white shadow-xs cursor-pointer"
+                            title="إضافة فورية مع البقاء لاختيار المزيد"
+                          >
+                            إضافة الآن
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           )}
 

@@ -23,11 +23,13 @@ import {
 } from 'lucide-react';
 import { WhatsAppBookingModal } from './WhatsAppBookingModal';
 import { LabReport } from '../types';
+import { LAB_CATALOG } from '../data/labCatalog';
 
 export const WorklistModule: React.FC = () => {
   const {
     reports,
-    selectedReportId,
+    incomeRecords,
+    facilities,
     setSelectedReportId,
     setActiveTab,
     verifyReport,
@@ -269,8 +271,9 @@ export const WorklistModule: React.FC = () => {
                     </span>
 
                     {hasPanic && (
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-600 text-white animate-pulse">
-                        قيمة حرجة (Panic Value)
+                      <span className="text-[10px] font-black px-2.5 py-0.5 rounded-md bg-red-600 text-white border border-red-700 inline-flex items-center gap-1">
+                        <AlertTriangle className="w-3 h-3" />
+                        <span>قيمة حرجة (Panic Value)</span>
                       </span>
                     )}
                   </div>
@@ -373,36 +376,100 @@ export const WorklistModule: React.FC = () => {
         )}
       </div>
       {/* WhatsApp Booking / Notification Modal */}
-      {whatsAppReport && (
-        <WhatsAppBookingModal
-          isOpen={!!whatsAppReport}
-          onClose={() => setWhatsAppReport(null)}
-          bookingData={{
-            patientName: whatsAppReport.patient.fullName,
-            labNumber: whatsAppReport.reportNumber,
-            barcode: whatsAppReport.patient.barcode || whatsAppReport.patient.labNumber,
-            phone: whatsAppReport.patient.phone,
-            date: whatsAppReport.patient.sampleDate ? whatsAppReport.patient.sampleDate.split('T')[0] : new Date().toISOString().split('T')[0],
-            time: whatsAppReport.patient.appointmentTime || '09:00',
-            isHomeVisit: whatsAppReport.patient.homeAddress ? true : false,
-            address: whatsAppReport.patient.homeAddress,
-            deliveryNotes: whatsAppReport.patient.deliveryNotes,
-            branchName: 'الفرع الرئيسي - بهتيم',
-            testsDetails: whatsAppReport.profiles.map(pr => ({
-              nameAr: pr.titleAr,
-              nameEn: pr.titleEn,
-              code: pr.profileCode,
-              price: (pr as any).price || 150
-            })),
-            testsList: whatsAppReport.profiles.map(pr => `• ${pr.titleAr} (${pr.titleEn})`).join('\n'),
-            subtotal: whatsAppReport.profiles.reduce((acc, pr) => acc + ((pr as any).price || 150), 0),
-            discountAmount: 0,
-            discountLabel: 'لا يوجد',
-            netAmount: whatsAppReport.profiles.reduce((acc, pr) => acc + ((pr as any).price || 150), 0),
-            paymentMethod: 'نقداً / فيزا'
-          }}
-        />
-      )}
+      {whatsAppReport && (() => {
+        const linkedInv = incomeRecords.find(
+          inv =>
+            (whatsAppReport.invoiceId && (inv.id === whatsAppReport.invoiceId || inv.invoiceNumber === whatsAppReport.invoiceId)) ||
+            inv.labNumber === whatsAppReport.reportNumber ||
+            (whatsAppReport.patient.barcode && inv.barcode === whatsAppReport.patient.barcode)
+        );
+        const isHome = Boolean(
+          whatsAppReport.patient.bookingType === 'home_visit' ||
+          whatsAppReport.patient.isHomeVisit ||
+          whatsAppReport.patient.homeAddress
+        );
+        const visitFee = isHome ? Number(whatsAppReport.patient.visitFee ?? linkedInv?.visitFee ?? 0) : 0;
+        const testsDetails =
+          linkedInv?.tests && linkedInv.tests.length > 0
+            ? linkedInv.tests.map(t => ({
+                nameAr: t.nameAr || t.nameEn || t.code || 'تحليل مخبري',
+                nameEn: t.nameEn || t.nameAr || t.code || 'Lab Test',
+                code: t.code || 'TEST',
+                price: Number(t.price) || 0
+              }))
+            : whatsAppReport.profiles.map(pr => {
+                const catMatch = LAB_CATALOG.find(c => c.code.toUpperCase() === (pr.profileCode || '').toUpperCase());
+                return {
+                  nameAr: pr.titleAr || pr.titleEn,
+                  nameEn: pr.titleEn || pr.titleAr,
+                  code: pr.profileCode,
+                  price: Number((pr as any).price || catMatch?.profilePrice) || 250
+                };
+              });
+        const testsSub =
+          linkedInv?.testsSubtotal ??
+          whatsAppReport.patient.testsSubtotal ??
+          testsDetails.reduce((s, t) => s + t.price, 0);
+        const discountAmt =
+          linkedInv?.discount ??
+          linkedInv?.discountApplied ??
+          whatsAppReport.patient.discountApplied ??
+          0;
+        const pkgOrig = Number(whatsAppReport.packageApplied?.originalPrice || 0);
+        const pkgPrice = Number(whatsAppReport.packageApplied?.packagePrice || 0);
+        const grossTotal =
+          whatsAppReport.packageApplied && pkgOrig > pkgPrice
+            ? pkgOrig + visitFee
+            : testsSub + visitFee;
+        const netAmt =
+          linkedInv?.netAmount ??
+          whatsAppReport.patient.totalCost ??
+          Math.max(0, testsSub + visitFee - discountAmt);
+        const branchName =
+          whatsAppReport.patient.branchName ||
+          linkedInv?.branchName ||
+          linkedInv?.branch ||
+          facilities?.[0]?.nameAr ||
+          'الفرع الرئيسي - بهتيم';
+
+        return (
+          <WhatsAppBookingModal
+            isOpen={!!whatsAppReport}
+            onClose={() => setWhatsAppReport(null)}
+            bookingData={{
+              patientName: whatsAppReport.patient.fullName,
+              labNumber: whatsAppReport.reportNumber,
+              barcode: whatsAppReport.patient.barcode || whatsAppReport.patient.labNumber,
+              phone: whatsAppReport.patient.phone,
+              date:
+                whatsAppReport.patient.appointmentDate ||
+                (whatsAppReport.patient.sampleDate
+                  ? whatsAppReport.patient.sampleDate.split('T')[0]
+                  : new Date().toISOString().split('T')[0]),
+              time: whatsAppReport.patient.appointmentTime || '09:00',
+              isHomeVisit: isHome,
+              address: whatsAppReport.patient.homeAddress,
+              deliveryNotes: whatsAppReport.patient.deliveryNotes,
+              visitSpecialist: whatsAppReport.patient.visitSpecialist || linkedInv?.visitSpecialist,
+              branchRepresentative: whatsAppReport.patient.branchRepresentative || linkedInv?.branchRepresentative,
+              branchName,
+              testsDetails,
+              packageName: whatsAppReport.packageApplied?.titleAr,
+              packagePrice: whatsAppReport.packageApplied?.packagePrice,
+              packageOriginalPrice: whatsAppReport.packageApplied?.originalPrice,
+              subtotal: grossTotal,
+              testsSubtotal: testsSub,
+              grossTotal,
+              visitFee,
+              discountAmount: discountAmt,
+              discountLabel: whatsAppReport.packageApplied ? `باقة: ${whatsAppReport.packageApplied.titleAr}` : (discountAmt > 0 ? 'خصم مطبق' : 'لا يوجد'),
+              netAmount: netAmt,
+              fastingHours: whatsAppReport.patient.fastingHours || 0,
+              paymentMethod: whatsAppReport.patient.paymentMethod || linkedInv?.paymentMethod || 'نقداً / فيزا'
+            }}
+          />
+        );
+      })()}
     </div>
   );
 };

@@ -52,6 +52,8 @@ interface SmartTestSearchProps {
   profiles: CatalogProfileTemplate[];
   individualTests: IndividualTest[];
   selectedItemCodes: string[];
+  selectedProfileCodes?: string[];
+  selectedPackageId?: string;
   onToggleTest: (test: InvoiceTestItem) => void;
   onSelectPackage?: (pkg: ComprehensivePackage) => void;
   onToggleProfile?: (profile: CatalogProfileTemplate) => void;
@@ -75,6 +77,8 @@ export const SmartTestSearch: React.FC<SmartTestSearchProps> = ({
   profiles,
   individualTests,
   selectedItemCodes,
+  selectedProfileCodes,
+  selectedPackageId,
   onToggleTest,
   onSelectPackage,
   onToggleProfile,
@@ -263,7 +267,8 @@ export const SmartTestSearch: React.FC<SmartTestSearchProps> = ({
         minNormal: item.rawTest.minNormal,
         maxNormal: item.rawTest.maxNormal,
         textReference: item.rawTest.textReference,
-        method: item.rawTest.method
+        method: item.rawTest.method,
+        itemKind: 'individual'
       });
     }
   };
@@ -370,14 +375,19 @@ export const SmartTestSearch: React.FC<SmartTestSearchProps> = ({
           </div>
         ) : (
           filteredItems.map(item => {
-            const isSelected = selectedItemCodes.some(c => c.toLowerCase() === item.code.toLowerCase());
+            const isSelected =
+              item.kind === 'package'
+                ? Boolean(selectedPackageId && item.rawPackage?.id === selectedPackageId)
+                : item.kind === 'profile' && selectedProfileCodes
+                ? selectedProfileCodes.some(c => c.toLowerCase() === item.code.toLowerCase())
+                : selectedItemCodes.some(c => c.toLowerCase() === item.code.toLowerCase());
             const isExpanded = expandedPackageId === item.id || expandedProfileCode === item.code;
 
             return (
               <div
                 key={item.id}
                 className={`p-3 transition-colors ${
-                  isSelected ? 'bg-rose-50/70 border-r-4 border-r-rose-700' : 'hover:bg-slate-50'
+                  isSelected ? 'bg-rose-50/75 ring-1 ring-inset ring-rose-300' : 'hover:bg-slate-50'
                 }`}
               >
                 <div className="flex items-start justify-between gap-3">

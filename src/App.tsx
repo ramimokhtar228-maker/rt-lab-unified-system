@@ -396,6 +396,13 @@ const AppContent: React.FC = () => {
                 profiles: [...currentReport.profiles, newProf]
               });
             }
+          }}
+          onAddMultipleProfiles={(newProfs: TestProfile[]) => {
+            if (currentReport && newProfs.length > 0) {
+              updateReport(currentReport.id, {
+                profiles: [...currentReport.profiles, ...newProfs]
+              });
+            }
             setCatalogModalOpen(false);
           }}
           onApplyPackage={(pkg) => {

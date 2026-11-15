@@ -58,6 +58,7 @@ export interface InvoiceTestItem {
   maxNormal?: number;
   textReference?: string;
   method?: string;
+  itemKind?: 'profile' | 'individual' | 'package';
 }
 
 export interface IncomeRecord {
@@ -78,7 +79,10 @@ export interface IncomeRecord {
   isHomeVisit?: boolean;
   visitAddress?: string;
   visitSpecialist?: string;
+  branchRepresentative?: string;
   branchId?: string;
+  branchName?: string;
+  discountApplied?: number;
   loyaltyDiscountEGP?: number;
   loyaltyPointsRedeemed?: number;
   loyaltyPointsEarned?: number;
@@ -404,6 +408,10 @@ export interface Patient {
   reviewComment?: string;
   visitFee?: number;
   visitSpecialist?: string;
+  branchRepresentative?: string;
+  branchId?: string;
+  branchName?: string;
+  isHomeVisit?: boolean;
   testsSubtotal?: number;
   paidAmount?: number;
   remainingAmount?: number;

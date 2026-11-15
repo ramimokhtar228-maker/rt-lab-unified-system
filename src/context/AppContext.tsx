@@ -369,6 +369,9 @@ export function mergeTwoReports(localRep: LabReport, remoteRep: LabReport): LabR
     homeAddress: hAddr,
     deliveryNotes: remoteRep.patient?.deliveryNotes || localRep.patient?.deliveryNotes,
     visitSpecialist: remoteRep.patient?.visitSpecialist || localRep.patient?.visitSpecialist,
+    branchRepresentative: remoteRep.patient?.branchRepresentative || localRep.patient?.branchRepresentative,
+    branchId: remoteRep.patient?.branchId || localRep.patient?.branchId,
+    branchName: remoteRep.patient?.branchName || localRep.patient?.branchName,
     phone: remoteRep.patient?.phone || localRep.patient?.phone,
     totalCost: remoteRep.patient?.totalCost ?? localRep.patient?.totalCost,
     paidAmount: remoteRep.patient?.paidAmount ?? localRep.patient?.paidAmount,
@@ -411,6 +414,9 @@ export function mergeTwoInvoices(localInv: IncomeRecord, remoteInv: IncomeRecord
     visitAddress: vAddr,
     deliveryNotes: (remoteInv as any).deliveryNotes || (localInv as any).deliveryNotes,
     visitSpecialist: remoteInv.visitSpecialist || localInv.visitSpecialist,
+    branchRepresentative: remoteInv.branchRepresentative || localInv.branchRepresentative,
+    branchId: remoteInv.branchId || localInv.branchId,
+    branch: remoteInv.branch || localInv.branch,
     patientPhone: remoteInv.patientPhone || localInv.patientPhone,
     tests: (remoteInv.tests && remoteInv.tests.length > 0) ? remoteInv.tests : localInv.tests,
     testsSubtotal: remoteInv.testsSubtotal ?? localInv.testsSubtotal,
@@ -2542,12 +2548,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
       if (generatedProfiles.some(gp => gp.profileCode && gp.profileCode.toUpperCase() === testCode)) return;
 
-      const catalogTemplate = (diagnosticProfiles || []).find(c => 
-        c.code && c.code.toUpperCase() === testCode
-      ) || LAB_CATALOG.find(c => 
-        (c.code && c.code.toUpperCase() === testCode) || 
-        (c.titleEn && testCode && c.titleEn.toLowerCase().includes(testCode.toLowerCase()))
+      const isExplicitProfile = test.itemKind === 'profile' || String(test.id || '').startsWith('prof-');
+      const exactCatalogTemplate = (diagnosticProfiles || []).find(
+        c => c.code && c.code.toUpperCase() === testCode
+      ) || LAB_CATALOG.find(
+        c => c.code && c.code.toUpperCase() === testCode
       );
+      const catalogTemplate = isExplicitProfile
+        ? exactCatalogTemplate
+        : (test.itemKind === 'individual' ? undefined : exactCatalogTemplate);
 
       if (catalogTemplate && Array.isArray(catalogTemplate.parameters)) {
         generatedProfiles.push({
@@ -2687,13 +2696,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       visitFee: fee,
       isHomeVisit: patient.bookingType === 'home_visit',
       visitAddress: patient.homeAddress || '',
+      visitSpecialist: patient.visitSpecialist || '',
+      branchRepresentative: patient.branchRepresentative || '',
+      branchId: patient.branchId || 'branch-behteem',
       netAmount: net,
       paidAmount: paid,
       remainingAmount: remaining,
       paymentMethod: (patient.paymentMethod as any) || 'cash',
       paymentStatus: pStatus,
       cashierName: currentUser?.nameAr || 'المسؤول',
-      branch: patient.branchAddress || 'الفرع الرئيسي - بهتيم',
+      branch: patient.branchName || patient.branchAddress || 'الفرع الرئيسي - بهتيم',
       syncStatus: 'synced',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()

@@ -121,7 +121,9 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
   const [newProfTitleAr, setNewProfTitleAr] = useState('');
   const [newProfCategory, setNewProfCategory] = useState('Clinical Chemistry');
   const [newProfSample, setNewProfSample] = useState('Serum');
+  const [newProfPrice, setNewProfPrice] = useState<string>('250');
   const [newProfInterp, setNewProfInterp] = useState('');
+  const [formError, setFormError] = useState<string | null>(null);
 
   // Categories
   const profileCategories = ['All', ...Array.from(new Set(catalog.map(c => c.category)))];
@@ -163,10 +165,10 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
       if (onUpdateCatalog) {
         onUpdateCatalog(diagnosticProfiles);
       }
-      alert(`✅ تم تحديث ومزامنة الكتالوج بالكامل سحابياً ومحلياً على كافة الأجهزة بنجاح!\n\n• إجمالي الفحوصات المنفردة: ${res.testsCount} فحص طبي\n• إجمالي باقات الفحص الشامل: ${res.packagesCount} باقة متكاملة\n• إجمالي البروفايلات الطبية: ${res.profilesCount} بروفايل شامل مع المعايير`);
+      showFeedback(`تم تحديث ومزامنة الكتالوج بالكامل (${res.testsCount} فحص منفرد · ${res.packagesCount} باقة · ${res.profilesCount} بروفايل).`);
     } catch (err) {
       console.error(err);
-      alert('تم تحديث وتفعيل الكتالوج بنجاح.');
+      showFeedback('تم تحديث وتفعيل الكتالوج بنجاح.');
     } finally {
       setTimeout(() => setIsSyncing(false), 600);
     }
@@ -222,9 +224,10 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
   const handleSaveTest = (e: React.FormEvent) => {
     e.preventDefault();
     if (!testFormData.code?.trim() || !testFormData.nameEn?.trim()) {
-      alert('يرجى كتابة رمز التحليل واسمه الطبي بالإنجليزي.');
+      setFormError('يرجى كتابة رمز التحليل واسمه الطبي بالإنجليزي.');
       return;
     }
+    setFormError(null);
 
     const cleanNameEn = testFormData.nameEn.trim();
     const cleanNameAr = testFormData.nameAr?.trim() || cleanNameEn;
@@ -263,23 +266,27 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
 
   // PROFILE HANDLERS
   const handleOpenAddProfile = () => {
+    setFormError(null);
     setEditingProfileCode(null);
     setNewProfCode('');
     setNewProfTitleEn('');
     setNewProfTitleAr('');
     setNewProfCategory('Clinical Chemistry');
     setNewProfSample('Serum');
+    setNewProfPrice('250');
     setNewProfInterp('');
     setIsNewProfileModalOpen(true);
   };
 
   const handleOpenEditProfile = (template: CatalogProfileTemplate) => {
+    setFormError(null);
     setEditingProfileCode(template.code);
     setNewProfCode(template.code || '');
     setNewProfTitleEn(template.titleEn || '');
     setNewProfTitleAr(template.titleAr || '');
     setNewProfCategory(template.category || 'Clinical Chemistry');
     setNewProfSample(template.sampleType || 'Serum');
+    setNewProfPrice(String(template.profilePrice ?? 250));
     setNewProfInterp(template.defaultInterpretation || '');
     setIsNewProfileModalOpen(true);
   };
@@ -287,18 +294,20 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
   const handleCreateProfile = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newProfCode.trim() || !newProfTitleEn.trim()) {
-      alert('برجاء كتابة رمز الفحص واسمه باللغة الإنجليزية');
+      setFormError('برجاء كتابة رمز الفحص واسمه باللغة الإنجليزية.');
       return;
     }
 
     const cleanCode = newProfCode.trim().toUpperCase();
+    const parsedPrice = Math.max(0, Number(newProfPrice) || 250);
 
     if (editingProfileCode) {
       const duplicate = catalog.some(c => c.code === cleanCode && c.code !== editingProfileCode);
       if (duplicate) {
-        alert(`الرمز (${cleanCode}) موجود بالفعل لبروفايل آخر، يرجى اختيار رمز مختلف.`);
+        setFormError(`الرمز (${cleanCode}) موجود بالفعل لبروفايل آخر، يرجى اختيار رمز مختلف.`);
         return;
       }
+      setFormError(null);
       const updatedCatalog = catalog.map(c =>
         c.code === editingProfileCode
           ? {
@@ -308,6 +317,7 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
               titleAr: newProfTitleAr.trim() || newProfTitleEn.trim(),
               category: newProfCategory.trim() || 'General',
               sampleType: newProfSample.trim() || 'Serum',
+              profilePrice: parsedPrice,
               defaultInterpretation: newProfInterp.trim() || undefined
             }
           : c
@@ -325,9 +335,10 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
     }
 
     if (catalog.some(c => c.code === cleanCode)) {
-      alert(`الرمز (${cleanCode}) موجود بالفعل في الكتالوج، يرجى اختيار رمز آخر.`);
+      setFormError(`الرمز (${cleanCode}) موجود بالفعل في الكتالوج، يرجى اختيار رمز آخر.`);
       return;
     }
+    setFormError(null);
 
     const newTemplate: CatalogProfileTemplate = {
       code: cleanCode,
@@ -335,6 +346,7 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
       titleAr: newProfTitleAr.trim() || newProfTitleEn.trim(),
       category: newProfCategory.trim() || 'General',
       sampleType: newProfSample.trim() || 'Serum',
+      profilePrice: parsedPrice,
       defaultInterpretation: newProfInterp.trim() || undefined,
       parameters: []
     };
@@ -510,7 +522,7 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
             className="flex items-center gap-1.5 px-3.5 py-2 bg-emerald-700 hover:bg-emerald-600 disabled:opacity-50 text-white text-xs font-bold rounded-lg shadow-sm transition-all"
             title="مزامنة فورية وتحديث لكافة الفحوصات الطبية والباقات والبروفايلات على السحابة وجميع الأجهزة"
           >
-            <Sparkles className={`w-3.5 h-3.5 text-emerald-200 ${isSyncing ? 'animate-spin' : 'animate-pulse'}`} />
+            <Sparkles className={`w-3.5 h-3.5 text-emerald-200 ${isSyncing ? 'animate-spin' : ''}`} />
             <span>{isSyncing ? 'جارِ المزامنة...' : 'تحديث ومزامنة الكتالوج الآن'}</span>
           </button>
 
@@ -740,6 +752,11 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
                     </div>
 
                     <div className="flex items-center gap-2">
+                      {template.profilePrice !== undefined && (
+                        <span className="text-[11px] font-mono font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg">
+                          {template.profilePrice} ج.م
+                        </span>
+                      )}
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
@@ -891,6 +908,11 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
             </div>
 
             <form onSubmit={handleSaveTest} className="space-y-3">
+              {formError && (
+                <div className="p-2.5 bg-rose-50 border border-rose-200 text-rose-800 rounded-lg font-bold">
+                  {formError}
+                </div>
+              )}
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block font-bold text-slate-700 mb-1">اسم التحليل (عربي) *</label>
@@ -1067,6 +1089,11 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
               </button>
             </div>
             <form onSubmit={handleCreateProfile} className="space-y-3">
+              {formError && (
+                <div className="p-2.5 bg-rose-50 border border-rose-200 text-rose-800 rounded-lg font-bold">
+                  {formError}
+                </div>
+              )}
               <div>
                 <label className="block font-bold text-slate-700 mb-1">رمز البروفايل (Code) *</label>
                 <input
@@ -1105,7 +1132,7 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-3 gap-3">
                 <div>
                   <label className="block font-bold text-slate-700 mb-1">القسم</label>
                   <input
@@ -1123,6 +1150,18 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
                     value={newProfSample}
                     onChange={(e) => setNewProfSample(e.target.value)}
                     className="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">سعر البروفايل (ج.م)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    dir="ltr"
+                    value={newProfPrice}
+                    onChange={(e) => setNewProfPrice(e.target.value)}
+                    className="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg font-mono font-bold text-emerald-800"
                   />
                 </div>
               </div>

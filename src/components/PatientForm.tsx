@@ -1,41 +1,36 @@
-import React, { useState } from 'react';
-import { Patient, Gender, AgeUnit, DoctorTitle, PatientLoyaltyProfile } from '../types/lab';
+import React, { useState, useMemo } from 'react';
+import { Patient, Gender, AgeUnit, PatientLoyaltyProfile } from '../types/lab';
 import { 
   User, 
   Phone, 
   Calendar, 
   Clock, 
-  Stethoscope, 
   Hash, 
   FileText,
   Building2,
   Home,
   MapPin,
-  Tag,
   CreditCard,
   Award,
-  Download,
   MessageCircle,
   Mail,
-  Star,
   RefreshCw,
   CheckCircle2,
-  Coins,
-  Smartphone,
+  AlertCircle,
   Percent,
-  Edit2,
+  UserCheck,
   Check
 } from 'lucide-react';
 import { 
   BRANCH_MAIN_ADDRESS, 
   INSTAPAY_IPA, 
-  formatBookingConfirmationWhatsAppMessage, 
   formatPostSampleWhatsAppMessage, 
   openWhatsApp 
 } from '../utils/whatsapp';
 import { generateAndDownloadLoyaltyCard } from '../utils/loyaltyCardCanvas';
 import { send24HourEmailReminder } from '../utils/emailReminder';
 import { WhatsAppBookingModal } from './WhatsAppBookingModal';
+import { useApp } from '../context/AppContext';
 
 interface PatientFormProps {
   patient: Patient;
@@ -44,20 +39,43 @@ interface PatientFormProps {
 }
 
 export const PatientForm: React.FC<PatientFormProps> = ({ patient, onChange, onRegisterLoyaltyProfile }) => {
+  const { staffMembers, facilities } = useApp();
+
+  const homeVisitTeam = useMemo(
+    () => (staffMembers || []).filter(s => s.isActive && (s.role === 'phlebotomist' || s.role === 'chemist')),
+    [staffMembers]
+  );
+  const branchReceptionTeam = useMemo(
+    () => (staffMembers || []).filter(s => s.isActive && (s.role === 'receptionist' || s.role === 'admin' || s.role === 'accountant')),
+    [staffMembers]
+  );
+
   const [couponInput, setCouponInput] = useState('');
   const [whatsAppSent, setWhatsAppSent] = useState(false);
   const [isWhatsAppModalOpen, setIsWhatsAppModalOpen] = useState(false);
   const [appliedCoupon, setAppliedCoupon] = useState<string | null>(patient.couponCode || null);
   const [customPercent, setCustomPercent] = useState<number>(15);
   const [customFlatDiscount, setCustomFlatDiscount] = useState<number>(0);
-  const [customHomeFee, setCustomHomeFee] = useState<number>(70);
+  const [customHomeFee, setCustomHomeFee] = useState<number>(patient.visitFee ?? 80);
   const [rescheduleModalOpen, setRescheduleModalOpen] = useState(false);
   const [newDate, setNewDate] = useState(patient.appointmentDate || new Date().toISOString().split('T')[0]);
   const [newTime, setNewTime] = useState(patient.appointmentTime || '10:00 ص');
+  const [actionNotice, setActionNotice] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-    const bookingType = patient.bookingType || 'branch';
-  const effectiveHomeFee = bookingType === 'home_visit' ? customHomeFee : 0;
-  const baseSubtotal = (patient.totalCost || 250) + effectiveHomeFee;
+  const showNotice = (type: 'success' | 'error', text: string) => {
+    setActionNotice({ type, text });
+    setTimeout(() => setActionNotice(null), 5000);
+  };
+
+  const bookingType = patient.bookingType || (patient.isHomeVisit || patient.homeAddress ? 'home_visit' : 'branch');
+  const effectiveHomeFee = bookingType === 'home_visit' ? Math.max(0, Number(customHomeFee) || 0) : 0;
+  const currentTestsCost =
+    patient.testsSubtotal !== undefined && patient.testsSubtotal > 0
+      ? patient.testsSubtotal
+      : patient.totalCost !== undefined && patient.totalCost > 0
+      ? Math.max(0, patient.totalCost + (patient.discountApplied || 0) - (patient.visitFee || 0))
+      : 250;
+  const baseSubtotal = currentTestsCost + effectiveHomeFee;
 
   const syncDiscount = (
     newType: Patient['discountType'],
@@ -65,29 +83,37 @@ export const PatientForm: React.FC<PatientFormProps> = ({ patient, onChange, onR
     flat: number,
     coupon: string | null = null,
     costOverride?: number,
-    feeOverride?: number
+    feeOverride?: number,
+    bookingTypeOverride?: 'branch' | 'home_visit'
   ) => {
-    const cost = costOverride !== undefined ? costOverride : (patient.totalCost || 250);
-    const fee = bookingType === 'home_visit' ? (feeOverride !== undefined ? feeOverride : customHomeFee) : 0;
+    const activeBookingType = bookingTypeOverride || bookingType;
+    const cost = costOverride !== undefined ? Math.max(0, costOverride) : currentTestsCost;
+    const fee = activeBookingType === 'home_visit' ? Math.max(0, feeOverride !== undefined ? feeOverride : customHomeFee) : 0;
     const currentBase = cost + fee;
 
     let disc = 0;
-    if (coupon === 'RTLAB10') disc = Math.round(currentBase * 0.1);
-    else if (coupon === 'BEHTEEM25') disc = Math.min(currentBase, 50);
-    else if (coupon === 'HEALTH20') disc = Math.round(currentBase * 0.2);
-    else if (coupon === 'VIP2026') disc = Math.round(currentBase * 0.25);
-    else if (newType === 'percentage') disc = Math.round((currentBase * pct) / 100);
+    if (coupon === 'RTLAB10') disc = Math.round(cost * 0.1);
+    else if (coupon === 'BEHTEEM25') disc = Math.min(cost, 50);
+    else if (coupon === 'HEALTH20') disc = Math.round(cost * 0.2);
+    else if (coupon === 'VIP2026') disc = Math.round(cost * 0.25);
+    else if (newType === 'percentage') disc = Math.round((cost * pct) / 100);
     else if (newType === 'daily_fixed') disc = Math.min(currentBase, flat > 0 ? flat : 60);
     else if (newType === 'package_bundle') disc = Math.min(currentBase, flat > 0 ? flat : 100);
-    else if (newType === 'dynamic_lab') disc = Math.round((currentBase * (pct || 18)) / 100);
+    else if (newType === 'dynamic_lab') disc = Math.round((cost * (pct || 18)) / 100);
     else if (newType === 'none') disc = 0;
+
+    const net = Math.max(0, currentBase - disc);
 
     onChange({
       ...patient,
+      bookingType: activeBookingType,
+      isHomeVisit: activeBookingType === 'home_visit',
+      visitFee: fee,
+      testsSubtotal: cost,
       discountType: newType,
       discountApplied: disc,
-      couponCode: coupon || undefined,
-      ...(costOverride !== undefined ? { totalCost: costOverride } : {})
+      totalCost: net,
+      couponCode: coupon || undefined
     });
   };
 
@@ -136,11 +162,10 @@ export const PatientForm: React.FC<PatientFormProps> = ({ patient, onChange, onR
     const code = couponInput.trim().toUpperCase();
     if (['RTLAB10', 'BEHTEEM25', 'HEALTH20', 'VIP2026'].includes(code)) {
       setAppliedCoupon(code);
-      updateField('couponCode', code);
-      updateField('discountApplied', discountAmount);
-      alert(`تم تطبيق الكوبون (${code}) بنجاح!`);
+      syncDiscount(patient.discountType || 'percentage', customPercent, customFlatDiscount, code);
+      showNotice('success', `تم تطبيق الكوبون (${code}) بنجاح!`);
     } else {
-      alert('كود الكوبون غير صحيح. الكوبونات النشطة: RTLAB10, BEHTEEM25, HEALTH20, VIP2026');
+      showNotice('error', 'كود الكوبون غير صحيح. الكوبونات النشطة: RTLAB10, BEHTEEM25, HEALTH20, VIP2026');
     }
   };
 
@@ -213,9 +238,7 @@ export const PatientForm: React.FC<PatientFormProps> = ({ patient, onChange, onR
     });
     openWhatsApp(patient.phone || '01000000000', msg);
 
-    alert(`✅ تم تفعيل كارت الولاء (${cardCode}) بنجاح للمريض (${patient.fullName || 'المريض'})!
-• تم إدراج العميل في سجل كروت الولاء
-• تم تحميل صورة الكارت الفاخرة وإرسال رسالة الواتساب للعميل.`);
+    showNotice('success', `تم تفعيل كارت الولاء (${cardCode}) بنجاح للمريض (${patient.fullName || 'المريض'}) وإدراج العميل وتجهيز رسالة الواتساب.`);
   };
 
   return (
@@ -450,21 +473,21 @@ export const PatientForm: React.FC<PatientFormProps> = ({ patient, onChange, onR
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button
             type="button"
-            onClick={() => { updateField('bookingType', 'branch'); syncDiscount(patient.discountType || 'percentage', customPercent, customFlatDiscount, appliedCoupon, undefined, 0); }}
+            onClick={() => { syncDiscount(patient.discountType || 'percentage', customPercent, customFlatDiscount, appliedCoupon, undefined, 0, 'branch'); }}
             className={`p-3 rounded-xl border text-right transition-all flex items-start gap-2.5 cursor-pointer ${
               bookingType === 'branch' ? 'bg-rose-50 border-rose-700 ring-1 ring-rose-700' : 'bg-white border-slate-200'
             }`}
           >
             <Building2 className={`w-5 h-5 mt-0.5 ${bookingType === 'branch' ? 'text-rose-700' : 'text-slate-400'}`} />
             <div>
-              <strong className="text-slate-900 block text-xs">حضور للفرع الرئيسي</strong>
-              <span className="text-[11px] text-slate-500">ميدان بهتيم - شبرا الخيمة</span>
+              <strong className="text-slate-900 block text-xs">حضور للفرع</strong>
+              <span className="text-[11px] text-slate-500">{patient.branchName || facilities?.[0]?.nameAr || 'الفرع الرئيسي - بهتيم'}</span>
             </div>
           </button>
 
           <button
             type="button"
-            onClick={() => { updateField('bookingType', 'home_visit'); syncDiscount(patient.discountType || 'percentage', customPercent, customFlatDiscount, appliedCoupon, undefined, customHomeFee); }}
+            onClick={() => { syncDiscount(patient.discountType || 'percentage', customPercent, customFlatDiscount, appliedCoupon, undefined, customHomeFee, 'home_visit'); }}
             className={`p-3 rounded-xl border text-right transition-all flex items-start gap-2.5 cursor-pointer ${
               bookingType === 'home_visit' ? 'bg-rose-50 border-rose-700 ring-1 ring-rose-700' : 'bg-white border-slate-200'
             }`}
@@ -472,17 +495,54 @@ export const PatientForm: React.FC<PatientFormProps> = ({ patient, onChange, onR
             <Home className={`w-5 h-5 mt-0.5 ${bookingType === 'home_visit' ? 'text-rose-700' : 'text-slate-400'}`} />
             <div>
               <strong className="text-slate-900 block text-xs">زيارة منزلية خاصة (+{customHomeFee} ج.م)</strong>
-              <span className="text-[11px] text-slate-500">أخصائي سحب معقم يصل لمنزلك</span>
+              <span className="text-[11px] text-slate-500">مندوب سحب معقم يصل لمنزلك</span>
             </div>
           </button>
         </div>
 
         {bookingType === 'branch' ? (
-          <div className="bg-white p-3 rounded-lg border border-slate-200 flex items-center gap-2 text-slate-800 text-xs">
-            <MapPin className="w-4 h-4 text-rose-700 shrink-0" />
-            <span className="font-semibold leading-relaxed">
-              عنوان الفرع الرئيسي لمعامل RT: {BRANCH_MAIN_ADDRESS}
-            </span>
+          <div className="bg-white p-3 rounded-lg border border-slate-200 space-y-2.5 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div>
+                <label className="block font-bold text-slate-700 mb-1 flex items-center gap-1">
+                  <Building2 className="w-3.5 h-3.5 text-rose-700" />
+                  <span>الفرع المختار للحضور</span>
+                </label>
+                <select
+                  value={patient.branchName || facilities?.[0]?.nameAr || 'الفرع الرئيسي - بهتيم'}
+                  onChange={(e) => {
+                    const f = facilities?.find(br => br.nameAr === e.target.value);
+                    onChange({ ...patient, branchName: e.target.value, branchId: f?.id });
+                  }}
+                  className="w-full px-2.5 py-1.5 border border-slate-300 rounded-md font-bold text-slate-800"
+                >
+                  {(facilities || []).map(f => (
+                    <option key={f.id} value={f.nameAr}>{f.nameAr}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block font-bold text-slate-700 mb-1 flex items-center gap-1">
+                  <UserCheck className="w-3.5 h-3.5 text-emerald-700" />
+                  <span>مندوب استقبال الفرع</span>
+                </label>
+                <select
+                  value={patient.branchRepresentative || branchReceptionTeam[0]?.name || ''}
+                  onChange={(e) => updateField('branchRepresentative', e.target.value)}
+                  className="w-full px-2.5 py-1.5 border border-slate-300 rounded-md font-bold text-slate-800"
+                >
+                  {branchReceptionTeam.map(m => (
+                    <option key={m.id} value={m.name}>{m.name} — {m.title}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 text-slate-700 bg-slate-50 p-2 rounded border border-slate-100">
+              <MapPin className="w-4 h-4 text-rose-700 shrink-0" />
+              <span className="font-semibold leading-relaxed">
+                العنوان: {facilities?.find(f => f.nameAr === patient.branchName)?.address || BRANCH_MAIN_ADDRESS}
+              </span>
+            </div>
           </div>
         ) : (
           <div className="bg-white p-3 rounded-lg border border-slate-200 space-y-2 text-xs">
@@ -508,15 +568,32 @@ export const PatientForm: React.FC<PatientFormProps> = ({ patient, onChange, onR
                 />
               </div>
             </div>
-            <div>
-              <label className="block font-bold text-slate-700 mb-1">ملاحظات إضافية حول التوصيل والمنطقة وحالة المريض</label>
-              <input
-                type="text"
-                value={patient.deliveryNotes || ''}
-                onChange={(e) => updateField('deliveryNotes', e.target.value)}
-                placeholder="بجوار مسجد النور، الأسانسير معطل، أو المريض طفل..."
-                className="w-full px-2.5 py-1.5 border border-slate-300 rounded-md"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div>
+                <label className="block font-bold text-slate-700 mb-1 flex items-center gap-1">
+                  <UserCheck className="w-3.5 h-3.5 text-rose-700" />
+                  <span>مندوب الزيارة المنزلية</span>
+                </label>
+                <select
+                  value={patient.visitSpecialist || homeVisitTeam[0]?.name || ''}
+                  onChange={(e) => updateField('visitSpecialist', e.target.value)}
+                  className="w-full px-2.5 py-1.5 border border-slate-300 rounded-md font-bold text-slate-800"
+                >
+                  {homeVisitTeam.map(m => (
+                    <option key={m.id} value={m.name}>{m.name} — {m.title}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">ملاحظات التوصيل والمنطقة وحالة المريض</label>
+                <input
+                  type="text"
+                  value={patient.deliveryNotes || ''}
+                  onChange={(e) => updateField('deliveryNotes', e.target.value)}
+                  placeholder="بجوار مسجد النور، الأسانسير معطل، أو المريض طفل..."
+                  className="w-full px-2.5 py-1.5 border border-slate-300 rounded-md"
+                />
+              </div>
             </div>
           </div>
         )}
@@ -766,7 +843,7 @@ export const PatientForm: React.FC<PatientFormProps> = ({ patient, onChange, onR
             <input
               type="number"
               min="0"
-              value={patient.totalCost || 250}
+              value={currentTestsCost}
               onChange={(e) => { const val = Number(e.target.value) || 0; syncDiscount(patient.discountType || 'percentage', customPercent, customFlatDiscount, appliedCoupon, val); }}
               className="w-24 text-center mx-auto px-1 py-0.5 border border-slate-300 rounded font-bold font-mono text-sm"
             />
@@ -776,11 +853,28 @@ export const PatientForm: React.FC<PatientFormProps> = ({ patient, onChange, onR
             <strong className="text-sm font-black font-mono text-rose-700">-{discountAmount} ج.م</strong>
           </div>
           <div>
-            <span className="text-slate-500 block">الصافي المطلوب:</span>
+            <span className="text-slate-500 block">المبلغ بعد الخصم:</span>
             <strong className="text-base font-black font-mono text-emerald-700">{netAmount} ج.م</strong>
           </div>
         </div>
       </div>
+
+      {actionNotice && (
+        <div
+          className={`p-3 rounded-xl border text-xs font-bold flex items-center gap-2 ${
+            actionNotice.type === 'success'
+              ? 'bg-emerald-50 border-emerald-300 text-emerald-900'
+              : 'bg-rose-50 border-rose-300 text-rose-900'
+          }`}
+        >
+          {actionNotice.type === 'success' ? (
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+          ) : (
+            <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+          )}
+          <span>{actionNotice.text}</span>
+        </div>
+      )}
 
       {/* Row 5: Action Toolbar (WhatsApp Confirmation, Reschedule, Email, Confirm Draw & Loyalty Card) */}
       <div className="bg-emerald-50/70 p-4 rounded-xl border border-emerald-200 space-y-3">
@@ -886,7 +980,7 @@ export const PatientForm: React.FC<PatientFormProps> = ({ patient, onChange, onR
                   updateField('appointmentDate', newDate);
                   updateField('appointmentTime', newTime);
                   setRescheduleModalOpen(false);
-                  alert(`تم تحديث الموعد إلى ${newDate} (${newTime}) بنجاح!`);
+                  showNotice('success', `تم تحديث الموعد إلى ${newDate} (${newTime}) بنجاح!`);
                 }}
                 className="flex-1 py-2 bg-emerald-700 text-white rounded-lg text-xs font-bold cursor-pointer"
               >
@@ -920,12 +1014,20 @@ export const PatientForm: React.FC<PatientFormProps> = ({ patient, onChange, onR
           isHomeVisit: bookingType === 'home_visit',
           address: patient.homeAddress,
           deliveryNotes: patient.deliveryNotes,
-          branchName: 'الفرع الرئيسي - بهتيم',
+          visitSpecialist: patient.visitSpecialist || homeVisitTeam[0]?.name,
+          branchRepresentative: patient.branchRepresentative || branchReceptionTeam[0]?.name,
+          branchName: patient.branchName || facilities?.[0]?.nameAr || 'الفرع الرئيسي - بهتيم',
+          branchAddress: facilities?.find(f => f.nameAr === patient.branchName)?.address,
+          branchPhone: facilities?.find(f => f.nameAr === patient.branchName)?.phones?.join(' / '),
           testsList: patient.clinicalHistory || 'الفحوصات التشخيصية المسجلة',
+          testsSubtotal: currentTestsCost,
+          grossTotal: baseSubtotal,
           subtotal: baseSubtotal,
+          visitFee: effectiveHomeFee,
           discountAmount,
           discountLabel,
           netAmount,
+          fastingHours: Number(patient.fastingHours) || 0,
           paymentMethod: patient.paymentMethod === 'card' ? 'بطاقة ائتمانية' : patient.paymentMethod === 'instapay' ? 'إنستا باي' : patient.paymentMethod === 'wallet' ? 'محفظة إلكترونية' : 'نقداً (كاش)'
         }}
       />
