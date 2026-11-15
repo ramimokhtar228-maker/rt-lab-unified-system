@@ -23,7 +23,8 @@ import {
   Building2,
   Home,
   UserCheck,
-  FileText
+  FileText,
+  ClipboardList
 } from 'lucide-react';
 import { Patient, InvoiceTestItem, PaymentMethod, LabReport } from '../types';
 import { LAB_CATALOG } from '../data/labCatalog';
@@ -68,7 +69,8 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
     diagnosticProfiles,
     forceSyncCatalog,
     facilities,
-    staffMembers
+    staffMembers,
+    openPatientSheet
   } = useApp();
 
   // Use local date (Egypt / regional timezone) instead of UTC toISOString to avoid day shift
@@ -688,6 +690,20 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
             <span>الانتقال لإدخال نتائج التحاليل</span>
           </button>
 
+          {/* Print Patient Sheet (Lab Bench A4) */}
+          <button
+            type="button"
+            onClick={() => {
+              if (createdReportObj) {
+                openPatientSheet(createdReportObj);
+              }
+            }}
+            className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-black text-xs transition-colors cursor-pointer shadow-sm"
+          >
+            <ClipboardList className="w-4 h-4 text-rose-300" />
+            <span>طباعة Patient Sheet للمعمل (A4)</span>
+          </button>
+
           {/* Print Invoice */}
           <button
             type="button"
@@ -723,7 +739,7 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
               setCustomBarcode('');
               setCreatedReportObj(null);
             }}
-            className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs border border-slate-300 transition-colors cursor-pointer"
+            className="w-full sm:col-span-2 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs border border-slate-300 transition-colors cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>تسجيل حالة جديدة أخرى</span>

@@ -19,7 +19,8 @@ import {
   CheckCheck,
   MessageCircle,
   RefreshCw,
-  Check
+  Check,
+  ClipboardList
 } from 'lucide-react';
 import { WhatsAppBookingModal } from './WhatsAppBookingModal';
 import { LabReport } from '../types';
@@ -36,7 +37,8 @@ export const WorklistModule: React.FC = () => {
     setIsBarcodeScannerOpen,
     instruments,
     simulateInstrumentRun,
-    syncAllDevicesNow
+    syncAllDevicesNow,
+    openPatientSheet
   } = useApp();
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -348,6 +350,15 @@ export const WorklistModule: React.FC = () => {
                   </div>
 
                   <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => openPatientSheet(rep)}
+                      title="طباعة ورقة عمل الحالة للكيميائي المختص داخل الوحدة (Patient Sheet A4)"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs whitespace-nowrap shrink-0"
+                    >
+                      <ClipboardList className="w-3.5 h-3.5 text-rose-300" />
+                      <span>Patient Sheet</span>
+                    </button>
                     {!isVerified ? (
                       <button
                         onClick={() => verifyReport(rep.id)}

@@ -46,7 +46,8 @@ import {
   Eye,
   ListFilter,
   RefreshCw,
-  Users
+  Users,
+  ClipboardList
 } from 'lucide-react';
 
 interface ReportEditorProps {
@@ -76,7 +77,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
   onOpenIllustrationsModal,
   onOpenSmartReport
 }) => {
-  const { packages, applyPackageToReport, reports, setSelectedReportId, syncAllDevicesNow, saveParameterNormalPermanently } = useApp();
+  const { packages, applyPackageToReport, reports, setSelectedReportId, syncAllDevicesNow, saveParameterNormalPermanently, openPatientSheet } = useApp();
   const [isManualSyncing, setIsManualSyncing] = useState(false);
   const [syncMessage, setSyncMessage] = useState<string | null>(null);
   const [activeProfileTab, setActiveProfileTab] = useState<string>(report.profiles[0]?.id || '');
@@ -909,6 +910,17 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
           >
             <FileSpreadsheet className="w-3.5 h-3.5" />
             <span>PowerPoint</span>
+          </button>
+
+          {/* Lab Bench Patient Sheet */}
+          <button
+            type="button"
+            onClick={() => openPatientSheet(report)}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-rose-200 border border-slate-700 text-xs font-bold rounded-lg transition-all shadow-xs cursor-pointer whitespace-nowrap shrink-0"
+            title="طباعة ورقة عمل الحالة للكيميائي المختص داخل الوحدة (Patient Sheet A4)"
+          >
+            <ClipboardList className="w-3.5 h-3.5 text-rose-300" />
+            <span>Patient Sheet</span>
           </button>
 
           {/* Invoice & Receipt Button */}

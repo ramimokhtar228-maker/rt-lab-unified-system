@@ -504,6 +504,16 @@ export interface LabStaffSignatures {
 
 export type ReportStatus = 'draft' | 'in_progress' | 'verified' | 'released';
 
+export interface PatientSheetMeta {
+  unitName?: string;
+  assignedChemist?: string;
+  handoverBy?: string;
+  handoverDate?: string;
+  expectedDeliveryDate?: string;
+  benchNotes?: string;
+  parameterNotes?: Record<string, string>;
+}
+
 export interface LabReport {
   id: string;
   reportNumber: string;
@@ -523,6 +533,7 @@ export interface LabReport {
   };
   attachedIllustrations?: DiseaseIllustration[];
   invoiceId?: string;
+  patientSheetMeta?: PatientSheetMeta;
 }
 
 export interface CatalogProfileTemplate {

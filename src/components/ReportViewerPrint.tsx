@@ -29,7 +29,8 @@ import {
   Microscope,
   Sparkles,
   User,
-  BarChart2
+  BarChart2,
+  ClipboardList
 } from 'lucide-react';
 
 interface ReportViewerPrintProps {
@@ -56,7 +57,8 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
     updateStaffSignatures, 
     updateReport,
     incomeRecords,
-    updateIncomeRecord
+    updateIncomeRecord,
+    openPatientSheet
   } = useApp();
   const [isClientModalOpen, setIsClientModalOpen] = useState(false);
   const [isLabModalOpen, setIsLabModalOpen] = useState(false);
@@ -216,6 +218,17 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
           >
             <Settings className="w-3.5 h-3.5 text-rose-400" />
             <span>بيانات المعمل والإمضاءات</span>
+          </button>
+
+          {/* Lab Bench Patient Sheet */}
+          <button
+            type="button"
+            onClick={() => openPatientSheet(safeReport)}
+            className="flex items-center gap-1.5 px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-rose-200 border border-slate-700 text-xs font-bold rounded-lg shadow-sm transition-all cursor-pointer whitespace-nowrap shrink-0"
+            title="طباعة ورقة عمل الحالة للكيميائي المختص داخل الوحدة (Patient Sheet A4)"
+          >
+            <ClipboardList className="w-3.5 h-3.5 text-rose-300" />
+            <span>Patient Sheet</span>
           </button>
 
           {/* Invoice Button */}

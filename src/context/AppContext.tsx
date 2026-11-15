@@ -321,6 +321,9 @@ interface AppContextType {
   setIsLabInfoModalOpen: (open: boolean) => void;
   isCloudSyncOpen: boolean;
   setIsCloudSyncOpen: (open: boolean) => void;
+  patientSheetReport: LabReport | null;
+  openPatientSheet: (report: LabReport) => void;
+  closePatientSheet: () => void;
 }
 
 export function mergeTwoReports(localRep: LabReport, remoteRep: LabReport): LabReport {
@@ -391,6 +394,10 @@ export function mergeTwoReports(localRep: LabReport, remoteRep: LabReport): LabR
     staff: {
       ...(localRep.staff || {}),
       ...(remoteRep.staff || {})
+    },
+    patientSheetMeta: {
+      ...(localRep.patientSheetMeta || {}),
+      ...(remoteRep.patientSheetMeta || {})
     },
     updatedAt: new Date(Math.max(localTime, remoteTime, Date.now())).toISOString()
   };
@@ -515,6 +522,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [isLabInfoModalOpen, setIsLabInfoModalOpen] = useState(false);
   const [isCloudSyncOpen, setIsCloudSyncOpen] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState<IncomeRecord | null>(null);
+  const [patientSheetState, setPatientSheetState] = useState<LabReport | null>(null);
 
   // 4. Reports (Unified Diagnostic Worklist)
   const [reports, setReports] = useStampedCollection<LabReport>(() => {
@@ -4453,7 +4461,10 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
     isLabInfoModalOpen,
     setIsLabInfoModalOpen,
     isCloudSyncOpen,
-    setIsCloudSyncOpen
+    setIsCloudSyncOpen,
+    patientSheetReport: patientSheetState ? (reports.find(r => r.id === patientSheetState.id) || patientSheetState) : null,
+    openPatientSheet: (rep: LabReport) => setPatientSheetState(rep),
+    closePatientSheet: () => setPatientSheetState(null)
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

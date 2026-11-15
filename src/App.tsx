@@ -27,6 +27,7 @@ import { PatientInvoiceModal } from './components/PatientInvoiceModal';
 import { TestCatalogModal } from './components/TestCatalogModal';
 import { ManualTestModal } from './components/ManualTestModal';
 import { OfflineIndicator } from './components/OfflineIndicator';
+import { PatientSheetModal } from './components/PatientSheetModal';
 import { getNextLabIdentity } from './utils/labNumbering';
 import {
   LabReport,
@@ -458,6 +459,9 @@ const AppContent: React.FC = () => {
           onClose={() => setIsCloudSyncOpen(false)}
         />
       )}
+
+      {/* Lab Bench Patient Sheet Modal (A4 Printable) */}
+      <PatientSheetModal />
 
       {/* Offline Connectivity Notification */}
       <OfflineIndicator />

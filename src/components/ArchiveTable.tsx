@@ -25,7 +25,8 @@ import {
   Zap,
   RefreshCw,
   Receipt,
-  Sparkles
+  Sparkles,
+  ClipboardList
 } from 'lucide-react';
 
 interface ArchiveTableProps {
@@ -67,7 +68,7 @@ export const ArchiveTable: React.FC<ArchiveTableProps> = ({
   onBulkDeleteReports,
   onBulkUpdateStatus
 }) => {
-  const { labInfo } = useApp();
+  const { labInfo, openPatientSheet } = useApp();
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [selectedReportIds, setSelectedReportIds] = useState<string[]>([]);
 
@@ -435,6 +436,16 @@ export const ArchiveTable: React.FC<ArchiveTableProps> = ({
                           title="تعديل التقرير والنتائج"
                         >
                           <Edit3 className="w-4 h-4" />
+                        </button>
+
+                        {/* Patient Sheet (Lab Bench A4) Button */}
+                        <button
+                          type="button"
+                          onClick={() => openPatientSheet(report)}
+                          className="p-1.5 text-rose-800 hover:text-rose-950 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                          title="طباعة ورقة عمل الحالة للكيميائي المختص (Patient Sheet A4)"
+                        >
+                          <ClipboardList className="w-4 h-4" />
                         </button>
 
                         {/* Print Button */}
