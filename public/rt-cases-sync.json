@@ -6686,5 +6686,47 @@
     "remainingAmount": 0,
     "paymentMethod": "cash",
     "createdAt": "2026-11-14T19:38:25.319Z"
+  },
+  {
+    "id": "rep-1794769412559",
+    "reportNumber": "RT-2026-092",
+    "invoiceNumber": "inv-1794769412591",
+    "barcode": "RT-10122",
+    "patientName": "هانم متولى خطاب",
+    "age": 61,
+    "gender": "female",
+    "phone": "0 11 11549505",
+    "referringDoctor": "Herself",
+    "tests": [
+      {
+        "id": "prof-1794769412559-f0d7",
+        "code": "GLYCEMIC",
+        "nameAr": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+        "nameEn": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+        "category": "Clinical Chemistry",
+        "sampleType": "Fluoride Plasma & EDTA Blood",
+        "unit": "mg/dL",
+        "minNormal": 70,
+        "maxNormal": 99,
+        "textReference": ""
+      }
+    ],
+    "netAmount": 270,
+    "paidAmount": 270,
+    "paymentStatus": "paid",
+    "financialClearance": "CLEARED_FOR_RELEASE",
+    "bookingType": "home_visit",
+    "isHomeVisit": true,
+    "visitFee": 50,
+    "visitAddress": "٧٢ شارع كامل منصور محطه البراميل شبرا الخيمه",
+    "homeAddress": "٧٢ شارع كامل منصور محطه البراميل شبرا الخيمه",
+    "deliveryNotes": "",
+    "visitSpecialist": "استاذه / ايه مصطفى",
+    "discount": 0,
+    "testsSubtotal": 220,
+    "subtotal": 270,
+    "remainingAmount": 0,
+    "paymentMethod": "cash",
+    "createdAt": "2026-11-15T19:03:32.560Z"
   }
 ]
