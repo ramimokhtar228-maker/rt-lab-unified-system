@@ -4846,7 +4846,7 @@
     "createdAt": "2026-11-12T20:46:34.793Z"
   },
   {
-    "id": "rep-1794514706045",
+    "id": "rep-rep-1794514706045",
     "reportNumber": "RT-2026-086",
     "invoiceNumber": "inv-1794514706078",
     "barcode": "RT-10116",
@@ -4869,21 +4869,21 @@
     ],
     "netAmount": 251,
     "paidAmount": 251,
-    "paymentStatus": "paid",
-    "financialClearance": "CLEARED_FOR_RELEASE",
-    "bookingType": "home_visit",
+    "paymentStatus": "pending",
+    "financialClearance": "PAYMENT_PENDING",
+    "bookingType": "branch",
     "isHomeVisit": false,
-    "visitFee": 65,
+    "visitFee": 0,
     "visitAddress": "٢٩ ش نصر الاسلام متفرع من شارع الوحدة مدينة بدر السكنية شبرا الخيمة",
     "homeAddress": "٢٩ ش نصر الاسلام متفرع من شارع الوحدة مدينة بدر السكنية شبرا الخيمة",
     "deliveryNotes": "",
     "visitSpecialist": "",
-    "discount": 591,
-    "testsSubtotal": 777,
+    "discount": 0,
+    "testsSubtotal": 251,
     "subtotal": 251,
     "remainingAmount": 0,
     "paymentMethod": "cash",
-    "createdAt": "2026-11-12T20:18:26.046Z"
+    "createdAt": "2026-11-13T09:00:00.000Z"
   },
   {
     "id": "rep-1794298620913",
