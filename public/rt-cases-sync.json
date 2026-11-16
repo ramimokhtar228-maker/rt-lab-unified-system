@@ -4846,7 +4846,7 @@
     "createdAt": "2026-11-12T20:46:34.793Z"
   },
   {
-    "id": "rep-rep-1794514706045",
+    "id": "rep-rep-rep-1794514706045",
     "reportNumber": "RT-2026-086",
     "invoiceNumber": "inv-1794514706078",
     "barcode": "RT-10116",
@@ -4883,7 +4883,7 @@
     "subtotal": 251,
     "remainingAmount": 0,
     "paymentMethod": "cash",
-    "createdAt": "2026-11-13T09:00:00.000Z"
+    "createdAt": "2026-11-13T09:00"
   },
   {
     "id": "rep-1794298620913",
