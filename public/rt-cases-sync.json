@@ -4768,8 +4768,8 @@
         "category": "Anemia & Vitamins",
         "sampleType": "Serum",
         "unit": "ng/mL",
-        "minNormal": 30,
-        "maxNormal": 400,
+        "minNormal": 13,
+        "maxNormal": 150,
         "textReference": "Adult Males: 30 - 400 ng/mL | Adult Females: 15 - 150 ng/mL"
       }
     ],
