@@ -1,7 +1,11 @@
+import { LabReport, IncomeRecord } from '../types';
+import { safeSetLocalStorage } from './idbBackup';
+
 export interface DeletionTombstone {
   id: string;
   reportNumber?: string;
   barcode?: string;
+  patientName?: string;
   deletedAt: string;
 }
 
@@ -14,8 +18,11 @@ interface DeletableRecord {
   id?: string;
   reportNumber?: string;
   invoiceNumber?: string;
+  labNumber?: string;
   barcode?: string;
-  patient?: { barcode?: string; fullName?: string };
+  patientName?: string;
+  fullName?: string;
+  patient?: { barcode?: string; fullName?: string; labNumber?: string };
 }
 
 const STORAGE_KEY = 'rt-deletion-registry';
@@ -23,6 +30,21 @@ const MAX_TOMBSTONES = 2000;
 
 function emptyRegistry(): DeletionRegistry {
   return { reports: [], invoices: [] };
+}
+
+function normalizeName(name?: string | null): string {
+  return String(name || '')
+    .replace(/[\u064B-\u065F\u0670]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+}
+
+function namesCompatible(a?: string | null, b?: string | null): boolean {
+  const na = normalizeName(a);
+  const nb = normalizeName(b);
+  if (!na || !nb || na === 'مريض' || nb === 'مريض') return true;
+  return na === nb || na.includes(nb) || nb.includes(na);
 }
 
 export function getDeletionTombstones(): DeletionRegistry {
@@ -43,7 +65,10 @@ function persist(registry: DeletionRegistry): void {
   try {
     const trim = (list: DeletionTombstone[]) =>
       [...list].sort((a, b) => (a.deletedAt || '').localeCompare(b.deletedAt || '')).slice(-MAX_TOMBSTONES);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ reports: trim(registry.reports), invoices: trim(registry.invoices) }));
+    safeSetLocalStorage(
+      STORAGE_KEY,
+      JSON.stringify({ reports: trim(registry.reports), invoices: trim(registry.invoices) })
+    );
   } catch {
     // التخزين المحلي غير متاح
   }
@@ -85,8 +110,9 @@ export function registerReportDeletion(report?: DeletableRecord | null): void {
   const registry = getDeletionTombstones();
   registry.reports = upsert(registry.reports, {
     id: report.id,
-    reportNumber: report.reportNumber,
-    barcode: report.patient?.barcode,
+    reportNumber: report.reportNumber || report.patient?.labNumber,
+    barcode: report.patient?.barcode || report.barcode,
+    patientName: report.patient?.fullName || report.fullName || report.patientName,
     deletedAt: new Date().toISOString()
   });
   persist(registry);
@@ -97,27 +123,36 @@ export function registerInvoiceDeletion(record?: DeletableRecord | null): void {
   const registry = getDeletionTombstones();
   registry.invoices = upsert(registry.invoices, {
     id: record.id,
-    reportNumber: record.invoiceNumber,
+    reportNumber: record.invoiceNumber || record.labNumber,
     barcode: record.barcode,
+    patientName: record.patientName || record.fullName,
     deletedAt: new Date().toISOString()
   });
   persist(registry);
 }
 
 interface TombstoneIndex {
-  ids: Set<string>;
-  numbers: Set<string>;
-  barcodes: Set<string>;
+  ids: Map<string, DeletionTombstone>;
+  numbers: Map<string, DeletionTombstone[]>;
+  barcodes: Map<string, DeletionTombstone[]>;
 }
 
 function buildIndex(tombstones: DeletionTombstone[]): TombstoneIndex {
-  const ids = new Set<string>();
-  const numbers = new Set<string>();
-  const barcodes = new Set<string>();
+  const ids = new Map<string, DeletionTombstone>();
+  const numbers = new Map<string, DeletionTombstone[]>();
+  const barcodes = new Map<string, DeletionTombstone[]>();
   tombstones.forEach(tombstone => {
-    if (tombstone.id) ids.add(tombstone.id);
-    if (tombstone.reportNumber) numbers.add(tombstone.reportNumber);
-    if (tombstone.barcode) barcodes.add(tombstone.barcode);
+    if (tombstone.id) ids.set(tombstone.id, tombstone);
+    if (tombstone.reportNumber) {
+      const list = numbers.get(tombstone.reportNumber) || [];
+      list.push(tombstone);
+      numbers.set(tombstone.reportNumber, list);
+    }
+    if (tombstone.barcode) {
+      const list = barcodes.get(tombstone.barcode) || [];
+      list.push(tombstone);
+      barcodes.set(tombstone.barcode, list);
+    }
   });
   return { ids, numbers, barcodes };
 }
@@ -137,33 +172,55 @@ export function purgeProtectedTombstones(): void {
   try {
     const registry = getDeletionTombstones();
     const isProtected = (t: DeletionTombstone) => {
-      if (PROTECTED_IDENTIFIERS.has(t.id) || (t.reportNumber && PROTECTED_IDENTIFIERS.has(t.reportNumber)) || (t.barcode && PROTECTED_IDENTIFIERS.has(t.barcode))) {
+      if (
+        PROTECTED_IDENTIFIERS.has(t.id) ||
+        (t.reportNumber && PROTECTED_IDENTIFIERS.has(t.reportNumber)) ||
+        (t.barcode && PROTECTED_IDENTIFIERS.has(t.barcode))
+      ) {
         return true;
       }
       return false;
     };
-    registry.reports = registry.reports.filter(t => !isProtected(t));
-    registry.invoices = registry.invoices.filter(t => !isProtected(t));
-    persist(registry);
+    const nextReports = registry.reports.filter(t => !isProtected(t));
+    const nextInvoices = registry.invoices.filter(t => !isProtected(t));
+    if (nextReports.length !== registry.reports.length || nextInvoices.length !== registry.invoices.length) {
+      registry.reports = nextReports;
+      registry.invoices = nextInvoices;
+      persist(registry);
+    }
   } catch {}
+}
+
+function matchesAnyTombstoneNameSafe(candidates: DeletionTombstone[] | undefined, patientName: string): boolean {
+  if (!candidates || candidates.length === 0) return false;
+  return candidates.some(t => !t.patientName || !patientName || namesCompatible(t.patientName, patientName));
 }
 
 function keepRecord(record: DeletableRecord, index: TombstoneIndex): boolean {
   if (!record) return false;
   const barcode = record.barcode || record.patient?.barcode;
-  const number = record.reportNumber || record.invoiceNumber;
-  const patientName = (record as any).patientName || (record as any).fullName || record.patient?.fullName || '';
+  const number = record.reportNumber || record.invoiceNumber || record.labNumber;
+  const patientName = record.patientName || record.fullName || record.patient?.fullName || '';
 
-  // Never drop protected patient cases (Dina, Hind, Manar, etc.)
   if (barcode && PROTECTED_IDENTIFIERS.has(barcode)) return true;
   if (number && PROTECTED_IDENTIFIERS.has(number)) return true;
   if (record.id && PROTECTED_IDENTIFIERS.has(record.id)) return true;
   if (patientName && PROTECTED_NAMES.some(n => patientName.includes(n))) return true;
 
   if (record.id && index.ids.has(record.id)) return false;
-  if (number && index.numbers.has(number)) return false;
-  if (barcode && index.barcodes.has(barcode)) return false;
+  if (number && matchesAnyTombstoneNameSafe(index.numbers.get(number), patientName)) return false;
+  if (barcode && matchesAnyTombstoneNameSafe(index.barcodes.get(barcode), patientName)) return false;
   return true;
+}
+
+export function isReportDeletedByTombstone(report: Partial<LabReport> | DeletableRecord): boolean {
+  const index = buildIndex(getDeletionTombstones().reports);
+  return !keepRecord(report as DeletableRecord, index);
+}
+
+export function isInvoiceDeletedByTombstone(invoice: Partial<IncomeRecord> | DeletableRecord): boolean {
+  const index = buildIndex(getDeletionTombstones().invoices);
+  return !keepRecord(invoice as DeletableRecord, index);
 }
 
 export function filterDeletedReports<T extends DeletableRecord>(list: T[]): T[] {

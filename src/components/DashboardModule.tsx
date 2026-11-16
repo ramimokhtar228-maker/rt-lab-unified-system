@@ -65,7 +65,7 @@ export const DashboardModule: React.FC = () => {
   const [timeRange, setTimeRange] = useState<'today' | 'month' | 'all'>('today');
   const [casesFilter, setCasesFilter] = useState<'all' | 'today' | 'pending' | 'verified' | 'requested_cases'>('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortMode, setSortMode] = useState<'alphabetical' | 'latest'>('alphabetical');
+  const [sortMode, setSortMode] = useState<'alphabetical' | 'latest'>('latest');
   const [syncStatus, setSyncStatus] = useState<SyncStatus>(realtimeSyncManager.getStatus());
   const [manualSyncing, setManualSyncing] = useState(false);
   const [isHealingCases, setIsHealingCases] = useState(false);
@@ -78,7 +78,8 @@ export const DashboardModule: React.FC = () => {
     return unsub;
   }, []);
 
-  const todayStr = new Date().toISOString().split('T')[0];
+  const nowLocal = new Date();
+  const todayStr = `${nowLocal.getFullYear()}-${String(nowLocal.getMonth() + 1).padStart(2, '0')}-${String(nowLocal.getDate()).padStart(2, '0')}`;
   const currentMonthStr = todayStr.substring(0, 7);
 
   // Filtered Income & Expenses
@@ -200,10 +201,6 @@ export const DashboardModule: React.FC = () => {
         const timeB = new Date(b.updatedAt || b.createdAt || 0).getTime();
         return timeB - timeA;
       } else {
-        const isReqA = ['دينا', 'هند', 'منار'].some(n => (a.patient?.fullName || '').includes(n));
-        const isReqB = ['دينا', 'هند', 'منار'].some(n => (b.patient?.fullName || '').includes(n));
-        if (isReqA && !isReqB) return -1;
-        if (!isReqA && isReqB) return 1;
         const timeA = new Date(a.updatedAt || a.createdAt || 0).getTime();
         const timeB = new Date(b.updatedAt || b.createdAt || 0).getTime();
         return timeB - timeA;

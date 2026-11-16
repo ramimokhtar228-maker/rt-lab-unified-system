@@ -3,6 +3,7 @@ import { LAB_CATALOG, DEFAULT_STAFF, INITIAL_INDIVIDUAL_TESTS, INITIAL_LAB_INFO,
 import { DISEASE_ILLUSTRATIONS, suggestHematologicalIllustration } from '../data/diseaseIllustrations';
 import { runAutomaticCalculations } from './calculator';
 import { getDeletedMap, recordStamp } from './cloudStore';
+import { safeSetLocalStorage, freeRedundantLocalStorage } from './idbBackup';
 
 export const MIGRATION_VERSION_KEY = 'rt_lab_migration_v9_booking_sync_fix_2026';
 
@@ -522,51 +523,53 @@ export function runGlobalDataUpgrade(): { upgradedReportsCount: number; success:
       alexAddress: ''
     };
     if (!localStorage.getItem('rt_lab_contacts')) {
-      localStorage.setItem('rt_lab_contacts', JSON.stringify(officialContacts));
+      safeSetLocalStorage('rt_lab_contacts', JSON.stringify(officialContacts));
     }
-    if (!localStorage.getItem('rt_lab_info_v3') && !localStorage.getItem('rt_lab_info_v2')) {
-      localStorage.setItem('rt_lab_info_v3', JSON.stringify(INITIAL_LAB_INFO));
-      localStorage.setItem('rt_lab_info_v2', JSON.stringify(INITIAL_LAB_INFO));
+    if (!localStorage.getItem('rt_lab_unified_lab_info_v3') && !localStorage.getItem('rt_lab_info_v3') && !localStorage.getItem('rt_lab_info_v2')) {
+      safeSetLocalStorage('rt_lab_unified_lab_info_v3', JSON.stringify(INITIAL_LAB_INFO));
     }
     if (!localStorage.getItem('rt_lab_unified_staff_signatures_v3') && !localStorage.getItem('rt_lab_staff_v3') && !localStorage.getItem('rt_lab_staff_v2')) {
-      localStorage.setItem('rt_lab_unified_staff_signatures_v3', JSON.stringify(DEFAULT_STAFF));
-      localStorage.setItem('rt_lab_staff_v3', JSON.stringify(DEFAULT_STAFF));
+      safeSetLocalStorage('rt_lab_unified_staff_signatures_v3', JSON.stringify(DEFAULT_STAFF));
     }
 
-    // 2. Upgrade and Merge Test Catalog in localStorage
-    const savedTestCatalogRaw = localStorage.getItem('rt_lab_unified_test_catalog_v3');
+    // 2. Upgrade and Merge Test Catalog in canonical localStorage only
+    const savedTestCatalogRaw = localStorage.getItem('rt_lab_unified_test_catalog_v3') || localStorage.getItem('rt_lab_individual_tests_v2');
     const existingTestCatalog = savedTestCatalogRaw ? JSON.parse(savedTestCatalogRaw) : [];
     const mergedTestCatalog = mergeCatalogWithDefaults(existingTestCatalog);
-    localStorage.setItem('rt_lab_unified_test_catalog_v3', JSON.stringify(mergedTestCatalog));
+    safeSetLocalStorage('rt_lab_unified_test_catalog_v3', JSON.stringify(mergedTestCatalog));
 
-    const savedPackagesRaw = localStorage.getItem('rt_lab_unified_packages_v3');
+    const savedPackagesRaw = localStorage.getItem('rt_lab_unified_packages_v3') || localStorage.getItem('rt_lab_packages_v3');
     const existingPackages = savedPackagesRaw ? JSON.parse(savedPackagesRaw) : [];
     const mergedPackages = mergePackagesWithDefaults(existingPackages);
-    localStorage.setItem('rt_lab_unified_packages_v3', JSON.stringify(mergedPackages));
+    safeSetLocalStorage('rt_lab_unified_packages_v3', JSON.stringify(mergedPackages));
 
-    const savedProfilesRaw = localStorage.getItem('rt_lab_unified_diagnostic_profiles_v3');
+    const savedProfilesRaw =
+      localStorage.getItem('rt_lab_unified_diagnostic_profiles_v3') ||
+      localStorage.getItem('rt_lab_custom_catalog_v3') ||
+      localStorage.getItem('rt_lab_catalog_v2');
     const existingProfiles = savedProfilesRaw ? JSON.parse(savedProfilesRaw) : [];
     const mergedProfiles = mergeProfilesWithDefaults(existingProfiles);
-    localStorage.setItem('rt_lab_unified_diagnostic_profiles_v3', JSON.stringify(mergedProfiles));
+    safeSetLocalStorage('rt_lab_unified_diagnostic_profiles_v3', JSON.stringify(mergedProfiles));
 
-    // Compatibility keys for legacy modules
-    localStorage.setItem('rt_lab_catalog_v2', JSON.stringify(mergedProfiles));
-    localStorage.setItem('rt_lab_custom_catalog_v3', JSON.stringify(mergedProfiles));
-    localStorage.setItem('rt_lab_individual_tests_v2', JSON.stringify(mergedTestCatalog));
-
-    // 3. Scan and Upgrade ALL Saved Patient Reports
+    // 3. Migrate & Upgrade ALL Saved Patient Reports into the single canonical key
     let reportCount = 0;
-    const reportKeys = ['rt_lab_unified_reports_v3', 'rt_lab_reports_v2', 'rt_lab_reports_v3', 'rt_lab_reports_v1'];
+    const canonicalReportKey = 'rt_lab_unified_reports_v3';
+    const legacyReportKeys = ['rt_lab_reports_v2', 'rt_lab_reports_v3', 'rt_lab_reports_v1'];
+    const collectedReports = new Map<string, LabReport>();
 
-    reportKeys.forEach(key => {
+    [canonicalReportKey, ...legacyReportKeys].forEach(key => {
       const savedStr = localStorage.getItem(key);
       if (savedStr) {
         try {
-          const reports: LabReport[] = JSON.parse(savedStr);
-          if (Array.isArray(reports) && reports.length > 0) {
-            const upgraded = reports.map(r => upgradeSingleReport(r));
-            localStorage.setItem(key, JSON.stringify(upgraded));
-            reportCount = Math.max(reportCount, upgraded.length);
+          const parsed: LabReport[] = JSON.parse(savedStr);
+          if (Array.isArray(parsed)) {
+            parsed.forEach(r => {
+              if (!r || !r.id) return;
+              const upgraded = upgradeSingleReport(r);
+              if (!collectedReports.has(r.id)) {
+                collectedReports.set(r.id, upgraded);
+              }
+            });
           }
         } catch (e) {
           console.error(`Error parsing reports in ${key}:`, e);
@@ -574,8 +577,17 @@ export function runGlobalDataUpgrade(): { upgradedReportsCount: number; success:
       }
     });
 
-    localStorage.setItem(MIGRATION_VERSION_KEY, 'true');
-    console.log(`[RT-LAB] Successfully upgraded ${reportCount} saved reports with full CBC and disease illustrations!`);
+    if (collectedReports.size > 0) {
+      const finalReports = Array.from(collectedReports.values());
+      safeSetLocalStorage(canonicalReportKey, JSON.stringify(finalReports));
+      reportCount = finalReports.length;
+    }
+
+    // Purge duplicate legacy storage keys so 5MB localStorage quota never blocks new cases
+    freeRedundantLocalStorage();
+
+    safeSetLocalStorage(MIGRATION_VERSION_KEY, 'true');
+    console.log(`[RT-LAB] Successfully upgraded ${reportCount} saved reports and freed redundant localStorage keys.`);
     return { upgradedReportsCount: reportCount, success: true };
   } catch (err) {
     console.error('[RT-LAB] Migration error:', err);

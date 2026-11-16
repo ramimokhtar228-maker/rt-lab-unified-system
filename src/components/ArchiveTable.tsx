@@ -147,6 +147,10 @@ export const ArchiveTable: React.FC<ArchiveTableProps> = ({
       profiles.some(pr => (pr?.titleEn && pr.titleEn.toLowerCase().includes(term)) || (pr?.titleAr && pr.titleAr.includes(term)));
     const matchesStatus = statusFilter === "all" || r.status === statusFilter;
     return matchesSearch && matchesStatus;
+  }).sort((a, b) => {
+    const timeA = new Date(a.updatedAt || a.createdAt || 0).getTime();
+    const timeB = new Date(b.updatedAt || b.createdAt || 0).getTime();
+    return timeB - timeA;
   });
 
   const handleWhatsAppClick = (report: LabReport) => {

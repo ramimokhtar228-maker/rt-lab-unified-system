@@ -71,10 +71,37 @@ import { INITIAL_INDIVIDUAL_TESTS } from '../data/individualTestsData';
 import { INITIAL_INSTRUMENTS, SAMPLE_INSTRUMENT_TRANSMISSIONS } from '../data/instrumentsData';
 import { realtimeSyncManager } from '../utils/realtimeMultiDeviceSync';
 import { pushFullStoreToGitHub, pullFullStoreFromGitHub, syncInvoiceToDiagnostic, fetchDiagnosticCases, convertIncomeRecordToDiagnosticReport } from '../utils/githubSync';
-import { resolveUniqueLabIdentity, dedupeReports, dedupeInvoices, unionReports, unionInvoices } from '../utils/labNumbering';
+import {
+  resolveUniqueLabIdentity,
+  dedupeReports,
+  dedupeInvoices,
+  unionReports,
+  unionInvoices,
+  mergeReportCollections,
+  mergeInvoiceCollections,
+  findOrphanPairs,
+  namesCompatibleForIdentity
+} from '../utils/labNumbering';
 import { notifyReportApproved } from '../utils/whatsappNotify';
 import { playSyncChime } from '../utils/criticalAlerts';
-import { registerReportDeletion, registerInvoiceDeletion, importDeletionTombstones, filterDeletedReports, filterDeletedInvoices, purgeProtectedTombstones } from '../utils/deletionRegistry';
+import {
+  registerReportDeletion,
+  registerInvoiceDeletion,
+  importDeletionTombstones,
+  filterDeletedReports,
+  filterDeletedInvoices,
+  purgeProtectedTombstones,
+  isReportDeletedByTombstone,
+  isInvoiceDeletedByTombstone
+} from '../utils/deletionRegistry';
+import {
+  safeSetLocalStorage,
+  freeRedundantLocalStorage,
+  saveIdbSnapshot,
+  loadIdbSnapshot,
+  isPendingCloudPush,
+  setPendingCloudPush
+} from '../utils/idbBackup';
 import {
   mergeCatalogWithDefaults,
   mergePackagesWithDefaults,
@@ -384,6 +411,7 @@ export function mergeTwoReports(localRep: LabReport, remoteRep: LabReport): LabR
   };
 
   const status = (remoteRep.status === 'verified' || localRep.status === 'verified') ? 'verified' : (remoteRep.status || localRep.status || 'draft');
+  const maxTime = Math.max(localTime || 0, remoteTime || 0);
 
   return {
     ...localRep,
@@ -399,7 +427,7 @@ export function mergeTwoReports(localRep: LabReport, remoteRep: LabReport): LabR
       ...(localRep.patientSheetMeta || {}),
       ...(remoteRep.patientSheetMeta || {})
     },
-    updatedAt: new Date(Math.max(localTime, remoteTime, Date.now())).toISOString()
+    updatedAt: maxTime > 0 ? new Date(maxTime).toISOString() : (remoteRep.updatedAt || localRep.updatedAt || remoteRep.createdAt || localRep.createdAt || '')
   };
 }
 
@@ -411,6 +439,7 @@ export function mergeTwoInvoices(localInv: IncomeRecord, remoteInv: IncomeRecord
   const bType = remoteInv.bookingType || localInv.bookingType || (isHome ? 'home_visit' : 'branch');
   const vFee = remoteInv.visitFee ?? localInv.visitFee ?? 0;
   const vAddr = remoteInv.visitAddress || localInv.visitAddress;
+  const maxTime = Math.max(localTime || 0, remoteTime || 0);
 
   return {
     ...localInv,
@@ -433,7 +462,79 @@ export function mergeTwoInvoices(localInv: IncomeRecord, remoteInv: IncomeRecord
     paidAmount: remoteInv.paidAmount ?? localInv.paidAmount,
     remainingAmount: remoteInv.remainingAmount ?? localInv.remainingAmount,
     paymentStatus: (remoteInv.paymentStatus === 'paid' || localInv.paymentStatus === 'paid') ? 'paid' : (remoteInv.paymentStatus || localInv.paymentStatus),
-    updatedAt: new Date(Math.max(localTime, remoteTime, Date.now())).toISOString()
+    updatedAt: maxTime > 0 ? new Date(maxTime).toISOString() : (remoteInv.updatedAt || localInv.updatedAt || remoteInv.createdAt || localInv.createdAt || '')
+  };
+}
+
+function buildInvoiceFromOrphanReport(rep: LabReport): IncomeRecord {
+  const nowIso = rep.createdAt || new Date().toISOString();
+  const pat = rep.patient || ({} as Patient);
+  const labNum = rep.reportNumber || pat.labNumber || '';
+  const invId = rep.invoiceId || (rep.id.startsWith('rep-') ? rep.id.replace(/^rep-/, '') : `inv-${rep.id}`);
+  const invNum = (pat as any).invoiceNumber || (labNum ? `INV-${String(labNum).replace(/^RT-/i, '')}` : `INV-${Date.now().toString().slice(-6)}`);
+  const visitFee = Number(pat.visitFee || 0);
+  const discount = Number(pat.discountApplied || 0);
+  const repAny = rep as any;
+  const rawNet = Number(pat.totalCost ?? repAny.totalCost ?? 0);
+  const testsSubtotal = Number(pat.testsSubtotal ?? Math.max(0, rawNet - visitFee + discount));
+  const subtotal = testsSubtotal + visitFee;
+  const netAmount = rawNet > 0 ? rawNet : Math.max(0, subtotal - discount);
+  const paidAmount = Number(pat.paidAmount ?? (pat.paymentStatus === 'paid' || repAny.paymentStatus === 'paid' ? netAmount : 0));
+  const remainingAmount = Number(pat.remainingAmount ?? Math.max(0, netAmount - paidAmount));
+  const paymentStatus: IncomeRecord['paymentStatus'] =
+    (pat.paymentStatus as any) ||
+    (repAny.paymentStatus as any) ||
+    (paidAmount >= netAmount && netAmount > 0 ? 'paid' : (paidAmount > 0 ? 'partial' : 'pending'));
+
+  const derivedTests: InvoiceTestItem[] = (rep.profiles || []).map((prof, idx) => ({
+    id: `tst-rec-${idx}-${rep.id}`,
+    code: prof.profileCode || `TST-${idx + 1}`,
+    nameAr: prof.titleAr || prof.titleEn || 'تحاليل مخبرية',
+    nameEn: prof.titleEn || prof.titleAr || 'Lab Test',
+    category: prof.category || 'Clinical',
+    price: idx === 0 ? testsSubtotal : 0,
+    cost: 0
+  }));
+
+  return {
+    id: invId,
+    invoiceNumber: invNum,
+    patientName: pat.fullName || 'مريض مسجل',
+    patientPhone: pat.phone || '',
+    patientAge: pat.age || 30,
+    patientGender: pat.gender || 'female',
+    barcode: pat.barcode || '',
+    labNumber: labNum,
+    referringDoctor: pat.referringDoctorName || 'كشف معمل',
+    tests: derivedTests.length > 0 ? derivedTests : [{
+      id: `tst-rec-${rep.id}`,
+      code: 'GENERAL',
+      nameAr: 'تحاليل مخبرية',
+      nameEn: 'Lab Tests',
+      category: 'Clinical',
+      price: netAmount,
+      cost: 0
+    }],
+    subtotal,
+    testsSubtotal,
+    discount,
+    visitFee,
+    isHomeVisit: Boolean(pat.isHomeVisit || pat.bookingType === 'home_visit'),
+    bookingType: pat.bookingType || (pat.isHomeVisit ? 'home_visit' : 'branch'),
+    visitAddress: pat.homeAddress || '',
+    visitSpecialist: pat.visitSpecialist || '',
+    branchRepresentative: pat.branchRepresentative || '',
+    branchId: pat.branchId || 'branch-behteem',
+    netAmount,
+    paidAmount,
+    remainingAmount,
+    paymentMethod: (pat.paymentMethod as any) || 'cash',
+    paymentStatus,
+    cashierName: 'استرجاع تلقائي',
+    branch: pat.branchName || 'الفرع الرئيسي - بهتيم',
+    syncStatus: 'synced',
+    createdAt: nowIso,
+    updatedAt: rep.updatedAt || nowIso
   };
 }
 
@@ -782,6 +883,81 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // 16. GitHub Sync Config
   const [githubConfig, setGithubConfig] = useState<GitHubSyncConfig>(INITIAL_GITHUB_CONFIG);
 
+  // Always keep a mutable ref to the latest collections so async/timeout pushes never overwrite with stale React closures
+  const latestStateRef = useRef({
+    reports,
+    incomeRecords,
+    expenses,
+    profitConfig,
+    loyaltyProfiles,
+    inventory,
+    instruments,
+    transmissions,
+    labToLabOrders,
+    employees,
+    attendance,
+    payroll,
+    dailyCloseouts,
+    labInfo,
+    staffSignatures,
+    staffSignatureOptions,
+    testCatalog,
+    packages,
+    diagnosticProfiles,
+    auditLogs
+  });
+
+  latestStateRef.current = {
+    reports,
+    incomeRecords,
+    expenses,
+    profitConfig,
+    loyaltyProfiles,
+    inventory,
+    instruments,
+    transmissions,
+    labToLabOrders,
+    employees,
+    attendance,
+    payroll,
+    dailyCloseouts,
+    labInfo,
+    staffSignatures,
+    staffSignatureOptions,
+    testCatalog,
+    packages,
+    diagnosticProfiles,
+    auditLogs
+  };
+
+  const buildFullSyncSnapshot = useCallback((overrides?: Partial<typeof latestStateRef.current>) => {
+    const s = { ...latestStateRef.current, ...(overrides || {}) };
+    return {
+      reports: s.reports,
+      incomeRecords: s.incomeRecords,
+      expenses: s.expenses,
+      profitConfig: s.profitConfig,
+      loyaltyProfiles: s.loyaltyProfiles,
+      inventory: s.inventory,
+      instruments: s.instruments,
+      transmissions: s.transmissions,
+      labToLabOrders: s.labToLabOrders,
+      employees: s.employees,
+      attendance: s.attendance,
+      payroll: s.payroll,
+      dailyCloseouts: s.dailyCloseouts,
+      labInfo: s.labInfo,
+      staffSignatures: s.staffSignatures,
+      staffSignatureOptions: s.staffSignatureOptions,
+      testCatalog: s.testCatalog,
+      packages: s.packages,
+      diagnosticProfiles: s.diagnosticProfiles,
+      auditLogs: (s.auditLogs || []).slice(0, 500),
+      deletedMap: getDeletedMap(),
+      settingsStamps: getSettingsStamps()
+    };
+  }, []);
+
   // Automatic Debounced Cloud Push: Pushes to GitHub cloud whenever reports or invoices change
   const cloudPushTimeoutRef = useRef<any>(null);
 
@@ -790,41 +966,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (cloudPushTimeoutRef.current) {
       clearTimeout(cloudPushTimeoutRef.current);
     }
-    const currentReps = customReports || reports;
-    const currentInvs = customInvoices || incomeRecords;
 
+    setPendingCloudPush(true);
     cloudPushTimeoutRef.current = setTimeout(async () => {
       try {
-        const snapshot = {
-          reports: currentReps,
-          incomeRecords: currentInvs,
-          expenses,
-          profitConfig,
-          loyaltyProfiles,
-          inventory,
-          instruments,
-          transmissions,
-          labToLabOrders,
-          employees,
-          attendance,
-          payroll,
-          dailyCloseouts,
-          labInfo,
-          staffSignatures,
-          staffSignatureOptions,
-          testCatalog,
-          packages,
-          diagnosticProfiles,
-          auditLogs: auditLogs.slice(0, 500),
-          deletedMap: getDeletedMap(),
-          settingsStamps: getSettingsStamps()
-        };
-        await pushFullStoreToGitHub(githubConfig, snapshot);
+        const snapshot = buildFullSyncSnapshot({
+          ...(customReports ? { reports: customReports } : {}),
+          ...(customInvoices ? { incomeRecords: customInvoices } : {})
+        });
+        const res = await pushFullStoreToGitHub(githubConfig, snapshot);
+        if (res.success) {
+          setPendingCloudPush(false);
+        } else {
+          setPendingCloudPush(true);
+        }
       } catch (err) {
         console.warn('Auto cloud push error:', err);
+        setPendingCloudPush(true);
       }
     }, 1200);
-  }, [githubConfig, reports, incomeRecords, expenses, profitConfig, loyaltyProfiles, inventory, instruments, transmissions, labToLabOrders, employees, attendance, payroll, dailyCloseouts, labInfo, staffSignatures, staffSignatureOptions, testCatalog, packages, diagnosticProfiles, auditLogs]);
+  }, [githubConfig, buildFullSyncSnapshot]);
 
   // ── تطبيق النسخة السحابية على كل حقول البرنامج بدمج دقيق ──
   const applyCloudCollections = useCallback((data: Record<string, any>) => {
@@ -904,101 +1065,171 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setIncomeRecords(prev => dedupeInvoices(prev));
   }, [incomeRecords]);
 
-  // Persistence Effects
-  useEffect(() => { try { localStorage.setItem(REPORTS_KEY, JSON.stringify(reports)); } catch (e) { console.error(e); } }, [reports]);
-  useEffect(() => { try { localStorage.setItem(INCOME_KEY, JSON.stringify(incomeRecords)); } catch (e) { console.error(e); } }, [incomeRecords]);
-  useEffect(() => { try { localStorage.setItem(LOYALTY_KEY, JSON.stringify(loyaltyProfiles)); } catch (e) { console.error(e); } }, [loyaltyProfiles]);
-  useEffect(() => { try { localStorage.setItem(EXPENSES_KEY, JSON.stringify(expenses)); } catch (e) { console.error(e); } }, [expenses]);
-  useEffect(() => { try { localStorage.setItem(INVENTORY_KEY, JSON.stringify(inventory)); } catch (e) { console.error(e); } }, [inventory]);
-  useEffect(() => { try { localStorage.setItem(INSTRUMENTS_KEY, JSON.stringify(instruments)); } catch (e) { console.error(e); } }, [instruments]);
-  useEffect(() => { try { localStorage.setItem(TRANSMISSIONS_KEY, JSON.stringify(transmissions)); } catch (e) { console.error(e); } }, [transmissions]);
-  useEffect(() => { try { localStorage.setItem(AUDIT_KEY, JSON.stringify(auditLogs)); } catch (e) { console.error(e); } }, [auditLogs]);
-  useEffect(() => { try { localStorage.setItem(LAB_INFO_KEY, JSON.stringify(labInfo)); } catch (e) { console.error(e); } }, [labInfo]);
-  useEffect(() => { 
-    try { 
-      localStorage.setItem(CATALOG_KEY, JSON.stringify(testCatalog)); 
-      localStorage.setItem('rt_lab_individual_tests_v2', JSON.stringify(testCatalog));
-    } catch (e) { 
-      console.error(e); 
-    } 
-  }, [testCatalog]);
-
-  useEffect(() => { 
-    try { 
-      localStorage.setItem(PACKAGES_KEY, JSON.stringify(packages)); 
-    } catch (e) { 
-      console.error(e); 
-    } 
-  }, [packages]);
-
-  useEffect(() => { 
-    try { 
-      localStorage.setItem(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(diagnosticProfiles)); 
-      localStorage.setItem('rt_lab_catalog_v2', JSON.stringify(diagnosticProfiles));
-    } catch (e) { 
-      console.error(e); 
-    } 
-  }, [diagnosticProfiles]);
+  // Persistence Effects (Canonical quota-safe localStorage + IndexedDB mirror for reports & invoices)
+  useEffect(() => {
+    safeSetLocalStorage(REPORTS_KEY, JSON.stringify(reports));
+    void saveIdbSnapshot({
+      reports,
+      incomeRecords: latestStateRef.current.incomeRecords,
+      updatedAt: new Date().toISOString()
+    });
+  }, [reports]);
 
   useEffect(() => {
-    try { localStorage.setItem(STAFF_SIGNATURES_KEY, JSON.stringify(staffSignatures)); } catch (e) { console.error(e); }
-  }, [staffSignatures]);
+    safeSetLocalStorage(INCOME_KEY, JSON.stringify(incomeRecords));
+    void saveIdbSnapshot({
+      reports: latestStateRef.current.reports,
+      incomeRecords,
+      updatedAt: new Date().toISOString()
+    });
+  }, [incomeRecords]);
 
-  useEffect(() => {
-    try { localStorage.setItem(STAFF_OPTIONS_KEY, JSON.stringify(staffSignatureOptions)); } catch (e) { console.error(e); }
-  }, [staffSignatureOptions]);
+  useEffect(() => { safeSetLocalStorage(LOYALTY_KEY, JSON.stringify(loyaltyProfiles)); }, [loyaltyProfiles]);
+  useEffect(() => { safeSetLocalStorage(EXPENSES_KEY, JSON.stringify(expenses)); }, [expenses]);
+  useEffect(() => { safeSetLocalStorage(INVENTORY_KEY, JSON.stringify(inventory)); }, [inventory]);
+  useEffect(() => { safeSetLocalStorage(INSTRUMENTS_KEY, JSON.stringify(instruments)); }, [instruments]);
+  useEffect(() => { safeSetLocalStorage(TRANSMISSIONS_KEY, JSON.stringify(transmissions)); }, [transmissions]);
+  useEffect(() => { safeSetLocalStorage(AUDIT_KEY, JSON.stringify(auditLogs)); }, [auditLogs]);
+  useEffect(() => { safeSetLocalStorage(LAB_INFO_KEY, JSON.stringify(labInfo)); }, [labInfo]);
+  useEffect(() => { safeSetLocalStorage(CATALOG_KEY, JSON.stringify(testCatalog)); }, [testCatalog]);
+  useEffect(() => { safeSetLocalStorage(PACKAGES_KEY, JSON.stringify(packages)); }, [packages]);
+  useEffect(() => { safeSetLocalStorage(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(diagnosticProfiles)); }, [diagnosticProfiles]);
+  useEffect(() => { safeSetLocalStorage(STAFF_SIGNATURES_KEY, JSON.stringify(staffSignatures)); }, [staffSignatures]);
+  useEffect(() => { safeSetLocalStorage(STAFF_OPTIONS_KEY, JSON.stringify(staffSignatureOptions)); }, [staffSignatureOptions]);
+  useEffect(() => { safeSetLocalStorage(EMPLOYEES_KEY, JSON.stringify(employees)); }, [employees]);
+  useEffect(() => { safeSetLocalStorage(ATTENDANCE_KEY, JSON.stringify(attendance)); }, [attendance]);
+  useEffect(() => { safeSetLocalStorage(PAYROLL_KEY, JSON.stringify(payroll)); }, [payroll]);
+  useEffect(() => { safeSetLocalStorage(LAB_TO_LAB_KEY, JSON.stringify(labToLabOrders)); }, [labToLabOrders]);
+  useEffect(() => { safeSetLocalStorage(CLOSEOUTS_KEY, JSON.stringify(dailyCloseouts)); }, [dailyCloseouts]);
 
-  // HR Employees & Attendance & Payroll Persistence
+  // Automatic Migration Run + IndexedDB & Local Pending Queue Recovery on Mount
   useEffect(() => {
     try {
-      localStorage.setItem(EMPLOYEES_KEY, JSON.stringify(employees));
-      localStorage.setItem('rt_lab_employees_v1', JSON.stringify(employees));
-    } catch (e) {
-      console.error('Failed to save employees:', e);
-    }
-  }, [employees]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(ATTENDANCE_KEY, JSON.stringify(attendance));
-    } catch (e) {
-      console.error('Failed to save attendance:', e);
-    }
-  }, [attendance]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(PAYROLL_KEY, JSON.stringify(payroll));
-    } catch (e) {
-      console.error('Failed to save payroll:', e);
-    }
-  }, [payroll]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(LAB_TO_LAB_KEY, JSON.stringify(labToLabOrders));
-    } catch (e) {
-      console.error('Failed to save labToLabOrders:', e);
-    }
-  }, [labToLabOrders]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(CLOSEOUTS_KEY, JSON.stringify(dailyCloseouts));
-    } catch (e) {
-      console.error('Failed to save closeouts:', e);
-    }
-  }, [dailyCloseouts]);
-
-  // Automatic Migration Run on Mount
-  useEffect(() => {
-    try {
-      if (typeof window !== 'undefined' && localStorage.getItem(MIGRATION_VERSION_KEY) !== 'true') {
-        runGlobalDataUpgrade();
+      if (typeof window !== 'undefined') {
+        if (localStorage.getItem(MIGRATION_VERSION_KEY) !== 'true') {
+          runGlobalDataUpgrade();
+        } else {
+          freeRedundantLocalStorage();
+        }
       }
     } catch (err) {
       console.warn('Migration run error:', err);
     }
+
+    // Recover any unsynced cases persisted in IndexedDB or local cases queue
+    (async () => {
+      try {
+        const idbData = await loadIdbSnapshot();
+        let recoveredCount = 0;
+
+        if (idbData) {
+          if (Array.isArray(idbData.reports) && idbData.reports.length > 0) {
+            setReports(prev => {
+              const { merged, newlyAdded, changed } = mergeReportCollections(prev, filterDeletedReports(idbData.reports), mergeTwoReports);
+              if (newlyAdded.length > 0) recoveredCount += newlyAdded.length;
+              return changed ? filterDeletedReports(merged) : prev;
+            });
+          }
+          if (Array.isArray(idbData.incomeRecords) && idbData.incomeRecords.length > 0) {
+            setIncomeRecords(prev => {
+              const { merged, changed } = mergeInvoiceCollections(prev, filterDeletedInvoices(idbData.incomeRecords), mergeTwoInvoices);
+              return changed ? filterDeletedInvoices(merged) : prev;
+            });
+          }
+        }
+
+        const localQueueStr = localStorage.getItem('rt_lab_cases_sync_v1');
+        if (localQueueStr) {
+          const queue = JSON.parse(localQueueStr);
+          if (Array.isArray(queue) && queue.length > 0) {
+            const queueReports: LabReport[] = [];
+            const queueInvoices: IncomeRecord[] = [];
+            queue.forEach((c: any) => {
+              if (!c || (!c.fullName && !c.patientName)) return;
+              const invObj: IncomeRecord = {
+                id: String(c.id || `inv-q-${Date.now()}`).replace(/^diag-/, ''),
+                invoiceNumber: c.invoiceNumber || `INV-${String(c.labNumber || '').replace('RT-', '')}`,
+                patientName: c.fullName || c.patientName,
+                patientPhone: c.phone || '',
+                patientAge: c.age || 30,
+                patientGender: (c.gender as any) || 'female',
+                barcode: c.barcode || '',
+                labNumber: c.labNumber || '',
+                referringDoctor: c.referringDoctorName || 'كشف معمل',
+                tests: Array.isArray(c.tests) && c.tests.length > 0 ? c.tests : (c.testNames || ['تحاليل مخبرية']).map((tn: string, idx: number) => ({
+                  id: `tst-q-${idx}`,
+                  code: `TST-${idx}`,
+                  nameAr: tn,
+                  nameEn: tn,
+                  category: 'Clinical',
+                  price: c.totalCost || 0,
+                  cost: 0
+                })),
+                subtotal: c.totalCost || 0,
+                testsSubtotal: c.testsSubtotal || c.totalCost || 0,
+                discount: c.discount || 0,
+                visitFee: c.visitFee || 0,
+                isHomeVisit: Boolean(c.isHomeVisit),
+                bookingType: c.bookingType || (c.isHomeVisit ? 'home_visit' : 'branch'),
+                visitAddress: c.visitAddress || '',
+                netAmount: c.totalCost || 0,
+                paidAmount: c.paidAmount ?? (c.totalCost || 0),
+                remainingAmount: Math.max(0, (c.totalCost || 0) - (c.paidAmount ?? (c.totalCost || 0))),
+                paymentMethod: (c.paymentMethod as any) || 'cash',
+                paymentStatus: (c.paymentStatus as any) || 'paid',
+                cashierName: 'استرجاع محلي',
+                branch: 'الفرع الرئيسي - بهتيم',
+                syncStatus: 'pending',
+                createdAt: c.sampleDate || new Date().toISOString(),
+                updatedAt: c.sampleDate || new Date().toISOString()
+              };
+              if (!isInvoiceDeletedByTombstone(invObj)) queueInvoices.push(invObj);
+              const repObj = convertIncomeRecordToDiagnosticReport(invObj) as unknown as LabReport;
+              if (!isReportDeletedByTombstone(repObj)) queueReports.push(repObj);
+            });
+
+            if (queueReports.length > 0) {
+              setReports(prev => {
+                const { merged, newlyAdded, changed } = mergeReportCollections(prev, queueReports, mergeTwoReports);
+                if (newlyAdded.length > 0) recoveredCount += newlyAdded.length;
+                return changed ? filterDeletedReports(merged) : prev;
+              });
+            }
+            if (queueInvoices.length > 0) {
+              setIncomeRecords(prev => {
+                const { merged, changed } = mergeInvoiceCollections(prev, queueInvoices, mergeTwoInvoices);
+                return changed ? filterDeletedInvoices(merged) : prev;
+              });
+            }
+          }
+        }
+
+        if (recoveredCount > 0) {
+          setPendingCloudPush(true);
+        }
+      } catch (err) {
+        console.warn('Mount IDB/queue recovery note:', err);
+      }
+    })();
+  }, []);
+
+  // Notifications helper (declared before sync effects that depend on it)
+  const addNotification = useCallback((notif: Omit<AppNotification, 'id' | 'timestamp' | 'read'>) => {
+    const newNotif: AppNotification = {
+      ...notif,
+      id: `notif-${Date.now()}`,
+      timestamp: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+      read: false
+    };
+    setNotifications(prev => [newNotif, ...prev]);
+  }, []);
+
+  const markNotificationRead = useCallback((id: string) => {
+    setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
+  }, []);
+
+  const clearNotifications = useCallback(() => {
+    setNotifications([]);
   }, []);
 
   // Register Master Snapshot Provider for instant multi-device bootstrapping
@@ -1095,11 +1326,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       } else if (msg.action === 'ADMIT_PATIENT' && msg.payload) {
         if (msg.payload.report) {
           const rep = msg.payload.report as LabReport;
-          setReports(prev => [rep, ...prev.filter(r => r.id !== rep.id)]);
+          setReports(prev => {
+            const { merged, changed } = mergeReportCollections(prev, [rep], mergeTwoReports);
+            return changed ? filterDeletedReports(merged) : prev;
+          });
         }
         if (msg.payload.invoice) {
           const inv = msg.payload.invoice as IncomeRecord;
-          setIncomeRecords(prev => [inv, ...prev.filter(i => i.id !== inv.id)]);
+          setIncomeRecords(prev => {
+            const { merged, changed } = mergeInvoiceCollections(prev, [inv], mergeTwoInvoices);
+            return changed ? filterDeletedInvoices(merged) : prev;
+          });
         }
         addNotification({
           title: '⚡ تسجيل حالة جديدة من فرع آخر',
@@ -1140,16 +1377,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       } else if ((msg.action === 'FULL_SYNC' || msg.action === 'INIT_STATE') && msg.payload) {
         if (Array.isArray(msg.payload.reports)) {
           setReports(prev => {
-            const map = new Map(prev.map(r => [r.id, r]));
-            msg.payload.reports.forEach((r: LabReport) => map.set(r.id, r));
-            return Array.from(map.values());
+            const { merged, changed } = mergeReportCollections(prev, msg.payload.reports, mergeTwoReports);
+            return changed ? filterDeletedReports(merged) : prev;
           });
         }
         if (Array.isArray(msg.payload.incomeRecords)) {
           setIncomeRecords(prev => {
-            const map = new Map(prev.map(i => [i.id, i]));
-            msg.payload.incomeRecords.forEach((i: IncomeRecord) => map.set(i.id, i));
-            return Array.from(map.values());
+            const { merged, changed } = mergeInvoiceCollections(prev, msg.payload.incomeRecords, mergeTwoInvoices);
+            return changed ? filterDeletedInvoices(merged) : prev;
           });
         }
         if (Array.isArray(msg.payload.expenses)) {
@@ -1175,46 +1410,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (res.success && res.data) {
         if (Array.isArray(res.data.reports) && res.data.reports.length > 0) {
           setReports(prev => {
-            const map = new Map<string, LabReport>();
-            prev.forEach(r => {
-              if (r.id) map.set(r.id, r);
-              if (r.reportNumber) map.set(r.reportNumber, r);
-              if (r.patient?.barcode) map.set(r.patient.barcode, r);
-            });
-            res.data.reports.forEach((r: LabReport) => {
-              const existing = map.get(r.id) || (r.reportNumber && map.get(r.reportNumber)) || (r.patient?.barcode && map.get(r.patient.barcode));
-              if (existing) {
-                const merged = mergeTwoReports(existing, r);
-                map.set(existing.id, merged);
-                if (merged.reportNumber) map.set(merged.reportNumber, merged);
-                if (merged.patient?.barcode) map.set(merged.patient.barcode, merged);
-              } else {
-                map.set(r.id, r);
-              }
-            });
-            return Array.from(new Set(map.values()));
+            const { merged, changed } = mergeReportCollections(prev, res.data.reports, mergeTwoReports);
+            return changed ? filterDeletedReports(merged) : prev;
           });
         }
         if (Array.isArray(res.data.incomeRecords) && res.data.incomeRecords.length > 0) {
           setIncomeRecords(prev => {
-            const map = new Map<string, IncomeRecord>();
-            prev.forEach(i => {
-              if (i.id) map.set(i.id, i);
-              if (i.invoiceNumber) map.set(i.invoiceNumber, i);
-              if (i.barcode) map.set(i.barcode, i);
-            });
-            res.data.incomeRecords.forEach((i: IncomeRecord) => {
-              const existing = map.get(i.id) || (i.invoiceNumber && map.get(i.invoiceNumber)) || (i.barcode && map.get(i.barcode));
-              if (existing) {
-                const merged = mergeTwoInvoices(existing, i);
-                map.set(existing.id, merged);
-                if (merged.invoiceNumber) map.set(merged.invoiceNumber, merged);
-                if (merged.barcode) map.set(merged.barcode, merged);
-              } else {
-                map.set(i.id, i);
-              }
-            });
-            return Array.from(new Set(map.values()));
+            const { merged, changed } = mergeInvoiceCollections(prev, res.data.incomeRecords, mergeTwoInvoices);
+            return changed ? filterDeletedInvoices(merged) : prev;
           });
         }
         if (Array.isArray(res.data.expenses) && res.data.expenses.length > 0) {
@@ -1242,46 +1445,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             importDeletionTombstones(ghRes.data.deletedReports, ghRes.data.deletedInvoices);
             if (Array.isArray(ghRes.data.reports) && ghRes.data.reports.length > 0) {
               setReports(prev => {
-                const map = new Map<string, LabReport>();
-                prev.forEach(r => {
-                  if (r.id) map.set(r.id, r);
-                  if (r.reportNumber) map.set(r.reportNumber, r);
-                  if (r.patient?.barcode) map.set(r.patient.barcode, r);
-                });
-                ghRes.data.reports.forEach((r: LabReport) => {
-                  const existing = map.get(r.id) || (r.reportNumber && map.get(r.reportNumber)) || (r.patient?.barcode && map.get(r.patient.barcode));
-                  if (existing) {
-                    const merged = mergeTwoReports(existing, r);
-                    map.set(existing.id, merged);
-                    if (merged.reportNumber) map.set(merged.reportNumber, merged);
-                    if (merged.patient?.barcode) map.set(merged.patient.barcode, merged);
-                  } else {
-                    map.set(r.id, r);
-                  }
-                });
-                return filterDeletedReports(Array.from(new Set(map.values())));
+                const { merged, changed } = mergeReportCollections(prev, ghRes.data.reports, mergeTwoReports);
+                return changed ? filterDeletedReports(merged) : filterDeletedReports(prev);
               });
             }
             if (Array.isArray(ghRes.data.incomeRecords) && ghRes.data.incomeRecords.length > 0) {
               setIncomeRecords(prev => {
-                const map = new Map<string, IncomeRecord>();
-                prev.forEach(i => {
-                  if (i.id) map.set(i.id, i);
-                  if (i.invoiceNumber) map.set(i.invoiceNumber, i);
-                  if (i.barcode) map.set(i.barcode, i);
-                });
-                ghRes.data.incomeRecords.forEach((i: IncomeRecord) => {
-                  const existing = map.get(i.id) || (i.invoiceNumber && map.get(i.invoiceNumber)) || (i.barcode && map.get(i.barcode));
-                  if (existing) {
-                    const merged = mergeTwoInvoices(existing, i);
-                    map.set(existing.id, merged);
-                    if (merged.invoiceNumber) map.set(merged.invoiceNumber, merged);
-                    if (merged.barcode) map.set(merged.barcode, merged);
-                  } else {
-                    map.set(i.id, i);
-                  }
-                });
-                return filterDeletedInvoices(Array.from(new Set(map.values())));
+                const { merged, changed } = mergeInvoiceCollections(prev, ghRes.data.incomeRecords, mergeTwoInvoices);
+                return changed ? filterDeletedInvoices(merged) : filterDeletedInvoices(prev);
               });
             }
             if (Array.isArray(ghRes.data.expenses) && ghRes.data.expenses.length > 0) {
@@ -1306,157 +1477,91 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               setDiagnosticProfiles(prev => mergeProfilesWithDefaults(ghRes.data.diagnosticProfiles, prev));
             }
 
-            // Also check for pending incoming diagnostic cases from GitHub queue (sync cases 50 to 68+)
+            // Also check for pending incoming diagnostic cases from GitHub queue (identity & name safe)
             fetchDiagnosticCases(githubConfig).then(casesRes => {
               if (casesRes.success && Array.isArray(casesRes.cases) && casesRes.cases.length > 0) {
-                // 1. Sync reports
-                setReports(curReports => {
-                  const existingCodes = new Set<string>();
-                  curReports.forEach(r => {
-                    if (r.patient?.barcode) existingCodes.add(r.patient.barcode);
-                    if (r.patient?.labNumber) existingCodes.add(r.patient.labNumber);
-                    if (r.reportNumber) existingCodes.add(r.reportNumber);
-                  });
-                  let addedCount = 0;
-                  const newOnes: LabReport[] = [];
-                  casesRes.cases!.forEach(c => {
-                    const code = c.barcode || c.labNumber;
-                    // A case already exists when either its barcode or its lab number is registered
-                    const alreadyRegistered =
-                      (c.barcode && existingCodes.has(c.barcode)) ||
-                      (c.labNumber && existingCodes.has(c.labNumber)) ||
-                      !code;
-                    if (!alreadyRegistered) {
-                      if (c.barcode) existingCodes.add(c.barcode);
-                      if (c.labNumber) existingCodes.add(c.labNumber);
-                      addedCount++;
-                      const actualTests = (Array.isArray(c.tests) && c.tests.length > 0)
-                        ? c.tests
-                        : (c.testNames || ['تحاليل مخبرية']).map((tName, idx) => ({
-                            id: `tst-${idx}-${c.id}`,
-                            code: `TST-${idx}`,
-                            nameAr: tName,
-                            nameEn: tName,
-                            category: 'Clinical',
-                            price: 150,
-                            cost: 30
-                          }));
-                      const net = c.totalCost || 200;
-                      const paid = c.paidAmount !== undefined ? c.paidAmount : (c.paymentStatus === 'paid' ? net : 0);
-                      const isHome = c.isHomeVisit ?? (c.bookingType === 'home_visit' || (c.visitFee && c.visitFee > 0));
-                      const vFee = c.visitFee || 0;
-                      const vAddr = c.visitAddress || c.homeAddress || '';
-                      const bType = c.bookingType || (isHome ? 'home_visit' : 'branch');
-                      const disc = c.discount || 0;
-                      const testsSub = c.testsSubtotal || net;
+                const candidateReports: LabReport[] = [];
+                const candidateInvoices: IncomeRecord[] = [];
 
-                      const safeCaseLab = c.labNumber || (c as any).reportNumber || (c.barcode ? `RT-${String(c.barcode).replace('RT-', '')}` : `RT-${Date.now()}`);
-                      const rep = convertIncomeRecordToDiagnosticReport({
-                        id: c.id,
-                        invoiceNumber: c.invoiceNumber || `INV-${String(safeCaseLab).replace('RT-', '')}`,
-                        labNumber: safeCaseLab,
-                        barcode: c.barcode,
-                        patientName: c.fullName,
-                        patientAge: c.age || 30,
-                        patientGender: (c.gender as any) || 'male',
-                        patientPhone: c.phone || '',
-                        referringDoctor: c.referringDoctorName || 'كشف معمل',
-                        tests: actualTests,
-                        subtotal: net,
-                        discount: disc,
-                        netAmount: net,
-                        paidAmount: paid,
-                        remainingAmount: Math.max(0, net - paid),
-                        paymentMethod: (c.paymentMethod as any) || 'cash',
-                        paymentStatus: (c.paymentStatus as any) || (paid >= net ? 'paid' : 'pending'),
-                        cashierName: 'مزامنة سحابية',
-                        branch: 'الفرع الرئيسي - بهتيم',
-                        syncStatus: 'synced',
-                        createdAt: c.sampleDate || new Date().toISOString(),
-                        updatedAt: c.sampleDate || new Date().toISOString(),
-                        isHomeVisit: Boolean(isHome),
-                        bookingType: bType,
-                        visitFee: vFee,
-                        visitAddress: vAddr,
-                        homeAddress: vAddr,
-                        deliveryNotes: c.deliveryNotes || '',
-                        visitSpecialist: c.visitSpecialist || '',
-                        testsSubtotal: testsSub,
-                        discountApplied: disc
-                      }) as unknown as LabReport;
-                      newOnes.push(rep);
-                    }
-                  });
-                  return addedCount > 0 ? [...newOnes, ...curReports] : curReports;
+                casesRes.cases!.forEach(c => {
+                  const safeCaseLab = c.labNumber || (c as any).reportNumber || (c.barcode ? `RT-${String(c.barcode).replace('RT-', '')}` : `RT-${Date.now()}`);
+                  const invNumber = c.invoiceNumber || `INV-${String(safeCaseLab).replace('RT-', '')}`;
+                  const net = c.totalCost || 200;
+                  const paid = c.paidAmount !== undefined ? c.paidAmount : (c.paymentStatus === 'paid' ? net : 0);
+                  const isHome = c.isHomeVisit ?? (c.bookingType === 'home_visit' || (c.visitFee && c.visitFee > 0));
+                  const vFee = c.visitFee || 0;
+                  const vAddr = c.visitAddress || c.homeAddress || '';
+                  const bType = c.bookingType || (isHome ? 'home_visit' : 'branch');
+                  const disc = c.discount || 0;
+                  const testsSub = c.testsSubtotal || net;
+
+                  const actualTests = (Array.isArray(c.tests) && c.tests.length > 0)
+                    ? c.tests
+                    : (c.testNames || ['تحاليل مخبرية']).map((tName, idx) => ({
+                        id: `tst-${idx}-${c.id}`,
+                        code: `TST-${idx}`,
+                        nameAr: tName,
+                        nameEn: tName,
+                        category: 'Clinical',
+                        price: 150,
+                        cost: 30
+                      }));
+
+                  const invObj: IncomeRecord = {
+                    id: c.id?.startsWith('inv-') ? c.id : `inv-${c.id || safeCaseLab}`,
+                    invoiceNumber: invNumber,
+                    patientName: c.fullName,
+                    patientPhone: c.phone || '',
+                    patientAge: c.age || 30,
+                    patientGender: (c.gender as any) || 'male',
+                    barcode: c.barcode,
+                    labNumber: safeCaseLab,
+                    referringDoctor: c.referringDoctorName || 'كشف معمل',
+                    tests: actualTests,
+                    subtotal: net,
+                    testsSubtotal: testsSub,
+                    discount: disc,
+                    visitFee: vFee,
+                    isHomeVisit: Boolean(isHome),
+                    bookingType: bType,
+                    visitAddress: vAddr,
+                    deliveryNotes: c.deliveryNotes || '',
+                    visitSpecialist: c.visitSpecialist || '',
+                    netAmount: net,
+                    paidAmount: paid,
+                    remainingAmount: Math.max(0, net - paid),
+                    paymentMethod: (c.paymentMethod as any) || 'cash',
+                    paymentStatus: (c.paymentStatus as any) || (paid >= net ? 'paid' : 'pending'),
+                    cashierName: 'مزامنة سحابية',
+                    branch: 'الفرع الرئيسي - بهتيم',
+                    syncStatus: 'synced',
+                    createdAt: c.sampleDate || new Date().toISOString(),
+                    updatedAt: c.sampleDate || new Date().toISOString()
+                  };
+
+                  const repObj = convertIncomeRecordToDiagnosticReport({
+                    ...invObj,
+                    id: c.id || `rep-${safeCaseLab}`,
+                    homeAddress: vAddr,
+                    discountApplied: disc
+                  }) as unknown as LabReport;
+
+                  if (!isReportDeletedByTombstone(repObj)) candidateReports.push(repObj);
+                  if (!isInvoiceDeletedByTombstone(invObj)) candidateInvoices.push(invObj);
                 });
 
-                // 2. Sync corresponding financial invoices
-                setIncomeRecords(curInvoices => {
-                  const existingCodes = new Set(curInvoices.map(i => i.invoiceNumber || i.labNumber));
-                  let addedInvoices = 0;
-                  const newInvoices: IncomeRecord[] = [];
-                  casesRes.cases!.forEach(c => {
-                    const safeCaseLab = c.labNumber || (c as any).reportNumber || (c.barcode ? `RT-${String(c.barcode).replace('RT-', '')}` : `RT-${Date.now()}`);
-                    const invNumber = c.invoiceNumber || `INV-${String(safeCaseLab).replace('RT-', '')}`;
-                    if (!existingCodes.has(invNumber) && !existingCodes.has(safeCaseLab)) {
-                      existingCodes.add(invNumber);
-                      existingCodes.add(safeCaseLab);
-                      addedInvoices++;
-                      const net = c.totalCost || 200;
-                      const paid = c.paidAmount !== undefined ? c.paidAmount : (c.paymentStatus === 'paid' ? net : 0);
-                      const isHome = c.isHomeVisit ?? (c.bookingType === 'home_visit' || (c.visitFee && c.visitFee > 0));
-                      const vFee = c.visitFee || 0;
-                      const vAddr = c.visitAddress || c.homeAddress || '';
-                      const bType = c.bookingType || (isHome ? 'home_visit' : 'branch');
-                      const disc = c.discount || 0;
-                      const testsSub = c.testsSubtotal || net;
-
-                      const actualTests = (Array.isArray(c.tests) && c.tests.length > 0)
-                        ? c.tests
-                        : (c.testNames || ['تحاليل مخبرية']).map((tName, idx) => ({
-                            id: `tst-${idx}-${c.id}`,
-                            code: `TST-${idx}`,
-                            nameAr: tName,
-                            nameEn: tName,
-                            category: 'Clinical',
-                            price: 150,
-                            cost: 30
-                          }));
-                      newInvoices.push({
-                        id: `inv-${c.id || c.labNumber}-${Date.now()}`,
-                        invoiceNumber: invNumber,
-                        patientName: c.fullName,
-                        patientPhone: c.phone || '',
-                        patientAge: c.age || 30,
-                        patientGender: (c.gender as any) || 'male',
-                        barcode: c.barcode,
-                        labNumber: c.labNumber,
-                        referringDoctor: c.referringDoctorName || 'كشف معمل',
-                        tests: actualTests,
-                        subtotal: net,
-                        testsSubtotal: testsSub,
-                        discount: disc,
-                        visitFee: vFee,
-                        isHomeVisit: Boolean(isHome),
-                        bookingType: bType,
-                        visitAddress: vAddr,
-                        deliveryNotes: c.deliveryNotes || '',
-                        visitSpecialist: c.visitSpecialist || '',
-                        netAmount: net,
-                        paidAmount: paid,
-                        remainingAmount: Math.max(0, net - paid),
-                        paymentMethod: (c.paymentMethod as any) || 'cash',
-                        paymentStatus: (c.paymentStatus as any) || (paid >= net ? 'paid' : 'pending'),
-                        cashierName: 'مزامنة سحابية',
-                        branch: 'الفرع الرئيسي - بهتيم',
-                        syncStatus: 'synced',
-                        createdAt: c.sampleDate || new Date().toISOString(),
-                        updatedAt: c.sampleDate || new Date().toISOString()
-                      });
-                    }
+                if (candidateReports.length > 0) {
+                  setReports(cur => {
+                    const { merged, changed } = mergeReportCollections(cur, candidateReports, mergeTwoReports);
+                    return changed ? filterDeletedReports(merged) : cur;
                   });
-                  return addedInvoices > 0 ? [...newInvoices, ...curInvoices] : curInvoices;
-                });
+                }
+                if (candidateInvoices.length > 0) {
+                  setIncomeRecords(cur => {
+                    const { merged, changed } = mergeInvoiceCollections(cur, candidateInvoices, mergeTwoInvoices);
+                    return changed ? filterDeletedInvoices(merged) : cur;
+                  });
+                }
               }
             }).catch(() => {});
 
@@ -1495,88 +1600,28 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           applyCloudCollections(data);
           if (Array.isArray(data.reports) && data.reports.length > 0) {
             setReports(prev => {
-              const currentMap = new Map<string, LabReport>();
-              prev.forEach(r => {
-                if (r.id) currentMap.set(r.id, r);
-                if (r.reportNumber) currentMap.set(r.reportNumber, r);
-                if (r.patient?.barcode) currentMap.set(r.patient.barcode, r);
-              });
+              const { merged, newlyAdded, changed } = mergeReportCollections(prev, data.reports, mergeTwoReports);
 
-              let hasChanged = false;
-              const nextReports = [...prev];
-              const newlyArrived: LabReport[] = [];
-
-              data.reports.forEach((remoteRep: LabReport) => {
-                const existing = currentMap.get(remoteRep.id) ||
-                  (remoteRep.reportNumber && currentMap.get(remoteRep.reportNumber)) ||
-                  (remoteRep.patient?.barcode && currentMap.get(remoteRep.patient.barcode));
-
-                if (!existing) {
-                  nextReports.unshift(remoteRep);
-                  currentMap.set(remoteRep.id, remoteRep);
-                  newlyArrived.push(remoteRep);
-                  hasChanged = true;
-                } else {
-                  const merged = mergeTwoReports(existing, remoteRep);
-                  // Check if merged is different from existing
-                  const existingIdx = nextReports.findIndex(r => r.id === existing.id);
-                  if (existingIdx !== -1 && JSON.stringify(merged) !== JSON.stringify(existing)) {
-                    nextReports[existingIdx] = merged;
-                    hasChanged = true;
-                  }
-                }
-              });
-
-              if (newlyArrived.length > 0) {
+              if (newlyAdded.length > 0) {
                 playSyncChime();
-                const latest = newlyArrived[0];
+                const latest = newlyAdded[0];
                 addNotification({
-                  title: '⚡ حجز حالة جديدة وصل من الموبايل',
-                  message: `وصلت حالة ${latest.patient.fullName} (${latest.reportNumber}) بنجاح — جاهزة لإدخال النتائج الطبية.`,
+                  title: '⚡ حجز حالة جديدة وصل من السحابة',
+                  message: `وصلت حالة ${latest.patient?.fullName || ''} (${latest.reportNumber || ''}) بنجاح — جاهزة لإدخال النتائج الطبية.`,
                   type: 'success'
                 });
               }
 
-              if (hasChanged) return filterDeletedReports(nextReports);
-              const cleanedReports = filterDeletedReports(prev);
-              return cleanedReports.length === prev.length ? prev : cleanedReports;
+              const filtered = filterDeletedReports(changed ? merged : prev);
+              return (changed || filtered.length !== prev.length) ? filtered : prev;
             });
           }
 
           if (Array.isArray(data.incomeRecords) && data.incomeRecords.length > 0) {
             setIncomeRecords(prev => {
-              const currentMap = new Map<string, IncomeRecord>();
-              prev.forEach(i => {
-                if (i.id) currentMap.set(i.id, i);
-                if (i.invoiceNumber) currentMap.set(i.invoiceNumber, i);
-                if (i.barcode) currentMap.set(i.barcode, i);
-              });
-
-              let hasChanged = false;
-              const nextInvoices = [...prev];
-
-              data.incomeRecords.forEach((remoteInv: IncomeRecord) => {
-                const existing = currentMap.get(remoteInv.id) ||
-                  (remoteInv.invoiceNumber && currentMap.get(remoteInv.invoiceNumber)) ||
-                  (remoteInv.barcode && currentMap.get(remoteInv.barcode));
-
-                if (!existing) {
-                  nextInvoices.unshift(remoteInv);
-                  currentMap.set(remoteInv.id, remoteInv);
-                  hasChanged = true;
-                } else {
-                  const merged = mergeTwoInvoices(existing, remoteInv);
-                  const existingIdx = nextInvoices.findIndex(i => i.id === existing.id);
-                  if (existingIdx !== -1 && JSON.stringify(merged) !== JSON.stringify(existing)) {
-                    nextInvoices[existingIdx] = merged;
-                    hasChanged = true;
-                  }
-                }
-              });
-
-              if (hasChanged) return filterDeletedInvoices(nextInvoices);
-              const cleanedInvoices = filterDeletedInvoices(prev);
-              return cleanedInvoices.length === prev.length ? prev : cleanedInvoices;
+              const { merged, changed } = mergeInvoiceCollections(prev, data.incomeRecords, mergeTwoInvoices);
+              const filtered = filterDeletedInvoices(changed ? merged : prev);
+              return (changed || filtered.length !== prev.length) ? filtered : prev;
             });
           }
 
@@ -1597,7 +1642,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     });
 
     return () => clearInterval(interval);
-  }, [githubConfig]);
+  }, [githubConfig, applyCloudCollections, addNotification]);
 
 
   // Re-pull latest cloud state when user returns to the tab or mobile wakes up (multi-device immediate catch-up)
@@ -1611,14 +1656,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
             if (Array.isArray(ghRes.data.reports) && ghRes.data.reports.length > 0) {
               setReports(prev => {
-                const combined = unionReports(prev, ghRes.data.reports);
-                return filterDeletedReports(combined);
+                const { merged, changed } = mergeReportCollections(prev, ghRes.data.reports, mergeTwoReports);
+                return changed ? filterDeletedReports(merged) : filterDeletedReports(prev);
               });
             }
             if (Array.isArray(ghRes.data.incomeRecords) && ghRes.data.incomeRecords.length > 0) {
               setIncomeRecords(prev => {
-                const combined = unionInvoices(prev, ghRes.data.incomeRecords);
-                return filterDeletedInvoices(combined);
+                const { merged, changed } = mergeInvoiceCollections(prev, ghRes.data.incomeRecords, mergeTwoInvoices);
+                return changed ? filterDeletedInvoices(merged) : filterDeletedInvoices(prev);
               });
             }
           }
@@ -1635,33 +1680,48 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
   }, [githubConfig, applyCloudCollections]);
 
+  // Pending-push auto-retry flush (retries immediately when back online or every 12s if any offline/failed push is queued)
+  useEffect(() => {
+    if (!githubConfig.token || !githubConfig.autoSync) return;
+
+    const flushPendingIfNeeded = async () => {
+      if (typeof navigator !== 'undefined' && !navigator.onLine) return;
+      if (!isPendingCloudPush()) return;
+      const snapshot = buildFullSyncSnapshot();
+      const res = await pushFullStoreToGitHub(githubConfig, snapshot);
+      if (res.success) {
+        setPendingCloudPush(false);
+      }
+    };
+
+    void flushPendingIfNeeded();
+    window.addEventListener('online', flushPendingIfNeeded);
+    const retryTimer = setInterval(flushPendingIfNeeded, 12000);
+    return () => {
+      window.removeEventListener('online', flushPendingIfNeeded);
+      clearInterval(retryTimer);
+    };
+  }, [githubConfig, buildFullSyncSnapshot]);
+
   // Debounced cloud save whenever critical lab data changes (Push to Firebase Firestore & GitHub)
   useEffect(() => {
     const timer = setTimeout(() => {
       if (reports.length > 0 || incomeRecords.length > 0 || testCatalog.length > 0) {
-        const payload = {
-          reports,
-          incomeRecords,
-          expenses,
-          loyaltyProfiles,
-          inventory,
-          labInfo,
-          testCatalog,
-          packages,
-          diagnosticProfiles
-        };
+        const payload = buildFullSyncSnapshot();
 
         // 1. Instant Firebase Cloud persistence
         realtimeSyncManager.pushMasterSnapshot(payload);
 
-        // 2. Secondary GitHub backup
+        // 2. Secondary GitHub backup with failure tracking
         if (githubConfig.autoSync && githubConfig.token) {
-          pushFullStoreToGitHub(githubConfig, payload).catch(() => {});
+          pushFullStoreToGitHub(githubConfig, payload)
+            .then(res => setPendingCloudPush(!res.success))
+            .catch(() => setPendingCloudPush(true));
         }
       }
     }, 15000);
     return () => clearTimeout(timer);
-  }, [reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, packages, diagnosticProfiles, githubConfig]);
+  }, [reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, packages, diagnosticProfiles, githubConfig, buildFullSyncSnapshot]);
 
   // Audit Logging helper
   const logAction = useCallback((action: AuditLog['action'], module: AuditLog['module'], description: string) => {
@@ -1677,25 +1737,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
     setAuditLogs(prev => [newLog, ...prev.slice(0, 499)]);
   }, [currentUser]);
-
-  // Notifications helper
-  const addNotification = useCallback((notif: Omit<AppNotification, 'id' | 'timestamp' | 'read'>) => {
-    const newNotif: AppNotification = {
-      ...notif,
-      id: `notif-${Date.now()}`,
-      timestamp: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
-      read: false
-    };
-    setNotifications(prev => [newNotif, ...prev]);
-  }, []);
-
-  const markNotificationRead = useCallback((id: string) => {
-    setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
-  }, []);
-
-  const clearNotifications = useCallback(() => {
-    setNotifications([]);
-  }, []);
 
   // Auth & Permissions
   const loginUser = useCallback((username: string, pin: string): boolean => {
@@ -1957,10 +1998,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         return profChanged ? { ...prof, parameters: nextParams } : prof;
       });
       if (anyProfChanged) {
-        try {
-          localStorage.setItem(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(nextProfiles));
-          localStorage.setItem('rt_lab_catalog_v2', JSON.stringify(nextProfiles));
-        } catch {}
+        safeSetLocalStorage(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(nextProfiles));
       }
       return anyProfChanged ? nextProfiles : prevProfiles;
     });
@@ -1991,12 +2029,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
         return t;
       });
-      try {
-        localStorage.setItem(CATALOG_KEY, JSON.stringify(stamped));
-        localStorage.setItem('rt_lab_individual_tests_v2', JSON.stringify(stamped));
-      } catch (e) {
-        console.warn('Storage save error:', e);
-      }
+      safeSetLocalStorage(CATALOG_KEY, JSON.stringify(stamped));
       realtimeSyncManager.broadcastAction('UPDATE_CATALOG', stamped);
       return stamped;
     });
@@ -2188,52 +2221,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
         return p;
       });
-      try {
-        localStorage.setItem(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(stampedProfiles));
-        localStorage.setItem('rt_lab_catalog_v2', JSON.stringify(stampedProfiles));
-      } catch {}
+      safeSetLocalStorage(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(stampedProfiles));
       realtimeSyncManager.broadcastAction('UPDATE_PROFILES', stampedProfiles);
       if (githubConfig.token && githubConfig.autoSync) {
-        pushFullStoreToGitHub(githubConfig, {
-          reports,
-          incomeRecords,
-          expenses,
-          loyaltyProfiles,
-          inventory,
-          labInfo,
-          testCatalog,
-          packages,
-          diagnosticProfiles: stampedProfiles
-        }).catch(err => console.warn('Profile sync note:', err));
+        pushFullStoreToGitHub(githubConfig, buildFullSyncSnapshot({ diagnosticProfiles: stampedProfiles })).catch(err => console.warn('Profile sync note:', err));
       }
       return stampedProfiles;
     });
     logAction('CATALOG_UPDATE', 'CATALOG', `تحديث بروفايلات التحاليل الشاملة (${profiles.length} بروفايل) ومزامنتها سحابياً`);
-  }, [logAction, githubConfig, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, packages]);
+  }, [logAction, githubConfig, buildFullSyncSnapshot]);
 
   const resetDiagnosticProfiles = useCallback(() => {
     clearDeletedCollection('diagnosticProfiles');
     setDiagnosticProfiles(LAB_CATALOG);
-    try {
-      localStorage.setItem(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(LAB_CATALOG));
-      localStorage.setItem('rt_lab_catalog_v2', JSON.stringify(LAB_CATALOG));
-    } catch {}
+    safeSetLocalStorage(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(LAB_CATALOG));
     realtimeSyncManager.broadcastAction('UPDATE_PROFILES', LAB_CATALOG);
     if (githubConfig.token && githubConfig.autoSync) {
-      pushFullStoreToGitHub(githubConfig, {
-        reports,
-        incomeRecords,
-        expenses,
-        loyaltyProfiles,
-        inventory,
-        labInfo,
-        testCatalog,
-        packages,
-        diagnosticProfiles: LAB_CATALOG
-      }).catch(() => {});
+      pushFullStoreToGitHub(githubConfig, buildFullSyncSnapshot({ diagnosticProfiles: LAB_CATALOG })).catch(() => {});
     }
     logAction('CATALOG_UPDATE', 'CATALOG', 'استعادة بروفايلات التحاليل الافتراضية (24 بروفايل طبي)');
-  }, [logAction, githubConfig, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, packages]);
+  }, [logAction, githubConfig, buildFullSyncSnapshot]);
 
   const saveParameterNormalPermanently = useCallback((param: {
     name: string;
@@ -2262,7 +2269,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         panicHigh: param.panicHigh,
         method: param.method
       };
-      localStorage.setItem(CUSTOM_NORMALS_KEY, JSON.stringify(registry));
+      safeSetLocalStorage(CUSTOM_NORMALS_KEY, JSON.stringify(registry));
 
       // 2. Propagate to diagnosticProfiles in state and storage
       setDiagnosticProfiles(prevProfiles => {
@@ -2291,10 +2298,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           });
           return { ...prof, parameters: newParams };
         });
-        try {
-          localStorage.setItem(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(next));
-          localStorage.setItem('rt_lab_catalog_v2', JSON.stringify(next));
-        } catch {}
+        safeSetLocalStorage(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(next));
         return next;
       });
 
@@ -2316,10 +2320,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           }
           return t;
         });
-        try {
-          localStorage.setItem(CATALOG_KEY, JSON.stringify(next));
-          localStorage.setItem('rt_lab_individual_tests_v2', JSON.stringify(next));
-        } catch {}
+        safeSetLocalStorage(CATALOG_KEY, JSON.stringify(next));
         return next;
       });
 
@@ -2338,15 +2339,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setPackages(refreshedPackages);
     setDiagnosticProfiles(refreshedProfiles);
 
-    try {
-      localStorage.setItem(CATALOG_KEY, JSON.stringify(refreshedTests));
-      localStorage.setItem('rt_lab_individual_tests_v2', JSON.stringify(refreshedTests));
-      localStorage.setItem(PACKAGES_KEY, JSON.stringify(refreshedPackages));
-      localStorage.setItem(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(refreshedProfiles));
-      localStorage.setItem('rt_lab_catalog_v2', JSON.stringify(refreshedProfiles));
-    } catch (e) {
-      console.error('Local storage save error:', e);
-    }
+    safeSetLocalStorage(CATALOG_KEY, JSON.stringify(refreshedTests));
+    safeSetLocalStorage(PACKAGES_KEY, JSON.stringify(refreshedPackages));
+    safeSetLocalStorage(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(refreshedProfiles));
 
     const syncPayload = {
       reports,
@@ -2461,10 +2456,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Unified Admission: Register patient -> Create Lab Report -> Create Income Invoice -> Update Loyalty
   const createReportFromAdmission = useCallback((patient: Patient, selectedTests: InvoiceTestItem[], packageApplied?: any): LabReport => {
-    const today = new Date().toISOString().split('T')[0];
-
-    // Guarantee unique lab identity
-    const caseIdentity = resolveUniqueLabIdentity(reports, patient.labNumber, patient.barcode);
+    // Guarantee unique lab identity across BOTH reports and incomeRecords
+    const currentReps = latestStateRef.current.reports;
+    const currentInvs = latestStateRef.current.incomeRecords;
+    const caseIdentity = resolveUniqueLabIdentity(currentReps, patient.labNumber, patient.barcode, currentInvs);
     const resolvedLabNumber = caseIdentity.labNumber || `RT-${new Date().getFullYear()}-${Date.now().toString().slice(-4)}`;
     const resolvedBarcode = caseIdentity.barcode || `RT-${Math.floor(10000 + Math.random() * 90000)}`;
 
@@ -2703,6 +2698,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       discount: disc,
       visitFee: fee,
       isHomeVisit: patient.bookingType === 'home_visit',
+      bookingType: patient.bookingType || 'branch',
       visitAddress: patient.homeAddress || '',
       visitSpecialist: patient.visitSpecialist || '',
       branchRepresentative: patient.branchRepresentative || '',
@@ -2719,8 +2715,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       updatedAt: new Date().toISOString()
     };
 
-    setIncomeRecords(prev => [newInvoice, ...(prev || [])]);
     newReport.invoiceId = newInvoice.id;
+
+    // Synchronously update latestStateRef, localStorage (quota-safe), IndexedDB, and mark pending cloud push
+    const updatedReports = [newReport, ...latestStateRef.current.reports];
+    const updatedInvoices = [newInvoice, ...latestStateRef.current.incomeRecords];
+    latestStateRef.current.reports = updatedReports;
+    latestStateRef.current.incomeRecords = updatedInvoices;
+
+    safeSetLocalStorage(REPORTS_KEY, JSON.stringify(updatedReports));
+    safeSetLocalStorage(INCOME_KEY, JSON.stringify(updatedInvoices));
+    void saveIdbSnapshot({
+      reports: updatedReports,
+      incomeRecords: updatedInvoices,
+      updatedAt: new Date().toISOString()
+    });
+    setPendingCloudPush(true);
+
+    setReports(prev => [newReport, ...(prev || [])]);
+    setIncomeRecords(prev => [newInvoice, ...(prev || [])]);
+    setSelectedReportId(newReport.id);
 
     try {
       realtimeSyncManager.broadcastAction('ADMIT_PATIENT', {
@@ -2736,31 +2750,34 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
 
     try {
-      // Instant Cloud & Multi-device Sync for newly admitted case
-      const updatedReports = [newReport, ...reports];
-      const updatedInvoices = [newInvoice, ...incomeRecords];
-      const instantSyncPayload = {
+      // Instant complete Cloud & Multi-device Sync (includes auditLogs, deletedMap, settingsStamps, etc.)
+      const instantSyncPayload = buildFullSyncSnapshot({
         reports: updatedReports,
-        incomeRecords: updatedInvoices,
-        expenses,
-        loyaltyProfiles,
-        inventory,
-        dailyCloseouts,
-        labInfo,
-        testCatalog,
-        packages
-      };
+        incomeRecords: updatedInvoices
+      });
       realtimeSyncManager.pushMasterSnapshot(instantSyncPayload).catch(err => {
         console.warn('Instant Firestore push error:', err);
       });
+
+      // Mirror lightweight queue item locally first and push to GitHub checking actual { success } result
       if (githubConfig?.token && githubConfig?.autoSync) {
-        pushFullStoreToGitHub(githubConfig, instantSyncPayload).catch(err => {
-          console.warn('Instant GitHub full push error, falling back to single case push:', err);
-          syncInvoiceToDiagnostic(newInvoice, githubConfig).catch(() => {});
-        });
+        pushFullStoreToGitHub(githubConfig, instantSyncPayload)
+          .then(res => {
+            if (res.success) {
+              setPendingCloudPush(false);
+            } else {
+              setPendingCloudPush(true);
+              void syncInvoiceToDiagnostic(newInvoice, githubConfig);
+            }
+          })
+          .catch(() => {
+            setPendingCloudPush(true);
+            void syncInvoiceToDiagnostic(newInvoice, githubConfig);
+          });
       }
     } catch (syncErr) {
       console.warn('Sync error during admission:', syncErr);
+      setPendingCloudPush(true);
     }
 
     try {
@@ -2780,7 +2797,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
 
     return newReport;
-  }, [currentUser, logAction, addNotification, reports, incomeRecords, expenses, loyaltyProfiles, inventory, dailyCloseouts, labInfo, testCatalog, packages, diagnosticProfiles, staffSignatures, githubConfig]);
+  }, [currentUser, logAction, addNotification, buildFullSyncSnapshot, testCatalog, packages, diagnosticProfiles, staffSignatures, githubConfig]);
 
 
   // Loyalty Program Helpers
@@ -3468,12 +3485,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
     setEmployees(prev => {
       const next = [newEmp, ...prev];
-      try {
-        localStorage.setItem(EMPLOYEES_KEY, JSON.stringify(next));
-        localStorage.setItem('rt_lab_employees_v1', JSON.stringify(next));
-      } catch (err) {
-        console.error('Error saving new employee:', err);
-      }
+      safeSetLocalStorage(EMPLOYEES_KEY, JSON.stringify(next));
       return next;
     });
     logAction('CREATE', 'HR', `إضافة موظف جديد: ${emp.fullName}`);
@@ -3482,12 +3494,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const updateEmployee = useCallback((id: string, updates: Partial<Employee>) => {
     setEmployees(prev => {
       const next = prev.map(e => e.id === id ? { ...e, ...updates } : e);
-      try {
-        localStorage.setItem(EMPLOYEES_KEY, JSON.stringify(next));
-        localStorage.setItem('rt_lab_employees_v1', JSON.stringify(next));
-      } catch (err) {
-        console.error('Error updating employee:', err);
-      }
+      safeSetLocalStorage(EMPLOYEES_KEY, JSON.stringify(next));
       return next;
     });
     logAction('UPDATE', 'HR', `تعديل بيانات الموظف رقم ${id}`);
@@ -3497,12 +3504,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     markDeleted('employees', id);
     setEmployees(prev => {
       const next = prev.filter(e => e.id !== id);
-      try {
-        localStorage.setItem(EMPLOYEES_KEY, JSON.stringify(next));
-        localStorage.setItem('rt_lab_employees_v1', JSON.stringify(next));
-      } catch (err) {
-        console.error('Error deleting employee:', err);
-      }
+      safeSetLocalStorage(EMPLOYEES_KEY, JSON.stringify(next));
       return next;
     });
     logAction('DELETE', 'HR', `حذف موظف رقم ${id}`);
@@ -3642,31 +3644,13 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
   // Staff Signatures & Options
   const updateStaffSignatures = useCallback((signatures: LabStaffSignatures) => {
     setStaffSignatures(signatures);
-    try {
-      localStorage.setItem(STAFF_SIGNATURES_KEY, JSON.stringify(signatures));
-      localStorage.setItem('rt_lab_staff_v3', JSON.stringify(signatures));
-      localStorage.setItem('rt_lab_staff_v2', JSON.stringify(signatures));
-    } catch (e) {
-      console.warn('Storage save error:', e);
-    }
+    safeSetLocalStorage(STAFF_SIGNATURES_KEY, JSON.stringify(signatures));
     realtimeSyncManager.broadcastAction('UPDATE_STAFF', signatures);
     if (githubConfig.token && githubConfig.autoSync) {
-      pushFullStoreToGitHub(githubConfig, {
-        reports,
-        incomeRecords,
-        expenses,
-        loyaltyProfiles,
-        inventory,
-        labInfo,
-        staffSignatures: signatures,
-        staffSignatureOptions,
-        testCatalog,
-        packages,
-        diagnosticProfiles
-      }).catch(() => {});
+      pushFullStoreToGitHub(githubConfig, buildFullSyncSnapshot({ staffSignatures: signatures })).catch(() => {});
     }
     logAction('UPDATE', 'SETTINGS', 'تحديث الإمضاءات الافتراضية لطاقم الفحص والاعتماد');
-  }, [logAction, githubConfig, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, staffSignatureOptions, testCatalog, packages, diagnosticProfiles]);
+  }, [logAction, githubConfig, buildFullSyncSnapshot]);
 
   const addStaffSignatureOption = useCallback((
     role: 'chemist' | 'verifier' | 'consultant',
@@ -3686,9 +3670,7 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
         ...prev,
         [targetKey]: [newItem, ...prev[targetKey].filter(x => x.name !== item.name)]
       };
-      try {
-        localStorage.setItem(STAFF_OPTIONS_KEY, JSON.stringify(updated));
-      } catch {}
+      safeSetLocalStorage(STAFF_OPTIONS_KEY, JSON.stringify(updated));
       return updated;
     });
 
@@ -3709,9 +3691,7 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
         ...prev,
         [targetKey]: prev[targetKey].map(x => (x.id === id ? { ...x, ...item } : x))
       };
-      try {
-        localStorage.setItem(STAFF_OPTIONS_KEY, JSON.stringify(updated));
-      } catch {}
+      safeSetLocalStorage(STAFF_OPTIONS_KEY, JSON.stringify(updated));
       return updated;
     });
 
@@ -3736,11 +3716,7 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
         isChanged = true;
       }
       if (isChanged) {
-        try {
-          localStorage.setItem(STAFF_SIGNATURES_KEY, JSON.stringify(next));
-          localStorage.setItem('rt_lab_staff_v3', JSON.stringify(next));
-          localStorage.setItem('rt_lab_staff_v2', JSON.stringify(next));
-        } catch {}
+        safeSetLocalStorage(STAFF_SIGNATURES_KEY, JSON.stringify(next));
       }
       return isChanged ? next : prev;
     });
@@ -3874,75 +3850,52 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
 
   const syncAllDevicesNow = useCallback(async (): Promise<{ success: boolean; message: string; reportsCount?: number; invoicesCount?: number }> => {
     try {
-      // 1. Pull latest database from GitHub directly via raw API
+      // 1. Pull latest database from GitHub directly + IndexedDB snapshot
       const ghRes = await pullFullStoreFromGitHub(githubConfig, { force: true });
-      let mergedReports = [...reports];
-      let mergedInvoices = [...incomeRecords];
-      let mergedPackages = [...packages];
-      let mergedProfiles = [...diagnosticProfiles];
-      let mergedCatalog = [...testCatalog];
+      const idbSnap = await loadIdbSnapshot().catch(() => null);
+
+      let mergedReports = [...latestStateRef.current.reports];
+      let mergedInvoices = [...latestStateRef.current.incomeRecords];
+      let mergedPackages = [...latestStateRef.current.packages];
+      let mergedProfiles = [...latestStateRef.current.diagnosticProfiles];
+      let mergedCatalog = [...latestStateRef.current.testCatalog];
+
+      if (idbSnap) {
+        if (Array.isArray(idbSnap.reports) && idbSnap.reports.length > 0) {
+          mergedReports = mergeReportCollections(mergedReports, idbSnap.reports, mergeTwoReports).merged;
+        }
+        if (Array.isArray(idbSnap.incomeRecords) && idbSnap.incomeRecords.length > 0) {
+          mergedInvoices = mergeInvoiceCollections(mergedInvoices, idbSnap.incomeRecords, mergeTwoInvoices).merged;
+        }
+      }
 
       if (ghRes.success && ghRes.data) {
         const data = ghRes.data;
-        applyCloudCollections(data);
         importDeletionTombstones(data.deletedReports, data.deletedInvoices);
         applyCloudCollections(data);
+
         if (Array.isArray(data.reports) && data.reports.length > 0) {
-          const map = new Map<string, LabReport>();
-          mergedReports.forEach(r => {
-            if (r.id) map.set(r.id, r);
-            if (r.reportNumber) map.set(r.reportNumber, r);
-            if (r.patient?.barcode) map.set(r.patient.barcode, r);
-          });
-          data.reports.forEach((r: LabReport) => {
-            const existing = map.get(r.id) || (r.reportNumber && map.get(r.reportNumber)) || (r.patient?.barcode && map.get(r.patient.barcode));
-            if (!existing) {
-              map.set(r.id, r);
-            } else {
-              const merged = mergeTwoReports(existing, r);
-              map.set(existing.id, merged);
-              if (merged.reportNumber) map.set(merged.reportNumber, merged);
-              if (merged.patient?.barcode) map.set(merged.patient.barcode, merged);
-            }
-          });
-          mergedReports = filterDeletedReports(Array.from(new Set(map.values())));
+          mergedReports = filterDeletedReports(mergeReportCollections(mergedReports, data.reports, mergeTwoReports).merged);
           setReports(mergedReports);
         }
 
         if (Array.isArray(data.incomeRecords) && data.incomeRecords.length > 0) {
-          const map = new Map<string, IncomeRecord>();
-          mergedInvoices.forEach(i => {
-            if (i.id) map.set(i.id, i);
-            if (i.invoiceNumber) map.set(i.invoiceNumber, i);
-            if (i.barcode) map.set(i.barcode, i);
-          });
-          data.incomeRecords.forEach((i: IncomeRecord) => {
-            const existing = map.get(i.id) || (i.invoiceNumber && map.get(i.invoiceNumber)) || (i.barcode && map.get(i.barcode));
-            if (!existing) {
-              map.set(i.id, i);
-            } else {
-              const merged = mergeTwoInvoices(existing, i);
-              map.set(existing.id, merged);
-              if (merged.invoiceNumber) map.set(merged.invoiceNumber, merged);
-              if (merged.barcode) map.set(merged.barcode, merged);
-            }
-          });
-          mergedInvoices = filterDeletedInvoices(Array.from(new Set(map.values())));
+          mergedInvoices = filterDeletedInvoices(mergeInvoiceCollections(mergedInvoices, data.incomeRecords, mergeTwoInvoices).merged);
           setIncomeRecords(mergedInvoices);
         }
 
         if (Array.isArray(data.packages) && data.packages.length > 0) {
-          mergedPackages = mergePackagesWithDefaults(data.packages, packages);
+          mergedPackages = mergePackagesWithDefaults(data.packages, mergedPackages);
           setPackages(mergedPackages);
         }
 
         if (Array.isArray(data.diagnosticProfiles) && data.diagnosticProfiles.length > 0) {
-          mergedProfiles = mergeProfilesWithDefaults(data.diagnosticProfiles, diagnosticProfiles);
+          mergedProfiles = mergeProfilesWithDefaults(data.diagnosticProfiles, mergedProfiles);
           setDiagnosticProfiles(mergedProfiles);
         }
 
         if (Array.isArray(data.testCatalog) && data.testCatalog.length > 0) {
-          mergedCatalog = mergeCatalogWithDefaults(data.testCatalog, testCatalog);
+          mergedCatalog = mergeCatalogWithDefaults(data.testCatalog, mergedCatalog);
           setTestCatalog(mergedCatalog);
         }
 
@@ -3957,9 +3910,7 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
         }
         if (data.staffSignatures) {
           setStaffSignatures(data.staffSignatures);
-          try {
-            localStorage.setItem(STAFF_SIGNATURES_KEY, JSON.stringify(data.staffSignatures));
-          } catch {}
+          safeSetLocalStorage(STAFF_SIGNATURES_KEY, JSON.stringify(data.staffSignatures));
         }
         if (data.staffSignatureOptions) {
           setStaffSignatureOptions(prev => {
@@ -3977,9 +3928,7 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
               verifiers: mergeRoleOptions(prev.verifiers, data.staffSignatureOptions.verifiers),
               consultants: mergeRoleOptions(prev.consultants, data.staffSignatureOptions.consultants)
             };
-            try {
-              localStorage.setItem(STAFF_OPTIONS_KEY, JSON.stringify(merged));
-            } catch {}
+            safeSetLocalStorage(STAFF_OPTIONS_KEY, JSON.stringify(merged));
             return merged;
           });
         }
@@ -3992,21 +3941,17 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
               if (!map.has(k)) map.set(k, e);
             });
             const merged = Array.from(map.values());
-            try {
-              localStorage.setItem(EMPLOYEES_KEY, JSON.stringify(merged));
-              localStorage.setItem('rt_lab_employees_v1', JSON.stringify(merged));
-            } catch {}
+            safeSetLocalStorage(EMPLOYEES_KEY, JSON.stringify(merged));
             return merged;
           });
         }
       }
 
-      // 2. Also fetch diagnostic cases queue from GitHub and sync both reports AND invoices
+      // 2. Also fetch diagnostic cases queue from GitHub (identity + name compatible)
       const diagCasesRes = await fetchDiagnosticCases(githubConfig);
       if (diagCasesRes.success && Array.isArray(diagCasesRes.cases)) {
-        const existingBarcodes = new Set(mergedReports.map(r => r.patient?.barcode).filter(Boolean));
-        const existingNumbers = new Set(mergedReports.map(r => r.reportNumber).filter(Boolean));
-        const existingInvNumbers = new Set(mergedInvoices.map(i => i.invoiceNumber || i.labNumber));
+        const candidateReports: LabReport[] = [];
+        const candidateInvoices: IncomeRecord[] = [];
 
         diagCasesRes.cases.forEach((c: any) => {
           const safeCaseLab = c.labNumber || c.reportNumber || (c.barcode ? `RT-${String(c.barcode).replace('RT-', '')}` : `RT-${Date.now()}`);
@@ -4032,124 +3977,107 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
                 cost: 30
               }));
 
-          const alreadyRegistered =
-            (c.barcode && existingBarcodes.has(c.barcode)) ||
-            (safeCaseLab && existingNumbers.has(safeCaseLab));
-          if (!alreadyRegistered) {
+          const alreadyRegisteredRep = mergedReports.some(r =>
+            (c.id && r.id === c.id) ||
+            (((c.barcode && r.patient?.barcode === c.barcode) || (safeCaseLab && (r.reportNumber === safeCaseLab || r.patient?.labNumber === safeCaseLab))) &&
+              namesCompatibleForIdentity(r.patient?.fullName, c.fullName))
+          );
+
+          const invObj: IncomeRecord = {
+            id: String(c.id || `inv-${safeCaseLab}`).startsWith('inv-') ? String(c.id) : `inv-${c.id || safeCaseLab}`,
+            invoiceNumber: invNum,
+            patientName: c.fullName,
+            patientPhone: c.phone || '',
+            patientAge: c.age || 30,
+            patientGender: (c.gender as any) || 'male',
+            barcode: c.barcode,
+            labNumber: c.labNumber || safeCaseLab,
+            referringDoctor: c.referringDoctorName || 'كشف معمل',
+            tests: actualTests,
+            subtotal: net,
+            testsSubtotal: testsSub,
+            discount: disc,
+            visitFee: vFee,
+            isHomeVisit: Boolean(isHome),
+            bookingType: bType,
+            visitAddress: vAddr,
+            deliveryNotes: c.deliveryNotes || '',
+            visitSpecialist: c.visitSpecialist || '',
+            netAmount: net,
+            paidAmount: paid,
+            remainingAmount: Math.max(0, net - paid),
+            paymentMethod: (c.paymentMethod as any) || 'cash',
+            paymentStatus: (c.paymentStatus as any) || (paid >= net ? 'paid' : 'pending'),
+            cashierName: 'مزامنة سحابية',
+            branch: 'الفرع الرئيسي - بهتيم',
+            syncStatus: 'synced',
+            createdAt: c.sampleDate || new Date().toISOString(),
+            updatedAt: c.sampleDate || new Date().toISOString()
+          };
+
+          if (!alreadyRegisteredRep) {
             const newRep = convertIncomeRecordToDiagnosticReport({
-              id: c.id,
-              invoiceNumber: invNum,
-              labNumber: safeCaseLab,
-              barcode: c.barcode,
-              patientName: c.fullName,
-              patientAge: c.age || 30,
-              patientGender: (c.gender as any) || 'male',
-              patientPhone: c.phone || '',
-              referringDoctor: c.referringDoctorName || 'كشف معمل',
-              tests: actualTests,
-              subtotal: net,
-              discount: disc,
-              netAmount: net,
-              paidAmount: paid,
-              remainingAmount: Math.max(0, net - paid),
-              paymentMethod: (c.paymentMethod as any) || 'cash',
-              paymentStatus: (c.paymentStatus as any) || (paid >= net ? 'paid' : 'pending'),
-              cashierName: 'مزامنة سحابية',
-              branch: 'الفرع الرئيسي - بهتيم',
-              syncStatus: 'synced',
-              createdAt: c.sampleDate || new Date().toISOString(),
-              updatedAt: c.sampleDate || new Date().toISOString(),
-              isHomeVisit: Boolean(isHome),
-              bookingType: bType,
-              visitFee: vFee,
-              visitAddress: vAddr,
+              ...invObj,
+              id: c.id || `rep-${safeCaseLab}`,
               homeAddress: vAddr,
-              deliveryNotes: c.deliveryNotes || '',
-              visitSpecialist: c.visitSpecialist || '',
-              testsSubtotal: testsSub,
               discountApplied: disc
             }) as unknown as LabReport;
-            mergedReports = [newRep, ...mergedReports];
-            if (c.barcode) existingBarcodes.add(c.barcode);
-            if (safeCaseLab) existingNumbers.add(safeCaseLab);
+            if (!isReportDeletedByTombstone(newRep)) candidateReports.push(newRep);
           }
-          if (!existingInvNumbers.has(invNum) && !existingInvNumbers.has(safeCaseLab)) {
-            const newInv: IncomeRecord = {
-              id: `inv-${c.id || c.labNumber}-${Date.now()}`,
-              invoiceNumber: invNum,
-              patientName: c.fullName,
-              patientPhone: c.phone || '',
-              patientAge: c.age || 30,
-              patientGender: (c.gender as any) || 'male',
-              barcode: c.barcode,
-              labNumber: c.labNumber,
-              referringDoctor: c.referringDoctorName || 'كشف معمل',
-              tests: actualTests,
-              subtotal: net,
-              testsSubtotal: testsSub,
-              discount: disc,
-              visitFee: vFee,
-              isHomeVisit: Boolean(isHome),
-              bookingType: bType,
-              visitAddress: vAddr,
-              deliveryNotes: c.deliveryNotes || '',
-              visitSpecialist: c.visitSpecialist || '',
-              netAmount: net,
-              paidAmount: paid,
-              remainingAmount: Math.max(0, net - paid),
-              paymentMethod: (c.paymentMethod as any) || 'cash',
-              paymentStatus: (c.paymentStatus as any) || (paid >= net ? 'paid' : 'pending'),
-              cashierName: 'مزامنة سحابية',
-              branch: 'الفرع الرئيسي - بهتيم',
-              syncStatus: 'synced',
-              createdAt: c.sampleDate || new Date().toISOString(),
-              updatedAt: c.sampleDate || new Date().toISOString()
-            };
-            mergedInvoices = [newInv, ...mergedInvoices];
-            existingInvNumbers.add(invNum);
-            existingInvNumbers.add(c.labNumber);
+
+          const alreadyRegisteredInv = mergedInvoices.some(i =>
+            (invObj.id && i.id === invObj.id) ||
+            (((i.invoiceNumber && i.invoiceNumber === invNum) || (i.labNumber && i.labNumber === safeCaseLab) || (i.barcode && c.barcode && i.barcode === c.barcode)) &&
+              namesCompatibleForIdentity(i.patientName, c.fullName))
+          );
+          if (!alreadyRegisteredInv && !isInvoiceDeletedByTombstone(invObj)) {
+            candidateInvoices.push(invObj);
           }
         });
+
+        if (candidateReports.length > 0) {
+          mergedReports = filterDeletedReports(mergeReportCollections(mergedReports, candidateReports, mergeTwoReports).merged);
+          setReports(mergedReports);
+        }
+        if (candidateInvoices.length > 0) {
+          mergedInvoices = filterDeletedInvoices(mergeInvoiceCollections(mergedInvoices, candidateInvoices, mergeTwoInvoices).merged);
+          setIncomeRecords(mergedInvoices);
+        }
+      }
+
+      // 3. Reconcile any remaining non-deleted orphan invoices <-> reports
+      const orphans = findOrphanPairs(mergedReports, mergedInvoices, isReportDeletedByTombstone, isInvoiceDeletedByTombstone);
+      if (orphans.missingFromReports.length > 0) {
+        const restoredReports = orphans.missingFromReports.map(inv => convertIncomeRecordToDiagnosticReport(inv) as unknown as LabReport);
+        mergedReports = filterDeletedReports(mergeReportCollections(mergedReports, restoredReports, mergeTwoReports).merged);
         setReports(mergedReports);
+      }
+      if (orphans.missingFromInvoices.length > 0) {
+        const restoredInvoices = orphans.missingFromInvoices.map(rep => buildInvoiceFromOrphanReport(rep));
+        mergedInvoices = filterDeletedInvoices(mergeInvoiceCollections(mergedInvoices, restoredInvoices, mergeTwoInvoices).merged);
         setIncomeRecords(mergedInvoices);
       }
 
-      // 3. Save to localStorage immediately
-      try {
-        localStorage.setItem(REPORTS_KEY, JSON.stringify(mergedReports));
-        localStorage.setItem(INCOME_KEY, JSON.stringify(mergedInvoices));
-        localStorage.setItem(PACKAGES_KEY, JSON.stringify(mergedPackages));
-        localStorage.setItem(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(mergedProfiles));
-        localStorage.setItem(CATALOG_KEY, JSON.stringify(mergedCatalog));
-        localStorage.setItem(STAFF_SIGNATURES_KEY, JSON.stringify(staffSignatures));
-        localStorage.setItem(STAFF_OPTIONS_KEY, JSON.stringify(staffSignatureOptions));
-        localStorage.setItem(EMPLOYEES_KEY, JSON.stringify(employees));
-        localStorage.setItem(ATTENDANCE_KEY, JSON.stringify(attendance));
-        localStorage.setItem(PAYROLL_KEY, JSON.stringify(payroll));
-      } catch (e) {
-        console.warn('Storage save note:', e);
-      }
+      // 4. Save to quota-safe localStorage + IndexedDB immediately
+      safeSetLocalStorage(REPORTS_KEY, JSON.stringify(mergedReports));
+      safeSetLocalStorage(INCOME_KEY, JSON.stringify(mergedInvoices));
+      safeSetLocalStorage(PACKAGES_KEY, JSON.stringify(mergedPackages));
+      safeSetLocalStorage(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(mergedProfiles));
+      safeSetLocalStorage(CATALOG_KEY, JSON.stringify(mergedCatalog));
+      void saveIdbSnapshot({ reports: mergedReports, incomeRecords: mergedInvoices, updatedAt: new Date().toISOString() });
 
-      // 4. Push unified state back to GitHub and broadcast to all devices
-      const unifiedStore = {
+      // 5. Push full unified state back to GitHub and broadcast to all devices
+      const unifiedStore = buildFullSyncSnapshot({
         reports: mergedReports,
         incomeRecords: mergedInvoices,
-        expenses,
-        loyaltyProfiles,
-        inventory,
-        labInfo,
-        employees,
-        attendance,
-        payroll,
-        staffSignatures,
-        staffSignatureOptions,
-        testCatalog: mergedCatalog,
         packages: mergedPackages,
-        diagnosticProfiles: mergedProfiles
-      };
+        diagnosticProfiles: mergedProfiles,
+        testCatalog: mergedCatalog
+      });
 
       if (githubConfig.token) {
-        await pushFullStoreToGitHub(githubConfig, unifiedStore);
+        const pushRes = await pushFullStoreToGitHub(githubConfig, unifiedStore);
+        setPendingCloudPush(!pushRes.success);
       }
       realtimeSyncManager.broadcastAction('FULL_SYNC', unifiedStore);
 
@@ -4174,18 +4102,19 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
         message: `خطأ أثناء المزامنة: ${err.message || 'تعذر الاتصال بالسحابة'}`
       };
     }
-  }, [reports, incomeRecords, packages, diagnosticProfiles, testCatalog, expenses, loyaltyProfiles, inventory, labInfo, githubConfig, addNotification]);
+  }, [githubConfig, applyCloudCollections, buildFullSyncSnapshot, addNotification]);
 
   const healAndRestoreCases = useCallback(async (): Promise<{ success: boolean; message: string; count: number }> => {
     try {
-      // 1. Purge any stale tombstones for required cases
+      // 1. Purge any stale tombstones for required cases & reset sha cache so fresh cloud snapshot is pulled
       purgeProtectedTombstones();
       try {
         localStorage.removeItem('rt_head_commit_sha');
         localStorage.removeItem('rt_cloud_store_sha');
       } catch {}
 
-      // 2. Filter target seed records
+      // 2. Recover from IndexedDB snapshot & local queue + seed targets
+      const idbSnap = await loadIdbSnapshot().catch(() => null);
       const requiredNames = ['دينا', 'هند', 'منار'];
       const targetReps = INITIAL_REPORTS.filter(r => {
         const name = r.patient?.fullName || '';
@@ -4195,66 +4124,53 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
         return requiredNames.some(rn => (i.patientName || '').includes(rn));
       });
 
-      // 3. Guarantee they are in state and localStorage
-      setReports(prev => {
-        const map = new Map<string, LabReport>();
-        prev.forEach(r => {
-          if (r.id) map.set(r.id, r);
-          if (r.reportNumber) map.set(r.reportNumber, r);
-          if (r.patient?.barcode) map.set(r.patient.barcode, r);
-        });
-        targetReps.forEach(r => {
-          const existing = map.get(r.id) || (r.reportNumber && map.get(r.reportNumber)) || (r.patient?.barcode && map.get(r.patient.barcode));
-          if (!existing) {
-            map.set(r.id, r);
-          } else {
-            const merged = mergeTwoReports(existing, r);
-            map.set(existing.id, merged);
-          }
-        });
-        const finalReps = Array.from(new Set(map.values()));
-        try {
-          localStorage.setItem(REPORTS_KEY, JSON.stringify(finalReps));
-        } catch {}
-        return finalReps;
-      });
+      let workingReps = mergeReportCollections(
+        latestStateRef.current.reports,
+        [...targetReps, ...(idbSnap?.reports || [])],
+        mergeTwoReports
+      ).merged;
+      let workingInvs = mergeInvoiceCollections(
+        latestStateRef.current.incomeRecords,
+        [...targetInvs, ...(idbSnap?.incomeRecords || [])],
+        mergeTwoInvoices
+      ).merged;
 
-      setIncomeRecords(prev => {
-        const map = new Map<string, IncomeRecord>();
-        prev.forEach(i => {
-          if (i.id) map.set(i.id, i);
-          if (i.invoiceNumber) map.set(i.invoiceNumber, i);
-          if (i.barcode) map.set(i.barcode, i);
-        });
-        targetInvs.forEach(i => {
-          const existing = map.get(i.id) || (i.invoiceNumber && map.get(i.invoiceNumber)) || (i.barcode && map.get(i.barcode));
-          if (!existing) {
-            map.set(i.id, i);
-          } else {
-            const merged = mergeTwoInvoices(existing, i);
-            map.set(existing.id, merged);
-          }
-        });
-        const finalInvs = Array.from(new Set(map.values()));
-        try {
-          localStorage.setItem(INCOME_KEY, JSON.stringify(finalInvs));
-        } catch {}
-        return finalInvs;
-      });
+      workingReps = filterDeletedReports(workingReps);
+      workingInvs = filterDeletedInvoices(workingInvs);
 
-      // 4. Trigger cloud pull & sync
-      await syncAllDevicesNow();
+      // 3. Reconcile any orphan invoices <-> reports before pushing
+      const orphans = findOrphanPairs(workingReps, workingInvs, isReportDeletedByTombstone, isInvoiceDeletedByTombstone);
+      let recoveredOrphansCount = 0;
+      if (orphans.missingFromReports.length > 0) {
+        recoveredOrphansCount += orphans.missingFromReports.length;
+        const restoredReports = orphans.missingFromReports.map(inv => convertIncomeRecordToDiagnosticReport(inv) as unknown as LabReport);
+        workingReps = filterDeletedReports(mergeReportCollections(workingReps, restoredReports, mergeTwoReports).merged);
+      }
+      if (orphans.missingFromInvoices.length > 0) {
+        recoveredOrphansCount += orphans.missingFromInvoices.length;
+        const restoredInvoices = orphans.missingFromInvoices.map(rep => buildInvoiceFromOrphanReport(rep));
+        workingInvs = filterDeletedInvoices(mergeInvoiceCollections(workingInvs, restoredInvoices, mergeTwoInvoices).merged);
+      }
+
+      setReports(workingReps);
+      setIncomeRecords(workingInvs);
+      safeSetLocalStorage(REPORTS_KEY, JSON.stringify(workingReps));
+      safeSetLocalStorage(INCOME_KEY, JSON.stringify(workingInvs));
+      setPendingCloudPush(true);
+
+      // 4. Trigger full cloud pull & push sync
+      const syncRes = await syncAllDevicesNow();
 
       addNotification({
-        title: '✅ تم استعادة وتثبيت الحالات بنجاح',
-        message: 'تم استرجاع حالات (دينا سامي، هند مرسي عبدالرحمن، منار اشرف) وتثبيتها بقائمة العمل والنتائج والفواتير.',
+        title: '✅ تم فحص واستعادة وتثبيت كافة الحالات بنجاح',
+        message: `تم فحص التكامل السحابي واسترجاع ${recoveredOrphansCount > 0 ? `${recoveredOrphansCount} سجل متضرر و` : ''}تثبيت جميع الحالات بنجاح.`,
         type: 'success'
       });
 
       return {
         success: true,
-        message: 'تم بنجاح تثبيت واسترجاع الحالات المسجلة (دينا سامي · هند مرسي · منار اشرف) بالكامل!',
-        count: targetReps.length
+        message: syncRes.message || 'تم بنجاح تثبيت واسترجاع جميع الحالات المسجلة وفحص التطابق السحابي!',
+        count: workingReps.length
       };
     } catch (err: any) {
       return {
@@ -4269,7 +4185,8 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
     return await syncAllDevicesNow();
   }, [syncAllDevicesNow]);
 
-  // Automatic Data Healing Effect for Dina, Hind, Manar
+  // Automatic Data Healing & Orphan Pair Reconciliation Effect
+  const healedOrphanIdsRef = useRef<Set<string>>(new Set());
   useEffect(() => {
     try {
       purgeProtectedTombstones();
@@ -4303,6 +4220,23 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
 
       if (missingInvs.length > 0) {
         setIncomeRecords(prev => unionInvoices(prev, missingInvs));
+      }
+
+      // Reconcile any non-deleted orphan invoices <-> reports caused by prior number collisions or interrupted saves
+      const orphans = findOrphanPairs(reports, incomeRecords, isReportDeletedByTombstone, isInvoiceDeletedByTombstone);
+      const newMissingReps = orphans.missingFromReports.filter(inv => !healedOrphanIdsRef.current.has(`rep-from-${inv.id}`));
+      const newMissingInvs = orphans.missingFromInvoices.filter(rep => !healedOrphanIdsRef.current.has(`inv-from-${rep.id}`));
+
+      if (newMissingReps.length > 0) {
+        newMissingReps.forEach(inv => healedOrphanIdsRef.current.add(`rep-from-${inv.id}`));
+        const restoredReps = newMissingReps.map(inv => convertIncomeRecordToDiagnosticReport(inv) as unknown as LabReport);
+        setReports(prev => filterDeletedReports(mergeReportCollections(prev, restoredReps, mergeTwoReports).merged));
+      }
+
+      if (newMissingInvs.length > 0) {
+        newMissingInvs.forEach(rep => healedOrphanIdsRef.current.add(`inv-from-${rep.id}`));
+        const restoredInvs = newMissingInvs.map(rep => buildInvoiceFromOrphanReport(rep));
+        setIncomeRecords(prev => filterDeletedInvoices(mergeInvoiceCollections(prev, restoredInvs, mergeTwoInvoices).merged));
       }
     } catch (e) {
       console.warn('Auto healing error:', e);

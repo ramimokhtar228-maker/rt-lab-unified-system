@@ -1,8 +1,9 @@
 import { broadcastCloudChange } from './realtimeChannel';
 import { mergeCollection, getDeletedMap, importDeletedMap } from './cloudStore';
 import { IncomeRecord, GitHubSyncConfig, InvoiceTestItem } from '../types';
-import { unionReports, unionInvoices } from './labNumbering';
+import { unionReports, unionInvoices, normalizePatientName, namesCompatibleForIdentity } from './labNumbering';
 import { mergePackagesWithDefaults, mergeProfilesWithDefaults } from './upgradeSavedData';
+import { safeSetLocalStorage, setPendingCloudPush } from './idbBackup';
 
 import { getDeletionTombstones, importDeletionTombstones, filterDeletedReports, filterDeletedInvoices } from './deletionRegistry';
 
@@ -141,7 +142,7 @@ export async function testGitHubConnection(
   }
 }
 
-// Fetch Diagnostic Cases from GitHub
+// Fetch Diagnostic Cases from GitHub (prefers fresh GitHub API over cached CDN)
 export async function fetchDiagnosticCases(
   arg1: string | GitHubSyncConfig,
   arg2?: string,
@@ -150,43 +151,53 @@ export async function fetchDiagnosticCases(
   try {
     const creds = resolveCredentials(arg1, arg2, arg3);
     const cases: DiagnosticPatientCase[] = [];
-    const seenIds = new Set<string>();
+    const seenKeys = new Set<string>();
+    const makeSeenKey = (idOrNum: string, patientName?: string) =>
+      `${String(idOrNum || '').trim().toUpperCase()}|${normalizePatientName(patientName)}`;
 
-    // 1. Priority: pull from public/rt-database-sync.json which contains ALL registered cases and reports
+    // 1. Priority: pull from public/rt-database-sync.json
     try {
       let dbData: any = null;
-      const rawDbRes = await fetch(
-        `https://raw.githubusercontent.com/${creds.owner}/${creds.repo}/main/public/rt-database-sync.json?_=${Date.now()}`
-      );
-      if (rawDbRes.ok) {
-        dbData = await rawDbRes.json();
-      } else {
-        const dbRes = await fetch(
-          `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/public/rt-database-sync.json?ref=main&_=${Date.now()}`,
-          {
-            headers: creds.token ? {
-              Authorization: `token ${creds.token}`,
-              Accept: 'application/vnd.github.v3.raw'
-            } : {
-              Accept: 'application/vnd.github.v3.raw'
+
+      if (creds.token) {
+        try {
+          const dbRes = await fetch(
+            `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/public/rt-database-sync.json?ref=main&_=${Date.now()}`,
+            {
+              cache: 'no-store',
+              headers: {
+                Authorization: `token ${creds.token}`,
+                Accept: 'application/vnd.github.v3.raw'
+              }
+            }
+          );
+          if (dbRes.ok) {
+            const resJson = await dbRes.json();
+            if (resJson && (Array.isArray(resJson.reports) || Array.isArray(resJson.incomeRecords))) {
+              dbData = resJson;
+            } else if (resJson && resJson.download_url) {
+              const dlRes = await fetch(`${resJson.download_url}?_=${Date.now()}`, { cache: 'no-store' });
+              if (dlRes.ok) dbData = await dlRes.json();
             }
           }
-        );
-        if (dbRes.ok) {
-          const resJson = await dbRes.json();
-          if (resJson && Array.isArray(resJson.reports)) {
-            dbData = resJson;
-          } else if (resJson && resJson.download_url) {
-            const dlRes = await fetch(`${resJson.download_url}?_=${Date.now()}`);
-            if (dlRes.ok) dbData = await dlRes.json();
-          }
-        }
+        } catch {}
       }
 
-      // Local fallback if remote failed
       if (!dbData) {
         try {
-          const localRes = await fetch(`./rt-database-sync.json?_=${Date.now()}`);
+          const rawDbRes = await fetch(
+            `https://raw.githubusercontent.com/${creds.owner}/${creds.repo}/main/public/rt-database-sync.json?_=${Date.now()}`,
+            { cache: 'no-store' }
+          );
+          if (rawDbRes.ok) {
+            dbData = await rawDbRes.json();
+          }
+        } catch {}
+      }
+
+      if (!dbData) {
+        try {
+          const localRes = await fetch(`./rt-database-sync.json?_=${Date.now()}`, { cache: 'no-store' });
           if (localRes.ok) dbData = await localRes.json();
         } catch {}
       }
@@ -194,9 +205,11 @@ export async function fetchDiagnosticCases(
       if (dbData && Array.isArray(dbData.reports)) {
         for (const rep of dbData.reports) {
           const pat = rep.patient || {};
-          const key = rep.reportNumber || rep.id || pat.barcode || pat.fullName;
-          if (key && !seenIds.has(key)) {
-            seenIds.add(key);
+          const pName = pat.fullName || 'مريض غير مسمى';
+          const numOrCode = rep.reportNumber || pat.labNumber || pat.barcode || rep.id;
+          const key = makeSeenKey(numOrCode || rep.id, pName);
+          if (numOrCode && !seenKeys.has(key)) {
+            seenKeys.add(key);
             const testNames: string[] = [];
             if (Array.isArray(rep.profiles)) {
               rep.profiles.forEach((p: any) => {
@@ -211,7 +224,7 @@ export async function fetchDiagnosticCases(
               id: rep.id || `rep-${cases.length + 1}`,
               labNumber: safeLab,
               barcode: pat.barcode || rep.barcode || '',
-              fullName: pat.fullName || 'مريض غير مسمى',
+              fullName: pName,
               age: pat.age || 30,
               gender: pat.gender || 'male',
               phone: pat.phone || '',
@@ -230,9 +243,11 @@ export async function fetchDiagnosticCases(
       // Also process any cases from dbData.cases
       if (dbData && Array.isArray(dbData.cases)) {
         for (const c of dbData.cases) {
-          const key = c.barcode || c.reportNumber || c.invoiceNumber || c.id || c.patientName;
-          if (key && !seenIds.has(key)) {
-            seenIds.add(key);
+          const pName = c.patientName || c.fullName || 'مريض مسجل';
+          const numOrCode = c.reportNumber || c.labNumber || c.barcode || c.invoiceNumber || c.id;
+          const key = makeSeenKey(numOrCode || c.id, pName);
+          if (numOrCode && !seenKeys.has(key)) {
+            seenKeys.add(key);
             const safeLab = c.reportNumber || c.labNumber || (c.barcode ? `RT-${String(c.barcode).replace('RT-', '')}` : `RT-${cases.length + 1}`);
             const testNames = Array.isArray(c.tests)
               ? c.tests.map((t: any) => t.nameAr || t.nameEn)
@@ -241,7 +256,7 @@ export async function fetchDiagnosticCases(
               id: c.id || `rep-${safeLab}`,
               labNumber: safeLab,
               barcode: c.barcode || '',
-              fullName: c.patientName || c.fullName || 'مريض مسجل',
+              fullName: pName,
               age: c.age || 30,
               gender: c.gender || 'female',
               phone: c.phone || '',
@@ -264,48 +279,56 @@ export async function fetchDiagnosticCases(
     // 2. Also check public/rt-cases-sync.json (Priority queue for new incoming bookings)
     try {
       let syncParsed: any = null;
-      const rawCasesRes = await fetch(
-        `https://raw.githubusercontent.com/${creds.owner}/${creds.repo}/main/public/rt-cases-sync.json?_=${Date.now()}`
-      );
-      if (rawCasesRes.ok) {
-        syncParsed = await rawCasesRes.json();
-      } else {
-        const syncRes = await fetch(
-          `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/public/rt-cases-sync.json?ref=main&_=${Date.now()}`,
-          {
-            headers: creds.token ? {
-              Authorization: `token ${creds.token}`,
-              Accept: 'application/vnd.github.v3+json'
-            } : {
-              Accept: 'application/vnd.github.v3+json'
+      if (creds.token) {
+        try {
+          const syncRes = await fetch(
+            `https://api.github.com/repos/${creds.owner}/${creds.repo}/contents/public/rt-cases-sync.json?ref=main&_=${Date.now()}`,
+            {
+              cache: 'no-store',
+              headers: {
+                Authorization: `token ${creds.token}`,
+                Accept: 'application/vnd.github.v3+json'
+              }
+            }
+          );
+          if (syncRes.ok) {
+            const syncData = await syncRes.json();
+            const contentStr = syncData.content ? decodeBase64Utf8(syncData.content) : '';
+            syncParsed = contentStr ? JSON.parse(contentStr) : null;
+            if (!syncParsed && syncData.download_url) {
+              const dlRes = await fetch(`${syncData.download_url}?_=${Date.now()}`, { cache: 'no-store' });
+              if (dlRes.ok) syncParsed = await dlRes.json();
             }
           }
-        );
-
-        if (syncRes.ok) {
-          const syncData = await syncRes.json();
-          const contentStr = syncData.content ? decodeBase64Utf8(syncData.content) : '';
-          syncParsed = contentStr ? JSON.parse(contentStr) : null;
-          if (!syncParsed && syncData.download_url) {
-            const dlRes = await fetch(`${syncData.download_url}?_=${Date.now()}`);
-            if (dlRes.ok) syncParsed = await dlRes.json();
-          }
-        }
+        } catch {}
       }
 
-      // Local fallback for cases if remote failed
       if (!syncParsed) {
         try {
-          const locRes = await fetch(`./rt-cases-sync.json?_=${Date.now()}`);
+          const rawCasesRes = await fetch(
+            `https://raw.githubusercontent.com/${creds.owner}/${creds.repo}/main/public/rt-cases-sync.json?_=${Date.now()}`,
+            { cache: 'no-store' }
+          );
+          if (rawCasesRes.ok) {
+            syncParsed = await rawCasesRes.json();
+          }
+        } catch {}
+      }
+
+      if (!syncParsed) {
+        try {
+          const locRes = await fetch(`./rt-cases-sync.json?_=${Date.now()}`, { cache: 'no-store' });
           if (locRes.ok) syncParsed = await locRes.json();
         } catch {}
       }
 
       if (Array.isArray(syncParsed)) {
         for (const item of syncParsed) {
-          const key = item.reportNumber || item.labNumber || item.barcode || item.id;
-          if (key && !seenIds.has(key)) {
-            seenIds.add(key);
+          const pName = item.patientName || (item.patient && item.patient.fullName) || item.fullName || 'مريض غير مسمى';
+          const numOrCode = item.reportNumber || item.labNumber || item.barcode || item.id;
+          const key = makeSeenKey(numOrCode || item.id, pName);
+          if (numOrCode && !seenKeys.has(key)) {
+            seenKeys.add(key);
             const isHome = item.isHomeVisit ?? (item.patient && item.patient.isHomeVisit) ?? (item.bookingType === 'home_visit' || (item.patient && item.patient.bookingType === 'home_visit'));
             const bType = item.bookingType || (item.patient && item.patient.bookingType) || (isHome ? 'home_visit' : 'branch');
             const vFee = item.visitFee ?? (item.patient && item.patient.visitFee) ?? 0;
@@ -316,7 +339,7 @@ export async function fetchDiagnosticCases(
               id: item.id || `diag-${cases.length + 1}`,
               labNumber: safeLab,
               barcode: item.barcode || (item.patient && item.patient.barcode) || '',
-              fullName: item.patientName || (item.patient && item.patient.fullName) || item.fullName || 'مريض غير مسمى',
+              fullName: pName,
               age: (item.patient && item.patient.age) || item.age || 35,
               gender: (item.patient && item.patient.gender) || item.gender || 'male',
               phone: (item.patient && item.patient.phone) || item.phone || '',
@@ -357,9 +380,11 @@ export async function fetchDiagnosticCases(
           const localCases = JSON.parse(localCasesStr);
           if (Array.isArray(localCases)) {
             for (const lc of localCases) {
-              const key = lc.barcode || lc.labNumber;
-              if (key && !seenIds.has(key)) {
-                seenIds.add(key);
+              const pName = lc.fullName || lc.patientName || '';
+              const numOrCode = lc.labNumber || lc.barcode || lc.id;
+              const key = makeSeenKey(numOrCode, pName);
+              if (numOrCode && !seenKeys.has(key)) {
+                seenKeys.add(key);
                 cases.unshift(lc);
               }
             }
@@ -821,79 +846,56 @@ export async function syncInvoiceToDiagnostic(
 
     const newReport = convertIncomeRecordToDiagnosticReport(record);
 
-    // 1. Instant Local Storage Sync (Direct browser sync between apps)
+    // 1. Instant Local Storage Sync (Canonical storage + lightweight cases queue)
     if (typeof window !== 'undefined') {
       try {
-        const STORAGE_KEY_V2 = 'rt_lab_reports_v2';
-        const STORAGE_KEY_V1 = 'rt_lab_reports_v1';
-        const savedReports = localStorage.getItem(STORAGE_KEY_V2) || localStorage.getItem(STORAGE_KEY_V1);
-        let reportsList: unknown[] = [];
+        const CANONICAL_REPORTS_KEY = 'rt_lab_unified_reports_v3';
+        const savedReports = localStorage.getItem(CANONICAL_REPORTS_KEY);
         if (savedReports) {
+          let reportsList: unknown[] = [];
           try {
             reportsList = JSON.parse(savedReports);
           } catch {
             reportsList = [];
           }
-        }
+          if (Array.isArray(reportsList)) {
+            const existingIdx = reportsList.findIndex((r: unknown) => {
+              const rep = r as { id?: string; reportNumber?: string; patient?: { barcode?: string; labNumber?: string; fullName?: string } };
+              if (rep.id === newReport.id) return true;
+              const matchesNum = rep.reportNumber === record.labNumber || (rep.patient && rep.patient.barcode === record.barcode);
+              return Boolean(matchesNum && namesCompatibleForIdentity(rep.patient?.fullName, record.patientName));
+            });
 
-        // Check if report already exists
-        const existingIdx = reportsList.findIndex((r: unknown) => {
-          const rep = r as { id?: string; reportNumber?: string; patient?: { barcode?: string; labNumber?: string } };
-          return (
-            rep.id === newReport.id ||
-            rep.reportNumber === record.labNumber ||
-            rep.reportNumber === record.invoiceNumber ||
-            (rep.patient && rep.patient.barcode === record.barcode)
-          );
-        });
-
-        if (existingIdx >= 0) {
-          // Update existing with latest info
-          reportsList[existingIdx] = {
-            ...(reportsList[existingIdx] as object),
-            updatedAt: new Date().toISOString(),
-            financialClearance: record.paymentStatus === 'paid' ? 'CLEARED' : 'PENDING'
-          };
-        } else {
-          // Prepend new report
-          reportsList.unshift(newReport);
-        }
-
-        localStorage.setItem(STORAGE_KEY_V2, JSON.stringify(reportsList));
-        localStorage.setItem(STORAGE_KEY_V1, JSON.stringify(reportsList));
-        localStorage.setItem('rt_lab_sync_trigger', Date.now().toString());
-
-        // Dedicated incoming orders queue for immediate instant sync
-        try {
-          const incomingQueueStr = localStorage.getItem('rt_lab_incoming_orders_queue');
-          let incomingQueue: any[] = [];
-          if (incomingQueueStr) {
-            try { incomingQueue = JSON.parse(incomingQueueStr); } catch {}
-          }
-          if (Array.isArray(incomingQueue)) {
-            const inIdx = incomingQueue.findIndex(q => (q.barcode && q.barcode === record.barcode) || (q.reportNumber && q.reportNumber === record.labNumber));
-            if (inIdx >= 0) {
-              incomingQueue[inIdx] = newReport;
+            if (existingIdx >= 0) {
+              reportsList[existingIdx] = {
+                ...(reportsList[existingIdx] as object),
+                updatedAt: new Date().toISOString(),
+                financialClearance: record.paymentStatus === 'paid' ? 'CLEARED' : 'PENDING'
+              };
             } else {
-              incomingQueue.unshift(newReport);
+              reportsList.unshift(newReport);
             }
-            localStorage.setItem('rt_lab_incoming_orders_queue', JSON.stringify(incomingQueue));
+            safeSetLocalStorage(CANONICAL_REPORTS_KEY, JSON.stringify(reportsList));
           }
-        } catch (inboxErr) {
-          console.warn('Incoming orders queue error:', inboxErr);
         }
+        try { localStorage.setItem('rt_lab_sync_trigger', Date.now().toString()); } catch {}
 
-        // Also save to pending sync queue
+        // Save lightweight pending queue entry (capped to 80 items so quota is never exceeded)
         const syncQueueStr = localStorage.getItem('rt_lab_cases_sync_v1');
-        let syncQueue: unknown[] = [];
+        let syncQueue: any[] = [];
         if (syncQueueStr) {
           try {
-            syncQueue = JSON.parse(syncQueueStr);
+            const parsed = JSON.parse(syncQueueStr);
+            if (Array.isArray(parsed)) syncQueue = parsed;
           } catch {
             syncQueue = [];
           }
         }
-        if (!syncQueue.some((q: unknown) => (q as { barcode?: string }).barcode === record.barcode)) {
+        const alreadyQueued = syncQueue.some((q: any) =>
+          (q.id === `diag-${record.id}`) ||
+          (q.barcode && q.barcode === record.barcode && namesCompatibleForIdentity(q.fullName, record.patientName))
+        );
+        if (!alreadyQueued) {
           syncQueue.unshift({
             id: `diag-${record.id}`,
             labNumber: record.labNumber,
@@ -910,7 +912,7 @@ export async function syncInvoiceToDiagnostic(
             invoiceNumber: record.invoiceNumber,
             testNames: record.tests.map(t => t.nameAr)
           });
-          localStorage.setItem('rt_lab_cases_sync_v1', JSON.stringify(syncQueue));
+          safeSetLocalStorage('rt_lab_cases_sync_v1', JSON.stringify(syncQueue.slice(0, 80)));
         }
       } catch (storageErr) {
         console.warn('Local storage sync warning:', storageErr);
@@ -933,10 +935,11 @@ export async function syncInvoiceToDiagnostic(
       }
     }
 
-    // 3. Online Cloud Push to GitHub Repository
+    // 3. Online Cloud Push to GitHub Repository (mark pending if offline/failed)
     if (creds.token) {
       pushSingleCaseToGitHub(creds, record).catch(err => {
-        console.warn('Background GitHub sync error:', err);
+        console.warn('Background GitHub single case sync error:', err);
+        setPendingCloudPush(true);
       });
     }
 
@@ -952,39 +955,35 @@ export async function syncInvoiceToDiagnostic(
   }
 }
 
-// Helper to merge cases from public/rt-cases-sync.json into database store
+// Helper to merge cases from public/rt-cases-sync.json into database store (identity + name safe)
 export function mergeCasesQueueIntoStore(storeData: any, rawCases: any[]) {
   if (!storeData || !Array.isArray(rawCases) || rawCases.length === 0) return;
 
   if (!Array.isArray(storeData.reports)) storeData.reports = [];
   if (!Array.isArray(storeData.incomeRecords)) storeData.incomeRecords = [];
 
-  const existingRepCodes = new Set<string>();
-  const existingRepNums = new Set<string>();
-  storeData.reports.forEach((r: any) => {
-    if (r.id) existingRepNums.add(r.id);
-    if (r.reportNumber) existingRepNums.add(r.reportNumber);
-    if (r.patient?.barcode) existingRepCodes.add(r.patient.barcode);
-    if (r.patient?.labNumber) existingRepNums.add(r.patient.labNumber);
-  });
+  const repMatchesCase = (r: any, cId: string, num: string, code: string, pName: string) => {
+    if (cId && r.id === cId) return true;
+    const sameNum = Boolean(num && (r.reportNumber === num || r.patient?.labNumber === num));
+    const sameBc = Boolean(code && r.patient?.barcode === code);
+    return (sameNum || sameBc) && namesCompatibleForIdentity(r.patient?.fullName, pName);
+  };
 
-  const existingInvNums = new Set<string>();
-  storeData.incomeRecords.forEach((i: any) => {
-    if (i.id) existingInvNums.add(i.id);
-    if (i.invoiceNumber) existingInvNums.add(i.invoiceNumber);
-    if (i.barcode) existingInvNums.add(i.barcode);
-    if (i.labNumber) existingInvNums.add(i.labNumber);
-  });
+  const invMatchesCase = (i: any, cId: string, invNum: string, num: string, code: string, pName: string) => {
+    if (cId && (i.id === cId || i.id === cId.replace(/^rep-/, ''))) return true;
+    const sameNum = Boolean((invNum && i.invoiceNumber === invNum) || (num && i.labNumber === num));
+    const sameBc = Boolean(code && i.barcode === code);
+    return (sameNum || sameBc) && namesCompatibleForIdentity(i.patientName, pName);
+  };
 
   rawCases.forEach((c: any) => {
     const code = c.barcode || (c.patient && c.patient.barcode) || '';
     const num = String(c.reportNumber || c.labNumber || c.id || '');
     const invNum = c.invoiceNumber || (c.patient && c.patient.invoiceNumber) || (num ? `INV-${num.replace('RT-', '')}` : `INV-${Date.now()}`);
+    const pName = c.patientName || (c.patient && c.patient.fullName) || c.fullName || 'مريض';
+    const cId = String(c.id || '');
 
-    const alreadyInReports =
-      (code && existingRepCodes.has(code)) ||
-      (num && existingRepNums.has(num)) ||
-      (c.id && existingRepNums.has(c.id));
+    const alreadyInReports = storeData.reports.some((r: any) => repMatchesCase(r, cId, num, code, pName));
 
     const net = c.netAmount ?? (c.patient && c.patient.totalCost) ?? c.totalCost ?? 0;
     const paid = c.paidAmount ?? (c.patient && c.patient.paidAmount) ?? (c.paymentStatus === 'paid' ? net : 0);
@@ -993,7 +992,6 @@ export function mergeCasesQueueIntoStore(storeData: any, rawCases: any[]) {
     const bType = c.bookingType || (c.patient && c.patient.bookingType) || (isHome ? 'home_visit' : 'branch');
     const vFee = c.visitFee ?? (c.patient && c.patient.visitFee) ?? 0;
     const vAddr = c.visitAddress || c.homeAddress || (c.patient && c.patient.homeAddress) || '';
-    const pName = c.patientName || (c.patient && c.patient.fullName) || c.fullName || 'مريض';
     const phone = c.phone || (c.patient && c.patient.phone) || '';
     const doctor = c.referringDoctor || (c.patient && c.patient.referringDoctorName) || c.referringDoctorName || 'كشف معمل';
     const age = c.age ?? (c.patient && c.patient.age) ?? 30;
@@ -1052,16 +1050,9 @@ export function mergeCasesQueueIntoStore(storeData: any, rawCases: any[]) {
       }) as any;
 
       storeData.reports.unshift(generatedReport);
-      if (code) existingRepCodes.add(code);
-      if (num) existingRepNums.add(num);
-      if (c.id) existingRepNums.add(c.id);
     }
 
-    const alreadyInInvoices =
-      (invNum && existingInvNums.has(invNum)) ||
-      (code && existingInvNums.has(code)) ||
-      (num && existingInvNums.has(num)) ||
-      (c.id && existingInvNums.has(c.id));
+    const alreadyInInvoices = storeData.incomeRecords.some((i: any) => invMatchesCase(i, cId, invNum, num, code, pName));
 
     if (!alreadyInInvoices) {
       const generatedInvoice: IncomeRecord = {
@@ -1096,9 +1087,6 @@ export function mergeCasesQueueIntoStore(storeData: any, rawCases: any[]) {
         updatedAt: createdDate
       };
       storeData.incomeRecords.unshift(generatedInvoice);
-      if (invNum) existingInvNums.add(invNum);
-      if (code) existingInvNums.add(code);
-      if (num) existingInvNums.add(num);
     }
   });
 }
@@ -1117,6 +1105,7 @@ async function pushSingleCaseToGitHub(
 
   try {
     const res = await fetch(`${apiUrl}?_=${Date.now()}`, {
+      cache: 'no-store',
       headers: {
         Authorization: `token ${creds.token}`,
         Accept: 'application/vnd.github.v3+json'
@@ -1171,11 +1160,14 @@ async function pushSingleCaseToGitHub(
     createdAt: record.createdAt || new Date().toISOString()
   };
 
-  // Add or update
-  const idx = existingCases.findIndex(
-    (c: unknown) => (c as { barcode?: string; reportNumber?: string }).barcode === record.barcode ||
-                    (c as { barcode?: string; reportNumber?: string }).reportNumber === record.labNumber
-  );
+  // Add or update only if same ID or (same barcode/labNumber AND compatible name)
+  const idx = existingCases.findIndex((c: any) => {
+    if (c.id === casePayload.id) return true;
+    const sameIdentity =
+      (record.barcode && c.barcode === record.barcode) ||
+      (record.labNumber && c.reportNumber === record.labNumber);
+    return Boolean(sameIdentity && namesCompatibleForIdentity(c.patientName || c.fullName, record.patientName));
+  });
 
   if (idx >= 0) {
     existingCases[idx] = casePayload;
@@ -1209,19 +1201,87 @@ async function pushSingleCaseToGitHub(
     await new Promise(r => setTimeout(r, 600 * (retryCount + 1)));
     return pushSingleCaseToGitHub(creds, record, retryCount + 1);
   }
+  if (!putRes.ok) {
+    setPendingCloudPush(true);
+  }
 }
 
-// Push full unified database store to GitHub (Git Data API — يدعم الملفات الكبيرة والدمج الآلي للفرعين)
+// Single-flight mutex & coalescing queue so simultaneous GitHub pushes NEVER race or drop newer payloads
+let activePushChain: Promise<{ success: boolean; message: string }> = Promise.resolve({
+  success: true,
+  message: ''
+});
+let queuedPushItem: {
+  creds: { token: string; owner: string; repo: string };
+  payload: Record<string, any>;
+} | null = null;
+let pushFlushActive = false;
+
+function mergeQueuedPayloads(a: Record<string, any>, b: Record<string, any>): Record<string, any> {
+  return {
+    ...a,
+    ...b,
+    reports: unionReports(a.reports || [], b.reports || []),
+    incomeRecords: unionInvoices(a.incomeRecords || [], b.incomeRecords || []),
+    auditLogs: mergeCollection('auditLogs', a.auditLogs || [], b.auditLogs || []).slice(0, 500)
+  };
+}
+
+// Push full unified database store to GitHub (Git Data API — serialized single-flight queue)
 export async function pushFullStoreToGitHub(
   arg1: string | GitHubSyncConfig,
   storePayload: Record<string, any>
 ): Promise<{ success: boolean; message: string }> {
-  try {
-    const creds = resolveCredentials(arg1);
-    if (!creds.token) {
-      return { success: false, message: 'لا يوجد رمز GitHub صالح — أدخل الرمز من إعدادات المزامنة' };
+  const creds = resolveCredentials(arg1);
+  if (!creds.token) {
+    setPendingCloudPush(true);
+    return { success: false, message: 'لا يوجد رمز GitHub صالح — أدخل الرمز من إعدادات المزامنة' };
+  }
+
+  queuedPushItem = queuedPushItem
+    ? { creds, payload: mergeQueuedPayloads(queuedPushItem.payload, storePayload) }
+    : { creds, payload: storePayload };
+
+  if (pushFlushActive) {
+    return activePushChain;
+  }
+
+  pushFlushActive = true;
+  activePushChain = (async () => {
+    let lastResult: { success: boolean; message: string } = {
+      success: false,
+      message: 'لم تبدأ عملية المزامنة بعد'
+    };
+
+    try {
+      while (queuedPushItem) {
+        const current = queuedPushItem;
+        queuedPushItem = null;
+        lastResult = await executeFullStorePush(current.creds, current.payload);
+        if (lastResult.success) {
+          // Only clear pending flag if nothing new queued while uploading
+          if (!queuedPushItem) {
+            setPendingCloudPush(false);
+          }
+        } else {
+          setPendingCloudPush(true);
+        }
+      }
+    } finally {
+      pushFlushActive = false;
     }
 
+    return lastResult;
+  })();
+
+  return activePushChain;
+}
+
+async function executeFullStorePush(
+  creds: { token: string; owner: string; repo: string },
+  storePayload: Record<string, any>
+): Promise<{ success: boolean; message: string }> {
+  try {
     const repoApi = `https://api.github.com/repos/${creds.owner}/${creds.repo}`;
     const authHeaders: Record<string, string> = {
       Authorization: `token ${creds.token}`,
@@ -1247,13 +1307,11 @@ export async function pushFullStoreToGitHub(
       // نكمل بالبيانات المحلية إذا تعذر قراءة السحابة
     }
 
-    // بناء نسخة آمنة مدمجة تماماً مع أحدث بيانات السحابة
     const buildSafeFullData = (remoteData: Record<string, any> | null) => {
       const tombstones = getDeletionTombstones();
       const cloudReports = Array.isArray(remoteData?.reports) ? remoteData.reports : [];
       const cloudInvoices = Array.isArray(remoteData?.incomeRecords) ? remoteData.incomeRecords : [];
 
-      // دمج كل مجموعة مع النسخة السحابية: لا يضيع أي تعديل من أي جهاز
       const mergedCollections: Record<string, any> = {};
       Object.keys(storePayload).forEach(key => {
         if (key === 'reports' || key === 'incomeRecords' || key === 'deletedMap' || key === 'settingsStamps') return;
@@ -1265,6 +1323,13 @@ export async function pushFullStoreToGitHub(
           mergedCollections[key] = localValue;
         }
       });
+
+      // Preserve auditLogs even when caller didn't pass auditLogs explicitly
+      if (!Array.isArray(mergedCollections.auditLogs) && Array.isArray(remoteData?.auditLogs)) {
+        mergedCollections.auditLogs = remoteData.auditLogs.slice(0, 500);
+      } else if (Array.isArray(mergedCollections.auditLogs)) {
+        mergedCollections.auditLogs = mergedCollections.auditLogs.slice(0, 500);
+      }
 
       const safePayload: Record<string, any> = {
         ...(remoteData || {}),
@@ -1289,7 +1354,6 @@ export async function pushFullStoreToGitHub(
         ...safePayload
       };
 
-      // Prepare cases-sync array from all active reports
       const casesPayload = (safePayload.reports || []).map((r: any) => {
         const pat = r.patient || {};
         const testsList = (r.profiles || []).map((p: any) => {
@@ -1349,7 +1413,6 @@ export async function pushFullStoreToGitHub(
     async function writeSnapshot(currentCloud: Record<string, any> | null, retryCount = 0): Promise<{ success: boolean; message: string }> {
       const { dbBase64, casesBase64 } = buildSafeFullData(currentCloud);
 
-      // 1. Create DB blob
       const dbBlobRes = await fetch(`${repoApi}/git/blobs`, {
         method: 'POST',
         headers: authHeaders,
@@ -1358,7 +1421,6 @@ export async function pushFullStoreToGitHub(
       if (!dbBlobRes.ok) return { success: false, message: `فشل تجهيز نسخة البيانات: ${dbBlobRes.status}` };
       const dbBlob = await dbBlobRes.json();
 
-      // 2. Create Cases blob
       const casesBlobRes = await fetch(`${repoApi}/git/blobs`, {
         method: 'POST',
         headers: authHeaders,
@@ -1366,12 +1428,11 @@ export async function pushFullStoreToGitHub(
       });
       const casesBlob = casesBlobRes.ok ? await casesBlobRes.json() : null;
 
-      // 3. Re-fetch current main ref on EVERY attempt to ensure fresh parent sha
-      const refRes = await fetch(`${repoApi}/git/ref/heads/main?t=${Date.now()}`, { headers: authHeaders });
+      const refRes = await fetch(`${repoApi}/git/ref/heads/main?t=${Date.now()}`, { cache: 'no-store', headers: authHeaders });
       if (!refRes.ok) return { success: false, message: `تعذر قراءة فرع المزامنة: ${refRes.status}` };
       const headSha = (await refRes.json()).object.sha;
 
-      const baseCommitRes = await fetch(`${repoApi}/git/commits/${headSha}`, { headers: authHeaders });
+      const baseCommitRes = await fetch(`${repoApi}/git/commits/${headSha}`, { cache: 'no-store', headers: authHeaders });
       const baseTreeSha = baseCommitRes.ok ? (await baseCommitRes.json()).tree.sha : undefined;
 
       const treeItems = [
@@ -1413,13 +1474,10 @@ export async function pushFullStoreToGitHub(
           localStorage.setItem('rt_lab_last_cloud_sync', new Date().toISOString());
           localStorage.setItem('rt_cloud_store_sha', dbBlob.sha);
           localStorage.setItem('rt_head_commit_sha', newCommit.sha);
-        } catch {
-          // التخزين المحلي غير متاح
-        }
+        } catch {}
         return { success: true, message: 'تم حفظ ومزامنة قاعدة البيانات والحالات سحابياً بنجاح!' };
       }
 
-      // Retry on 409 Conflict: another device pushed! Re-pull fresh cloud data and re-merge
       if ((updateRes.status === 409 || updateRes.status === 422) && retryCount < 5) {
         await new Promise(r => setTimeout(r, 600 * (retryCount + 1)));
         let freshCloud: Record<string, any> | null = null;

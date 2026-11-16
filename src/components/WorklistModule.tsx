@@ -94,11 +94,10 @@ export const WorklistModule: React.FC = () => {
       return matchesSearch && matchesStatus && matchesCategory;
     });
 
-    const isReq = (r: LabReport) => ['دينا', 'هند', 'منار'].some(n => (r.patient?.fullName || '').includes(n));
     return result.sort((a, b) => {
-      const aReq = isReq(a) ? 1 : 0;
-      const bReq = isReq(b) ? 1 : 0;
-      return bReq - aReq;
+      const timeA = new Date(a.updatedAt || a.createdAt || 0).getTime();
+      const timeB = new Date(b.updatedAt || b.createdAt || 0).getTime();
+      return timeB - timeA;
     });
   }, [reports, searchTerm, statusFilter, categoryFilter]);
 
