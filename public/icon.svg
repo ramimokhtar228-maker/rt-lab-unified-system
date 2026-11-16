@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4c0519" />
+      <stop offset="50%" stop-color="#1e0914" />
+      <stop offset="100%" stop-color="#090b10" />
+    </linearGradient>
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f43f5e" />
+      <stop offset="50%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#be123c" />
+    </linearGradient>
+    <linearGradient id="dropGrad" x1="25%" y1="0%" x2="75%" y2="100%">
+      <stop offset="0%" stop-color="#ff5a5f" />
+      <stop offset="45%" stop-color="#dc2626" />
+      <stop offset="100%" stop-color="#7f1d1d" />
+    </linearGradient>
+    <linearGradient id="rGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fecdd3" />
+      <stop offset="50%" stop-color="#ef4444" />
+      <stop offset="100%" stop-color="#991b1b" />
+    </linearGradient>
+    <linearGradient id="tGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="60%" stop-color="#e2e8f0" />
+      <stop offset="100%" stop-color="#94a3b8" />
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded App Tile Background -->
+  <rect x="16" y="16" width="480" height="480" rx="108" fill="url(#bgGrad)" stroke="url(#borderGrad)" stroke-width="12" />
+
+  <!-- Subtle Medical Circuit Lines -->
+  <path d="M56 128 H168 L206 184 H352" stroke="#ef4444" stroke-opacity="0.35" stroke-width="5" stroke-dasharray="10 10" fill="none" stroke-linecap="round" />
+  <path d="M456 384 H340 L302 328 H156" stroke="#fbbf24" stroke-opacity="0.28" stroke-width="5" fill="none" stroke-linecap="round" />
+  <circle cx="352" cy="184" r="9" fill="#ef4444" fill-opacity="0.6" />
+  <circle cx="156" cy="328" r="9" fill="#fbbf24" fill-opacity="0.5" />
+
+  <!-- R Letter -->
+  <text x="136" y="302" text-anchor="middle" font-family="Arial Black, Impact, sans-serif" font-weight="900" font-size="168" fill="url(#rGrad)">R</text>
+
+  <!-- Central Ruby Droplet -->
+  <path d="M256 112 C256 112 198 188 198 228 C198 260 224 286 256 286 C288 286 314 260 314 228 C314 188 256 112 256 112 Z" fill="url(#dropGrad)" stroke="#fca5a5" stroke-width="4" />
+  <ellipse cx="236" cy="204" rx="14" ry="28" transform="rotate(-22 236 204)" fill="#ffffff" fill-opacity="0.45" />
+  <circle cx="242" cy="248" r="7" fill="#ffffff" fill-opacity="0.55" />
+
+  <!-- T Letter -->
+  <text x="376" y="302" text-anchor="middle" font-family="Arial Black, Impact, sans-serif" font-weight="900" font-size="168" fill="url(#tGrad)">T</text>
+
+  <!-- LABS Gold/White Pill -->
+  <rect x="148" y="346" width="216" height="58" rx="29" fill="#0f172a" fill-opacity="0.9" stroke="#fbbf24" stroke-opacity="0.65" stroke-width="3" />
+  <text x="256" y="385" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="30" letter-spacing="8" fill="#fef3c7">LABS</text>
+</svg>
