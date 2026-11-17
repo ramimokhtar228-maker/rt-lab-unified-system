@@ -212,9 +212,10 @@ export function mergePackagesWithDefaults(
         includedIndividualTestCodes: Array.isArray(existing.includedIndividualTestCodes)
           ? existing.includedIndividualTestCodes
           : defPkg.includedIndividualTestCodes,
-        fastingRequired: existing.fastingRequired || defPkg.fastingRequired,
-        sampleTypes: Array.isArray(existing.sampleTypes) && existing.sampleTypes.length > 0 ? existing.sampleTypes : defPkg.sampleTypes,
-        isPopular: existing.isPopular !== undefined ? existing.isPopular : defPkg.isPopular
+        fastingRequired: existing.fastingRequired !== undefined ? existing.fastingRequired : defPkg.fastingRequired,
+        sampleTypes: Array.isArray(existing.sampleTypes) ? existing.sampleTypes : defPkg.sampleTypes,
+        isPopular: existing.isPopular !== undefined ? existing.isPopular : defPkg.isPopular,
+        updatedAt: existing.updatedAt || defPkg.updatedAt
       } as ComprehensivePackage);
     } else {
       merged.push({ ...defPkg });
@@ -252,12 +253,21 @@ export function mergeProfilesWithDefaults(
   const isDeletedProf = (p?: Partial<CatalogProfileTemplate>) =>
     Boolean(p && p.code && deletedProfiles.has(p.code.toUpperCase().trim()));
 
-  const applyCustomNormalsToParams = <T extends { name: string; unit?: string; minNormal?: number; maxNormal?: number; panicLow?: number; panicHigh?: number; textReference?: string; method?: string }>(params: T[]): T[] => {
+  const applyCustomNormalsToParams = <T extends { name: string; unit?: string; minNormal?: number; maxNormal?: number; panicLow?: number; panicHigh?: number; textReference?: string; method?: string }>(
+    params: T[],
+    profileUpdatedAt?: string
+  ): T[] => {
+    const profTs = profileUpdatedAt ? new Date(profileUpdatedAt).getTime() || 0 : 0;
     return params.map(param => {
       const pCode = (param as any).code || '';
       const pKey = normalizeTestKey(pCode) || normalizeTestKey(param.name);
-      const custom = customNormals[pKey];
+      const custom = customNormals[pKey] as (Partial<TestParameter> & { updatedAt?: string }) | undefined;
       if (custom) {
+        const customTs = custom.updatedAt ? new Date(custom.updatedAt).getTime() || 0 : 0;
+        // If the profile itself was edited AFTER customNormals was recorded, keep the profile's own parameter edits!
+        if (profTs > 0 && customTs > 0 && profTs > customTs) {
+          return param;
+        }
         return {
           ...param,
           unit: custom.unit !== undefined ? custom.unit : param.unit,
@@ -313,7 +323,7 @@ export function mergeProfilesWithDefaults(
     const existing = savedMap.get(key);
     if (existing) {
       savedMap.delete(key);
-      const rawParams = Array.isArray(existing.parameters) && existing.parameters.length > 0
+      const rawParams = Array.isArray(existing.parameters)
         ? existing.parameters
         : defProf.parameters;
 
@@ -325,7 +335,7 @@ export function mergeProfilesWithDefaults(
         category: existing.category || defProf.category,
         sampleType: existing.sampleType || defProf.sampleType,
         defaultInterpretation: existing.defaultInterpretation !== undefined ? existing.defaultInterpretation : defProf.defaultInterpretation,
-        parameters: applyCustomNormalsToParams(rawParams)
+        parameters: applyCustomNormalsToParams(rawParams, existing.updatedAt)
       });
     } else {
       merged.push({
@@ -341,7 +351,7 @@ export function mergeProfilesWithDefaults(
     if (!isDeletedProf(customProf)) {
       customList.push({
         ...customProf,
-        parameters: applyCustomNormalsToParams(customProf.parameters || [])
+        parameters: applyCustomNormalsToParams(customProf.parameters || [], customProf.updatedAt)
       });
     }
   });

@@ -349,8 +349,8 @@ export interface LabFacility {
   isActive: boolean;
 }
 
-export type StaffRole = 'admin' | 'accountant' | 'receptionist' | 'chemist' | 'pathologist' | 'phlebotomist' | 'verifier';
-export type StaffDepartment = 'administration' | 'accounts' | 'reception' | 'chemists' | 'pathologists' | 'phlebotomists';
+export type StaffRole = 'admin' | 'accountant' | 'receptionist' | 'chemist' | 'pathologist' | 'phlebotomist' | 'verifier' | 'visit_coordinator' | 'custom';
+export type StaffDepartment = 'administration' | 'accounts' | 'reception' | 'chemists' | 'pathologists' | 'phlebotomists' | 'visit_coordinators' | 'custom';
 
 export interface StaffMember {
   id: string;
@@ -364,8 +364,10 @@ export interface StaffMember {
   branchId: string;
   branchName?: string;
   signatureLabel?: string;
+  signatureKey?: string;
   isActive: boolean;
   nationalId?: string;
+  updatedAt?: string;
 }
 
 export type Gender = 'male' | 'female' | 'child' | 'newborn' | 'MALE' | 'FEMALE' | 'CHILD' | 'NEWBORN';
@@ -413,6 +415,7 @@ export interface Patient {
   rating?: number;
   reviewComment?: string;
   visitFee?: number;
+  phlebotomist?: string;
   visitSpecialist?: string;
   branchRepresentative?: string;
   branchId?: string;
@@ -482,12 +485,26 @@ export interface TestProfile {
   };
 }
 
+export type StaffOptionRole = 'chemist' | 'verifier' | 'consultant' | 'phlebotomist' | 'visit_coordinator' | 'custom';
+
 export interface StaffOptionItem {
   id: string;
   name: string;
   title: string;
-  role: 'chemist' | 'verifier' | 'consultant';
+  role: StaffOptionRole;
   license?: string;
+  signatureKey?: string;
+  customRoleLabel?: string;
+}
+
+export interface ExtraSignatureSlot {
+  id: string;
+  roleTitle: string;
+  name: string;
+  subtitle?: string;
+  license?: string;
+  signatureKey?: string;
+  isActive?: boolean;
 }
 
 export interface LabStaffSignatures {
@@ -500,6 +517,24 @@ export interface LabStaffSignatures {
   chemistLicense?: string;
   verifierLicense?: string;
   pathologistLicense?: string;
+  chemistSignatureKey?: string;
+  verifierSignatureKey?: string;
+  pathologistSignatureKey?: string;
+  showChemist?: boolean;
+  showVerifier?: boolean;
+  showPathologist?: boolean;
+  phlebotomist?: string;
+  phlebotomistTitle?: string;
+  phlebotomistLicense?: string;
+  phlebotomistSignatureKey?: string;
+  showPhlebotomist?: boolean;
+  visitCoordinator?: string;
+  visitCoordinatorTitle?: string;
+  visitCoordinatorLicense?: string;
+  visitCoordinatorSignatureKey?: string;
+  showVisitCoordinator?: boolean;
+  extraSignatures?: ExtraSignatureSlot[];
+  hideSignatures?: boolean;
 }
 
 export type ReportStatus = 'draft' | 'in_progress' | 'verified' | 'released';
@@ -546,6 +581,7 @@ export interface CatalogProfileTemplate {
   parameters: Omit<TestParameter, 'id' | 'result' | 'flag'>[];
   profilePrice?: number;
   illustrationId?: string;
+  updatedAt?: string;
 }
 
 export interface IndividualTest {
@@ -567,6 +603,7 @@ export interface IndividualTest {
   turnaroundTime?: string;
   price: number;
   cost?: number;
+  updatedAt?: string;
 }
 
 export interface ComprehensivePackage {
@@ -584,6 +621,7 @@ export interface ComprehensivePackage {
   fastingRequired: string;
   sampleTypes: string[];
   isPopular?: boolean;
+  updatedAt?: string;
 }
 
 export type InstrumentProtocol = 'ASTM-E1381' | 'HL7-v2' | 'RS232_Serial' | 'TCP_IP_Socket' | 'USB_HID' | 'File_CSV';

@@ -43,7 +43,8 @@ import {
   UserRole,
   ComprehensivePackage,
   LabStaffSignatures,
-  StaffOptionItem
+  StaffOptionItem,
+  StaffOptionRole
 } from '../types';
 import {
   INITIAL_USERS,
@@ -65,7 +66,7 @@ import {
   INITIAL_INCOME_RECORDS,
   INITIAL_LOYALTY_DATA
 } from '../data/initialData';
-import { LAB_CATALOG, DEFAULT_STAFF, INITIAL_STAFF_SIGNATURE_OPTIONS } from '../data/labCatalog';
+import { LAB_CATALOG, DEFAULT_STAFF, INITIAL_STAFF_SIGNATURE_OPTIONS, StaffSignatureOptionsMap } from '../data/labCatalog';
 import { INITIAL_PACKAGES } from '../data/packagesData';
 import { INITIAL_INDIVIDUAL_TESTS } from '../data/individualTestsData';
 import { INITIAL_INSTRUMENTS, SAMPLE_INSTRUMENT_TRANSMISSIONS } from '../data/instrumentsData';
@@ -133,6 +134,7 @@ const PACKAGES_KEY = `${STORAGE_PREFIX}packages_v3`;
 const DIAGNOSTIC_PROFILES_KEY = `${STORAGE_PREFIX}diagnostic_profiles_v3`;
 const STAFF_SIGNATURES_KEY = `${STORAGE_PREFIX}staff_signatures_v3`;
 const STAFF_OPTIONS_KEY = `${STORAGE_PREFIX}staff_options_v3`;
+const STAFF_MEMBERS_KEY = `${STORAGE_PREFIX}staff_members_v3`;
 
 interface AppContextType {
   // Localization & Auth
@@ -305,16 +307,16 @@ interface AppContextType {
   updateLabInfo: (info: LabInfo) => void;
   facilities: LabFacility[];
   staffMembers: StaffMember[];
+  updateStaffMembers: (members: StaffMember[]) => void;
+  addStaffMember: (member: StaffMember) => void;
+  updateStaffMember: (id: string, updates: Partial<StaffMember>) => void;
+  deleteStaffMember: (id: string) => void;
   staffSignatures: LabStaffSignatures;
   updateStaffSignatures: (signatures: LabStaffSignatures) => void;
-  staffSignatureOptions: {
-    chemists: StaffOptionItem[];
-    verifiers: StaffOptionItem[];
-    consultants: StaffOptionItem[];
-  };
-  addStaffSignatureOption: (role: 'chemist' | 'verifier' | 'consultant', item: { name: string; title: string; license?: string }) => void;
-  updateStaffSignatureOption: (role: 'chemist' | 'verifier' | 'consultant', id: string, item: { name: string; title: string; license?: string }) => void;
-  deleteStaffSignatureOption: (role: 'chemist' | 'verifier' | 'consultant', id: string) => void;
+  staffSignatureOptions: StaffSignatureOptionsMap;
+  addStaffSignatureOption: (role: StaffOptionRole, item: { name: string; title: string; license?: string; signatureKey?: string; customRoleLabel?: string }) => void;
+  updateStaffSignatureOption: (role: StaffOptionRole, id: string, item: { name: string; title: string; license?: string; signatureKey?: string; customRoleLabel?: string }) => void;
+  deleteStaffSignatureOption: (role: StaffOptionRole, id: string) => void;
 
   // Security & Audit
   auditLogs: AuditLog[];
@@ -413,6 +415,9 @@ export function mergeTwoReports(localRep: LabReport, remoteRep: LabReport): LabR
   const status = (remoteRep.status === 'verified' || localRep.status === 'verified') ? 'verified' : (remoteRep.status || localRep.status || 'draft');
   const maxTime = Math.max(localTime || 0, remoteTime || 0);
 
+  const newerStaff = localTime > remoteTime ? (localRep.staff || {}) : (remoteRep.staff || {});
+  const olderStaff = localTime > remoteTime ? (remoteRep.staff || {}) : (localRep.staff || {});
+
   return {
     ...localRep,
     ...remoteRep,
@@ -420,8 +425,8 @@ export function mergeTwoReports(localRep: LabReport, remoteRep: LabReport): LabR
     patient: mergedPatient,
     profiles: chosenProfiles,
     staff: {
-      ...(localRep.staff || {}),
-      ...(remoteRep.staff || {})
+      ...olderStaff,
+      ...newerStaff
     },
     patientSheetMeta: {
       ...(localRep.patientSheetMeta || {}),
@@ -829,28 +834,47 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   });
   const [facilities] = useState<LabFacility[]>(INITIAL_FACILITIES);
-  const [staffMembers] = useState<StaffMember[]>(INITIAL_STAFF_MEMBERS);
+  const [staffMembers, setStaffMembers] = useStampedCollection<StaffMember>(() => {
+    try {
+      const saved = localStorage.getItem(STAFF_MEMBERS_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed;
+      }
+      return INITIAL_STAFF_MEMBERS;
+    } catch {
+      return INITIAL_STAFF_MEMBERS;
+    }
+  });
 
   // 13b. Staff Signatures and Options
   const [staffSignatures, setStaffSignatures] = useState<LabStaffSignatures>(() => {
     try {
       const saved = localStorage.getItem(STAFF_SIGNATURES_KEY);
-      return saved ? JSON.parse(saved) : DEFAULT_STAFF;
+      if (saved) {
+        return { ...DEFAULT_STAFF, ...JSON.parse(saved) };
+      }
+      return DEFAULT_STAFF;
     } catch {
       return DEFAULT_STAFF;
     }
   });
 
-  const [staffSignatureOptions, setStaffSignatureOptions] = useState<{
-    chemists: StaffOptionItem[];
-    verifiers: StaffOptionItem[];
-    consultants: StaffOptionItem[];
-  }>(() => {
+  const [staffSignatureOptions, setStaffSignatureOptions] = useState<StaffSignatureOptionsMap>(() => {
     try {
       const saved = localStorage.getItem(STAFF_OPTIONS_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (parsed.chemists && parsed.verifiers && parsed.consultants) return parsed;
+        if (parsed.chemists && parsed.verifiers && parsed.consultants) {
+          return {
+            chemists: parsed.chemists,
+            verifiers: parsed.verifiers,
+            consultants: parsed.consultants,
+            phlebotomists: Array.isArray(parsed.phlebotomists) ? parsed.phlebotomists : (INITIAL_STAFF_SIGNATURE_OPTIONS.phlebotomists || []),
+            visitCoordinators: Array.isArray(parsed.visitCoordinators) ? parsed.visitCoordinators : (INITIAL_STAFF_SIGNATURE_OPTIONS.visitCoordinators || []),
+            customWorkers: Array.isArray(parsed.customWorkers) ? parsed.customWorkers : []
+          };
+        }
       }
       return INITIAL_STAFF_SIGNATURE_OPTIONS;
     } catch {
@@ -899,6 +923,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     payroll,
     dailyCloseouts,
     labInfo,
+    staffMembers,
     staffSignatures,
     staffSignatureOptions,
     testCatalog,
@@ -922,6 +947,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     payroll,
     dailyCloseouts,
     labInfo,
+    staffMembers,
     staffSignatures,
     staffSignatureOptions,
     testCatalog,
@@ -947,6 +973,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       payroll: s.payroll,
       dailyCloseouts: s.dailyCloseouts,
       labInfo: s.labInfo,
+      staffMembers: s.staffMembers,
       staffSignatures: s.staffSignatures,
       staffSignatureOptions: s.staffSignatureOptions,
       testCatalog: s.testCatalog,
@@ -1015,6 +1042,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     applyList('testCatalog', setTestCatalog);
     applyList('packages', setPackages);
     applyList('diagnosticProfiles', setDiagnosticProfiles);
+    applyList('staffMembers', setStaffMembers);
     applyList('auditLogs', setAuditLogs);
     setProfitConfig((prev: any) => mergeSettingsObject('profitConfig', prev, data.profitConfig, data.settingsStamps));
     setLabInfo((prev: any) => mergeSettingsObject('labInfo', prev, data.labInfo, data.settingsStamps));
@@ -1029,14 +1057,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const signature = JSON.stringify([
       expenses, profitConfig, inventory, instruments, transmissions, labToLabOrders,
       employees, attendance, payroll, dailyCloseouts, loyaltyProfiles,
-      testCatalog, packages, diagnosticProfiles, labInfo, staffSignatures, staffSignatureOptions
+      testCatalog, packages, diagnosticProfiles, labInfo, staffMembers, staffSignatures, staffSignatureOptions
     ]);
     if (signature === lastCollectionSignatureRef.current) return;
     const isFirstRun = lastCollectionSignatureRef.current === '';
     lastCollectionSignatureRef.current = signature;
     if (isFirstRun) return;
     triggerAutoCloudPush();
-  }, [githubConfig, expenses, profitConfig, inventory, instruments, transmissions, labToLabOrders, employees, attendance, payroll, dailyCloseouts, loyaltyProfiles, testCatalog, packages, diagnosticProfiles, labInfo, staffSignatures, staffSignatureOptions, triggerAutoCloudPush]);
+  }, [githubConfig, expenses, profitConfig, inventory, instruments, transmissions, labToLabOrders, employees, attendance, payroll, dailyCloseouts, loyaltyProfiles, testCatalog, packages, diagnosticProfiles, labInfo, staffMembers, staffSignatures, staffSignatureOptions, triggerAutoCloudPush]);
 
   // ── طبع وقت آخر تعديل للإعدادات المفردة لمعرفة الأحدث بين الأجهزة ──
   const settingsSnapshotRef = useRef<Record<string, string>>({});
@@ -1065,24 +1093,31 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setIncomeRecords(prev => dedupeInvoices(prev));
   }, [incomeRecords]);
 
-  // Persistence Effects (Canonical quota-safe localStorage + IndexedDB mirror for reports & invoices)
-  useEffect(() => {
-    safeSetLocalStorage(REPORTS_KEY, JSON.stringify(reports));
+  // Persistence Effects (Canonical quota-safe localStorage + IndexedDB mirror)
+  const syncIdbSnapshot = useCallback(() => {
+    const s = latestStateRef.current;
     void saveIdbSnapshot({
-      reports,
-      incomeRecords: latestStateRef.current.incomeRecords,
+      reports: s.reports,
+      incomeRecords: s.incomeRecords,
+      packages: s.packages,
+      diagnosticProfiles: s.diagnosticProfiles,
+      testCatalog: s.testCatalog,
+      staffSignatures: s.staffSignatures,
+      staffSignatureOptions: s.staffSignatureOptions,
+      staffMembers: s.staffMembers,
       updatedAt: new Date().toISOString()
     });
-  }, [reports]);
+  }, []);
+
+  useEffect(() => {
+    safeSetLocalStorage(REPORTS_KEY, JSON.stringify(reports));
+    syncIdbSnapshot();
+  }, [reports, syncIdbSnapshot]);
 
   useEffect(() => {
     safeSetLocalStorage(INCOME_KEY, JSON.stringify(incomeRecords));
-    void saveIdbSnapshot({
-      reports: latestStateRef.current.reports,
-      incomeRecords,
-      updatedAt: new Date().toISOString()
-    });
-  }, [incomeRecords]);
+    syncIdbSnapshot();
+  }, [incomeRecords, syncIdbSnapshot]);
 
   useEffect(() => { safeSetLocalStorage(LOYALTY_KEY, JSON.stringify(loyaltyProfiles)); }, [loyaltyProfiles]);
   useEffect(() => { safeSetLocalStorage(EXPENSES_KEY, JSON.stringify(expenses)); }, [expenses]);
@@ -1091,11 +1126,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useEffect(() => { safeSetLocalStorage(TRANSMISSIONS_KEY, JSON.stringify(transmissions)); }, [transmissions]);
   useEffect(() => { safeSetLocalStorage(AUDIT_KEY, JSON.stringify(auditLogs)); }, [auditLogs]);
   useEffect(() => { safeSetLocalStorage(LAB_INFO_KEY, JSON.stringify(labInfo)); }, [labInfo]);
-  useEffect(() => { safeSetLocalStorage(CATALOG_KEY, JSON.stringify(testCatalog)); }, [testCatalog]);
-  useEffect(() => { safeSetLocalStorage(PACKAGES_KEY, JSON.stringify(packages)); }, [packages]);
-  useEffect(() => { safeSetLocalStorage(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(diagnosticProfiles)); }, [diagnosticProfiles]);
-  useEffect(() => { safeSetLocalStorage(STAFF_SIGNATURES_KEY, JSON.stringify(staffSignatures)); }, [staffSignatures]);
-  useEffect(() => { safeSetLocalStorage(STAFF_OPTIONS_KEY, JSON.stringify(staffSignatureOptions)); }, [staffSignatureOptions]);
+  useEffect(() => { safeSetLocalStorage(CATALOG_KEY, JSON.stringify(testCatalog)); syncIdbSnapshot(); }, [testCatalog, syncIdbSnapshot]);
+  useEffect(() => { safeSetLocalStorage(PACKAGES_KEY, JSON.stringify(packages)); syncIdbSnapshot(); }, [packages, syncIdbSnapshot]);
+  useEffect(() => { safeSetLocalStorage(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(diagnosticProfiles)); syncIdbSnapshot(); }, [diagnosticProfiles, syncIdbSnapshot]);
+  useEffect(() => { safeSetLocalStorage(STAFF_MEMBERS_KEY, JSON.stringify(staffMembers)); syncIdbSnapshot(); }, [staffMembers, syncIdbSnapshot]);
+  useEffect(() => { safeSetLocalStorage(STAFF_SIGNATURES_KEY, JSON.stringify(staffSignatures)); syncIdbSnapshot(); }, [staffSignatures, syncIdbSnapshot]);
+  useEffect(() => { safeSetLocalStorage(STAFF_OPTIONS_KEY, JSON.stringify(staffSignatureOptions)); syncIdbSnapshot(); }, [staffSignatureOptions, syncIdbSnapshot]);
   useEffect(() => { safeSetLocalStorage(EMPLOYEES_KEY, JSON.stringify(employees)); }, [employees]);
   useEffect(() => { safeSetLocalStorage(ATTENDANCE_KEY, JSON.stringify(attendance)); }, [attendance]);
   useEffect(() => { safeSetLocalStorage(PAYROLL_KEY, JSON.stringify(payroll)); }, [payroll]);
@@ -1116,7 +1152,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       console.warn('Migration run error:', err);
     }
 
-    // Recover any unsynced cases persisted in IndexedDB or local cases queue
+    // Recover any unsynced cases / catalog edits / staff persisted in IndexedDB or local cases queue
     (async () => {
       try {
         const idbData = await loadIdbSnapshot();
@@ -1135,6 +1171,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               const { merged, changed } = mergeInvoiceCollections(prev, filterDeletedInvoices(idbData.incomeRecords), mergeTwoInvoices);
               return changed ? filterDeletedInvoices(merged) : prev;
             });
+          }
+          if (Array.isArray(idbData.packages) && idbData.packages.length > 0) {
+            setPackages(prev => mergeCollection('packages', prev, idbData.packages!));
+          }
+          if (Array.isArray(idbData.diagnosticProfiles) && idbData.diagnosticProfiles.length > 0) {
+            setDiagnosticProfiles(prev => mergeCollection('diagnosticProfiles', prev, idbData.diagnosticProfiles!));
+          }
+          if (Array.isArray(idbData.testCatalog) && idbData.testCatalog.length > 0) {
+            setTestCatalog(prev => mergeCollection('testCatalog', prev, idbData.testCatalog!));
+          }
+          if (Array.isArray(idbData.staffMembers) && idbData.staffMembers.length > 0) {
+            setStaffMembers(prev => mergeCollection('staffMembers', prev, idbData.staffMembers!));
           }
         }
 
@@ -1589,6 +1637,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const doCloudPull = () => {
       if (typeof document !== 'undefined' && document.hidden) return;
       if (typeof navigator !== 'undefined' && !navigator.onLine) return;
+      // Never let a background cloud pull clobber local edits while a local push is still queued
+      if (isPendingCloudPush()) return;
 
       cloudVersionChanged(githubConfig)
         .then(changed => (changed ? pullFullStoreFromGitHub(githubConfig, { force: true }) : null))
@@ -1624,13 +1674,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               return (changed || filtered.length !== prev.length) ? filtered : prev;
             });
           }
-
-          if (Array.isArray(data.packages) && data.packages.length > 0) {
-            setPackages(prev => mergePackagesWithDefaults(data.packages, prev));
-          }
-          if (Array.isArray(data.diagnosticProfiles) && data.diagnosticProfiles.length > 0) {
-            setDiagnosticProfiles(prev => mergeProfilesWithDefaults(data.diagnosticProfiles, prev));
-          }
         }
       }).catch(() => {});
     };
@@ -1648,7 +1691,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Re-pull latest cloud state when user returns to the tab or mobile wakes up (multi-device immediate catch-up)
   useEffect(() => {
     const onVisible = () => {
-      if (document.visibilityState === 'visible' && githubConfig.token && githubConfig.autoSync) {
+      if (document.visibilityState === 'visible' && githubConfig.token && githubConfig.autoSync && !isPendingCloudPush()) {
         pullFullStoreFromGitHub(githubConfig, { force: true }).then(ghRes => {
           if (ghRes.success && ghRes.data) {
             importDeletionTombstones(ghRes.data.deletedReports, ghRes.data.deletedInvoices);
@@ -1971,6 +2014,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     });
 
     // Also propagate changes to diagnosticProfiles templates so new reports inherit the updated normals!
+    const nowProfIso = new Date().toISOString();
     setDiagnosticProfiles(prevProfiles => {
       let anyProfChanged = false;
       const nextProfiles = prevProfiles.map(prof => {
@@ -1995,10 +2039,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           }
           return param;
         });
-        return profChanged ? { ...prof, parameters: nextParams } : prof;
+        return profChanged ? { ...prof, parameters: nextParams, updatedAt: nowProfIso } : prof;
       });
       if (anyProfChanged) {
         safeSetLocalStorage(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(nextProfiles));
+        realtimeSyncManager.broadcastAction('UPDATE_PROFILES', nextProfiles);
       }
       return anyProfChanged ? nextProfiles : prevProfiles;
     });
@@ -2048,23 +2093,27 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     logAction('CATALOG_UPDATE', 'CATALOG', `حذف التحليل ${code} من الكتالوج`);
   }, [logAction]);
 
-  // Packages Management CRUD
+  // Packages Management CRUD — Always uses full sync snapshot & stamps updatedAt
   const updatePackages = useCallback((pkgs: ComprehensivePackage[]) => {
     const nowIso = new Date().toISOString();
     const nextIds = new Set(pkgs.map(p => p.id).filter(Boolean));
     const nextCodes = new Set(pkgs.map(p => (p.code || '').toUpperCase().trim()).filter(Boolean));
-    let stampedList = pkgs;
 
     setPackages(prev => {
       prev.forEach(oldPkg => {
         const oldCode = (oldPkg.code || '').toUpperCase().trim();
-        if (!nextIds.has(oldPkg.id) && (!oldCode || !nextCodes.has(oldCode))) {
-          markDeleted('packages', oldPkg.id);
+        const sameId = oldPkg.id && nextIds.has(oldPkg.id);
+        const sameCode = oldCode && nextCodes.has(oldCode);
+        if (!sameId && !sameCode) {
+          if (oldPkg.id) markDeleted('packages', oldPkg.id);
           if (oldPkg.code) markDeleted('packages', oldPkg.code);
+        } else if (sameId && oldCode && !nextCodes.has(oldCode)) {
+          // Package code was renamed — tombstone old default code so it never duplicates on reload
+          markDeleted('packages', oldPkg.code);
         }
       });
       const prevById = new Map(prev.map(p => [p.id, p]));
-      stampedList = pkgs.map(p => {
+      const stampedList = pkgs.map(p => {
         unmarkDeleted('packages', p.id);
         if (p.code) unmarkDeleted('packages', p.code);
         const old = prevById.get(p.id);
@@ -2073,27 +2122,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
         return p;
       });
-      try {
-        localStorage.setItem(PACKAGES_KEY, JSON.stringify(stampedList));
-      } catch {}
+      safeSetLocalStorage(PACKAGES_KEY, JSON.stringify(stampedList));
+      latestStateRef.current.packages = stampedList;
       realtimeSyncManager.broadcastAction('UPDATE_PACKAGES', stampedList);
       if (githubConfig.token && githubConfig.autoSync) {
-        pushFullStoreToGitHub(githubConfig, {
-          reports,
-          incomeRecords,
-          expenses,
-          loyaltyProfiles,
-          inventory,
-          labInfo,
-          testCatalog,
-          packages: stampedList,
-          diagnosticProfiles
-        }).catch(err => console.warn('Package sync note:', err));
+        setPendingCloudPush(true);
+        pushFullStoreToGitHub(githubConfig, buildFullSyncSnapshot({ packages: stampedList }))
+          .then(res => { if (res.success) setPendingCloudPush(false); })
+          .catch(err => console.warn('Package sync note:', err));
       }
       return stampedList;
     });
     logAction('UPDATE', 'CATALOG', 'تحديث قائمة باقات الفحص الشامل المتاحة');
-  }, [logAction, githubConfig, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, diagnosticProfiles]);
+  }, [logAction, githubConfig, buildFullSyncSnapshot]);
 
   const addPackage = useCallback((pkg: ComprehensivePackage) => {
     unmarkDeleted('packages', pkg.id);
@@ -2101,52 +2142,41 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const stampedPkg = { ...pkg, updatedAt: new Date().toISOString() } as ComprehensivePackage;
     setPackages(prev => {
       const next = [stampedPkg, ...prev];
-      try {
-        localStorage.setItem(PACKAGES_KEY, JSON.stringify(next));
-      } catch {}
+      safeSetLocalStorage(PACKAGES_KEY, JSON.stringify(next));
+      latestStateRef.current.packages = next;
       realtimeSyncManager.broadcastAction('UPDATE_PACKAGES', next);
       if (githubConfig.token && githubConfig.autoSync) {
-        pushFullStoreToGitHub(githubConfig, {
-          reports,
-          incomeRecords,
-          expenses,
-          loyaltyProfiles,
-          inventory,
-          labInfo,
-          testCatalog,
-          packages: next,
-          diagnosticProfiles
-        }).catch(err => console.warn('Add package sync note:', err));
+        setPendingCloudPush(true);
+        pushFullStoreToGitHub(githubConfig, buildFullSyncSnapshot({ packages: next }))
+          .then(res => { if (res.success) setPendingCloudPush(false); })
+          .catch(err => console.warn('Add package sync note:', err));
       }
       return next;
     });
     logAction('CREATE', 'CATALOG', `إضافة باقة فحص جديدة: ${pkg.titleAr} (${pkg.code})`);
-  }, [logAction, githubConfig, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, diagnosticProfiles]);
+  }, [logAction, githubConfig, buildFullSyncSnapshot]);
 
   const updateSinglePackage = useCallback((id: string, updates: Partial<ComprehensivePackage>) => {
+    const nowIso = new Date().toISOString();
     setPackages(prev => {
-      const next = prev.map(p => p.id === id ? { ...p, ...updates, updatedAt: new Date().toISOString() } : p);
-      try {
-        localStorage.setItem(PACKAGES_KEY, JSON.stringify(next));
-      } catch {}
+      const targetOld = prev.find(p => p.id === id);
+      if (targetOld?.code && updates.code && targetOld.code.toUpperCase().trim() !== updates.code.toUpperCase().trim()) {
+        markDeleted('packages', targetOld.code);
+      }
+      const next = prev.map(p => p.id === id ? { ...p, ...updates, updatedAt: nowIso } : p);
+      safeSetLocalStorage(PACKAGES_KEY, JSON.stringify(next));
+      latestStateRef.current.packages = next;
       realtimeSyncManager.broadcastAction('UPDATE_PACKAGES', next);
       if (githubConfig.token && githubConfig.autoSync) {
-        pushFullStoreToGitHub(githubConfig, {
-          reports,
-          incomeRecords,
-          expenses,
-          loyaltyProfiles,
-          inventory,
-          labInfo,
-          testCatalog,
-          packages: next,
-          diagnosticProfiles
-        }).catch(err => console.warn('Update package sync note:', err));
+        setPendingCloudPush(true);
+        pushFullStoreToGitHub(githubConfig, buildFullSyncSnapshot({ packages: next }))
+          .then(res => { if (res.success) setPendingCloudPush(false); })
+          .catch(err => console.warn('Update package sync note:', err));
       }
       return next;
     });
     logAction('UPDATE', 'CATALOG', `تعديل بيانات الباقة: ${id}`);
-  }, [logAction, githubConfig, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, diagnosticProfiles]);
+  }, [logAction, githubConfig, buildFullSyncSnapshot]);
 
   const deletePackage = useCallback((id: string) => {
     markDeleted('packages', id);
@@ -2154,56 +2184,40 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const target = prev.find(p => p.id === id);
       if (target?.code) markDeleted('packages', target.code);
       const next = prev.filter(p => p.id !== id);
-      try {
-        localStorage.setItem(PACKAGES_KEY, JSON.stringify(next));
-      } catch {}
+      safeSetLocalStorage(PACKAGES_KEY, JSON.stringify(next));
+      latestStateRef.current.packages = next;
       realtimeSyncManager.broadcastAction('UPDATE_PACKAGES', next);
       if (githubConfig.token && githubConfig.autoSync) {
-        pushFullStoreToGitHub(githubConfig, {
-          reports,
-          incomeRecords,
-          expenses,
-          loyaltyProfiles,
-          inventory,
-          labInfo,
-          testCatalog,
-          packages: next,
-          diagnosticProfiles
-        }).catch(err => console.warn('Delete package sync note:', err));
+        setPendingCloudPush(true);
+        pushFullStoreToGitHub(githubConfig, buildFullSyncSnapshot({ packages: next }))
+          .then(res => { if (res.success) setPendingCloudPush(false); })
+          .catch(err => console.warn('Delete package sync note:', err));
       }
       return next;
     });
     logAction('DELETE', 'CATALOG', `حذف الباقة: ${id}`);
-  }, [logAction, githubConfig, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, diagnosticProfiles]);
+  }, [logAction, githubConfig, buildFullSyncSnapshot]);
 
   const resetPackages = useCallback(() => {
     clearDeletedCollection('packages');
-    const fullPkgs = mergePackagesWithDefaults();
+    const nowIso = new Date().toISOString();
+    const fullPkgs = mergePackagesWithDefaults().map(p => ({ ...p, updatedAt: nowIso }));
     setPackages(fullPkgs);
-    try {
-      localStorage.setItem(PACKAGES_KEY, JSON.stringify(fullPkgs));
-    } catch {}
+    safeSetLocalStorage(PACKAGES_KEY, JSON.stringify(fullPkgs));
+    latestStateRef.current.packages = fullPkgs;
     realtimeSyncManager.broadcastAction('UPDATE_PACKAGES', fullPkgs);
     if (githubConfig.token && githubConfig.autoSync) {
-      pushFullStoreToGitHub(githubConfig, {
-        reports,
-        incomeRecords,
-        expenses,
-        loyaltyProfiles,
-        inventory,
-        labInfo,
-        testCatalog,
-        packages: fullPkgs,
-        diagnosticProfiles
-      }).catch(() => {});
+      setPendingCloudPush(true);
+      pushFullStoreToGitHub(githubConfig, buildFullSyncSnapshot({ packages: fullPkgs }))
+        .then(res => { if (res.success) setPendingCloudPush(false); })
+        .catch(() => {});
     }
     logAction('UPDATE', 'CATALOG', `استعادة الباقات الافتراضية الـ 15 المتكاملة (${fullPkgs.length} باقة)`);
-  }, [logAction, githubConfig, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, diagnosticProfiles]);
+  }, [logAction, githubConfig, buildFullSyncSnapshot]);
 
   const updateDiagnosticProfiles = useCallback((profiles: CatalogProfileTemplate[]) => {
     const nowIso = new Date().toISOString();
     const nextCodes = new Set(profiles.map(p => (p.code || '').toUpperCase().trim()).filter(Boolean));
-    let stampedProfiles = profiles;
 
     setDiagnosticProfiles(prev => {
       prev.forEach(oldProf => {
@@ -2213,7 +2227,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
       });
       const prevMap = new Map(prev.map(p => [(p.code || '').toUpperCase().trim(), p]));
-      stampedProfiles = profiles.map(p => {
+      const stampedProfiles = profiles.map(p => {
         if (p.code) unmarkDeleted('diagnosticProfiles', p.code);
         const old = prevMap.get((p.code || '').toUpperCase().trim());
         if (!old || JSON.stringify(old) !== JSON.stringify(p)) {
@@ -2222,9 +2236,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         return p;
       });
       safeSetLocalStorage(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(stampedProfiles));
+      latestStateRef.current.diagnosticProfiles = stampedProfiles;
       realtimeSyncManager.broadcastAction('UPDATE_PROFILES', stampedProfiles);
       if (githubConfig.token && githubConfig.autoSync) {
-        pushFullStoreToGitHub(githubConfig, buildFullSyncSnapshot({ diagnosticProfiles: stampedProfiles })).catch(err => console.warn('Profile sync note:', err));
+        setPendingCloudPush(true);
+        pushFullStoreToGitHub(githubConfig, buildFullSyncSnapshot({ diagnosticProfiles: stampedProfiles }))
+          .then(res => { if (res.success) setPendingCloudPush(false); })
+          .catch(err => console.warn('Profile sync note:', err));
       }
       return stampedProfiles;
     });
@@ -2233,11 +2251,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const resetDiagnosticProfiles = useCallback(() => {
     clearDeletedCollection('diagnosticProfiles');
-    setDiagnosticProfiles(LAB_CATALOG);
-    safeSetLocalStorage(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(LAB_CATALOG));
-    realtimeSyncManager.broadcastAction('UPDATE_PROFILES', LAB_CATALOG);
+    const nowIso = new Date().toISOString();
+    const resetList = LAB_CATALOG.map(p => ({ ...p, updatedAt: nowIso }));
+    setDiagnosticProfiles(resetList);
+    safeSetLocalStorage(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(resetList));
+    latestStateRef.current.diagnosticProfiles = resetList;
+    realtimeSyncManager.broadcastAction('UPDATE_PROFILES', resetList);
     if (githubConfig.token && githubConfig.autoSync) {
-      pushFullStoreToGitHub(githubConfig, buildFullSyncSnapshot({ diagnosticProfiles: LAB_CATALOG })).catch(() => {});
+      setPendingCloudPush(true);
+      pushFullStoreToGitHub(githubConfig, buildFullSyncSnapshot({ diagnosticProfiles: resetList }))
+        .then(res => { if (res.success) setPendingCloudPush(false); })
+        .catch(() => {});
     }
     logAction('CATALOG_UPDATE', 'CATALOG', 'استعادة بروفايلات التحاليل الافتراضية (24 بروفايل طبي)');
   }, [logAction, githubConfig, buildFullSyncSnapshot]);
@@ -2254,7 +2278,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     method?: string;
   }) => {
     try {
-      // 1. Save to custom normals registry
+      const nowIso = new Date().toISOString();
+      // 1. Save to custom normals registry with updatedAt stamp
       const normKey = (param.code || param.name).toLowerCase().replace(/[\(\)\[\]\/\-_\s]/g, '').trim();
       const raw = localStorage.getItem(CUSTOM_NORMALS_KEY);
       const registry: Record<string, any> = raw ? JSON.parse(raw) : {};
@@ -2267,11 +2292,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         textReference: param.textReference,
         panicLow: param.panicLow,
         panicHigh: param.panicHigh,
-        method: param.method
+        method: param.method,
+        updatedAt: nowIso
       };
       safeSetLocalStorage(CUSTOM_NORMALS_KEY, JSON.stringify(registry));
 
-      // 2. Propagate to diagnosticProfiles in state and storage
+      // 2. Propagate to diagnosticProfiles in state, storage, and cloud sync (stamped with updatedAt)
       setDiagnosticProfiles(prevProfiles => {
         const next = prevProfiles.map(prof => {
           const hasParam = prof.parameters.some(p => 
@@ -2296,9 +2322,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             }
             return p;
           });
-          return { ...prof, parameters: newParams };
+          return { ...prof, parameters: newParams, updatedAt: nowIso };
         });
         safeSetLocalStorage(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(next));
+        latestStateRef.current.diagnosticProfiles = next;
+        realtimeSyncManager.broadcastAction('UPDATE_PROFILES', next);
         return next;
       });
 
@@ -2315,12 +2343,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               minNormal: param.minNormal !== undefined ? param.minNormal : t.minNormal,
               maxNormal: param.maxNormal !== undefined ? param.maxNormal : t.maxNormal,
               textReference: param.textReference !== undefined ? param.textReference : t.textReference,
-              method: param.method !== undefined ? param.method : t.method
+              method: param.method !== undefined ? param.method : t.method,
+              updatedAt: nowIso
             };
           }
           return t;
         });
         safeSetLocalStorage(CATALOG_KEY, JSON.stringify(next));
+        latestStateRef.current.testCatalog = next;
+        realtimeSyncManager.broadcastAction('UPDATE_CATALOG', next);
         return next;
       });
 
@@ -2342,18 +2373,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     safeSetLocalStorage(CATALOG_KEY, JSON.stringify(refreshedTests));
     safeSetLocalStorage(PACKAGES_KEY, JSON.stringify(refreshedPackages));
     safeSetLocalStorage(DIAGNOSTIC_PROFILES_KEY, JSON.stringify(refreshedProfiles));
+    latestStateRef.current.testCatalog = refreshedTests;
+    latestStateRef.current.packages = refreshedPackages;
+    latestStateRef.current.diagnosticProfiles = refreshedProfiles;
 
-    const syncPayload = {
-      reports,
-      incomeRecords,
-      expenses,
-      loyaltyProfiles,
-      inventory,
-      labInfo,
+    const syncPayload = buildFullSyncSnapshot({
       testCatalog: refreshedTests,
       packages: refreshedPackages,
       diagnosticProfiles: refreshedProfiles
-    };
+    });
 
     realtimeSyncManager.pushMasterSnapshot(syncPayload);
     realtimeSyncManager.broadcastAction('UPDATE_CATALOG', refreshedTests);
@@ -2361,7 +2389,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     realtimeSyncManager.broadcastAction('UPDATE_PROFILES', refreshedProfiles);
 
     if (githubConfig.token) {
-      pushFullStoreToGitHub(githubConfig, syncPayload).catch(() => {});
+      setPendingCloudPush(true);
+      pushFullStoreToGitHub(githubConfig, syncPayload)
+        .then(res => { if (res.success) setPendingCloudPush(false); })
+        .catch(() => {});
     }
 
     logAction('CATALOG_UPDATE', 'CATALOG', `مزامنة وتوحيد شامل للكتالوج: ${refreshedTests.length} فحص منفرد + ${refreshedPackages.length} باقة + ${refreshedProfiles.length} بروفايل`);
@@ -2371,7 +2402,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       packagesCount: refreshedPackages.length,
       profilesCount: refreshedProfiles.length
     };
-  }, [testCatalog, packages, diagnosticProfiles, reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, githubConfig, logAction]);
+  }, [testCatalog, packages, diagnosticProfiles, buildFullSyncSnapshot, githubConfig, logAction]);
 
   // Apply Package Directly to Any Report: Each profile is generated as an independent profile on its own page (الباقات الشاملة تنزل كل بروفايل في صفحة مستقلة)
   const applyPackageToReport = useCallback((reportId: string, pkg: ComprehensivePackage) => {
@@ -2656,7 +2687,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         originalPrice: packageApplied.originalPrice
       } as any : undefined,
       profiles: generatedProfiles,
-      staff: staffSignatures ? { ...staffSignatures } : { ...DEFAULT_STAFF },
+      staff: {
+        ...(staffSignatures || DEFAULT_STAFF),
+        ...(patient.phlebotomist ? { phlebotomist: patient.phlebotomist, showPhlebotomist: true } : {}),
+        ...(patient.visitSpecialist ? { visitCoordinator: patient.visitSpecialist, showVisitCoordinator: true } : {}),
+        ...(patient.branchRepresentative && !patient.visitSpecialist ? { visitCoordinator: patient.branchRepresentative, showVisitCoordinator: true } : {})
+      },
       status: 'draft',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -3634,114 +3670,268 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
     }));
   }, [employees]);
 
-  // Lab Info Update
+  // Staff Members (Global Directory CRUD)
+  const updateStaffMembers = useCallback((members: StaffMember[]) => {
+    const nowIso = new Date().toISOString();
+    const nextIds = new Set(members.map(m => m.id).filter(Boolean));
+    setStaffMembers(prev => {
+      prev.forEach(old => {
+        if (old.id && !nextIds.has(old.id)) {
+          markDeleted('staffMembers', old.id);
+        }
+      });
+      const stamped = members.map(m => {
+        if (m.id) unmarkDeleted('staffMembers', m.id);
+        return { ...m, updatedAt: m.updatedAt || nowIso };
+      });
+      safeSetLocalStorage(STAFF_MEMBERS_KEY, JSON.stringify(stamped));
+      latestStateRef.current.staffMembers = stamped;
+      if (githubConfig.token && githubConfig.autoSync) {
+        setPendingCloudPush(true);
+        pushFullStoreToGitHub(githubConfig, buildFullSyncSnapshot({ staffMembers: stamped }))
+          .then(res => { if (res.success) setPendingCloudPush(false); })
+          .catch(() => {});
+      }
+      return stamped;
+    });
+    logAction('UPDATE', 'SETTINGS', `تحديث دليل العاملين والطاقم الطبي (${members.length} فرد)`);
+  }, [logAction, githubConfig, buildFullSyncSnapshot]);
+
+  const addStaffMember = useCallback((member: StaffMember) => {
+    const nowIso = new Date().toISOString();
+    if (member.id) unmarkDeleted('staffMembers', member.id);
+    const stamped = { ...member, updatedAt: nowIso };
+    setStaffMembers(prev => {
+      const next = [stamped, ...prev];
+      safeSetLocalStorage(STAFF_MEMBERS_KEY, JSON.stringify(next));
+      latestStateRef.current.staffMembers = next;
+      if (githubConfig.token && githubConfig.autoSync) {
+        setPendingCloudPush(true);
+        pushFullStoreToGitHub(githubConfig, buildFullSyncSnapshot({ staffMembers: next }))
+          .then(res => { if (res.success) setPendingCloudPush(false); })
+          .catch(() => {});
+      }
+      return next;
+    });
+    logAction('CREATE', 'SETTINGS', `إضافة عامل جديد: ${member.name} (${member.title})`);
+  }, [logAction, githubConfig, buildFullSyncSnapshot]);
+
+  const updateStaffMember = useCallback((id: string, updates: Partial<StaffMember>) => {
+    const nowIso = new Date().toISOString();
+    setStaffMembers(prev => {
+      const next = prev.map(m => m.id === id ? { ...m, ...updates, updatedAt: nowIso } : m);
+      safeSetLocalStorage(STAFF_MEMBERS_KEY, JSON.stringify(next));
+      latestStateRef.current.staffMembers = next;
+      if (githubConfig.token && githubConfig.autoSync) {
+        setPendingCloudPush(true);
+        pushFullStoreToGitHub(githubConfig, buildFullSyncSnapshot({ staffMembers: next }))
+          .then(res => { if (res.success) setPendingCloudPush(false); })
+          .catch(() => {});
+      }
+      return next;
+    });
+    logAction('UPDATE', 'SETTINGS', `تعديل بيانات العامل: ${id}`);
+  }, [logAction, githubConfig, buildFullSyncSnapshot]);
+
+  const deleteStaffMember = useCallback((id: string) => {
+    markDeleted('staffMembers', id);
+    setStaffMembers(prev => {
+      const next = prev.filter(m => m.id !== id);
+      safeSetLocalStorage(STAFF_MEMBERS_KEY, JSON.stringify(next));
+      latestStateRef.current.staffMembers = next;
+      if (githubConfig.token && githubConfig.autoSync) {
+        setPendingCloudPush(true);
+        pushFullStoreToGitHub(githubConfig, buildFullSyncSnapshot({ staffMembers: next }))
+          .then(res => { if (res.success) setPendingCloudPush(false); })
+          .catch(() => {});
+      }
+      return next;
+    });
+    logAction('DELETE', 'SETTINGS', `حذف عامل من الدليل: ${id}`);
+  }, [logAction, githubConfig, buildFullSyncSnapshot]);
+
+  // Lab Info update
   const updateLabInfo = useCallback((info: LabInfo) => {
     setLabInfo(info);
+    safeSetLocalStorage(LAB_INFO_KEY, JSON.stringify(info));
+    stampSetting('labInfo');
+    latestStateRef.current.labInfo = info;
     realtimeSyncManager.broadcastAction('UPDATE_LAB_INFO', info);
-    logAction('UPDATE', 'SETTINGS', 'تحديث بيانات المعمل والاعتماد الطبي ووسائل التواصل');
-  }, [logAction]);
+    if (githubConfig.token && githubConfig.autoSync) {
+      setPendingCloudPush(true);
+      pushFullStoreToGitHub(githubConfig, buildFullSyncSnapshot({ labInfo: info }))
+        .then(res => { if (res.success) setPendingCloudPush(false); })
+        .catch(() => {});
+    }
+    logAction('UPDATE', 'SETTINGS', 'تحديث بيانات وهوية المعمل وأرقام التواصل');
+  }, [logAction, githubConfig, buildFullSyncSnapshot]);
 
   // Staff Signatures & Options
   const updateStaffSignatures = useCallback((signatures: LabStaffSignatures) => {
     setStaffSignatures(signatures);
     safeSetLocalStorage(STAFF_SIGNATURES_KEY, JSON.stringify(signatures));
+    stampSetting('staffSignatures');
+    latestStateRef.current.staffSignatures = signatures;
     realtimeSyncManager.broadcastAction('UPDATE_STAFF', signatures);
     if (githubConfig.token && githubConfig.autoSync) {
-      pushFullStoreToGitHub(githubConfig, buildFullSyncSnapshot({ staffSignatures: signatures })).catch(() => {});
+      setPendingCloudPush(true);
+      pushFullStoreToGitHub(githubConfig, buildFullSyncSnapshot({ staffSignatures: signatures }))
+        .then(res => { if (res.success) setPendingCloudPush(false); })
+        .catch(() => {});
     }
     logAction('UPDATE', 'SETTINGS', 'تحديث الإمضاءات الافتراضية لطاقم الفحص والاعتماد');
   }, [logAction, githubConfig, buildFullSyncSnapshot]);
 
+  const roleToOptionsKey = (role: StaffOptionRole): keyof StaffSignatureOptionsMap => {
+    if (role === 'chemist') return 'chemists';
+    if (role === 'verifier') return 'verifiers';
+    if (role === 'consultant') return 'consultants';
+    if (role === 'phlebotomist') return 'phlebotomists';
+    if (role === 'visit_coordinator') return 'visitCoordinators';
+    return 'customWorkers';
+  };
+
   const addStaffSignatureOption = useCallback((
-    role: 'chemist' | 'verifier' | 'consultant',
-    item: { name: string; title: string; license?: string }
+    role: StaffOptionRole,
+    item: { name: string; title: string; license?: string; signatureKey?: string; customRoleLabel?: string }
   ) => {
     const newItem: StaffOptionItem = {
       id: `${role}-${Date.now()}`,
       name: item.name,
       title: item.title,
       role,
-      license: item.license
+      license: item.license,
+      signatureKey: item.signatureKey,
+      customRoleLabel: item.customRoleLabel
     };
 
     setStaffSignatureOptions(prev => {
-      const targetKey = role === 'chemist' ? 'chemists' : role === 'verifier' ? 'verifiers' : 'consultants';
-      const updated = {
+      const targetKey = roleToOptionsKey(role);
+      const existingList = Array.isArray(prev[targetKey]) ? prev[targetKey]! : [];
+      const updated: StaffSignatureOptionsMap = {
         ...prev,
-        [targetKey]: [newItem, ...prev[targetKey].filter(x => x.name !== item.name)]
+        [targetKey]: [newItem, ...existingList.filter(x => x.name !== item.name)]
       };
       safeSetLocalStorage(STAFF_OPTIONS_KEY, JSON.stringify(updated));
+      stampSetting('staffSignatureOptions');
+      latestStateRef.current.staffSignatureOptions = updated;
+      if (githubConfig.token && githubConfig.autoSync) {
+        setPendingCloudPush(true);
+        pushFullStoreToGitHub(githubConfig, buildFullSyncSnapshot({ staffSignatureOptions: updated }))
+          .then(res => { if (res.success) setPendingCloudPush(false); })
+          .catch(() => {});
+      }
       return updated;
     });
 
     logAction('CREATE', 'SETTINGS', `إضافة عضو جديد لطاقم الاعتماد: ${item.name} (${item.title})`);
-  }, [logAction]);
+  }, [logAction, githubConfig, buildFullSyncSnapshot]);
 
   const updateStaffSignatureOption = useCallback((
-    role: 'chemist' | 'verifier' | 'consultant',
+    role: StaffOptionRole,
     id: string,
-    item: { name: string; title: string; license?: string }
+    item: { name: string; title: string; license?: string; signatureKey?: string; customRoleLabel?: string }
   ) => {
     let oldName = '';
     setStaffSignatureOptions(prev => {
-      const targetKey = role === 'chemist' ? 'chemists' : role === 'verifier' ? 'verifiers' : 'consultants';
-      const existing = prev[targetKey].find(x => x.id === id);
+      const targetKey = roleToOptionsKey(role);
+      const existingList = Array.isArray(prev[targetKey]) ? prev[targetKey]! : [];
+      const existing = existingList.find(x => x.id === id);
       if (existing) oldName = existing.name;
-      const updated = {
+      const updated: StaffSignatureOptionsMap = {
         ...prev,
-        [targetKey]: prev[targetKey].map(x => (x.id === id ? { ...x, ...item } : x))
+        [targetKey]: existingList.map(x => (x.id === id ? { ...x, ...item } : x))
       };
       safeSetLocalStorage(STAFF_OPTIONS_KEY, JSON.stringify(updated));
+      stampSetting('staffSignatureOptions');
+      latestStateRef.current.staffSignatureOptions = updated;
+      if (githubConfig.token && githubConfig.autoSync) {
+        setPendingCloudPush(true);
+        pushFullStoreToGitHub(githubConfig, buildFullSyncSnapshot({ staffSignatureOptions: updated }))
+          .then(res => { if (res.success) setPendingCloudPush(false); })
+          .catch(() => {});
+      }
       return updated;
     });
 
-    // Automatically update default staffSignatures if this doctor was selected
+    // Automatically update default staffSignatures if this worker was selected
     setStaffSignatures(prev => {
       let isChanged = false;
       const next = { ...prev };
       if (role === 'chemist' && (prev.labChemist === oldName || !prev.labChemist)) {
         next.labChemist = item.name;
         next.chemistTitle = item.title;
-        if (item.license) next.chemistLicense = item.license;
+        if (item.license !== undefined) next.chemistLicense = item.license;
+        if (item.signatureKey !== undefined) next.chemistSignatureKey = item.signatureKey;
         isChanged = true;
       } else if (role === 'verifier' && (prev.verifiedBy === oldName || !prev.verifiedBy)) {
         next.verifiedBy = item.name;
         next.verifierTitle = item.title;
-        if (item.license) next.verifierLicense = item.license;
+        if (item.license !== undefined) next.verifierLicense = item.license;
+        if (item.signatureKey !== undefined) next.verifierSignatureKey = item.signatureKey;
         isChanged = true;
       } else if (role === 'consultant' && (prev.pathologist === oldName || !prev.pathologist)) {
         next.pathologist = item.name;
         next.pathologistTitle = item.title;
-        if (item.license) next.pathologistLicense = item.license;
+        if (item.license !== undefined) next.pathologistLicense = item.license;
+        if (item.signatureKey !== undefined) next.pathologistSignatureKey = item.signatureKey;
+        isChanged = true;
+      } else if (role === 'phlebotomist' && (prev.phlebotomist === oldName || !prev.phlebotomist)) {
+        next.phlebotomist = item.name;
+        next.phlebotomistTitle = item.title;
+        if (item.license !== undefined) next.phlebotomistLicense = item.license;
+        if (item.signatureKey !== undefined) next.phlebotomistSignatureKey = item.signatureKey;
+        isChanged = true;
+      } else if (role === 'visit_coordinator' && (prev.visitCoordinator === oldName || !prev.visitCoordinator)) {
+        next.visitCoordinator = item.name;
+        next.visitCoordinatorTitle = item.title;
+        if (item.license !== undefined) next.visitCoordinatorLicense = item.license;
+        if (item.signatureKey !== undefined) next.visitCoordinatorSignatureKey = item.signatureKey;
         isChanged = true;
       }
       if (isChanged) {
         safeSetLocalStorage(STAFF_SIGNATURES_KEY, JSON.stringify(next));
+        stampSetting('staffSignatures');
       }
       return isChanged ? next : prev;
     });
 
-    // Update in any reports that reference the modified doctor
+    // Update in any reports that reference the modified worker
     setReports(prevReports => {
       let anyRepChanged = false;
       const nextReports = prevReports.map(rep => {
         if (!rep.staff) return rep;
         let repChanged = false;
         const newStaff = { ...rep.staff };
-        if (role === 'chemist' && rep.staff.labChemist === oldName) {
+        if (role === 'chemist' && oldName && rep.staff.labChemist === oldName) {
           newStaff.labChemist = item.name;
           newStaff.chemistTitle = item.title;
-          if (item.license) newStaff.chemistLicense = item.license;
+          if (item.license !== undefined) newStaff.chemistLicense = item.license;
+          if (item.signatureKey !== undefined) newStaff.chemistSignatureKey = item.signatureKey;
           repChanged = true;
-        } else if (role === 'verifier' && rep.staff.verifiedBy === oldName) {
+        } else if (role === 'verifier' && oldName && rep.staff.verifiedBy === oldName) {
           newStaff.verifiedBy = item.name;
           newStaff.verifierTitle = item.title;
-          if (item.license) newStaff.verifierLicense = item.license;
+          if (item.license !== undefined) newStaff.verifierLicense = item.license;
+          if (item.signatureKey !== undefined) newStaff.verifierSignatureKey = item.signatureKey;
           repChanged = true;
-        } else if (role === 'consultant' && rep.staff.pathologist === oldName) {
+        } else if (role === 'consultant' && oldName && rep.staff.pathologist === oldName) {
           newStaff.pathologist = item.name;
           newStaff.pathologistTitle = item.title;
-          if (item.license) newStaff.pathologistLicense = item.license;
+          if (item.license !== undefined) newStaff.pathologistLicense = item.license;
+          if (item.signatureKey !== undefined) newStaff.pathologistSignatureKey = item.signatureKey;
+          repChanged = true;
+        } else if (role === 'phlebotomist' && oldName && rep.staff.phlebotomist === oldName) {
+          newStaff.phlebotomist = item.name;
+          newStaff.phlebotomistTitle = item.title;
+          if (item.license !== undefined) newStaff.phlebotomistLicense = item.license;
+          if (item.signatureKey !== undefined) newStaff.phlebotomistSignatureKey = item.signatureKey;
+          repChanged = true;
+        } else if (role === 'visit_coordinator' && oldName && rep.staff.visitCoordinator === oldName) {
+          newStaff.visitCoordinator = item.name;
+          newStaff.visitCoordinatorTitle = item.title;
+          if (item.license !== undefined) newStaff.visitCoordinatorLicense = item.license;
+          if (item.signatureKey !== undefined) newStaff.visitCoordinatorSignatureKey = item.signatureKey;
           repChanged = true;
         }
         if (repChanged) anyRepChanged = true;
@@ -3751,21 +3941,32 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
     });
 
     logAction('UPDATE', 'SETTINGS', `تحديث بيانات عضو طاقم الاعتماد وتحديث كافة السجلات: ${item.name}`);
-  }, [logAction]);
+  }, [logAction, githubConfig, buildFullSyncSnapshot]);
 
   const deleteStaffSignatureOption = useCallback((
-    role: 'chemist' | 'verifier' | 'consultant',
+    role: StaffOptionRole,
     id: string
   ) => {
     setStaffSignatureOptions(prev => {
-      const targetKey = role === 'chemist' ? 'chemists' : role === 'verifier' ? 'verifiers' : 'consultants';
-      return {
+      const targetKey = roleToOptionsKey(role);
+      const existingList = Array.isArray(prev[targetKey]) ? prev[targetKey]! : [];
+      const updated: StaffSignatureOptionsMap = {
         ...prev,
-        [targetKey]: prev[targetKey].filter(x => x.id !== id)
+        [targetKey]: existingList.filter(x => x.id !== id)
       };
+      safeSetLocalStorage(STAFF_OPTIONS_KEY, JSON.stringify(updated));
+      stampSetting('staffSignatureOptions');
+      latestStateRef.current.staffSignatureOptions = updated;
+      if (githubConfig.token && githubConfig.autoSync) {
+        setPendingCloudPush(true);
+        pushFullStoreToGitHub(githubConfig, buildFullSyncSnapshot({ staffSignatureOptions: updated }))
+          .then(res => { if (res.success) setPendingCloudPush(false); })
+          .catch(() => {});
+      }
+      return updated;
     });
     logAction('DELETE', 'SETTINGS', `حذف عضو من قائمة طاقم الاعتماد: ${id}`);
-  }, [logAction]);
+  }, [logAction, githubConfig, buildFullSyncSnapshot]);
 
   // Backups
   const exportBackup = useCallback(async (): Promise<string> => {
@@ -3781,6 +3982,11 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
       labToLabOrders,
       testCatalog,
       packages,
+      diagnosticProfiles,
+      staffMembers,
+      staffSignatures,
+      staffSignatureOptions,
+      labInfo,
       auditLogs: auditLogs.slice(0, 100)
     };
     const jsonStr = JSON.stringify(payload, null, 2);
@@ -3793,7 +3999,7 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
     URL.revokeObjectURL(url);
     logAction('BACKUP', 'SETTINGS', 'تصدير نسخة احتياطية موحدة شاملة لبيانات المعمل');
     return jsonStr;
-  }, [reports, incomeRecords, loyaltyProfiles, inventory, expenses, dailyCloseouts, employees, labToLabOrders, testCatalog, packages, auditLogs, logAction]);
+  }, [reports, incomeRecords, loyaltyProfiles, inventory, expenses, dailyCloseouts, employees, labToLabOrders, testCatalog, packages, diagnosticProfiles, staffMembers, staffSignatures, staffSignatureOptions, labInfo, auditLogs, logAction]);
 
   const importBackup = useCallback(async (backupJson: string): Promise<{ success: boolean; message: string }> => {
     try {
@@ -3807,6 +4013,11 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
       if (data.labToLabOrders) setLabToLabOrders(data.labToLabOrders);
       if (data.testCatalog) setTestCatalog(data.testCatalog);
       if (data.packages) setPackages(data.packages);
+      if (data.diagnosticProfiles) setDiagnosticProfiles(data.diagnosticProfiles);
+      if (data.staffMembers) setStaffMembers(data.staffMembers);
+      if (data.staffSignatures) setStaffSignatures(data.staffSignatures);
+      if (data.staffSignatureOptions) setStaffSignatureOptions(data.staffSignatureOptions);
+      if (data.labInfo) setLabInfo(data.labInfo);
       logAction('BACKUP', 'SETTINGS', 'استعادة قاعدة البيانات الموحدة من نسخة احتياطية');
       return { success: true, message: 'تم استعادة البيانات بنجاح!' };
     } catch {
@@ -3923,14 +4134,20 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
               });
               return Array.from(map.values());
             };
-            const merged = {
+            const merged: StaffSignatureOptionsMap = {
               chemists: mergeRoleOptions(prev.chemists, data.staffSignatureOptions.chemists),
               verifiers: mergeRoleOptions(prev.verifiers, data.staffSignatureOptions.verifiers),
-              consultants: mergeRoleOptions(prev.consultants, data.staffSignatureOptions.consultants)
+              consultants: mergeRoleOptions(prev.consultants, data.staffSignatureOptions.consultants),
+              phlebotomists: mergeRoleOptions(prev.phlebotomists || [], data.staffSignatureOptions.phlebotomists || []),
+              visitCoordinators: mergeRoleOptions(prev.visitCoordinators || [], data.staffSignatureOptions.visitCoordinators || []),
+              customWorkers: mergeRoleOptions(prev.customWorkers || [], data.staffSignatureOptions.customWorkers || [])
             };
             safeSetLocalStorage(STAFF_OPTIONS_KEY, JSON.stringify(merged));
             return merged;
           });
+        }
+        if (Array.isArray(data.staffMembers) && data.staffMembers.length > 0) {
+          setStaffMembers(prev => mergeCollection('staffMembers', prev, data.staffMembers));
         }
         if (Array.isArray(data.employees) && data.employees.length > 0) {
           setEmployees(prev => {
@@ -4362,6 +4579,10 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
     updateLabInfo,
     facilities,
     staffMembers,
+    updateStaffMembers,
+    addStaffMember,
+    updateStaffMember,
+    deleteStaffMember,
     staffSignatures,
     updateStaffSignatures,
     staffSignatureOptions,

@@ -121,6 +121,8 @@ export const PackagesManager: React.FC<PackagesManagerProps> = ({
     const orig = Number(formData.originalPrice) || 0;
     const pkgP = Number(formData.packagePrice) || 0;
     const discount = orig > 0 ? Math.round(((orig - pkgP) / orig) * 100) : 0;
+    const nowIso = new Date().toISOString();
+    const cleanCode = formData.code.trim().toUpperCase();
 
     if (editingPackage) {
       // Update
@@ -130,19 +132,24 @@ export const PackagesManager: React.FC<PackagesManagerProps> = ({
               ...p,
               ...formData,
               id: editingPackage.id,
+              code: cleanCode,
+              titleAr: formData.titleAr!.trim(),
+              titleEn: (formData.titleEn || formData.titleAr || '').trim(),
               originalPrice: orig,
               packagePrice: pkgP,
-              discountPercentage: discount
+              discountPercentage: discount,
+              fastingRequired: formData.fastingRequired !== undefined ? formData.fastingRequired.trim() : p.fastingRequired,
+              updatedAt: nowIso
             } as ComprehensivePackage
           : p
       );
       onUpdatePackages(updated);
-      setSaveSuccessMsg(`✅ تم تعديل باقة "${formData.titleAr}" بنجاح ومزامنتها على كافة الأجهزة!`);
+      setSaveSuccessMsg(`✅ تم تعديل باقة "${formData.titleAr}" وحفظها دائماً على كافة الأجهزة!`);
     } else {
       // Create new
       const newPkg: ComprehensivePackage = {
         id: `pkg-${Date.now()}`,
-        code: formData.code?.trim().toUpperCase() || `PKG-${Date.now()}`,
+        code: cleanCode || `PKG-${Date.now()}`,
         titleAr: formData.titleAr.trim(),
         titleEn: formData.titleEn?.trim() || formData.titleAr.trim(),
         descriptionAr: formData.descriptionAr?.trim() || '',
@@ -154,7 +161,8 @@ export const PackagesManager: React.FC<PackagesManagerProps> = ({
         discountPercentage: discount,
         fastingRequired: formData.fastingRequired?.trim() || 'صيام 8-10 ساعات',
         sampleTypes: formData.sampleTypes || ['Serum'],
-        isPopular: !!formData.isPopular
+        isPopular: !!formData.isPopular,
+        updatedAt: nowIso
       };
       onUpdatePackages([newPkg, ...packages]);
       setSaveSuccessMsg(`✅ تم إنشاء باقة "${formData.titleAr}" بنجاح وحفظها سحابياً لكافة الأجهزة!`);

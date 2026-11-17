@@ -204,6 +204,34 @@ export const ClientEditModal: React.FC<ClientEditModalProps> = ({
               />
             </div>
 
+            {/* Phlebotomist */}
+            <div>
+              <label className="block text-xs font-bold text-slate-300 mb-1">
+                القائم بالسحب:
+              </label>
+              <input
+                type="text"
+                value={formData.phlebotomist || ''}
+                onChange={(e) => setFormData({ ...formData, phlebotomist: e.target.value })}
+                placeholder="مثال: أ/ يوسف طارق المنشاوي"
+                className="w-full text-xs font-bold bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:ring-2 focus:ring-rose-500"
+              />
+            </div>
+
+            {/* Visit Coordinator */}
+            <div>
+              <label className="block text-xs font-bold text-slate-300 mb-1">
+                مسؤول الزيارة:
+              </label>
+              <input
+                type="text"
+                value={formData.visitSpecialist || ''}
+                onChange={(e) => setFormData({ ...formData, visitSpecialist: e.target.value })}
+                placeholder="مثال: أ/ سارة إبراهيم الشربيني"
+                className="w-full text-xs font-bold bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:ring-2 focus:ring-rose-500"
+              />
+            </div>
+
             {/* Referring Doctor */}
             <div className="sm:col-span-2">
               <label className="block text-xs font-bold text-slate-300 mb-1">

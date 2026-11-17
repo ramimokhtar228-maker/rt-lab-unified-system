@@ -136,6 +136,9 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
   const [branchRepresentative, setBranchRepresentative] = useState<string>(
     branchReceptionTeam[0]?.name || currentUser?.nameAr || 'أ/ هدى السيد رضوان'
   );
+  const [phlebotomist, setPhlebotomist] = useState<string>(
+    homeVisitTeam[0]?.name || 'أ/ يوسف طارق المنشاوي'
+  );
 
   const selectedBranch = useMemo(
     () => activeBranches.find(b => b.id === selectedBranchId) || activeBranches[0],
@@ -532,6 +535,7 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
         branchName: selectedBranch?.nameAr || 'الفرع الرئيسي - بهتيم',
         visitSpecialist: bookingType === 'home_visit' ? visitSpecialist.trim() : undefined,
         branchRepresentative: bookingType === 'branch' ? branchRepresentative.trim() : undefined,
+        phlebotomist: (bookingType === 'home_visit' ? (phlebotomist.trim() || visitSpecialist.trim()) : phlebotomist.trim()) || undefined,
         homeAddress: bookingType === 'home_visit' ? homeAddress.trim() : undefined,
         visitFee: effectiveVisitFee,
         appointmentDate: appointmentDate || today,
@@ -1644,6 +1648,20 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
                         className="w-full bg-white border border-emerald-200 rounded-lg p-1.5 text-xs font-semibold text-slate-800"
                       />
                     </div>
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-emerald-950 block mb-1 flex items-center gap-1.5">
+                      <UserCheck className="w-3.5 h-3.5 text-teal-700" />
+                      <span>القائم بالسحب (يظهر بالتقرير):</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={phlebotomist}
+                      onChange={(e) => setPhlebotomist(e.target.value)}
+                      placeholder="مثال: أ/ يوسف طارق المنشاوي"
+                      className="w-full bg-white border border-emerald-200 rounded-lg p-1.5 text-xs font-semibold text-slate-800"
+                    />
                   </div>
                 </div>
               ) : (

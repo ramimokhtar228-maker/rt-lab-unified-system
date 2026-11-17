@@ -159,12 +159,6 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
     setIsSyncing(true);
     try {
       const res = forceSyncCatalog();
-      if (onUpdateIndividualTests) {
-        onUpdateIndividualTests(testCatalog as unknown as IndividualTest[]);
-      }
-      if (onUpdateCatalog) {
-        onUpdateCatalog(diagnosticProfiles);
-      }
       showFeedback(`تم تحديث ومزامنة الكتالوج بالكامل (${res.testsCount} فحص منفرد · ${res.packagesCount} باقة · ${res.profilesCount} بروفايل).`);
     } catch (err) {
       console.error(err);
@@ -308,6 +302,7 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
         return;
       }
       setFormError(null);
+      const nowIso = new Date().toISOString();
       const updatedCatalog = catalog.map(c =>
         c.code === editingProfileCode
           ? {
@@ -318,7 +313,8 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
               category: newProfCategory.trim() || 'General',
               sampleType: newProfSample.trim() || 'Serum',
               profilePrice: parsedPrice,
-              defaultInterpretation: newProfInterp.trim() || undefined
+              defaultInterpretation: newProfInterp.trim() || undefined,
+              updatedAt: nowIso
             }
           : c
       );
@@ -348,7 +344,8 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
       sampleType: newProfSample.trim() || 'Serum',
       profilePrice: parsedPrice,
       defaultInterpretation: newProfInterp.trim() || undefined,
-      parameters: []
+      parameters: [],
+      updatedAt: new Date().toISOString()
     };
 
     onUpdateCatalog([newTemplate, ...catalog]);
@@ -370,15 +367,17 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
 
   const handleDeleteParameter = (profileCode: string, paramIndex: number) => {
     if (confirm('هل أنت متأكد من حذف هذا المعيار من البروفايل؟')) {
+      const nowIso = new Date().toISOString();
       const updated = catalog.map(p => {
         if (p.code === profileCode) {
           const newParams = [...p.parameters];
           newParams.splice(paramIndex, 1);
-          return { ...p, parameters: newParams };
+          return { ...p, parameters: newParams, updatedAt: nowIso };
         }
         return p;
       });
       onUpdateCatalog(updated);
+      showFeedback(`تم حذف المعيار وحفظ البروفايل (${profileCode}) نهائياً.`);
     }
   };
 
@@ -1206,6 +1205,7 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
           isOpen={true}
           parameter={paramToEdit.param}
           onSave={(updated, savePermanently) => {
+            const nowIso = new Date().toISOString();
             const updatedCatalog = catalog.map(p => {
               if (p.code === paramToEdit.profileCode) {
                 const newParams = [...p.parameters];
@@ -1214,7 +1214,7 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
                   ...updated,
                   name: updated.name || newParams[paramToEdit.paramIndex].name
                 };
-                return { ...p, parameters: newParams };
+                return { ...p, parameters: newParams, updatedAt: nowIso };
               }
               return p;
             });
@@ -1234,6 +1234,7 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
               });
             }
 
+            showFeedback(`تم حفظ تعديل المعيار "${updated.name || paramToEdit.param.name}" في البروفايل بشكل دائم.`);
             setParamToEdit(null);
           }}
           onClose={() => setParamToEdit(null)}
@@ -1245,13 +1246,15 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
         <AddParameterModal
           isOpen={true}
           onAdd={(newParam) => {
+            const nowIso = new Date().toISOString();
             const updatedCatalog = catalog.map(p => {
               if (p.code === activeProfileForParam) {
-                return { ...p, parameters: [...p.parameters, newParam] };
+                return { ...p, parameters: [...p.parameters, newParam], updatedAt: nowIso };
               }
               return p;
             });
             onUpdateCatalog(updatedCatalog);
+            showFeedback(`تم إضافة المعيار "${newParam.name}" وحفظ البروفايل (${activeProfileForParam}) دائماً.`);
             setIsAddParamModalOpen(false);
             setActiveProfileForParam(null);
           }}

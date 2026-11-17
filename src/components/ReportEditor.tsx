@@ -77,7 +77,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
   onOpenIllustrationsModal,
   onOpenSmartReport
 }) => {
-  const { packages, applyPackageToReport, reports, setSelectedReportId, syncAllDevicesNow, saveParameterNormalPermanently, openPatientSheet } = useApp();
+  const { packages, applyPackageToReport, reports, setSelectedReportId, syncAllDevicesNow, saveParameterNormalPermanently, openPatientSheet, staffSignatureOptions } = useApp();
   const [isManualSyncing, setIsManualSyncing] = useState(false);
   const [syncMessage, setSyncMessage] = useState<string | null>(null);
   const [activeProfileTab, setActiveProfileTab] = useState<string>(report.profiles[0]?.id || '');
@@ -446,14 +446,26 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
     }
   };
 
-  // Update patient field directly
+  // Update patient field directly (syncing phlebotomist & visit coordinator with report.staff)
   const handleUpdatePatient = (updates: Partial<typeof report.patient>) => {
+    const staffPatch: Partial<LabStaffSignatures> = {};
+    if (updates.phlebotomist !== undefined) {
+      staffPatch.phlebotomist = updates.phlebotomist;
+      staffPatch.showPhlebotomist = updates.phlebotomist.trim() !== '';
+    }
+    if (updates.visitSpecialist !== undefined) {
+      staffPatch.visitCoordinator = updates.visitSpecialist;
+      staffPatch.showVisitCoordinator = updates.visitSpecialist.trim() !== '';
+    }
     onUpdateReport({
       ...report,
       patient: {
         ...report.patient,
         ...updates
       },
+      ...(Object.keys(staffPatch).length > 0
+        ? { staff: { ...report.staff, ...staffPatch } }
+        : {}),
       updatedAt: new Date().toISOString()
     });
   };
@@ -972,6 +984,18 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                 <span>تاريخ السحب: <strong className="font-mono text-slate-700">{report.patient.sampleDate ? new Date(report.patient.sampleDate).toLocaleDateString('en-GB') : 'غير محدد'}</strong></span>
                 <span>•</span>
                 <span>الهاتف: <strong className="font-mono text-slate-700">{report.patient.phone}</strong></span>
+                {(report.staff?.showPhlebotomist !== false && (report.staff?.phlebotomist || report.patient.phlebotomist)) && (
+                  <>
+                    <span>•</span>
+                    <span>القائم بالسحب: <strong className="text-slate-700">{report.staff?.phlebotomist || report.patient.phlebotomist}</strong></span>
+                  </>
+                )}
+                {(report.staff?.showVisitCoordinator !== false && (report.staff?.visitCoordinator || report.patient.visitSpecialist)) && (
+                  <>
+                    <span>•</span>
+                    <span>مسؤول الزيارة: <strong className="text-slate-700">{report.staff?.visitCoordinator || report.patient.visitSpecialist}</strong></span>
+                  </>
+                )}
                 {(report.patient.clinicalDiagnosis || report.patient.clinicalHistory) && (
                   <>
                     <span>•</span>
@@ -1198,6 +1222,90 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                   onChange={(e) => handleUpdatePatient({ fastingHours: e.target.value ? Number(e.target.value) : undefined })}
                   className="w-full px-3 py-1.5 rounded-lg border border-slate-300 focus:border-rose-600 focus:outline-none font-mono"
                 />
+              </div>
+
+              {/* Phlebotomist (القائم بالسحب) */}
+              <div className="space-y-1">
+                <div className="flex items-center justify-between">
+                  <label className="font-bold text-slate-700 flex items-center gap-1.5">
+                    <input
+                      type="checkbox"
+                      checked={report.staff?.showPhlebotomist !== false}
+                      onChange={(e) => onUpdateReport({
+                        ...report,
+                        staff: { ...report.staff, showPhlebotomist: e.target.checked },
+                        updatedAt: new Date().toISOString()
+                      })}
+                      className="w-3.5 h-3.5 accent-teal-700 rounded cursor-pointer"
+                      title="تفعيل ظهور القائم بالسحب في التقرير"
+                    />
+                    <span>القائم بالسحب (تفعيل بالتقرير):</span>
+                  </label>
+                  {(report.staff?.phlebotomist || report.patient.phlebotomist) && (
+                    <button
+                      type="button"
+                      onClick={() => handleUpdatePatient({ phlebotomist: '' })}
+                      className="text-[11px] text-red-600 hover:text-red-800 font-bold cursor-pointer"
+                    >
+                      حذف
+                    </button>
+                  )}
+                </div>
+                <input
+                  type="text"
+                  list="rt-phlebotomist-options"
+                  placeholder="اسم القائم بالسحب..."
+                  value={report.staff?.phlebotomist !== undefined ? report.staff.phlebotomist : (report.patient.phlebotomist || '')}
+                  onChange={(e) => handleUpdatePatient({ phlebotomist: e.target.value })}
+                  className="w-full px-3 py-1.5 rounded-lg border border-slate-300 focus:border-teal-600 focus:outline-none font-bold"
+                />
+                <datalist id="rt-phlebotomist-options">
+                  {(staffSignatureOptions.phlebotomists || []).map(p => (
+                    <option key={p.id} value={p.name} />
+                  ))}
+                </datalist>
+              </div>
+
+              {/* Visit Coordinator (مسؤول الزيارة) */}
+              <div className="space-y-1">
+                <div className="flex items-center justify-between">
+                  <label className="font-bold text-slate-700 flex items-center gap-1.5">
+                    <input
+                      type="checkbox"
+                      checked={report.staff?.showVisitCoordinator !== false}
+                      onChange={(e) => onUpdateReport({
+                        ...report,
+                        staff: { ...report.staff, showVisitCoordinator: e.target.checked },
+                        updatedAt: new Date().toISOString()
+                      })}
+                      className="w-3.5 h-3.5 accent-amber-700 rounded cursor-pointer"
+                      title="تفعيل ظهور مسؤول الزيارة في التقرير"
+                    />
+                    <span>مسؤول الزيارة (تفعيل بالتقرير):</span>
+                  </label>
+                  {(report.staff?.visitCoordinator || report.patient.visitSpecialist) && (
+                    <button
+                      type="button"
+                      onClick={() => handleUpdatePatient({ visitSpecialist: '' })}
+                      className="text-[11px] text-red-600 hover:text-red-800 font-bold cursor-pointer"
+                    >
+                      حذف
+                    </button>
+                  )}
+                </div>
+                <input
+                  type="text"
+                  list="rt-visit-coordinator-options"
+                  placeholder="اسم مسؤول الزيارة..."
+                  value={report.staff?.visitCoordinator !== undefined ? report.staff.visitCoordinator : (report.patient.visitSpecialist || '')}
+                  onChange={(e) => handleUpdatePatient({ visitSpecialist: e.target.value })}
+                  className="w-full px-3 py-1.5 rounded-lg border border-slate-300 focus:border-amber-600 focus:outline-none font-bold"
+                />
+                <datalist id="rt-visit-coordinator-options">
+                  {(staffSignatureOptions.visitCoordinators || []).map(v => (
+                    <option key={v.id} value={v.name} />
+                  ))}
+                </datalist>
               </div>
 
               {/* Clinical Diagnosis / Indication */}
@@ -2312,7 +2420,16 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
       {/* Staff Signatures Box with Dropdown Selection & Add New Member */}
       <StaffSignaturesPicker
         signatures={report.staff}
-        onChange={(updated) => onUpdateReport({ ...report, staff: updated, updatedAt: new Date().toISOString() })}
+        onChange={(updated) => onUpdateReport({
+          ...report,
+          staff: updated,
+          patient: {
+            ...report.patient,
+            phlebotomist: updated.phlebotomist !== undefined ? updated.phlebotomist : report.patient.phlebotomist,
+            visitSpecialist: updated.visitCoordinator !== undefined ? updated.visitCoordinator : report.patient.visitSpecialist
+          },
+          updatedAt: new Date().toISOString()
+        })}
       />
 
       {/* Parameter Edit Modal */}

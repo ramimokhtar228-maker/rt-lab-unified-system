@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StaffMember, LabFacility, LabStaffSignatures, StaffRole, StaffDepartment, LabInfo } from '../types/lab';
 import { INITIAL_LAB_INFO } from '../data/staffAndFacilitiesData';
+import { resolveHandwrittenSignatureSrc } from '../assets/signatureImages';
 import { 
   Building2, 
   Users, 
@@ -90,6 +91,8 @@ export const StaffAndFacilitiesManager: React.FC<StaffAndFacilitiesManagerProps>
   const [includeOfficialSeal, setIncludeOfficialSeal] = useState(true);
   const [activeVerifierSig, setActiveVerifierSig] = useState(defaultSignatures.verifiedBy);
   const [activePathologistSig, setActivePathologistSig] = useState(defaultSignatures.pathologist);
+  const [activePhlebotomistSig, setActivePhlebotomistSig] = useState(defaultSignatures.phlebotomist || '');
+  const [activeVisitCoordSig, setActiveVisitCoordSig] = useState(defaultSignatures.visitCoordinator || '');
   const [saveSigToast, setSaveSigToast] = useState(false);
 
   // STAFF HANDLERS
@@ -272,9 +275,14 @@ export const StaffAndFacilitiesManager: React.FC<StaffAndFacilitiesManagerProps>
 
   const handleSaveSignatures = () => {
     onUpdateDefaultSignatures({
+      ...defaultSignatures,
       labChemist: activeChemistSig,
       verifiedBy: activeVerifierSig,
-      pathologist: activePathologistSig
+      pathologist: activePathologistSig,
+      phlebotomist: activePhlebotomistSig,
+      visitCoordinator: activeVisitCoordSig,
+      showPhlebotomist: activePhlebotomistSig.trim() !== '',
+      showVisitCoordinator: activeVisitCoordSig.trim() !== ''
     });
     setSaveSigToast(true);
     setTimeout(() => setSaveSigToast(false), 3000);
@@ -496,15 +504,15 @@ export const StaffAndFacilitiesManager: React.FC<StaffAndFacilitiesManagerProps>
               {/* Chemist Selector */}
               <div className="space-y-1.5 p-3 rounded-xl bg-slate-50 border border-slate-200">
                 <div className="flex justify-between items-center">
-                  <label className="font-bold text-slate-800 block">1. Lab CHEMIST (كيميائي الفحص):</label>
+                  <label className="font-bold text-slate-800 block">1. كيميائي المعمل:</label>
                 </div>
                 <select
                   value={selectedChemistId}
                   onChange={e => handleChemistSelect(e.target.value)}
                   className="w-full p-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold"
                 >
-                  <option value="">-- اختر كيميائي من الطاقم المسجل --</option>
-                  {staffMembers.filter(s => (s.role as string) === 'chemist' || (s.role as string) === 'technician' || true).map(s => (
+                  <option value="">-- اختر كيميائي المعمل --</option>
+                  {staffMembers.map(s => (
                     <option key={s.id} value={s.id}>{s.name} ({s.specialty})</option>
                   ))}
                   <option value="custom">-- إدخال اسم مخصص يدوياً --</option>
@@ -521,14 +529,14 @@ export const StaffAndFacilitiesManager: React.FC<StaffAndFacilitiesManagerProps>
               {/* Verifier Selector */}
               <div className="space-y-1.5 p-3 rounded-xl bg-slate-50 border border-slate-200">
                 <div className="flex justify-between items-center">
-                  <label className="font-bold text-slate-800 block">2. Verify By (مراجع النتائج والاعتماد):</label>
+                  <label className="font-bold text-slate-800 block">2. طبيب الوحده:</label>
                 </div>
                 <select
                   value={selectedVerifierId}
                   onChange={e => handleVerifierSelect(e.target.value)}
                   className="w-full p-2 bg-white border border-slate-300 rounded-lg text-xs font-semibold"
                 >
-                  <option value="">-- اختر مراجع تحاليل معتمد --</option>
+                  <option value="">-- اختر طبيب الوحده --</option>
                   {staffMembers.map(s => (
                     <option key={s.id} value={s.id}>{s.name} ({s.title})</option>
                   ))}
@@ -538,7 +546,7 @@ export const StaffAndFacilitiesManager: React.FC<StaffAndFacilitiesManagerProps>
                   type="text"
                   value={activeVerifierSig}
                   onChange={(e) => setActiveVerifierSig(e.target.value)}
-                  placeholder="صيغة اسم المراجع..."
+                  placeholder="صيغة اسم طبيب الوحده..."
                   className="w-full p-2 bg-white border border-slate-300 rounded-lg font-semibold text-slate-900 text-xs"
                 />
               </div>
@@ -546,7 +554,7 @@ export const StaffAndFacilitiesManager: React.FC<StaffAndFacilitiesManagerProps>
               {/* Pathologist Selector */}
               <div className="space-y-1.5 p-3 rounded-xl bg-rose-50/60 border border-rose-200">
                 <div className="flex justify-between items-center">
-                  <label className="font-bold text-rose-950 block">3. Consultant Pathologist (المدير الطبي):</label>
+                  <label className="font-bold text-rose-950 block">3. استشارى الباثولوجيا الإكلينيكية:</label>
                 </div>
                 <select
                   value={selectedPathologistId}
@@ -554,7 +562,7 @@ export const StaffAndFacilitiesManager: React.FC<StaffAndFacilitiesManagerProps>
                   className="w-full p-2 bg-white border border-rose-300 rounded-lg text-xs font-bold text-rose-950"
                 >
                   <option value="">-- اختر استشاري الباثولوجيا --</option>
-                  {staffMembers.filter(s => (s.role as string) === 'pathologist' || (s.role as string) === 'director' || true).map(s => (
+                  {staffMembers.map(s => (
                     <option key={s.id} value={s.id}>{s.name} ({s.specialty})</option>
                   ))}
                   <option value="custom">-- إدخال اسم مخصص يدوياً --</option>
@@ -565,6 +573,29 @@ export const StaffAndFacilitiesManager: React.FC<StaffAndFacilitiesManagerProps>
                   onChange={(e) => setActivePathologistSig(e.target.value)}
                   placeholder="صيغة اسم الاستشاري..."
                   className="w-full p-2 bg-white border border-rose-300 rounded-lg font-bold text-rose-950 text-xs"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <div className="space-y-1.5 p-3 rounded-xl bg-teal-50/50 border border-teal-200">
+                <label className="font-bold text-teal-950 block">4. القائم بالسحب:</label>
+                <input
+                  type="text"
+                  value={activePhlebotomistSig}
+                  onChange={(e) => setActivePhlebotomistSig(e.target.value)}
+                  placeholder="اسم القائم بالسحب بالتقرير..."
+                  className="w-full p-2 bg-white border border-teal-300 rounded-lg font-semibold text-slate-900 text-xs"
+                />
+              </div>
+              <div className="space-y-1.5 p-3 rounded-xl bg-amber-50/50 border border-amber-200">
+                <label className="font-bold text-amber-950 block">5. مسؤول الزيارة:</label>
+                <input
+                  type="text"
+                  value={activeVisitCoordSig}
+                  onChange={(e) => setActiveVisitCoordSig(e.target.value)}
+                  placeholder="اسم مسؤول الزيارة بالتقرير..."
+                  className="w-full p-2 bg-white border border-amber-300 rounded-lg font-semibold text-slate-900 text-xs"
                 />
               </div>
             </div>
@@ -581,28 +612,27 @@ export const StaffAndFacilitiesManager: React.FC<StaffAndFacilitiesManagerProps>
                 </span>
               </div>
 
-              <div className="bg-white rounded-lg p-3 text-slate-900 grid grid-cols-3 gap-3 text-center border border-slate-200 text-xs shadow-inner">
-                <div className="border-l border-slate-200 pl-2">
-                  <div className="text-[10px] font-bold text-slate-500 uppercase">Lab CHEMIST</div>
-                  <div className="font-serif italic font-bold text-slate-700 py-1">Approved</div>
-                  <div className="font-bold text-[11px] text-slate-900 truncate">{activeChemistSig || 'كيميائي المعمل'}</div>
-                </div>
-
-                <div className="border-l border-slate-200 pl-2">
-                  <div className="text-[10px] font-bold text-slate-500 uppercase">Verified By</div>
-                  <div className="font-serif italic font-bold text-slate-700 py-1">Quality Audit</div>
-                  <div className="font-bold text-[11px] text-slate-900 truncate">{activeVerifierSig || 'مراجع الجودة المخبرية'}</div>
-                </div>
-
-                <div className="pr-2">
-                  <div className="text-[10px] font-bold text-rose-900 uppercase">Consultant Pathologist</div>
-                  <div className="py-1">
-                    <span className="inline-block px-2 py-0.5 rounded border border-rose-800 bg-rose-50 text-rose-900 font-serif italic font-black text-[11px]">
-                      Dr. Rami Mokhtar
-                    </span>
-                  </div>
-                  <div className="font-bold text-[11px] text-rose-950 truncate">{activePathologistSig || 'استشاري الباثولوجيا'}</div>
-                </div>
+              <div className="bg-white rounded-lg p-3 text-slate-900 grid grid-cols-2 sm:grid-cols-5 gap-3 text-center border border-slate-200 text-xs shadow-inner" dir="rtl">
+                {[
+                  { label: 'كيميائي المعمل', name: activeChemistSig, key: defaultSignatures.chemistSignatureKey, cls: 'text-slate-600' },
+                  { label: 'طبيب الوحده', name: activeVerifierSig, key: defaultSignatures.verifierSignatureKey, cls: 'text-slate-600' },
+                  { label: 'استشارى الباثولوجيا الإكلينيكية', name: activePathologistSig, key: defaultSignatures.pathologistSignatureKey, cls: 'text-rose-900' },
+                  { label: 'القائم بالسحب', name: activePhlebotomistSig, key: defaultSignatures.phlebotomistSignatureKey, cls: 'text-teal-800' },
+                  { label: 'مسؤول الزيارة', name: activeVisitCoordSig, key: defaultSignatures.visitCoordinatorSignatureKey, cls: 'text-amber-800' }
+                ].map((slot, idx) => {
+                  const sigSrc = resolveHandwrittenSignatureSrc(slot.name, slot.key);
+                  return (
+                    <div key={idx} className="border-l last:border-l-0 border-slate-200 pl-2 flex flex-col items-center justify-end">
+                      <div className={`text-[10px] font-black mb-1 ${slot.cls}`}>{slot.label}</div>
+                      <div className="h-9 flex items-center justify-center">
+                        {sigSrc && <img src={sigSrc} alt={slot.name} className="max-h-8 w-auto object-contain" />}
+                      </div>
+                      <div className="font-bold text-[11px] text-slate-900 truncate max-w-full border-t border-slate-200 pt-1 w-full">
+                        {slot.name || 'غير مفعل'}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -844,11 +874,13 @@ export const StaffAndFacilitiesManager: React.FC<StaffAndFacilitiesManagerProps>
                     onChange={(e) => setStaffFormData({ ...staffFormData, role: e.target.value as StaffRole })}
                     className="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg font-bold"
                   >
-                    <option value="pathologist">استشاري باثولوجيا (Pathologist)</option>
-                    <option value="verifier">مراجعة وتدقيق إكلينيكي (Verifier)</option>
-                    <option value="chemist">كيميائي معمل (Lab Chemist)</option>
-                    <option value="phlebotomist">أخصائي سحب عينات (Phlebotomist)</option>
-                    <option value="receptionist">استقبال وتسجيل (Receptionist)</option>
+                    <option value="pathologist">استشارى الباثولوجيا الإكلينيكية</option>
+                    <option value="verifier">طبيب الوحده</option>
+                    <option value="chemist">كيميائي المعمل</option>
+                    <option value="phlebotomist">القائم بالسحب</option>
+                    <option value="visit_coordinator">مسؤول الزيارة</option>
+                    <option value="receptionist">استقبال وتسجيل</option>
+                    <option value="custom">عامل / وظيفة مخصصة</option>
                   </select>
                 </div>
 

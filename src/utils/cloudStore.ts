@@ -138,7 +138,11 @@ function mergeReportProfiles(winner: AnyRecord, other: AnyRecord): any[] {
   return [...mergedProfiles, ...extras];
 }
 
-export function mergeCollection(collection: string, local: AnyRecord[] = [], cloud: AnyRecord[] = []): AnyRecord[] {
+export function mergeCollection<T extends AnyRecord = AnyRecord>(
+  collection: string,
+  local: T[] = [],
+  cloud: T[] = []
+): T[] {
   const localList = Array.isArray(local) ? local.filter(Boolean) : [];
   const cloudList = Array.isArray(cloud) ? cloud.filter(Boolean) : [];
   const deletedRaw = getDeletedMap()[collection] || [];
@@ -156,7 +160,7 @@ export function mergeCollection(collection: string, local: AnyRecord[] = [], clo
     return filteredLocal.length === localList.length ? local : filteredLocal;
   }
 
-  const map = new Map<string, AnyRecord>();
+  const map = new Map<string, T>();
   const order: string[] = [];
   localList.forEach((record, index) => {
     const key = keyOf(record, index);
@@ -187,10 +191,19 @@ export function mergeCollection(collection: string, local: AnyRecord[] = [], clo
     const localStamp = recordStamp(existing);
     const winner = cloudStamp >= localStamp ? record : existing;
     const loser = winner === record ? existing : record;
-    const baseMerged = fillGaps(winner, loser);
-    const merged = collection === 'reports'
+    const strictKeepUserEmpty = (collection === 'packages' || collection === 'diagnosticProfiles') && cloudStamp !== localStamp;
+    const baseMerged = strictKeepUserEmpty
+      ? (() => {
+          const out: AnyRecord = { ...winner };
+          Object.keys(loser || {}).forEach(k => {
+            if (out[k] === undefined && loser[k] !== undefined) out[k] = loser[k];
+          });
+          return out;
+        })()
+      : fillGaps(winner, loser);
+    const merged = (collection === 'reports'
       ? { ...baseMerged, profiles: mergeReportProfiles(baseMerged, loser) }
-      : baseMerged;
+      : baseMerged) as T;
     if (JSON.stringify(merged) !== JSON.stringify(existing)) {
       map.set(key, merged);
       changed = true;
@@ -201,7 +214,7 @@ export function mergeCollection(collection: string, local: AnyRecord[] = [], clo
     const filteredLocal = localList.filter((record, index) => !deleted.has(record.id || keyOf(record, index)));
     return filteredLocal.length === localList.length ? local : filteredLocal;
   }
-  return order.filter(key => map.has(key)).map(key => map.get(key) as AnyRecord);
+  return order.filter(key => map.has(key)).map(key => map.get(key) as T);
 }
 
 /** طوابع زمنية للإعدادات المفردة (بيانات المعمل، التوقيعات، نسب الأرباح…) */

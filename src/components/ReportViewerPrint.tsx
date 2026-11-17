@@ -76,8 +76,8 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
       },
       staff: {
         ...DEFAULT_STAFF,
-        ...report.staff,
-        ...staffSignatures
+        ...staffSignatures,
+        ...report.staff
       }
     };
   }, [report, staffSignatures]);
@@ -290,7 +290,12 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
           onClose={() => setIsClientModalOpen(false)}
           patient={safeReport.patient}
           onSave={(updatedPatient) => {
-            updateReport(safeReport.id, { patient: updatedPatient });
+            const nextStaff = {
+              ...safeReport.staff,
+              ...(updatedPatient.phlebotomist !== undefined ? { phlebotomist: updatedPatient.phlebotomist, showPhlebotomist: Boolean(updatedPatient.phlebotomist.trim()) } : {}),
+              ...(updatedPatient.visitSpecialist !== undefined ? { visitCoordinator: updatedPatient.visitSpecialist, showVisitCoordinator: Boolean(updatedPatient.visitSpecialist.trim()) } : {})
+            };
+            updateReport(safeReport.id, { patient: updatedPatient, staff: nextStaff });
             const inv = incomeRecords.find(i => i.barcode === updatedPatient.barcode || i.labNumber === updatedPatient.labNumber || i.id === safeReport.invoiceId);
             if (inv) {
               updateIncomeRecord(inv.id, {
@@ -298,7 +303,8 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
                 patientPhone: updatedPatient.phone,
                 patientAge: updatedPatient.age,
                 patientGender: updatedPatient.gender,
-                referringDoctor: updatedPatient.referringDoctorName
+                referringDoctor: updatedPatient.referringDoctorName,
+                visitSpecialist: updatedPatient.visitSpecialist
               });
             }
           }}

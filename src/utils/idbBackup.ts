@@ -1,4 +1,12 @@
-import { LabReport, IncomeRecord } from '../types';
+import {
+  LabReport,
+  IncomeRecord,
+  ComprehensivePackage,
+  CatalogProfileTemplate,
+  InvoiceTestItem,
+  LabStaffSignatures,
+  StaffMember
+} from '../types';
 
 const IDB_NAME = 'rt_lab_idb_backup_v1';
 const IDB_VERSION = 1;
@@ -25,6 +33,12 @@ const REDUNDANT_LEGACY_KEYS = [
 export interface IdbSnapshotData {
   reports: LabReport[];
   incomeRecords: IncomeRecord[];
+  packages?: ComprehensivePackage[];
+  diagnosticProfiles?: CatalogProfileTemplate[];
+  testCatalog?: InvoiceTestItem[];
+  staffSignatures?: LabStaffSignatures;
+  staffSignatureOptions?: Record<string, any>;
+  staffMembers?: StaffMember[];
   updatedAt: string;
 }
 
@@ -140,7 +154,14 @@ export async function loadIdbSnapshot(): Promise<IdbSnapshotData | null> {
       req.onsuccess = () => {
         const val = req.result as IdbSnapshotData | undefined;
         try { db.close(); } catch {}
-        if (val && (Array.isArray(val.reports) || Array.isArray(val.incomeRecords))) {
+        if (
+          val &&
+          (Array.isArray(val.reports) ||
+            Array.isArray(val.incomeRecords) ||
+            Array.isArray(val.packages) ||
+            Array.isArray(val.diagnosticProfiles) ||
+            Array.isArray(val.staffMembers))
+        ) {
           resolve(val);
         } else {
           resolve(null);

@@ -1,6 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LabInfo, LabStaffSignatures } from '../types';
-import { Building2, Phone, MapPin, UserCheck, ShieldCheck, X, Check, RefreshCw, CreditCard, Sparkles } from 'lucide-react';
+import { DEFAULT_STAFF } from '../data/labCatalog';
+import {
+  HANDWRITTEN_SIGNATURE_OPTIONS,
+  HandwrittenSignatureKey,
+  resolveHandwrittenSignatureSrc
+} from '../assets/signatureImages';
+import { Building2, Phone, MapPin, UserCheck, X, Check, RefreshCw, Trash2 } from 'lucide-react';
 
 interface LabInfoEditModalProps {
   isOpen: boolean;
@@ -20,8 +26,15 @@ export const LabInfoEditModal: React.FC<LabInfoEditModalProps> = ({
   onUpdateStaffSignatures
 }) => {
   const [formData, setFormData] = useState<LabInfo>({ ...labInfo });
-  const [staffData, setStaffData] = useState<LabStaffSignatures>({ ...staffSignatures });
+  const [staffData, setStaffData] = useState<LabStaffSignatures>({ ...DEFAULT_STAFF, ...staffSignatures });
   const [savedSuccess, setSavedSuccess] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setFormData({ ...labInfo });
+      setStaffData({ ...DEFAULT_STAFF, ...staffSignatures });
+    }
+  }, [isOpen, labInfo, staffSignatures]);
 
   if (!isOpen) return null;
 
@@ -37,37 +50,137 @@ export const LabInfoEditModal: React.FC<LabInfoEditModalProps> = ({
 
   const handleResetToDefault = () => {
     setFormData({
-      labNameAr: "معامل RT للتحاليل الطبية والتشخيصية",
-      labNameEn: "RT Diagnostic Laboratories",
-      sloganAr: "التشخيص الصحيح يبدأ معنا · دقة، سرعة، وأمان تشخيصي",
-      sloganEn: "Accurate Diagnosis Starts With Us · Precision & Care",
-      supervisionAr: "أطباء واستشاريو كلية طب قصر العيني - جامعة القاهرة",
-      supervisionEn: "Kasr Al Ainy Faculty of Medicine Consultants - Cairo University",
-      accreditation: "ISO 15189 Certified Quality Management",
-      hotline: "01100874444",
-      phone: "01100874444 / 01100046841",
-      whatsapp: "01100874444",
-      mainAddress: "ميدان بهتيم برج صيدليه العزبى الدور الثالث امام الأسانسير شبرا الخيمه",
-      instapay: "ramirtlab@instapay",
-      vodafoneCash: "01098765432"
+      labNameAr: 'معامل RT للتحاليل الطبية والتشخيصية',
+      labNameEn: 'RT Diagnostic Laboratories',
+      sloganAr: 'التشخيص الصحيح يبدأ معنا · دقة، سرعة، وأمان تشخيصي',
+      sloganEn: 'Accurate Diagnosis Starts With Us · Precision & Care',
+      supervisionAr: 'أطباء واستشاريو كلية طب قصر العيني - جامعة القاهرة',
+      supervisionEn: 'Kasr Al Ainy Faculty of Medicine Consultants - Cairo University',
+      accreditation: 'ISO 15189 Certified Quality Management',
+      hotline: '01100874444',
+      phone: '01100874444 / 01100046841',
+      whatsapp: '01100874444',
+      mainAddress: 'ميدان بهتيم برج صيدليه العزبى الدور الثالث امام الأسانسير شبرا الخيمه',
+      instapay: 'ramirtlab@instapay',
+      vodafoneCash: '01098765432'
     });
-    setStaffData({
-      labChemist: "د/ عمر فؤاد القاضي",
-      verifiedBy: "أ/ سارة إبراهيم الشربيني",
-      pathologist: "أ.د. رامي مختار",
-      chemistTitle: "أخصائي أول كيمياء إكلينيكية وهرمونات",
-      verifierTitle: "مدير العمليات والجودة الإدارية",
-      pathologistTitle: "استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني",
-      chemistLicense: "EGY-SCI-88402",
-      verifierLicense: "EGY-MGT-11024",
-      pathologistLicense: "EGY-MED-48201"
-    });
+    setStaffData({ ...DEFAULT_STAFF });
+  };
+
+  const renderStaffSignatureCard = (
+    heading: string,
+    accentClass: string,
+    nameKey: keyof LabStaffSignatures,
+    titleKey: keyof LabStaffSignatures,
+    licenseKey: keyof LabStaffSignatures,
+    sigKeyField: keyof LabStaffSignatures,
+    showField: keyof LabStaffSignatures
+  ) => {
+    const nameVal = String(staffData[nameKey] ?? '');
+    const titleVal = String(staffData[titleKey] ?? '');
+    const licenseVal = String(staffData[licenseKey] ?? '');
+    const sigKeyVal = (staffData[sigKeyField] as HandwrittenSignatureKey | undefined) || 'auto';
+    const isVisible = staffData[showField] !== false;
+    const sigPreview = resolveHandwrittenSignatureSrc(nameVal, sigKeyVal);
+
+    return (
+      <div className={`bg-slate-900/80 border p-3 rounded-xl space-y-2 ${accentClass} ${!isVisible ? 'opacity-55' : ''}`}>
+        <div className="flex items-center justify-between gap-2">
+          <label className="flex items-center gap-1.5 text-[11px] font-bold text-white cursor-pointer">
+            <input
+              type="checkbox"
+              checked={isVisible}
+              onChange={(e) => setStaffData({ ...staffData, [showField]: e.target.checked })}
+              className="w-3.5 h-3.5 accent-rose-500 rounded cursor-pointer"
+            />
+            <span>{heading}</span>
+          </label>
+          <button
+            type="button"
+            onClick={() =>
+              setStaffData({
+                ...staffData,
+                [nameKey]: '',
+                [titleKey]: '',
+                [licenseKey]: '',
+                [sigKeyField]: 'none',
+                [showField]: false
+              })
+            }
+            className="text-[10px] text-rose-400 hover:text-rose-200 flex items-center gap-0.5 cursor-pointer"
+            title="حذف / إخفاء من الإمضاءات الافتراضية"
+          >
+            <Trash2 className="w-3 h-3" />
+            <span>حذف</span>
+          </button>
+        </div>
+
+        <div>
+          <label className="text-[10px] text-slate-400">الاسم:</label>
+          <input
+            type="text"
+            value={nameVal}
+            onChange={(e) =>
+              setStaffData({
+                ...staffData,
+                [nameKey]: e.target.value,
+                ...(e.target.value.trim() ? { [showField]: true } : {})
+              })
+            }
+            placeholder="الاسم كما يظهر بالتقرير..."
+            className="w-full bg-slate-800 border border-slate-700 rounded p-1.5 text-white font-bold"
+          />
+        </div>
+
+        <div>
+          <label className="text-[10px] text-slate-400">المسمى الوظيفي والدرجة:</label>
+          <input
+            type="text"
+            value={titleVal}
+            onChange={(e) => setStaffData({ ...staffData, [titleKey]: e.target.value })}
+            className="w-full bg-slate-800 border border-slate-700 rounded p-1.5 text-white text-xs"
+          />
+        </div>
+
+        <div>
+          <label className="text-[10px] text-slate-400">رقم الترخيص / الكود:</label>
+          <input
+            type="text"
+            value={licenseVal}
+            onChange={(e) => setStaffData({ ...staffData, [licenseKey]: e.target.value })}
+            className="w-full bg-slate-800 border border-slate-700 rounded p-1.5 text-slate-300 font-mono text-xs"
+          />
+        </div>
+
+        <div>
+          <label className="text-[10px] text-slate-400">الإمضاء اليدوي المرفق:</label>
+          <select
+            value={sigKeyVal}
+            onChange={(e) =>
+              setStaffData({ ...staffData, [sigKeyField]: e.target.value as HandwrittenSignatureKey })
+            }
+            className="w-full bg-slate-800 border border-slate-700 rounded p-1.5 text-slate-100 text-[11px] font-bold"
+          >
+            {HANDWRITTEN_SIGNATURE_OPTIONS.map((opt) => (
+              <option key={opt.key} value={opt.key}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {sigPreview && (
+          <div className="bg-white rounded-lg p-1.5 flex items-center justify-center h-10">
+            <img src={sigPreview} alt={nameVal} className="max-h-8 w-auto object-contain" />
+          </div>
+        )}
+      </div>
+    );
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200" dir="rtl">
       <div className="bg-slate-900 border border-slate-700 w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden text-slate-100">
-        
         {/* Header */}
         <div className="p-4 bg-gradient-to-r from-rose-950 via-slate-900 to-slate-900 border-b border-rose-900/40 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -93,7 +206,6 @@ export const LabInfoEditModal: React.FC<LabInfoEditModalProps> = ({
 
         {/* Form Body */}
         <div className="p-5 overflow-y-auto space-y-6 max-h-[72vh]">
-          
           {/* 1. Basic Lab Branding */}
           <div className="bg-slate-950/40 border border-slate-800 p-4 rounded-xl space-y-4">
             <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
@@ -232,114 +344,64 @@ export const LabInfoEditModal: React.FC<LabInfoEditModalProps> = ({
             </div>
           </div>
 
-          {/* 3. Official Lab Signatures */}
+          {/* 3. Official Lab Signatures in Arabic */}
           <div className="bg-slate-950/40 border border-slate-800 p-4 rounded-xl space-y-4">
             <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
               <UserCheck className="w-4 h-4 text-rose-400" />
-              <h3 className="text-sm font-bold text-white">صيغ الإمضاءات الرسمية المعتمدة (تظهر أسفل كل تقرير وفاتورة)</h3>
+              <h3 className="text-sm font-bold text-white">صيغ الإمضاءات الرسمية المعتمدة بالعربية (تظهر أسفل كل تقرير وفاتورة)</h3>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-              
-              {/* Lab Chemist */}
-              <div className="bg-slate-900/80 border border-slate-700/80 p-3 rounded-xl space-y-2">
-                <span className="text-[11px] font-bold text-rose-300 block uppercase">1. أخصائي المعمل (Lab Chemist)</span>
-                <div>
-                  <label className="text-[10px] text-slate-400">الاسم:</label>
-                  <input
-                    type="text"
-                    value={staffData.labChemist}
-                    onChange={e => setStaffData({ ...staffData, labChemist: e.target.value })}
-                    className="w-full bg-slate-800 border border-slate-700 rounded p-1.5 text-white font-bold"
-                  />
-                </div>
-                <div>
-                  <label className="text-[10px] text-slate-400">المسمى الوظيفي والدرجة:</label>
-                  <input
-                    type="text"
-                    value={staffData.chemistTitle || ''}
-                    onChange={e => setStaffData({ ...staffData, chemistTitle: e.target.value })}
-                    className="w-full bg-slate-800 border border-slate-700 rounded p-1.5 text-white text-xs"
-                  />
-                </div>
-                <div>
-                  <label className="text-[10px] text-slate-400">رقم ترخيص مزاولة المهنة:</label>
-                  <input
-                    type="text"
-                    value={staffData.chemistLicense || ''}
-                    onChange={e => setStaffData({ ...staffData, chemistLicense: e.target.value })}
-                    className="w-full bg-slate-800 border border-slate-700 rounded p-1.5 text-slate-300 font-mono text-xs"
-                  />
-                </div>
-              </div>
+              {renderStaffSignatureCard(
+                '1. كيميائي المعمل',
+                'border-slate-700/80',
+                'labChemist',
+                'chemistTitle',
+                'chemistLicense',
+                'chemistSignatureKey',
+                'showChemist'
+              )}
+              {renderStaffSignatureCard(
+                '2. طبيب الوحده',
+                'border-blue-800/70',
+                'verifiedBy',
+                'verifierTitle',
+                'verifierLicense',
+                'verifierSignatureKey',
+                'showVerifier'
+              )}
+              {renderStaffSignatureCard(
+                '3. استشارى الباثولوجيا الإكلينيكية',
+                'border-rose-900/70 bg-rose-950/20',
+                'pathologist',
+                'pathologistTitle',
+                'pathologistLicense',
+                'pathologistSignatureKey',
+                'showPathologist'
+              )}
+            </div>
 
-              {/* Quality Audit Verifier */}
-              <div className="bg-slate-900/80 border border-slate-700/80 p-3 rounded-xl space-y-2">
-                <span className="text-[11px] font-bold text-blue-300 block uppercase">2. مراجعة الجودة والتشغيل (Quality Audit)</span>
-                <div>
-                  <label className="text-[10px] text-slate-400">الاسم:</label>
-                  <input
-                    type="text"
-                    value={staffData.verifiedBy}
-                    onChange={e => setStaffData({ ...staffData, verifiedBy: e.target.value })}
-                    className="w-full bg-slate-800 border border-slate-700 rounded p-1.5 text-white font-bold"
-                  />
-                </div>
-                <div>
-                  <label className="text-[10px] text-slate-400">المسمى الوظيفي والدرجة:</label>
-                  <input
-                    type="text"
-                    value={staffData.verifierTitle || ''}
-                    onChange={e => setStaffData({ ...staffData, verifierTitle: e.target.value })}
-                    className="w-full bg-slate-800 border border-slate-700 rounded p-1.5 text-white text-xs"
-                  />
-                </div>
-                <div>
-                  <label className="text-[10px] text-slate-400">رقم ترخيص / كود المراجع:</label>
-                  <input
-                    type="text"
-                    value={staffData.verifierLicense || ''}
-                    onChange={e => setStaffData({ ...staffData, verifierLicense: e.target.value })}
-                    className="w-full bg-slate-800 border border-slate-700 rounded p-1.5 text-slate-300 font-mono text-xs"
-                  />
-                </div>
-              </div>
-
-              {/* Consultant Pathologist */}
-              <div className="bg-slate-900/80 border border-rose-900/60 p-3 rounded-xl space-y-2 bg-rose-950/20">
-                <span className="text-[11px] font-bold text-rose-400 block uppercase">3. استشاري الباثولوجيا الإكلينيكية (CEO)</span>
-                <div>
-                  <label className="text-[10px] text-slate-400">الاسم واللقب العلمي:</label>
-                  <input
-                    type="text"
-                    value={staffData.pathologist}
-                    onChange={e => setStaffData({ ...staffData, pathologist: e.target.value })}
-                    className="w-full bg-slate-800 border border-rose-800/80 rounded p-1.5 text-rose-200 font-black"
-                  />
-                </div>
-                <div>
-                  <label className="text-[10px] text-slate-400">المسمى الوظيفي واستشاري الكلية:</label>
-                  <input
-                    type="text"
-                    value={staffData.pathologistTitle || ''}
-                    onChange={e => setStaffData({ ...staffData, pathologistTitle: e.target.value })}
-                    className="w-full bg-slate-800 border border-rose-800/80 rounded p-1.5 text-white text-xs"
-                  />
-                </div>
-                <div>
-                  <label className="text-[10px] text-slate-400">رقم القيد والترخيص الطبي:</label>
-                  <input
-                    type="text"
-                    value={staffData.pathologistLicense || ''}
-                    onChange={e => setStaffData({ ...staffData, pathologistLicense: e.target.value })}
-                    className="w-full bg-slate-800 border border-rose-800/80 rounded p-1.5 text-rose-300 font-mono text-xs font-bold"
-                  />
-                </div>
-              </div>
-
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs pt-2 border-t border-slate-800">
+              {renderStaffSignatureCard(
+                '4. القائم بالسحب',
+                'border-teal-800/70',
+                'phlebotomist',
+                'phlebotomistTitle',
+                'phlebotomistLicense',
+                'phlebotomistSignatureKey',
+                'showPhlebotomist'
+              )}
+              {renderStaffSignatureCard(
+                '5. مسؤول الزيارة',
+                'border-amber-800/70',
+                'visitCoordinator',
+                'visitCoordinatorTitle',
+                'visitCoordinatorLicense',
+                'visitCoordinatorSignatureKey',
+                'showVisitCoordinator'
+              )}
             </div>
           </div>
-
         </div>
 
         {/* Footer actions */}
@@ -372,7 +434,6 @@ export const LabInfoEditModal: React.FC<LabInfoEditModalProps> = ({
             </button>
           </div>
         </div>
-
       </div>
     </div>
   );

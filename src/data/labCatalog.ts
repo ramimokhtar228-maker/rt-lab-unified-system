@@ -7,44 +7,79 @@ import { CatalogProfileTemplate, LabStaffSignatures, StaffOptionItem } from '../
 import { OGTT_CATALOG_TEMPLATE } from '../utils/ogttEngine';
 
 export const DEFAULT_STAFF: LabStaffSignatures = {
-  labChemist: "Dr. Omar Fouad El-Kady",
-  verifiedBy: "Sara Ibrahim El-Sherbiny",
-  pathologist: "Prof. Dr. Rami Mokhtar",
-  chemistTitle: "Senior Clinical Chemist - Hormones",
-  verifierTitle: "Operations & Quality Manager",
-  pathologistTitle: "Consultant Clinical Pathologist - Kasr Al Ainy",
+  labChemist: "د/ رحاب علي",
+  verifiedBy: "د/ عمر فؤاد القاضي",
+  pathologist: "أ.د/ رامي مختار",
+  chemistTitle: "أخصائي تحاليل طبية",
+  verifierTitle: "طبيب الوحدة",
+  pathologistTitle: "استشارى الباثولوجيا الإكلينيكية — قصر العيني",
   chemistLicense: "EGY-SCI-88402",
-  verifierLicense: "EGY-MGT-11024",
-  pathologistLicense: "EGY-MED-48201"
+  verifierLicense: "EGY-MED-11024",
+  pathologistLicense: "EGY-MED-48201",
+  chemistSignatureKey: "rehab",
+  verifierSignatureKey: "auto",
+  pathologistSignatureKey: "rami",
+  showChemist: true,
+  showVerifier: true,
+  showPathologist: true,
+  phlebotomist: "أ/ يوسف طارق المنشاوي",
+  phlebotomistTitle: "أخصائي سحب العينات",
+  phlebotomistLicense: "EGY-NUR-77651",
+  phlebotomistSignatureKey: "auto",
+  showPhlebotomist: true,
+  visitCoordinator: "أ/ هدى السيد رضوان",
+  visitCoordinatorTitle: "مسؤول تنسيق الزيارة",
+  visitCoordinatorLicense: "EGY-VST-33201",
+  visitCoordinatorSignatureKey: "auto",
+  showVisitCoordinator: true,
+  extraSignatures: [],
+  hideSignatures: false
 };
 
-export const INITIAL_STAFF_SIGNATURE_OPTIONS: {
+export interface StaffSignatureOptionsMap {
   chemists: StaffOptionItem[];
   verifiers: StaffOptionItem[];
   consultants: StaffOptionItem[];
-} = {
+  phlebotomists?: StaffOptionItem[];
+  visitCoordinators?: StaffOptionItem[];
+  customWorkers?: StaffOptionItem[];
+}
+
+export const INITIAL_STAFF_SIGNATURE_OPTIONS: StaffSignatureOptionsMap = {
   chemists: [
-    { id: 'c-1', name: 'Dr. Omar Fouad El-Kady', title: 'Senior Clinical Chemist - Hormones', role: 'chemist', license: 'EGY-SCI-88402' },
-    { id: 'c-2', name: 'Dr. Aya Mahmoud El-Baz', title: 'Specialist - Hematology, Immunology & Cultures', role: 'chemist', license: 'EGY-SCI-91204' },
-    { id: 'c-3', name: 'Dr. Karim Hassan El-Deeb', title: 'Medical Laboratory Chemist', role: 'chemist', license: 'EGY-SCI-65432' },
-    { id: 'c-4', name: 'Dr. Heba El-Shennawy', title: 'Laboratory Chemist - STAT Testing', role: 'chemist', license: 'EGY-SCI-77210' }
+    { id: 'c-0', name: 'د/ رحاب علي', title: 'أخصائي تحاليل طبية', role: 'chemist', license: 'EGY-SCI-88402', signatureKey: 'rehab' },
+    { id: 'c-1', name: 'د/ عمر فؤاد القاضي', title: 'أخصائي أول كيمياء إكلينيكية وهرمونات', role: 'chemist', license: 'EGY-SCI-88405', signatureKey: 'auto' },
+    { id: 'c-2', name: 'د/ آية محمود الباز', title: 'أخصائية أمراض الدم والمناعة والمزارع', role: 'chemist', license: 'EGY-SCI-91204', signatureKey: 'auto' },
+    { id: 'c-3', name: 'د/ كريم حسن الديب', title: 'كيميائي تحاليل طبية وتشخيصية', role: 'chemist', license: 'EGY-SCI-65432', signatureKey: 'auto' },
+    { id: 'c-4', name: 'د/ هبة الشناوي', title: 'كيميائي المعمل — الفحوصات الطارئة', role: 'chemist', license: 'EGY-SCI-77210', signatureKey: 'auto' }
   ],
   verifiers: [
-    { id: 'v-1', name: 'Sara Ibrahim El-Sherbiny', title: 'Operations & Quality Manager', role: 'verifier', license: 'EGY-MGT-11024' },
-    { id: 'v-2', name: 'Dr. Doaa El-Shafei', title: 'Clinical Quality Reviewer', role: 'verifier', license: 'EGY-MGT-55412' },
-    { id: 'v-3', name: 'Dr. Mostafa El-Awady', title: 'Consultant - Result Review & Calibration', role: 'verifier', license: 'EGY-MGT-33109' }
+    { id: 'v-1', name: 'د/ عمر فؤاد القاضي', title: 'طبيب الوحدة والمراجعة الإكلينيكية', role: 'verifier', license: 'EGY-MED-11024', signatureKey: 'auto' },
+    { id: 'v-2', name: 'د/ دعاء الشافعي', title: 'طبيب الوحدة — مراجعة الجودة', role: 'verifier', license: 'EGY-MED-55412', signatureKey: 'auto' },
+    { id: 'v-3', name: 'د/ مصطفى العوضي', title: 'طبيب الوحدة — اعتماد النتائج', role: 'verifier', license: 'EGY-MED-33109', signatureKey: 'auto' }
   ],
   consultants: [
-    { id: 'p-1', name: 'Prof. Dr. Rami Mokhtar', title: 'Consultant Clinical Pathologist - Kasr Al Ainy', role: 'consultant', license: 'EGY-MED-48201' },
-    { id: 'p-2', name: 'Dr. Sameh Abdel Razek', title: 'Consultant Hematologist & Clinical Pathologist', role: 'consultant', license: 'EGY-MED-39108' }
-  ]
+    { id: 'p-1', name: 'أ.د/ رامي مختار', title: 'استشارى الباثولوجيا الإكلينيكية — كلية طب قصر العيني', role: 'consultant', license: 'EGY-MED-48201', signatureKey: 'rami' },
+    { id: 'p-2', name: 'د/ سامح عبد الرازق', title: 'استشارى أمراض الدم والباثولوجيا الإكلينيكية', role: 'consultant', license: 'EGY-MED-39108', signatureKey: 'auto' }
+  ],
+  phlebotomists: [
+    { id: 'ph-1', name: 'أ/ يوسف طارق المنشاوي', title: 'أخصائي سحب العينات والزيارات المنزلية', role: 'phlebotomist', license: 'EGY-NUR-77651', signatureKey: 'auto' },
+    { id: 'ph-2', name: 'أ/ محمد السيد عبد الله', title: 'فني سحب عينات — الفرع الرئيسي', role: 'phlebotomist', license: 'EGY-NUR-55210', signatureKey: 'auto' }
+  ],
+  visitCoordinators: [
+    { id: 'vc-1', name: 'أ/ هدى السيد رضوان', title: 'مسؤول الزيارة وخدمة المرضى', role: 'visit_coordinator', license: 'EGY-VST-33201', signatureKey: 'auto' },
+    { id: 'vc-2', name: 'أ/ مريم عبد الله توفيق', title: 'مسؤول تنسيق الزيارات المنزلية', role: 'visit_coordinator', license: 'EGY-VST-44102', signatureKey: 'auto' }
+  ],
+  customWorkers: []
 };
 
 export const STAFF_OPTIONS = {
   chemists: INITIAL_STAFF_SIGNATURE_OPTIONS.chemists.map(c => `${c.name} - ${c.title}`),
   verifiers: INITIAL_STAFF_SIGNATURE_OPTIONS.verifiers.map(v => `${v.name} - ${v.title}`),
   consultants: INITIAL_STAFF_SIGNATURE_OPTIONS.consultants.map(p => `${p.name} - ${p.title}`),
-  pathologists: INITIAL_STAFF_SIGNATURE_OPTIONS.consultants.map(p => `${p.name} - ${p.title}`)
+  pathologists: INITIAL_STAFF_SIGNATURE_OPTIONS.consultants.map(p => `${p.name} - ${p.title}`),
+  phlebotomists: (INITIAL_STAFF_SIGNATURE_OPTIONS.phlebotomists || []).map(p => `${p.name} - ${p.title}`),
+  visitCoordinators: (INITIAL_STAFF_SIGNATURE_OPTIONS.visitCoordinators || []).map(p => `${p.name} - ${p.title}`)
 };
 
 export const COMMON_INTERPRETATIONS: { [key: string]: string[] } = {

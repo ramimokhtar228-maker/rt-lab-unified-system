@@ -5,6 +5,7 @@ import { DEFAULT_STAFF } from '../data/labCatalog';
 import { DISEASE_ILLUSTRATIONS } from '../data/diseaseIllustrations';
 import { isOgttProfile, extractOgttData, generateOgttSvgChart, generateOgttProtocolHtml } from './ogttEngine';
 import { isCBCProfile, extractCBCData, generateCbcRbcSvgChart, generateCbcPltSvgChart } from './cbcEngine';
+import { resolveHandwrittenSignatureSrc } from '../assets/signatureImages';
 
 /**
  * Single source of truth for the patient-facing report.
@@ -167,11 +168,7 @@ export function formatStaffTitle(raw?: string | null, defaultTitle = ''): string
   return str || defaultTitle;
 }
 
-/** Generates realistic signature line flourish */
-function renderRealisticSignature(name: string, isConsultant?: boolean): string {
-  const strokeColor = isConsultant ? '#881337' : '#0f172a';
-  return '<svg class="sig-svg" viewBox="0 0 160 40" style="width: 110px; height: 30px; stroke: ' + strokeColor + '; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;"><path d="M 14 26 C 24 12, 36 10, 46 22 C 54 32, 68 18, 80 16 C 94 14, 108 26, 124 18 C 136 12, 146 16, 152 22" /><path d="M 18 35 C 45 33, 85 35, 136 30" stroke-width="1.2" opacity="0.75" /></svg>';
-}
+
 
 /** Known Arabic staff names/titles already saved in older data -> English. */
 const KNOWN: Record<string, string> = {
@@ -416,6 +413,16 @@ export const REPORT_CSS = `
     font-size: 13.5px;
     font-weight: 800;
     color: ${BRAND.navy};
+  }
+  .rt-patient .f-ar, .rt-patient .f-ar * {
+    font-family: 'Cairo', 'Inter', sans-serif !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+  }
+  .rt-patient .f-ar label {
+    font-size: 9px;
+    font-weight: 800;
+    color: ${BRAND.navyBlue};
   }
 
   /* Profile Title Bar */
@@ -904,13 +911,18 @@ export const REPORT_CSS = `
     min-height: 5mm;
   }
 
-  /* Signatures Section: clean, customizable, 1 to 3 columns */
+  /* Signatures Section: Arabic RTL, handwritten PNGs, dynamic workers */
+  .rt-sign, .rt-sign * {
+    font-family: 'Cairo', 'Inter', sans-serif !important;
+    letter-spacing: 0 !important;
+  }
   .rt-sign {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6mm;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4mm;
     margin-top: 4mm;
     padding-top: 2mm;
+    direction: rtl;
     page-break-inside: avoid;
     break-inside: avoid;
   }
@@ -919,58 +931,69 @@ export const REPORT_CSS = `
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-width: 0;
   }
   .rt-sign .sig-handwritten {
-    height: 9mm;
+    height: 12mm;
+    width: 100%;
     display: flex;
     align-items: flex-end;
     justify-content: center;
     margin-bottom: 1mm;
   }
+  .rt-sign .sig-img {
+    max-height: 11.5mm;
+    max-width: 42mm;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+  }
   .rt-sign .line {
-    width: 90%;
+    width: 92%;
     height: 1px;
     border-bottom: 1.5px solid ${BRAND.navy};
-    margin: 0 auto 2mm;
+    margin: 0 auto 1.5mm;
   }
   .rt-sign .role {
-    font-size: 8.5px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: ${BRAND.muted};
-    font-weight: 700;
+    font-size: 9.5px;
+    color: ${BRAND.navyBlue};
+    font-weight: 800;
+    line-height: 1.3;
   }
   .rt-sign .nm {
-    font-size: 11.5px;
-    font-weight: 800;
+    font-size: 11px;
+    font-weight: 900;
     color: ${BRAND.navy};
     margin-top: 1px;
+    line-height: 1.35;
   }
   .rt-sign .tt {
     font-size: 8.5px;
     color: ${BRAND.muted};
-    margin-top: 0.5px;
+    margin-top: 1px;
     line-height: 1.3;
+    font-weight: 600;
   }
   .rt-sign .lic {
     font-size: 8px;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'JetBrains Mono', 'Cairo', monospace !important;
     color: ${BRAND.navyBlue};
-    margin-top: 1px;
-    font-weight: 600;
+    margin-top: 1.5px;
+    font-weight: 700;
+    direction: ltr;
   }
   .rt-sign .stamp-box {
     margin-top: 2mm;
     border: 1.5px dashed ${BRAND.red};
     border-radius: 4px;
-    padding: 1.5px 6px;
+    padding: 2px 7px;
     background: ${BRAND.redSoft};
     font-size: 7.5px;
-    line-height: 1.2;
+    line-height: 1.35;
     color: ${BRAND.redDark};
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
+    font-weight: 800;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1089,100 +1112,151 @@ export const REPORT_CSS = `
 `;
 
 function signatureBlock(report: LabReport, lab?: LabInfo): string {
-  const s = report.staff || (lab as any)?.staffSignatures || DEFAULT_STAFF;
-  
-  // If report explicitly hides signatures, omit
-  if ((s as any)?.hideSignatures === true || (report as any)?.hideSignatures === true) {
+  const labStaff = (lab as any)?.staffSignatures || {};
+  const repStaff = report.staff || {};
+  const s: Record<string, any> = {
+    ...DEFAULT_STAFF,
+    ...labStaff,
+    ...repStaff
+  };
+
+  if (s.hideSignatures === true || (report as any)?.hideSignatures === true) {
     return '';
   }
 
-  const defaultChemist = (lab as any)?.staffSignatures?.labChemist || DEFAULT_STAFF.labChemist;
-  const defaultChemistTitle = (lab as any)?.staffSignatures?.chemistTitle || DEFAULT_STAFF.chemistTitle;
-  const defaultChemistLicense = (lab as any)?.staffSignatures?.chemistLicense || DEFAULT_STAFF.chemistLicense;
+  interface SigBlockItem {
+    role: string;
+    name: string;
+    title?: string;
+    license?: string;
+    signatureKey?: string;
+    isConsultant?: boolean;
+  }
 
-  const defaultVerifier = (lab as any)?.staffSignatures?.verifiedBy || DEFAULT_STAFF.verifiedBy;
-  const defaultVerifierTitle = (lab as any)?.staffSignatures?.verifierTitle || DEFAULT_STAFF.verifierTitle;
-  const defaultVerifierLicense = (lab as any)?.staffSignatures?.verifierLicense || DEFAULT_STAFF.verifierLicense;
+  const blocks: SigBlockItem[] = [];
 
-  const defaultPathologist = (lab as any)?.staffSignatures?.pathologist || DEFAULT_STAFF.pathologist;
-  const defaultPathologistTitle = (lab as any)?.staffSignatures?.pathologistTitle || DEFAULT_STAFF.pathologistTitle;
-  const defaultPathologistLicense = (lab as any)?.staffSignatures?.pathologistLicense || DEFAULT_STAFF.pathologistLicense;
-
-  const blocks: { role: string; name: string; title: string; license?: string; isConsultant?: boolean }[] = [];
-
-  const rawChemist = s.labChemist || defaultChemist;
-  if (rawChemist && (s as any).showChemist !== false) {
+  const rawChemist = repStaff.labChemist !== undefined ? repStaff.labChemist : (labStaff.labChemist ?? DEFAULT_STAFF.labChemist);
+  if (String(rawChemist || '').trim() && s.showChemist !== false) {
     blocks.push({
-      role: 'Laboratory Chemist',
-      name: formatStaffName(rawChemist, 'Dr. Omar Fouad El-Kady'),
-      title: formatStaffTitle(s.chemistTitle || defaultChemistTitle, 'Senior Clinical Chemist'),
-      license: s.chemistLicense || defaultChemistLicense
+      role: 'كيميائي المعمل',
+      name: String(rawChemist).trim(),
+      title: String(s.chemistTitle || DEFAULT_STAFF.chemistTitle || '').trim(),
+      license: s.chemistLicense || DEFAULT_STAFF.chemistLicense,
+      signatureKey: s.chemistSignatureKey || 'auto'
     });
   }
 
-  const rawVerifier = s.verifiedBy || defaultVerifier;
-  if (rawVerifier && (s as any).showVerifier !== false) {
+  const rawVerifier = repStaff.verifiedBy !== undefined ? repStaff.verifiedBy : (labStaff.verifiedBy ?? DEFAULT_STAFF.verifiedBy);
+  if (String(rawVerifier || '').trim() && s.showVerifier !== false) {
     blocks.push({
-      role: 'Quality Verified By',
-      name: formatStaffName(rawVerifier, 'Sara Ibrahim El-Sherbiny'),
-      title: formatStaffTitle(s.verifierTitle || defaultVerifierTitle, 'Operations & Quality Manager'),
-      license: s.verifierLicense || defaultVerifierLicense
+      role: 'طبيب الوحده',
+      name: String(rawVerifier).trim(),
+      title: String(s.verifierTitle || DEFAULT_STAFF.verifierTitle || '').trim(),
+      license: s.verifierLicense || DEFAULT_STAFF.verifierLicense,
+      signatureKey: s.verifierSignatureKey || 'auto'
     });
   }
 
-  const rawPathologist = s.pathologist || defaultPathologist;
-  if (rawPathologist && (s as any).showPathologist !== false) {
+  const rawPathologist = repStaff.pathologist !== undefined ? repStaff.pathologist : (labStaff.pathologist ?? DEFAULT_STAFF.pathologist);
+  if (String(rawPathologist || '').trim() && s.showPathologist !== false) {
     blocks.push({
-      role: 'Consultant Clinical Pathologist',
-      name: formatStaffName(rawPathologist, 'Prof. Dr. Rami Mokhtar'),
-      title: formatStaffTitle(s.pathologistTitle || defaultPathologistTitle, 'Consultant Clinical Pathologist - Kasr Al Ainy'),
-      license: s.pathologistLicense || defaultPathologistLicense,
+      role: 'استشارى الباثولوجيا الإكلينيكية',
+      name: String(rawPathologist).trim(),
+      title: String(s.pathologistTitle || DEFAULT_STAFF.pathologistTitle || '').trim(),
+      license: s.pathologistLicense || DEFAULT_STAFF.pathologistLicense,
+      signatureKey: s.pathologistSignatureKey || 'auto',
       isConsultant: true
     });
   }
 
-  // Financial signature if enabled
-  if ((s as any).financialDirector && (s as any).showFinancialSignature === true) {
+  const rawPhlebotomist =
+    repStaff.phlebotomist !== undefined
+      ? repStaff.phlebotomist
+      : (report.patient?.phlebotomist || labStaff.phlebotomist || DEFAULT_STAFF.phlebotomist || '');
+  if (String(rawPhlebotomist || '').trim() && s.showPhlebotomist !== false) {
     blocks.push({
-      role: 'Chief Financial Officer',
-      name: formatStaffName((s as any).financialDirector, 'Maged Hosny El-Sharkawy'),
-      title: formatStaffTitle((s as any).financialTitle, 'Chief Financial Officer (CFO)'),
-      license: (s as any).financialLicense
+      role: 'القائم بالسحب',
+      name: String(rawPhlebotomist).trim(),
+      title: String(s.phlebotomistTitle || DEFAULT_STAFF.phlebotomistTitle || 'أخصائي سحب العينات').trim(),
+      license: s.phlebotomistLicense || DEFAULT_STAFF.phlebotomistLicense,
+      signatureKey: s.phlebotomistSignatureKey || 'auto'
     });
   }
 
-  // HR signature if enabled
-  if ((s as any).hrDirector && (s as any).showHrSignature === true) {
+  const rawVisitCoordinator =
+    repStaff.visitCoordinator !== undefined
+      ? repStaff.visitCoordinator
+      : (report.patient?.visitSpecialist || report.patient?.branchRepresentative || labStaff.visitCoordinator || DEFAULT_STAFF.visitCoordinator || '');
+  if (String(rawVisitCoordinator || '').trim() && s.showVisitCoordinator !== false) {
     blocks.push({
-      role: 'HR Director',
-      name: formatStaffName((s as any).hrDirector, 'Ahmed Fathy El-Gammal'),
-      title: formatStaffTitle((s as any).hrTitle, 'Human Resources Director'),
-      license: (s as any).hrLicense
+      role: 'مسؤول الزيارة',
+      name: String(rawVisitCoordinator).trim(),
+      title: String(s.visitCoordinatorTitle || DEFAULT_STAFF.visitCoordinatorTitle || 'مسؤول تنسيق الزيارة').trim(),
+      license: s.visitCoordinatorLicense || DEFAULT_STAFF.visitCoordinatorLicense,
+      signatureKey: s.visitCoordinatorSignatureKey || 'auto'
+    });
+  }
+
+  // Custom extra workers added directly to report or default staff
+  const extraList = Array.isArray(s.extraSignatures) ? s.extraSignatures : [];
+  extraList.forEach((slot: any) => {
+    if (slot && slot.isActive !== false && (String(slot.name || '').trim() || String(slot.roleTitle || '').trim())) {
+      blocks.push({
+        role: String(slot.roleTitle || 'عامل بالمعمل').trim(),
+        name: String(slot.name || '').trim(),
+        title: slot.subtitle ? String(slot.subtitle).trim() : undefined,
+        license: slot.license ? String(slot.license).trim() : undefined,
+        signatureKey: slot.signatureKey || 'auto'
+      });
+    }
+  });
+
+  // Financial & HR signatures if explicitly enabled
+  if (s.financialDirector && s.showFinancialSignature === true) {
+    blocks.push({
+      role: 'المدير المالي',
+      name: String(s.financialDirector).trim(),
+      title: s.financialTitle ? String(s.financialTitle).trim() : 'المدير المالي (CFO)',
+      license: s.financialLicense,
+      signatureKey: 'none'
+    });
+  }
+
+  if (s.hrDirector && s.showHrSignature === true) {
+    blocks.push({
+      role: 'مدير الموارد البشرية',
+      name: String(s.hrDirector).trim(),
+      title: s.hrTitle ? String(s.hrTitle).trim() : 'مدير الموارد البشرية',
+      license: s.hrLicense,
+      signatureKey: 'none'
     });
   }
 
   if (!blocks.length) return '';
 
-  return `<div class="rt-sign" style="grid-template-columns: repeat(${blocks.length}, 1fr);">
+  const colCount = blocks.length <= 5 ? blocks.length : 4;
+
+  return `<div class="rt-sign" dir="rtl" style="grid-template-columns: repeat(${colCount}, minmax(0, 1fr));">
     ${blocks
-      .map(
-        b => `<div class="s">
+      .map(b => {
+        const sigSrc = resolveHandwrittenSignatureSrc(b.name, b.signatureKey);
+        return `<div class="s">
           <div class="sig-handwritten">
-            ${renderRealisticSignature(b.name, b.isConsultant)}
+            ${sigSrc ? `<img src="${sigSrc}" alt="${esc(b.name)}" class="sig-img" />` : ''}
           </div>
           <div class="line"></div>
           <div class="role">${esc(b.role)}</div>
-          <div class="nm">${esc(b.name)}</div>
+          ${b.name ? `<div class="nm">${esc(b.name)}</div>` : ''}
           ${b.title ? `<div class="tt">${esc(b.title)}</div>` : ''}
-          ${b.license ? `<div class="lic">Lic: ${esc(b.license)}</div>` : ''}
+          ${b.license ? `<div class="lic">ترخيص: ${esc(b.license)}</div>` : ''}
           ${b.isConsultant ? `
             <div class="stamp-box">
-              <span>ELECTRONICALLY VERIFIED</span>
-              <strong>RT-LAB CLINICAL PATHOLOGY</strong>
+              <span>معتمد وموثق إلكترونياً</span>
+              <strong>معامل RT للتحاليل الطبية</strong>
             </div>
           ` : ''}
-        </div>`
-      )
+        </div>`;
+      })
       .join('')}
   </div>`;
 }
@@ -2098,7 +2172,17 @@ function pageHtml(report: LabReport, profile: TestProfile, idx: number, total: n
       <div class="f"><label>Age / Gender</label><span class="v">${esc(ageText(p.age, p.ageUnit))} / ${esc(formatGenderEn(p.gender))}</span></div>
       <div class="f"><label>Collected</label><span class="v">${esc(fmtDate(p.sampleDate || report.createdAt || new Date().toISOString()))}</span></div>
       <div class="f"><label>Reported</label><span class="v">${esc(fmtDate(p.reportingDate || new Date().toISOString()))}</span></div>
-      <div class="f wide"><label>Referred By</label><span class="v">${esc(doctor)}</span></div>
+      <div class="f wide"><label>Referred By</label><span class="v" dir="auto">${esc(doctor)}</span></div>
+      ${(() => {
+        const labS = (lab as any)?.staffSignatures || {};
+        const repS = report.staff || {};
+        const phlebVal = repS.phlebotomist !== undefined ? repS.phlebotomist : (p.phlebotomist || labS.phlebotomist || DEFAULT_STAFF.phlebotomist || '');
+        const visitVal = repS.visitCoordinator !== undefined ? repS.visitCoordinator : (p.visitSpecialist || p.branchRepresentative || labS.visitCoordinator || DEFAULT_STAFF.visitCoordinator || '');
+        const showPhleb = repS.showPhlebotomist !== false && Boolean(String(phlebVal || '').trim());
+        const showVisit = repS.showVisitCoordinator !== false && Boolean(String(visitVal || '').trim());
+        return `${showPhleb ? `<div class="f f-ar" dir="rtl"><label>القائم بالسحب</label><span class="v" dir="auto">${esc(phlebVal)}</span></div>` : ''}
+                ${showVisit ? `<div class="f f-ar" dir="rtl"><label>مسؤول الزيارة</label><span class="v" dir="auto">${esc(visitVal)}</span></div>` : ''}`;
+      })()}
       ${diagnosis ? `<div class="f wide" style="grid-column: span 2;"><label>Clinical Diagnosis / Indication</label><span class="v" style="color: ${BRAND.red}; font-weight: 700;">${esc(diagnosis)}</span></div>` : ''}
     </div>
 
