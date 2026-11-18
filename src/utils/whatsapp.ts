@@ -1,6 +1,6 @@
 import { LabReport, LabInfo } from '../types/lab';
 import type { LoyaltyConfig, LoyaltyTier, PatientLoyaltyProfile } from '../types';
-import { computeLoyaltyTier, nextTierProgress, pointsCashValue, redemptionSummaryText, tierDiscountRate } from './loyaltyEngine';
+import { nextTierProgress, pointsCashValue, redemptionSummaryText, resolveProfileTier, tierDiscountRate } from './loyaltyEngine';
 
 export const BRANCH_MAIN_ADDRESS = 'ميدان بهتيم برج صيدليه العزبى الدور الثالث امام الأسانسير شبرا الخيمه';
 export const LAB_NAME_AR = 'معامل RT للتحاليل الطبية والتشخيصية';
@@ -339,7 +339,7 @@ export function formatLoyaltyCardWhatsAppMessage(params: {
   labInfo?: LabInfo;
 }): string {
   const { profile, config, labInfo } = params;
-  const tier = computeLoyaltyTier(profile.totalPoints || 0, config);
+  const tier = resolveProfileTier(profile, config);
   const discountPct = tierDiscountRate(tier, config);
   const cashInfo = pointsCashValue(profile.totalPoints || 0, config);
   const progress = nextTierProgress(profile, config);
@@ -419,7 +419,7 @@ export function formatInvoiceWhatsAppMessage(params: {
 
   let loyaltySection = '';
   if (loyaltyProfile && loyaltyConfig) {
-    const tier = computeLoyaltyTier(loyaltyProfile.totalPoints || 0, loyaltyConfig);
+    const tier = resolveProfileTier(loyaltyProfile, loyaltyConfig);
     const pct = tierDiscountRate(tier, loyaltyConfig);
     const cash = pointsCashValue(loyaltyProfile.totalPoints || 0, loyaltyConfig);
     loyaltySection = `\n\n💳 *كارت الولاء ونقاطك المرفقة بالفاتورة:*

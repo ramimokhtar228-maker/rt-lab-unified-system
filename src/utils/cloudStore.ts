@@ -191,7 +191,7 @@ export function mergeCollection<T extends AnyRecord = AnyRecord>(
     const localStamp = recordStamp(existing);
     const winner = cloudStamp >= localStamp ? record : existing;
     const loser = winner === record ? existing : record;
-    const strictKeepUserEmpty = (collection === 'packages' || collection === 'diagnosticProfiles') && cloudStamp !== localStamp;
+    const strictKeepUserEmpty = (collection === 'packages' || collection === 'diagnosticProfiles' || collection === 'loyaltyProfiles') && cloudStamp !== localStamp;
     const baseMerged = strictKeepUserEmpty
       ? (() => {
           const out: AnyRecord = { ...winner };

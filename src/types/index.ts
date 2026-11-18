@@ -294,10 +294,12 @@ export interface PatientLoyaltyProfile {
   bloodGroup: string;
   totalPoints: number;
   tier: LoyaltyTier;
+  manualTierOverride?: boolean;
   lifetimeSpent: number;
   emergencyContact?: string;
   chronicConditions?: string[];
   issueDate: string;
+  updatedAt?: string;
   transactions: LoyaltyTransaction[];
 }
 

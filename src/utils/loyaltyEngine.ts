@@ -125,6 +125,18 @@ export function computeLoyaltyTier(points: number, config: LoyaltyConfig): Loyal
   return 'Silver';
 }
 
+/** حسم فئة الكارت الفعلية مع احترام التعديل اليدوي لبيانات الكارت */
+export function resolveProfileTier(
+  profile: Partial<PatientLoyaltyProfile> | undefined | null,
+  config: LoyaltyConfig
+): LoyaltyTier {
+  if (!profile) return 'Silver';
+  if (profile.manualTierOverride && profile.tier && LOYALTY_TIER_ORDER.includes(profile.tier)) {
+    return profile.tier;
+  }
+  return computeLoyaltyTier(profile.totalPoints || 0, config);
+}
+
 /** القيمة النقدية للرصيد الحالي (قيمة دقيقة والقيمة القابلة للاستبدال بوحدات 100 نقطة) */
 export function pointsCashValue(points: number, config: LoyaltyConfig): {
   exactEGP: number;
@@ -309,7 +321,7 @@ export function createAutoLoyaltyProfile(params: {
 /** الترقية القادمة ونسبة التقدم داخل المستوى الحالي */
 export function nextTierProgress(profile: PatientLoyaltyProfile, config: LoyaltyConfig) {
   const points = profile?.totalPoints || 0;
-  const tier = computeLoyaltyTier(points, config);
+  const tier = resolveProfileTier(profile, config);
   const idx = LOYALTY_TIER_ORDER.indexOf(tier);
   const nextTier = LOYALTY_TIER_ORDER[idx + 1];
   if (!nextTier) return { tier, nextTier: null as LoyaltyTier | null, pointsNeeded: 0, progressPct: 100 };

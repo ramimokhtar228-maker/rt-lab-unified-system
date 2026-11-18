@@ -40,6 +40,7 @@ export interface LoyaltyCardParams {
   bloodGroup?: string;
   issueDate?: string;
   emergencyContact?: string;
+  chronicConditions?: string[];
   labNameAr?: string;
   supervisionAr?: string;
   address?: string;
@@ -98,7 +99,7 @@ export async function generateAndDownloadLoyaltyCard(params: LoyaltyCardParams):
       showCardCode: params.fields?.showCardCode ?? true,
       showPatientName: params.fields?.showPatientName ?? true,
       showPatientPhone: params.fields?.showPatientPhone ?? true,
-      showBloodGroup: params.fields?.showBloodGroup ?? false,
+      showBloodGroup: params.fields?.showBloodGroup ?? true,
       showDates: params.fields?.showDates ?? true,
       showUsageNote: params.fields?.showUsageNote ?? true,
       showFooter: params.fields?.showFooter ?? true,
@@ -416,6 +417,42 @@ export async function generateAndDownloadLoyaltyCard(params: LoyaltyCardParams):
       ctx.fillStyle = '#34d399';
       ctx.font = `800 14px ${fontAr}`;
       ctx.fillText('صلاحية الكارت: دائم مدى الحياة ✓', 45, 426);
+    }
+
+    // Center optional emergency contact / medical notes badge if set
+    const emergTxt = String(params.emergencyContact || '').trim();
+    const condTxt = Array.isArray(params.chronicConditions) && params.chronicConditions.length > 0
+      ? params.chronicConditions.join('، ')
+      : '';
+    if (emergTxt || condTxt) {
+      ctx.save();
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.55)';
+      ctx.beginPath();
+      ctx.roundRect(245, 326, 365, 94, 12);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      if (emergTxt && condTxt) {
+        ctx.fillStyle = '#fde68a';
+        ctx.font = `700 13px ${fontAr}`;
+        ctx.fillText(`🚑 طوارئ: ${emergTxt}`, 427, 355);
+        ctx.fillStyle = '#fecdd3';
+        ctx.font = `700 12px ${fontAr}`;
+        ctx.fillText(`🩺 ${condTxt.slice(0, 38)}`, 427, 392);
+      } else if (emergTxt) {
+        ctx.fillStyle = '#fde68a';
+        ctx.font = `800 14px ${fontAr}`;
+        ctx.fillText(`🚑 هاتف الطوارئ: ${emergTxt}`, 427, 373);
+      } else if (condTxt) {
+        ctx.fillStyle = '#fecdd3';
+        ctx.font = `700 13px ${fontAr}`;
+        ctx.fillText(`🩺 ملاحظات صحية: ${condTxt.slice(0, 42)}`, 427, 373);
+      }
+      ctx.restore();
     }
 
     // 10. Clear Redemption & Cumulative Upgrade Rule Strip (Always legible)

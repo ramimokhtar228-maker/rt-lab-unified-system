@@ -16,7 +16,7 @@ export function useStampedCollection<T extends Record<string, any>>(
       if (!Array.isArray(next)) return next;
       if (!Array.isArray(prev) || prev.length === 0) return next;
 
-      const keyOf = (r: T) => (r.id ? String(r.id) : r.code ? String(r.code) : '');
+      const keyOf = (r: T) => (r.id ? String(r.id) : r.patientId ? String(r.patientId) : r.code ? String(r.code) : '');
       const prevById = new Map<string, T>();
       prev.forEach(record => {
         const k = record ? keyOf(record) : '';

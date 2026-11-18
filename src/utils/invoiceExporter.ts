@@ -2,11 +2,10 @@ import type { LabInfo, LoyaltyConfig, PatientLoyaltyProfile } from '../types';
 import { tafqeetEGP } from './tafqeet';
 import { generateBarcodeSVG } from './barcode';
 import {
-  computeLoyaltyTier,
   getTierPalette,
   pointsCashValue,
   redemptionSummaryText,
-  syncCardNumberTier,
+  resolveProfileTier,
   tierDiscountRate
 } from './loyaltyEngine';
 import { copyDataUrlToClipboard } from './loyaltyCardCanvas';
@@ -88,11 +87,11 @@ export function buildInvoiceMarkup(payload: InvoiceExportPayload): string {
   if (payload.loyaltyProfile && payload.loyaltyConfig) {
     const prof = payload.loyaltyProfile;
     const cfg = payload.loyaltyConfig;
-    const tier = computeLoyaltyTier(prof.totalPoints || 0, cfg);
+    const tier = resolveProfileTier(prof, cfg);
     const pal = getTierPalette(tier);
     const discPct = tierDiscountRate(tier, cfg);
     const cash = pointsCashValue(prof.totalPoints || 0, cfg);
-    const cardCode = syncCardNumberTier(prof.cardNumber || prof.barcode, tier, payload.barcode);
+    const cardCode = prof.cardNumber || prof.barcode || payload.barcode;
 
     loyaltyCardHtml = `
       <div style="margin: 14px 0; border-radius: 12px; padding: 12px 16px; background: ${pal.printBgGradient}; color: #ffffff; border: 2px solid ${pal.printBorderHex}; box-shadow: 0 4px 12px rgba(15,23,42,0.14);">

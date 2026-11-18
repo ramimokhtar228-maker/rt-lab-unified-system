@@ -85,7 +85,7 @@ export const PatientCardsAndPoints: React.FC<PatientCardsAndPointsProps> = ({
       showCardCode: true,
       showPatientName: true,
       showPatientPhone: true,
-      showBloodGroup: false,
+      showBloodGroup: true,
       showDates: true,
       showUsageNote: true,
       showFooter: true,
@@ -121,7 +121,7 @@ export const PatientCardsAndPoints: React.FC<PatientCardsAndPointsProps> = ({
       showCardCode: true,
       showPatientName: true,
       showPatientPhone: true,
-      showBloodGroup: false,
+      showBloodGroup: true,
       showDates: true,
       showUsageNote: true,
       showFooter: true,
@@ -332,6 +332,8 @@ export const PatientCardsAndPoints: React.FC<PatientCardsAndPointsProps> = ({
     e.preventDefault();
     if (!activeProfile) return;
 
+    const parsedPts = Number(editForm.totalPoints) || 0;
+    const autoTier = getDynamicTier(parsedPts);
     const updated: PatientLoyaltyProfile = {
       ...activeProfile,
       patientName: editForm.patientName.trim() || activeProfile.patientName,
@@ -339,14 +341,16 @@ export const PatientCardsAndPoints: React.FC<PatientCardsAndPointsProps> = ({
       cardNumber: editForm.cardNumber.trim(),
       barcode: editForm.cardNumber.trim(),
       tier: editForm.tier,
-      totalPoints: Number(editForm.totalPoints) || 0,
+      manualTierOverride: editForm.tier !== autoTier,
+      totalPoints: parsedPts,
       lifetimeSpent: Number(editForm.lifetimeSpent) || 0,
       bloodGroup: editForm.bloodGroup,
-      emergencyContact: editForm.emergencyContact.trim() || undefined,
+      emergencyContact: editForm.emergencyContact.trim(),
       chronicConditions: editForm.chronicConditions.trim() 
-        ? editForm.chronicConditions.split(',').map(s => s.trim()).filter(Boolean) 
+        ? editForm.chronicConditions.split(/[,،]+/).map(s => s.trim()).filter(Boolean) 
         : [],
-      issueDate: editForm.issueDate || activeProfile.issueDate
+      issueDate: editForm.issueDate || activeProfile.issueDate,
+      updatedAt: new Date().toISOString()
     };
 
     const newProfiles = loyaltyProfiles.map(p => p.patientId === activeProfile.patientId ? updated : p);
@@ -617,7 +621,7 @@ export const PatientCardsAndPoints: React.FC<PatientCardsAndPointsProps> = ({
     }
 
     const pal = getTierPalette(currentTierKey);
-    const cardCode = syncCardNumberTier(activeProfile.cardNumber || activeProfile.barcode, currentTierKey, activeProfile.barcode);
+    const cardCode = activeProfile.cardNumber || activeProfile.barcode || syncCardNumberTier('', currentTierKey, activeProfile.barcode);
     const cashInfo = pointsCashValue(activeProfile.totalPoints || 0, config);
 
     const html = `<!DOCTYPE html><html lang="ar" dir="rtl"><head>
@@ -732,7 +736,7 @@ export const PatientCardsAndPoints: React.FC<PatientCardsAndPointsProps> = ({
   // Download Single-Sided Card PNG
   const handleDownloadSingleSidedPNG = () => {
     if (!activeProfile) return;
-    const cardCode = syncCardNumberTier(activeProfile.cardNumber || activeProfile.barcode, currentTierKey, activeProfile.barcode);
+    const cardCode = activeProfile.cardNumber || activeProfile.barcode || syncCardNumberTier('', currentTierKey, activeProfile.barcode);
     generateAndDownloadLoyaltyCard({
       cardNumber: cardCode,
       patientName: activeProfile.patientName,

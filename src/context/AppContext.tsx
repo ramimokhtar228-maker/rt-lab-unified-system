@@ -1,15 +1,17 @@
 import { useStampedCollection } from '../hooks/useStampedCollection';
 import { cloudVersionChanged } from '../utils/cloudPulse';
 import { startRealtimeChannel } from '../utils/realtimeChannel';
-import { markDeleted, unmarkDeleted, clearDeletedCollection, importDeletedMap, importSettingsStamps, getDeletedMap, getSettingsStamps, stampSetting, mergeCollection, mergeSettingsObject } from '../utils/cloudStore';
+import { markDeleted, unmarkDeleted, clearDeletedCollection, importDeletedMap, importSettingsStamps, getDeletedMap, getSettingsStamps, stampSetting, mergeCollection, mergeSettingsObject, recordStamp } from '../utils/cloudStore';
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import {
+  LOYALTY_TIER_ORDER,
   hasEarnedForInvoice,
   pointsForAmount,
   calculateTestsOnlyPaidAmount,
   createAutoLoyaltyProfile,
   generateSmartCardNumber,
   computeLoyaltyTier,
+  resolveProfileTier,
   normalizePhoneKey,
   normalizeInvoiceRef,
   syncCardNumberTier
@@ -1351,12 +1353,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setLoyaltyConfig(msg.payload);
       } else if (msg.action === 'UPDATE_LOYALTY' && msg.payload) {
         if (Array.isArray(msg.payload)) {
-          setLoyaltyProfiles(msg.payload);
+          setLoyaltyProfiles(prev => mergeCollection('loyaltyProfiles', prev, msg.payload) as PatientLoyaltyProfile[]);
         } else if (msg.payload.patientId) {
           setLoyaltyProfiles(prev => {
             const pPhone = normalizePhoneKey(msg.payload.phone);
             const idx = prev.findIndex(p => p.patientId === msg.payload.patientId || (pPhone && normalizePhoneKey(p.phone) === pPhone));
             if (idx >= 0) {
+              const incomingStamp = recordStamp(msg.payload);
+              const localStamp = recordStamp(prev[idx]);
+              if (localStamp > 0 && incomingStamp > 0 && incomingStamp < localStamp) {
+                return prev;
+              }
               const next = [...prev];
               next[idx] = { ...next[idx], ...msg.payload };
               return next;
@@ -1458,7 +1465,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           setExpenses(msg.payload.expenses);
         }
         if (Array.isArray(msg.payload.loyaltyProfiles)) {
-          setLoyaltyProfiles(msg.payload.loyaltyProfiles);
+          setLoyaltyProfiles(prev => mergeCollection('loyaltyProfiles', prev, msg.payload.loyaltyProfiles) as PatientLoyaltyProfile[]);
         }
         if (msg.payload.loyaltyConfig) {
           setLoyaltyConfig(prev => mergeSettingsObject('loyaltyConfig', prev, msg.payload.loyaltyConfig, msg.payload.settingsStamps));
@@ -1494,7 +1501,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           setExpenses(res.data.expenses);
         }
         if (Array.isArray(res.data.loyaltyProfiles) && res.data.loyaltyProfiles.length > 0) {
-          setLoyaltyProfiles(res.data.loyaltyProfiles);
+          setLoyaltyProfiles(prev => mergeCollection('loyaltyProfiles', prev, res.data.loyaltyProfiles) as PatientLoyaltyProfile[]);
         }
         if (res.data.loyaltyConfig) {
           setLoyaltyConfig(prev => mergeSettingsObject('loyaltyConfig', prev, res.data.loyaltyConfig, res.data.settingsStamps));
@@ -2929,13 +2936,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if ((invoiceNumber || normalizedInv) && hasEarnedForInvoice(existing, invoiceNumber)) return prev;
         const newTotal = existing.totalPoints + pointsToEarn;
         const newSpent = (existing.lifetimeSpent || 0) + testsPaid;
-        const newTier = computeLoyaltyTier(newTotal, loyaltyConfig);
-        const upgradedCardNumber = syncCardNumberTier(existing.cardNumber, newTier, existing.barcode || barcode);
+        const ptsTier = computeLoyaltyTier(newTotal, loyaltyConfig);
+        const keepManualTier = Boolean(
+          existing.manualTierOverride &&
+          existing.tier &&
+          LOYALTY_TIER_ORDER.indexOf(ptsTier) <= LOYALTY_TIER_ORDER.indexOf(existing.tier)
+        );
+        const newTier = keepManualTier ? existing.tier : ptsTier;
+        const upgradedCardNumber = keepManualTier
+          ? (existing.cardNumber || existing.barcode)
+          : syncCardNumberTier(existing.cardNumber, newTier, existing.barcode || barcode);
         const updatedProfile: PatientLoyaltyProfile = {
           ...existing,
           patientName: (existing.patientName && existing.patientName !== 'عميل مسجل') ? existing.patientName : (patientName || existing.patientName),
           totalPoints: newTotal,
           tier: newTier,
+          manualTierOverride: keepManualTier,
           cardNumber: upgradedCardNumber,
           lifetimeSpent: newSpent,
           updatedAt: new Date().toISOString(),
@@ -3070,6 +3086,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     // Re-evaluate all existing loyalty cards immediately so tier & prefix stay synced with policy
     setLoyaltyProfiles(prev => {
       const updated = prev.map(p => {
+        if (p.manualTierOverride && p.tier) return p;
         const nextTier = computeLoyaltyTier(p.totalPoints || 0, newConfig);
         const nextCardNumber = syncCardNumberTier(p.cardNumber, nextTier, p.barcode);
         if (nextTier === p.tier && nextCardNumber === p.cardNumber) return p;
@@ -3185,7 +3202,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
         const calculatedFinalPoints = Math.max(0, profileTotalPoints + retainedPoints + welcomeBonus);
         totalPointsCalculated += calculatedFinalPoints;
-        const calculatedTier = computeLoyaltyTier(calculatedFinalPoints, activeConfig);
+        const autoTier = computeLoyaltyTier(calculatedFinalPoints, activeConfig);
+        const keepManual = Boolean(existing?.manualTierOverride && existing?.tier);
+        const calculatedTier = keepManual ? existing!.tier : autoTier;
 
         if (existing) {
           updatedProfilesCount++;
@@ -3197,7 +3216,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               patientName: (existing.patientName && existing.patientName !== 'عميل مسجل') ? existing.patientName : entry.name,
               totalPoints: calculatedFinalPoints,
               tier: calculatedTier,
-              cardNumber: syncCardNumberTier(existing.cardNumber, calculatedTier, existing.barcode || entry.barcode),
+              manualTierOverride: keepManual,
+              cardNumber: keepManual
+                ? (existing.cardNumber || existing.barcode)
+                : syncCardNumberTier(existing.cardNumber, calculatedTier, existing.barcode || entry.barcode),
               lifetimeSpent: Math.max(profileTotalTestsPaid, existing.lifetimeSpent || 0),
               updatedAt: new Date().toISOString(),
               transactions: [...newTransactions, ...retainedTx]
@@ -3228,8 +3250,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       // Also apply updated tier thresholds/card prefix to any profiles without matching incomeRecords
       const finalizedList = updatedProfilesList.map(prof => {
         if (handledProfileIds.has(prof.patientId)) return prof;
-        const nextTier = computeLoyaltyTier(prof.totalPoints || 0, activeConfig);
-        const nextCardNumber = syncCardNumberTier(prof.cardNumber, nextTier, prof.barcode);
+        const nextTier = resolveProfileTier(prof, activeConfig);
+        const nextCardNumber = prof.manualTierOverride
+          ? (prof.cardNumber || prof.barcode)
+          : syncCardNumberTier(prof.cardNumber, nextTier, prof.barcode);
         updatedProfilesCount++;
         totalPointsCalculated += (prof.totalPoints || 0);
         return {
@@ -3310,12 +3334,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const existing = prev.find(p => (cleanPhone && normalizePhoneKey(p.phone) === cleanPhone) || p.patientId === patientPhone);
       if (existing) {
         const newTotal = existing.totalPoints + points;
-        const nextTier = computeLoyaltyTier(newTotal, loyaltyConfig);
+        const ptsTier = computeLoyaltyTier(newTotal, loyaltyConfig);
+        const keepManualTier = Boolean(
+          existing.manualTierOverride &&
+          existing.tier &&
+          LOYALTY_TIER_ORDER.indexOf(ptsTier) <= LOYALTY_TIER_ORDER.indexOf(existing.tier)
+        );
+        const nextTier = keepManualTier ? existing.tier : ptsTier;
         const updatedProfile: PatientLoyaltyProfile = {
           ...existing,
           totalPoints: newTotal,
           tier: nextTier,
-          cardNumber: syncCardNumberTier(existing.cardNumber, nextTier, existing.barcode),
+          manualTierOverride: keepManualTier,
+          cardNumber: keepManualTier
+            ? (existing.cardNumber || existing.barcode)
+            : syncCardNumberTier(existing.cardNumber, nextTier, existing.barcode),
           lifetimeSpent: amountEGP ? (existing.lifetimeSpent || 0) + amountEGP : existing.lifetimeSpent,
           updatedAt: new Date().toISOString(),
           transactions: [
@@ -3358,12 +3391,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const updated = prev.map(p => {
         if (p.patientId === profile.patientId) {
           const remaining = Math.max(0, p.totalPoints - points);
-          const nextTier = computeLoyaltyTier(remaining, loyaltyConfig);
+          const nextTier = p.manualTierOverride && p.tier ? p.tier : computeLoyaltyTier(remaining, loyaltyConfig);
           const updatedProfile: PatientLoyaltyProfile = {
             ...p,
             totalPoints: remaining,
             tier: nextTier,
-            cardNumber: syncCardNumberTier(p.cardNumber, nextTier, p.barcode),
+            cardNumber: p.manualTierOverride ? (p.cardNumber || p.barcode) : syncCardNumberTier(p.cardNumber, nextTier, p.barcode),
             updatedAt: new Date().toISOString(),
             transactions: [
               {
@@ -3394,10 +3427,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [getLoyaltyByPhone, loyaltyProfiles, calculateCashForPoints, loyaltyConfig, logAction, triggerAutoCloudPush]);
 
   const updateLoyaltyProfile = useCallback((id: string, updates: Partial<PatientLoyaltyProfile>) => {
+    const stampedAt = new Date().toISOString();
+    let changedProfile: PatientLoyaltyProfile | null = null;
     setLoyaltyProfiles(prev => {
-      const updated = prev.map(p => p.patientId === id ? { ...p, ...updates, updatedAt: new Date().toISOString() } : p);
+      const updated = prev.map(p => {
+        if (p.patientId !== id) return p;
+        changedProfile = { ...p, ...updates, updatedAt: stampedAt };
+        return changedProfile;
+      });
       latestStateRef.current.loyaltyProfiles = updated;
       safeSetLocalStorage(LOYALTY_KEY, JSON.stringify(updated));
+      safeSetLocalStorage('rt_lab_loyalty_profiles_v2', JSON.stringify(updated));
+      if (changedProfile) {
+        try { realtimeSyncManager.broadcastAction('UPDATE_LOYALTY', changedProfile); } catch {}
+      }
       return updated;
     });
     triggerAutoCloudPush();
@@ -3420,15 +3463,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (p.patientId === profileId) {
           const filteredTx = p.transactions.filter(t => t.id !== txId);
           const recomputedPoints = Math.max(0, filteredTx.reduce((sum, t) => sum + t.points, 0));
-          const nextTier = computeLoyaltyTier(recomputedPoints, loyaltyConfig);
-          return {
+          const nextTier = p.manualTierOverride && p.tier ? p.tier : computeLoyaltyTier(recomputedPoints, loyaltyConfig);
+          const updatedProfile: PatientLoyaltyProfile = {
             ...p,
             transactions: filteredTx,
             totalPoints: recomputedPoints,
             tier: nextTier,
-            cardNumber: syncCardNumberTier(p.cardNumber, nextTier, p.barcode),
+            cardNumber: p.manualTierOverride ? (p.cardNumber || p.barcode) : syncCardNumberTier(p.cardNumber, nextTier, p.barcode),
             updatedAt: new Date().toISOString()
           };
+          try { realtimeSyncManager.broadcastAction('UPDATE_LOYALTY', updatedProfile); } catch {}
+          return updatedProfile;
         }
         return p;
       });
@@ -4278,7 +4323,7 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
           setExpenses(data.expenses);
         }
         if (Array.isArray(data.loyaltyProfiles) && data.loyaltyProfiles.length > 0) {
-          setLoyaltyProfiles(data.loyaltyProfiles);
+          setLoyaltyProfiles(prev => mergeCollection('loyaltyProfiles', prev, data.loyaltyProfiles) as PatientLoyaltyProfile[]);
         }
         if (data.loyaltyConfig) {
           setLoyaltyConfig(prev => mergeSettingsObject('loyaltyConfig', prev, data.loyaltyConfig, data.settingsStamps));

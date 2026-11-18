@@ -9,6 +9,7 @@ import {
   redemptionSummaryText,
   nextTierProgress,
   computeLoyaltyTier,
+  resolveProfileTier,
   tierDiscountRate,
   syncCardNumberTier,
   generateSmartCardNumber
@@ -114,7 +115,8 @@ export const LoyaltyModule: React.FC = () => {
       const saved = localStorage.getItem('rt_lab_card_fields_config');
       if (saved) {
         const parsed = JSON.parse(saved);
-        return {
+        const migrated = localStorage.getItem('rt_lab_card_fields_v2_migrated') === '1';
+        const resolved = {
           showHeader: parsed.showHeader ?? true,
           showTierBadge: parsed.showTierBadge ?? true,
           showChip: parsed.showChip ?? true,
@@ -123,15 +125,21 @@ export const LoyaltyModule: React.FC = () => {
           showCardCode: parsed.showCardCode ?? true,
           showPatientName: parsed.showPatientName ?? true,
           showPatientPhone: parsed.showPatientPhone ?? true,
-          showBloodGroup: parsed.showBloodGroup ?? false,
+          showBloodGroup: migrated ? (parsed.showBloodGroup ?? true) : true,
           showDates: parsed.showDates ?? true,
           showUsageNote: parsed.showUsageNote ?? true,
           showFooter: parsed.showFooter ?? true,
           showHotline: parsed.showHotline ?? true,
           showAddress: parsed.showAddress ?? true,
-          theme: parsed.theme || 'auto-tier'
+          theme: (migrated ? (parsed.theme || 'auto-tier') : 'auto-tier') as CardThemeOption
         };
+        if (!migrated) {
+          localStorage.setItem('rt_lab_card_fields_v2_migrated', '1');
+          localStorage.setItem('rt_lab_card_fields_config', JSON.stringify(resolved));
+        }
+        return resolved;
       }
+      localStorage.setItem('rt_lab_card_fields_v2_migrated', '1');
     } catch {}
     return {
       showHeader: true,
@@ -142,7 +150,7 @@ export const LoyaltyModule: React.FC = () => {
       showCardCode: true,
       showPatientName: true,
       showPatientPhone: true,
-      showBloodGroup: false,
+      showBloodGroup: true,
       showDates: true,
       showUsageNote: true,
       showFooter: true,
@@ -179,7 +187,7 @@ export const LoyaltyModule: React.FC = () => {
       showCardCode: true,
       showPatientName: true,
       showPatientPhone: true,
-      showBloodGroup: false,
+      showBloodGroup: true,
       showDates: true,
       showUsageNote: true,
       showFooter: true,
@@ -251,7 +259,7 @@ export const LoyaltyModule: React.FC = () => {
   const resolvedPhonesDisplay = [resolvedHotline, resolvedPhone].filter(Boolean).join(' / ');
 
   const currentTier: LoyaltyTier = activeProfile
-    ? computeLoyaltyTier(activeProfile.totalPoints || 0, loyaltyConfig)
+    ? resolveProfileTier(activeProfile, loyaltyConfig)
     : 'Silver';
   const tierPalette = getTierPalette(currentTier);
   const tierInfo = TIER_BENEFITS[currentTier] || TIER_BENEFITS.Silver;
@@ -304,24 +312,29 @@ export const LoyaltyModule: React.FC = () => {
     e.preventDefault();
     if (!activeProfile) return;
 
-    const syncedCode = syncCardNumberTier(editForm.cardNumber.trim(), editForm.tier, activeProfile.barcode);
+    const finalCode = editForm.cardNumber.trim() || generateSmartCardNumber(editForm.tier, activeProfile.barcode);
+    const parsedPoints = Math.max(0, Number(editForm.totalPoints) || 0);
+    const autoTierForPoints = computeLoyaltyTier(parsedPoints, loyaltyConfig);
+    const isManualTier = editForm.tier !== autoTierForPoints;
 
     updateLoyaltyProfile(activeProfile.patientId, {
       patientName: editForm.patientName.trim(),
       phone: editForm.phone.trim(),
-      cardNumber: syncedCode,
-      barcode: syncedCode,
+      cardNumber: finalCode,
+      barcode: finalCode,
       tier: editForm.tier,
-      totalPoints: Number(editForm.totalPoints) || 0,
-      lifetimeSpent: Number(editForm.lifetimeSpent) || 0,
+      manualTierOverride: isManualTier,
+      totalPoints: parsedPoints,
+      lifetimeSpent: Math.max(0, Number(editForm.lifetimeSpent) || 0),
       bloodGroup: editForm.bloodGroup,
-      emergencyContact: editForm.emergencyContact.trim() || undefined,
+      emergencyContact: editForm.emergencyContact.trim(),
       chronicConditions: editForm.chronicConditions.trim()
-        ? editForm.chronicConditions.split(',').map(s => s.trim()).filter(Boolean)
+        ? editForm.chronicConditions.split(/[,،]+/).map(s => s.trim()).filter(Boolean)
         : [],
       issueDate: editForm.issueDate || activeProfile.issueDate
     });
 
+    setSelectedProfileId(activeProfile.patientId);
     setIsEditModalOpen(false);
     showNotice('success', `تم حفظ وتحديث بيانات كارت المريض (${editForm.patientName.trim()}) بنجاح.`);
   };
@@ -368,7 +381,7 @@ export const LoyaltyModule: React.FC = () => {
       return;
     }
 
-    const cardCode = syncCardNumberTier(activeProfile.cardNumber || activeProfile.barcode, currentTier, activeProfile.barcode);
+    const cardCode = activeProfile.cardNumber || activeProfile.barcode || generateSmartCardNumber(currentTier, activeProfile.barcode);
 
     const html = `<!DOCTYPE html><html lang="ar" dir="rtl"><head>
   <meta charset="UTF-8">
@@ -482,7 +495,7 @@ export const LoyaltyModule: React.FC = () => {
 
   const buildCardCanvasParams = (skipDownload = false) => {
     if (!activeProfile) return null;
-    const cardCode = syncCardNumberTier(activeProfile.cardNumber || activeProfile.barcode, currentTier, activeProfile.barcode);
+    const cardCode = activeProfile.cardNumber || activeProfile.barcode || generateSmartCardNumber(currentTier, activeProfile.barcode);
     return {
       cardNumber: cardCode,
       patientName: activeProfile.patientName,
@@ -496,6 +509,7 @@ export const LoyaltyModule: React.FC = () => {
       bloodGroup: activeProfile.bloodGroup || 'O+',
       issueDate: activeProfile.issueDate,
       emergencyContact: activeProfile.emergencyContact,
+      chronicConditions: activeProfile.chronicConditions,
       labNameAr: resolvedLabName,
       supervisionAr: resolvedSupervision,
       hotline: resolvedHotline,
@@ -760,7 +774,7 @@ export const LoyaltyModule: React.FC = () => {
           {LOYALTY_TIER_ORDER.map(tKey => {
             const pal = getTierPalette(tKey);
             const tCfg = loyaltyConfig.tiers[tKey];
-            const count = loyaltyProfiles.filter(p => computeLoyaltyTier(p.totalPoints || 0, loyaltyConfig) === tKey).length;
+            const count = loyaltyProfiles.filter(p => resolveProfileTier(p, loyaltyConfig) === tKey).length;
             return (
               <div
                 key={tKey}
@@ -813,12 +827,12 @@ export const LoyaltyModule: React.FC = () => {
               </div>
             ) : (
               filteredProfiles.map(p => {
-                const dynTier = computeLoyaltyTier(p.totalPoints || 0, loyaltyConfig);
+                const dynTier = resolveProfileTier(p, loyaltyConfig);
                 const pal = getTierPalette(dynTier);
                 const disc = tierDiscountRate(dynTier, loyaltyConfig);
                 const egpVal = pointsCashValue(p.totalPoints || 0, loyaltyConfig).exactEGP;
                 const isSelected = p.patientId === activeProfile?.patientId;
-                const cardNum = syncCardNumberTier(p.cardNumber || p.barcode, dynTier, p.barcode);
+                const cardNum = p.cardNumber || p.barcode;
                 return (
                   <div
                     key={p.patientId}
@@ -1046,7 +1060,7 @@ export const LoyaltyModule: React.FC = () => {
                   {cardFields.showCardCode && (
                   <div className="relative z-10 text-center">
                     <div className="font-mono text-lg sm:text-2xl font-black tracking-widest text-white drop-shadow-md flex items-center justify-center gap-3">
-                      <span>{syncCardNumberTier(activeProfile.cardNumber || activeProfile.barcode, currentTier, activeProfile.barcode)}</span>
+                      <span>{activeProfile.cardNumber || activeProfile.barcode}</span>
                       <button
                         onClick={handleCopyCardCode}
                         className="text-white/70 hover:text-amber-300 transition-colors p-1 cursor-pointer"
@@ -1116,6 +1130,22 @@ export const LoyaltyModule: React.FC = () => {
                       </>
                       )}
                     </div>
+                  </div>
+                  )}
+
+                  {/* Row 5.5: Emergency Contact & Medical Notes when set */}
+                  {(activeProfile.emergencyContact || (activeProfile.chronicConditions && activeProfile.chronicConditions.length > 0)) && (
+                  <div className="relative z-10 flex flex-wrap items-center justify-between gap-2 bg-black/35 border border-white/15 rounded-xl px-3 py-1.5 text-[10.5px]">
+                    {activeProfile.emergencyContact && (
+                      <span className="text-amber-200 font-bold">
+                        🚑 هاتف الطوارئ: <span className="font-mono text-white">{activeProfile.emergencyContact}</span>
+                      </span>
+                    )}
+                    {activeProfile.chronicConditions && activeProfile.chronicConditions.length > 0 && (
+                      <span className="text-rose-200 font-bold truncate">
+                        🩺 ملاحظات صحية: <span className="text-white">{activeProfile.chronicConditions.join('، ')}</span>
+                      </span>
+                    )}
                   </div>
                   )}
 
@@ -1223,6 +1253,32 @@ export const LoyaltyModule: React.FC = () => {
                       <Gift className="w-4 h-4" />
                       <span>استبدال نقاط بخصم نقدي</span>
                     </button>
+                  </div>
+                </div>
+
+                {/* Registered Card Identity & Medical Details Strip */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3.5 rounded-xl bg-slate-50/90 border border-slate-200 text-xs">
+                  <div>
+                    <div className="text-[10px] text-slate-500">رقم الكارت المعتمد</div>
+                    <div className="font-mono font-black text-slate-900 mt-0.5">{activeProfile.cardNumber || activeProfile.barcode}</div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] text-slate-500">رقم الهاتف المسجل</div>
+                    <div className="font-mono font-bold text-slate-800 mt-0.5">{activeProfile.phone}</div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] text-slate-500">فصيلة الدم / الطوارئ</div>
+                    <div className="font-bold text-slate-800 mt-0.5">
+                      <span className="text-rose-700 font-mono">{activeProfile.bloodGroup || 'O+'}</span>
+                      {activeProfile.emergencyContact ? <span className="font-mono text-slate-600"> · {activeProfile.emergencyContact}</span> : ''}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] text-slate-500">تاريخ الإصدار / الملاحظات</div>
+                    <div className="font-bold text-slate-800 mt-0.5 truncate" title={activeProfile.chronicConditions?.join('، ') || activeProfile.issueDate}>
+                      <span className="font-mono">{activeProfile.issueDate}</span>
+                      {activeProfile.chronicConditions && activeProfile.chronicConditions.length > 0 ? ` · ${activeProfile.chronicConditions.join('، ')}` : ''}
+                    </div>
                   </div>
                 </div>
 
@@ -1410,7 +1466,14 @@ export const LoyaltyModule: React.FC = () => {
                   <label className="block font-bold text-slate-700 mb-1">فئة العضوية (Tier):</label>
                   <select
                     value={editForm.tier}
-                    onChange={e => setEditForm(prev => ({ ...prev, tier: e.target.value as LoyaltyTier }))}
+                    onChange={e => {
+                      const newTier = e.target.value as LoyaltyTier;
+                      setEditForm(prev => ({
+                        ...prev,
+                        tier: newTier,
+                        cardNumber: syncCardNumberTier(prev.cardNumber, newTier, activeProfile?.barcode)
+                      }));
+                    }}
                     className="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white font-bold"
                   >
                     <option value="Silver">Silver VIP (خصم %{loyaltyConfig.tiers.Silver.discountRate})</option>
@@ -1443,7 +1506,21 @@ export const LoyaltyModule: React.FC = () => {
                   <input
                     type="number"
                     value={editForm.totalPoints}
-                    onChange={e => setEditForm(prev => ({ ...prev, totalPoints: Number(e.target.value) }))}
+                    onChange={e => {
+                      const newPts = Math.max(0, Number(e.target.value) || 0);
+                      setEditForm(prev => {
+                        const wasAutoTier = prev.tier === computeLoyaltyTier(prev.totalPoints, loyaltyConfig);
+                        const nextTier = wasAutoTier ? computeLoyaltyTier(newPts, loyaltyConfig) : prev.tier;
+                        return {
+                          ...prev,
+                          totalPoints: newPts,
+                          tier: nextTier,
+                          cardNumber: wasAutoTier
+                            ? syncCardNumberTier(prev.cardNumber, nextTier, activeProfile?.barcode)
+                            : prev.cardNumber
+                        };
+                      });
+                    }}
                     className="w-full px-3 py-2 rounded-lg border border-slate-300 font-mono font-bold text-amber-800"
                   />
                 </div>

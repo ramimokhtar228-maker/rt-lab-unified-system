@@ -32,14 +32,13 @@ import {
 } from '../utils/whatsapp';
 import {
   calculateTestsOnlyPaidAmount,
-  computeLoyaltyTier,
   getTierPalette,
   normalizeInvoiceRef,
   normalizePhoneKey,
   pointsCashValue,
   pointsForAmount,
   redemptionSummaryText,
-  syncCardNumberTier,
+  resolveProfileTier,
   tierDiscountRate
 } from '../utils/loyaltyEngine';
 import {
@@ -115,12 +114,12 @@ export const InvoicePrintModal: React.FC<InvoicePrintModalProps> = ({ invoice, o
       (invoice.barcode && prof.barcode === invoice.barcode)
   );
 
-  const currentTier = loyaltyProfile ? computeLoyaltyTier(loyaltyProfile.totalPoints || 0, loyaltyConfig) : 'Silver';
+  const currentTier = loyaltyProfile ? resolveProfileTier(loyaltyProfile, loyaltyConfig) : 'Silver';
   const tierPalette = getTierPalette(currentTier);
   const tierDiscountPct = loyaltyProfile ? tierDiscountRate(currentTier, loyaltyConfig) : 0;
   const loyaltyCashInfo = loyaltyProfile ? pointsCashValue(loyaltyProfile.totalPoints || 0, loyaltyConfig) : null;
   const loyaltyCardCode = loyaltyProfile
-    ? syncCardNumberTier(loyaltyProfile.cardNumber || loyaltyProfile.barcode, currentTier, invoice.barcode)
+    ? (loyaltyProfile.cardNumber || loyaltyProfile.barcode)
     : undefined;
 
   const invNorm = normalizeInvoiceRef(invoice.invoiceNumber);
