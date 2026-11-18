@@ -2,30 +2,58 @@ import { tafqeetEGP } from '../utils/tafqeet';
 import { formatGenderAr } from '../utils/calculator';
 import React, { useRef, useState } from 'react';
 import { LabReport } from '../types/lab';
-import { RTLogo } from './RTLogo';
-import { 
-  Printer, 
-  Download, 
-  Share2, 
-  X, 
-  Receipt, 
-  CheckCircle2, 
-  Clock, 
-  User, 
-  Phone, 
-  Calendar, 
-  CreditCard,
+import {
+  Printer,
+  Download,
+  Share2,
+  X,
+  Receipt,
+  CheckCircle2,
+  User,
   Building2,
-  PhoneCall,
   Loader2,
   Percent,
-  Edit2
+  Award,
+  Image as ImageIcon,
+  FileText,
+  Layers,
+  Sparkles,
+  Gift
 } from 'lucide-react';
-import { formatWhatsAppMessage, openWhatsApp } from '../utils/whatsapp';
+import {
+  formatInvoiceWhatsAppMessage,
+  openWhatsApp,
+  LAB_PHONE,
+  LAB_PHONE_SECONDARY,
+  LAB_WHATSAPP,
+  BRANCH_MAIN_ADDRESS,
+  INSTAPAY_IPA,
+  WALLET_VODAFONE,
+  LAB_NAME_AR
+} from '../utils/whatsapp';
+import {
+  calculateTestsOnlyPaidAmount,
+  computeLoyaltyTier,
+  getTierPalette,
+  normalizeInvoiceRef,
+  normalizePhoneKey,
+  pointsCashValue,
+  pointsForAmount,
+  redemptionSummaryText,
+  syncCardNumberTier,
+  tierDiscountRate
+} from '../utils/loyaltyEngine';
+import {
+  buildInvoicePrintDocumentHTML,
+  exportInvoiceAsPDF,
+  exportInvoiceAsPNG,
+  InvoiceExportPayload
+} from '../utils/invoiceExporter';
 import { useApp } from '../context/AppContext';
 import { ClientEditModal } from './ClientEditModal';
 import { LabInfoEditModal } from './LabInfoEditModal';
 import { LAB_CATALOG } from '../data/labCatalog';
+import { generateBarcodeSVG } from '../utils/barcode';
 
 interface PatientInvoiceModalProps {
   isOpen: boolean;
@@ -34,67 +62,97 @@ interface PatientInvoiceModalProps {
   onUpdateReport?: (updatedReport: LabReport) => void;
 }
 
+const PAYMENT_METHOD_AR: Record<string, string> = {
+  cash: 'نقدي',
+  visa: 'فيزا / بطاقة',
+  card: 'بطاقة بنكية',
+  instapay: 'إنستاباي',
+  vodafone_cash: 'فودافون كاش',
+  wallet: 'محفظة إلكترونية',
+  bank_transfer: 'تحويل بنكي',
+  deferred: 'آجل'
+};
+
 export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
   isOpen,
   onClose,
   report,
   onUpdateReport
 }) => {
-  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const [isExporting, setIsExporting] = useState<'pdf' | 'png' | 'both' | 'wa' | null>(null);
   const [isClientEditOpen, setIsClientEditOpen] = useState(false);
   const [isLabEditOpen, setIsLabEditOpen] = useState(false);
   const [printNotice, setPrintNotice] = useState<string | null>(null);
   const invoiceContainerRef = useRef<HTMLDivElement>(null);
 
-  const { 
+  const {
     labInfo: contextLabInfo,
     updateLabInfo,
     staffSignatures,
     updateStaffSignatures,
     updateReport,
     incomeRecords,
-    updateIncomeRecord
+    updateIncomeRecord,
+    loyaltyProfiles,
+    loyaltyConfig,
+    redeemLoyaltyPoints
   } = useApp();
 
   if (!isOpen || !report) return null;
 
-  // Load dynamic lab info and real contact details from context or storage
-  const labInfo = contextLabInfo || (() => {
-    try {
-      const saved = localStorage.getItem('rt_lab_info_v2');
-      if (saved) return JSON.parse(saved);
-    } catch {}
-    return {
-      labNameAr: "معامل RT للتحاليل الطبية والتشخيصية",
-      hotline: "01100874444",
-      phone: "01100874444",
-      whatsapp: "01100874444",
-      mainAddress: "ميدان بهتيم — برج صيدلية العزبي — الدور الثالث (أمام الأسانسير) — شبرا الخيمة"
-    };
-  })();
-  const contactPhone = labInfo.phone || labInfo.hotline || "01100874444";
-  const contactWhatsapp = labInfo.whatsapp || "01100874444";
-  const mainAddressDisplay = labInfo.mainAddress || "ميدان بهتيم — برج صيدلية العزبي — الدور الثالث — شبرا الخيمة";
+  const labInfo = {
+    labNameAr: contextLabInfo?.labNameAr || LAB_NAME_AR,
+    labNameEn: contextLabInfo?.labNameEn || 'RT Diagnostic Laboratories',
+    sloganAr: contextLabInfo?.sloganAr || 'التشخيص الصحيح يبدأ معنا',
+    sloganEn: contextLabInfo?.sloganEn || 'Accurate Diagnosis Starts With Us',
+    supervisionAr: contextLabInfo?.supervisionAr || 'أطباء واستشاريو كلية طب قصر العيني',
+    supervisionEn: contextLabInfo?.supervisionEn || 'Kasr Al Ainy Clinical Pathology Consultants',
+    accreditation: contextLabInfo?.accreditation || 'ISO 15189 Certified',
+    hotline: contextLabInfo?.hotline || LAB_PHONE,
+    phone: contextLabInfo?.phone || LAB_PHONE_SECONDARY,
+    whatsapp: contextLabInfo?.whatsapp || LAB_WHATSAPP,
+    mainAddress: contextLabInfo?.mainAddress || BRANCH_MAIN_ADDRESS,
+    instapay: contextLabInfo?.instapay || INSTAPAY_IPA,
+    vodafoneCash: contextLabInfo?.vodafoneCash || WALLET_VODAFONE
+  };
 
+  const contactPhonesDisplay = [labInfo.hotline, labInfo.phone].filter(Boolean).join(' — ');
   const p = report.patient;
-  
+
   // Find real linked financial invoice
-  const linkedInvoice = incomeRecords.find(i => 
+  const linkedInvoice = incomeRecords.find(i =>
     (report.invoiceId && (i.id === report.invoiceId || i.invoiceNumber === report.invoiceId)) ||
     i.labNumber === p.labNumber ||
     (p.barcode && i.barcode === p.barcode)
   );
 
   const invoiceNumber = linkedInvoice?.invoiceNumber
-    || p.clinicalHistory?.match(/فاتورة\s*(?:مالية)?\s*رقم\s*([\w\d-]+)/i)?.[1] 
-    || `INV-${p.labNumber?.replace('RT-', '') || '2026'}`;
-  
+    || p.clinicalHistory?.match(/فاتورة\s*(?:مالية)?\s*رقم\s*([\w\d-]+)/i)?.[1]
+    || `INV-${p.labNumber?.replace(/^RT-/i, '') || '2026'}`;
+
+  // Linked Patient Loyalty Profile (normalized phone / cardNumber / barcode)
+  const normPhone = normalizePhoneKey(p.phone);
+  const loyaltyProfile = loyaltyProfiles.find(prof =>
+    (normPhone && normalizePhoneKey(prof.phone) === normPhone) ||
+    (p.loyaltyCardNumber && (prof.cardNumber === p.loyaltyCardNumber || prof.barcode === p.loyaltyCardNumber)) ||
+    (p.barcode && prof.barcode === p.barcode)
+  );
+
+  const currentTier = loyaltyProfile ? computeLoyaltyTier(loyaltyProfile.totalPoints || 0, loyaltyConfig) : 'Silver';
+  const tierPalette = getTierPalette(currentTier);
+  const tierDiscountPct = loyaltyProfile ? tierDiscountRate(currentTier, loyaltyConfig) : 0;
+  const loyaltyCashInfo = loyaltyProfile ? pointsCashValue(loyaltyProfile.totalPoints || 0, loyaltyConfig) : null;
+  const loyaltyCardCode = loyaltyProfile
+    ? syncCardNumberTier(loyaltyProfile.cardNumber || loyaltyProfile.barcode, currentTier, p.barcode)
+    : undefined;
+
   // Calculate prices based on linked invoice or profiles
   const items = (linkedInvoice?.tests && linkedInvoice.tests.length > 0)
     ? linkedInvoice.tests.map((t, idx) => ({
         id: t.id || `item-${idx}`,
         titleAr: t.nameAr || t.nameEn || 'تحليل مخبري',
         titleEn: t.nameEn || t.code || 'Lab Test',
+        code: t.code,
         category: t.category || 'تحاليل تشخيصية',
         sampleType: t.sampleType || 'Serum',
         parametersCount: 1,
@@ -112,6 +170,7 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
           id: prof.id || `item-${idx}`,
           titleAr: prof.titleAr || prof.titleEn,
           titleEn: prof.titleEn,
+          code: prof.profileCode,
           category: prof.category || 'تحاليل تشخيصية',
           sampleType: prof.sampleType || 'Serum',
           parametersCount: prof.parameters.length,
@@ -120,101 +179,122 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
       });
 
   const visitFee = (p as any).visitFee || linkedInvoice?.visitFee || 0;
-  const testsSubtotal = linkedInvoice?.testsSubtotal 
-    || report.packageApplied?.packagePrice 
-    || (p as any).testsSubtotal 
+  const testsSubtotal = linkedInvoice?.testsSubtotal
+    || report.packageApplied?.packagePrice
+    || (p as any).testsSubtotal
     || (p.totalCost ? Math.max(0, p.totalCost + (p.discountApplied || 0) - visitFee) : items.reduce((sum, item) => sum + item.price, 0));
   const subtotal = testsSubtotal + visitFee;
 
   const [activePercent, setActivePercent] = useState<number | null>(
-    p.discountType === 'percentage' && p.discountApplied
-      ? Math.round((p.discountApplied / subtotal) * 100)
+    p.discountType === 'percentage' && p.discountApplied && testsSubtotal > 0
+      ? Math.round((p.discountApplied / testsSubtotal) * 100)
       : null
   );
-  const [customPercent, setCustomPercent] = useState<number>(activePercent || 15);
+  const [customPercent, setCustomPercent] = useState<number>(activePercent || tierDiscountPct || 15);
   const [customFlatDiscount, setCustomFlatDiscount] = useState<number>(0);
-  const [discountAmount, setDiscountAmount] = useState<number>(p.discountApplied || 0);
+  const [discountAmount, setDiscountAmount] = useState<number>(p.discountApplied ?? linkedInvoice?.discount ?? 0);
 
-  // Sync if report changes
   React.useEffect(() => {
-    setDiscountAmount(p.discountApplied || 0);
-  }, [p.discountApplied]);
+    setDiscountAmount(p.discountApplied ?? linkedInvoice?.discount ?? 0);
+  }, [p.discountApplied, linkedInvoice?.discount]);
 
   const discount = discountAmount;
   const netTotal = Math.max(0, subtotal - discount);
+
+  const persistDiscountChanges = (disc: number, discountType: 'percentage' | 'daily_fixed' | 'none') => {
+    const newNet = Math.max(0, subtotal - disc);
+    const currentPaid = linkedInvoice?.paidAmount ?? (p as any).paidAmount ?? newNet;
+    const adjustedPaid = Math.min(currentPaid, newNet);
+    const newRemaining = Math.max(0, newNet - adjustedPaid);
+
+    const updatedPatient = {
+      ...p,
+      discountType,
+      discountApplied: disc,
+      totalCost: newNet,
+      paidAmount: adjustedPaid,
+      remainingAmount: newRemaining,
+      loyaltyCardIssued: loyaltyProfile ? true : p.loyaltyCardIssued,
+      loyaltyCardNumber: loyaltyCardCode || p.loyaltyCardNumber
+    };
+
+    if (onUpdateReport) {
+      onUpdateReport({ ...report, patient: updatedPatient });
+    } else {
+      updateReport(report.id, { patient: updatedPatient });
+    }
+
+    if (linkedInvoice) {
+      updateIncomeRecord(linkedInvoice.id, {
+        discount: disc,
+        discountApplied: disc,
+        netAmount: newNet,
+        paidAmount: adjustedPaid,
+        remainingAmount: newRemaining,
+        paymentStatus: newRemaining === 0 ? 'paid' : adjustedPaid > 0 ? 'partial' : 'unpaid'
+      });
+    }
+  };
 
   const handleApplyPercentage = (pct: number) => {
     setActivePercent(pct);
     setCustomPercent(pct);
     const disc = Math.round((testsSubtotal * pct) / 100);
     setDiscountAmount(disc);
-    if (onUpdateReport) {
-      onUpdateReport({
-        ...report,
-        patient: {
-          ...p,
-          discountType: 'percentage',
-          discountApplied: disc
-        }
-      });
-    }
+    persistDiscountChanges(disc, 'percentage');
   };
 
   const handleCustomPercentChange = (pct: number) => {
-    setActivePercent(pct);
-    setCustomPercent(pct);
-    const disc = Math.round((testsSubtotal * pct) / 100);
+    const safePct = Math.max(0, Math.min(100, pct));
+    setActivePercent(safePct);
+    setCustomPercent(safePct);
+    const disc = Math.round((testsSubtotal * safePct) / 100);
     setDiscountAmount(disc);
-    if (onUpdateReport) {
-      onUpdateReport({
-        ...report,
-        patient: {
-          ...p,
-          discountType: 'percentage',
-          discountApplied: disc
-        }
-      });
-    }
+    persistDiscountChanges(disc, 'percentage');
   };
 
   const handleFlatDiscountChange = (flat: number) => {
     setActivePercent(null);
     setCustomFlatDiscount(flat);
-    const disc = Math.min(subtotal, flat);
+    const disc = Math.max(0, Math.min(testsSubtotal, flat));
     setDiscountAmount(disc);
-    if (onUpdateReport) {
-      onUpdateReport({
-        ...report,
-        patient: {
-          ...p,
-          discountType: 'daily_fixed',
-          discountApplied: disc
-        }
-      });
-    }
+    persistDiscountChanges(disc, 'daily_fixed');
   };
 
   const handleResetDiscount = () => {
     setActivePercent(null);
+    setCustomFlatDiscount(0);
     setDiscountAmount(0);
-    if (onUpdateReport) {
-      onUpdateReport({
-        ...report,
-        patient: {
-          ...p,
-          discountType: 'none',
-          discountApplied: 0
-        }
-      });
+    persistDiscountChanges(0, 'none');
+  };
+
+  const handleRedeemPointsOnInvoice = () => {
+    if (!loyaltyProfile || loyaltyProfile.totalPoints < 100) return;
+    const redeemPts = Math.floor(loyaltyProfile.totalPoints / 100) * 100;
+    const cashVal = pointsCashValue(redeemPts, loyaltyConfig).exactEGP;
+    const maxApplicable = Math.max(0, testsSubtotal - discount);
+    const actualRedeemCash = Math.min(cashVal, maxApplicable);
+    const actualPts = Math.min(redeemPts, Math.ceil((actualRedeemCash / Math.max(1, loyaltyConfig.egpPer100Points)) * 100));
+    if (actualPts <= 0 || actualRedeemCash <= 0) {
+      setPrintNotice('لا يمكن تطبيق خصم نقاط أكبر من صافي قيمة التحاليل المتبقي.');
+      return;
+    }
+    const res = redeemLoyaltyPoints(loyaltyProfile.patientId, actualPts, invoiceNumber);
+    if (res.success) {
+      const nextDisc = Math.min(testsSubtotal, discount + res.cashValue);
+      setDiscountAmount(nextDisc);
+      setActivePercent(null);
+      persistDiscountChanges(nextDisc, 'daily_fixed');
+      setPrintNotice(`✅ تم استبدال ${actualPts} نقطة وخصم ${res.cashValue} ج.م فوراً من الفاتورة.`);
+      setTimeout(() => setPrintNotice(null), 5500);
     }
   };
-  const realPaid = (p as any).paidAmount !== undefined 
-    ? (p as any).paidAmount 
-    : (linkedInvoice?.paidAmount !== undefined ? linkedInvoice.paidAmount : netTotal);
+
+  const realPaid = (p as any).paidAmount !== undefined
+    ? Math.min(netTotal, Number((p as any).paidAmount) || 0)
+    : (linkedInvoice?.paidAmount !== undefined ? Math.min(netTotal, linkedInvoice.paidAmount) : netTotal);
   const paidAmount = realPaid;
-  const remainingAmount = (p as any).remainingAmount !== undefined
-    ? (p as any).remainingAmount
-    : (linkedInvoice?.remainingAmount !== undefined ? linkedInvoice.remainingAmount : Math.max(0, netTotal - paidAmount));
+  const remainingAmount = Math.max(0, netTotal - paidAmount);
 
   const sampleDateFormatted = p.sampleDate ? new Date(p.sampleDate).toLocaleDateString('en-GB', {
     year: 'numeric',
@@ -230,390 +310,172 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
     minute: '2-digit'
   }) : 'خلال 24 ساعة';
 
-  // 1. Direct Isolated Print Window (100% white background, zero app background)
+  const invNorm = normalizeInvoiceRef(invoiceNumber);
+  const labNorm = normalizeInvoiceRef(p.labNumber);
+  const confirmedTx = loyaltyProfile?.transactions?.find(
+    t => t.type === 'earn' && t.points > 0 && (
+      (t.invoiceNumber && (normalizeInvoiceRef(t.invoiceNumber) === invNorm || normalizeInvoiceRef(t.invoiceNumber) === labNorm)) ||
+      (t.reportNumber && normalizeInvoiceRef(t.reportNumber) === labNorm)
+    )
+  );
+  const paidTestsOnly = calculateTestsOnlyPaidAmount(
+    { testsSubtotal, visitFee, discount, netAmount: netTotal, paidAmount },
+    loyaltyConfig
+  );
+  const invoiceEarnedPoints = confirmedTx?.points ?? pointsForAmount(paidTestsOnly, loyaltyConfig);
+
+  const paymentMethodCode = linkedInvoice?.paymentMethod || p.paymentMethod || 'cash';
+  const paymentMethodLabel = PAYMENT_METHOD_AR[paymentMethodCode] || 'نقدي';
+  const isHomeVisitFlag = p.bookingType === 'home_visit' || (p as any).isHomeVisit;
+  const repName = isHomeVisitFlag
+    ? (p.visitSpecialist || linkedInvoice?.visitSpecialist)
+    : (p.branchRepresentative || linkedInvoice?.branchRepresentative);
+
+  const buildExportPayload = (): InvoiceExportPayload => ({
+    invoiceNumber,
+    labNumber: p.labNumber,
+    barcode: p.barcode,
+    patientName: p.fullName,
+    patientPhone: p.phone,
+    ageText: `${p.age} ${p.ageUnit === 'years' ? 'سنة' : 'شهر'}`,
+    genderText: formatGenderAr(p.gender),
+    referringDoctor: p.referringDoctorName || 'طلب فحص ذاتي (Self-Request)',
+    sampleDateFormatted,
+    reportingDateFormatted,
+    branchName: p.branchName || linkedInvoice?.branchName || linkedInvoice?.branch || 'الفرع الرئيسي - بهتيم',
+    representativeLabel: isHomeVisitFlag ? 'مندوب الزيارة المنزلية' : 'مندوب استقبال الفرع',
+    representativeName: repName,
+    items,
+    testsSubtotal,
+    visitFee,
+    discount,
+    netTotal,
+    paidAmount,
+    remainingAmount,
+    paymentMethodLabel,
+    cashierName: linkedInvoice?.cashierName || 'الاستقبال والخزينة',
+    labInfo,
+    loyaltyProfile,
+    loyaltyConfig,
+    invoiceEarnedPoints,
+    isEarnedConfirmed: Boolean(confirmedTx)
+  });
+
+  // 1. Direct Isolated Print Window
   const handlePrintInvoice = () => {
     const printWindow = window.open('', '_blank');
     if (!printWindow) {
-      setPrintNotice('يرجى السماح بالنوافذ المنبثقة في المتصفح لطباعة الفاتورة، أو استخدام زر تحميل PDF.');
+      setPrintNotice('يرجى السماح بالنوافذ المنبثقة في المتصفح لطباعة الفاتورة، أو استخدام زر تحميل PNG / PDF.');
       setTimeout(() => setPrintNotice(null), 5000);
       return;
     }
-
-    const itemsHtml = items.map((it, i) => `
-      <tr style="border-bottom: 1px solid #e2e8f0; font-size: 11.5px;">
-        <td style="padding: 8px 12px; text-align: center; color: #64748b; font-family: monospace;">${i + 1}</td>
-        <td style="padding: 8px 12px; text-align: right; font-weight: bold; color: #0f172a;">
-          ${it.titleAr}
-          <span style="display:block; font-size: 10px; color: #64748b; font-weight: normal;" dir="ltr">${it.titleEn}</span>
-        </td>
-        <td style="padding: 8px 12px; text-align: center; color: #475569;">${it.sampleType}</td>
-        <td style="padding: 8px 12px; text-align: center; font-family: monospace;">${it.parametersCount} عنصر</td>
-        <td style="padding: 8px 12px; text-align: left; font-family: monospace; font-weight: bold; color: #800000;" dir="ltr">${it.price.toFixed(2)} EGP</td>
-      </tr>
-    `).join('');
-
-    const htmlContent = `<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <title>فاتورة فحص طبي - ${p.fullName} - ${invoiceNumber}</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-  <style>
-    * { box-sizing: border-box; }
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: #ffffff !important;
-      background-color: #ffffff !important;
-      font-family: 'Cairo', sans-serif;
-      color: #0f172a;
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
-    }
-    .no-print-toolbar {
-      position: sticky;
-      top: 0;
-      background: #0f172a;
-      color: #ffffff;
-      padding: 12px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      z-index: 100;
-    }
-    .btn-print {
-      background: #800000;
-      color: white;
-      border: none;
-      padding: 8px 20px;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      font-family: 'Cairo', sans-serif;
-    }
-    .btn-close {
-      background: #334155;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-family: 'Cairo', sans-serif;
-    }
-    .invoice-card {
-      width: 210mm;
-      min-height: 297mm;
-      margin: 0 auto;
-      padding: 15mm 18mm;
-      background: #ffffff;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    @media print {
-      .no-print-toolbar { display: none !important; }
-      body { margin: 0 !important; padding: 0 !important; background: #ffffff !important; }
-      .invoice-card { width: 100% !important; margin: 0 !important; padding: 10mm 14mm !important; }
-      @page { size: A4 portrait; margin: 0; }
-    }
-  </style>
-</head>
-<body>
-  <div class="no-print-toolbar">
-    <div style="font-weight: bold; font-size: 13px;">معامل RT - طباعة فاتورة المريض الرسمية (A4)</div>
-    <div style="display:flex; gap:10px;">
-      <button class="btn-print" onclick="window.print()">🖨️ طباعة الفاتورة أو حفظ كـ PDF</button>
-      <button class="btn-close" onclick="window.close()">إغلاق النافذة ✕</button>
-    </div>
-  </div>
-
-  <div class="invoice-card">
-    <div>
-      <!-- Official Header -->
-      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #800000; padding-bottom: 12px;">
-        <div style="text-align: right; flex: 1;">
-          <h1 style="margin: 0; font-size: 19px; font-weight: 900; color: #800000;">معامل RT للتحاليل التشخيصية</h1>
-          <h2 style="margin: 2px 0 0 0; font-size: 13px; font-weight: 700; color: #0f172a;">معامل د. رامي مختار</h2>
-          <p style="margin: 2px 0 0 0; font-size: 11px; font-weight: 600; color: #800000;">أطباء الباثولوجيا الإكلينيكية والكيميائية - طب قصر العيني</p>
-          <p style="margin: 2px 0 0 0; font-size: 10px; color: #64748b;">المقر الرئيسي: ${mainAddressDisplay} | تليفون المعمل والخط الساخن: ${contactPhone} | خدمة واتساب: ${contactWhatsapp}</p>
-        </div>
-
-        <div style="text-align: center; padding: 0 16px;">
-          <div style="display: inline-block; background: #800000; color: white; padding: 4px 14px; border-radius: 6px; font-weight: 900; font-size: 13px; letter-spacing: 0.5px;">
-            فاتورة فحص وإيصال سداد
-          </div>
-          <div style="font-size: 10px; color: #64748b; margin-top: 4px; font-family: monospace;">RECEIPT & INVOICE</div>
-        </div>
-
-        <div style="text-align: left; flex: 1;" dir="ltr">
-          <h1 style="margin: 0; font-size: 18px; font-weight: 900; color: #800000;">RT LAB LABORATORIES</h1>
-          <h2 style="margin: 2px 0 0 0; font-size: 12px; font-weight: 700; color: #0f172a;">Dr. Rami Mokhtar Labs</h2>
-          <p style="margin: 2px 0 0 0; font-size: 10px; color: #64748b;">Kasr Al Ainy Faculty of Medicine</p>
-          <p style="margin: 2px 0 0 0; font-size: 10px; color: #800000; font-family: monospace;">${invoiceNumber}</p>
-        </div>
-      </div>
-
-      <!-- Stripe -->
-      <div style="display: flex; height: 3px; width: 100%; margin-top: 3px; margin-bottom: 14px;">
-        <div style="width: 75%; background: #800000;"></div>
-        <div style="width: 25%; background: #0f172a;"></div>
-      </div>
-
-      <!-- Patient & Invoice Meta Box -->
-      <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px 14px; margin-bottom: 16px; font-size: 12px;">
-        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px 14px;">
-          <div>
-            <span style="color: #64748b;">اسم المريض:</span>
-            <strong style="color: #0f172a; font-size: 13px; margin-right: 4px;">${p.fullName}</strong>
-          </div>
-          <div dir="ltr" style="text-align: right;">
-            <span style="color: #64748b;">رقم المعمل:</span>
-            <strong style="color: #800000; font-family: monospace; font-size: 13px; margin-left: 4px;">${p.labNumber}</strong>
-          </div>
-          <div dir="ltr" style="text-align: right;">
-            <span style="background: white; border: 1px solid #cbd5e1; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 10px;">||| ${p.barcode}</span>
-          </div>
-
-          <div>
-            <span style="color: #64748b;">السن / النوع:</span>
-            <strong style="margin-right: 4px;">${p.age} ${p.ageUnit === 'years' ? 'سنة' : 'شهر'} / ${formatGenderAr(p.gender)}</strong>
-          </div>
-          <div>
-            <span style="color: #64748b;">تاريخ السحب:</span>
-            <span style="font-family: monospace; margin-right: 4px;">${sampleDateFormatted}</span>
-          </div>
-          <div>
-            <span style="color: #64748b;">موعد الاستلام:</span>
-            <span style="font-family: monospace; margin-right: 4px; color: #800000; font-weight: bold;">${reportingDateFormatted}</span>
-          </div>
-
-          <div style="grid-column: span 2;">
-            <span style="color: #64748b;">الطبيب المعالج:</span>
-            <strong style="margin-right: 4px;">${p.referringDoctorName || 'طلب فحص ذاتي (Self-Request)'}</strong>
-          </div>
-          <div dir="ltr" style="text-align: right;">
-            <span style="color: #64748b;">الهاتف:</span>
-            <span style="font-family: monospace; margin-left: 4px;">${p.phone || '—'}</span>
-          </div>
-          ${(p.visitSpecialist || p.branchRepresentative || linkedInvoice?.visitSpecialist || linkedInvoice?.branchRepresentative) ? `
-          <div style="grid-column: span 3; border-top: 1px dashed #e2e8f0; padding-top: 6px; margin-top: 2px;">
-            <span style="color: #64748b;">${(p.bookingType === 'home_visit' || p.isHomeVisit) ? 'مندوب الزيارة المنزلية:' : 'مندوب استقبال الفرع:'}</span>
-            <strong style="margin-right: 4px; color: #0f172a;">${(p.bookingType === 'home_visit' || p.isHomeVisit) ? (p.visitSpecialist || linkedInvoice?.visitSpecialist) : (p.branchRepresentative || linkedInvoice?.branchRepresentative)}</strong>
-            ${p.branchName ? `<span style="color: #64748b; margin-right: 10px;">| الفرع: <strong>${p.branchName}</strong></span>` : ''}
-          </div>` : ''}
-        </div>
-      </div>
-
-      <!-- Financial Table -->
-      <div style="border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; margin-bottom: 16px;">
-        <table style="width: 100%; border-collapse: collapse;">
-          <thead>
-            <tr style="background: #f1f5f9; color: #1e293b; font-size: 11px; font-weight: 800; border-bottom: 1.5px solid #cbd5e1;">
-              <th style="padding: 9px 12px; width: 6%; text-align: center;">#</th>
-              <th style="padding: 9px 12px; width: 44%; text-align: right;">اسم التحليل / باقة الفحص</th>
-              <th style="padding: 9px 12px; width: 18%; text-align: center;">العينة المطلوبة</th>
-              <th style="padding: 9px 12px; width: 16%; text-align: center;">العناصر</th>
-              <th style="padding: 9px 12px; width: 16%; text-align: left;">القيمة</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${itemsHtml}
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Financial Totals Summary -->
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; margin-bottom: 20px;">
-        <!-- Notes & Policy -->
-        <div style="flex: 1; background: #fff1f2; border: 1px dashed #f43f5e; border-radius: 8px; padding: 10px 14px; font-size: 11px; line-height: 1.6; color: #881337;">
-          <strong>تنبيهات هامة للمريض:</strong>
-          <ul style="margin: 4px 0 0 0; padding-right: 18px;">
-            <li>يرجى إبراز هذا الإيصال أو الباركود عند استلام النتائج الورقية من فرع المعمل.</li>
-            <li>يمكن إرسال التقرير الطبي المعتمد بصيغة PDF فور اعتماده على رقم الواتساب المسجل.</li>
-            <li>الأسعار تشمل سحب العينات والمستلزمات الطبية والتقارير الاستشارية المعتمدة.</li>
-          </ul>
-        </div>
-
-        <!-- Totals Table -->
-        <div style="width: 290px; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 12px 14px; font-size: 12px;">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-            <span style="color: #64748b;">إجمالي التحاليل:</span>
-            <span style="font-family: monospace; font-weight: bold;">${testsSubtotal.toFixed(2)} ج.م</span>
-          </div>
-          ${discount > 0 ? `
-            <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: #059669;">
-              <span>خصم مطبق (تحاليل):</span>
-              <span style="font-family: monospace; font-weight: bold;">- ${discount.toFixed(2)} ج.م</span>
-            </div>
-          ` : ''}
-          ${visitFee > 0 ? `
-            <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: #4338ca; font-weight: bold;">
-              <span>رسوم الزيارة (ثابتة):</span>
-              <span style="font-family: monospace;">+ ${visitFee.toFixed(2)} ج.م</span>
-            </div>
-          ` : ''}
-          <div style="display: flex; justify-content: space-between; padding-top: 6px; border-top: 1.5px solid #cbd5e1; font-size: 13px; font-weight: 900; color: #800000; margin-bottom: 6px;">
-            <span>الصافي المطلوب:</span>
-            <span style="font-family: monospace;">${netTotal.toFixed(2)} ج.م</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: #0f172a;">
-            <span style="color: #64748b;">المدفوع نقداً:</span>
-            <span style="font-family: monospace; font-weight: bold; color: #059669;">${paidAmount.toFixed(2)} ج.م</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; padding-top: 6px; border-top: 1px dashed #cbd5e1; font-weight: bold;">
-            <span style="color: ${remainingAmount > 0 ? '#b91c1c' : '#059669'};">
-              ${remainingAmount > 0 ? 'المتبقي للخزينة:' : 'حالة الحساب:'}
-            </span>
-            <span style="font-family: monospace; color: ${remainingAmount > 0 ? '#b91c1c' : '#059669'};">
-              ${remainingAmount > 0 ? `${remainingAmount.toFixed(2)} ج.م` : 'مسدد بالكامل ✓'}
-            </span>
-          </div>
-          <!-- Tafqeet -->
-          <div style="margin-top: 8px; padding-top: 6px; border-top: 1px dashed #cbd5e1; font-size: 11px; font-weight: bold; color: #800000;">
-            المبلغ كتابةً: ${tafqeetEGP(netTotal)}
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Signatures & Stamp Footer -->
-    <div style="border-top: 1.5px solid #cbd5e1; padding-top: 12px; margin-top: auto;">
-      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; text-align: center;">
-        <div>
-          <div style="font-size: 11px; font-weight: bold; color: #64748b;">مسؤول الاستقبال والخزينة</div>
-          <div style="font-family: cursive; font-size: 13px; color: #0f172a; padding: 6px 0;">Approved / Cashier</div>
-          <div style="font-size: 10px; color: #64748b;">خزينة معامل RT قصر العيني</div>
-        </div>
-
-        <div>
-          <div style="font-size: 11px; font-weight: bold; color: #64748b;">ختم الاستلام المالي</div>
-          <div style="display: inline-block; border: 2px dashed #800000; border-radius: 50%; width: 56px; height: 56px; line-height: 56px; color: #800000; font-size: 11px; font-weight: 900; margin: 2px auto;">
-            PAID
-          </div>
-        </div>
-
-        <div>
-          <div style="font-size: 11px; font-weight: bold; color: #800000;">إدارة معامل RT للتحاليل</div>
-          <div style="font-size: 11px; font-weight: bold; color: #800000; padding: 6px 0;">د. رامي مختار</div>
-          <div style="font-size: 10px; color: #64748b;">مدرس واستشاري الباثولوجيا الإكلينيكية</div>
-        </div>
-      </div>
-
-      <div style="text-align: center; font-size: 9px; color: #94a3b8; margin-top: 10px; padding-top: 4px; border-top: 1px solid #f1f5f9;">
-        فاتورة إلكترونية معتمدة صادرة آلياً من منظومة RT LAB للتشخيص الطبي | تليفون المعمل: ${contactPhone} | خدمة عملاء واتساب: ${contactWhatsapp}
-      </div>
-    </div>
-  </div>
-
-  <script>
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        window.print();
-      }, 400);
-    });
-  </script>
-</body>
-</html>`;
-
     printWindow.document.open();
-    printWindow.document.write(htmlContent);
+    printWindow.document.write(buildInvoicePrintDocumentHTML(buildExportPayload()));
     printWindow.document.close();
   };
 
-  // 2. Direct PDF File Download using clean isolated html2canvas
+  // 2. High-res PNG Image Export
+  const handleDownloadPNG = async () => {
+    try {
+      setIsExporting('png');
+      await exportInvoiceAsPNG(buildExportPayload(), false);
+      setPrintNotice('✅ تم تحميل صورة الفاتورة شاملة كارت الولاء بصيغة PNG عالية الدقة.');
+      setTimeout(() => setPrintNotice(null), 4500);
+    } catch (err) {
+      console.error('PNG export error:', err);
+      setPrintNotice('تعذر إنشاء صورة PNG — يمكنك استخدام زر الطباعة الفورية.');
+    } finally {
+      setIsExporting(null);
+    }
+  };
+
+  // 3. Direct PDF File Download
   const handleDownloadPDF = async () => {
     try {
-      setIsGeneratingPDF(true);
-      const { default: html2canvas } = await import('html2canvas');
-      const { default: jsPDF } = await import('jspdf');
-
-      const targetEl = invoiceContainerRef.current;
-      if (!targetEl) return;
-
-      // Temporarily strip any shadows and set white bg
-      const origShadow = targetEl.style.boxShadow;
-      const origBorder = targetEl.style.border;
-      targetEl.style.boxShadow = 'none';
-      targetEl.style.border = 'none';
-      targetEl.style.backgroundColor = '#ffffff';
-
-      const canvas = await html2canvas(targetEl, {
-        scale: 2,
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#ffffff',
-        windowWidth: 1000
-      });
-
-      targetEl.style.boxShadow = origShadow;
-      targetEl.style.border = origBorder;
-
-      const imgData = canvas.toDataURL('image/jpeg', 0.95);
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4',
-        compress: true
-      });
-
-      const pdfWidth = 210;
-      const pdfHeight = 297;
-      const margin = 8;
-      const contentWidth = pdfWidth - margin * 2;
-      const contentHeight = (canvas.height * contentWidth) / canvas.width;
-
-      pdf.addImage(imgData, 'JPEG', margin, margin, contentWidth, Math.min(contentHeight, pdfHeight - margin * 2));
-      const safeName = p.fullName.trim().replace(/\s+/g, '_') || 'Patient';
-      pdf.save(`فاتورة_معامل_RT_${safeName}_${p.labNumber}.pdf`);
+      setIsExporting('pdf');
+      await exportInvoiceAsPDF(buildExportPayload());
+      setPrintNotice('✅ تم تحميل ملف الفاتورة الرسمي (PDF) شاملاً كارت الولاء.');
+      setTimeout(() => setPrintNotice(null), 4500);
     } catch (err) {
       console.error('Error generating PDF:', err);
       handlePrintInvoice();
     } finally {
-      setIsGeneratingPDF(false);
+      setIsExporting(null);
     }
   };
 
-  // 3. Send WhatsApp Invoice Summary
-  const handleSendWhatsAppInvoice = () => {
-    const text = `*معامل RT للتحاليل الطبية والتشخيصية*
-*معامل د. رامي مختار - طب قصر العيني*
----------------------------------------
-📋 *فاتورة فحص طبي وإيصال سداد*
-رقم الفاتورة: ${invoiceNumber}
-رقم المعمل: ${p.labNumber}
-اسم المريض: ${p.fullName}
-تاريخ السحب: ${sampleDateFormatted}
-موعد الاستلام: ${reportingDateFormatted}
-
-🔬 *الفحوصات المطلوبة:*
-${items.map((it, idx) => `${idx + 1}. ${it.titleAr} (${it.titleEn}) - ${it.price} ج.م`).join('\n')}
-
-💰 *البيان المالي:*
-- الإجمالي: ${subtotal} ج.م
-${discount > 0 ? `- الخصم: ${discount} ج.م\n` : ''}- الصافي المطلوب: ${netTotal} ج.م
-- المسدد نقداً: ${paidAmount} ج.م
-- المتبقي: ${remainingAmount > 0 ? `${remainingAmount} ج.م` : 'مسدد بالكامل ✓'}
-
-📞 الخط الساخن وهاتف المعمل: ${contactPhone}
-💬 خدمة عملاء واتساب: ${contactWhatsapp}
-📍 العنوان: ${mainAddressDisplay}
-نتمنى لكم دوام الصحة والعافية!`;
-
-    openWhatsApp(p.phone, text);
+  // 4. Download Both PNG + PDF
+  const handleDownloadBoth = async () => {
+    try {
+      setIsExporting('both');
+      const payload = buildExportPayload();
+      await exportInvoiceAsPNG(payload, false);
+      await exportInvoiceAsPDF(payload);
+      setPrintNotice('✅ تم تحميل النسختين معاً (صورة PNG + ملف PDF) شاملتين لكارت الولاء.');
+      setTimeout(() => setPrintNotice(null), 5500);
+    } catch (err) {
+      console.error('Both export error:', err);
+      setPrintNotice('تعذر تصدير النسختين — جرب التصدير الفردي أو الطباعة.');
+    } finally {
+      setIsExporting(null);
+    }
   };
 
+  // 5. WhatsApp with PNG Image + Full Invoice & Loyalty Card Summary
+  const handleSendWhatsAppInvoice = async () => {
+    try {
+      setIsExporting('wa');
+      const payload = buildExportPayload();
+      const { copied } = await exportInvoiceAsPNG(payload, false);
+      const text = formatInvoiceWhatsAppMessage({
+        invoiceNumber,
+        labNumber: p.labNumber,
+        barcode: p.barcode,
+        patientName: p.fullName,
+        sampleDate: sampleDateFormatted,
+        reportingDate: reportingDateFormatted,
+        branchName: payload.branchName,
+        items: items.map(it => ({ titleAr: it.titleAr, titleEn: it.titleEn, price: it.price })),
+        testsSubtotal,
+        visitFee,
+        discount,
+        netTotal,
+        paidAmount,
+        remainingAmount,
+        paymentMethodLabel,
+        loyaltyProfile,
+        loyaltyConfig,
+        invoiceEarnedPoints,
+        labInfo: labInfo as any
+      });
+      openWhatsApp(p.phone, text);
+      setPrintNotice(
+        copied
+          ? '✅ تم تحميل صورة الفاتورة مع الكارت ونسخها للحافظة (الصقها Ctrl+V في واتساب) وفتح رسالة التفاصيل للمريض.'
+          : '✅ تم تحميل صورة الفاتورة مع الكارت وفتح رسالة الواتساب — أرفق الصورة المحمّلة في المحادثة.'
+      );
+      setTimeout(() => setPrintNotice(null), 6500);
+    } catch (err) {
+      console.error('WhatsApp invoice export error:', err);
+    } finally {
+      setIsExporting(null);
+    }
+  };
+
+  const barcodeSvgInline = generateBarcodeSVG(p.barcode || p.labNumber, 175, 38, true);
+
   return (
-    <div className="fixed inset-0 z-[60] bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto font-sans no-print" dir="rtl">
+    <div className="fixed inset-0 z-[60] bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-2 sm:p-5 overflow-y-auto font-sans no-print" dir="rtl">
       <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-4xl shadow-2xl flex flex-col max-h-[95vh] overflow-hidden">
         {/* Top Dialog Bar */}
-        <div className="bg-slate-900 border-b border-slate-800 p-4 px-6 flex items-center justify-between text-white sticky top-0 z-20">
+        <div className="bg-slate-900 border-b border-slate-800 p-3.5 sm:px-5 flex flex-wrap items-center justify-between gap-2 text-white sticky top-0 z-20">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-rose-600/20 text-rose-400 flex items-center justify-center border border-rose-500/30">
               <Receipt className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-white flex items-center gap-2">
-                <span>فاتورة فحص المريض وإيصال السداد المالي</span>
+              <h2 className="text-sm sm:text-base font-black text-white flex items-center gap-2">
+                <span>فاتورة المريض الذكية وكارت الولاء</span>
                 <span className="text-[11px] font-mono bg-rose-950 text-rose-300 px-2 py-0.5 rounded border border-rose-800 font-normal">
                   {invoiceNumber}
                 </span>
@@ -624,58 +486,77 @@ ${discount > 0 ? `- الخصم: ${discount} ج.م\n` : ''}- الصافي الم�
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            {/* Edit Client Data */}
+          <div className="flex flex-wrap items-center gap-1.5">
             <button
               onClick={() => setIsClientEditOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-sky-300 border border-slate-700 rounded-lg text-xs font-bold transition-all shadow-sm"
+              className="flex items-center gap-1 px-2.5 py-2 bg-slate-800 hover:bg-slate-700 text-sky-300 border border-slate-700 rounded-lg text-xs font-bold transition-all cursor-pointer"
               title="تعديل بيانات العميل / المريض بالفاتورة"
             >
               <User className="w-3.5 h-3.5 text-sky-400" />
-              <span>بيانات العميل</span>
+              <span className="hidden md:inline">بيانات العميل</span>
             </button>
 
-            {/* Edit Lab Info */}
             <button
               onClick={() => setIsLabEditOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-rose-300 border border-slate-700 rounded-lg text-xs font-bold transition-all shadow-sm"
+              className="flex items-center gap-1 px-2.5 py-2 bg-slate-800 hover:bg-slate-700 text-rose-300 border border-slate-700 rounded-lg text-xs font-bold transition-all cursor-pointer"
               title="تعديل بيانات المعمل والفاتورة والعنوان"
             >
               <Building2 className="w-3.5 h-3.5 text-rose-400" />
-              <span>بيانات المعمل</span>
+              <span className="hidden md:inline">بيانات المعمل</span>
             </button>
 
             <button
               onClick={handleSendWhatsAppInvoice}
-              className="flex items-center gap-1.5 px-3 py-2 bg-emerald-700 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold transition-all shadow-sm"
-              title="إرسال الفاتورة عبر واتساب"
+              disabled={isExporting !== null}
+              className="flex items-center gap-1.5 px-3 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white rounded-lg text-xs font-black transition-all shadow-sm cursor-pointer"
+              title="تحميل صورة الفاتورة بالكارت وإرسال التفاصيل عبر واتساب"
             >
-              <Share2 className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">واتساب</span>
+              {isExporting === 'wa' ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Share2 className="w-3.5 h-3.5" />}
+              <span>واتساب + صورة</span>
+            </button>
+
+            <button
+              onClick={handleDownloadPNG}
+              disabled={isExporting !== null}
+              className="flex items-center gap-1 px-2.5 py-2 bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white rounded-lg text-xs font-bold transition-all shadow-sm cursor-pointer"
+              title="تحميل الفاتورة وكارت الولاء كصورة PNG"
+            >
+              {isExporting === 'png' ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <ImageIcon className="w-3.5 h-3.5" />}
+              <span>PNG</span>
             </button>
 
             <button
               onClick={handleDownloadPDF}
-              disabled={isGeneratingPDF}
-              className="flex items-center gap-1.5 px-3 py-2 bg-rose-800 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition-all shadow-sm disabled:opacity-50"
-              title="تحميل ملف PDF"
+              disabled={isExporting !== null}
+              className="flex items-center gap-1 px-2.5 py-2 bg-rose-800 hover:bg-rose-700 disabled:opacity-50 text-white rounded-lg text-xs font-bold transition-all shadow-sm cursor-pointer"
+              title="تحميل الفاتورة كملف PDF"
             >
-              {isGeneratingPDF ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
-              <span className="hidden sm:inline">تحميل PDF</span>
+              {isExporting === 'pdf' ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <FileText className="w-3.5 h-3.5" />}
+              <span>PDF</span>
+            </button>
+
+            <button
+              onClick={handleDownloadBoth}
+              disabled={isExporting !== null}
+              className="flex items-center gap-1 px-2.5 py-2 bg-indigo-700 hover:bg-indigo-600 disabled:opacity-50 text-white rounded-lg text-xs font-bold transition-all shadow-sm cursor-pointer"
+              title="تحميل الصيغتين معاً (PNG + PDF)"
+            >
+              {isExporting === 'both' ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Layers className="w-3.5 h-3.5" />}
+              <span className="hidden sm:inline">PNG+PDF</span>
             </button>
 
             <button
               onClick={handlePrintInvoice}
-              className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-red-800 to-rose-700 hover:from-red-900 hover:to-rose-800 text-white rounded-lg text-xs font-black shadow-md transition-all"
-              title="طباعة الفاتورة"
+              className="flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-red-800 to-rose-700 hover:from-red-900 hover:to-rose-800 text-white rounded-lg text-xs font-black shadow-md transition-all cursor-pointer"
+              title="طباعة الفاتورة A4"
             >
               <Printer className="w-3.5 h-3.5" />
-              <span>طباعة فورية</span>
+              <span className="hidden sm:inline">طباعة</span>
             </button>
 
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition-colors mr-2"
+              className="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
               title="إغلاق"
             >
               <X className="w-4 h-4" />
@@ -684,19 +565,41 @@ ${discount > 0 ? `- الخصم: ${discount} ج.م\n` : ''}- الصافي الم�
         </div>
 
         {printNotice && (
-          <div className="bg-amber-50 border-b border-amber-300 px-6 py-2 text-xs font-bold text-amber-900">
+          <div className="bg-emerald-50 border-b border-emerald-300 px-6 py-2 text-xs font-bold text-emerald-900">
             {printNotice}
           </div>
         )}
 
-                {/* Interactive Discount Bar in Invoice Dialog (User Requested) */}
-        <div className="bg-slate-800/95 border-b border-slate-700/80 px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs text-white">
+        {/* Interactive Discount & Loyalty Action Bar */}
+        <div className="bg-slate-800/95 border-b border-slate-700/80 px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-2.5 text-xs text-white">
           <div className="flex items-center gap-1.5 flex-wrap">
             <span className="font-bold flex items-center gap-1 text-rose-300 ml-1">
               <Percent className="w-3.5 h-3.5 text-rose-400" />
-              <span>نسب الخصم:</span>
+              <span>خصم الفاتورة:</span>
             </span>
-            {[5, 10, 15, 20, 25, 30, 35, 40, 50].map((pct) => (
+            {loyaltyProfile && tierDiscountPct > 0 && (
+              <button
+                type="button"
+                onClick={() => handleApplyPercentage(tierDiscountPct)}
+                className="px-2.5 py-1 rounded-md font-bold text-xs cursor-pointer bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-xs flex items-center gap-1"
+                title="تطبيق نسبة الخصم التلقائية لفئة كارت المريض"
+              >
+                <Sparkles className="w-3 h-3" />
+                <span>خصم الكارت (%{tierDiscountPct})</span>
+              </button>
+            )}
+            {loyaltyProfile && loyaltyProfile.totalPoints >= 100 && (
+              <button
+                type="button"
+                onClick={handleRedeemPointsOnInvoice}
+                className="px-2.5 py-1 rounded-md font-bold text-xs cursor-pointer bg-emerald-600 hover:bg-emerald-500 text-white shadow-xs flex items-center gap-1"
+                title="استبدال النقاط بخصم نقدي مباشر على هذه الفاتورة"
+              >
+                <Gift className="w-3 h-3" />
+                <span>استبدال نقاط ({loyaltyCashInfo?.redeemableEGP || 0} ج.م)</span>
+              </button>
+            )}
+            {[5, 10, 15, 20, 25, 30].map((pct) => (
               <button
                 key={pct}
                 type="button"
@@ -712,29 +615,29 @@ ${discount > 0 ? `- الخصم: ${discount} ج.م\n` : ''}- الصافي الم�
             ))}
           </div>
 
-          <div className="flex items-center gap-3 flex-wrap">
-            <div className="flex items-center gap-1.5">
-              <span className="text-slate-300 text-[11px]">نسبة مخصصة (%):</span>
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <div className="flex items-center gap-1">
+              <span className="text-slate-300 text-[11px]">مخصص (%):</span>
               <input
                 type="number"
                 min="0"
                 max="100"
                 value={customPercent}
                 onChange={(e) => handleCustomPercentChange(Number(e.target.value) || 0)}
-                className="w-16 px-2 py-1 bg-slate-900 border border-slate-600 rounded text-center font-bold font-mono text-rose-300 text-xs"
+                className="w-14 px-2 py-1 bg-slate-900 border border-slate-600 rounded text-center font-bold font-mono text-rose-300 text-xs"
               />
             </div>
 
-            <div className="flex items-center gap-1.5">
-              <span className="text-slate-300 text-[11px]">خصم مباشر (ج.م):</span>
+            <div className="flex items-center gap-1">
+              <span className="text-slate-300 text-[11px]">مباشر (ج.م):</span>
               <input
                 type="number"
                 min="0"
-                max={subtotal}
+                max={testsSubtotal}
                 value={customFlatDiscount || ''}
                 onChange={(e) => handleFlatDiscountChange(Number(e.target.value) || 0)}
                 placeholder="0"
-                className="w-20 px-2 py-1 bg-slate-900 border border-slate-600 rounded text-center font-bold font-mono text-emerald-400 text-xs"
+                className="w-16 px-2 py-1 bg-slate-900 border border-slate-600 rounded text-center font-bold font-mono text-emerald-400 text-xs"
               />
             </div>
 
@@ -748,65 +651,63 @@ ${discount > 0 ? `- الخصم: ${discount} ج.م\n` : ''}- الصافي الم�
           </div>
         </div>
 
-        {/* Scrollable Document Preview Container */}
+        {/* Scrollable Executive Invoice Preview Container */}
         <div className="p-4 sm:p-6 overflow-y-auto bg-slate-950 flex justify-center">
-          {/* Paper Document - 100% White Background with Zero Leaks */}
           <div
             ref={invoiceContainerRef}
-            className="invoice-page-container bg-white text-slate-900 rounded-xl p-8 sm:p-10 w-full max-w-3xl shadow-xl flex flex-col justify-between min-h-[700px] border border-slate-200"
+            className="invoice-page-container bg-white text-slate-900 rounded-2xl p-6 sm:p-9 w-full max-w-3xl shadow-2xl flex flex-col justify-between border border-slate-200"
             style={{ backgroundColor: '#ffffff' }}
           >
             <div>
-              {/* Header */}
-              <div className="flex items-center justify-between border-b-2 border-red-950 pb-4 mb-4 gap-4">
+              {/* Executive Verified Header */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b-2 border-red-900 pb-4 mb-3 gap-4">
                 <div className="text-right flex-1">
-                  <h1 className="text-lg font-black text-rose-950">معامل RT للتحاليل التشخيصية</h1>
-                  <h2 className="text-xs font-bold text-slate-900">معامل د. رامي مختار</h2>
-                  <p className="text-[11px] font-semibold text-rose-900">أطباء الباثولوجيا الإكلينيكية والكيميائية - طب قصر العيني</p>
-                  <p className="text-[10px] text-slate-500">هاتف المعمل والخط الساخن: <strong className="font-mono text-slate-700">{contactPhone}</strong> | واتساب: <strong className="font-mono text-slate-700">{contactWhatsapp}</strong></p>
+                  <h1 className="text-lg sm:text-xl font-black text-rose-950">{labInfo.labNameAr}</h1>
+                  <p className="text-xs font-bold text-slate-800 mt-0.5">{labInfo.supervisionAr}</p>
+                  <p className="text-[11px] text-slate-600 mt-1">
+                    📞 الهاتف والخط الساخن: <strong className="font-mono text-slate-900">{contactPhonesDisplay}</strong> | 💬 واتساب: <strong className="font-mono text-emerald-800">{labInfo.whatsapp}</strong>
+                  </p>
+                  <p className="text-[10.5px] text-slate-500 mt-0.5">📍 {labInfo.mainAddress}</p>
                 </div>
 
-                <div className="text-center px-4">
-                  <div className="inline-block bg-red-950 text-white px-3.5 py-1.5 rounded-lg font-black text-xs shadow-sm">
+                <div className="text-center px-2 shrink-0">
+                  <div className="inline-block bg-gradient-to-r from-red-900 to-rose-800 text-white px-4 py-1.5 rounded-xl font-black text-xs shadow-sm">
                     فاتورة فحص وإيصال سداد
                   </div>
-                  <div className="text-[9px] text-slate-400 font-mono mt-1">RECEIPT & INVOICE</div>
+                  <div className="text-[9.5px] text-slate-400 font-mono mt-1 font-bold">OFFICIAL INVOICE & RECEIPT</div>
                 </div>
 
                 <div className="text-left flex-1" dir="ltr">
-                  <h1 className="text-lg font-black text-rose-950">RT LAB LABORATORIES</h1>
-                  <h2 className="text-xs font-bold text-slate-900">Dr. Rami Mokhtar Labs</h2>
-                  <p className="text-[10px] text-slate-500">Kasr Al Ainy Faculty of Medicine</p>
-                  <p className="text-[11px] font-mono font-bold text-rose-900">{invoiceNumber}</p>
+                  <h1 className="text-base font-black text-rose-950">{labInfo.labNameEn}</h1>
+                  <p className="text-[11px] font-bold text-slate-700">{labInfo.supervisionEn}</p>
+                  <p className="text-[10px] text-slate-500">{labInfo.accreditation}</p>
+                  <p className="text-xs font-mono font-black text-rose-900 mt-1">{invoiceNumber}</p>
                 </div>
               </div>
 
-              {/* Red line */}
-              <div className="flex h-1 w-full -mt-2 mb-4">
-                <div className="w-3/4 bg-red-950"></div>
+              <div className="flex h-1 w-full mb-4 rounded-full overflow-hidden">
+                <div className="w-3/4 bg-red-900"></div>
                 <div className="w-1/4 bg-slate-900"></div>
               </div>
 
-              {/* Patient details card */}
-              <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-4 text-xs">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {/* Patient details + Barcode */}
+              <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-4 text-xs flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-2 w-full">
                   <div>
                     <span className="text-slate-500">اسم المريض: </span>
-                    <strong className="text-slate-900 text-sm font-bold">{p.fullName}</strong>
+                    <strong className="text-slate-900 text-sm font-black">{p.fullName}</strong>
                   </div>
-                  <div dir="ltr" className="sm:text-right">
+                  <div>
                     <span className="text-slate-500">رقم المعمل: </span>
                     <strong className="text-rose-950 font-mono text-sm">{p.labNumber}</strong>
                   </div>
-                  <div dir="ltr" className="sm:text-right">
-                    <span className="bg-white border border-slate-300 px-2 py-0.5 rounded font-mono text-[11px]">
-                      ||| {p.barcode}
-                    </span>
-                  </div>
-
                   <div>
                     <span className="text-slate-500">السن / النوع: </span>
                     <strong>{p.age} {p.ageUnit === 'years' ? 'سنة' : 'شهر'} / {formatGenderAr(p.gender)}</strong>
+                  </div>
+                  <div>
+                    <span className="text-slate-500">الهاتف: </span>
+                    <strong className="font-mono">{p.phone || '—'}</strong>
                   </div>
                   <div>
                     <span className="text-slate-500">تاريخ السحب: </span>
@@ -816,35 +717,25 @@ ${discount > 0 ? `- الخصم: ${discount} ج.م\n` : ''}- الصافي الم�
                     <span className="text-slate-500">موعد الاستلام: </span>
                     <span className="font-mono font-bold text-rose-900">{reportingDateFormatted}</span>
                   </div>
-
-                  <div className="sm:col-span-2">
+                  <div>
                     <span className="text-slate-500">الطبيب المعالج: </span>
                     <strong>{p.referringDoctorName || 'طلب فحص ذاتي (Self-Request)'}</strong>
                   </div>
-                  <div dir="ltr" className="sm:text-right">
-                    <span className="text-slate-500">الهاتف: </span>
-                    <span className="font-mono">{p.phone || '—'}</span>
+                  <div>
+                    <span className="text-slate-500">الفرع: </span>
+                    <strong>{p.branchName || linkedInvoice?.branchName || 'الفرع الرئيسي - بهتيم'}</strong>
                   </div>
-                  {(p.visitSpecialist || p.branchRepresentative || linkedInvoice?.visitSpecialist || linkedInvoice?.branchRepresentative) && (
-                    <div className="sm:col-span-3 pt-2 border-t border-slate-200/70 flex flex-wrap gap-4">
-                      <span>
-                        <span className="text-slate-500">
-                          {p.bookingType === 'home_visit' || p.isHomeVisit ? 'مندوب الزيارة المنزلية: ' : 'مندوب استقبال الفرع: '}
-                        </span>
-                        <strong className="text-slate-900">
-                          {p.bookingType === 'home_visit' || p.isHomeVisit
-                            ? (p.visitSpecialist || linkedInvoice?.visitSpecialist)
-                            : (p.branchRepresentative || linkedInvoice?.branchRepresentative)}
-                        </strong>
-                      </span>
-                      {p.branchName && (
-                        <span>
-                          <span className="text-slate-500">الفرع: </span>
-                          <strong className="text-slate-800">{p.branchName}</strong>
-                        </span>
-                      )}
+                  {repName && (
+                    <div className="sm:col-span-2 pt-1 border-t border-slate-200/70">
+                      <span className="text-slate-500">{isHomeVisitFlag ? 'مندوب الزيارة المنزلية: ' : 'مندوب استقبال الفرع: '}</span>
+                      <strong className="text-slate-900">{repName}</strong>
                     </div>
                   )}
+                </div>
+
+                <div className="bg-white border border-slate-200 rounded-xl p-2 text-center shrink-0 mx-auto sm:mx-0">
+                  <div dangerouslySetInnerHTML={{ __html: barcodeSvgInline }} />
+                  <div className="text-[10px] text-slate-500 font-mono mt-0.5">{p.barcode}</div>
                 </div>
               </div>
 
@@ -852,8 +743,8 @@ ${discount > 0 ? `- الخصم: ${discount} ج.م\n` : ''}- الصافي الم�
               <div className="border border-slate-200 rounded-xl overflow-hidden mb-4">
                 <table className="w-full text-xs text-right">
                   <thead>
-                    <tr className="bg-slate-100 text-slate-700 font-bold border-b border-slate-200 text-[11px]">
-                      <th className="py-2.5 px-3 text-center w-12">#</th>
+                    <tr className="bg-slate-100 text-slate-800 font-black border-b border-slate-200 text-[11px]">
+                      <th className="py-2.5 px-3 text-center w-10">#</th>
                       <th className="py-2.5 px-3 text-right">اسم التحليل / باقة الفحص</th>
                       <th className="py-2.5 px-3 text-center">نوع العينة</th>
                       <th className="py-2.5 px-3 text-center">العناصر</th>
@@ -862,7 +753,7 @@ ${discount > 0 ? `- الخصم: ${discount} ج.م\n` : ''}- الصافي الم�
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {items.map((it, idx) => (
-                      <tr key={it.id} className="hover:bg-slate-50/50">
+                      <tr key={it.id} className="odd:bg-white even:bg-slate-50/60">
                         <td className="py-2.5 px-3 text-center text-slate-400 font-mono">{idx + 1}</td>
                         <td className="py-2.5 px-3">
                           <div className="font-bold text-slate-900">{it.titleAr}</div>
@@ -879,28 +770,94 @@ ${discount > 0 ? `- الخصم: ${discount} ج.م\n` : ''}- الصافي الم�
                 </table>
               </div>
 
-              {/* Totals & Notes Section */}
-              <div className="flex flex-col sm:flex-row items-start justify-between gap-4 mb-6">
-                <div className="flex-1 bg-rose-50/70 border border-rose-200 rounded-xl p-3.5 text-xs text-rose-950 space-y-1">
-                  <div className="font-bold flex items-center gap-1 text-rose-900">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>تنبيهات استلام النتائج:</span>
+              {/* Integrated Patient Loyalty Card & Points Panel Inside Invoice */}
+              {loyaltyProfile && (
+                <div className={`rounded-2xl p-4 mb-4 text-white border-2 shadow-md ${tierPalette.gradientCss} ${tierPalette.borderClass}`}>
+                  <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 mb-2.5 border-b border-white/20">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-lg bg-white/15 border border-white/30 flex items-center justify-center font-black text-xs">
+                        <Award className="w-4 h-4 text-amber-300" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-black text-white">
+                          كارت الولاء الطبي الذكي — {tierPalette.titleAr}
+                        </div>
+                        <div className="text-[11px] font-mono text-amber-200 font-bold">
+                          رقم الكارت: {loyaltyCardCode}
+                        </div>
+                      </div>
+                    </div>
+                    <span className={`px-3 py-1 rounded-full text-[11px] font-black border ${tierPalette.badgeBgClass}`}>
+                      خصم دائم معتمد: %{tierDiscountPct}
+                    </span>
                   </div>
-                  <ul className="text-[11px] list-disc list-inside space-y-0.5 text-rose-900/90 pr-1">
-                    <li>يرجى إبراز هذا الإيصال أو كود الباركود عند استلام التقرير الورقي.</li>
-                    <li>يتم إرسال النتائج المعتمدة بصيغة PDF فورياً عبر الواتساب المسجل.</li>
-                    <li>للاستفسارات الطبية: الخط الساخن لمعامل RT متاح 24/7.</li>
-                  </ul>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+                    <div className="bg-black/35 border border-white/15 rounded-xl px-3 py-2">
+                      <div className="text-[10px] text-slate-200">رصيد النقاط التراكمي:</div>
+                      <div className="font-black font-mono text-sm text-amber-300">
+                        {(loyaltyProfile.totalPoints || 0).toLocaleString()} نقطة
+                      </div>
+                    </div>
+                    <div className="bg-black/35 border border-white/15 rounded-xl px-3 py-2">
+                      <div className="text-[10px] text-slate-200">القيمة النقدية للاستبدال:</div>
+                      <div className="font-black font-mono text-sm text-emerald-300">
+                        = {loyaltyCashInfo?.exactEGP || 0} ج.م
+                      </div>
+                    </div>
+                    <div className="bg-black/35 border border-white/15 rounded-xl px-3 py-2">
+                      <div className="text-[10px] text-slate-200">
+                        {confirmedTx ? 'نقاط مكتسبة بهذه الفاتورة:' : 'نقاط متوقعة لهذه الفاتورة:'}
+                      </div>
+                      <div className="font-black font-mono text-sm text-amber-200">
+                        +{invoiceEarnedPoints.toLocaleString()} نقطة
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-2.5 text-[10.5px] text-amber-100 bg-white/10 rounded-lg px-3 py-1.5 text-center font-bold">
+                    {redemptionSummaryText(loyaltyConfig)} · تُضاف النقاط وتُرقى الفئة تلقائياً مع كل حجز جديد
+                  </div>
+                </div>
+              )}
+
+              {/* Totals, InstaPay/Vodafone Cash & Notes Section */}
+              <div className="flex flex-col sm:flex-row items-stretch justify-between gap-4 mb-5">
+                <div className="flex-1 flex flex-col justify-between gap-3">
+                  <div className="bg-rose-50/70 border border-rose-200 rounded-xl p-3.5 text-xs text-rose-950 space-y-1">
+                    <div className="font-bold flex items-center gap-1 text-rose-900">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <span>تنبيهات استلام النتائج والولاء:</span>
+                    </div>
+                    <ul className="text-[11px] list-disc list-inside space-y-0.5 text-rose-900/90 pr-1">
+                      <li>يرجى إبراز هذا الإيصال أو رقم كارت الولاء في زياراتكم القادمة.</li>
+                      <li>يتم إرسال النتائج المعتمدة بصيغة PDF فورياً عبر واتساب ({labInfo.whatsapp}).</li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-[11px] text-blue-950">
+                    <div className="font-black text-blue-900 mb-1">💳 قنوات الدفع والتحويل الإلكتروني المعتمدة:</div>
+                    <div className="font-mono font-bold space-y-0.5">
+                      <div>InstaPay: <span className="text-slate-900">{labInfo.instapay}</span></div>
+                      <div>Vodafone Cash: <span className="text-slate-900">{labInfo.vodafoneCash}</span></div>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="w-full sm:w-72 bg-slate-50 border border-slate-300 rounded-xl p-4 text-xs space-y-2">
                   <div className="flex justify-between text-slate-600">
-                    <span>إجمالي الفحوصات:</span>
-                    <span className="font-mono font-bold text-slate-800">{subtotal.toFixed(2)} ج.م</span>
+                    <span>إجمالي التحاليل:</span>
+                    <span className="font-mono font-bold text-slate-800">{testsSubtotal.toFixed(2)} ج.م</span>
                   </div>
+                  {visitFee > 0 && (
+                    <div className="flex justify-between text-indigo-700 font-semibold">
+                      <span>رسوم الزيارة المنزلية:</span>
+                      <span className="font-mono font-bold">+ {visitFee.toFixed(2)} ج.م</span>
+                    </div>
+                  )}
                   {discount > 0 && (
                     <div className="flex justify-between text-emerald-700 font-semibold">
-                      <span>خصم مطبق:</span>
+                      <span>الخصم المطبق:</span>
                       <span className="font-mono font-bold">- {discount.toFixed(2)} ج.م</span>
                     </div>
                   )}
@@ -909,7 +866,7 @@ ${discount > 0 ? `- الخصم: ${discount} ج.م\n` : ''}- الصافي الم�
                     <span className="font-mono">{netTotal.toFixed(2)} ج.م</span>
                   </div>
                   <div className="flex justify-between text-slate-700">
-                    <span>المسدد نقداً:</span>
+                    <span>المسدد ({paymentMethodLabel}):</span>
                     <span className="font-mono font-bold text-emerald-700">{paidAmount.toFixed(2)} ج.م</span>
                   </div>
                   <div className="flex justify-between font-bold pt-2 border-t border-dashed border-slate-300">
@@ -922,7 +879,7 @@ ${discount > 0 ? `- الخصم: ${discount} ج.م\n` : ''}- الصافي الم�
                   </div>
 
                   {/* Tafqeet in Arabic Words */}
-                  <div className="pt-2 border-t border-slate-200 text-[11px] font-bold text-rose-950 bg-amber-50/70 p-2 rounded-lg border border-amber-200">
+                  <div className="pt-2 text-[11px] font-bold text-rose-950 bg-amber-50/80 p-2 rounded-lg border border-amber-200">
                     <span className="text-slate-500 font-normal">المبلغ كتابةً: </span>
                     <span>{tafqeetEGP(netTotal)}</span>
                   </div>
@@ -931,30 +888,30 @@ ${discount > 0 ? `- الخصم: ${discount} ج.م\n` : ''}- الصافي الم�
             </div>
 
             {/* Official Signatures & Stamp */}
-            <div className="border-t border-slate-200 pt-4 mt-6">
+            <div className="border-t border-slate-200 pt-4 mt-4">
               <div className="grid grid-cols-3 gap-4 text-center">
                 <div>
                   <div className="text-[11px] font-bold text-slate-500">مسؤول الاستقبال والخزينة</div>
-                  <div className="font-serif italic text-xs text-slate-800 py-1 font-bold">Approved Cashier</div>
-                  <div className="text-[10px] text-slate-400">خزينة فرع قصر العيني</div>
+                  <div className="text-xs text-slate-900 py-1 font-bold">{linkedInvoice?.cashierName || 'الاستقبال والخزينة'}</div>
+                  <div className="text-[10px] text-slate-400">{p.branchName || 'فرع بهتيم الرئيسي'}</div>
                 </div>
 
                 <div>
-                  <div className="text-[11px] font-bold text-slate-500">ختم السداد المالي</div>
-                  <div className="inline-block border-2 border-dashed border-rose-900 rounded-full w-12 h-12 leading-[44px] text-rose-900 font-black text-xs mx-auto">
-                    PAID
+                  <div className="text-[11px] font-bold text-slate-500 mb-1">ختم السداد المالي</div>
+                  <div className="inline-block border-2 border-dashed border-rose-900 rounded-full w-12 h-12 leading-[44px] text-rose-900 font-black text-[10px] mx-auto">
+                    {remainingAmount > 0 ? 'PARTIAL' : 'PAID ✓'}
                   </div>
                 </div>
 
                 <div>
-                  <div className="text-[11px] font-bold text-rose-950">إدارة معامل RT للتحاليل</div>
-                  <div className="text-xs font-bold text-rose-950 py-1">د. رامي مختار</div>
-                  <div className="text-[10px] text-slate-500">مدرس واستشاري الباثولوجيا الإكلينيكية</div>
+                  <div className="text-[11px] font-bold text-rose-950">الإشراف العلمي والإدارة</div>
+                  <div className="text-[11px] font-bold text-slate-900 py-1">{labInfo.supervisionAr}</div>
+                  <div className="text-[10px] text-slate-500">{labInfo.accreditation}</div>
                 </div>
               </div>
 
-              <div className="text-center text-[9px] text-slate-400 mt-4 pt-2 border-t border-slate-100">
-                فاتورة فحص إلكترونية معتمدة - معامل RT للتحاليل التشخيصية · هاتف: {contactPhone} · واتساب: {contactWhatsapp}
+              <div className="text-center text-[9.5px] text-slate-500 mt-4 pt-2 border-t border-slate-100">
+                فاتورة إلكترونية معتمدة — {labInfo.labNameAr} · هاتف: {contactPhonesDisplay} · واتساب: {labInfo.whatsapp}
               </div>
             </div>
           </div>

@@ -149,11 +149,11 @@ export function mergeCollection<T extends AnyRecord = AnyRecord>(
   const deleted = new Set(deletedRaw);
   const deletedUpper = new Set(deletedRaw.map(d => String(d).toUpperCase().trim()));
   const isRecordDeleted = (record: AnyRecord, key: string) => {
-    const candidates = [record.id, record.code, key].filter(Boolean).map(v => String(v));
+    const candidates = [record.id, record.patientId, record.code, key].filter(Boolean).map(v => String(v));
     return candidates.some(c => deleted.has(c) || deletedUpper.has(c.toUpperCase().trim()));
   };
   const keyOf = (record: AnyRecord, index: number) =>
-    record.id || record.code || record.barcode || record.invoiceNumber || record.reportNumber || `idx-${index}`;
+    record.id || record.patientId || record.code || record.barcode || record.invoiceNumber || record.reportNumber || `idx-${index}`;
 
   if (cloudList.length === 0) {
     const filteredLocal = localList.filter((record, index) => !isRecordDeleted(record, keyOf(record, index)));
@@ -252,6 +252,10 @@ export function mergeSettingsObject(key: string, local: any, cloud: any, cloudSt
   if (cloudStamp > localStamp) {
     stampSetting(key);
     return cloud;
+  }
+  if (localStamp > cloudStamp) {
+    const localWins = fillGaps(local, cloud);
+    return JSON.stringify(localWins) === JSON.stringify(local) ? local : localWins;
   }
   const merged = fillGaps(cloud, local);
   return JSON.stringify(merged) === JSON.stringify(local) ? local : merged;

@@ -9,11 +9,11 @@ export const INITIAL_LAB_INFO: LabInfo = {
   supervisionEn: "Kasr Al Ainy Faculty of Medicine Consultants",
   accreditation: "ISO 15189 Certified Quality Management",
   hotline: "01100874444",
-  phone: "01100874444 / 01100046841",
-  whatsapp: "01100874444",
+  phone: "01013242777",
+  whatsapp: "01100046841",
   mainAddress: "ميدان بهتيم برج صيدليه العزبى الدور الثالث امام الأسانسير شبرا الخيمه",
-  instapay: "ramirtlab@instapay",
-  vodafoneCash: "01098765432"
+  instapay: "01100874444 @instapay",
+  vodafoneCash: "01124485444"
 };
 
 export const INITIAL_FACILITIES: LabFacility[] = [
@@ -24,8 +24,8 @@ export const INITIAL_FACILITIES: LabFacility[] = [
     branchCode: "MAIN-01",
     address: "ميدان بهتيم برج صيدليه العزبى الدور الثالث امام الأسانسير شبرا الخيمه",
     city: "شبرا الخيمة - القليوبية",
-    phones: ["01100874444", "01100046841"],
-    whatsapp: "01100874444",
+    phones: ["01100874444", "01013242777"],
+    whatsapp: "01100046841",
     managerName: "أ.د. رامي مختار",
     operatingHours: "يومياً على مدار 24 ساعة (خدمة الطوارئ متوفرة)",
     availableServices: [

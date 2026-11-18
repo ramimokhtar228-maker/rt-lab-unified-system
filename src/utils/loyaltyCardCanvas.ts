@@ -1,4 +1,12 @@
-import { BRANCH_MAIN_ADDRESS, LAB_NAME_AR } from './whatsapp';
+import {
+  BRANCH_MAIN_ADDRESS,
+  LAB_NAME_AR,
+  LAB_PHONE,
+  LAB_PHONE_SECONDARY,
+  LAB_WHATSAPP,
+} from './whatsapp';
+import { getTierPalette } from './loyaltyEngine';
+import type { LoyaltyTier } from '../types';
 
 export interface CardCustomFields {
   showHeader?: boolean;
@@ -17,27 +25,64 @@ export interface CardCustomFields {
   showAddress?: boolean;
 }
 
+export type CardThemeOption = 'auto-tier' | 'royal-black' | 'sapphire' | 'emerald' | 'ruby';
+
 export interface LoyaltyCardParams {
   cardNumber: string;
   patientName: string;
   patientPhone: string;
   tier: string;
+  tierKey?: LoyaltyTier;
   discountPercentage: number;
   points: number;
+  egpPer100Points?: number;
+  pointsPerEGP?: number;
   bloodGroup?: string;
   issueDate?: string;
   emergencyContact?: string;
+  labNameAr?: string;
+  supervisionAr?: string;
   address?: string;
   hotline?: string;
+  phone?: string;
+  whatsapp?: string;
   fields?: CardCustomFields;
-  theme?: 'royal-black' | 'sapphire' | 'emerald' | 'ruby';
+  theme?: CardThemeOption;
+  skipDownload?: boolean;
 }
 
-export function generateAndDownloadLoyaltyCard(params: LoyaltyCardParams): Promise<string> {
+function resolveTierKey(tierStr?: string, explicitKey?: LoyaltyTier): LoyaltyTier {
+  if (explicitKey) return explicitKey;
+  const lower = String(tierStr || '').toLowerCase();
+  if (lower.includes('vip') || lower.includes('الماس') || lower.includes('diamond')) return 'VIP';
+  if (lower.includes('plat') || lower.includes('بلاتين')) return 'Platinum';
+  if (lower.includes('gold') || lower.includes('ذهب')) return 'Gold';
+  return 'Silver';
+}
+
+export async function copyDataUrlToClipboard(dataUrl: string): Promise<boolean> {
+  try {
+    if (!navigator.clipboard || typeof ClipboardItem === 'undefined') return false;
+    const res = await fetch(dataUrl);
+    const blob = await res.blob();
+    await navigator.clipboard.write([new ClipboardItem({ [blob.type || 'image/png']: blob })]);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function generateAndDownloadLoyaltyCard(params: LoyaltyCardParams): Promise<string> {
+  try {
+    if (typeof document !== 'undefined' && document.fonts?.ready) {
+      await document.fonts.ready;
+    }
+  } catch {}
+
   return new Promise((resolve) => {
     const canvas = document.createElement('canvas');
-    canvas.width = 1050;
-    canvas.height = 650;
+    canvas.width = 1080;
+    canvas.height = 680;
     const ctx = canvas.getContext('2d');
     if (!ctx) {
       resolve('');
@@ -61,322 +106,389 @@ export function generateAndDownloadLoyaltyCard(params: LoyaltyCardParams): Promi
       showAddress: params.fields?.showAddress ?? true,
     };
 
+    const resolvedTier = resolveTierKey(params.tier, params.tierKey);
+    const palette = getTierPalette(resolvedTier);
+
     const blood = params.bloodGroup || 'O+';
     const issueDate = params.issueDate || new Date().toISOString().substring(0, 10);
-    const hotline = params.hotline || '01012345678 / 02-44667788';
-    const address = params.address || BRANCH_MAIN_ADDRESS || 'ميدان بهتيم برج صيدلية العزبي الدور الثالث شبرا الخيمة';
-    const theme = params.theme || 'royal-black';
+    const labName = params.labNameAr || LAB_NAME_AR || 'معامل RT للتحاليل الطبية والتشخيصية';
+    const supervision = params.supervisionAr || 'أطباء واستشاريو كلية طب قصر العيني';
+    const hotlineVal = params.hotline || LAB_PHONE;
+    const phoneVal = params.phone || LAB_PHONE_SECONDARY;
+    const whatsappVal = params.whatsapp || LAB_WHATSAPP;
+    const contactDisplay = [hotlineVal, phoneVal].filter(Boolean).join(' / ');
+    const address = params.address || BRANCH_MAIN_ADDRESS;
+    const theme = params.theme || 'auto-tier';
 
-    // 1. Luxury Background Gradient
-    const bgGradient = ctx.createLinearGradient(0, 0, 1050, 650);
+    const egpPer100 = Number(params.egpPer100Points) || 10;
+    const ptsPerEgp = Number(params.pointsPerEGP) || 1;
+    const pts = Math.max(0, Number(params.points) || 0);
+    const exactCashValue = Math.round(((pts * egpPer100) / 100) * 100) / 100;
+    const earnText =
+      ptsPerEgp >= 1
+        ? `كل 1 ج.م تحاليل = ${ptsPerEgp} نقطة`
+        : `كل ${Math.round(1 / ptsPerEgp)} ج.م تحاليل = 1 نقطة`;
+
+    // 1. Per-tier or custom background gradient
+    const bgGradient = ctx.createLinearGradient(0, 0, 1080, 680);
+    let colorStops = palette.canvasColors;
+    let borderStops = palette.borderColors;
+    let accentHex = palette.accentHex;
+    let discountTextHex = palette.discountTextHex;
+    let discountBgHex = palette.discountBgHex;
+
     if (theme === 'sapphire') {
-      bgGradient.addColorStop(0, '#030712');
-      bgGradient.addColorStop(0.35, '#0c1a30');
-      bgGradient.addColorStop(0.7, '#172554');
-      bgGradient.addColorStop(1, '#020617');
+      colorStops = ['#041024', '#0c2344', '#164e63', '#020617'];
+      borderStops = ['#e0f2fe', '#38bdf8', '#0284c7', '#bae6fd'];
+      accentHex = '#7dd3fc';
+      discountTextHex = '#bae6fd';
+      discountBgHex = 'rgba(56, 189, 248, 0.22)';
     } else if (theme === 'emerald') {
-      bgGradient.addColorStop(0, '#021a12');
-      bgGradient.addColorStop(0.35, '#064e3b');
-      bgGradient.addColorStop(0.7, '#022c22');
-      bgGradient.addColorStop(1, '#01150e');
+      colorStops = ['#021a12', '#064e3b', '#047857', '#01150e'];
+      borderStops = ['#d1fae5', '#34d399', '#059669', '#a7f3d0'];
+      accentHex = '#6ee7b7';
+      discountTextHex = '#a7f3d0';
+      discountBgHex = 'rgba(16, 185, 129, 0.24)';
     } else if (theme === 'ruby') {
-      bgGradient.addColorStop(0, '#1c0a00');
-      bgGradient.addColorStop(0.35, '#311010');
-      bgGradient.addColorStop(0.7, '#4c0519');
-      bgGradient.addColorStop(1, '#0f0505');
-    } else {
-      // royal-black (Default)
-      bgGradient.addColorStop(0, '#090d16');
-      bgGradient.addColorStop(0.35, '#0f172a');
-      bgGradient.addColorStop(0.7, '#1e1b4b');
-      bgGradient.addColorStop(1, '#020617');
+      colorStops = ['#1f0410', '#4c0519', '#6b0f2b', '#17051c'];
+      borderStops = ['#fecdd3', '#fb7185', '#fbbf24', '#fda4af'];
+      accentHex = '#fda4af';
+      discountTextHex = '#fecdd3';
+      discountBgHex = 'rgba(244, 63, 94, 0.25)';
+    } else if (theme === 'royal-black') {
+      colorStops = ['#090d16', '#111827', '#1e293b', '#020617'];
+      borderStops = ['#fef08a', '#fbbf24', '#d97706', '#fde68a'];
+      accentHex = '#fde68a';
+      discountTextHex = '#fef08a';
+      discountBgHex = 'rgba(245, 158, 11, 0.24)';
     }
 
-    const radius = 36;
+    bgGradient.addColorStop(0, colorStops[0]);
+    bgGradient.addColorStop(0.35, colorStops[1]);
+    bgGradient.addColorStop(0.7, colorStops[2]);
+    bgGradient.addColorStop(1, colorStops[3]);
+
+    const radius = 34;
     ctx.beginPath();
-    ctx.roundRect(0, 0, 1050, 650, radius);
+    ctx.roundRect(0, 0, 1080, 680, radius);
     ctx.fillStyle = bgGradient;
     ctx.fill();
 
-    // 2. Metallic Outer Border
+    // Soft radial glow for visual depth
+    const glow = ctx.createRadialGradient(860, 120, 20, 860, 120, 420);
+    glow.addColorStop(0, 'rgba(255,255,255,0.09)');
+    glow.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, 1080, 680);
+
+    // 2. Metallic Outer Border matched to tier
     ctx.lineWidth = 6;
-    const borderGrad = ctx.createLinearGradient(0, 0, 1050, 650);
-    borderGrad.addColorStop(0, '#fbbf24');
-    borderGrad.addColorStop(0.3, '#d97706');
-    borderGrad.addColorStop(0.6, '#fef08a');
-    borderGrad.addColorStop(1, '#b45309');
+    const borderGrad = ctx.createLinearGradient(0, 0, 1080, 680);
+    borderGrad.addColorStop(0, borderStops[0]);
+    borderGrad.addColorStop(0.35, borderStops[1]);
+    borderGrad.addColorStop(0.7, borderStops[2]);
+    borderGrad.addColorStop(1, borderStops[3]);
     ctx.strokeStyle = borderGrad;
     ctx.stroke();
 
-    // 3. Subtle grid watermark
+    // 3. Subtle pattern watermark
     ctx.save();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.035)';
     ctx.lineWidth = 1;
-    for (let x = 40; x < 1050; x += 50) {
+    for (let x = 40; x < 1080; x += 54) {
       ctx.beginPath();
       ctx.moveTo(x, 20);
-      ctx.lineTo(x, 630);
+      ctx.lineTo(x, 660);
       ctx.stroke();
     }
-    for (let y = 40; y < 650; y += 50) {
+    for (let y = 40; y < 680; y += 54) {
       ctx.beginPath();
       ctx.moveTo(20, y);
-      ctx.lineTo(1030, y);
+      ctx.lineTo(1060, y);
       ctx.stroke();
     }
     ctx.restore();
 
-    // 4. Header: RT Brand Logo & Title (Top Right)
+    const fontAr = '"Cairo", "Tajawal", sans-serif';
+
+    // 4. Header: RT Brand Logo & Lab Identity (Top Right)
     if (fields.showHeader) {
-      ctx.fillStyle = '#b45309';
+      ctx.fillStyle = borderStops[2];
       ctx.beginPath();
-      ctx.roundRect(930, 42, 70, 70, 16);
+      ctx.roundRect(955, 36, 76, 76, 18);
       ctx.fill();
 
-      ctx.strokeStyle = '#fef08a';
+      ctx.strokeStyle = borderStops[0];
       ctx.lineWidth = 2;
       ctx.stroke();
 
       ctx.fillStyle = '#ffffff';
-      ctx.font = '900 38px sans-serif';
+      ctx.font = `900 36px ${fontAr}`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText('RT', 965, 77);
+      ctx.fillText('RT', 993, 75);
 
       ctx.fillStyle = '#ffffff';
       ctx.textAlign = 'right';
-      ctx.font = 'bold 27px sans-serif';
-      ctx.fillText(LAB_NAME_AR || 'معامل RT للتحاليل الطبية والتشخيصية', 910, 62);
+      ctx.font = `900 26px ${fontAr}`;
+      ctx.fillText(labName, 935, 56);
 
-      ctx.font = 'bold 15px sans-serif';
-      ctx.fillStyle = '#fde68a';
-      ctx.fillText('معامل رامي مختار • أطباء واستشاريو كلية طب قصر العيني', 910, 92);
+      ctx.font = `700 16px ${fontAr}`;
+      ctx.fillStyle = accentHex;
+      ctx.fillText(supervision, 935, 86);
 
-      ctx.font = '500 13px sans-serif';
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.65)';
-      ctx.fillText('RT Medical Diagnostic Laboratories • VIP Health Pass', 910, 114);
+      ctx.font = `600 13px sans-serif`;
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.72)';
+      ctx.fillText('RT Diagnostic Laboratories · Smart Loyalty Health Pass', 935, 110);
     }
 
-    // 5. Tier Badge (Top Left)
+    // 5. Tier Badge + Permanent Tier Discount (Top Left)
     if (fields.showTierBadge) {
-      const tierBgGrad = ctx.createLinearGradient(45, 45, 260, 100);
-      tierBgGrad.addColorStop(0, 'rgba(245, 158, 11, 0.25)');
-      tierBgGrad.addColorStop(1, 'rgba(217, 119, 6, 0.45)');
-      ctx.fillStyle = tierBgGrad;
+      ctx.fillStyle = discountBgHex;
       ctx.beginPath();
-      ctx.roundRect(45, 45, 230, 52, 26);
+      ctx.roundRect(42, 36, 295, 48, 24);
       ctx.fill();
 
-      ctx.strokeStyle = '#fbbf24';
+      ctx.strokeStyle = borderStops[1];
       ctx.lineWidth = 2;
       ctx.stroke();
 
-      ctx.fillStyle = '#fef08a';
-      ctx.font = 'bold 19px sans-serif';
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `800 17px ${fontAr}`;
       ctx.textAlign = 'center';
-      ctx.fillText(`★ ${params.tier} ★`, 160, 77);
+      ctx.textBaseline = 'middle';
+      ctx.fillText(`★ ${params.tier || palette.titleAr} ★`, 189, 60);
 
-      ctx.fillStyle = 'rgba(244, 63, 94, 0.2)';
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.65)';
       ctx.beginPath();
-      ctx.roundRect(45, 106, 230, 36, 12);
+      ctx.roundRect(42, 92, 295, 36, 12);
       ctx.fill();
 
-      ctx.strokeStyle = 'rgba(251, 113, 133, 0.4)';
+      ctx.strokeStyle = borderStops[1];
       ctx.lineWidth = 1;
       ctx.stroke();
 
-      ctx.fillStyle = '#fda4af';
-      ctx.font = 'bold 14px sans-serif';
+      ctx.fillStyle = discountTextHex;
+      ctx.font = `800 15px ${fontAr}`;
       ctx.textAlign = 'center';
-      ctx.fillText(`خصم دائم معتمد: %${params.discountPercentage || 15} على كافة التحاليل`, 160, 129);
+      ctx.fillText(`خصم دائم معتمد: %${params.discountPercentage || 0} على التحاليل`, 189, 111);
     }
 
-    // 6. EMV Smart Chip & Contactless
+    // 6. EMV Smart Chip & NFC
     if (fields.showChip) {
-      const chipX = 55;
-      const chipY = 165;
-      const chipW = 85;
-      const chipH = 65;
+      const chipX = 50;
+      const chipY = 152;
+      const chipW = 84;
+      const chipH = 62;
       const chipGrad = ctx.createLinearGradient(chipX, chipY, chipX + chipW, chipY + chipH);
-      chipGrad.addColorStop(0, '#fde68a');
-      chipGrad.addColorStop(0.5, '#d97706');
-      chipGrad.addColorStop(1, '#92400e');
+      chipGrad.addColorStop(0, borderStops[0]);
+      chipGrad.addColorStop(0.5, borderStops[1]);
+      chipGrad.addColorStop(1, borderStops[2]);
       ctx.fillStyle = chipGrad;
       ctx.beginPath();
       ctx.roundRect(chipX, chipY, chipW, chipH, 12);
       ctx.fill();
 
-      ctx.strokeStyle = '#fef3c7';
+      ctx.strokeStyle = 'rgba(255,255,255,0.65)';
       ctx.lineWidth = 1.5;
       ctx.stroke();
 
-      ctx.strokeStyle = 'rgba(69, 26, 3, 0.6)';
+      ctx.strokeStyle = 'rgba(15, 23, 42, 0.55)';
       ctx.lineWidth = 1.5;
       ctx.beginPath();
       ctx.moveTo(chipX + 28, chipY);
       ctx.lineTo(chipX + 28, chipY + chipH);
-      ctx.moveTo(chipX + 57, chipY);
-      ctx.lineTo(chipX + 57, chipY + chipH);
-      ctx.moveTo(chipX, chipY + 32);
-      ctx.lineTo(chipX + chipW, chipY + 32);
+      ctx.moveTo(chipX + 56, chipY);
+      ctx.lineTo(chipX + 56, chipY + chipH);
+      ctx.moveTo(chipX, chipY + 31);
+      ctx.lineTo(chipX + chipW, chipY + 31);
       ctx.stroke();
 
-      ctx.strokeStyle = 'rgba(254, 240, 138, 0.8)';
-      ctx.lineWidth = 3;
+      ctx.strokeStyle = accentHex;
+      ctx.lineWidth = 2.8;
       for (let r = 1; r <= 3; r++) {
         ctx.beginPath();
-        ctx.arc(175, 197, r * 11, -Math.PI / 3, Math.PI / 3, false);
+        ctx.arc(158, 183, r * 10, -Math.PI / 3, Math.PI / 3, false);
         ctx.stroke();
       }
     }
 
-    // 7. Points Balance Box
+    // 7. Points Balance & Cash Value Box (Right side row 2)
     if (fields.showPoints) {
-      const ptsGrad = ctx.createLinearGradient(680, 155, 990, 225);
-      ptsGrad.addColorStop(0, 'rgba(15, 23, 42, 0.8)');
-      ptsGrad.addColorStop(1, 'rgba(30, 41, 59, 0.9)');
-      ctx.fillStyle = ptsGrad;
+      ctx.fillStyle = 'rgba(2, 6, 23, 0.72)';
       ctx.beginPath();
-      ctx.roundRect(680, 155, 320, 72, 16);
+      ctx.roundRect(620, 142, 412, 86, 16);
       ctx.fill();
 
-      ctx.strokeStyle = 'rgba(245, 158, 11, 0.5)';
+      ctx.strokeStyle = borderStops[1];
       ctx.lineWidth = 1.5;
       ctx.stroke();
 
       ctx.textAlign = 'right';
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.65)';
-      ctx.font = 'bold 13px sans-serif';
-      ctx.fillText('رصيد نقاط الولاء التراكمي:', 980, 182);
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.78)';
+      ctx.font = `700 14px ${fontAr}`;
+      ctx.fillText('رصيد نقاط الولاء التراكمي وقيمته:', 1012, 165);
 
-      ctx.fillStyle = '#fbbf24';
-      ctx.font = '900 28px sans-serif';
-      ctx.fillText(`${Number(params.points || 0).toLocaleString()} نقطة`, 980, 214);
+      ctx.fillStyle = accentHex;
+      ctx.font = `900 28px ${fontAr}`;
+      ctx.fillText(`${pts.toLocaleString()} نقطة`, 1012, 199);
+
+      if (fields.showCashValue) {
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#34d399';
+        ctx.font = `800 20px ${fontAr}`;
+        ctx.fillText(`= ${exactCashValue} ج.م`, 640, 198);
+        ctx.fillStyle = 'rgba(209, 250, 229, 0.85)';
+        ctx.font = `700 12px ${fontAr}`;
+        ctx.fillText('رصيد نقدي للاستبدال', 640, 166);
+      }
     }
 
-    // 8. Card Number Display
+    // 8. Embossed Card Number
     if (fields.showCardCode) {
       ctx.textAlign = 'center';
-      ctx.font = 'bold 36px monospace';
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-      ctx.fillText(params.cardNumber, 527, 287);
+      ctx.textBaseline = 'middle';
+      ctx.font = 'bold 34px monospace';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
+      ctx.fillText(params.cardNumber, 542, 267);
       ctx.fillStyle = '#ffffff';
-      ctx.fillText(params.cardNumber, 525, 285);
+      ctx.fillText(params.cardNumber, 540, 265);
     }
 
-    // Horizontal gold divider
-    const divGrad = ctx.createLinearGradient(45, 315, 1005, 315);
-    divGrad.addColorStop(0, 'rgba(251, 191, 36, 0.05)');
-    divGrad.addColorStop(0.5, 'rgba(251, 191, 36, 0.8)');
-    divGrad.addColorStop(1, 'rgba(251, 191, 36, 0.05)');
+    // Horizontal divider
+    const divGrad = ctx.createLinearGradient(42, 298, 1038, 298);
+    divGrad.addColorStop(0, 'rgba(255,255,255,0.08)');
+    divGrad.addColorStop(0.5, borderStops[1]);
+    divGrad.addColorStop(1, 'rgba(255,255,255,0.08)');
     ctx.strokeStyle = divGrad;
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(45, 315);
-    ctx.lineTo(1005, 315);
+    ctx.moveTo(42, 298);
+    ctx.lineTo(1038, 298);
     ctx.stroke();
 
-    // 9. Patient Information
+    // 9. Patient Information Row
     if (fields.showPatientName) {
       ctx.textAlign = 'right';
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-      ctx.font = 'bold 15px sans-serif';
-      ctx.fillText('اسم المريض / العضو المعتمد:', 990, 350);
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.72)';
+      ctx.font = `700 14px ${fontAr}`;
+      ctx.fillText('اسم العضو / المريض:', 1032, 326);
       ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 28px sans-serif';
-      ctx.fillText(params.patientName, 990, 385);
+      ctx.font = `900 26px ${fontAr}`;
+      ctx.fillText(params.patientName, 1032, 360);
     }
 
     if (fields.showPatientPhone) {
       ctx.textAlign = 'right';
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-      ctx.font = 'bold 14px sans-serif';
-      ctx.fillText('رقم الهاتف المسجل:', 990, 428);
-      ctx.fillStyle = '#fde68a';
-      ctx.font = 'bold 22px monospace';
-      ctx.fillText(params.patientPhone, 990, 458);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.72)';
+      ctx.font = `700 14px ${fontAr}`;
+      ctx.fillText('رقم الهاتف المسجل (لتجميع النقاط تلقائياً):', 1032, 398);
+      ctx.fillStyle = accentHex;
+      ctx.font = 'bold 21px monospace';
+      ctx.fillText(params.patientPhone, 1032, 426);
     }
 
-    // Blood Group
     if (fields.showBloodGroup) {
       ctx.textAlign = 'left';
       ctx.fillStyle = 'rgba(225, 29, 72, 0.25)';
       ctx.beginPath();
-      ctx.roundRect(50, 345, 190, 60, 14);
+      ctx.roundRect(45, 316, 175, 58, 14);
       ctx.fill();
-
-      ctx.strokeStyle = 'rgba(244, 63, 94, 0.5)';
+      ctx.strokeStyle = 'rgba(251, 113, 133, 0.55)';
       ctx.lineWidth = 1.5;
       ctx.stroke();
 
       ctx.fillStyle = '#fda4af';
-      ctx.font = 'bold 13px sans-serif';
-      ctx.fillText('فصيلة الدم (Blood Group):', 65, 370);
-
+      ctx.font = `700 13px ${fontAr}`;
+      ctx.fillText('فصيلة الدم:', 60, 336);
       ctx.fillStyle = '#ffffff';
-      ctx.font = '900 24px monospace';
-      ctx.fillText(blood, 65, 396);
+      ctx.font = '900 22px monospace';
+      ctx.fillText(blood, 60, 358);
     }
 
-    // Dates
     if (fields.showDates) {
       ctx.textAlign = 'left';
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-      ctx.font = 'bold 13px sans-serif';
-      ctx.fillText('تاريخ الإصدار:', 50, 435);
-      ctx.fillStyle = '#e2e8f0';
-      ctx.font = 'bold 16px monospace';
-      ctx.fillText(issueDate, 50, 458);
-
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.72)';
+      ctx.font = `700 13px ${fontAr}`;
+      ctx.fillText(`تاريخ الإصدار: ${issueDate}`, 45, 400);
       ctx.fillStyle = '#34d399';
-      ctx.font = 'bold 13px sans-serif';
-      ctx.fillText('صلاحية الكارت: دائم مدى الحياة ✓', 50, 484);
+      ctx.font = `800 14px ${fontAr}`;
+      ctx.fillText('صلاحية الكارت: دائم مدى الحياة ✓', 45, 426);
     }
 
-    // Usage Note
+    // 10. Clear Redemption & Cumulative Upgrade Rule Strip (Always legible)
     if (fields.showUsageNote) {
-      ctx.textAlign = 'center';
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
-      ctx.font = '13px sans-serif';
-      ctx.fillText('• يمنح هذا الكارت حامله وأسرته الخصم الدائم وتجميع النقاط التلقائي فور إبرازه بالمعمل أو بالزيارات المنزلية •', 525, 520);
-    }
-
-    // 10. Bottom Footer Bar
-    if (fields.showFooter && (fields.showHotline || fields.showAddress)) {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.09)';
       ctx.beginPath();
-      ctx.roundRect(25, 545, 1000, 80, 18);
+      ctx.roundRect(40, 452, 1000, 62, 14);
       ctx.fill();
-
-      ctx.strokeStyle = 'rgba(251, 191, 36, 0.3)';
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.22)';
       ctx.lineWidth = 1;
       ctx.stroke();
 
       ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = '#fef08a';
+      ctx.font = `800 16px ${fontAr}`;
+      ctx.fillText(
+        `نظام الاستبدال: كل 100 نقطة = ${egpPer100} ج.م خصم نقدي  •  ${earnText}`,
+        540,
+        472
+      );
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+      ctx.font = `700 13px ${fontAr}`;
+      ctx.fillText(
+        'الترقية التراكمية التلقائية: تُجمع النقاط مع كل حجز أو تحليل لترقية الفئة وزيادة نسبة الخصم تلقائياً',
+        540,
+        499
+      );
+    }
+
+    // 11. Bottom Lab Contacts Bar
+    if (fields.showFooter && (fields.showHotline || fields.showAddress)) {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.56)';
+      ctx.beginPath();
+      ctx.roundRect(30, 532, 1020, 114, 18);
+      ctx.fill();
+
+      ctx.strokeStyle = borderStops[1];
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
       if (fields.showHotline) {
-        ctx.fillStyle = '#fef08a';
-        ctx.font = 'bold 16px sans-serif';
-        ctx.fillText(`📞 الخط الساخن والواتساب: ${hotline}  |  🏥 إشراف أ.د رامي مختار`, 525, 575);
+        ctx.fillStyle = accentHex;
+        ctx.font = `800 17px ${fontAr}`;
+        ctx.fillText(
+          `📞 الخط الساخن والهاتف: ${contactDisplay}   |   💬 واتساب خدمة العملاء: ${whatsappVal}`,
+          540,
+          568
+        );
       }
       if (fields.showAddress) {
-        ctx.fillStyle = '#cbd5e1';
-        ctx.font = '13px sans-serif';
-        ctx.fillText(`📍 ${address}`, 525, 603);
+        ctx.fillStyle = '#e2e8f0';
+        ctx.font = `700 15px ${fontAr}`;
+        ctx.fillText(`📍 ${address}`, 540, 608);
       }
     }
 
     const dataUrl = canvas.toDataURL('image/png');
-    try {
-      const link = document.createElement('a');
-      link.download = `RT-Loyalty-Card-${params.cardNumber}.png`;
-      link.href = dataUrl;
-      document.body.appendChild(link);
-      link.click();
-      setTimeout(() => {
-        if (link.parentNode) link.parentNode.removeChild(link);
-      }, 500);
-    } catch (e) {
-      console.warn('Card download notice:', e);
+    if (!params.skipDownload) {
+      try {
+        const link = document.createElement('a');
+        link.download = `RT-Loyalty-Card-${params.cardNumber}.png`;
+        link.href = dataUrl;
+        document.body.appendChild(link);
+        link.click();
+        setTimeout(() => {
+          if (link.parentNode) link.parentNode.removeChild(link);
+        }, 500);
+      } catch (e) {
+        console.warn('Card download notice:', e);
+      }
     }
 
     resolve(dataUrl);

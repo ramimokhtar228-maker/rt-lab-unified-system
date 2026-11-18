@@ -1,12 +1,15 @@
 import { LabReport, LabInfo } from '../types/lab';
+import type { LoyaltyConfig, LoyaltyTier, PatientLoyaltyProfile } from '../types';
+import { computeLoyaltyTier, nextTierProgress, pointsCashValue, redemptionSummaryText, tierDiscountRate } from './loyaltyEngine';
 
-export const BRANCH_MAIN_ADDRESS = 'ميدان بهتيم — برج صيدلية العزبي — الدور الثالث (أمام الأسانسير) — شبرا الخيمة';
+export const BRANCH_MAIN_ADDRESS = 'ميدان بهتيم برج صيدليه العزبى الدور الثالث امام الأسانسير شبرا الخيمه';
 export const LAB_NAME_AR = 'معامل RT للتحاليل الطبية والتشخيصية';
 export const LAB_PHONE = '01100874444';
-export const LAB_PHONE_SECONDARY = '01100046841';
-export const LAB_PHONES_DISPLAY = '01100874444 — 01100046841';
-export const LAB_WHATSAPP = '01100874444';
-export const INSTAPAY_IPA = 'ramirtlab@instapay';
+export const LAB_PHONE_SECONDARY = '01013242777';
+export const LAB_PHONES_DISPLAY = '01100874444 — 01013242777';
+export const LAB_WHATSAPP = '01100046841';
+export const INSTAPAY_IPA = '01100874444 @instapay';
+export const WALLET_VODAFONE = '01124485444';
 export const GOOGLE_MAPS_BRANCH_URL = 'https://maps.google.com/?q=30.1287,31.2842';
 
 /** Formats Egyptian local numbers to standard international format (201xxxxxxxxx) */
@@ -246,7 +249,7 @@ ${visitSpecificNote}
 ${precautions.map(tip => `• ${tip}`).join('\n')}
 • *تنبيه المواعيد والحضور:* عدم الحضور فى الموعد المحدد دون تأجيل مسبق سيتم إلغاء الحجز بعد ٢٤ ساعه من تاريخه.
 
-📞 *أرقام التواصل والاستفسار أو تعديل الموعد:* ${contactPhone || '01100874444 / 01100046841'}
+📞 *أرقام التواصل والاستفسار أو تعديل الموعد:* ${contactPhone || LAB_PHONES_DISPLAY} | واتساب: ${params.customLabInfo?.whatsapp || LAB_WHATSAPP}
 نسأل الله لكم دوام الصحة والعافية 🌸`;
 }
 
@@ -258,12 +261,13 @@ export function formatWhatsAppMessage(report: LabReport, customLabInfo?: LabInfo
   const referringDr = p.referringDoctorTitle === 'Herself' || p.referringDoctorTitle === 'Himself'
     ? 'طلب فحص ذاتي (Self-Request)'
     : `${p.referringDoctorTitle} ${p.referringDoctorName}`.trim();
-  const phoneDisplay = customLabInfo?.hotline || customLabInfo?.phone || customLabInfo?.whatsapp || LAB_PHONE;
+  const phoneDisplay = [customLabInfo?.hotline || LAB_PHONE, customLabInfo?.phone || LAB_PHONE_SECONDARY].filter(Boolean).join(' / ');
+  const waDisplay = customLabInfo?.whatsapp || LAB_WHATSAPP;
   const addressDisplay = customLabInfo?.mainAddress || BRANCH_MAIN_ADDRESS;
   const labTitle = customLabInfo?.labNameAr || LAB_NAME_AR;
 
   return `🔬 *${labTitle}*
-*معامل أ.د. رامي مختار — استشاريو الباثولوجيا الإكلينيكية (طب قصر العيني)*
+*${customLabInfo?.supervisionAr || 'أطباء واستشاريو كلية طب قصر العيني'}*
 ━━━━━━━━━━━━━━━━━━━━━
 السيد/ة الفاضل/ة: *${p.fullName}* 🌸
 يسعدنا إبلاغكم بجاهزية نتائج تحاليلكم الطبية واعتمادها رسمياً ✅
@@ -284,7 +288,7 @@ ${profilesList}
 يمكنكم استلام النسخة الورقية المعتمدة والمختومة من فرع المعمل، أو طلب إرسال النسخة الرقمية الرسمية (PDF) المعتمدة مباشرة عبر هذه المحادثة.
 
 مع تمنيات أسرة *${labTitle}* لكم بموفور الصحة والعافية والشفاء التام 🌸
-📞 هاتف المعمل: ${phoneDisplay}
+📞 الخط الساخن والهاتف: ${phoneDisplay} | واتساب: ${waDisplay}
 📍 العنوان: ${addressDisplay}`;
 }
 
@@ -320,3 +324,135 @@ ${params.notes ? `• *ملاحظات الفحص:* ${params.notes}\n` : ''}• *
 
 ⭐ *خدمتكم شرف لنا وتمنياتنا لكم بالشفاء العاجل دائماً!* 🌹`;
 }
+
+const TIER_NAMES_AR: Record<LoyaltyTier, string> = {
+  Silver: 'المستوى الفضي (Silver)',
+  Gold: 'المستوى الذهبي (Gold)',
+  Platinum: 'المستوى البلاتيني (Platinum)',
+  VIP: 'نخبة الماس (Diamond VIP)'
+};
+
+/** رسالة شرح كارت الولاء ونظام النقاط والاستبدال والترقية التراكمية لإرسالها عبر الواتساب مع الكارت */
+export function formatLoyaltyCardWhatsAppMessage(params: {
+  profile: PatientLoyaltyProfile;
+  config: LoyaltyConfig;
+  labInfo?: LabInfo;
+}): string {
+  const { profile, config, labInfo } = params;
+  const tier = computeLoyaltyTier(profile.totalPoints || 0, config);
+  const discountPct = tierDiscountRate(tier, config);
+  const cashInfo = pointsCashValue(profile.totalPoints || 0, config);
+  const progress = nextTierProgress(profile, config);
+  const labName = labInfo?.labNameAr || LAB_NAME_AR;
+  const supervision = labInfo?.supervisionAr || 'أطباء واستشاريو كلية طب قصر العيني';
+  const hotline = labInfo?.hotline || LAB_PHONE;
+  const phone = labInfo?.phone || LAB_PHONE_SECONDARY;
+  const whatsapp = labInfo?.whatsapp || LAB_WHATSAPP;
+  const address = labInfo?.mainAddress || BRANCH_MAIN_ADDRESS;
+  const ruleLine = redemptionSummaryText(config);
+
+  const upgradeLine = progress.nextTier
+    ? `• متبقي *${progress.pointsNeeded.toLocaleString()} نقطة* للترقية التلقائية إلى *${TIER_NAMES_AR[progress.nextTier]}* (خصم *%${tierDiscountRate(progress.nextTier, config)}* دائماً).`
+    : '• تهانينا! وصلتم إلى أعلى فئة عضوية (*نخبة الماس VIP*) بأقصى خصم ومميزات.';
+
+  return `💳 *${labName}*
+_${supervision}_
+━━━━━━━━━━━━━━━━━━━━━━
+أهلاً بحضرتك أ/ *${profile.patientName}* 🌸
+يسعدنا إرسال *كارت الولاء الطبي الذكي* الخاص بكم (مرفق صورة الكارت أعلاه 📎):
+
+🪪 *بيانات الكارت:*
+• *رقم الكارت:* \`${profile.cardNumber || profile.barcode}\`
+• *فئة العضوية:* *${TIER_NAMES_AR[tier]}*
+• *الخصم الفوري الدائم:* *%${discountPct}* على كافة التحاليل بالمعمل والزيارات المنزلية
+• *رصيد النقاط التراكمي:* *${Number(profile.totalPoints || 0).toLocaleString()} نقطة*
+• *قيمة النقاط بالجنيه المصري:* *${cashInfo.exactEGP} ج.م* (خصم نقدي جاهز للاستبدال: *${cashInfo.redeemableEGP} ج.م*)
+
+📖 *شرح نظام النقاط والاستبدال والترقية التلقائية:*
+• *${ruleLine}*
+• تُضاف النقاط *تراكمياً وبشكل تلقائي* مع كل حجز أو تحليل جديد بنفس رقم الهاتف (على قيمة التحاليل المدفوعة فقط).
+• يمكنك استبدال نقاطك بخصم نقدي فوري على أي فاتورة، أو جمعها لترقية فئة الكارت تلقائياً إلى خصم أعلى:
+  - 🥈 الفضي: من ${config.tiers.Silver.minPoints} نقطة (خصم %${config.tiers.Silver.discountRate})
+  - 🥇 الذهبي: من ${config.tiers.Gold.minPoints} نقطة (خصم %${config.tiers.Gold.discountRate})
+  - 💎 البلاتيني: من ${config.tiers.Platinum.minPoints} نقطة (خصم %${config.tiers.Platinum.discountRate})
+  - 👑 الماس VIP: من ${config.tiers.VIP.minPoints} نقطة (خصم %${config.tiers.VIP.discountRate})
+${upgradeLine}
+
+📞 *للحجز والاستفسار:*
+• الخط الساخن: ${hotline} | هاتف: ${phone}
+• واتساب خدمة العملاء: ${whatsapp}
+📍 *العنوان:* ${address}
+نتمنى لكم دوام الصحة والعافية! 🌹`;
+}
+
+/** رسالة فاتورة شاملة وتفاصيل كارت الولاء والرصيد للواتساب */
+export function formatInvoiceWhatsAppMessage(params: {
+  invoiceNumber: string;
+  labNumber: string;
+  barcode?: string;
+  patientName: string;
+  sampleDate: string;
+  reportingDate?: string;
+  branchName?: string;
+  items: { titleAr: string; titleEn?: string; price: number }[];
+  testsSubtotal: number;
+  visitFee?: number;
+  discount: number;
+  netTotal: number;
+  paidAmount: number;
+  remainingAmount: number;
+  paymentMethodLabel?: string;
+  loyaltyProfile?: PatientLoyaltyProfile;
+  loyaltyConfig?: LoyaltyConfig;
+  invoiceEarnedPoints?: number;
+  labInfo?: LabInfo;
+}): string {
+  const { labInfo, loyaltyProfile, loyaltyConfig } = params;
+  const labName = labInfo?.labNameAr || LAB_NAME_AR;
+  const supervision = labInfo?.supervisionAr || 'أطباء واستشاريو كلية طب قصر العيني';
+  const hotline = labInfo?.hotline || LAB_PHONE;
+  const phone = labInfo?.phone || LAB_PHONE_SECONDARY;
+  const whatsapp = labInfo?.whatsapp || LAB_WHATSAPP;
+  const address = labInfo?.mainAddress || BRANCH_MAIN_ADDRESS;
+  const instapay = labInfo?.instapay || INSTAPAY_IPA;
+  const vodafoneCash = labInfo?.vodafoneCash || WALLET_VODAFONE;
+
+  let loyaltySection = '';
+  if (loyaltyProfile && loyaltyConfig) {
+    const tier = computeLoyaltyTier(loyaltyProfile.totalPoints || 0, loyaltyConfig);
+    const pct = tierDiscountRate(tier, loyaltyConfig);
+    const cash = pointsCashValue(loyaltyProfile.totalPoints || 0, loyaltyConfig);
+    loyaltySection = `\n\n💳 *كارت الولاء ونقاطك المرفقة بالفاتورة:*
+• رقم الكارت: *${loyaltyProfile.cardNumber || loyaltyProfile.barcode}* (${TIER_NAMES_AR[tier]})
+• نسبة الخصم الدائمة: *%${pct}*${params.invoiceEarnedPoints ? `\n• نقاط مكتسبة من هذه الفاتورة: *+${params.invoiceEarnedPoints} نقطة*` : ''}
+• رصيدك الحالي: *${Number(loyaltyProfile.totalPoints || 0).toLocaleString()} نقطة* (= *${cash.exactEGP} ج.م*)
+• نظام الاستبدال: كل 100 نقطة = ${cash.egpPer100} ج.م خصم`;
+  }
+
+  return `🧾 *${labName}*
+_${supervision}_
+━━━━━━━━━━━━━━━━━━━━━━
+📋 *فاتورة فحص طبي وإيصال سداد*
+• رقم الفاتورة: *${params.invoiceNumber}*
+• رقم المعمل: *${params.labNumber}*${params.barcode ? ` | باركود: *${params.barcode}*` : ''}
+• اسم المريض: *${params.patientName}*
+• تاريخ السحب: ${params.sampleDate}${params.reportingDate ? `\n• موعد الاستلام: ${params.reportingDate}` : ''}${params.branchName ? `\n• الفرع: ${params.branchName}` : ''}
+
+🔬 *تفاصيل الفحوصات (${params.items.length}):*
+${params.items.map((it, idx) => `${idx + 1}. ${it.titleAr}${it.titleEn ? ` (${it.titleEn})` : ''} — *${Number(it.price).toFixed(0)} ج.م*`).join('\n')}
+
+💰 *البيان المالي:*
+• إجمالي التحاليل: *${params.testsSubtotal.toFixed(0)} ج.م*${params.visitFee && params.visitFee > 0 ? `\n• رسوم الزيارة: *+${params.visitFee.toFixed(0)} ج.م*` : ''}${params.discount > 0 ? `\n• الخصم المطبق: *-${params.discount.toFixed(0)} ج.م*` : ''}
+• *الصافي المطلوب:* *${params.netTotal.toFixed(0)} ج.م*
+• *المدفوع:* *${params.paidAmount.toFixed(0)} ج.م*${params.paymentMethodLabel ? ` (${params.paymentMethodLabel})` : ''}
+• *المتبقي:* *${params.remainingAmount > 0 ? `${params.remainingAmount.toFixed(0)} ج.م` : 'مسدد بالكامل ✓'}*${loyaltySection}
+
+💳 *بيانات التحويل الإلكتروني (عند الحاجة):*
+• إنستاباي: ${instapay}
+• فودافون كاش: ${vodafoneCash}
+
+📞 الخط الساخن: ${hotline} | الهاتف: ${phone} | واتساب: ${whatsapp}
+📍 ${address}
+_(مرفق نسخة الفاتورة المعتمدة بكامل تفاصيل الكارت)_ 🌸`;
+}
+

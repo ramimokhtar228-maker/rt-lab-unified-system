@@ -9,7 +9,10 @@ import {
   calculateTestsOnlyPaidAmount,
   createAutoLoyaltyProfile,
   generateSmartCardNumber,
-  computeLoyaltyTier
+  computeLoyaltyTier,
+  normalizePhoneKey,
+  normalizeInvoiceRef,
+  syncCardNumberTier
 } from '../utils/loyaltyEngine';
 import {
   Language,
@@ -914,6 +917,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     expenses,
     profitConfig,
     loyaltyProfiles,
+    loyaltyConfig,
     inventory,
     instruments,
     transmissions,
@@ -938,6 +942,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     expenses,
     profitConfig,
     loyaltyProfiles,
+    loyaltyConfig,
     inventory,
     instruments,
     transmissions,
@@ -964,6 +969,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       expenses: s.expenses,
       profitConfig: s.profitConfig,
       loyaltyProfiles: s.loyaltyProfiles,
+      loyaltyConfig: s.loyaltyConfig,
       inventory: s.inventory,
       instruments: s.instruments,
       transmissions: s.transmissions,
@@ -1045,6 +1051,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     applyList('staffMembers', setStaffMembers);
     applyList('auditLogs', setAuditLogs);
     setProfitConfig((prev: any) => mergeSettingsObject('profitConfig', prev, data.profitConfig, data.settingsStamps));
+    setLoyaltyConfig((prev: any) => mergeSettingsObject('loyaltyConfig', prev, data.loyaltyConfig, data.settingsStamps));
     setLabInfo((prev: any) => mergeSettingsObject('labInfo', prev, data.labInfo, data.settingsStamps));
     setStaffSignatures((prev: any) => mergeSettingsObject('staffSignatures', prev, data.staffSignatures, data.settingsStamps));
     setStaffSignatureOptions((prev: any) => mergeSettingsObject('staffSignatureOptions', prev, data.staffSignatureOptions, data.settingsStamps));
@@ -1056,7 +1063,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (!githubConfig.token || !githubConfig.autoSync) return;
     const signature = JSON.stringify([
       expenses, profitConfig, inventory, instruments, transmissions, labToLabOrders,
-      employees, attendance, payroll, dailyCloseouts, loyaltyProfiles,
+      employees, attendance, payroll, dailyCloseouts, loyaltyProfiles, loyaltyConfig,
       testCatalog, packages, diagnosticProfiles, labInfo, staffMembers, staffSignatures, staffSignatureOptions
     ]);
     if (signature === lastCollectionSignatureRef.current) return;
@@ -1064,7 +1071,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     lastCollectionSignatureRef.current = signature;
     if (isFirstRun) return;
     triggerAutoCloudPush();
-  }, [githubConfig, expenses, profitConfig, inventory, instruments, transmissions, labToLabOrders, employees, attendance, payroll, dailyCloseouts, loyaltyProfiles, testCatalog, packages, diagnosticProfiles, labInfo, staffMembers, staffSignatures, staffSignatureOptions, triggerAutoCloudPush]);
+  }, [githubConfig, expenses, profitConfig, inventory, instruments, transmissions, labToLabOrders, employees, attendance, payroll, dailyCloseouts, loyaltyProfiles, loyaltyConfig, testCatalog, packages, diagnosticProfiles, labInfo, staffMembers, staffSignatures, staffSignatureOptions, triggerAutoCloudPush]);
 
   // ── طبع وقت آخر تعديل للإعدادات المفردة لمعرفة الأحدث بين الأجهزة ──
   const settingsSnapshotRef = useRef<Record<string, string>>({});
@@ -1073,7 +1080,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       labInfo: JSON.stringify(labInfo),
       staffSignatures: JSON.stringify(staffSignatures),
       staffSignatureOptions: JSON.stringify(staffSignatureOptions),
-      profitConfig: JSON.stringify(profitConfig)
+      profitConfig: JSON.stringify(profitConfig),
+      loyaltyConfig: JSON.stringify(loyaltyConfig)
     };
     const previous = settingsSnapshotRef.current;
     const isFirstRun = Object.keys(previous).length === 0;
@@ -1081,7 +1089,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (!isFirstRun && previous[key] !== undefined && previous[key] !== current[key]) stampSetting(key);
     });
     settingsSnapshotRef.current = current;
-  }, [labInfo, staffSignatures, staffSignatureOptions, profitConfig]);
+  }, [labInfo, staffSignatures, staffSignatureOptions, profitConfig, loyaltyConfig]);
 
   // Collapse any case or invoice that multi-device sync delivered twice (same barcode /
   // lab number and patient) instead of letting duplicates pile up.
@@ -1120,6 +1128,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [incomeRecords, syncIdbSnapshot]);
 
   useEffect(() => { safeSetLocalStorage(LOYALTY_KEY, JSON.stringify(loyaltyProfiles)); }, [loyaltyProfiles]);
+  useEffect(() => {
+    safeSetLocalStorage(`${STORAGE_PREFIX}loyalty_config`, JSON.stringify(loyaltyConfig));
+    safeSetLocalStorage('rt_lab_loyalty_settings', JSON.stringify(loyaltyConfig));
+  }, [loyaltyConfig]);
   useEffect(() => { safeSetLocalStorage(EXPENSES_KEY, JSON.stringify(expenses)); }, [expenses]);
   useEffect(() => { safeSetLocalStorage(INVENTORY_KEY, JSON.stringify(inventory)); }, [inventory]);
   useEffect(() => { safeSetLocalStorage(INSTRUMENTS_KEY, JSON.stringify(instruments)); }, [instruments]);
@@ -1287,6 +1299,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       incomeRecords,
       expenses,
       loyaltyProfiles,
+      loyaltyConfig,
       labInfo,
       packages,
       diagnosticProfiles,
@@ -1297,7 +1310,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       facilities,
       staffMembers,
     }));
-  }, [reports, incomeRecords, expenses, loyaltyProfiles, labInfo, packages, diagnosticProfiles, testCatalog, inventory, staffSignatures, staffSignatureOptions, facilities, staffMembers]);
+  }, [reports, incomeRecords, expenses, loyaltyProfiles, loyaltyConfig, labInfo, packages, diagnosticProfiles, testCatalog, inventory, staffSignatures, staffSignatureOptions, facilities, staffMembers]);
 
   // Real-Time Multi-Device Cloud Synchronization (Supabase Realtime WebSockets + GitHub Cloud Backup)
   useEffect(() => {
@@ -1333,12 +1346,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setIncomeRecords(prev => prev.filter(i => i.id !== msg.payload));
       } else if (msg.action === 'UPDATE_LAB_INFO' && msg.payload) {
         setLabInfo(msg.payload);
+      } else if (msg.action === 'UPDATE_LOYALTY_CONFIG' && msg.payload) {
+        stampSetting('loyaltyConfig');
+        setLoyaltyConfig(msg.payload);
       } else if (msg.action === 'UPDATE_LOYALTY' && msg.payload) {
         if (Array.isArray(msg.payload)) {
           setLoyaltyProfiles(msg.payload);
         } else if (msg.payload.patientId) {
           setLoyaltyProfiles(prev => {
-            const idx = prev.findIndex(p => p.patientId === msg.payload.patientId || p.phone === msg.payload.phone);
+            const pPhone = normalizePhoneKey(msg.payload.phone);
+            const idx = prev.findIndex(p => p.patientId === msg.payload.patientId || (pPhone && normalizePhoneKey(p.phone) === pPhone));
             if (idx >= 0) {
               const next = [...prev];
               next[idx] = { ...next[idx], ...msg.payload };
@@ -1346,6 +1363,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             }
             return [msg.payload, ...prev];
           });
+        } else if (msg.payload.tiers && msg.payload.pointsPerEGP !== undefined) {
+          setLoyaltyConfig(msg.payload);
         }
       } else if (msg.action === 'UPDATE_EXPENSES' && msg.payload) {
         if (Array.isArray(msg.payload)) {
@@ -1441,6 +1460,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (Array.isArray(msg.payload.loyaltyProfiles)) {
           setLoyaltyProfiles(msg.payload.loyaltyProfiles);
         }
+        if (msg.payload.loyaltyConfig) {
+          setLoyaltyConfig(prev => mergeSettingsObject('loyaltyConfig', prev, msg.payload.loyaltyConfig, msg.payload.settingsStamps));
+        }
         if (msg.payload.labInfo) {
           setLabInfo(msg.payload.labInfo);
         }
@@ -1473,6 +1495,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
         if (Array.isArray(res.data.loyaltyProfiles) && res.data.loyaltyProfiles.length > 0) {
           setLoyaltyProfiles(res.data.loyaltyProfiles);
+        }
+        if (res.data.loyaltyConfig) {
+          setLoyaltyConfig(prev => mergeSettingsObject('loyaltyConfig', prev, res.data.loyaltyConfig, res.data.settingsStamps));
         }
         if (res.data.labInfo) {
           setLabInfo(res.data.labInfo);
@@ -1508,6 +1533,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             }
             if (Array.isArray(ghRes.data.loyaltyProfiles) && ghRes.data.loyaltyProfiles.length > 0) {
               setLoyaltyProfiles(prev => mergeCollection('loyaltyProfiles', prev, ghRes.data.loyaltyProfiles) as PatientLoyaltyProfile[]);
+            }
+            if (ghRes.data.loyaltyConfig) {
+              setLoyaltyConfig(prev => mergeSettingsObject('loyaltyConfig', prev, ghRes.data.loyaltyConfig, ghRes.data.settingsStamps));
             }
             if (Array.isArray(ghRes.data.inventory) && ghRes.data.inventory.length > 0) {
               setInventory(prev => mergeCollection('inventory', prev, ghRes.data.inventory) as InventoryItem[]);
@@ -1764,7 +1792,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
     }, 15000);
     return () => clearTimeout(timer);
-  }, [reports, incomeRecords, expenses, loyaltyProfiles, inventory, labInfo, testCatalog, packages, diagnosticProfiles, githubConfig, buildFullSyncSnapshot]);
+  }, [reports, incomeRecords, expenses, loyaltyProfiles, loyaltyConfig, inventory, labInfo, testCatalog, packages, diagnosticProfiles, githubConfig, buildFullSyncSnapshot]);
 
   // Audit Logging helper
   const logAction = useCallback((action: AuditLog['action'], module: AuditLog['module'], description: string) => {
@@ -2678,7 +2706,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         reportingDate: patient.reportingDate || new Date().toISOString(),
         assignedPackageId: packageApplied ? packageApplied.id : patient.assignedPackageId,
         loyaltyCardIssued: true,
-        loyaltyCardNumber: patient.loyaltyCardNumber || generateSmartCardNumber('Silver', patient.barcode || patient.labNumber)
+        loyaltyCardNumber: patient.loyaltyCardNumber || (() => {
+          const pKey = normalizePhoneKey(patient.phone);
+          const matchedProf = pKey
+            ? latestStateRef.current.loyaltyProfiles.find(lp => normalizePhoneKey(lp.phone) === pKey)
+            : undefined;
+          return matchedProf?.cardNumber || generateSmartCardNumber(matchedProf?.tier || 'Silver', patient.barcode || patient.labNumber);
+        })()
       },
       packageApplied: packageApplied ? {
         code: packageApplied.code,
@@ -2851,9 +2885,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [loyaltyConfig]);
 
   const getLoyaltyByPhone = useCallback((phone: string): PatientLoyaltyProfile | undefined => {
-    if (!phone) return undefined;
-    const cleanPhone = phone.replace(/\s+/g, '');
-    return loyaltyProfiles.find(p => p.phone.replace(/\s+/g, '') === cleanPhone);
+    const cleanPhone = normalizePhoneKey(phone);
+    if (!cleanPhone) return undefined;
+    return loyaltyProfiles.find(p => normalizePhoneKey(p.phone) === cleanPhone);
   }, [loyaltyProfiles]);
 
   const earnLoyaltyPoints = useCallback((
@@ -2870,7 +2904,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       customNote?: string;
     }
   ) => {
-    if (!patientPhone || !patientPhone.trim()) return;
+    const cleanPhone = normalizePhoneKey(patientPhone);
+    if (!cleanPhone) return;
 
     // Strict tests-only paid amount calculation excluding visit fees
     let testsPaid = Math.max(0, amount);
@@ -2884,22 +2919,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
 
     const pointsToEarn = pointsForAmount(testsPaid, loyaltyConfig);
-    const cleanPhone = patientPhone.replace(/\s+/g, '');
+    const normalizedInv = normalizeInvoiceRef(invoiceNumber);
 
     setLoyaltyProfiles(prev => {
-      const existing = prev.find(p => p.phone.replace(/\s+/g, '') === cleanPhone);
+      const existing = prev.find(p => normalizePhoneKey(p.phone) === cleanPhone);
+      let updatedList: PatientLoyaltyProfile[];
 
       if (existing) {
-        if (invoiceNumber && hasEarnedForInvoice(existing, invoiceNumber)) return prev;
+        if ((invoiceNumber || normalizedInv) && hasEarnedForInvoice(existing, invoiceNumber)) return prev;
         const newTotal = existing.totalPoints + pointsToEarn;
-        const newSpent = existing.lifetimeSpent + testsPaid;
+        const newSpent = (existing.lifetimeSpent || 0) + testsPaid;
         const newTier = computeLoyaltyTier(newTotal, loyaltyConfig);
-
-        return prev.map(p => p.patientId === existing.patientId ? {
-          ...p,
+        const upgradedCardNumber = syncCardNumberTier(existing.cardNumber, newTier, existing.barcode || barcode);
+        const updatedProfile: PatientLoyaltyProfile = {
+          ...existing,
+          patientName: (existing.patientName && existing.patientName !== 'عميل مسجل') ? existing.patientName : (patientName || existing.patientName),
           totalPoints: newTotal,
           tier: newTier,
+          cardNumber: upgradedCardNumber,
           lifetimeSpent: newSpent,
+          updatedAt: new Date().toISOString(),
           transactions: [
             {
               id: `tx-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
@@ -2910,25 +2949,34 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               invoiceNumber,
               amountEGP: testsPaid
             },
-            ...(p.transactions || [])
+            ...(existing.transactions || [])
           ]
-        } : p);
+        } as PatientLoyaltyProfile;
+
+        updatedList = prev.map(p => p.patientId === existing.patientId ? updatedProfile : p);
+        try { realtimeSyncManager.broadcastAction('UPDATE_LOYALTY', updatedProfile); } catch {}
       } else {
         // Automatically create a smart card and profile for this patient!
         const autoProfile = createAutoLoyaltyProfile({
           patientName: patientName || 'عميل مسجل',
-          phone: patientPhone,
+          phone: patientPhone.trim(),
           barcode,
           testsPaidAmount: testsPaid,
           invoiceNumber,
           config: loyaltyConfig
         });
-        return [autoProfile, ...prev];
+        updatedList = [autoProfile, ...prev];
+        try { realtimeSyncManager.broadcastAction('UPDATE_LOYALTY', autoProfile); } catch {}
       }
+
+      latestStateRef.current.loyaltyProfiles = updatedList;
+      safeSetLocalStorage(LOYALTY_KEY, JSON.stringify(updatedList));
+      return updatedList;
     });
 
+    triggerAutoCloudPush();
     logAction('LOYALTY', 'LOYALTY', `إضافة ${pointsToEarn} نقطة ولاء للعميل ${patientName} (${patientPhone}) عن تحاليل مدفوعة بقيمة ${testsPaid} ج.م`);
-  }, [loyaltyConfig, logAction]);
+  }, [loyaltyConfig, logAction, triggerAutoCloudPush]);
 
   // النقاط التلقائية: تُمنح لكل فاتورة جديدة مرة واحدة فقط أياً كان مسار إنشاء الفاتورة ومحسوبة على التحاليل فقط
   const loyaltyAutoEarnSinceRef = useRef<number>(0);
@@ -2944,24 +2992,28 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
     }
     const sinceStamp = loyaltyAutoEarnSinceRef.current;
-    const normalizePhone = (v?: string) => (v || '').replace(/\s+/g, '');
     incomeRecords.forEach(inv => {
       const invNo = inv.invoiceNumber;
-      if (!invNo || loyaltyAutoEarnSeenRef.current.has(invNo)) return;
+      const normRef = normalizeInvoiceRef(invNo || inv.labNumber);
+      if (!invNo || !normRef || loyaltyAutoEarnSeenRef.current.has(normRef)) return;
       const created = new Date(inv.createdAt || inv.updatedAt || '').getTime();
       if (!created || isNaN(created) || created < sinceStamp) {
-        loyaltyAutoEarnSeenRef.current.add(invNo);
+        loyaltyAutoEarnSeenRef.current.add(normRef);
         return;
       }
       const testsOnlyPaid = calculateTestsOnlyPaidAmount(inv, loyaltyConfig);
-      if (!inv.patientPhone || pointsForAmount(testsOnlyPaid, loyaltyConfig) <= 0) return;
-      const profile = loyaltyProfiles.find(p => normalizePhone(p.phone) === normalizePhone(inv.patientPhone));
+      const cleanInvPhone = normalizePhoneKey(inv.patientPhone);
+      if (!cleanInvPhone || pointsForAmount(testsOnlyPaid, loyaltyConfig) <= 0) return;
+      const profile = loyaltyProfiles.find(p => normalizePhoneKey(p.phone) === cleanInvPhone);
       if (profile && hasEarnedForInvoice(profile, invNo)) {
-        loyaltyAutoEarnSeenRef.current.add(invNo);
+        loyaltyAutoEarnSeenRef.current.add(normRef);
         return;
       }
-      const alreadyCredited = profile?.transactions?.some(t => t.points > 0 && Math.abs(new Date(t.date).getTime() - created) < 5 * 60 * 1000);
-      loyaltyAutoEarnSeenRef.current.add(invNo);
+      const alreadyCredited = profile?.transactions?.some(t =>
+        (t.invoiceNumber && normalizeInvoiceRef(t.invoiceNumber) === normRef) ||
+        (t.points > 0 && t.type === 'earn' && Math.abs(new Date(t.date).getTime() - created) < 2 * 60 * 1000 && t.amountEGP === testsOnlyPaid)
+      );
+      loyaltyAutoEarnSeenRef.current.add(normRef);
       if (alreadyCredited) return;
       earnLoyaltyPoints(inv.patientPhone, testsOnlyPaid, invNo, inv.patientName, inv.barcode, {
         visitFee: inv.visitFee,
@@ -3005,6 +3057,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [logAction]);
 
   const updateLoyaltyConfig = useCallback((newConfig: LoyaltyConfig) => {
+    stampSetting('loyaltyConfig');
+    latestStateRef.current.loyaltyConfig = newConfig;
     setLoyaltyConfig(newConfig);
     try {
       localStorage.setItem(`${STORAGE_PREFIX}loyalty_config`, JSON.stringify(newConfig));
@@ -3012,11 +3066,31 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     } catch (e) {
       console.warn('Failed to save loyaltyConfig to localStorage:', e);
     }
+
+    // Re-evaluate all existing loyalty cards immediately so tier & prefix stay synced with policy
+    setLoyaltyProfiles(prev => {
+      const updated = prev.map(p => {
+        const nextTier = computeLoyaltyTier(p.totalPoints || 0, newConfig);
+        const nextCardNumber = syncCardNumberTier(p.cardNumber, nextTier, p.barcode);
+        if (nextTier === p.tier && nextCardNumber === p.cardNumber) return p;
+        return {
+          ...p,
+          tier: nextTier,
+          cardNumber: nextCardNumber,
+          updatedAt: new Date().toISOString()
+        };
+      });
+      latestStateRef.current.loyaltyProfiles = updated;
+      safeSetLocalStorage(LOYALTY_KEY, JSON.stringify(updated));
+      return updated;
+    });
+
     try {
-      realtimeSyncManager.broadcastAction('UPDATE_LOYALTY', newConfig);
+      realtimeSyncManager.broadcastAction('UPDATE_LOYALTY_CONFIG', newConfig);
     } catch {}
-    logAction('LOYALTY', 'LOYALTY', `تحديث إعدادات كروت الولاء وقواعد احتساب النقاط (استبعاد رسوم الزيارة: ${newConfig.excludeVisitFee !== false ? 'مفعّل' : 'معطّل'})`);
-  }, [logAction]);
+    triggerAutoCloudPush();
+    logAction('LOYALTY', 'LOYALTY', `تحديث إعدادات كروت الولاء وقواعد احتساب النقاط وتطبيقها على كافة الكروت المسجلة`);
+  }, [logAction, triggerAutoCloudPush]);
 
   const recalculateAllLoyaltyPoints = useCallback((customConfig?: LoyaltyConfig) => {
     const activeConfig = customConfig || loyaltyConfig;
@@ -3031,11 +3105,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         name: string;
         barcode: string;
         invoices: IncomeRecord[];
+        seenInvRefs: Set<string>;
       }>();
 
       incomeRecords.forEach(inv => {
         if (!inv.patientPhone || !inv.patientPhone.trim()) return;
-        const cleanPhone = inv.patientPhone.replace(/\s+/g, '');
+        const cleanPhone = normalizePhoneKey(inv.patientPhone);
         if (!cleanPhone) return;
 
         if (!phoneMap.has(cleanPhone)) {
@@ -3043,23 +3118,37 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             phone: inv.patientPhone.trim(),
             name: inv.patientName || 'عميل مسجل',
             barcode: inv.barcode || '',
-            invoices: []
+            invoices: [],
+            seenInvRefs: new Set()
           });
         }
-        phoneMap.get(cleanPhone)!.invoices.push(inv);
+        const entry = phoneMap.get(cleanPhone)!;
+        const invRef = normalizeInvoiceRef(inv.invoiceNumber || inv.labNumber || inv.id);
+        if (invRef && entry.seenInvRefs.has(invRef)) return;
+        if (invRef) entry.seenInvRefs.add(invRef);
+        entry.invoices.push(inv);
       });
 
       const updatedProfilesList: PatientLoyaltyProfile[] = [...prevProfiles];
+      const handledProfileIds = new Set<string>();
 
       phoneMap.forEach((entry, cleanPhone) => {
-        const existing = updatedProfilesList.find(p => p.phone.replace(/\s+/g, '') === cleanPhone);
+        const existing = updatedProfilesList.find(p => normalizePhoneKey(p.phone) === cleanPhone);
         let profileTotalTestsPaid = 0;
         let profileTotalPoints = 0;
         const newTransactions: LoyaltyTransaction[] = [];
 
-        // Retain manual adjustments
-        const manualTx = (existing?.transactions || []).filter(t => !t.invoiceNumber && t.type !== 'earn');
-        const manualPoints = manualTx.reduce((sum, t) => sum + (t.points || 0), 0);
+        // Retain ALL non-earn transactions (redeem, adjust, bonus) without dropping invoice-linked redemptions
+        const retainedTxRaw = (existing?.transactions || []).filter(t => t.type !== 'earn');
+        const seenTxIds = new Set<string>();
+        const retainedTx: LoyaltyTransaction[] = [];
+        retainedTxRaw.forEach(t => {
+          if (!seenTxIds.has(t.id)) {
+            seenTxIds.add(t.id);
+            retainedTx.push(t);
+          }
+        });
+        const retainedPoints = retainedTx.reduce((sum, t) => sum + (Number(t.points) || 0), 0);
 
         entry.invoices.forEach(inv => {
           totalInvoicesProcessed++;
@@ -3070,7 +3159,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
           if (points > 0 || testsPaid > 0) {
             newTransactions.push({
-              id: `tx-rec-${inv.invoiceNumber || Date.now()}`,
+              id: `tx-rec-${normalizeInvoiceRef(inv.invoiceNumber || inv.labNumber) || inv.id || Date.now()}`,
               date: (inv.createdAt || new Date().toISOString()).split('T')[0],
               type: 'earn',
               points,
@@ -3081,10 +3170,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           }
         });
 
-        const welcomeBonus = !existing ? (Number(activeConfig.welcomeBonusPoints) || 0) : 0;
+        const hasExistingWelcomeBonus = retainedTx.some(t => t.type === 'bonus');
+        const welcomeBonus = (!existing && !hasExistingWelcomeBonus) ? (Number(activeConfig.welcomeBonusPoints) || 0) : 0;
         if (welcomeBonus > 0) {
           newTransactions.unshift({
-            id: `tx-wel-${Date.now()}`,
+            id: `tx-wel-${Date.now()}-${Math.random().toString(36).slice(2, 5)}`,
             date: new Date().toISOString().split('T')[0],
             type: 'bonus',
             points: welcomeBonus,
@@ -3093,21 +3183,25 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           });
         }
 
-        const calculatedFinalPoints = Math.max(0, profileTotalPoints + manualPoints + welcomeBonus);
+        const calculatedFinalPoints = Math.max(0, profileTotalPoints + retainedPoints + welcomeBonus);
         totalPointsCalculated += calculatedFinalPoints;
         const calculatedTier = computeLoyaltyTier(calculatedFinalPoints, activeConfig);
 
         if (existing) {
           updatedProfilesCount++;
+          handledProfileIds.add(existing.patientId);
           const idx = updatedProfilesList.findIndex(p => p.patientId === existing.patientId);
           if (idx !== -1) {
             updatedProfilesList[idx] = {
               ...existing,
+              patientName: (existing.patientName && existing.patientName !== 'عميل مسجل') ? existing.patientName : entry.name,
               totalPoints: calculatedFinalPoints,
               tier: calculatedTier,
-              lifetimeSpent: profileTotalTestsPaid,
-              transactions: [...newTransactions, ...manualTx]
-            };
+              cardNumber: syncCardNumberTier(existing.cardNumber, calculatedTier, existing.barcode || entry.barcode),
+              lifetimeSpent: Math.max(profileTotalTestsPaid, existing.lifetimeSpent || 0),
+              updatedAt: new Date().toISOString(),
+              transactions: [...newTransactions, ...retainedTx]
+            } as PatientLoyaltyProfile;
           }
         } else {
           newCardsCreatedCount++;
@@ -3124,20 +3218,37 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             tier: calculatedTier,
             lifetimeSpent: profileTotalTestsPaid,
             issueDate: new Date().toISOString().split('T')[0],
-            transactions: [...newTransactions, ...manualTx]
+            transactions: [...newTransactions, ...retainedTx]
           };
+          handledProfileIds.add(newProf.patientId);
           updatedProfilesList.unshift(newProf);
         }
       });
 
-      try {
-        localStorage.setItem(LOYALTY_KEY, JSON.stringify(updatedProfilesList));
-        localStorage.setItem('rt_lab_loyalty_profiles_v2', JSON.stringify(updatedProfilesList));
-      } catch (e) {}
+      // Also apply updated tier thresholds/card prefix to any profiles without matching incomeRecords
+      const finalizedList = updatedProfilesList.map(prof => {
+        if (handledProfileIds.has(prof.patientId)) return prof;
+        const nextTier = computeLoyaltyTier(prof.totalPoints || 0, activeConfig);
+        const nextCardNumber = syncCardNumberTier(prof.cardNumber, nextTier, prof.barcode);
+        updatedProfilesCount++;
+        totalPointsCalculated += (prof.totalPoints || 0);
+        return {
+          ...prof,
+          tier: nextTier,
+          cardNumber: nextCardNumber,
+          updatedAt: new Date().toISOString()
+        } as PatientLoyaltyProfile;
+      });
 
-      return updatedProfilesList;
+      latestStateRef.current.loyaltyProfiles = finalizedList;
+      safeSetLocalStorage(LOYALTY_KEY, JSON.stringify(finalizedList));
+      safeSetLocalStorage('rt_lab_loyalty_profiles_v2', JSON.stringify(finalizedList));
+      try { realtimeSyncManager.broadcastAction('UPDATE_LOYALTY', finalizedList); } catch {}
+
+      return finalizedList;
     });
 
+    triggerAutoCloudPush();
     logAction('LOYALTY', 'LOYALTY', `إعادة احتساب وتحديث نقاط كروت الولاء لـ ${totalInvoicesProcessed} حجز وفاتورة، وتحديث ${updatedProfilesCount} بروفايل وإصدار ${newCardsCreatedCount} كارت جديد`);
     return {
       updatedProfilesCount,
@@ -3145,12 +3256,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       totalPointsCalculated,
       totalInvoicesProcessed
     };
-  }, [incomeRecords, loyaltyConfig, logAction]);
+  }, [incomeRecords, loyaltyConfig, logAction, triggerAutoCloudPush]);
 
   const addLoyaltyProfile = useCallback((profile: PatientLoyaltyProfile) => {
-    setLoyaltyProfiles(prev => [profile, ...prev]);
+    setLoyaltyProfiles(prev => {
+      const updated = [profile, ...prev];
+      latestStateRef.current.loyaltyProfiles = updated;
+      safeSetLocalStorage(LOYALTY_KEY, JSON.stringify(updated));
+      return updated;
+    });
+    try { realtimeSyncManager.broadcastAction('UPDATE_LOYALTY', profile); } catch {}
+    triggerAutoCloudPush();
     logAction('CREATE', 'LOYALTY', `إصدار كارت ولاء جديد للمريض ${profile.patientName}`);
-  }, [logAction]);
+  }, [logAction, triggerAutoCloudPush]);
 
   const restockItem = useCallback((id: string, addedQty: number, newCost?: number) => {
     setInventory(prev => prev.map(item => {
@@ -3188,36 +3306,41 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     amountEGP?: number
   ) => {
     setLoyaltyProfiles(prev => {
-      const cleanPhone = patientPhone.replace(/\s+/g, '');
-      const existing = prev.find(p => p.phone.replace(/\s+/g, '') === cleanPhone || p.patientId === patientPhone);
+      const cleanPhone = normalizePhoneKey(patientPhone);
+      const existing = prev.find(p => (cleanPhone && normalizePhoneKey(p.phone) === cleanPhone) || p.patientId === patientPhone);
       if (existing) {
         const newTotal = existing.totalPoints + points;
-        return prev.map(p => {
-          if (p.patientId === existing.patientId) {
-            return {
-              ...p,
-              totalPoints: newTotal,
-              tier: calculateLoyaltyTier(newTotal),
-              transactions: [
-                {
-                  id: `tx-${Date.now()}`,
-                  date: new Date().toISOString().split('T')[0],
-                  type: 'bonus',
-                  points,
-                  description: reason,
-                  invoiceNumber,
-                  amountEGP
-                },
-                ...(p.transactions || [])
-              ]
-            };
-          }
-          return p;
-        });
+        const nextTier = computeLoyaltyTier(newTotal, loyaltyConfig);
+        const updatedProfile: PatientLoyaltyProfile = {
+          ...existing,
+          totalPoints: newTotal,
+          tier: nextTier,
+          cardNumber: syncCardNumberTier(existing.cardNumber, nextTier, existing.barcode),
+          lifetimeSpent: amountEGP ? (existing.lifetimeSpent || 0) + amountEGP : existing.lifetimeSpent,
+          updatedAt: new Date().toISOString(),
+          transactions: [
+            {
+              id: `tx-${Date.now()}`,
+              date: new Date().toISOString().split('T')[0],
+              type: 'bonus',
+              points,
+              description: reason,
+              invoiceNumber,
+              amountEGP
+            },
+            ...(existing.transactions || [])
+          ]
+        } as PatientLoyaltyProfile;
+        const updated = prev.map(p => p.patientId === existing.patientId ? updatedProfile : p);
+        latestStateRef.current.loyaltyProfiles = updated;
+        safeSetLocalStorage(LOYALTY_KEY, JSON.stringify(updated));
+        try { realtimeSyncManager.broadcastAction('UPDATE_LOYALTY', updatedProfile); } catch {}
+        return updated;
       }
       return prev;
     });
-  }, [calculateLoyaltyTier]);
+    triggerAutoCloudPush();
+  }, [loyaltyConfig, triggerAutoCloudPush]);
 
   const redeemLoyaltyPoints = useCallback((
     patientPhone: string,
@@ -3231,51 +3354,90 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       return { success: false, cashValue: 0 };
     }
 
-    setLoyaltyProfiles(prev => prev.map(p => {
-      if (p.patientId === profile.patientId) {
-        const remaining = p.totalPoints - points;
-        return {
-          ...p,
-          totalPoints: remaining,
-          transactions: [
-            {
-              id: `tx-red-${Date.now()}`,
-              date: new Date().toISOString().split('T')[0],
-              type: 'redeem',
-              points: -points,
-              description: `استبدال ${points} نقطة بخصم ${cashValue} ج.م ${invoiceNumber ? `على فاتورة ${invoiceNumber}` : ''}`,
-              invoiceNumber,
-              amountEGP: cashValue
-            },
-            ...(p.transactions || [])
-          ]
-        };
-      }
-      return p;
-    }));
+    setLoyaltyProfiles(prev => {
+      const updated = prev.map(p => {
+        if (p.patientId === profile.patientId) {
+          const remaining = Math.max(0, p.totalPoints - points);
+          const nextTier = computeLoyaltyTier(remaining, loyaltyConfig);
+          const updatedProfile: PatientLoyaltyProfile = {
+            ...p,
+            totalPoints: remaining,
+            tier: nextTier,
+            cardNumber: syncCardNumberTier(p.cardNumber, nextTier, p.barcode),
+            updatedAt: new Date().toISOString(),
+            transactions: [
+              {
+                id: `tx-red-${Date.now()}`,
+                date: new Date().toISOString().split('T')[0],
+                type: 'redeem',
+                points: -points,
+                description: `استبدال ${points} نقطة بخصم ${cashValue} ج.م ${invoiceNumber ? `على فاتورة ${invoiceNumber}` : ''}`,
+                invoiceNumber,
+                amountEGP: cashValue
+              },
+              ...(p.transactions || [])
+            ]
+          } as PatientLoyaltyProfile;
+          try { realtimeSyncManager.broadcastAction('UPDATE_LOYALTY', updatedProfile); } catch {}
+          return updatedProfile;
+        }
+        return p;
+      });
+      latestStateRef.current.loyaltyProfiles = updated;
+      safeSetLocalStorage(LOYALTY_KEY, JSON.stringify(updated));
+      return updated;
+    });
 
+    triggerAutoCloudPush();
     logAction('LOYALTY', 'LOYALTY', `استبدال ${points} نقطة للمريض ${profile.patientName} بخصم ${cashValue} ج.م`);
     return { success: true, cashValue };
-  }, [getLoyaltyByPhone, loyaltyProfiles, calculateCashForPoints, logAction]);
+  }, [getLoyaltyByPhone, loyaltyProfiles, calculateCashForPoints, loyaltyConfig, logAction, triggerAutoCloudPush]);
 
   const updateLoyaltyProfile = useCallback((id: string, updates: Partial<PatientLoyaltyProfile>) => {
-    setLoyaltyProfiles(prev => prev.map(p => p.patientId === id ? { ...p, ...updates } : p));
-  }, []);
+    setLoyaltyProfiles(prev => {
+      const updated = prev.map(p => p.patientId === id ? { ...p, ...updates, updatedAt: new Date().toISOString() } : p);
+      latestStateRef.current.loyaltyProfiles = updated;
+      safeSetLocalStorage(LOYALTY_KEY, JSON.stringify(updated));
+      return updated;
+    });
+    triggerAutoCloudPush();
+  }, [triggerAutoCloudPush]);
 
   const deleteLoyaltyProfile = useCallback((id: string) => {
-    setLoyaltyProfiles(prev => prev.filter(p => p.patientId !== id));
-  }, []);
+    markDeleted('loyaltyProfiles', id);
+    setLoyaltyProfiles(prev => {
+      const updated = prev.filter(p => p.patientId !== id);
+      latestStateRef.current.loyaltyProfiles = updated;
+      safeSetLocalStorage(LOYALTY_KEY, JSON.stringify(updated));
+      return updated;
+    });
+    triggerAutoCloudPush();
+  }, [triggerAutoCloudPush]);
 
   const deleteLoyaltyTransaction = useCallback((profileId: string, txId: string) => {
-    setLoyaltyProfiles(prev => prev.map(p => {
-      if (p.patientId === profileId) {
-        const filteredTx = p.transactions.filter(t => t.id !== txId);
-        const recomputedPoints = filteredTx.reduce((sum, t) => sum + t.points, 0);
-        return { ...p, transactions: filteredTx, totalPoints: Math.max(0, recomputedPoints) };
-      }
-      return p;
-    }));
-  }, []);
+    setLoyaltyProfiles(prev => {
+      const updated = prev.map(p => {
+        if (p.patientId === profileId) {
+          const filteredTx = p.transactions.filter(t => t.id !== txId);
+          const recomputedPoints = Math.max(0, filteredTx.reduce((sum, t) => sum + t.points, 0));
+          const nextTier = computeLoyaltyTier(recomputedPoints, loyaltyConfig);
+          return {
+            ...p,
+            transactions: filteredTx,
+            totalPoints: recomputedPoints,
+            tier: nextTier,
+            cardNumber: syncCardNumberTier(p.cardNumber, nextTier, p.barcode),
+            updatedAt: new Date().toISOString()
+          };
+        }
+        return p;
+      });
+      latestStateRef.current.loyaltyProfiles = updated;
+      safeSetLocalStorage(LOYALTY_KEY, JSON.stringify(updated));
+      return updated;
+    });
+    triggerAutoCloudPush();
+  }, [loyaltyConfig, triggerAutoCloudPush]);
 
   const retroactiveSyncAllInvoicesToLoyalty = useCallback(() => {
     const res = recalculateAllLoyaltyPoints();
@@ -3975,6 +4137,7 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
       reports,
       incomeRecords,
       loyaltyProfiles,
+      loyaltyConfig,
       inventory,
       expenses,
       dailyCloseouts,
@@ -3999,7 +4162,7 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
     URL.revokeObjectURL(url);
     logAction('BACKUP', 'SETTINGS', 'تصدير نسخة احتياطية موحدة شاملة لبيانات المعمل');
     return jsonStr;
-  }, [reports, incomeRecords, loyaltyProfiles, inventory, expenses, dailyCloseouts, employees, labToLabOrders, testCatalog, packages, diagnosticProfiles, staffMembers, staffSignatures, staffSignatureOptions, labInfo, auditLogs, logAction]);
+  }, [reports, incomeRecords, loyaltyProfiles, loyaltyConfig, inventory, expenses, dailyCloseouts, employees, labToLabOrders, testCatalog, packages, diagnosticProfiles, staffMembers, staffSignatures, staffSignatureOptions, labInfo, auditLogs, logAction]);
 
   const importBackup = useCallback(async (backupJson: string): Promise<{ success: boolean; message: string }> => {
     try {
@@ -4007,6 +4170,7 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
       if (data.reports) setReports(data.reports);
       if (data.incomeRecords) setIncomeRecords(data.incomeRecords);
       if (data.loyaltyProfiles) setLoyaltyProfiles(data.loyaltyProfiles);
+      if (data.loyaltyConfig) setLoyaltyConfig(data.loyaltyConfig);
       if (data.inventory) setInventory(data.inventory);
       if (data.expenses) setExpenses(data.expenses);
       if (data.employees) setEmployees(data.employees);
@@ -4115,6 +4279,9 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
         }
         if (Array.isArray(data.loyaltyProfiles) && data.loyaltyProfiles.length > 0) {
           setLoyaltyProfiles(data.loyaltyProfiles);
+        }
+        if (data.loyaltyConfig) {
+          setLoyaltyConfig(prev => mergeSettingsObject('loyaltyConfig', prev, data.loyaltyConfig, data.settingsStamps));
         }
         if (data.labInfo) {
           setLabInfo(data.labInfo);

@@ -84,7 +84,7 @@ export const ClientEditModal: React.FC<ClientEditModalProps> = ({
                   type="tel"
                   value={formData.phone || ''}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  placeholder="01012345678"
+                  placeholder="011xxxxxxxx"
                   className="w-full text-xs font-mono bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-white focus:outline-none focus:ring-2 focus:ring-rose-500"
                 />
               </div>

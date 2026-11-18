@@ -927,7 +927,7 @@ export const StaffAndFacilitiesManager: React.FC<StaffAndFacilitiesManagerProps>
                     type="text"
                     value={staffFormData.phone || ''}
                     onChange={(e) => setStaffFormData({ ...staffFormData, phone: e.target.value })}
-                    placeholder="01012345678"
+                    placeholder="011xxxxxxxx"
                     className="w-full p-2 bg-slate-50 border border-slate-300 rounded-lg font-mono"
                   />
                 </div>

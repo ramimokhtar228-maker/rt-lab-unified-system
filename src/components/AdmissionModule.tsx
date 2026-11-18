@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useApp } from '../context/AppContext';
 import { getNextLabIdentity } from '../utils/labNumbering';
-import { calculateTestsOnlyPaidAmount, pointsForAmount } from '../utils/loyaltyEngine';
+import { calculateTestsOnlyPaidAmount, pointsForAmount, getTierPalette, pointsCashValue, normalizePhoneKey, computeLoyaltyTier } from '../utils/loyaltyEngine';
 import {
   UserPlus,
   Plus,
@@ -164,8 +164,9 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
   const [isWhatsAppModalOpen, setIsWhatsAppModalOpen] = useState(false);
 
   const autoLoyaltyAppliedForPhone = useRef<string>('');
+  const autoAppliedPctRef = useRef<number>(0);
 
-  // Loyalty check by phone
+  // Loyalty check by normalized phone
   const loyaltyProfile = useMemo(() => {
     return getLoyaltyByPhone(phone);
   }, [phone, getLoyaltyByPhone]);
@@ -178,17 +179,29 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
 
   // Auto apply loyalty discount once per recognized loyalty phone (and no package)
   useEffect(() => {
-    const cleanPhone = phone.trim();
+    const cleanPhone = normalizePhoneKey(phone);
     if (!cleanPhone) {
+      if (autoAppliedPctRef.current > 0 && discountPercent === autoAppliedPctRef.current) {
+        setDiscountPercent(0);
+      }
       autoLoyaltyAppliedForPhone.current = '';
+      autoAppliedPctRef.current = 0;
       return;
     }
-    if (loyaltyProfile && !selectedPackage && autoLoyaltyAppliedForPhone.current !== cleanPhone) {
-      const tierConfig = loyaltyConfig?.tiers?.[loyaltyProfile.tier];
-      const tierDiscount = tierConfig?.discountRate || 0;
-      autoLoyaltyAppliedForPhone.current = cleanPhone;
-      if (tierDiscount > 0 && discountPercent === 0) {
-        setDiscountPercent(tierDiscount);
+    if (!selectedPackage && autoLoyaltyAppliedForPhone.current !== cleanPhone) {
+      if (loyaltyProfile) {
+        const dynamicTier = computeLoyaltyTier(loyaltyProfile.totalPoints || 0, loyaltyConfig);
+        const tierConfig = loyaltyConfig?.tiers?.[dynamicTier];
+        const tierDiscount = tierConfig?.discountRate || 0;
+        autoLoyaltyAppliedForPhone.current = cleanPhone;
+        if (discountPercent === 0 || discountPercent === autoAppliedPctRef.current) {
+          setDiscountPercent(tierDiscount);
+          autoAppliedPctRef.current = tierDiscount;
+        }
+      } else if (autoLoyaltyAppliedForPhone.current && discountPercent === autoAppliedPctRef.current) {
+        autoLoyaltyAppliedForPhone.current = cleanPhone;
+        setDiscountPercent(0);
+        autoAppliedPctRef.current = 0;
       }
     }
   }, [phone, loyaltyProfile, loyaltyConfig, discountPercent, selectedPackage]);
@@ -547,7 +560,9 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
         paidAmount,
         remainingAmount,
         paymentStatus: paidAmount >= netTotal ? 'paid' : (paidAmount > 0 ? 'partial' : 'pending'),
-        paymentMethod: (paymentMethod as any) || 'cash'
+        paymentMethod: (paymentMethod as any) || 'cash',
+        loyaltyCardIssued: true,
+        loyaltyCardNumber: loyaltyProfile?.cardNumber
       };
 
       // Create Report & Invoice via AppContext
@@ -557,13 +572,14 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
         selectedPackage || undefined
       );
 
-      // Apply loyalty points redemption or earning safely
+      // Apply loyalty points redemption or earning safely using matching INV- reference
       if (phone.trim() && createdReport) {
         try {
+          const invoiceRef = `INV-${String(createdReport.reportNumber || nextLabNumber).replace(/^RT-/i, '')}`;
           if (redeemPoints && pointsRedeemValue > 0 && loyaltyProfile && (loyaltyProfile.totalPoints || 0) >= 100) {
             const pointsToRedeem = Math.floor(loyaltyProfile.totalPoints / 100) * 100;
             if (pointsToRedeem > 0) {
-              redeemLoyaltyPoints(phone.trim(), pointsToRedeem, createdReport.reportNumber, pointsRedeemValue);
+              redeemLoyaltyPoints(phone.trim(), pointsToRedeem, invoiceRef, pointsRedeemValue);
             }
           }
           const testsOnlyPaid = calculateTestsOnlyPaidAmount({
@@ -576,7 +592,7 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
           earnLoyaltyPoints(
             phone.trim(),
             testsOnlyPaid,
-            createdReport.reportNumber,
+            invoiceRef,
             fullName.trim(),
             nextBarcode,
             {
@@ -1718,15 +1734,44 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
 
             {/* Loyalty Card & Discounts Section */}
             <div className="p-4 bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent border border-amber-300 rounded-2xl space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-xs text-amber-950 flex items-center gap-1.5">
-                  <Gift className="w-4 h-4 text-amber-700" />
-                  <span>الخصومات وكارت الولاء (RT Club)</span>
-                </span>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 font-mono">
-                  {loyaltyProfile ? `كارت ${loyaltyProfile.tier}` : 'عضو جديد'}
-                </span>
-              </div>
+              {(() => {
+                const activeTier = loyaltyProfile ? computeLoyaltyTier(loyaltyProfile.totalPoints || 0, loyaltyConfig) : 'Silver';
+                const tierPalette = getTierPalette(activeTier);
+                const cashVal = loyaltyProfile ? pointsCashValue(loyaltyProfile.totalPoints || 0, loyaltyConfig) : null;
+                const estTestsPaid = calculateTestsOnlyPaidAmount({
+                  paidAmount,
+                  visitFee: effectiveVisitFee,
+                  testsSubtotal,
+                  netAmount: netTotal
+                }, loyaltyConfig);
+                const estEarned = pointsForAmount(estTestsPaid, loyaltyConfig);
+                return (
+                  <>
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-bold text-xs text-amber-950 flex items-center gap-1.5">
+                        <Gift className="w-4 h-4 text-amber-700" />
+                        <span>الخصومات وكارت الولاء (RT Club)</span>
+                      </span>
+                      <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border font-mono ${loyaltyProfile ? tierPalette.badgeBgClass : 'bg-amber-200 text-amber-900 border-amber-300'}`}>
+                        {loyaltyProfile ? `${tierPalette.shortLabel} • خصم %${loyaltyConfig?.tiers?.[activeTier]?.discountRate || 0}` : 'كارت تلقائي جديد'}
+                      </span>
+                    </div>
+                    {loyaltyProfile && cashVal && (
+                      <div className="text-[11px] bg-white/80 border border-amber-200 rounded-lg px-2.5 py-1.5 flex flex-wrap items-center justify-between gap-1">
+                        <span className="font-bold text-slate-700">
+                          الرصيد: <strong className="text-amber-800 font-mono">{loyaltyProfile.totalPoints.toLocaleString()} نقطة</strong> (= <strong className="text-emerald-700">{cashVal.exactEGP} ج.م</strong>)
+                        </span>
+                        <span className="text-[10px] text-slate-500 font-mono">{loyaltyProfile.cardNumber || loyaltyProfile.barcode}</span>
+                      </div>
+                    )}
+                    {estEarned > 0 && (
+                      <div className="text-[10px] text-emerald-800 font-bold bg-emerald-50 border border-emerald-200 rounded-lg px-2.5 py-1">
+                        + سيكتسب المريض تلقائياً {estEarned} نقطة (= {pointsCashValue(estEarned, loyaltyConfig).exactEGP} ج.م) من هذا الحجز
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
 
               <div className="grid grid-cols-2 gap-2.5 text-xs">
                 <div>
@@ -1767,7 +1812,7 @@ export const AdmissionModule: React.FC<AdmissionModuleProps> = ({ onSuccess, isM
                   <div className="space-y-0.5">
                     <span className="text-slate-700 font-bold block">استبدال رصيد النقاط:</span>
                     <span className="text-[10px] text-slate-500 block">
-                      لديه {loyaltyProfile.totalPoints} نقطة = خصم نقدي {Math.floor(loyaltyProfile.totalPoints / 100) * loyaltyConfig.egpPer100Points} ج.م
+                      لديه {loyaltyProfile.totalPoints} نقطة = خصم نقدي قابل للاستبدال {Math.floor(loyaltyProfile.totalPoints / 100) * loyaltyConfig.egpPer100Points} ج.م
                     </span>
                   </div>
                   <input

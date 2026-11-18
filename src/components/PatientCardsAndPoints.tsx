@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { PatientLoyaltyProfile, LoyaltyTier, LoyaltyTransaction, LabReport } from '../types/lab';
 import { TIER_BENEFITS } from '../data/loyaltyData';
 import { RTLogo } from './RTLogo';
-import { generateAndDownloadLoyaltyCard, CardCustomFields } from '../utils/loyaltyCardCanvas';
-import { openWhatsApp } from '../utils/whatsapp';
+import { generateAndDownloadLoyaltyCard, CardCustomFields, CardThemeOption, copyDataUrlToClipboard } from '../utils/loyaltyCardCanvas';
+import { openWhatsApp, formatLoyaltyCardWhatsAppMessage, LAB_PHONE, LAB_PHONE_SECONDARY, LAB_WHATSAPP, BRANCH_MAIN_ADDRESS } from '../utils/whatsapp';
 import { 
   CreditCard, 
   Award, 
@@ -43,7 +43,15 @@ import {
 
 import { LoyaltyConfig } from '../types';
 import { DEFAULT_LOYALTY_CONFIG } from '../data/catalog';
-import { pointsForAmount, calculateTestsOnlyPaidAmount } from '../utils/loyaltyEngine';
+import {
+  pointsForAmount,
+  calculateTestsOnlyPaidAmount,
+  getTierPalette,
+  pointsCashValue,
+  redemptionSummaryText,
+  computeLoyaltyTier,
+  syncCardNumberTier
+} from '../utils/loyaltyEngine';
 
 interface PatientCardsAndPointsProps {
   loyaltyProfiles: PatientLoyaltyProfile[];
@@ -605,11 +613,12 @@ export const PatientCardsAndPoints: React.FC<PatientCardsAndPointsProps> = ({
     if (!activeProfile) return;
     const printWindow = window.open('', '_blank');
     if (!printWindow) {
-      alert('يرجى السماح بالنوافذ المنبثقة لطباعة الكرت.');
       return;
     }
 
-    const cardCode = activeProfile.cardNumber || activeProfile.barcode;
+    const pal = getTierPalette(currentTierKey);
+    const cardCode = syncCardNumberTier(activeProfile.cardNumber || activeProfile.barcode, currentTierKey, activeProfile.barcode);
+    const cashInfo = pointsCashValue(activeProfile.totalPoints || 0, config);
 
     const html = `<!DOCTYPE html><html lang="ar" dir="rtl"><head>
   <meta charset="UTF-8">
@@ -651,7 +660,7 @@ export const PatientCardsAndPoints: React.FC<PatientCardsAndPointsProps> = ({
       margin: 16px auto;
       page-break-inside: avoid;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      border: 1.5px solid #d97706;
+      border: 1.5px solid ${pal.printBorderHex};
       position: relative;
     }
     @media print {
@@ -662,7 +671,7 @@ export const PatientCardsAndPoints: React.FC<PatientCardsAndPointsProps> = ({
     }
   </style></head><body>
   <div class="no-print">
-    <div style="font-weight:bold; font-size:13px;">طباعة كارت الولاء الطبي الذكي (وجه واحد قياسي)</div>
+    <div style="font-weight:bold; font-size:13px;">طباعة كارت الولاء الطبي الذكي (${tierInfo.titleAr})</div>
     <div style="display:flex; gap:10px;">
       <button onclick="window.print()" style="background:#b45309; color:white; border:none; padding:8px 18px; border-radius:6px; font-weight:bold; cursor:pointer;">🖨️ طباعة الآن</button>
       <button onclick="window.close()" style="background:#334155; color:white; border:none; padding:8px 14px; border-radius:6px; cursor:pointer;">إغلاق ✕</button>
@@ -670,45 +679,46 @@ export const PatientCardsAndPoints: React.FC<PatientCardsAndPointsProps> = ({
   </div>
 
   <div style="padding-top: 60px; text-align: center;">
-    <div class="card-wrap" style="background: linear-gradient(135deg, #090d16 0%, #1e1b4b 60%, #311010 100%); color: white; padding: 4.5mm 6mm; display: flex; flex-direction: column; justify-content: space-between; text-align: right;">
+    <div class="card-wrap" style="background: ${pal.printBgGradient}; color: white; padding: 4mm 5.5mm; display: flex; flex-direction: column; justify-content: space-between; text-align: right;">
       <div style="display: flex; justify-content: space-between; align-items: flex-start;">
         <div>
-          <div style="font-weight: 900; font-size: 13.5px; color: #ffffff;">معامل RT للتحاليل الطبية والتشخيصية</div>
-          <div style="font-size: 8.5px; color: #fde68a; font-weight: bold;">معامل رامي مختار • أطباء كلية طب قصر العيني</div>
+          <div style="font-weight: 900; font-size: 12.5px; color: #ffffff;">معامل RT للتحاليل الطبية والتشخيصية</div>
+          <div style="font-size: 8px; color: ${pal.accentHex}; font-weight: bold;">أطباء واستشاريو كلية طب قصر العيني</div>
         </div>
-        <div style="background: rgba(245, 158, 11, 0.25); border: 1px solid #fbbf24; border-radius: 20px; padding: 2px 8px; font-size: 8.5px; font-weight: bold; color: #fef08a;">
+        <div style="background: ${pal.discountBgHex}; border: 1px solid ${pal.printBorderHex}; border-radius: 20px; padding: 2px 8px; font-size: 8px; font-weight: bold; color: #ffffff;">
           ★ ${tierInfo.titleAr} ★
         </div>
       </div>
 
       <!-- Center info -->
-      <div style="margin: 2mm 0; display: flex; justify-content: space-between; align-items: center;">
-        <div style="background: linear-gradient(135deg, #fde68a, #d97706); width: 34px; height: 26px; border-radius: 4px; border: 1px solid #fef3c7;"></div>
+      <div style="margin: 1.5mm 0; display: flex; justify-content: space-between; align-items: center;">
+        <div style="background: linear-gradient(135deg, #fde68a, ${pal.printBorderHex}); width: 30px; height: 22px; border-radius: 4px; border: 1px solid #fef3c7;"></div>
         <div style="text-align: center; flex: 1;">
-          <div style="font-family: monospace; font-size: 14px; font-weight: bold; letter-spacing: 2px; color: #ffffff;">${cardCode}</div>
-          <div style="font-size: 8px; color: #fda4af; font-weight: bold; margin-top: 1px;">خصم دائم معتمد: %${currentDiscountRate} على كافة التحاليل</div>
+          <div style="font-family: monospace; font-size: 13px; font-weight: bold; letter-spacing: 1.5px; color: #ffffff;">${cardCode}</div>
+          <div style="font-size: 7.5px; color: ${pal.discountTextHex}; font-weight: bold; margin-top: 1px;">خصم تلقائي معتمد: %${currentDiscountRate} على كافة التحاليل</div>
         </div>
-        <div style="text-align: left; background: rgba(0,0,0,0.4); padding: 3px 6px; border-radius: 6px; border: 1px solid rgba(245, 158, 11, 0.3);">
+        <div style="text-align: left; background: rgba(0,0,0,0.45); padding: 3px 6px; border-radius: 6px; border: 1px solid ${pal.printBorderHex}80;">
           <div style="font-size: 7px; color: #cbd5e1;">رصيد النقاط:</div>
-          <div style="font-size: 11px; font-weight: 900; color: #fbbf24;">${activeProfile.totalPoints} نقطة</div>
+          <div style="font-size: 10px; font-weight: 900; color: ${pal.accentHex};">${activeProfile.totalPoints} نقطة</div>
+          <div style="font-size: 7.5px; font-weight: 800; color: #34d399;">= ${cashInfo.exactEGP} ج.م</div>
         </div>
       </div>
 
+      <div style="font-size: 6.8px; color: #fef08a; text-align: center; background: rgba(255,255,255,0.08); border-radius: 4px; padding: 1.5px 4px;">
+        ${redemptionSummaryText(config)} · الترقية تلقائياً مع كل حجز
+      </div>
+
       <!-- Patient Demographics -->
-      <div style="display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 2.5mm;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 2mm;">
         <div>
-          <div style="font-size: 8px; color: #94a3b8;">اسم المريض:</div>
-          <div style="font-weight: 800; font-size: 11px; color: #ffffff;">${activeProfile.patientName}</div>
-          <div style="font-family: monospace; font-size: 9px; color: #fde68a; margin-top: 1px;">${activeProfile.phone}</div>
-        </div>
-        <div style="text-align: center;">
-          <div style="font-size: 7.5px; color: #94a3b8;">حالة الكارت:</div>
-          <div style="font-weight: 900; font-size: 11px; color: #10b981; font-family: monospace;">عضوية نشطة ✓</div>
+          <div style="font-size: 7.5px; color: #94a3b8;">اسم المريض:</div>
+          <div style="font-weight: 800; font-size: 10.5px; color: #ffffff;">${activeProfile.patientName}</div>
+          <div style="font-family: monospace; font-size: 8.5px; color: ${pal.accentHex}; margin-top: 1px;">${activeProfile.phone}</div>
         </div>
         <div style="text-align: left;">
-          <div style="font-size: 7.5px; color: #94a3b8;">الخط الساخن:</div>
-          <div style="font-size: 8.5px; font-weight: bold; color: #ffffff; font-family: monospace;">01012345678</div>
-          <div style="font-size: 6.5px; color: #cbd5e1;">بهتيم - شبرا الخيمة</div>
+          <div style="font-size: 7.5px; color: #cbd5e1;">الهاتف: <strong style="color:#fff; font-family:monospace;">${LAB_PHONE} / ${LAB_PHONE_SECONDARY}</strong></div>
+          <div style="font-size: 7px; color: #34d399;">واتساب: <span style="font-family:monospace;">${LAB_WHATSAPP}</span></div>
+          <div style="font-size: 6px; color: #cbd5e1;">📍 ${BRANCH_MAIN_ADDRESS}</div>
         </div>
       </div>
     </div>
@@ -722,21 +732,26 @@ export const PatientCardsAndPoints: React.FC<PatientCardsAndPointsProps> = ({
   // Download Single-Sided Card PNG
   const handleDownloadSingleSidedPNG = () => {
     if (!activeProfile) return;
-    const cardCode = activeProfile.cardNumber || activeProfile.barcode;
+    const cardCode = syncCardNumberTier(activeProfile.cardNumber || activeProfile.barcode, currentTierKey, activeProfile.barcode);
     generateAndDownloadLoyaltyCard({
       cardNumber: cardCode,
       patientName: activeProfile.patientName,
       patientPhone: activeProfile.phone,
-      tier: tierInfo.titleAr || 'Gold VIP',
+      tier: tierInfo.titleAr || 'Silver',
+      tierKey: currentTierKey,
       discountPercentage: currentDiscountRate,
       points: activeProfile.totalPoints,
+      egpPer100Points: config.egpPer100Points,
+      pointsPerEGP: config.pointsPerEGP,
       bloodGroup: activeProfile.bloodGroup || 'O+',
       issueDate: activeProfile.issueDate,
       emergencyContact: activeProfile.emergencyContact,
-      hotline: '01012345678 / 02-44667788',
-      address: 'ميدان بهتيم برج صيدلية العزبي الدور الثالث شبرا الخيمة',
+      hotline: LAB_PHONE,
+      phone: LAB_PHONE_SECONDARY,
+      whatsapp: LAB_WHATSAPP,
+      address: BRANCH_MAIN_ADDRESS,
       fields: cardFields,
-      theme: cardFields.theme
+      theme: cardFields.theme as CardThemeOption
     });
   };
 
@@ -1120,13 +1135,13 @@ export const PatientCardsAndPoints: React.FC<PatientCardsAndPointsProps> = ({
                       <>
                         <div className="text-[10px] text-slate-400 font-medium">الخط الساخن:</div>
                         <div className="font-bold font-mono text-white text-xs">
-                          01012345678
+                          {LAB_PHONE} / {LAB_PHONE_SECONDARY}
                         </div>
                       </>
                       )}
                       {cardFields.showAddress && (
                       <div className="text-[9px] text-slate-300 truncate">
-                        بهتيم - شبرا الخيمة
+                        {BRANCH_MAIN_ADDRESS}
                       </div>
                       )}
                     </div>
@@ -1670,7 +1685,7 @@ export const PatientCardsAndPoints: React.FC<PatientCardsAndPointsProps> = ({
                   type="text"
                   value={newCardPhone}
                   onChange={e => setNewCardPhone(e.target.value)}
-                  placeholder="01012345678"
+                  placeholder="011xxxxxxxx"
                   className="w-full px-3 py-2 border rounded-lg font-mono text-xs"
                   required
                 />

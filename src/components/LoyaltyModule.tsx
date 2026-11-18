@@ -1,12 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
-import { PatientLoyaltyProfile, LoyaltyTier, LoyaltyTransaction, LoyaltyConfig } from '../types';
+import { PatientLoyaltyProfile, LoyaltyTier, LoyaltyConfig } from '../types';
 import { DEFAULT_LOYALTY_CONFIG } from '../data/catalog';
-import { pointsForAmount, calculateTestsOnlyPaidAmount } from '../utils/loyaltyEngine';
-import { RTLogo } from './RTLogo';
-import { generateAndDownloadLoyaltyCard, CardCustomFields } from '../utils/loyaltyCardCanvas';
 import {
-  CreditCard,
+  LOYALTY_TIER_ORDER,
+  getTierPalette,
+  pointsCashValue,
+  redemptionSummaryText,
+  nextTierProgress,
+  computeLoyaltyTier,
+  tierDiscountRate,
+  syncCardNumberTier,
+  generateSmartCardNumber
+} from '../utils/loyaltyEngine';
+import {
+  generateAndDownloadLoyaltyCard,
+  CardCustomFields,
+  CardThemeOption,
+  copyDataUrlToClipboard
+} from '../utils/loyaltyCardCanvas';
+import {
+  formatLoyaltyCardWhatsAppMessage,
+  openWhatsApp,
+  LAB_PHONE,
+  LAB_PHONE_SECONDARY,
+  LAB_WHATSAPP,
+  BRANCH_MAIN_ADDRESS
+} from '../utils/whatsapp';
+import {
   Award,
   Plus,
   Search,
@@ -20,10 +41,7 @@ import {
   Sliders,
   Calculator,
   DollarSign,
-  Percent,
   RefreshCw,
-  HeartPulse,
-  Phone,
   Edit3,
   Trash2,
   Download,
@@ -32,28 +50,30 @@ import {
   Zap,
   User,
   X,
-  ShieldCheck
+  ShieldCheck,
+  MessageCircle,
+  CheckCircle2
 } from 'lucide-react';
 
 const TIER_BENEFITS: Record<LoyaltyTier, { titleAr: string; badgeBg: string; description: string }> = {
   Silver: {
     titleAr: 'المستوى الفضي (Silver)',
-    badgeBg: 'bg-slate-200 text-slate-800 border-slate-300',
-    description: 'أولوية استلام النتائج عبر الواتساب'
+    badgeBg: 'bg-slate-100 text-slate-800 border-slate-300',
+    description: 'أولوية استلام النتائج عبر الواتساب وتجميع تلقائي مع كل زيارة'
   },
   Gold: {
     titleAr: 'المستوى الذهبي (Gold)',
-    badgeBg: 'bg-amber-100 text-amber-900 border-amber-300',
+    badgeBg: 'bg-amber-100 text-amber-950 border-amber-400',
     description: 'سحب منزلي مجاني مرتين سنوياً + تقرير التطور البياني'
   },
   Platinum: {
     titleAr: 'المستوى البلاتيني (Platinum)',
-    badgeBg: 'bg-indigo-100 text-indigo-900 border-indigo-300',
+    badgeBg: 'bg-sky-100 text-sky-950 border-sky-400',
     description: 'سحب منزلي مجاني غير محدود + استشارة طبية مع استشاري المعمل'
   },
   VIP: {
     titleAr: 'نخبة الماس VIP (Diamond Elite)',
-    badgeBg: 'bg-gradient-to-r from-red-800 to-rose-700 text-white border-red-500',
+    badgeBg: 'bg-gradient-to-r from-rose-700 to-red-800 text-white border-rose-400',
     description: 'خصم لك ولأفراد عائلتك من الدرجة الأولى + باقة فحص سنوي مجانية'
   }
 };
@@ -68,7 +88,6 @@ export const LoyaltyModule: React.FC = () => {
     updateLoyaltyProfile,
     deleteLoyaltyProfile,
     deleteLoyaltyTransaction,
-    retroactiveSyncAllInvoicesToLoyalty,
     addLoyaltyPoints,
     redeemLoyaltyPoints,
     calculateCashForPoints,
@@ -79,17 +98,47 @@ export const LoyaltyModule: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProfileId, setSelectedProfileId] = useState<string>(loyaltyProfiles[0]?.patientId || '');
   const [copiedCode, setCopiedCode] = useState(false);
+  const [noticeBanner, setNoticeBanner] = useState<{ type: 'success' | 'error' | 'info'; message: string } | null>(null);
+  const [isSendingWA, setIsSendingWA] = useState(false);
+
+  const showNotice = (type: 'success' | 'error' | 'info', message: string) => {
+    setNoticeBanner({ type, message });
+    setTimeout(() => {
+      setNoticeBanner(prev => (prev?.message === message ? null : prev));
+    }, 6500);
+  };
+
   // Card Fields Customization State (Face 1 single-sided luxury customization)
-  const [cardFields, setCardFields] = useState<CardCustomFields & { theme: 'royal-black' | 'sapphire' | 'emerald' | 'ruby' }>(() => {
+  const [cardFields, setCardFields] = useState<CardCustomFields & { theme: CardThemeOption }>(() => {
     try {
       const saved = localStorage.getItem('rt_lab_card_fields_config');
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return {
+          showHeader: parsed.showHeader ?? true,
+          showTierBadge: parsed.showTierBadge ?? true,
+          showChip: parsed.showChip ?? true,
+          showPoints: parsed.showPoints ?? true,
+          showCashValue: parsed.showCashValue ?? true,
+          showCardCode: parsed.showCardCode ?? true,
+          showPatientName: parsed.showPatientName ?? true,
+          showPatientPhone: parsed.showPatientPhone ?? true,
+          showBloodGroup: parsed.showBloodGroup ?? false,
+          showDates: parsed.showDates ?? true,
+          showUsageNote: parsed.showUsageNote ?? true,
+          showFooter: parsed.showFooter ?? true,
+          showHotline: parsed.showHotline ?? true,
+          showAddress: parsed.showAddress ?? true,
+          theme: parsed.theme || 'auto-tier'
+        };
+      }
     } catch {}
     return {
       showHeader: true,
       showTierBadge: true,
       showChip: true,
       showPoints: true,
+      showCashValue: true,
       showCardCode: true,
       showPatientName: true,
       showPatientPhone: true,
@@ -99,7 +148,7 @@ export const LoyaltyModule: React.FC = () => {
       showFooter: true,
       showHotline: true,
       showAddress: true,
-      theme: 'royal-black'
+      theme: 'auto-tier'
     };
   });
   const [isFieldCustomizerOpen, setIsFieldCustomizerOpen] = useState(false);
@@ -112,7 +161,7 @@ export const LoyaltyModule: React.FC = () => {
     });
   };
 
-  const setCardTheme = (theme: 'royal-black' | 'sapphire' | 'emerald' | 'ruby') => {
+  const setCardTheme = (theme: CardThemeOption) => {
     setCardFields(prev => {
       const updated = { ...prev, theme };
       try { localStorage.setItem('rt_lab_card_fields_config', JSON.stringify(updated)); } catch {}
@@ -121,11 +170,12 @@ export const LoyaltyModule: React.FC = () => {
   };
 
   const resetAllCardFields = () => {
-    const defaults = {
+    const defaults: CardCustomFields & { theme: CardThemeOption } = {
       showHeader: true,
       showTierBadge: true,
       showChip: true,
       showPoints: true,
+      showCashValue: true,
       showCardCode: true,
       showPatientName: true,
       showPatientPhone: true,
@@ -135,7 +185,7 @@ export const LoyaltyModule: React.FC = () => {
       showFooter: true,
       showHotline: true,
       showAddress: true,
-      theme: 'royal-black' as const
+      theme: 'auto-tier'
     };
     setCardFields(defaults);
     try { localStorage.setItem('rt_lab_card_fields_config', JSON.stringify(defaults)); } catch {}
@@ -192,22 +242,43 @@ export const LoyaltyModule: React.FC = () => {
 
   const activeProfile = loyaltyProfiles.find(p => p.patientId === selectedProfileId) || loyaltyProfiles[0];
 
-  const getDynamicTier = (points: number): LoyaltyTier => {
-    if (points >= loyaltyConfig.tiers.VIP.minPoints) return 'VIP';
-    if (points >= loyaltyConfig.tiers.Platinum.minPoints) return 'Platinum';
-    if (points >= loyaltyConfig.tiers.Gold.minPoints) return 'Gold';
-    return 'Silver';
-  };
+  const resolvedLabName = labInfo?.labNameAr || 'معامل RT للتحاليل الطبية والتشخيصية';
+  const resolvedSupervision = labInfo?.supervisionAr || 'أطباء واستشاريو كلية طب قصر العيني';
+  const resolvedHotline = labInfo?.hotline || LAB_PHONE;
+  const resolvedPhone = labInfo?.phone || LAB_PHONE_SECONDARY;
+  const resolvedWhatsapp = labInfo?.whatsapp || LAB_WHATSAPP;
+  const resolvedAddress = labInfo?.mainAddress || BRANCH_MAIN_ADDRESS;
+  const resolvedPhonesDisplay = [resolvedHotline, resolvedPhone].filter(Boolean).join(' / ');
 
-  const currentTier = activeProfile ? (activeProfile.tier || getDynamicTier(activeProfile.totalPoints)) : 'Silver';
+  const currentTier: LoyaltyTier = activeProfile
+    ? computeLoyaltyTier(activeProfile.totalPoints || 0, loyaltyConfig)
+    : 'Silver';
+  const tierPalette = getTierPalette(currentTier);
   const tierInfo = TIER_BENEFITS[currentTier] || TIER_BENEFITS.Silver;
-  const currentDiscount = loyaltyConfig.tiers[currentTier]?.discountRate || 10;
+  const currentDiscount = tierDiscountRate(currentTier, loyaltyConfig);
+  const cashInfo = pointsCashValue(activeProfile?.totalPoints || 0, loyaltyConfig);
+  const tierProgress = activeProfile ? nextTierProgress(activeProfile, loyaltyConfig) : null;
+  const earnRuleShort =
+    loyaltyConfig.pointsPerEGP >= 1
+      ? `كل 1 ج.م تحاليل = ${loyaltyConfig.pointsPerEGP} نقطة`
+      : `كل ${Math.round(1 / (loyaltyConfig.pointsPerEGP || 0.1))} ج.م تحاليل = 1 نقطة`;
+
+  const cardThemeClass =
+    cardFields.theme === 'auto-tier'
+      ? `${tierPalette.gradientCss} ${tierPalette.borderClass}`
+      : cardFields.theme === 'sapphire'
+      ? 'bg-gradient-to-br from-slate-950 via-blue-950 to-cyan-950 border-cyan-400'
+      : cardFields.theme === 'emerald'
+      ? 'bg-gradient-to-br from-slate-950 via-emerald-950 to-teal-950 border-emerald-400'
+      : cardFields.theme === 'ruby'
+      ? 'bg-gradient-to-br from-rose-950 via-red-950 to-purple-950 border-rose-400'
+      : 'bg-gradient-to-br from-slate-950 via-slate-900 to-amber-950 border-amber-400';
 
   const filteredProfiles = loyaltyProfiles.filter(p =>
-    p.patientName.includes(searchTerm) ||
+    p.patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     p.phone.includes(searchTerm) ||
-    (p.cardNumber && p.cardNumber.includes(searchTerm)) ||
-    p.barcode.includes(searchTerm)
+    (p.cardNumber && p.cardNumber.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    p.barcode.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Open Edit Modal
@@ -217,7 +288,7 @@ export const LoyaltyModule: React.FC = () => {
       patientName: activeProfile.patientName,
       phone: activeProfile.phone,
       cardNumber: activeProfile.cardNumber || activeProfile.barcode,
-      tier: activeProfile.tier,
+      tier: currentTier,
       totalPoints: activeProfile.totalPoints,
       lifetimeSpent: activeProfile.lifetimeSpent,
       bloodGroup: activeProfile.bloodGroup || 'O+',
@@ -233,28 +304,31 @@ export const LoyaltyModule: React.FC = () => {
     e.preventDefault();
     if (!activeProfile) return;
 
+    const syncedCode = syncCardNumberTier(editForm.cardNumber.trim(), editForm.tier, activeProfile.barcode);
+
     updateLoyaltyProfile(activeProfile.patientId, {
       patientName: editForm.patientName.trim(),
       phone: editForm.phone.trim(),
-      cardNumber: editForm.cardNumber.trim(),
-      barcode: editForm.cardNumber.trim(),
+      cardNumber: syncedCode,
+      barcode: syncedCode,
       tier: editForm.tier,
       totalPoints: Number(editForm.totalPoints) || 0,
       lifetimeSpent: Number(editForm.lifetimeSpent) || 0,
       bloodGroup: editForm.bloodGroup,
       emergencyContact: editForm.emergencyContact.trim() || undefined,
-      chronicConditions: editForm.chronicConditions.trim() 
-        ? editForm.chronicConditions.split(',').map(s => s.trim()).filter(Boolean) 
+      chronicConditions: editForm.chronicConditions.trim()
+        ? editForm.chronicConditions.split(',').map(s => s.trim()).filter(Boolean)
         : [],
       issueDate: editForm.issueDate || activeProfile.issueDate
     });
 
     setIsEditModalOpen(false);
+    showNotice('success', `تم حفظ وتحديث بيانات كارت المريض (${editForm.patientName.trim()}) بنجاح.`);
   };
 
-  // Generate Fresh Code
+  // Generate Fresh Code matching selected tier
   const handleRegenerateCardCode = () => {
-    const freshCode = `RT-GOLD-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+    const freshCode = generateSmartCardNumber(editForm.tier || 'Silver', `${new Date().getFullYear()}${Math.floor(1000 + Math.random() * 9000)}`);
     setEditForm(prev => ({ ...prev, cardNumber: freshCode }));
   };
 
@@ -285,16 +359,16 @@ export const LoyaltyModule: React.FC = () => {
     setRecalcSummary(res);
   };
 
-  // Single-Sided Isolated Card Print
+  // Single-Sided Isolated Card Print (Dynamic per-tier colors, verified contacts, redemption rules)
   const handlePrintCard = () => {
     if (!activeProfile) return;
     const printWindow = window.open('', '_blank');
     if (!printWindow) {
-      alert('يرجى السماح بالنوافذ المنبثقة لطباعة الكرت.');
+      showNotice('error', 'يرجى السماح بالنوافذ المنبثقة في المتصفح لطباعة الكارت.');
       return;
     }
 
-    const cardCode = activeProfile.cardNumber || activeProfile.barcode;
+    const cardCode = syncCardNumberTier(activeProfile.cardNumber || activeProfile.barcode, currentTier, activeProfile.barcode);
 
     const html = `<!DOCTYPE html><html lang="ar" dir="rtl"><head>
   <meta charset="UTF-8">
@@ -335,8 +409,8 @@ export const LoyaltyModule: React.FC = () => {
       overflow: hidden;
       margin: 16px auto;
       page-break-inside: avoid;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      border: 1.5px solid #d97706;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      border: 1.8px solid ${tierPalette.printBorderHex};
       position: relative;
     }
     @media print {
@@ -347,7 +421,7 @@ export const LoyaltyModule: React.FC = () => {
     }
   </style></head><body>
   <div class="no-print">
-    <div style="font-weight:bold; font-size:13px;">طباعة كارت الولاء الطبي الذكي (وجه واحد قياسي)</div>
+    <div style="font-weight:bold; font-size:13px;">طباعة كارت الولاء الطبي الذكي (${tierInfo.titleAr} — خصم تلقائي %${currentDiscount})</div>
     <div style="display:flex; gap:10px;">
       <button onclick="window.print()" style="background:#b45309; color:white; border:none; padding:8px 18px; border-radius:6px; font-weight:bold; cursor:pointer;">🖨️ طباعة الآن</button>
       <button onclick="window.close()" style="background:#334155; color:white; border:none; padding:8px 14px; border-radius:6px; cursor:pointer;">إغلاق ✕</button>
@@ -355,45 +429,47 @@ export const LoyaltyModule: React.FC = () => {
   </div>
 
   <div style="padding-top: 60px; text-align: center;">
-    <div class="card-wrap" style="background: linear-gradient(135deg, #090d16 0%, #1e1b4b 60%, #311010 100%); color: white; padding: 4.5mm 6mm; display: flex; flex-direction: column; justify-content: space-between; text-align: right;">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+    <div class="card-wrap" style="background: ${tierPalette.printBgGradient}; color: white; padding: 3.8mm 5mm; display: flex; flex-direction: column; justify-content: space-between; text-align: right;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 6px;">
         <div>
-          <div style="font-weight: 900; font-size: 13.5px; color: #ffffff;">معامل RT للتحاليل الطبية والتشخيصية</div>
-          <div style="font-size: 8.5px; color: #fde68a; font-weight: bold;">معامل رامي مختار • أطباء كلية طب قصر العيني</div>
+          <div style="font-weight: 900; font-size: 12px; color: #ffffff;">${resolvedLabName}</div>
+          <div style="font-size: 7.5px; color: ${tierPalette.accentHex}; font-weight: bold;">${resolvedSupervision}</div>
         </div>
-        <div style="background: rgba(245, 158, 11, 0.25); border: 1px solid #fbbf24; border-radius: 20px; padding: 2px 8px; font-size: 8.5px; font-weight: bold; color: #fef08a;">
+        <div style="background: ${tierPalette.discountBgHex}; border: 1px solid ${tierPalette.printBorderHex}; border-radius: 20px; padding: 2px 7px; font-size: 7.5px; font-weight: 800; color: #ffffff; white-space: nowrap;">
           ★ ${tierInfo.titleAr} ★
         </div>
       </div>
 
       <!-- Center info -->
-      <div style="margin: 2mm 0; display: flex; justify-content: space-between; align-items: center;">
-        <div style="background: linear-gradient(135deg, #fde68a, #d97706); width: 34px; height: 26px; border-radius: 4px; border: 1px solid #fef3c7;"></div>
+      <div style="margin: 1mm 0; display: flex; justify-content: space-between; align-items: center; gap: 6px;">
+        <div style="background: linear-gradient(135deg, #fde68a, ${tierPalette.printBorderHex}); width: 28px; height: 21px; border-radius: 4px; border: 1px solid #ffffff88;"></div>
         <div style="text-align: center; flex: 1;">
-          <div style="font-family: monospace; font-size: 14px; font-weight: bold; letter-spacing: 2px; color: #ffffff;">${cardCode}</div>
-          <div style="font-size: 8px; color: #fda4af; font-weight: bold; margin-top: 1px;">خصم دائم معتمد: %${currentDiscount} على كافة التحاليل</div>
+          <div style="font-family: monospace; font-size: 12.5px; font-weight: 900; letter-spacing: 1.5px; color: #ffffff;">${cardCode}</div>
+          <div style="font-size: 7.5px; color: ${tierPalette.discountTextHex}; font-weight: 800; margin-top: 1px;">خصم تلقائي معتمد: %${currentDiscount} على كافة التحاليل</div>
         </div>
-        <div style="text-align: left; background: rgba(0,0,0,0.4); padding: 3px 6px; border-radius: 6px; border: 1px solid rgba(245, 158, 11, 0.3);">
-          <div style="font-size: 7px; color: #cbd5e1;">رصيد النقاط:</div>
-          <div style="font-size: 11px; font-weight: 900; color: #fbbf24;">${activeProfile.totalPoints} نقطة</div>
+        <div style="text-align: left; background: rgba(0,0,0,0.48); padding: 2.5px 6px; border-radius: 6px; border: 1px solid ${tierPalette.printBorderHex}80;">
+          <div style="font-size: 6.5px; color: #cbd5e1;">رصيد النقاط / القيمة:</div>
+          <div style="font-size: 10px; font-weight: 900; color: ${tierPalette.accentHex};">${(activeProfile.totalPoints || 0).toLocaleString()} نقطة</div>
+          <div style="font-size: 7.5px; font-weight: 800; color: #34d399;">= ${cashInfo.exactEGP} ج.م</div>
         </div>
       </div>
 
-      <!-- Patient Demographics -->
-      <div style="display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 2.5mm;">
+      <!-- Redemption & Cumulative Rule -->
+      <div style="background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; padding: 1.5px 5px; font-size: 6.8px; color: #fef08a; font-weight: 700; text-align: center;">
+        كل 100 نقطة = ${cashInfo.egpPer100} ج.م خصم · ${earnRuleShort} · الترقية التراكمية تلقائياً مع كل حجز
+      </div>
+
+      <!-- Patient Demographics & Verified Contacts -->
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid rgba(255,255,255,0.22); padding-top: 1.8mm; gap: 6px;">
         <div>
-          <div style="font-size: 8px; color: #94a3b8;">اسم المريض:</div>
-          <div style="font-weight: 800; font-size: 11px; color: #ffffff;">${activeProfile.patientName}</div>
-          <div style="font-family: monospace; font-size: 9px; color: #fde68a; margin-top: 1px;">${activeProfile.phone}</div>
-        </div>
-        <div style="text-align: center;">
-          <div style="font-size: 7.5px; color: #94a3b8;">حالة الكارت:</div>
-          <div style="font-weight: 900; font-size: 11px; color: #10b981; font-family: monospace;">عضوية نشطة ✓</div>
+          <div style="font-size: 6.8px; color: #cbd5e1;">اسم المريض:</div>
+          <div style="font-weight: 900; font-size: 10px; color: #ffffff;">${activeProfile.patientName}</div>
+          <div style="font-family: monospace; font-size: 8px; color: ${tierPalette.accentHex};">${activeProfile.phone}</div>
         </div>
         <div style="text-align: left;">
-          <div style="font-size: 7.5px; color: #94a3b8;">الخط الساخن:</div>
-          <div style="font-size: 8.5px; font-weight: bold; color: #ffffff; font-family: monospace;">01012345678</div>
-          <div style="font-size: 6.5px; color: #cbd5e1;">بهتيم - شبرا الخيمة</div>
+          <div style="font-size: 6.8px; color: #cbd5e1;">الهاتف: <strong style="color:#fff; font-family:monospace;">${resolvedPhonesDisplay}</strong></div>
+          <div style="font-size: 6.8px; color: #34d399; font-weight:700;">واتساب: <span style="font-family:monospace;">${resolvedWhatsapp}</span></div>
+          <div style="font-size: 6px; color: #e2e8f0; max-width: 48mm; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">📍 ${resolvedAddress}</div>
         </div>
       </div>
     </div>
@@ -404,23 +480,78 @@ export const LoyaltyModule: React.FC = () => {
     printWindow.document.close();
   };
 
-  // Download Single-Sided Card PNG
-  const handleDownloadSingleSidedPNG = () => {
-    if (!activeProfile) return;
-    const cardCode = activeProfile.cardNumber || activeProfile.barcode;
-    generateAndDownloadLoyaltyCard({
+  const buildCardCanvasParams = (skipDownload = false) => {
+    if (!activeProfile) return null;
+    const cardCode = syncCardNumberTier(activeProfile.cardNumber || activeProfile.barcode, currentTier, activeProfile.barcode);
+    return {
       cardNumber: cardCode,
       patientName: activeProfile.patientName,
       patientPhone: activeProfile.phone,
-      tier: tierInfo.titleAr || 'Gold VIP',
+      tier: tierInfo.titleAr,
+      tierKey: currentTier,
       discountPercentage: currentDiscount,
       points: activeProfile.totalPoints,
+      egpPer100Points: loyaltyConfig.egpPer100Points,
+      pointsPerEGP: loyaltyConfig.pointsPerEGP,
       bloodGroup: activeProfile.bloodGroup || 'O+',
       issueDate: activeProfile.issueDate,
       emergencyContact: activeProfile.emergencyContact,
-      hotline: '01012345678 / 02-44667788',
-      address: 'ميدان بهتيم برج صيدلية العزبي الدور الثالث شبرا الخيمة'
+      labNameAr: resolvedLabName,
+      supervisionAr: resolvedSupervision,
+      hotline: resolvedHotline,
+      phone: resolvedPhone,
+      whatsapp: resolvedWhatsapp,
+      address: resolvedAddress,
+      fields: cardFields,
+      theme: cardFields.theme,
+      skipDownload
+    };
+  };
+
+  // Download Single-Sided Card PNG
+  const handleDownloadSingleSidedPNG = async () => {
+    const params = buildCardCanvasParams(false);
+    if (!params) return;
+    await generateAndDownloadLoyaltyCard(params);
+    showNotice('success', `تم تحميل صورة الكارت (${params.cardNumber}.png) بدقة عالية وبألوان ${tierInfo.titleAr}.`);
+  };
+
+  // Download Card PNG + Copy Image + Open WhatsApp with Full Explanation
+  const handleDownloadAndSendWhatsAppCard = async () => {
+    if (!activeProfile) return;
+    setIsSendingWA(true);
+    try {
+      const params = buildCardCanvasParams(false);
+      if (params) {
+        const dataUrl = await generateAndDownloadLoyaltyCard(params);
+        const copied = dataUrl ? await copyDataUrlToClipboard(dataUrl) : false;
+        showNotice(
+          'success',
+          copied
+            ? 'تم تحميل صورة الكارت ونسخها للحافظة (يمكنك لصقها Ctrl+V في واتساب فوراً) وجارٍ فتح رسالة الشرح للمريض.'
+            : 'تم تحميل صورة الكارت بنجاح وجارٍ فتح رسالة الواتساب المشروحة — يرجى إرفاق الصورة المحمّلة في المحادثة.'
+        );
+      }
+      const message = formatLoyaltyCardWhatsAppMessage({
+        profile: activeProfile,
+        config: loyaltyConfig,
+        labInfo
+      });
+      openWhatsApp(activeProfile.phone, message);
+    } finally {
+      setIsSendingWA(false);
+    }
+  };
+
+  const handleSendWhatsAppMessageOnly = () => {
+    if (!activeProfile) return;
+    const message = formatLoyaltyCardWhatsAppMessage({
+      profile: activeProfile,
+      config: loyaltyConfig,
+      labInfo
     });
+    openWhatsApp(activeProfile.phone, message);
+    showNotice('info', `تم فتح محادثة واتساب لشرح الكارت والنقاط للمريض (${activeProfile.patientName}).`);
   };
 
   const handleCopyCardCode = () => {
@@ -446,6 +577,7 @@ export const LoyaltyModule: React.FC = () => {
     );
 
     setIsAddPointsOpen(false);
+    showNotice('success', `تمت إضافة ${pts} نقطة إلى رصيد (${activeProfile.patientName}) وتحديث الفئة تلقائياً.`);
   };
 
   // Redeem points
@@ -453,10 +585,10 @@ export const LoyaltyModule: React.FC = () => {
     if (!activeProfile || pointsToRedeem <= 0) return;
     const res = redeemLoyaltyPoints(activeProfile.patientId, pointsToRedeem);
     if (res.success) {
-      alert(`تم استبدال ${pointsToRedeem} نقطة بنجاح بخصم نقدي قدره ${res.cashValue} ج.م.`);
+      showNotice('success', `تم استبدال ${pointsToRedeem} نقطة بنجاح بخصم نقدي قدره ${res.cashValue} ج.م.`);
       setIsRedeemOpen(false);
     } else {
-      alert('النقاط المطلوبة أكبر من الرصيد المتاح للمريض.');
+      showNotice('error', 'النقاط المطلوبة أكبر من الرصيد المتاح للمريض.');
     }
   };
 
@@ -465,29 +597,31 @@ export const LoyaltyModule: React.FC = () => {
     e.preventDefault();
     if (!newPatientName.trim()) return;
 
-    const cardCode = `RT-GOLD-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+    const welcomePts = Number(loyaltyConfig.welcomeBonusPoints ?? 50);
+    const initialTier = computeLoyaltyTier(welcomePts, loyaltyConfig);
+    const cardCode = generateSmartCardNumber(initialTier, `${new Date().getFullYear()}${Math.floor(1000 + Math.random() * 9000)}`);
     const newProfile: PatientLoyaltyProfile = {
       patientId: `pat-${Date.now()}`,
       patientName: newPatientName.trim(),
-      phone: newPhone.trim() || '01000000000',
+      phone: newPhone.trim() || resolvedPhone,
       cardNumber: cardCode,
       barcode: cardCode,
       bloodGroup: newBloodGroup,
-      totalPoints: 100, // Welcome bonus
-      tier: 'Silver',
+      totalPoints: welcomePts,
+      tier: initialTier,
       lifetimeSpent: 0,
       emergencyContact: newEmergency.trim() || undefined,
       chronicConditions: newCondition.trim() ? [newCondition.trim()] : [],
       issueDate: new Date().toISOString().substring(0, 10),
-      transactions: [
+      transactions: welcomePts > 0 ? [
         {
           id: `tx-welcome-${Date.now()}`,
           date: new Date().toISOString().substring(0, 10),
           type: 'bonus',
-          points: 100,
+          points: welcomePts,
           description: 'هدية ترحيبية فورية بمناسبة فتح حساب كارت المريض الذكي'
         }
-      ]
+      ] : []
     };
 
     addLoyaltyProfile(newProfile);
@@ -497,6 +631,7 @@ export const LoyaltyModule: React.FC = () => {
     setNewPhone('');
     setNewEmergency('');
     setNewCondition('');
+    showNotice('success', `تم إصدار كارت الولاء الذكي (${cardCode}) للمريض ${newProfile.patientName}.`);
   };
 
   return (
@@ -554,38 +689,48 @@ export const LoyaltyModule: React.FC = () => {
         </div>
       </div>
 
-      {/* Dynamic Points Calculation & Auto-Card Status Banner */}
-      <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl p-4 sm:p-5 shadow-md border border-amber-500/30">
+      {/* Inline Status Banner */}
+      {noticeBanner && (
+        <div className={`p-3.5 rounded-2xl border flex items-center justify-between gap-3 text-xs font-bold shadow-sm ${
+          noticeBanner.type === 'success' ? 'bg-emerald-50 border-emerald-300 text-emerald-900' :
+          noticeBanner.type === 'error' ? 'bg-rose-50 border-rose-300 text-rose-900' :
+          'bg-sky-50 border-sky-300 text-sky-900'
+        }`}>
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 shrink-0" />
+            <span>{noticeBanner.message}</span>
+          </div>
+          <button onClick={() => setNoticeBanner(null)} className="opacity-60 hover:opacity-100 cursor-pointer">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
+      {/* Dynamic Points Calculation, Tier Colors Overview & Redemption Banner */}
+      <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl p-4 sm:p-5 shadow-md border border-amber-500/30 space-y-4">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
                 <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                <span>قاعدة احتساب النقاط الحالية</span>
+                <span>قاعدة الاحتساب والاستبدال الحالية</span>
               </span>
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
                 <Check className="w-3.5 h-3.5" />
-                <span>إصدار الكروت تلقائي لجميع الحجوزات</span>
+                <span>ترقية تراكمية تلقائية مع كل حجز بنفس الهاتف</span>
               </span>
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/30">
                 <ShieldCheck className="w-3.5 h-3.5" />
-                <span>رسوم الزيارة المنزلية مستبعدة تلقائياً</span>
+                <span>{loyaltyConfig.excludeVisitFee !== false ? 'رسوم الزيارة مستبعدة تلقائياً' : 'الاحتساب على كامل المسدد'}</span>
               </span>
             </div>
 
-            <div className="text-base sm:text-lg font-black text-amber-200 flex flex-wrap items-center gap-2">
-              <span>
-                كل {loyaltyConfig.pointsPerEGP >= 1 
-                  ? `1 ج.م مدفوع للتحاليل = ${loyaltyConfig.pointsPerEGP} نقطة ولاء` 
-                  : `${(1 / (loyaltyConfig.pointsPerEGP || 0.1)).toFixed(0)} ج.م مدفوعة للتحاليل = 1 نقطة ولاء`}
-              </span>
-              <span className="text-xs font-normal text-slate-300 bg-black/40 px-2 py-0.5 rounded-lg border border-white/10">
-                (المبلغ المدفوع للتحاليل فقط وبدون احتساب رسوم الزيارة)
-              </span>
+            <div className="text-sm sm:text-base font-black text-amber-200 flex flex-wrap items-center gap-2">
+              <span>{redemptionSummaryText(loyaltyConfig)}</span>
             </div>
 
             <p className="text-xs text-slate-300 leading-relaxed max-w-4xl">
-              النظام يقوم تلقائياً بإنشاء كارت ذكي لكل مريض يحجز على المنظومة، واحتساب نقاط ولائه فوراً على مدفوعات التحاليل فقط. يمكنك تعديل معدل النقاط بالنسبة للقيمة المدفوعة من الإدارة، وتحديث كافة الحجوزات السابقة بنقرة واحدة بأثر رجعي.
+              يصدر الكارت بلون ونسبة خصم الفئة تلقائياً بناءً على إجمالي النقاط والمبالغ المدفوعة. أي تعديل في السياسة ينعكس فوراً على جميع الكروت المسجلة والفواتير.
             </p>
           </div>
 
@@ -598,16 +743,41 @@ export const LoyaltyModule: React.FC = () => {
               className="px-4 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs rounded-xl shadow-md transition-all cursor-pointer flex items-center gap-2 active:scale-95"
             >
               <Sliders className="w-4 h-4 text-slate-950" />
-              <span>تعديل سياسة وحساب النقاط</span>
+              <span>تعديل السياسة والنسب</span>
             </button>
             <button
               onClick={handleRetroactiveSync}
               className="px-4 py-2.5 bg-indigo-600/80 hover:bg-indigo-600 text-white font-bold text-xs rounded-xl border border-indigo-400/30 transition-all cursor-pointer flex items-center gap-2 active:scale-95"
             >
               <RefreshCw className="w-4 h-4 text-amber-300" />
-              <span>تحديث الحساب لجميع الحجوزات ⚡</span>
+              <span>تحديث كافة الحجوزات ⚡</span>
             </button>
           </div>
+        </div>
+
+        {/* 4 Distinct Tier Colors & Thresholds Strip */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 pt-2 border-t border-white/10">
+          {LOYALTY_TIER_ORDER.map(tKey => {
+            const pal = getTierPalette(tKey);
+            const tCfg = loyaltyConfig.tiers[tKey];
+            const count = loyaltyProfiles.filter(p => computeLoyaltyTier(p.totalPoints || 0, loyaltyConfig) === tKey).length;
+            return (
+              <div
+                key={tKey}
+                className={`${pal.gradientCss} border ${pal.borderClass} rounded-xl px-3 py-2 flex items-center justify-between text-xs shadow-xs`}
+              >
+                <div>
+                  <div className="font-black text-white">{pal.titleAr}</div>
+                  <div className="text-[10px] text-white/80 font-mono">
+                    من {tCfg.minPoints.toLocaleString()} نقطة · {count} عضو
+                  </div>
+                </div>
+                <span className="px-2 py-0.5 rounded-lg bg-black/40 border border-white/20 text-amber-200 font-black font-mono">
+                  %{tCfg.discountRate}
+                </span>
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -636,41 +806,39 @@ export const LoyaltyModule: React.FC = () => {
           </div>
 
           {/* Profiles list */}
-          <div className="space-y-2 max-h-[580px] overflow-y-auto pr-1">
+          <div className="space-y-2 max-h-[620px] overflow-y-auto pr-1">
             {filteredProfiles.length === 0 ? (
               <div className="text-center py-8 text-slate-400 text-xs">
                 لا يوجد كروت مطابقة لبيانات البحث
               </div>
             ) : (
               filteredProfiles.map(p => {
-                const tier = p.tier || getDynamicTier(p.totalPoints);
+                const dynTier = computeLoyaltyTier(p.totalPoints || 0, loyaltyConfig);
+                const pal = getTierPalette(dynTier);
+                const disc = tierDiscountRate(dynTier, loyaltyConfig);
+                const egpVal = pointsCashValue(p.totalPoints || 0, loyaltyConfig).exactEGP;
                 const isSelected = p.patientId === activeProfile?.patientId;
-                const cardNum = p.cardNumber || p.barcode;
+                const cardNum = syncCardNumberTier(p.cardNumber || p.barcode, dynTier, p.barcode);
                 return (
                   <div
                     key={p.patientId}
                     onClick={() => setSelectedProfileId(p.patientId)}
                     className={`p-3 rounded-xl border text-right transition-all cursor-pointer ${
                       isSelected
-                        ? 'bg-amber-50/80 border-amber-400 shadow-xs'
+                        ? 'bg-amber-50/90 border-amber-500 shadow-sm ring-1 ring-amber-400/50'
                         : 'bg-white hover:bg-slate-50 border-slate-200'
                     }`}
                   >
-                    <div className="flex items-center justify-between">
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
-                        tier === 'VIP' ? 'bg-purple-100 text-purple-900 border-purple-300' :
-                        tier === 'Platinum' ? 'bg-slate-200 text-slate-900 border-slate-400' :
-                        tier === 'Gold' ? 'bg-amber-100 text-amber-900 border-amber-300' :
-                        'bg-slate-100 text-slate-700 border-slate-300'
-                      }`}>
-                        ★ {tier}
+                    <div className="flex items-center justify-between gap-2">
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border shrink-0 ${pal.badgeBgClass}`}>
+                        ★ {dynTier} · %{disc}
                       </span>
-                      <div className="font-bold text-xs text-slate-900">{p.patientName}</div>
+                      <div className="font-bold text-xs text-slate-900 truncate">{p.patientName}</div>
                     </div>
 
                     <div className="flex items-center justify-between mt-2 text-[11px] text-slate-500 font-mono">
                       <span className="text-amber-800 font-bold font-sans">
-                        {p.totalPoints.toLocaleString()} نقطة
+                        {(p.totalPoints || 0).toLocaleString()} نقطة <span className="text-emerald-700 font-mono">({egpVal} ج.م)</span>
                       </span>
                       <span>{p.phone}</span>
                     </div>
@@ -717,7 +885,13 @@ export const LoyaltyModule: React.FC = () => {
                 {/* Color Theme Selector */}
                 <div className="flex flex-wrap items-center gap-2 pt-1">
                   <span className="text-slate-400 font-bold text-[11px]">مظهر ولون الكارت:</span>
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <button
+                      onClick={() => setCardTheme('auto-tier')}
+                      className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${cardFields.theme === 'auto-tier' ? 'bg-emerald-500/20 text-emerald-300 border-emerald-400' : 'bg-slate-800 text-slate-400 border-slate-700'}`}
+                    >
+                      🎨 تلقائي حسب الفئة (موصى به)
+                    </button>
                     <button
                       onClick={() => setCardTheme('royal-black')}
                       className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${cardFields.theme === 'royal-black' ? 'bg-amber-500/20 text-amber-300 border-amber-400' : 'bg-slate-800 text-slate-400 border-slate-700'}`}
@@ -728,19 +902,19 @@ export const LoyaltyModule: React.FC = () => {
                       onClick={() => setCardTheme('sapphire')}
                       className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${cardFields.theme === 'sapphire' ? 'bg-blue-500/20 text-cyan-300 border-cyan-400' : 'bg-slate-800 text-slate-400 border-slate-700'}`}
                     >
-                      💎 أزرق ياقوتي
+                      💎 أزرق بلاتيني
                     </button>
                     <button
                       onClick={() => setCardTheme('emerald')}
                       className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${cardFields.theme === 'emerald' ? 'bg-emerald-500/20 text-emerald-300 border-emerald-400' : 'bg-slate-800 text-slate-400 border-slate-700'}`}
                     >
-                      🌿 زمردي VIP
+                      🌿 زمردي
                     </button>
                     <button
                       onClick={() => setCardTheme('ruby')}
                       className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${cardFields.theme === 'ruby' ? 'bg-rose-500/20 text-rose-300 border-rose-400' : 'bg-slate-800 text-slate-400 border-slate-700'}`}
                     >
-                      🍷 عنابي راقي
+                      🍷 عنابي الماس
                     </button>
                   </div>
                 </div>
@@ -753,13 +927,14 @@ export const LoyaltyModule: React.FC = () => {
                       { key: 'showTierBadge', label: 'شارة الفئة والخصم' },
                       { key: 'showChip', label: 'الشريحة الذكية والـNFC' },
                       { key: 'showPoints', label: 'رصيد النقاط التراكمي' },
+                      { key: 'showCashValue', label: 'قيمة النقاط بالجنيه' },
                       { key: 'showCardCode', label: 'كود الكارت والنسخ' },
                       { key: 'showPatientName', label: 'اسم المريض / العضو' },
                       { key: 'showPatientPhone', label: 'رقم هاتف المريض' },
                       { key: 'showBloodGroup', label: 'فصيلة الدم' },
                       { key: 'showDates', label: 'تاريخ الإصدار والصلاحية' },
-                      { key: 'showUsageNote', label: 'تعليمات استخدام الكارت' },
-                      { key: 'showHotline', label: 'الخط الساخن' },
+                      { key: 'showUsageNote', label: 'شرح نظام الاستبدال' },
+                      { key: 'showHotline', label: 'أرقام المعمل والواتساب' },
                       { key: 'showAddress', label: 'عنوان المقر الرئيسي' },
                     ].map(f => {
                       const isVisible = cardFields[f.key as keyof CardCustomFields] ?? true;
@@ -783,86 +958,83 @@ export const LoyaltyModule: React.FC = () => {
                 )}
               </div>
 
-              {/* THE LUXURY SINGLE-SIDED CARD PREVIEW */}
-              <div className="bg-slate-950 p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-800 relative overflow-hidden flex flex-col items-center">
-                <div className="w-full flex items-center justify-between text-xs text-amber-200/80 pb-3 mb-2 border-b border-slate-800/80 font-bold">
+              {/* THE LUXURY SINGLE-SIDED CARD PREVIEW (Eye-friendly, Distinct Per-Tier Color, Redemption Rule Visible) */}
+              <div className="bg-slate-950 p-5 sm:p-8 rounded-3xl shadow-xl border border-slate-800 relative overflow-hidden flex flex-col items-center">
+                <div className="w-full flex items-center justify-between text-xs text-amber-200/90 pb-3 mb-3 border-b border-slate-800/80 font-bold">
                   <div className="flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-amber-400" />
-                    <span>معاينة كارت الولاء الطبي الذكي (وجه واحد قياسي معتمد):</span>
+                    <span>معاينة كارت الولاء الطبي الذكي ({tierInfo.titleAr} — خصم تلقائي %{currentDiscount})</span>
                   </div>
-                  <span className="text-[11px] font-mono text-slate-400">CR80 • Single Side</span>
+                  <span className="text-[11px] font-mono text-slate-400">CR80 • Smart Pass</span>
                 </div>
 
                 {/* THE SINGLE-SIDED CARD */}
-                <div className={`w-full max-w-[560px] aspect-[1.618/1] rounded-3xl p-6 sm:p-7 shadow-2xl border-2 relative overflow-hidden text-white flex flex-col justify-between select-none transition-all ${
-                  cardFields.theme === 'sapphire' ? 'bg-gradient-to-br from-slate-950 via-blue-950 to-indigo-950 border-cyan-400/80' :
-                  cardFields.theme === 'emerald' ? 'bg-gradient-to-br from-slate-950 via-emerald-950 to-teal-950 border-emerald-400/80' :
-                  cardFields.theme === 'ruby' ? 'bg-gradient-to-br from-slate-950 via-rose-950 to-red-950 border-rose-400/80' :
-                  'bg-gradient-to-br from-slate-950 via-slate-900 to-amber-950 border-amber-400/80'
-                }`}>
-                  {/* Watermarks */}
-                  <div className="absolute -top-12 -right-12 w-48 h-48 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
-                  <div className="absolute -bottom-12 -left-12 w-48 h-48 bg-rose-600/10 rounded-full blur-2xl pointer-events-none"></div>
+                <div className={`w-full max-w-[600px] rounded-3xl p-5 sm:p-7 shadow-2xl border-2 relative overflow-hidden text-white flex flex-col justify-between gap-3.5 select-none transition-all ${cardThemeClass}`}>
+                  {/* Subtle lighting watermarks */}
+                  <div className="absolute -top-12 -right-12 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+                  <div className="absolute -bottom-12 -left-12 w-48 h-48 bg-white/5 rounded-full blur-2xl pointer-events-none"></div>
 
-                  {/* Row 1: Header */}
-                  {/* Row 1: Header */}
+                  {/* Row 1: Header & Tier Badge */}
                   {(cardFields.showHeader || cardFields.showTierBadge) && (
-                  <div className="relative z-10 flex items-start justify-between">
+                  <div className="relative z-10 flex items-start justify-between gap-3">
                     {cardFields.showHeader ? (
-                    <div>
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-9 h-9 rounded-xl bg-amber-600/90 text-white font-black flex items-center justify-center text-sm shadow-sm border border-amber-300">
-                          RT
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="w-10 h-10 rounded-xl bg-white/15 text-white font-black flex items-center justify-center text-sm shadow-sm border border-white/40 shrink-0">
+                        RT
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-black text-sm sm:text-base tracking-tight text-white leading-snug">
+                          {resolvedLabName}
                         </div>
-                        <div>
-                          <div className="font-black text-sm sm:text-base tracking-tight text-white leading-tight">
-                            معامل RT للتحاليل الطبية والتشخيصية
-                          </div>
-                          <div className="text-[10px] text-amber-300 font-bold mt-0.5">
-                            معامل رامي مختار • أطباء كلية طب قصر العيني
-                          </div>
+                        <div className="text-[11px] text-amber-200 font-bold mt-0.5 truncate">
+                          {resolvedSupervision}
                         </div>
                       </div>
                     </div>
                     ) : <div></div>}
 
                     {cardFields.showTierBadge ? (
-                    <div className="flex flex-col items-end gap-1">
-                      <div className="px-3 py-1 bg-amber-500/20 text-amber-300 border border-amber-400/80 rounded-full text-xs font-bold flex items-center gap-1 shadow-xs">
-                        <Sparkles className="w-3 h-3 text-amber-300" />
+                    <div className="flex flex-col items-end gap-1 shrink-0">
+                      <div className={`px-3 py-1 border rounded-full text-xs font-extrabold flex items-center gap-1 shadow-xs ${tierPalette.badgeBgClass}`}>
+                        <Sparkles className="w-3 h-3" />
                         <span>★ {tierInfo.titleAr} ★</span>
                       </div>
-                      <div className="text-[10px] font-bold text-rose-300 bg-rose-950/60 px-2 py-0.5 rounded-md border border-rose-800/40">
-                        خصم دائم معتمد: %{currentDiscount}
+                      <div className="text-[11px] font-black text-amber-200 bg-black/45 px-2.5 py-0.5 rounded-md border border-white/20">
+                        خصم تلقائي معتمد: %{currentDiscount}
                       </div>
                     </div>
                     ) : <div></div>}
                   </div>
                   )}
 
-                  {/* Row 2: Chip + Points Box + NFC */}
+                  {/* Row 2: Chip + Points & EGP Cash Value Box */}
                   {(cardFields.showChip || cardFields.showPoints) && (
-                  <div className="relative z-10 flex items-center justify-between my-2">
+                  <div className="relative z-10 flex items-center justify-between gap-3">
                     {cardFields.showChip ? (
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-9 rounded-lg bg-gradient-to-br from-amber-200 via-amber-400 to-amber-600 border border-amber-200/90 p-1 flex flex-col justify-between shadow-sm">
                         <div className="h-px bg-amber-900/40 w-full"></div>
                         <div className="h-px bg-amber-900/40 w-full"></div>
                       </div>
-                      <div className="text-amber-300/80 text-xs font-bold flex items-center gap-0.5" title="Contactless NFC">
-                        <span>)))</span>
+                      <div className="text-white/75 text-xs font-bold" title="Contactless NFC">
+                        )))
                       </div>
                     </div>
                     ) : <div></div>}
                     {cardFields.showPoints && (
-                    <div className="bg-slate-900/80 border border-amber-400/40 px-3.5 py-1.5 rounded-xl text-left shadow-inner">
-                      <div className="text-[10px] text-slate-300 font-semibold">رصيد النقاط التراكمي:</div>
-                      <div className="text-base font-black text-amber-400 font-mono">
-                        {activeProfile.totalPoints.toLocaleString()} <span className="text-xs font-sans">نقطة</span>
+                    <div className="bg-black/45 border border-white/25 px-4 py-2 rounded-2xl shadow-inner flex items-center gap-4">
+                      <div>
+                        <div className="text-[10px] text-slate-200 font-semibold">رصيد النقاط التراكمي:</div>
+                        <div className="text-lg font-black text-amber-300 font-mono leading-tight">
+                          {activeProfile.totalPoints.toLocaleString()} <span className="text-xs font-sans">نقطة</span>
+                        </div>
                       </div>
                       {cardFields.showCashValue && (
-                      <div className="text-[9px] text-emerald-400 font-semibold">
-                        قيمة الاستبدال: {calculateCashForPoints(activeProfile.totalPoints)} ج.م
+                      <div className="border-r border-white/20 pr-3 text-left">
+                        <div className="text-[10px] text-emerald-200 font-semibold">تعادل خصم نقدي:</div>
+                        <div className="text-base font-black text-emerald-300 font-mono leading-tight">
+                          = {cashInfo.exactEGP} <span className="text-xs font-sans">ج.م</span>
+                        </div>
                       </div>
                       )}
                     </div>
@@ -872,12 +1044,12 @@ export const LoyaltyModule: React.FC = () => {
 
                   {/* Row 3: Embossed Card Number */}
                   {cardFields.showCardCode && (
-                  <div className="relative z-10 text-center my-1">
-                    <div className="font-mono text-lg sm:text-2xl font-bold tracking-widest text-amber-100 drop-shadow-md flex items-center justify-center gap-3">
-                      <span>{activeProfile.cardNumber || activeProfile.barcode}</span>
+                  <div className="relative z-10 text-center">
+                    <div className="font-mono text-lg sm:text-2xl font-black tracking-widest text-white drop-shadow-md flex items-center justify-center gap-3">
+                      <span>{syncCardNumberTier(activeProfile.cardNumber || activeProfile.barcode, currentTier, activeProfile.barcode)}</span>
                       <button
                         onClick={handleCopyCardCode}
-                        className="text-slate-400 hover:text-amber-300 transition-colors p-1 cursor-pointer"
+                        className="text-white/70 hover:text-amber-300 transition-colors p-1 cursor-pointer"
                         title="نسخ رقم الكارت"
                       >
                         {copiedCode ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
@@ -886,14 +1058,26 @@ export const LoyaltyModule: React.FC = () => {
                   </div>
                   )}
 
-                  {/* Row 4: Patient Info Grid */}
+                  {/* Row 4: Clear Redemption & Auto-Upgrade Strip */}
+                  {cardFields.showUsageNote && (
+                  <div className="relative z-10 bg-white/10 border border-white/20 rounded-xl px-3.5 py-2 text-center space-y-0.5">
+                    <div className="text-xs font-black text-amber-200">
+                      {redemptionSummaryText(loyaltyConfig)}
+                    </div>
+                    <div className="text-[10.5px] text-white/90 font-semibold">
+                      الترقية التراكمية التلقائية: تُجمع النقاط مع كل حجز بنفس الهاتف وتترقى الفئة ويزداد الخصم تلقائياً
+                    </div>
+                  </div>
+                  )}
+
+                  {/* Row 5: Patient Info & Verified Lab Contacts Grid */}
                   {(cardFields.showPatientName || cardFields.showPatientPhone || cardFields.showBloodGroup || cardFields.showHotline) && (
-                  <div className="relative z-10 border-t border-slate-700/80 pt-2.5 grid grid-cols-3 gap-2 text-xs">
+                  <div className="relative z-10 border-t border-white/20 pt-2.5 grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
                     <div>
                       {cardFields.showPatientName && (
                       <>
-                        <div className="text-[10px] text-slate-400 font-medium">اسم العضو / المريض:</div>
-                        <div className="font-black text-white text-xs sm:text-sm truncate">
+                        <div className="text-[10px] text-slate-200/80 font-medium">اسم العضو / المريض:</div>
+                        <div className="font-black text-white text-sm truncate">
                           {activeProfile.patientName}
                         </div>
                       </>
@@ -904,70 +1088,81 @@ export const LoyaltyModule: React.FC = () => {
                       </div>
                       )}
                     </div>
-                    <div className="text-center">
+                    <div className="sm:text-center flex sm:flex-col items-center justify-between sm:justify-center">
                       {cardFields.showBloodGroup && (
-                      <>
-                        <div className="text-[10px] text-slate-400 font-medium">فصيلة الدم:</div>
-                        <div className="font-black text-rose-400 font-mono text-sm">
+                      <div>
+                        <div className="text-[10px] text-slate-200/80 font-medium">فصيلة الدم:</div>
+                        <div className="font-black text-rose-300 font-mono text-sm">
                           {activeProfile.bloodGroup || 'O+'}
                         </div>
-                      </>
+                      </div>
                       )}
                       {cardFields.showDates && (
-                      <div className="text-[9px] text-emerald-400 font-medium">
-                        صلاحية دائمة ✓
+                      <div className="text-[10.5px] text-emerald-300 font-bold">
+                        صلاحية دائمة ✓ · إصدار {activeProfile.issueDate}
                       </div>
                       )}
                     </div>
-                    <div className="text-left">
+                    <div className="sm:text-left">
                       {cardFields.showHotline && (
                       <>
-                        <div className="text-[10px] text-slate-400 font-medium">الخط الساخن:</div>
-                        <div className="font-bold font-mono text-white text-xs">
-                          {labInfo?.hotline || '01012345678'}
+                        <div className="text-[10px] text-slate-200/80 font-medium">الخط الساخن والهاتف:</div>
+                        <div className="font-bold font-mono text-white text-[11px]" dir="ltr">
+                          {resolvedPhonesDisplay}
+                        </div>
+                        <div className="font-bold font-mono text-emerald-300 text-[10.5px]">
+                          واتساب: {resolvedWhatsapp}
                         </div>
                       </>
-                      )}
-                      {cardFields.showAddress && (
-                      <div className="text-[9px] text-slate-300 truncate">
-                        بهتيم - شبرا الخيمة
-                      </div>
                       )}
                     </div>
                   </div>
                   )}
 
-                  {/* Row 5: Footer Bar */}
-                  {cardFields.showFooter && (
-                  <div className="relative z-10 border-t border-slate-800/80 pt-1.5 flex items-center justify-between text-[9px] text-slate-400 font-medium">
-                    {cardFields.showAddress && (
-                    <div className="truncate max-w-[320px]">
-                      {labInfo?.mainAddress || 'الفرع الرئيسي: ميدان بهتيم برج صيدلية العزبي الدور الثالث'}
-                    </div>
-                    )}
-                    {cardFields.showUsageNote && (
-                    <div className="text-amber-300 font-bold">RT LAB HEALTH PASS</div>
-                    )}
+                  {/* Row 6: Footer Address Bar */}
+                  {cardFields.showFooter && cardFields.showAddress && (
+                  <div className="relative z-10 border-t border-white/15 pt-1.5 flex items-center justify-between gap-2 text-[10px] text-slate-100/90 font-medium">
+                    <div className="truncate">📍 {resolvedAddress}</div>
+                    <div className="text-amber-200 font-bold shrink-0">RT LAB PASS</div>
                   </div>
                   )}
                 </div>
 
                 {/* Single-Sided Card Actions Toolbar */}
-                <div className="w-full max-w-[560px] flex flex-wrap items-center justify-between gap-2 mt-5">
-                  <div className="flex items-center gap-2">
+                <div className="w-full max-w-[600px] flex flex-wrap items-center justify-between gap-2 mt-5">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      onClick={handleDownloadAndSendWhatsAppCard}
+                      disabled={isSendingWA}
+                      className="flex items-center gap-1.5 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white rounded-xl text-xs font-black transition-all shadow-md cursor-pointer"
+                      title="تحميل صورة الكارت مع نسخها وإرسال رسالة شرح النقاط والاستبدال عبر الواتساب"
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                      <span>تحميل الكارت وإرسال واتساب</span>
+                    </button>
+
+                    <button
+                      onClick={handleSendWhatsAppMessageOnly}
+                      className="flex items-center gap-1.5 px-3 py-2 bg-teal-900/90 hover:bg-teal-800 text-emerald-200 rounded-xl text-xs font-bold transition-all border border-emerald-700/60 cursor-pointer"
+                      title="فتح محادثة الواتساب بشرح الكارت فقط"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5" />
+                      <span>رسالة الشرح</span>
+                    </button>
+
                     <button
                       onClick={handleDownloadSingleSidedPNG}
                       className="flex items-center gap-1.5 px-3.5 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm cursor-pointer"
-                      title="تحميل صورة الكارت وجه واحد عالي الدقة PNG"
+                      title="تحميل صورة الكارت عالي الدقة PNG"
                     >
                       <Download className="w-4 h-4" />
-                      <span>تحميل صورة الكارت (PNG)</span>
+                      <span>صورة PNG</span>
                     </button>
 
                     <button
                       onClick={handlePrintCard}
                       className="flex items-center gap-1.5 px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold transition-all border border-slate-700 cursor-pointer"
-                      title="طباعة الكارت وجه واحد معزول على بياض"
+                      title="طباعة الكارت تلقائياً بألوان الفئة ونسبة الخصم"
                     >
                       <Printer className="w-4 h-4" />
                       <span>طباعة الكارت (CR80)</span>
@@ -981,7 +1176,7 @@ export const LoyaltyModule: React.FC = () => {
                       title="تعديل وتبديل كافة حقول الكارت"
                     >
                       <Edit3 className="w-4 h-4" />
-                      <span>تعديل بيانات الكارت</span>
+                      <span>تعديل</span>
                     </button>
 
                     <button
@@ -996,7 +1191,7 @@ export const LoyaltyModule: React.FC = () => {
                 </div>
               </div>
 
-              {/* POINTS POLICY & TRANSACTIONS MANAGEMENT */}
+              {/* POINTS POLICY, CUMULATIVE PROGRESS & TRANSACTIONS MANAGEMENT */}
               <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-6">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
                   <div>
@@ -1034,35 +1229,58 @@ export const LoyaltyModule: React.FC = () => {
                 {/* Stats Highlights */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                    <div className="text-xs text-slate-500 font-medium">الرصيد النشط للنقاط:</div>
+                    <div className="text-xs text-slate-500 font-medium">الرصيد النشط للنقاط وقيمته:</div>
                     <div className="text-2xl font-black text-amber-800 font-mono mt-1">
-                      {activeProfile.totalPoints.toLocaleString()}
+                      {activeProfile.totalPoints.toLocaleString()} <span className="text-xs font-sans">نقطة</span>
                     </div>
-                    <div className="text-[11px] text-slate-500 mt-1">
-                      تساوي خصماً نقدياً: <strong className="text-emerald-700 font-bold">{calculateCashForPoints(activeProfile.totalPoints)} ج.م</strong>
+                    <div className="text-[11px] text-slate-600 mt-1">
+                      تعادل: <strong className="text-emerald-700 font-bold">{cashInfo.exactEGP} ج.م</strong> (استبدال فوري: {cashInfo.redeemableEGP} ج.م)
                     </div>
                   </div>
 
                   <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                    <div className="text-xs text-slate-500 font-medium">إجمالي الإنفاق المعملي:</div>
+                    <div className="text-xs text-slate-500 font-medium">إجمالي الإنفاق المعملي التراكمي:</div>
                     <div className="text-2xl font-black text-slate-900 font-mono mt-1">
                       {activeProfile.lifetimeSpent.toLocaleString()} <span className="text-sm font-sans">ج.م</span>
                     </div>
                     <div className="text-[11px] text-slate-500 mt-1">
-                      مدفوعات الفحوصات والتحاليل
+                      حجوزات تحاليل محتسبة: <strong>{activeProfile.transactions.filter(t => t.type === 'earn').length}</strong> زيارة
                     </div>
                   </div>
 
                   <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                    <div className="text-xs text-slate-500 font-medium">فئة الخصم المعتمدة:</div>
+                    <div className="text-xs text-slate-500 font-medium">فئة الخصم المعتمدة تلقائياً:</div>
                     <div className="text-2xl font-black text-rose-800 font-mono mt-1">
                       %{currentDiscount}
                     </div>
                     <div className="text-[11px] text-slate-500 mt-1">
-                      خصم فوري دائم على كافة الفحوصات
+                      يطبق تلقائياً في الحجز والفاتورة والطباعة
                     </div>
                   </div>
                 </div>
+
+                {/* Cumulative Tier Upgrade Progress Bar */}
+                {tierProgress && (
+                  <div className="p-4 rounded-xl bg-indigo-50/70 border border-indigo-200 space-y-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+                      <div className="flex items-center gap-1.5 font-bold text-indigo-950">
+                        <TrendingUp className="w-4 h-4 text-indigo-600" />
+                        <span>مؤشر الترقية التراكمية التلقائية عند تكرار الحجز:</span>
+                      </div>
+                      <span className="font-bold text-indigo-800">
+                        {tierProgress.nextTier
+                          ? `متبقي ${tierProgress.pointsNeeded.toLocaleString()} نقطة للوصول إلى ${TIER_BENEFITS[tierProgress.nextTier].titleAr} (خصم %${tierDiscountRate(tierProgress.nextTier, loyaltyConfig)})`
+                          : 'تهانينا! وصل العميل إلى أعلى مستوى (Diamond VIP) بأقصى نسبة خصم.'}
+                      </span>
+                    </div>
+                    <div className="w-full h-2.5 bg-indigo-100 rounded-full overflow-hidden border border-indigo-200">
+                      <div
+                        className="h-full bg-gradient-to-r from-indigo-600 to-emerald-500 transition-all duration-500"
+                        style={{ width: `${tierProgress.progressPct}%` }}
+                      />
+                    </div>
+                  </div>
+                )}
 
                 {/* Transaction History with Delete per Transaction */}
                 <div className="space-y-3 pt-2">
@@ -1195,10 +1413,10 @@ export const LoyaltyModule: React.FC = () => {
                     onChange={e => setEditForm(prev => ({ ...prev, tier: e.target.value as LoyaltyTier }))}
                     className="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white font-bold"
                   >
-                    <option value="Silver">Silver VIP (خصم %5)</option>
-                    <option value="Gold">Gold VIP (خصم %10)</option>
-                    <option value="Platinum">Platinum VIP (خصم %15)</option>
-                    <option value="VIP">Diamond Elite (خصم %20)</option>
+                    <option value="Silver">Silver VIP (خصم %{loyaltyConfig.tiers.Silver.discountRate})</option>
+                    <option value="Gold">Gold VIP (خصم %{loyaltyConfig.tiers.Gold.discountRate})</option>
+                    <option value="Platinum">Platinum VIP (خصم %{loyaltyConfig.tiers.Platinum.discountRate})</option>
+                    <option value="VIP">Diamond Elite (خصم %{loyaltyConfig.tiers.VIP.discountRate})</option>
                   </select>
                 </div>
 
@@ -1472,7 +1690,7 @@ export const LoyaltyModule: React.FC = () => {
                   type="text"
                   value={newPhone}
                   onChange={e => setNewPhone(e.target.value)}
-                  placeholder="01012345678"
+                  placeholder="011xxxxxxxx"
                   className="w-full px-3 py-2 border rounded-lg font-mono text-xs"
                   required
                 />
@@ -1519,7 +1737,7 @@ export const LoyaltyModule: React.FC = () => {
                   type="submit"
                   className="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg font-bold"
                 >
-                  إصدار الكارت الذكي (هدية 100 نقطة)
+                  إصدار الكارت الذكي (هدية {loyaltyConfig.welcomeBonusPoints ?? 50} نقطة)
                 </button>
               </div>
             </form>
@@ -1701,73 +1919,64 @@ export const LoyaltyModule: React.FC = () => {
                 </div>
               </div>
 
-              {/* 3. Tiers & Discounts */}
-              <div>
-                <h4 className="font-bold text-slate-800 mb-2">نسب الخصم الدائم ومستويات العضوية:</h4>
+              {/* 3. Tiers, Thresholds & Discounts */}
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-black text-slate-800">فئات العضوية والترقية التراكمية ونسب الخصم (%):</h4>
+                  <span className="text-[10px] font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-200">
+                    كل 100 نقطة = {tempConfig.egpPer100Points} ج.م
+                  </span>
+                </div>
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between bg-slate-50 p-2.5 rounded-lg border">
-                    <span className="font-bold text-slate-700">Silver VIP (0 نقطة فأكثر):</span>
-                    <div className="flex items-center gap-1">
-                      <input
-                        type="number"
-                        value={tempConfig.tiers.Silver.discountRate}
-                        onChange={e => setTempConfig(prev => ({
-                          ...prev,
-                          tiers: { ...prev.tiers, Silver: { ...prev.tiers.Silver, discountRate: Number(e.target.value) } }
-                        }))}
-                        className="w-16 px-2 py-1 border rounded text-center font-mono font-bold"
-                      />
-                      <span>%</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between bg-amber-50 p-2.5 rounded-lg border border-amber-200">
-                    <span className="font-bold text-amber-900">Gold VIP (500 نقطة فأكثر):</span>
-                    <div className="flex items-center gap-1">
-                      <input
-                        type="number"
-                        value={tempConfig.tiers.Gold.discountRate}
-                        onChange={e => setTempConfig(prev => ({
-                          ...prev,
-                          tiers: { ...prev.tiers, Gold: { ...prev.tiers.Gold, discountRate: Number(e.target.value) } }
-                        }))}
-                        className="w-16 px-2 py-1 border rounded text-center font-mono font-bold text-amber-900"
-                      />
-                      <span>%</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between bg-slate-100 p-2.5 rounded-lg border">
-                    <span className="font-bold text-slate-900">Platinum VIP (1500 نقطة فأكثر):</span>
-                    <div className="flex items-center gap-1">
-                      <input
-                        type="number"
-                        value={tempConfig.tiers.Platinum.discountRate}
-                        onChange={e => setTempConfig(prev => ({
-                          ...prev,
-                          tiers: { ...prev.tiers, Platinum: { ...prev.tiers.Platinum, discountRate: Number(e.target.value) } }
-                        }))}
-                        className="w-16 px-2 py-1 border rounded text-center font-mono font-bold"
-                      />
-                      <span>%</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between bg-purple-50 p-2.5 rounded-lg border border-purple-200">
-                    <span className="font-bold text-purple-900">Diamond Elite (3000 نقطة فأكثر):</span>
-                    <div className="flex items-center gap-1">
-                      <input
-                        type="number"
-                        value={tempConfig.tiers.VIP.discountRate}
-                        onChange={e => setTempConfig(prev => ({
-                          ...prev,
-                          tiers: { ...prev.tiers, VIP: { ...prev.tiers.VIP, discountRate: Number(e.target.value) } }
-                        }))}
-                        className="w-16 px-2 py-1 border rounded text-center font-mono font-bold text-purple-900"
-                      />
-                      <span>%</span>
-                    </div>
-                  </div>
+                  {LOYALTY_TIER_ORDER.map(tKey => {
+                    const pal = getTierPalette(tKey);
+                    const tierCfg = tempConfig.tiers[tKey];
+                    return (
+                      <div
+                        key={tKey}
+                        className={`flex flex-wrap items-center justify-between gap-2 p-3 rounded-xl border ${pal.badgeBgClass}`}
+                      >
+                        <div className="font-black text-xs">{pal.titleAr}</div>
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-1">
+                            <span className="text-[10px] font-bold opacity-80">يبدأ من:</span>
+                            <input
+                              type="number"
+                              min="0"
+                              value={tierCfg.minPoints}
+                              onChange={e => setTempConfig(prev => ({
+                                ...prev,
+                                tiers: {
+                                  ...prev.tiers,
+                                  [tKey]: { ...prev.tiers[tKey], minPoints: Math.max(0, Number(e.target.value)) }
+                                }
+                              }))}
+                              className="w-20 px-2 py-1 border border-slate-300 bg-white text-slate-900 rounded text-center font-mono font-bold"
+                            />
+                            <span className="text-[10px] font-bold">نقطة</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <span className="text-[10px] font-bold opacity-80">الخصم:</span>
+                            <input
+                              type="number"
+                              min="0"
+                              max="100"
+                              value={tierCfg.discountRate}
+                              onChange={e => setTempConfig(prev => ({
+                                ...prev,
+                                tiers: {
+                                  ...prev.tiers,
+                                  [tKey]: { ...prev.tiers[tKey], discountRate: Math.max(0, Math.min(100, Number(e.target.value))) }
+                                }
+                              }))}
+                              className="w-16 px-2 py-1 border border-slate-300 bg-white text-slate-900 rounded text-center font-mono font-bold"
+                            />
+                            <span className="font-bold">%</span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -1795,10 +2004,11 @@ export const LoyaltyModule: React.FC = () => {
                   onClick={() => {
                     updateLoyaltyConfig(tempConfig);
                     setIsSettingsOpen(false);
+                    showNotice('success', 'تم تثبيت سياسة النقاط والخصومات وتفعيل التحديث على كافة الكروت المسجلة فوراً.');
                   }}
                   className="px-4 py-2.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl font-bold cursor-pointer transition-all active:scale-95 shadow-sm"
                 >
-                  حفظ للحجوزات القادمة
+                  تثبيت وتفعيل على كل الكروت ✓
                 </button>
                 <button
                   type="button"
@@ -1811,7 +2021,7 @@ export const LoyaltyModule: React.FC = () => {
                   className="px-5 py-2.5 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white rounded-xl font-black cursor-pointer transition-all active:scale-95 shadow-md flex items-center gap-1.5"
                 >
                   <RefreshCw className="w-4 h-4 text-amber-200" />
-                  <span>حفظ وتحديث نقاط كافة الحجوزات بأثر رجعي ⚡</span>
+                  <span>حفظ وإعادة احتساب كافة الحجوزات ⚡</span>
                 </button>
               </div>
             </div>

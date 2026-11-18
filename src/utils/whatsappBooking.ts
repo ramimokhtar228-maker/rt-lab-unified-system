@@ -1,10 +1,11 @@
 export const BRANCH_MAIN_ADDRESS = 'ميدان بهتيم برج صيدليه العزبى الدور الثالث امام الأسانسير شبرا الخيمه';
 export const LAB_NAME_AR = 'معامل RT للتحاليل الطبية والتشخيصية';
 export const LAB_PHONE = '01100874444';
-export const LAB_PHONE_SECONDARY = '01100046841';
-export const LAB_PHONES = ['01100874444', '01100046841'];
-export const INSTAPAY_IPA = 'ramirtlab@instapay';
-export const WALLET_VODAFONE = '01098765432';
+export const LAB_PHONE_SECONDARY = '01013242777';
+export const LAB_WHATSAPP = '01100046841';
+export const LAB_PHONES = ['01100874444', '01013242777'];
+export const INSTAPAY_IPA = '01100874444 @instapay';
+export const WALLET_VODAFONE = '01124485444';
 
 export function formatEgyptianPhoneForWhatsApp(phone: string): string {
   let cleaned = phone.replace(/[^0-9]/g, '');
@@ -80,7 +81,7 @@ ${testsList}
 
 ⚠️ *تعليمات هامة:* يرجى الصيام في حال طلبت التحاليل ذلك (يسمح بشرب الماء فقط).
 ⚠️ *تنبيه الحضور:* عدم الحضور فى الموعد المحدد دون تأجيل مسبق سيتم إلغاء الحجز بعد ٢٤ ساعه من تاريخه.
-📞 *أرقام التواصل أو تعديل الموعد:* ${params.branchPhone || '01100874444 / 01100046841'}
+📞 *أرقام التواصل أو تعديل الموعد:* ${params.branchPhone || '01100874444 / 01013242777'} | *واتساب:* 01100046841
 
 نسعد دائماً بخدمتكم وتمنياتنا لكم بالصحة والعافية! ❤️`;
 }

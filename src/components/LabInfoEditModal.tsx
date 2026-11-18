@@ -53,16 +53,16 @@ export const LabInfoEditModal: React.FC<LabInfoEditModalProps> = ({
       labNameAr: 'معامل RT للتحاليل الطبية والتشخيصية',
       labNameEn: 'RT Diagnostic Laboratories',
       sloganAr: 'التشخيص الصحيح يبدأ معنا · دقة، سرعة، وأمان تشخيصي',
-      sloganEn: 'Accurate Diagnosis Starts With Us · Precision & Care',
-      supervisionAr: 'أطباء واستشاريو كلية طب قصر العيني - جامعة القاهرة',
-      supervisionEn: 'Kasr Al Ainy Faculty of Medicine Consultants - Cairo University',
+      sloganEn: 'Accurate Diagnosis Starts With Us',
+      supervisionAr: 'أطباء واستشاريو كلية طب قصر العيني',
+      supervisionEn: 'Kasr Al Ainy Faculty of Medicine Consultants',
       accreditation: 'ISO 15189 Certified Quality Management',
       hotline: '01100874444',
-      phone: '01100874444 / 01100046841',
-      whatsapp: '01100874444',
+      phone: '01013242777',
+      whatsapp: '01100046841',
       mainAddress: 'ميدان بهتيم برج صيدليه العزبى الدور الثالث امام الأسانسير شبرا الخيمه',
-      instapay: 'ramirtlab@instapay',
-      vodafoneCash: '01098765432'
+      instapay: '01100874444 @instapay',
+      vodafoneCash: '01124485444'
     });
     setStaffData({ ...DEFAULT_STAFF });
   };
