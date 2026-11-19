@@ -538,8 +538,17 @@ export function runGlobalDataUpgrade(): { upgradedReportsCount: number; success:
     if (!localStorage.getItem('rt_lab_unified_lab_info_v3') && !localStorage.getItem('rt_lab_info_v3') && !localStorage.getItem('rt_lab_info_v2')) {
       safeSetLocalStorage('rt_lab_unified_lab_info_v3', JSON.stringify(INITIAL_LAB_INFO));
     }
-    if (!localStorage.getItem('rt_lab_unified_staff_signatures_v3') && !localStorage.getItem('rt_lab_staff_v3') && !localStorage.getItem('rt_lab_staff_v2')) {
-      safeSetLocalStorage('rt_lab_unified_staff_signatures_v3', JSON.stringify(DEFAULT_STAFF));
+    if (!localStorage.getItem('rt_lab_unified_staff_signatures_v3')) {
+      const legacyStaff = localStorage.getItem('rt_lab_staff_v3') || localStorage.getItem('rt_lab_staff_v2');
+      if (legacyStaff) {
+        try {
+          safeSetLocalStorage('rt_lab_unified_staff_signatures_v3', JSON.stringify({ ...DEFAULT_STAFF, ...JSON.parse(legacyStaff) }));
+        } catch {
+          safeSetLocalStorage('rt_lab_unified_staff_signatures_v3', JSON.stringify(DEFAULT_STAFF));
+        }
+      } else {
+        safeSetLocalStorage('rt_lab_unified_staff_signatures_v3', JSON.stringify(DEFAULT_STAFF));
+      }
     }
 
     // 2. Upgrade and Merge Test Catalog in canonical localStorage only

@@ -243,20 +243,83 @@ export function importSettingsStamps(incoming?: Record<string, string>) {
   if (changed) writeJSON(STAMPS_KEY, stamps);
 }
 
-/** دمج إعداد مفرد: النسخة الأحدث زمنياً هي التي تُعتمد */
+function fillUndefinedOnly(winner: AnyRecord, other: AnyRecord): AnyRecord {
+  const out: AnyRecord = { ...winner };
+  Object.keys(other || {}).forEach(key => {
+    if (out[key] === undefined && other[key] !== undefined) out[key] = other[key];
+  });
+  return out;
+}
+
+function mergeStaffSignatureOptionsSafe(localOpts: AnyRecord, cloudOpts: AnyRecord, cloudNewer: boolean): AnyRecord {
+  const roleKeys = ['chemists', 'verifiers', 'consultants', 'phlebotomists', 'visitCoordinators', 'customWorkers'];
+  const out: AnyRecord = { ...(cloudNewer ? cloudOpts : localOpts) };
+  roleKeys.forEach(rk => {
+    const primary = Array.isArray(cloudNewer ? cloudOpts?.[rk] : localOpts?.[rk]) ? (cloudNewer ? cloudOpts[rk] : localOpts[rk]) : [];
+    const secondary = Array.isArray(cloudNewer ? localOpts?.[rk] : cloudOpts?.[rk]) ? (cloudNewer ? localOpts[rk] : cloudOpts[rk]) : [];
+    const seen = new Set<string>();
+    const combined: any[] = [];
+    [...primary, ...secondary].forEach((item: any) => {
+      if (!item || !item.name) return;
+      const key = `${String(item.name).trim().toLowerCase()}::${String(item.role || rk)}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        combined.push(item);
+      }
+    });
+    out[rk] = combined;
+  });
+  return out;
+}
+
+/** دمج إعداد مفرد: النسخة الأحدث زمنياً هي التي تُعتمد مع حماية بيانات الإمضاءات من المسح */
 export function mergeSettingsObject(key: string, local: any, cloud: any, cloudStamps: Record<string, string> = {}) {
   if (!cloud || typeof cloud !== 'object') return local;
   if (!local || typeof local !== 'object') return cloud;
+
   const localStamp = Date.parse(String(getSettingsStamps()[key] || '')) || 0;
   const cloudStamp = Date.parse(String(cloudStamps?.[key] || '')) || 0;
+
+  if (key === 'staffSignatureOptions') {
+    const cloudNewer = cloudStamp > localStamp;
+    const merged = mergeStaffSignatureOptionsSafe(local, cloud, cloudNewer);
+    if (cloudNewer && cloudStamps?.[key]) {
+      const stamps = getSettingsStamps();
+      stamps[key] = cloudStamps[key];
+      writeJSON(STAMPS_KEY, stamps);
+    }
+    return JSON.stringify(merged) === JSON.stringify(local) ? local : merged;
+  }
+
+  if (key === 'staffSignatures') {
+    // Only adopt cloud signatures when cloud explicitly has a NEWER timestamp than local
+    if (cloudStamp > localStamp) {
+      const merged = fillUndefinedOnly(cloud, local);
+      const stamps = getSettingsStamps();
+      stamps[key] = cloudStamps[key] || new Date().toISOString();
+      writeJSON(STAMPS_KEY, stamps);
+      return JSON.stringify(merged) === JSON.stringify(local) ? local : merged;
+    }
+    // Never allow an equal/older/unstamped cloud snapshot to overwrite local signatures or resurrect cleared names/boxes
+    const localPreserved = fillUndefinedOnly(local, cloud);
+    return JSON.stringify(localPreserved) === JSON.stringify(local) ? local : localPreserved;
+  }
+
   if (cloudStamp > localStamp) {
-    stampSetting(key);
+    const stamps = getSettingsStamps();
+    if (cloudStamps?.[key]) {
+      stamps[key] = cloudStamps[key];
+      writeJSON(STAMPS_KEY, stamps);
+    } else {
+      stampSetting(key);
+    }
     return cloud;
   }
   if (localStamp > cloudStamp) {
     const localWins = fillGaps(local, cloud);
     return JSON.stringify(localWins) === JSON.stringify(local) ? local : localWins;
   }
-  const merged = fillGaps(cloud, local);
+  // Equal/zero timestamps: preserve existing local customizations first and only fill missing gaps from cloud
+  const merged = fillGaps(local, cloud);
   return JSON.stringify(merged) === JSON.stringify(local) ? local : merged;
 }

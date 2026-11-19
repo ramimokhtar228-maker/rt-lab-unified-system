@@ -94,13 +94,73 @@ export function getChartPointerPosition(
 }
 
 /**
- * Formats reference interval for display in column 5
+ * Detects whether a textReference holds multiple values / categories / thresholds
+ * (e.g., age/sex ranges, disease cutoffs, trimesters, pipe/newline/semicolon lists)
+ * that MUST be preserved intact in reports rather than collapsed to a single min-max.
  */
+export function isMultiValueReference(text?: string): boolean {
+  if (!text) return false;
+  const trimmed = text.trim();
+  if (!trimmed) return false;
+
+  if (trimmed.includes('\n') || trimmed.includes('|') || trimmed.includes(';') || trimmed.includes('•')) {
+    return true;
+  }
+
+  // Multiple labeled segments like "Male: 110-205, Female: 125-215" or "Follicular: ... Ovulatory: ..."
+  const colonCount = (trimmed.match(/:/g) || []).length;
+  if (colonCount >= 2) return true;
+
+  // Two or more distinct numeric ranges or threshold comparators
+  const rangeTokens = trimmed.match(/(?:<=|>=|≤|≥|<|>|\d+(?:\.\d+)?\s*(?:-|–|—|to)\s*\d+(?:\.\d+)?)/gi);
+  if (rangeTokens && rangeTokens.length >= 2) return true;
+
+  return false;
+}
+
 /**
- * Formats reference interval for display in column 5
+ * Formats multi-value reference strings cleanly onto separate readable lines.
+ */
+export function normalizeMultiValueReference(text: string): string {
+  const raw = text.trim();
+  if (!raw) return '';
+
+  // Split by pipe `|` or newline or `;` (when separating tiers)
+  let lines = raw.split(/\s*\|\s*|\r?\n/);
+  if (lines.length === 1 && raw.includes(';')) {
+    const semiParts = raw.split(/\s*;\s*/).filter(Boolean);
+    if (semiParts.length >= 2) {
+      lines = semiParts;
+    }
+  }
+
+  return lines
+    .map(l => l.trim())
+    .filter(Boolean)
+    .join('\n');
+}
+
+function isQualitativeOrLabeledSingleRef(text: string): boolean {
+  const t = text.trim();
+  if (!t) return false;
+  // Labeled threshold/contextual reference e.g. "Desirable: < 30 mg/dL", "Protective: >= 10 mIU/mL", "Negative (< 1.0)"
+  if (/:/.test(t)) return true;
+  if (/\((?:reflects|thyroid|adult|fasting|random|child|male|female|pregnant|trimester|post|pre)/i.test(t)) return true;
+  return false;
+}
+
+/**
+ * Formats reference interval for display in column 5.
+ * Multi-value / richly labeled reference intervals are displayed AS-IS across lines.
  */
 export function formatReferenceDisplay(param: TestParameter): string {
-  // If numeric normal boundaries are defined, prioritize them so modifications are always reflected immediately
+  const rawText = (param.textReference || '').trim();
+
+  if (rawText && (isMultiValueReference(rawText) || isQualitativeOrLabeledSingleRef(rawText))) {
+    return normalizeMultiValueReference(rawText);
+  }
+
+  // Fallback to numeric normal bounds for standard single numeric intervals
   if (param.minNormal !== undefined && param.maxNormal !== undefined) {
     return `${param.minNormal} - ${param.maxNormal} ${param.unit || ''}`.trim();
   }
@@ -113,8 +173,8 @@ export function formatReferenceDisplay(param: TestParameter): string {
     return `> ${param.minNormal} ${param.unit || ''}`.trim();
   }
 
-  if (param.textReference && param.textReference.trim().length > 0) {
-    return param.textReference.trim();
+  if (rawText) {
+    return normalizeMultiValueReference(rawText);
   }
 
   return 'Normal';

@@ -1927,7 +1927,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
 
                           {/* 6. References */}
                           <td className="py-2.5 px-3 text-left">
-                            <span className="text-xs text-slate-700 font-mono-numbers block font-medium">
+                            <span className="text-xs text-slate-700 font-mono-numbers block font-medium whitespace-pre-line leading-snug">
                               {formatReferenceDisplay(param)}
                             </span>
                           </td>

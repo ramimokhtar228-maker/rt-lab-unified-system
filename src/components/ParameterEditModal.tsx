@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TestParameter } from '../types/lab';
+import { isMultiValueReference } from '../utils/calculator';
 import { X, Save, Check } from 'lucide-react';
 
 interface ParameterEditModalProps {
@@ -7,6 +8,23 @@ interface ParameterEditModalProps {
   onClose: () => void;
   parameter: TestParameter | null;
   onSave: (updated: Partial<TestParameter>, savePermanently?: boolean) => void;
+}
+
+function buildNumericRefText(min?: number, max?: number, unit?: string): string {
+  const u = (unit || '').trim();
+  if (min !== undefined && max !== undefined) return `${min} - ${max} ${u}`.trim();
+  if (max !== undefined) return `< ${max} ${u}`.trim();
+  if (min !== undefined) return `> ${min} ${u}`.trim();
+  return '';
+}
+
+function matchesPlainNumericRef(text: string, min?: number, max?: number, unit?: string): boolean {
+  const clean = text.trim();
+  if (!clean) return true;
+  if (isMultiValueReference(clean) || /:/.test(clean)) return false;
+  const candidate = buildNumericRefText(min, max, unit);
+  const candidateNoUnit = buildNumericRefText(min, max, '');
+  return clean === candidate || clean === candidateNoUnit;
 }
 
 export const ParameterEditModal: React.FC<ParameterEditModalProps> = ({
@@ -22,6 +40,7 @@ export const ParameterEditModal: React.FC<ParameterEditModalProps> = ({
   const [panicLow, setPanicLow] = useState<string>(parameter?.panicLow !== undefined ? String(parameter.panicLow) : '');
   const [panicHigh, setPanicHigh] = useState<string>(parameter?.panicHigh !== undefined ? String(parameter.panicHigh) : '');
   const [textReference, setTextReference] = useState(parameter?.textReference || '');
+  const [textRefManuallyEdited, setTextRefManuallyEdited] = useState(false);
   const [method, setMethod] = useState(parameter?.method || '');
   const [notes, setNotes] = useState(parameter?.notes || '');
   const [savePermanently, setSavePermanently] = useState(true);
@@ -35,6 +54,7 @@ export const ParameterEditModal: React.FC<ParameterEditModalProps> = ({
       setPanicLow(parameter.panicLow !== undefined ? String(parameter.panicLow) : '');
       setPanicHigh(parameter.panicHigh !== undefined ? String(parameter.panicHigh) : '');
       setTextReference(parameter.textReference || '');
+      setTextRefManuallyEdited(false);
       setMethod(parameter.method || '');
       setNotes(parameter.notes || '');
       setSavePermanently(true);
@@ -55,16 +75,12 @@ export const ParameterEditModal: React.FC<ParameterEditModalProps> = ({
     const panicLowVal = panicLow !== '' && !isNaN(parseFloat(panicLow)) ? parseFloat(panicLow) : undefined;
     const panicHighVal = panicHigh !== '' && !isNaN(parseFloat(panicHigh)) ? parseFloat(panicHigh) : undefined;
 
-    // Auto-update textReference if numeric ranges exist or if user updated them
+    // Preserve multi-value or manually edited textReference intact; only auto-sync when it was a plain single numeric mirror
     let computedTextRef = textReference.trim();
-    if (!computedTextRef && (minVal !== undefined || maxVal !== undefined)) {
-      if (minVal !== undefined && maxVal !== undefined) {
-        computedTextRef = `${minVal} - ${maxVal} ${unit.trim()}`.trim();
-      } else if (maxVal !== undefined) {
-        computedTextRef = `< ${maxVal} ${unit.trim()}`.trim();
-      } else if (minVal !== undefined) {
-        computedTextRef = `> ${minVal} ${unit.trim()}`.trim();
-      }
+    const wasPlainMirror = matchesPlainNumericRef(computedTextRef, parameter.minNormal, parameter.maxNormal, parameter.unit);
+
+    if ((!computedTextRef || (!textRefManuallyEdited && wasPlainMirror)) && (minVal !== undefined || maxVal !== undefined)) {
+      computedTextRef = buildNumericRefText(minVal, maxVal, unit);
     }
 
     onSave({
@@ -137,7 +153,7 @@ export const ParameterEditModal: React.FC<ParameterEditModalProps> = ({
 
           {/* Normal Range */}
           <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-3">
-            <div className="font-bold text-xs text-rose-900">المعدل الطبيعي العددي (Normal Reference Range):</div>
+            <div className="font-bold text-xs text-rose-900">المعدل الطبيعي العددي لحساب التمييز (Min / Max Flagging):</div>
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-[11px] text-slate-600 mb-1">الحد الأدنى (Min Normal):</label>
@@ -194,19 +210,25 @@ export const ParameterEditModal: React.FC<ParameterEditModalProps> = ({
             </div>
           </div>
 
-          {/* Qualitative Text Reference */}
+          {/* Qualitative / Multi-value Text Reference */}
           <div>
             <label className="block text-xs font-bold text-slate-700 mb-1">
-              المعدل الطبيعي النصي أو الوصفي (Text Reference):
+              المعدل الطبيعي متعدد القيم أو الوصفي (يظهر في التقرير كما هو):
             </label>
-            <input
-              type="text"
+            <textarea
+              rows={3}
               value={textReference}
-              onChange={(e) => setTextReference(e.target.value)}
-              className="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:outline-none"
+              onChange={(e) => {
+                setTextReference(e.target.value);
+                setTextRefManuallyEdited(true);
+              }}
+              className="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:outline-none font-mono leading-relaxed"
               dir="ltr"
-              placeholder="e.g. Negative, Non-Reactive, Nil, < 14.0 ng/L"
+              placeholder={'e.g. Optimal: < 100 | Borderline: 100 - 125 | Diabetic: >= 126 mg/dL\n(أو ضع كل قيمة في سطر مستقل)'}
             />
+            <p className="text-[10px] text-slate-500 mt-1">
+              يدعم النورمال ذو القيم المتعددة (بفاصل <code className="bg-slate-100 px-1 rounded">|</code> أو سطر جديد لكل قيمة) ويُطبع في التقرير كما هو تماماً.
+            </p>
           </div>
 
           <div>

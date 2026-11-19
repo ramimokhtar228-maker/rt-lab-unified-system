@@ -1,6 +1,12 @@
 import { LabReport, LabInfo } from '../types/lab';
 import { openPrintReportWindow } from './printReportWindow';
-import { buildReportPages, REPORT_CSS, REPORT_FONT_LINK } from './reportTemplate';
+import {
+  buildReportPages,
+  fitReportPagesToSingleA4,
+  getPersistedGlobalStaffSignatures,
+  REPORT_CSS,
+  REPORT_FONT_LINK
+} from './reportTemplate';
 import { DEFAULT_STAFF } from '../data/labCatalog';
 
 export function reportFileName(report: LabReport, ext: string): string {
@@ -16,10 +22,11 @@ export async function buildReportPDFBlob(report: LabReport, labInfo?: LabInfo, s
     patient: {
       ...report.patient,
       sampleDate: report.patient?.sampleDate || report.createdAt || nowIso,
-      reportingDate: nowIso
+      reportingDate: report.patient?.reportingDate || nowIso
     },
     staff: {
       ...DEFAULT_STAFF,
+      ...getPersistedGlobalStaffSignatures(),
       ...(labInfo as any)?.staffSignatures,
       ...report.staff
     }
@@ -34,12 +41,20 @@ export async function buildReportPDFBlob(report: LabReport, labInfo?: LabInfo, s
 
   try {
     if ((document as any).fonts?.ready) await (document as any).fonts.ready;
+    fitReportPagesToSingleA4(host);
     const pages = Array.from(host.querySelectorAll<HTMLElement>('.rt-page'));
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: true });
 
     for (let i = 0; i < pages.length; i++) {
       const page = pages[i];
-      const canvas = await html2canvas(page, { scale: 2.2, useCORS: true, backgroundColor: '#ffffff', logging: false });
+      const canvas = await html2canvas(page, {
+        scale: 2.2,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+        logging: false,
+        width: page.clientWidth || undefined,
+        height: page.clientHeight || undefined
+      });
       if (i > 0) pdf.addPage('a4', 'portrait');
       pdf.addImage(canvas.toDataURL('image/jpeg', 0.96), 'JPEG', 0, 0, 210, 297, undefined, 'FAST');
     }

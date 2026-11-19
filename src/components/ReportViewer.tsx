@@ -448,7 +448,7 @@ export const ReportViewer: React.FC<ReportViewerProps> = ({
                     </td>
 
                     {/* Reference Range */}
-                    <td className="py-2.5 px-3 text-center font-mono text-slate-600 text-[11px]">
+                    <td className="py-2.5 px-3 text-left font-mono text-slate-600 text-[11px] whitespace-pre-line leading-snug">
                       {item.referenceDisplay}
                     </td>
 

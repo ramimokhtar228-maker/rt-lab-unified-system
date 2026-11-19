@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { DEFAULT_STAFF } from '../data/labCatalog';
 import { LabReport, TestProfile } from '../types/lab';
 import { formatReferenceDisplay } from '../utils/calculator';
@@ -8,7 +8,7 @@ import { exportReportToPPTX } from '../utils/pptxExport';
 import { formatWhatsAppMessage, openWhatsApp } from '../utils/whatsapp';
 import { downloadReportPDF, triggerPrintDialog } from '../utils/pdfExport';
 import { openPrintReportWindow } from '../utils/printReportWindow';
-import { buildReportPages, REPORT_CSS } from '../utils/reportTemplate';
+import { buildReportPages, REPORT_CSS, fitReportPagesToSingleA4 } from '../utils/reportTemplate';
 import { useApp } from '../context/AppContext';
 import { ClientEditModal } from './ClientEditModal';
 import { LabInfoEditModal } from './LabInfoEditModal';
@@ -83,6 +83,21 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
   }, [report, staffSignatures]);
   const staff = safeReport.staff;
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const previewRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const runFit = () => {
+      if (previewRef.current) {
+        fitReportPagesToSingleA4(previewRef.current);
+      }
+    };
+    const raf = requestAnimationFrame(runFit);
+    const fontsReady = (document as any).fonts?.ready;
+    if (fontsReady && typeof fontsReady.then === 'function') {
+      fontsReady.then(() => requestAnimationFrame(runFit)).catch(() => {});
+    }
+    return () => cancelAnimationFrame(raf);
+  }, [safeReport, labInfo, showVisualChart]);
 
   const handleDownloadPDF = async () => {
     const nowIso = new Date().toISOString();
@@ -132,7 +147,7 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
   };
 
   const handlePPTX = async () => {
-    await exportReportToPPTX(safeReport, labInfo);
+    await exportReportToPPTX(safeReport, labInfo, showVisualChart);
   };
 
   const formatDoctorDisplay = () => {
@@ -280,7 +295,11 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
       */}
       <div className="overflow-x-auto rounded-xl bg-slate-200 p-3 print:p-0">
         <style>{REPORT_CSS}</style>
-        <div className="rt-root" dangerouslySetInnerHTML={{ __html: buildReportPages(safeReport, labInfo, showVisualChart) }} />
+        <div
+          ref={previewRef}
+          className="rt-root"
+          dangerouslySetInnerHTML={{ __html: buildReportPages(safeReport, labInfo, showVisualChart) }}
+        />
       </div>
 
       {/* Edit Client Modal */}

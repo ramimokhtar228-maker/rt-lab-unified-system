@@ -32,6 +32,27 @@ export function calculateFlag(
 }
 
 export function formatReferenceDisplay(param: TestParameter): string {
+  const rawText = (param.textReference || '').trim();
+  if (rawText) {
+    const hasMulti =
+      rawText.includes('\n') ||
+      rawText.includes('|') ||
+      rawText.includes(';') ||
+      rawText.includes('•') ||
+      (rawText.match(/:/g) || []).length >= 2 ||
+      (rawText.match(/(?:<=|>=|≤|≥|<|>|\d+(?:\.\d+)?\s*(?:-|–|—|to)\s*\d+(?:\.\d+)?)/gi) || []).length >= 2 ||
+      /:/.test(rawText);
+
+    if (hasMulti) {
+      let lines = rawText.split(/\s*\|\s*|\r?\n/);
+      if (lines.length === 1 && rawText.includes(';')) {
+        const semi = rawText.split(/\s*;\s*/).filter(Boolean);
+        if (semi.length >= 2) lines = semi;
+      }
+      return lines.map(l => l.trim()).filter(Boolean).join('\n');
+    }
+  }
+
   if (param.minNormal !== undefined && param.maxNormal !== undefined) {
     return `${param.minNormal} - ${param.maxNormal} ${param.unit || ''}`.trim();
   }
@@ -41,8 +62,8 @@ export function formatReferenceDisplay(param: TestParameter): string {
   if (param.minNormal !== undefined) {
     return `> ${param.minNormal} ${param.unit || ''}`.trim();
   }
-  if (param.textReference && param.textReference.trim().length > 0) {
-    return param.textReference.trim();
+  if (rawText) {
+    return rawText;
   }
   return 'Negative';
 }

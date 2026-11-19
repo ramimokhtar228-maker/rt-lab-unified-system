@@ -194,23 +194,36 @@ const KNOWN: Record<string, string> = {
   "استشاري أمراض الدم والباثولوجيا الإكلينيكية": "Consultant Hematologist & Clinical Pathologist",
 };
 
-/** Remove Arabic characters so nothing Arabic reaches the patient report. */
+/** Remove Arabic characters while preserving multi-line newlines for multi-value reference ranges. */
 export function latin(input?: string | null, fallback = ''): string {
   if (!input) return fallback;
-  const trimmed = String(input).trim();
-  if (KNOWN[trimmed]) return KNOWN[trimmed];
-  if (KNOWN_STAFF_MAP[trimmed]) return KNOWN_STAFF_MAP[trimmed];
-  const cleaned = trimmed
-    .replace(ARABIC, '')
-    .replace(/\(\s*\)/g, '')
-    .replace(/\s{2,}/g, ' ')
-    .replace(/^[\s\-–—•|/,:]+|[\s\-–—•|/,:]+$/g, '')
-    .trim();
-  // NEVER return lone dots or empty string if original input was valid text
-  if (!cleaned || /^[\s.\-–—•|/,:]+$/.test(cleaned)) {
-    return formatStaffName(trimmed, trimmed) || fallback;
+  const raw = String(input);
+  if (!raw.trim()) return fallback;
+  const trimmedSingle = raw.trim();
+  if (KNOWN[trimmedSingle]) return KNOWN[trimmedSingle];
+  if (KNOWN_STAFF_MAP[trimmedSingle]) return KNOWN_STAFF_MAP[trimmedSingle];
+
+  const lines = raw.split(/\r?\n/).map(line => {
+    const t = line.trim();
+    if (!t) return '';
+    if (KNOWN[t]) return KNOWN[t];
+    if (KNOWN_STAFF_MAP[t]) return KNOWN_STAFF_MAP[t];
+    const cleaned = t
+      .replace(ARABIC, '')
+      .replace(/\(\s*\)/g, '')
+      .replace(/[ \t]{2,}/g, ' ')
+      .replace(/^[\s\-–—•|/,:]+|[\s\-–—•|/,:]+$/g, '')
+      .trim();
+    if (!cleaned || /^[\s.\-–—•|/,:]+$/.test(cleaned)) {
+      return '';
+    }
+    return cleaned;
+  }).filter(Boolean);
+
+  if (lines.length === 0) {
+    return formatStaffName(trimmedSingle, trimmedSingle) || fallback;
   }
-  return cleaned || fallback;
+  return lines.join('\n') || fallback;
 }
 
 const esc = (s: unknown): string =>
@@ -308,20 +321,86 @@ export const REPORT_CSS = `
   }
   .rt-page {
     width: 210mm;
+    height: 297mm;
     min-height: 297mm;
+    max-height: 297mm;
+    overflow: hidden;
     background: #ffffff;
     margin: 0 auto;
     position: relative;
     display: flex;
     flex-direction: column;
-    padding: 10mm 14mm 10mm;
+    padding: 9mm 13mm 8mm;
     page-break-after: always;
     break-after: page;
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
   .rt-page:last-child {
     page-break-after: auto;
     break-after: auto;
   }
+  .rt-page-inner {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    transform-origin: top left;
+  }
+
+  /* Automatic density tiers so single-profile reports (even large panels like CBC) fit on 1 A4 page cleanly */
+  .rt-page.rt-dense-1 .rt-head { padding: 2mm 0 2.5mm; }
+  .rt-page.rt-dense-1 .rt-patient { margin: 2.8mm 0 2.5mm; padding: 2.2mm 3.5mm; gap: 4px 10px; }
+  .rt-page.rt-dense-1 .rt-title { margin: 1mm 0 2mm; padding: 1.2mm 2.8mm; }
+  .rt-page.rt-dense-1 .rt-table thead th { padding: 5.5px 8px; font-size: 9.8px; }
+  .rt-page.rt-dense-1 .rt-table tbody td { padding: 4px 8px; font-size: 10.5px; }
+  .rt-page.rt-dense-1 .rt-table td.test { font-size: 10.8px; }
+  .rt-page.rt-dense-1 .rt-table td.result { font-size: 11px; }
+  .rt-page.rt-dense-1 .rt-table td.ref { font-size: 9.8px; }
+  .rt-page.rt-dense-1 .rt-diag-panel,
+  .rt-page.rt-dense-1 .rt-note,
+  .rt-page.rt-dense-1 .rt-film,
+  .rt-page.rt-dense-1 .rt-rec,
+  .rt-page.rt-dense-1 .rt-atlas { margin-top: 2mm; margin-bottom: 1mm; padding: 2mm 3mm; }
+  .rt-page.rt-dense-1 .rt-sign { margin-top: 2.5mm; padding-top: 1.5mm; gap: 3mm; }
+  .rt-page.rt-dense-1 .rt-sign .sig-handwritten { height: 10mm; }
+  .rt-page.rt-dense-1 .rt-sign .sig-img { max-height: 9.5mm; }
+  .rt-page.rt-dense-1 .rt-foot { margin-top: 2mm; padding-top: 1.5mm; }
+
+  .rt-page.rt-dense-2 { padding: 7.5mm 12mm 6.5mm; }
+  .rt-page.rt-dense-2 .rt-topbar { height: 3.5mm; }
+  .rt-page.rt-dense-2 .rt-head { padding: 1.5mm 0 2mm; }
+  .rt-page.rt-dense-2 .rt-brand h1 { font-size: 16.5px; }
+  .rt-page.rt-dense-2 .rt-patient { margin: 2mm 0 2mm; padding: 1.8mm 3mm; gap: 3px 8px; }
+  .rt-page.rt-dense-2 .rt-patient label { font-size: 7.5px; }
+  .rt-page.rt-dense-2 .rt-patient span.v { font-size: 10px; }
+  .rt-page.rt-dense-2 .rt-patient span.v.name { font-size: 11.5px; }
+  .rt-page.rt-dense-2 .rt-title { margin: 0.8mm 0 1.5mm; padding: 1mm 2.5mm; }
+  .rt-page.rt-dense-2 .rt-title h2 { font-size: 11.5px; }
+  .rt-page.rt-dense-2 .rt-table thead th { padding: 4px 6px; font-size: 9px; }
+  .rt-page.rt-dense-2 .rt-table tbody td { padding: 2.3px 6px; font-size: 9.4px; line-height: 1.25; }
+  .rt-page.rt-dense-2 .rt-table td.test { font-size: 9.6px; }
+  .rt-page.rt-dense-2 .rt-table td.test small { display: inline; margin-left: 4px; font-size: 7.8px; }
+  .rt-page.rt-dense-2 .rt-table td.result { font-size: 9.8px; padding: 1px 4px; }
+  .rt-page.rt-dense-2 .rt-table td.unit { font-size: 8.8px; }
+  .rt-page.rt-dense-2 .rt-table td.ref { font-size: 8.6px; line-height: 1.2; }
+  .rt-page.rt-dense-2 .flag-tag { font-size: 7.5px; padding: 1px 4px; }
+  .rt-page.rt-dense-2 .rt-diag-panel,
+  .rt-page.rt-dense-2 .rt-note,
+  .rt-page.rt-dense-2 .rt-film,
+  .rt-page.rt-dense-2 .rt-rec,
+  .rt-page.rt-dense-2 .rt-atlas { margin-top: 1.5mm; margin-bottom: 0.8mm; padding: 1.6mm 2.5mm; font-size: 9px; }
+  .rt-page.rt-dense-2 .rt-note p { font-size: 9px; line-height: 1.35; }
+  .rt-page.rt-dense-2 .rt-spacer { min-height: 2mm; }
+  .rt-page.rt-dense-2 .rt-sign { margin-top: 1.5mm; padding-top: 1mm; gap: 2.5mm; }
+  .rt-page.rt-dense-2 .rt-sign .sig-handwritten { height: 8.5mm; }
+  .rt-page.rt-dense-2 .rt-sign .sig-img { max-height: 8mm; }
+  .rt-page.rt-dense-2 .rt-sign .role { font-size: 8.5px; }
+  .rt-page.rt-dense-2 .rt-sign .nm { font-size: 9.5px; }
+  .rt-page.rt-dense-2 .rt-sign .tt { font-size: 7.5px; }
+  .rt-page.rt-dense-2 .rt-sign .lic { font-size: 7px; }
+  .rt-page.rt-dense-2 .rt-sign .stamp-box { padding: 1px 5px; font-size: 6.5px; margin-top: 1mm; }
+  .rt-page.rt-dense-2 .rt-foot { margin-top: 1.5mm; padding-top: 1mm; font-size: 8px; }
   
   /* Top decorative dual-tone clinical bar */
   .rt-topbar {
@@ -558,9 +637,12 @@ export const REPORT_CSS = `
   }
   .rt-table td.ref {
     color: #334155;
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 600;
     font-family: 'JetBrains Mono', 'Inter', monospace;
+    white-space: pre-line;
+    line-height: 1.32;
+    word-break: break-word;
   }
   .rt-table td.gauge-col {
     text-align: center;
@@ -1111,31 +1193,46 @@ export const REPORT_CSS = `
   }
 `;
 
-function signatureBlock(report: LabReport, lab?: LabInfo): string {
+export interface ActiveSignatureBlock {
+  role: string;
+  name: string;
+  title?: string;
+  license?: string;
+  signatureKey?: string;
+  isConsultant?: boolean;
+}
+
+export function getPersistedGlobalStaffSignatures(): Record<string, any> {
+  if (typeof window === 'undefined') return {};
+  try {
+    const raw =
+      localStorage.getItem('rt_lab_unified_staff_signatures_v3') ||
+      localStorage.getItem('rt_lab_staff_v3') ||
+      localStorage.getItem('rt_lab_staff_v2');
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+export function resolveActiveSignatureBlocks(report: LabReport, lab?: LabInfo): ActiveSignatureBlock[] {
+  const persistedGlobal = getPersistedGlobalStaffSignatures();
   const labStaff = (lab as any)?.staffSignatures || {};
   const repStaff = report.staff || {};
   const s: Record<string, any> = {
     ...DEFAULT_STAFF,
+    ...persistedGlobal,
     ...labStaff,
     ...repStaff
   };
 
   if (s.hideSignatures === true || (report as any)?.hideSignatures === true) {
-    return '';
+    return [];
   }
 
-  interface SigBlockItem {
-    role: string;
-    name: string;
-    title?: string;
-    license?: string;
-    signatureKey?: string;
-    isConsultant?: boolean;
-  }
+  const blocks: ActiveSignatureBlock[] = [];
 
-  const blocks: SigBlockItem[] = [];
-
-  const rawChemist = repStaff.labChemist !== undefined ? repStaff.labChemist : (labStaff.labChemist ?? DEFAULT_STAFF.labChemist);
+  const rawChemist = repStaff.labChemist !== undefined ? repStaff.labChemist : (labStaff.labChemist ?? persistedGlobal.labChemist ?? DEFAULT_STAFF.labChemist);
   if (String(rawChemist || '').trim() && s.showChemist !== false) {
     blocks.push({
       role: 'كيميائي المعمل',
@@ -1146,7 +1243,7 @@ function signatureBlock(report: LabReport, lab?: LabInfo): string {
     });
   }
 
-  const rawVerifier = repStaff.verifiedBy !== undefined ? repStaff.verifiedBy : (labStaff.verifiedBy ?? DEFAULT_STAFF.verifiedBy);
+  const rawVerifier = repStaff.verifiedBy !== undefined ? repStaff.verifiedBy : (labStaff.verifiedBy ?? persistedGlobal.verifiedBy ?? DEFAULT_STAFF.verifiedBy);
   if (String(rawVerifier || '').trim() && s.showVerifier !== false) {
     blocks.push({
       role: 'طبيب الوحده',
@@ -1157,7 +1254,7 @@ function signatureBlock(report: LabReport, lab?: LabInfo): string {
     });
   }
 
-  const rawPathologist = repStaff.pathologist !== undefined ? repStaff.pathologist : (labStaff.pathologist ?? DEFAULT_STAFF.pathologist);
+  const rawPathologist = repStaff.pathologist !== undefined ? repStaff.pathologist : (labStaff.pathologist ?? persistedGlobal.pathologist ?? DEFAULT_STAFF.pathologist);
   if (String(rawPathologist || '').trim() && s.showPathologist !== false) {
     blocks.push({
       role: 'استشارى الباثولوجيا الإكلينيكية',
@@ -1172,7 +1269,7 @@ function signatureBlock(report: LabReport, lab?: LabInfo): string {
   const rawPhlebotomist =
     repStaff.phlebotomist !== undefined
       ? repStaff.phlebotomist
-      : (report.patient?.phlebotomist || labStaff.phlebotomist || DEFAULT_STAFF.phlebotomist || '');
+      : (report.patient?.phlebotomist || labStaff.phlebotomist || persistedGlobal.phlebotomist || DEFAULT_STAFF.phlebotomist || '');
   if (String(rawPhlebotomist || '').trim() && s.showPhlebotomist !== false) {
     blocks.push({
       role: 'القائم بالسحب',
@@ -1186,7 +1283,7 @@ function signatureBlock(report: LabReport, lab?: LabInfo): string {
   const rawVisitCoordinator =
     repStaff.visitCoordinator !== undefined
       ? repStaff.visitCoordinator
-      : (report.patient?.visitSpecialist || report.patient?.branchRepresentative || labStaff.visitCoordinator || DEFAULT_STAFF.visitCoordinator || '');
+      : (report.patient?.visitSpecialist || report.patient?.branchRepresentative || labStaff.visitCoordinator || persistedGlobal.visitCoordinator || DEFAULT_STAFF.visitCoordinator || '');
   if (String(rawVisitCoordinator || '').trim() && s.showVisitCoordinator !== false) {
     blocks.push({
       role: 'مسؤول الزيارة',
@@ -1232,6 +1329,11 @@ function signatureBlock(report: LabReport, lab?: LabInfo): string {
     });
   }
 
+  return blocks;
+}
+
+function signatureBlock(report: LabReport, lab?: LabInfo): string {
+  const blocks = resolveActiveSignatureBlocks(report, lab);
   if (!blocks.length) return '';
 
   const colCount = blocks.length <= 5 ? blocks.length : 4;
@@ -1261,7 +1363,7 @@ function signatureBlock(report: LabReport, lab?: LabInfo): string {
   </div>`;
 }
 
-function cleanInvestigationName(raw?: string | null): string {
+export function cleanInvestigationName(raw?: string | null): string {
   if (!raw) return '—';
   let str = latin(raw, raw).trim();
   // Strip duplicate consecutive identical tokens or words (e.g. "Hemoglobin (Hemoglobin)" or "WBC - WBC" or "Glucose Glucose")
@@ -2147,9 +2249,26 @@ function pageHtml(report: LabReport, profile: TestProfile, idx: number, total: n
     ? renderProfileDiagnosticChartHtml(profile, p)
     : '';
 
+  // Compute density tier so a single test or large profile (CBC/comprehensive) always fits 1 A4 page
+  const paramLinesEstimate = profile.parameters.reduce((sum, param) => {
+    const refLines = Math.max(1, formatReferenceDisplay(param).split('\n').length);
+    return sum + Math.max(1, Math.ceil(refLines * 0.65));
+  }, 0);
+  const extraUnits =
+    (profileDashboardHtml ? 4 : 0) +
+    (film ? 2 : 0) +
+    (ogttBlockHtml ? 5 : 0) +
+    (atlasHtml ? 3 : 0) +
+    (recommendationsHtml ? 2 : 0) +
+    (allInterpretations.length + allComments.length) * 2 +
+    (general ? 2 : 0);
+  const effectiveLoad = paramLinesEstimate + extraUnits;
+  const densityClass = effectiveLoad > 20 ? 'rt-dense-2' : effectiveLoad > 11 ? 'rt-dense-1' : '';
+
   return `
-  <section class="rt-page report-page-container">
+  <section class="rt-page report-page-container ${densityClass}">
     <div class="rt-topbar"></div>
+    <div class="rt-page-inner">
     <header class="rt-head">
       <div class="rt-brand">
         ${rtLogoSvg(56)}
@@ -2174,10 +2293,11 @@ function pageHtml(report: LabReport, profile: TestProfile, idx: number, total: n
       <div class="f"><label>Reported</label><span class="v">${esc(fmtDate(p.reportingDate || new Date().toISOString()))}</span></div>
       <div class="f wide"><label>Referred By</label><span class="v" dir="auto">${esc(doctor)}</span></div>
       ${(() => {
+        const persistedS = getPersistedGlobalStaffSignatures();
         const labS = (lab as any)?.staffSignatures || {};
         const repS = report.staff || {};
-        const phlebVal = repS.phlebotomist !== undefined ? repS.phlebotomist : (p.phlebotomist || labS.phlebotomist || DEFAULT_STAFF.phlebotomist || '');
-        const visitVal = repS.visitCoordinator !== undefined ? repS.visitCoordinator : (p.visitSpecialist || p.branchRepresentative || labS.visitCoordinator || DEFAULT_STAFF.visitCoordinator || '');
+        const phlebVal = repS.phlebotomist !== undefined ? repS.phlebotomist : (p.phlebotomist || labS.phlebotomist || persistedS.phlebotomist || DEFAULT_STAFF.phlebotomist || '');
+        const visitVal = repS.visitCoordinator !== undefined ? repS.visitCoordinator : (p.visitSpecialist || p.branchRepresentative || labS.visitCoordinator || persistedS.visitCoordinator || DEFAULT_STAFF.visitCoordinator || '');
         const showPhleb = repS.showPhlebotomist !== false && Boolean(String(phlebVal || '').trim());
         const showVisit = repS.showVisitCoordinator !== false && Boolean(String(visitVal || '').trim());
         return `${showPhleb ? `<div class="f f-ar" dir="rtl"><label>القائم بالسحب</label><span class="v" dir="auto">${esc(phlebVal)}</span></div>` : ''}
@@ -2224,7 +2344,7 @@ function pageHtml(report: LabReport, profile: TestProfile, idx: number, total: n
 
     ${signatureBlock(report, lab)}
 
-    <div style="margin-top: 3mm; padding-top: 2mm; border-top: 1px dashed #cbd5e1; font-size: 8.5px; color: #64748b; display: flex; justify-content: space-between; align-items: center;">
+    <div style="margin-top: 2.5mm; padding-top: 1.5mm; border-top: 1px dashed #cbd5e1; font-size: 8px; color: #64748b; display: flex; justify-content: space-between; align-items: center;">
       <span>• The analytical results relate solely to the specimen received and tested. Clinical correlation is recommended.</span>
       <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #1e3a8a;">RT LAB VERIFIED REPORT</span>
     </div>
@@ -2233,8 +2353,85 @@ function pageHtml(report: LabReport, profile: TestProfile, idx: number, total: n
       <span>Lab ID: ${esc(report.reportNumber)} • Sample Barcode: ${esc(p.barcode || p.labNumber)} • Page ${idx + 1} of ${total}</span>
       <span class="end">${idx === total - 1 ? '— END OF LABORATORY REPORT —' : 'CONTINUED ON NEXT PAGE'}</span>
     </footer>
+    </div>
   </section>`;
 }
+
+/**
+ * Proportionally fits each A4 report page container so ALL sections
+ * (header, patient details, table, visuals, notes, signatures, footer)
+ * remain cleanly inside 1 single A4 sheet without spilling onto a second page.
+ */
+export function fitReportPagesToSingleA4(root: ParentNode = document): void {
+  const pages = Array.from(root.querySelectorAll<HTMLElement>('.rt-page'));
+  pages.forEach(page => {
+    const inner = page.querySelector<HTMLElement>('.rt-page-inner');
+    if (!inner) return;
+    inner.style.width = '';
+    inner.style.height = 'auto';
+    inner.style.minHeight = '';
+    inner.style.transform = '';
+    inner.style.transformOrigin = 'top left';
+
+    const cs = getComputedStyle(page);
+    const padY = (parseFloat(cs.paddingTop) || 0) + (parseFloat(cs.paddingBottom) || 0);
+    const availH = page.clientHeight - padY;
+    if (availH <= 0) return;
+
+    const naturalH = inner.scrollHeight;
+    if (naturalH <= availH + 1) {
+      inner.style.height = '100%';
+      return;
+    }
+
+    let scale = Math.max(0.45, (availH - 2) / naturalH);
+    inner.style.width = `${(100 / scale).toFixed(4)}%`;
+    inner.style.transform = `scale(${scale.toFixed(4)})`;
+
+    const scaledH = inner.scrollHeight * scale;
+    if (scaledH > availH) {
+      scale = Math.max(0.4, scale * ((availH - 2) / scaledH));
+      inner.style.width = `${(100 / scale).toFixed(4)}%`;
+      inner.style.transform = `scale(${scale.toFixed(4)})`;
+    }
+    inner.style.minHeight = `${Math.floor(availH / scale)}px`;
+  });
+}
+
+const INLINE_FIT_SCRIPT = `
+function fitRtPagesToA4(){
+  var pages=document.querySelectorAll('.rt-page');
+  for(var i=0;i<pages.length;i++){
+    var page=pages[i];
+    var inner=page.querySelector('.rt-page-inner');
+    if(!inner)continue;
+    inner.style.width='';
+    inner.style.height='auto';
+    inner.style.minHeight='';
+    inner.style.transform='';
+    inner.style.transformOrigin='top left';
+    var cs=window.getComputedStyle(page);
+    var padY=(parseFloat(cs.paddingTop)||0)+(parseFloat(cs.paddingBottom)||0);
+    var availH=page.clientHeight-padY;
+    if(availH<=0)continue;
+    var naturalH=inner.scrollHeight;
+    if(naturalH<=availH+1){
+      inner.style.height='100%';
+      continue;
+    }
+    var scale=Math.max(0.45,(availH-2)/naturalH);
+    inner.style.width=(100/scale).toFixed(4)+'%';
+    inner.style.transform='scale('+scale.toFixed(4)+')';
+    var scaledH=inner.scrollHeight*scale;
+    if(scaledH>availH){
+      scale=Math.max(0.40,scale*((availH-2)/scaledH));
+      inner.style.width=(100/scale).toFixed(4)+'%';
+      inner.style.transform='scale('+scale.toFixed(4)+')';
+    }
+    inner.style.minHeight=Math.floor(availH/scale)+'px';
+  }
+}
+`;
 
 /** The report pages only (for embedding in the in-app preview). Wrap in <div class="rt-root">. */
 export function buildReportPages(report: LabReport, lab?: LabInfo, showVisualChart: boolean = true): string {
@@ -2272,22 +2469,44 @@ export function buildReportDocument(report: LabReport, lab?: LabInfo, autoPrint 
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(136,19,55,0.3);
   }
+  ${REPORT_CSS}
   @media print {
     body { background: #ffffff !important; font-family: 'Cairo', 'Inter', sans-serif !important; }
     .bar { display: none !important; }
-    .rt-page { box-shadow: none !important; margin: 0 !important; width: 100% !important; min-height: auto !important; }
+    .rt-page {
+      box-shadow: none !important;
+      margin: 0 !important;
+      width: 210mm !important;
+      height: 297mm !important;
+      min-height: 297mm !important;
+      max-height: 297mm !important;
+      overflow: hidden !important;
+    }
   }
-  ${REPORT_CSS}
 </style>
 </head>
 <body>
 <div class="bar">
-  <button onclick="window.print()">Print / Save as PDF</button>
+  <button onclick="fitRtPagesToA4(); window.print()">Print / Save as PDF</button>
 </div>
 <div class="rt-root">
   ${buildReportPages(report, lab, showVisualChart)}
 </div>
-${autoPrint ? '<script>window.onload=function(){setTimeout(function(){window.print()},600)}</script>' : ''}
+<script>
+${INLINE_FIT_SCRIPT}
+window.addEventListener('beforeprint', fitRtPagesToA4);
+window.onload = function() {
+  var runFit = function() {
+    fitRtPagesToA4();
+    ${autoPrint ? 'setTimeout(function(){ fitRtPagesToA4(); window.print(); }, 450);' : ''}
+  };
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(runFit).catch(runFit);
+  } else {
+    runFit();
+  }
+};
+</script>
 </body>
 </html>`;
 }

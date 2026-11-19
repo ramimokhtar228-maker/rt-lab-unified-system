@@ -1,6 +1,7 @@
 import { LabReport, TestProfile, TestParameter } from '../types/lab';
 import { LAB_CATALOG, DEFAULT_STAFF, INITIAL_INDIVIDUAL_TESTS } from '../data/labCatalog';
 import { getDefaultSyncToken } from './githubSync';
+import { getPersistedGlobalStaffSignatures } from './reportTemplate';
 
 const getGitHubToken = (): string => getDefaultSyncToken();
 const REPO_OWNER = 'ramimokhtar228-maker';
@@ -152,7 +153,7 @@ export function convertOrderToLabReport(order: IncomingFinancialOrder): LabRepor
       totalCost: cost
     },
     status: 'draft',
-    staff: DEFAULT_STAFF,
+    staff: { ...DEFAULT_STAFF, ...getPersistedGlobalStaffSignatures() },
     generalComment: invNum ? `طلب فحص مالي صادر بالفاتورة ${invNum} - تم التسميع آلياً من منظومة الفواتير` : 'تم التسميع آلياً من منظومة الفواتير',
     createdAt: nowIso,
     updatedAt: nowIso,

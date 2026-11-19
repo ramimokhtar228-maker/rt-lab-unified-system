@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { LabStaffSignatures } from '../types/lab';
 import { HANDWRITTEN_SIGNATURE_OPTIONS, HandwrittenSignatureKey, resolveHandwrittenSignatureSrc } from '../assets/signatureImages';
@@ -37,6 +37,17 @@ export const StaffSettingsModal: React.FC<StaffSettingsModalProps> = ({
   const [pathologistSigKey, setPathologistSigKey] = useState<HandwrittenSignatureKey>((currentStaff.pathologistSignatureKey as HandwrittenSignatureKey) || 'auto');
 
   const [savedNotification, setSavedNotification] = useState(false);
+
+  useEffect(() => {
+    setActiveChemist(currentStaff.labChemist || '');
+    setActiveVerifier(currentStaff.verifiedBy || '');
+    setActivePathologist(currentStaff.pathologist || '');
+    setActivePhlebotomist(currentStaff.phlebotomist || '');
+    setActiveVisitCoord(currentStaff.visitCoordinator || '');
+    setChemistSigKey((currentStaff.chemistSignatureKey as HandwrittenSignatureKey) || 'auto');
+    setVerifierSigKey((currentStaff.verifierSignatureKey as HandwrittenSignatureKey) || 'auto');
+    setPathologistSigKey((currentStaff.pathologistSignatureKey as HandwrittenSignatureKey) || 'auto');
+  }, [currentStaff]);
 
   const handleAddChemist = () => {
     if (!newChemist.trim()) return;

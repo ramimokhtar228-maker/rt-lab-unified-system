@@ -78,12 +78,8 @@ export const StaffSignaturesPicker: React.FC<StaffSignaturesPickerProps> = ({
   signatures: rawSignatures,
   onChange
 }) => {
-  const signatures: LabStaffSignatures = {
-    ...DEFAULT_STAFF,
-    ...(rawSignatures || {})
-  };
-
   const {
+    staffSignatures: globalStaffSignatures,
     staffSignatureOptions,
     addStaffSignatureOption,
     updateStaffSignatureOption,
@@ -91,7 +87,21 @@ export const StaffSignaturesPicker: React.FC<StaffSignaturesPickerProps> = ({
     updateStaffSignatures
   } = useApp();
 
+  const signatures: LabStaffSignatures = {
+    ...DEFAULT_STAFF,
+    ...(globalStaffSignatures || {}),
+    ...(rawSignatures || {})
+  };
+
   const [savedDefaultAlert, setSavedDefaultAlert] = useState(false);
+  const [autoPersistDefault, setAutoPersistDefault] = useState(true);
+
+  const commitSignatures = (updated: LabStaffSignatures, forceGlobal = false) => {
+    onChange(updated);
+    if (autoPersistDefault || forceGlobal) {
+      updateStaffSignatures(updated);
+    }
+  };
 
   // Modal states for Adding / Editing staff options
   const [addingRole, setAddingRole] = useState<StaffOptionRole | null>(null);
@@ -133,7 +143,7 @@ export const StaffSignaturesPicker: React.FC<StaffSignaturesPickerProps> = ({
   };
 
   const handleToggleHideAll = () => {
-    onChange({
+    commitSignatures({
       ...signatures,
       hideSignatures: !hideAll
     });
@@ -141,15 +151,15 @@ export const StaffSignaturesPicker: React.FC<StaffSignaturesPickerProps> = ({
 
   const handleToggleRole = (role: Exclude<StaffOptionRole, 'custom'>) => {
     if (role === 'chemist') {
-      onChange({ ...signatures, showChemist: !showChemist });
+      commitSignatures({ ...signatures, showChemist: !showChemist });
     } else if (role === 'verifier') {
-      onChange({ ...signatures, showVerifier: !showVerifier });
+      commitSignatures({ ...signatures, showVerifier: !showVerifier });
     } else if (role === 'consultant') {
-      onChange({ ...signatures, showPathologist: !showPathologist });
+      commitSignatures({ ...signatures, showPathologist: !showPathologist });
     } else if (role === 'phlebotomist') {
-      onChange({ ...signatures, showPhlebotomist: !showPhlebotomist });
+      commitSignatures({ ...signatures, showPhlebotomist: !showPhlebotomist });
     } else if (role === 'visit_coordinator') {
-      onChange({ ...signatures, showVisitCoordinator: !showVisitCoordinator });
+      commitSignatures({ ...signatures, showVisitCoordinator: !showVisitCoordinator });
     }
   };
 
@@ -395,21 +405,21 @@ export const StaffSignaturesPicker: React.FC<StaffSignaturesPickerProps> = ({
       signatureKey: 'auto',
       isActive: true
     };
-    onChange({
+    commitSignatures({
       ...signatures,
       extraSignatures: [...extraSignatures, newSlot]
     });
   };
 
   const handleUpdateExtraSlot = (id: string, patch: Partial<ExtraSignatureSlot>) => {
-    onChange({
+    commitSignatures({
       ...signatures,
       extraSignatures: extraSignatures.map(slot => (slot.id === id ? { ...slot, ...patch } : slot))
     });
   };
 
   const handleDeleteExtraSlot = (id: string) => {
-    onChange({
+    commitSignatures({
       ...signatures,
       extraSignatures: extraSignatures.filter(slot => slot.id !== id)
     });
@@ -623,6 +633,19 @@ export const StaffSignaturesPicker: React.FC<StaffSignaturesPickerProps> = ({
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          <label
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-bold bg-slate-100 text-slate-800 border border-slate-300 cursor-pointer select-none"
+            title="عند التفعيل يتم تثبيت أي تعديل أو حذف تقوم به مباشرة كإمضاءات افتراضية دائمة لا تُمسح مع التحديثات"
+          >
+            <input
+              type="checkbox"
+              checked={autoPersistDefault}
+              onChange={(e) => setAutoPersistDefault(e.target.checked)}
+              className="w-3.5 h-3.5 rounded text-rose-700 accent-rose-700"
+            />
+            <span>تثبيت التعديلات تلقائياً كافتراضي دائم</span>
+          </label>
+
           <button
             type="button"
             onClick={() => handleOpenAdd('custom')}
@@ -635,7 +658,7 @@ export const StaffSignaturesPicker: React.FC<StaffSignaturesPickerProps> = ({
           <button
             type="button"
             onClick={() => {
-              updateStaffSignatures(signatures);
+              commitSignatures(signatures, true);
               setSavedDefaultAlert(true);
               setTimeout(() => setSavedDefaultAlert(false), 4000);
             }}
@@ -643,7 +666,7 @@ export const StaffSignaturesPicker: React.FC<StaffSignaturesPickerProps> = ({
             title="حفظ وتثبيت هذه الإمضاءات كبيانات افتراضية لكافة التقارير والمعمل"
           >
             <Check className="w-3.5 h-3.5" />
-            <span>حفظ كإمضاءات افتراضية</span>
+            <span>حفظ وتثبيت الإمضاءات</span>
           </button>
 
           <button
@@ -688,11 +711,11 @@ export const StaffSignaturesPicker: React.FC<StaffSignaturesPickerProps> = ({
           licenseValue: signatures.chemistLicense || '',
           sigKeyValue: signatures.chemistSignatureKey || 'auto',
           accent: 'slate',
-          onNameChange: (val) => onChange({ ...signatures, labChemist: val }),
-          onTitleChange: (val) => onChange({ ...signatures, chemistTitle: val }),
-          onLicenseChange: (val) => onChange({ ...signatures, chemistLicense: val }),
-          onSigKeyChange: (val) => onChange({ ...signatures, chemistSignatureKey: val }),
-          onClearSlot: () => onChange({ ...signatures, labChemist: '', showChemist: false })
+          onNameChange: (val) => commitSignatures({ ...signatures, labChemist: val }),
+          onTitleChange: (val) => commitSignatures({ ...signatures, chemistTitle: val }),
+          onLicenseChange: (val) => commitSignatures({ ...signatures, chemistLicense: val }),
+          onSigKeyChange: (val) => commitSignatures({ ...signatures, chemistSignatureKey: val }),
+          onClearSlot: () => commitSignatures({ ...signatures, labChemist: '', showChemist: false })
         })}
 
         {renderRoleCard({
@@ -704,11 +727,11 @@ export const StaffSignaturesPicker: React.FC<StaffSignaturesPickerProps> = ({
           licenseValue: signatures.verifierLicense || '',
           sigKeyValue: signatures.verifierSignatureKey || 'auto',
           accent: 'blue',
-          onNameChange: (val) => onChange({ ...signatures, verifiedBy: val }),
-          onTitleChange: (val) => onChange({ ...signatures, verifierTitle: val }),
-          onLicenseChange: (val) => onChange({ ...signatures, verifierLicense: val }),
-          onSigKeyChange: (val) => onChange({ ...signatures, verifierSignatureKey: val }),
-          onClearSlot: () => onChange({ ...signatures, verifiedBy: '', showVerifier: false })
+          onNameChange: (val) => commitSignatures({ ...signatures, verifiedBy: val }),
+          onTitleChange: (val) => commitSignatures({ ...signatures, verifierTitle: val }),
+          onLicenseChange: (val) => commitSignatures({ ...signatures, verifierLicense: val }),
+          onSigKeyChange: (val) => commitSignatures({ ...signatures, verifierSignatureKey: val }),
+          onClearSlot: () => commitSignatures({ ...signatures, verifiedBy: '', showVerifier: false })
         })}
 
         {renderRoleCard({
@@ -720,11 +743,11 @@ export const StaffSignaturesPicker: React.FC<StaffSignaturesPickerProps> = ({
           licenseValue: signatures.pathologistLicense || '',
           sigKeyValue: signatures.pathologistSignatureKey || 'auto',
           accent: 'rose',
-          onNameChange: (val) => onChange({ ...signatures, pathologist: val }),
-          onTitleChange: (val) => onChange({ ...signatures, pathologistTitle: val }),
-          onLicenseChange: (val) => onChange({ ...signatures, pathologistLicense: val }),
-          onSigKeyChange: (val) => onChange({ ...signatures, pathologistSignatureKey: val }),
-          onClearSlot: () => onChange({ ...signatures, pathologist: '', showPathologist: false })
+          onNameChange: (val) => commitSignatures({ ...signatures, pathologist: val }),
+          onTitleChange: (val) => commitSignatures({ ...signatures, pathologistTitle: val }),
+          onLicenseChange: (val) => commitSignatures({ ...signatures, pathologistLicense: val }),
+          onSigKeyChange: (val) => commitSignatures({ ...signatures, pathologistSignatureKey: val }),
+          onClearSlot: () => commitSignatures({ ...signatures, pathologist: '', showPathologist: false })
         })}
       </div>
 
@@ -739,11 +762,11 @@ export const StaffSignaturesPicker: React.FC<StaffSignaturesPickerProps> = ({
           licenseValue: signatures.phlebotomistLicense || '',
           sigKeyValue: signatures.phlebotomistSignatureKey || 'auto',
           accent: 'emerald',
-          onNameChange: (val) => onChange({ ...signatures, phlebotomist: val }),
-          onTitleChange: (val) => onChange({ ...signatures, phlebotomistTitle: val }),
-          onLicenseChange: (val) => onChange({ ...signatures, phlebotomistLicense: val }),
-          onSigKeyChange: (val) => onChange({ ...signatures, phlebotomistSignatureKey: val }),
-          onClearSlot: () => onChange({ ...signatures, phlebotomist: '', showPhlebotomist: false })
+          onNameChange: (val) => commitSignatures({ ...signatures, phlebotomist: val }),
+          onTitleChange: (val) => commitSignatures({ ...signatures, phlebotomistTitle: val }),
+          onLicenseChange: (val) => commitSignatures({ ...signatures, phlebotomistLicense: val }),
+          onSigKeyChange: (val) => commitSignatures({ ...signatures, phlebotomistSignatureKey: val }),
+          onClearSlot: () => commitSignatures({ ...signatures, phlebotomist: '', showPhlebotomist: false })
         })}
 
         {renderRoleCard({
@@ -755,11 +778,11 @@ export const StaffSignaturesPicker: React.FC<StaffSignaturesPickerProps> = ({
           licenseValue: signatures.visitCoordinatorLicense || '',
           sigKeyValue: signatures.visitCoordinatorSignatureKey || 'auto',
           accent: 'emerald',
-          onNameChange: (val) => onChange({ ...signatures, visitCoordinator: val }),
-          onTitleChange: (val) => onChange({ ...signatures, visitCoordinatorTitle: val }),
-          onLicenseChange: (val) => onChange({ ...signatures, visitCoordinatorLicense: val }),
-          onSigKeyChange: (val) => onChange({ ...signatures, visitCoordinatorSignatureKey: val }),
-          onClearSlot: () => onChange({ ...signatures, visitCoordinator: '', showVisitCoordinator: false })
+          onNameChange: (val) => commitSignatures({ ...signatures, visitCoordinator: val }),
+          onTitleChange: (val) => commitSignatures({ ...signatures, visitCoordinatorTitle: val }),
+          onLicenseChange: (val) => commitSignatures({ ...signatures, visitCoordinatorLicense: val }),
+          onSigKeyChange: (val) => commitSignatures({ ...signatures, visitCoordinatorSignatureKey: val }),
+          onClearSlot: () => commitSignatures({ ...signatures, visitCoordinator: '', showVisitCoordinator: false })
         })}
       </div>
 
@@ -794,7 +817,7 @@ export const StaffSignaturesPicker: React.FC<StaffSignaturesPickerProps> = ({
                     signatureKey: chosen.signatureKey || 'auto',
                     isActive: true
                   };
-                  onChange({
+                  commitSignatures({
                     ...signatures,
                     extraSignatures: [...extraSignatures, slot]
                   });

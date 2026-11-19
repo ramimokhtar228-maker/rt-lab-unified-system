@@ -1,5 +1,5 @@
 import { LabReport, LabInfo } from '../types';
-import { buildReportDocument } from './reportTemplate';
+import { buildReportDocument, getPersistedGlobalStaffSignatures } from './reportTemplate';
 import { DEFAULT_STAFF } from '../data/labCatalog';
 
 /** Opens the unified English-only report in a print-ready window (A4). */
@@ -10,10 +10,11 @@ export function openPrintReportWindow(report: LabReport, labInfo?: LabInfo, show
     patient: {
       ...report.patient,
       sampleDate: report.patient?.sampleDate || report.createdAt || nowIso,
-      reportingDate: nowIso
+      reportingDate: report.patient?.reportingDate || nowIso
     },
     staff: {
       ...DEFAULT_STAFF,
+      ...getPersistedGlobalStaffSignatures(),
       ...(labInfo as any)?.staffSignatures,
       ...report.staff
     }

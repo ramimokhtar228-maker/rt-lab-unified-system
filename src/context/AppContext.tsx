@@ -855,9 +855,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // 13b. Staff Signatures and Options
   const [staffSignatures, setStaffSignatures] = useState<LabStaffSignatures>(() => {
     try {
-      const saved = localStorage.getItem(STAFF_SIGNATURES_KEY);
+      const saved =
+        localStorage.getItem(STAFF_SIGNATURES_KEY) ||
+        localStorage.getItem('rt_lab_staff_v3') ||
+        localStorage.getItem('rt_lab_staff_v2');
       if (saved) {
-        return { ...DEFAULT_STAFF, ...JSON.parse(saved) };
+        const parsed = JSON.parse(saved);
+        return { ...DEFAULT_STAFF, ...parsed };
       }
       return DEFAULT_STAFF;
     } catch {
@@ -1198,6 +1202,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           if (Array.isArray(idbData.staffMembers) && idbData.staffMembers.length > 0) {
             setStaffMembers(prev => mergeCollection('staffMembers', prev, idbData.staffMembers!));
           }
+          if (idbData.staffSignatures && typeof idbData.staffSignatures === 'object') {
+            setStaffSignatures(prev => mergeSettingsObject(
+              'staffSignatures',
+              prev,
+              idbData.staffSignatures,
+              idbData.updatedAt ? { staffSignatures: idbData.updatedAt } : {}
+            ));
+          }
+          if (idbData.staffSignatureOptions && typeof idbData.staffSignatureOptions === 'object') {
+            setStaffSignatureOptions(prev => mergeSettingsObject(
+              'staffSignatureOptions',
+              prev,
+              idbData.staffSignatureOptions,
+              idbData.updatedAt ? { staffSignatureOptions: idbData.updatedAt } : {}
+            ));
+          }
         }
 
         const localQueueStr = localStorage.getItem('rt_lab_cases_sync_v1');
@@ -1348,6 +1368,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setIncomeRecords(prev => prev.filter(i => i.id !== msg.payload));
       } else if (msg.action === 'UPDATE_LAB_INFO' && msg.payload) {
         setLabInfo(msg.payload);
+      } else if (msg.action === 'UPDATE_STAFF' && msg.payload) {
+        stampSetting('staffSignatures');
+        setStaffSignatures(msg.payload);
+        safeSetLocalStorage(STAFF_SIGNATURES_KEY, JSON.stringify(msg.payload));
+        latestStateRef.current.staffSignatures = msg.payload;
+      } else if (msg.action === 'UPDATE_STAFF_OPTIONS' && msg.payload) {
+        stampSetting('staffSignatureOptions');
+        setStaffSignatureOptions(prev => mergeSettingsObject('staffSignatureOptions', prev, msg.payload));
       } else if (msg.action === 'UPDATE_LOYALTY_CONFIG' && msg.payload) {
         stampSetting('loyaltyConfig');
         setLoyaltyConfig(msg.payload);
@@ -1473,6 +1501,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (msg.payload.labInfo) {
           setLabInfo(msg.payload.labInfo);
         }
+        if (msg.payload.staffSignatures) {
+          setStaffSignatures(prev => mergeSettingsObject('staffSignatures', prev, msg.payload.staffSignatures, msg.payload.settingsStamps));
+        }
+        if (msg.payload.staffSignatureOptions) {
+          setStaffSignatureOptions(prev => mergeSettingsObject('staffSignatureOptions', prev, msg.payload.staffSignatureOptions, msg.payload.settingsStamps));
+        }
         if (Array.isArray(msg.payload.packages) && msg.payload.packages.length > 0) {
           setPackages(prev => mergePackagesWithDefaults(msg.payload.packages, prev));
         }
@@ -1508,6 +1542,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
         if (res.data.labInfo) {
           setLabInfo(res.data.labInfo);
+        }
+        if (res.data.staffSignatures) {
+          setStaffSignatures(prev => mergeSettingsObject('staffSignatures', prev, res.data.staffSignatures, res.data.settingsStamps));
+        }
+        if (res.data.staffSignatureOptions) {
+          setStaffSignatureOptions(prev => mergeSettingsObject('staffSignatureOptions', prev, res.data.staffSignatureOptions, res.data.settingsStamps));
         }
         if (Array.isArray(res.data.testCatalog) && res.data.testCatalog.length > 0) {
           setTestCatalog(prev => mergeCatalogWithDefaults(res.data.testCatalog, prev));
@@ -1549,6 +1589,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             }
             if (ghRes.data.labInfo) {
               setLabInfo(ghRes.data.labInfo);
+            }
+            if (ghRes.data.staffSignatures) {
+              setStaffSignatures(prev => mergeSettingsObject('staffSignatures', prev, ghRes.data.staffSignatures, ghRes.data.settingsStamps));
+            }
+            if (ghRes.data.staffSignatureOptions) {
+              setStaffSignatureOptions(prev => mergeSettingsObject('staffSignatureOptions', prev, ghRes.data.staffSignatureOptions, ghRes.data.settingsStamps));
             }
             if (Array.isArray(ghRes.data.testCatalog) && ghRes.data.testCatalog.length > 0) {
               setTestCatalog(prev => mergeCatalogWithDefaults(ghRes.data.testCatalog, prev));
@@ -4022,6 +4068,7 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
       safeSetLocalStorage(STAFF_OPTIONS_KEY, JSON.stringify(updated));
       stampSetting('staffSignatureOptions');
       latestStateRef.current.staffSignatureOptions = updated;
+      realtimeSyncManager.broadcastAction('UPDATE_STAFF_OPTIONS', updated);
       if (githubConfig.token && githubConfig.autoSync) {
         setPendingCloudPush(true);
         pushFullStoreToGitHub(githubConfig, buildFullSyncSnapshot({ staffSignatureOptions: updated }))
@@ -4052,6 +4099,7 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
       safeSetLocalStorage(STAFF_OPTIONS_KEY, JSON.stringify(updated));
       stampSetting('staffSignatureOptions');
       latestStateRef.current.staffSignatureOptions = updated;
+      realtimeSyncManager.broadcastAction('UPDATE_STAFF_OPTIONS', updated);
       if (githubConfig.token && githubConfig.autoSync) {
         setPendingCloudPush(true);
         pushFullStoreToGitHub(githubConfig, buildFullSyncSnapshot({ staffSignatureOptions: updated }))
@@ -4164,6 +4212,7 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
       safeSetLocalStorage(STAFF_OPTIONS_KEY, JSON.stringify(updated));
       stampSetting('staffSignatureOptions');
       latestStateRef.current.staffSignatureOptions = updated;
+      realtimeSyncManager.broadcastAction('UPDATE_STAFF_OPTIONS', updated);
       if (githubConfig.token && githubConfig.autoSync) {
         setPendingCloudPush(true);
         pushFullStoreToGitHub(githubConfig, buildFullSyncSnapshot({ staffSignatureOptions: updated }))
@@ -4224,9 +4273,18 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
       if (data.packages) setPackages(data.packages);
       if (data.diagnosticProfiles) setDiagnosticProfiles(data.diagnosticProfiles);
       if (data.staffMembers) setStaffMembers(data.staffMembers);
-      if (data.staffSignatures) setStaffSignatures(data.staffSignatures);
-      if (data.staffSignatureOptions) setStaffSignatureOptions(data.staffSignatureOptions);
-      if (data.labInfo) setLabInfo(data.labInfo);
+      if (data.staffSignatures) {
+        stampSetting('staffSignatures');
+        setStaffSignatures({ ...DEFAULT_STAFF, ...data.staffSignatures });
+      }
+      if (data.staffSignatureOptions) {
+        stampSetting('staffSignatureOptions');
+        setStaffSignatureOptions(data.staffSignatureOptions);
+      }
+      if (data.labInfo) {
+        stampSetting('labInfo');
+        setLabInfo(data.labInfo);
+      }
       logAction('BACKUP', 'SETTINGS', 'استعادة قاعدة البيانات الموحدة من نسخة احتياطية');
       return { success: true, message: 'تم استعادة البيانات بنجاح!' };
     } catch {
@@ -4332,8 +4390,11 @@ const recordAttendance = useCallback((employeeId: string, status: AttendanceReco
           setLabInfo(data.labInfo);
         }
         if (data.staffSignatures) {
-          setStaffSignatures(data.staffSignatures);
-          safeSetLocalStorage(STAFF_SIGNATURES_KEY, JSON.stringify(data.staffSignatures));
+          setStaffSignatures(prev => {
+            const next = mergeSettingsObject('staffSignatures', prev, data.staffSignatures, data.settingsStamps);
+            safeSetLocalStorage(STAFF_SIGNATURES_KEY, JSON.stringify(next));
+            return next;
+          });
         }
         if (data.staffSignatureOptions) {
           setStaffSignatureOptions(prev => {

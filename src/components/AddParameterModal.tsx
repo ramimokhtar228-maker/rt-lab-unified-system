@@ -131,14 +131,14 @@ export const AddParameterModal: React.FC<AddParameterModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">المعدل الطبيعي الوصفي / النصي (Text Reference):</label>
-            <input
-              type="text"
+            <label className="block text-xs font-bold text-slate-700 mb-1">المعدل الطبيعي الوصفي أو متعدد القيم (Text Reference):</label>
+            <textarea
+              rows={2}
               value={textReference}
               onChange={(e) => setTextReference(e.target.value)}
-              className="w-full text-xs p-2 border border-slate-300 rounded-lg"
+              className="w-full text-xs p-2 border border-slate-300 rounded-lg font-mono leading-relaxed"
               dir="ltr"
-              placeholder="e.g. Negative, Non-reactive, < 1.0"
+              placeholder={'e.g. Normal: < 100 | Impaired: 100-125 | Diabetic: >= 126\n(أو كل قيمة في سطر)'}
             />
           </div>
 
