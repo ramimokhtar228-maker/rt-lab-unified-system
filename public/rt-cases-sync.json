@@ -7106,5 +7106,90 @@
     "remainingAmount": 0,
     "paymentMethod": "cash",
     "createdAt": "2026-11-20T16:44:27.942Z"
+  },
+  {
+    "id": "rep-1795195094648",
+    "reportNumber": "RT-2026-915",
+    "invoiceNumber": "inv-1795195094708",
+    "barcode": "RT-10945",
+    "patientName": "محمد صلاح سالم",
+    "age": 38,
+    "gender": "male",
+    "phone": "0 10 67570914",
+    "referringDoctor": "Himself",
+    "tests": [
+      {
+        "id": "prof-1795195094645-i5uu",
+        "code": "CBC",
+        "nameAr": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
+        "nameEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+        "category": "Hematology",
+        "sampleType": "EDTA Whole Blood",
+        "unit": "g/dL",
+        "minNormal": 12,
+        "maxNormal": 17.5,
+        "textReference": "M: 13.0 - 17.5 | F: 12.0 - 15.5 g/dL"
+      },
+      {
+        "id": "prof-1795195094646-0to0",
+        "code": "AUTOIMMUNE",
+        "nameAr": "Rheumatology & Autoimmune Markers",
+        "nameEn": "Rheumatology & Autoimmune Markers",
+        "category": "Immunology",
+        "sampleType": "Serum & Citrate Blood",
+        "unit": "mm/1st hr",
+        "minNormal": 0,
+        "maxNormal": 15,
+        "textReference": ""
+      },
+      {
+        "id": "prof-1795195094647-qyxm",
+        "code": "OCCULT_BLOOD_FIT",
+        "nameAr": "Fecal Occult Blood Test (FIT / FOBT)",
+        "nameEn": "Fecal Occult Blood Test (FIT / FOBT)",
+        "category": "Gastroenterology",
+        "sampleType": "Fresh Stool",
+        "unit": "",
+        "textReference": "Negative (< 50 ng/mL buffer)"
+      },
+      {
+        "id": "prof-1795195094647-2yeh",
+        "code": "HP_STOOL_AG",
+        "nameAr": "Helicobacter Pylori Stool Antigen (HpSA)",
+        "nameEn": "Helicobacter Pylori Stool Antigen (HpSA)",
+        "category": "Gastroenterology",
+        "sampleType": "Fresh Stool Specimen",
+        "unit": "Qualitative",
+        "textReference": "Negative (No H. Pylori antigen detected in stool)"
+      },
+      {
+        "id": "prof-1795195094648-uzct",
+        "code": "FAECAL_CALPROTECTIN",
+        "nameAr": "Fecal Calprotectin Quantitative",
+        "nameEn": "Fecal Calprotectin Quantitative",
+        "category": "Gastroenterology",
+        "sampleType": "Fresh Stool (First Morning)",
+        "unit": "µg/g",
+        "maxNormal": 50,
+        "textReference": "Normal: < 50 µg/g | Borderline: 50 - 120 | Active IBD: > 120"
+      }
+    ],
+    "netAmount": 987,
+    "paidAmount": 987,
+    "paymentStatus": "paid",
+    "financialClearance": "CLEARED_FOR_RELEASE",
+    "bookingType": "branch",
+    "isHomeVisit": false,
+    "visitFee": 0,
+    "visitAddress": "",
+    "homeAddress": "",
+    "deliveryNotes": "",
+    "visitSpecialist": "",
+    "discount": 1420,
+    "testsSubtotal": 2407,
+    "subtotal": 987,
+    "remainingAmount": 0,
+    "paymentMethod": "cash",
+    "createdAt": "2026-11-20T17:18:14.651Z"
   }
 ]
