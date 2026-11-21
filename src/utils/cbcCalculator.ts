@@ -1,34 +1,15 @@
 import { TestParameter, ResultFlag } from '../types';
+import { calculateFlag as unifiedCalculateFlag, CalculateFlagContext } from './calculator';
 
 export function calculateFlag(
   resultVal: string,
   minNormal?: number,
   maxNormal?: number,
   panicLow?: number,
-  panicHigh?: number
+  panicHigh?: number,
+  context?: CalculateFlagContext
 ): ResultFlag {
-  const numeric = parseFloat(resultVal);
-  if (isNaN(numeric)) {
-    const lower = (resultVal || '').trim().toLowerCase();
-    if (lower === 'positive' || lower === 'reactive' || lower === 'detected' || lower === 'إيجابي') {
-      return 'ABNORMAL';
-    }
-    if (lower === 'negative' || lower === 'non-reactive' || lower === 'not detected' || lower === 'سلبي') {
-      return 'NORMAL';
-    }
-    return '';
-  }
-
-  // Panic / Critical Values Check
-  if (panicHigh !== undefined && numeric >= panicHigh) return 'PANIC_HIGH';
-  if (panicLow !== undefined && numeric <= panicLow) return 'PANIC_LOW';
-
-  // Normal Range Check
-  if (maxNormal !== undefined && numeric > maxNormal) return 'HIGH';
-  if (minNormal !== undefined && numeric < minNormal) return 'LOW';
-
-  if (minNormal !== undefined || maxNormal !== undefined) return 'NORMAL';
-  return '';
+  return unifiedCalculateFlag(resultVal, minNormal, maxNormal, panicLow, panicHigh, context);
 }
 
 export function formatReferenceDisplay(param: TestParameter): string {

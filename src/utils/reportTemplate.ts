@@ -1409,7 +1409,10 @@ function renderRowGaugeHtml(p: TestParameter): string {
     if (p.flag === 'NORMAL') {
       return `<span style="font-size: 8.5px; font-weight: 700; color: #059669; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 1.5px 6px; border-radius: 3px;">Normal</span>`;
     }
-    if (p.flag === 'HIGH' || p.flag === 'ABNORMAL') {
+    if (p.flag === 'ABNORMAL') {
+      return `<span style="font-size: 8.5px; font-weight: 700; color: #dc2626; background: #fee2e2; border: 1px solid #fca5a5; padding: 1.5px 6px; border-radius: 3px;">Abnormal</span>`;
+    }
+    if (p.flag === 'HIGH') {
       return `<span style="font-size: 8.5px; font-weight: 700; color: #dc2626; background: #fee2e2; border: 1px solid #fca5a5; padding: 1.5px 6px; border-radius: 3px;">Reactive</span>`;
     }
     return `<span style="color: #cbd5e1; text-align: center; display: block; font-size: 9px;">—</span>`;
@@ -1495,6 +1498,7 @@ export function isElectrolytesProfile(profile: TestProfile): boolean {
   const code = (profile.profileCode || (profile as any).code || '').toUpperCase();
   const tEn = (profile.titleEn || '').toLowerCase();
   const tAr = (profile.titleAr || '');
+  if (code === 'VITAMINS_MINERALS' || tEn.includes('vitamin')) return false;
   return code === 'ELECTROLYTES' || tEn.includes('electrolyte') || tEn.includes('minerals') || tAr.includes('أملاح') || tAr.includes('شوارد');
 }
 
@@ -1523,7 +1527,7 @@ export function isVitaminProfile(profile: TestProfile): boolean {
   const code = (profile.profileCode || (profile as any).code || '').toUpperCase();
   const tEn = (profile.titleEn || '').toLowerCase();
   const tAr = (profile.titleAr || '');
-  return code === 'VITAMINS' || tEn.includes('vitamin') || tAr.includes('فيتامين');
+  return code === 'VITAMINS_MINERALS' || code === 'VITAMINS' || tEn.includes('vitamin') || tAr.includes('فيتامين');
 }
 
 export function renderCbcVisualsHtml(params: TestParameter[]): string {
@@ -1971,11 +1975,65 @@ export function renderIronVisualsHtml(params: TestParameter[]): string {
 export function renderVitaminsVisualsHtml(params: TestParameter[]): string {
   const vitD = getNum(params, ['vitamin d', '25-oh', 'vit d']);
   const vitB12 = getNum(params, ['vitamin b12', 'vit b12', 'b12']);
+  const folate = getNum(params, ['folic', 'folate', 'b9']);
+  const ca = getNum(params, ['total serum calcium', 'calcium (ca)', 'calcium']);
+  const mg = getNum(params, ['magnesium']);
+  const zn = getNum(params, ['zinc']);
+  const ferritin = getNum(params, ['ferritin']);
+  const hasMinerals = ca !== null || mg !== null || zn !== null || ferritin !== null ||
+    params.some(p => /calcium|magnesium|zinc|phosphorus|copper|iron|ferritin/i.test(p.name || ''));
 
   const dStatus = vitD === null ? '' :
     vitD < 10 ? 'Severe Deficiency' :
     vitD < 20 ? 'Deficiency' :
     vitD < 30 ? 'Insufficiency' : 'Optimal Sufficiency (30-100 ng/mL)';
+
+  if (hasMinerals) {
+    return `
+  <div class="rt-diag-panel">
+    <h3>
+      <span>📊 Vitamins & Essential Minerals Bioavailability Scale</span>
+      <span class="rt-diag-badge ${vitD && vitD < 20 ? 'alert' : 'opt'}">${vitD ? dStatus : 'Vitamins & Minerals Profile'}</span>
+    </h3>
+    <div class="rt-diag-grid-4">
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Vitamin D (25-OH)</span><span class="rt-diag-sub">30 - 100 ng/mL</span></div>
+        <div class="rt-diag-val" style="color:${(vitD !== null && vitD < 30)?'#b45309':'#15803d'};">${vitD !== null ? `${vitD} ng/mL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low" style="width:30%;"></div><div class="rt-gauge-seg high" style="width:20%; background:#fef3c7;"></div><div class="rt-gauge-seg norm" style="width:50%;"></div><div class="rt-gauge-pin" style="left:${calcPos(vitD, 10, 80)}%; background:${(vitD!==null&&vitD<20)?'#b91c1c':((vitD!==null&&vitD<30)?'#b45309':'#15803d')};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Vitamin B12</span><span class="rt-diag-sub">211 - 911 pg/mL</span></div>
+        <div class="rt-diag-val">${vitB12 !== null ? `${vitB12} pg/mL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low"></div><div class="rt-gauge-seg norm"></div><div class="rt-gauge-seg high"></div><div class="rt-gauge-pin" style="left:${calcPos(vitB12, 211, 911)}%; background:${calcColor(vitB12, 211, 911)};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Folic Acid (B9)</span><span class="rt-diag-sub">3.9 - 26.8 ng/mL</span></div>
+        <div class="rt-diag-val">${folate !== null ? `${folate} ng/mL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low"></div><div class="rt-gauge-seg norm"></div><div class="rt-gauge-seg high"></div><div class="rt-gauge-pin" style="left:${calcPos(folate, 3.89, 26.8)}%; background:${calcColor(folate, 3.89, 26.8)};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Total Calcium</span><span class="rt-diag-sub">8.5 - 10.5 mg/dL</span></div>
+        <div class="rt-diag-val">${ca !== null ? `${ca} mg/dL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low"></div><div class="rt-gauge-seg norm"></div><div class="rt-gauge-seg high"></div><div class="rt-gauge-pin" style="left:${calcPos(ca, 8.5, 10.5)}%; background:${calcColor(ca, 8.5, 10.5)};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Magnesium (Mg)</span><span class="rt-diag-sub">1.7 - 2.6 mg/dL</span></div>
+        <div class="rt-diag-val">${mg !== null ? `${mg} mg/dL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low"></div><div class="rt-gauge-seg norm"></div><div class="rt-gauge-seg high"></div><div class="rt-gauge-pin" style="left:${calcPos(mg, 1.7, 2.6)}%; background:${calcColor(mg, 1.7, 2.6)};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Serum Zinc (Zn)</span><span class="rt-diag-sub">70 - 120 ug/dL</span></div>
+        <div class="rt-diag-val">${zn !== null ? `${zn} ug/dL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low"></div><div class="rt-gauge-seg norm"></div><div class="rt-gauge-seg high"></div><div class="rt-gauge-pin" style="left:${calcPos(zn, 70, 120)}%; background:${calcColor(zn, 70, 120)};"></div></div>
+      </div>
+      <div class="rt-diag-card">
+        <div class="rt-diag-card-head"><span>Serum Ferritin</span><span class="rt-diag-sub">30 - 300 ng/mL</span></div>
+        <div class="rt-diag-val">${ferritin !== null ? `${ferritin} ng/mL` : '—'}</div>
+        <div class="rt-gauge-track"><div class="rt-gauge-seg low"></div><div class="rt-gauge-seg norm"></div><div class="rt-gauge-seg high"></div><div class="rt-gauge-pin" style="left:${calcPos(ferritin, 30, 300)}%; background:${calcColor(ferritin, 30, 300)};"></div></div>
+      </div>
+    </div>
+  </div>`;
+  }
 
   return `
   <div class="rt-diag-panel">

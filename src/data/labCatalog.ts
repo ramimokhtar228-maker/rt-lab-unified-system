@@ -146,219 +146,186 @@ export const COMMON_INTERPRETATIONS: { [key: string]: string[] } = {
     'Euthyroid state: TSH, Free T3, and Free T4 are within euthyroid reference ranges.',
     'Elevated TSH with normal Free T4, findings compatible with Subclinical Hypothyroidism.',
     'Suppressed TSH with elevated Free T4/Free T3, suggestive of Primary Hyperthyroidism.'
+  ],
+  VITAMINS_MINERALS: [
+    'Vitamins and essential serum minerals are within optimal physiological reference ranges.',
+    '25-Hydroxy Vitamin D insufficiency/deficiency noted. Vitamin D3 supplementation and follow-up after 3 months recommended.',
+    'Combined Vitamin B12 and Iron/Ferritin depletion noted. Nutritional supplementation and hematological follow-up advised.',
+    'Mild hypomagnesemia / zinc deficiency observed; dietary supplementation and clinical correlation recommended.'
   ]
 };
 
 export const LAB_CATALOG: CatalogProfileTemplate[] = [
   {
     "code": "CBC",
-    "titleEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
-    "titleAr": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
+    "titleEn": "Complete Blood Picture",
+    "titleAr": "صورة الدم الكاملة (Complete Blood Picture)",
     "category": "Hematology",
     "sampleType": "EDTA Whole Blood",
     "profilePrice": 180,
-    "defaultInterpretation": "Automated 5-part differential and erythrocytic/thrombocytic indices evaluated according to international hematology consensus guidelines (ICSH / CLSI).",
+    "defaultInterpretation": "Complete blood picture parameters evaluated according to international hematology consensus guidelines (ICSH / CLSI).",
     "parameters": [
       {
-        "name": "Hemoglobin (Hb)",
+        "name": "Haemoglobin (EDTA Blood)",
         "unit": "g/dL",
-        "minNormal": 12.0,
-        "maxNormal": 17.5,
+        "minNormal": 12.5,
+        "maxNormal": 16.5,
         "panicLow": 7.0,
         "panicHigh": 20.0,
         "method": "Automated SLS-Hb",
-        "textReference": "M: 13.0 - 17.5 | F: 12.0 - 15.5 g/dL"
+        "textReference": "12.5 - 16.5"
       },
       {
-        "name": "R.B.Cs Count",
-        "unit": "x10^6/µL",
-        "minNormal": 4.0,
-        "maxNormal": 5.9,
-        "panicLow": 2.0,
-        "panicHigh": 7.0,
-        "method": "Electrical Impedance",
-        "textReference": "M: 4.5 - 5.9 | F: 4.0 - 5.2 x10^6/µL"
-      },
-      {
-        "name": "Hematocrit (PCV / HCT)",
+        "name": "Haematocrit (PCV)",
         "unit": "%",
-        "minNormal": 36.0,
-        "maxNormal": 52.0,
+        "minNormal": 37,
+        "maxNormal": 49,
         "panicLow": 20.0,
         "panicHigh": 60.0,
         "notes": "Auto-calculated: Hb × 3",
-        "textReference": "M: 40.0 - 52.0% | F: 36.0 - 48.0%"
+        "textReference": "37 - 49"
       },
       {
-        "name": "M.C.V",
-        "unit": "fL",
-        "minNormal": 80.0,
-        "maxNormal": 100.0,
+        "name": "RBCs Count (EDTA Blood)",
+        "unit": "Millions / cmm",
+        "minNormal": 4.5,
+        "maxNormal": 5.3,
+        "panicLow": 2.0,
+        "panicHigh": 7.0,
+        "method": "Electrical Impedance",
+        "textReference": "4.5 - 5.3"
+      },
+      {
+        "name": "MCV",
+        "unit": "fl",
+        "minNormal": 78,
+        "maxNormal": 98,
         "notes": "Auto-calculated: (PCV × 10) / RBC",
-        "textReference": "80.0 - 100.0 fL"
+        "textReference": "78 - 98"
       },
       {
-        "name": "M.C.H",
+        "name": "MCH",
         "unit": "pg",
-        "minNormal": 27.0,
-        "maxNormal": 33.0,
+        "minNormal": 26,
+        "maxNormal": 33,
         "notes": "Auto-calculated: (Hb × 10) / RBC",
-        "textReference": "27.0 - 33.0 pg"
+        "textReference": "26 - 33"
       },
       {
-        "name": "M.C.H.C",
+        "name": "MCHC",
         "unit": "g/dL",
-        "minNormal": 32.0,
-        "maxNormal": 36.0,
+        "minNormal": 31,
+        "maxNormal": 37,
         "notes": "Auto-calculated: (Hb × 100) / PCV",
-        "textReference": "32.0 - 36.0 g/dL"
+        "textReference": "31 - 37"
       },
       {
-        "name": "R.D.W-CV",
+        "name": "RDW-CV",
         "unit": "%",
         "minNormal": 11.5,
-        "maxNormal": 14.5,
-        "textReference": "11.5 - 14.5 %"
+        "maxNormal": 15,
+        "textReference": "11.5 - 15"
       },
       {
-        "name": "R.D.W-SD",
-        "unit": "fL",
-        "minNormal": 39.0,
-        "maxNormal": 46.0,
-        "textReference": "39.0 - 46.0 fL"
-      },
-      {
-        "name": "Platelets Count",
-        "unit": "x10^3/µL",
-        "minNormal": 150.0,
-        "maxNormal": 450.0,
+        "name": "Platelet Count",
+        "unit": "Thousands / cmm",
+        "minNormal": 150,
+        "maxNormal": 450,
         "panicLow": 20.0,
         "panicHigh": 1000.0,
         "method": "Electrical Impedance",
-        "textReference": "150 - 450 x10^3/µL"
+        "textReference": "150 - 450"
       },
       {
-        "name": "MPV (Mean Platelet Volume)",
-        "unit": "fL",
-        "minNormal": 7.4,
-        "maxNormal": 11.5,
-        "textReference": "7.4 - 11.5 fL"
-      },
-      {
-        "name": "PCT (Plateletcrit)",
-        "unit": "%",
-        "minNormal": 0.17,
-        "maxNormal": 0.38,
-        "notes": "Auto-calculated: (PLT × MPV) / 10,000",
-        "textReference": "0.17 - 0.38 %"
-      },
-      {
-        "name": "PDW (Platelet Dist. Width)",
-        "unit": "%",
-        "minNormal": 9.0,
-        "maxNormal": 17.0,
-        "textReference": "9.0 - 17.0 %"
-      },
-      {
-        "name": "P-LCR (Platelet Large Cell Ratio)",
-        "unit": "%",
-        "minNormal": 15.0,
-        "maxNormal": 45.0,
-        "textReference": "15.0 - 45.0 %"
-      },
-      {
-        "name": "Total Leucocytic Count (TLC / WBC)",
-        "unit": "x10^3/µL",
-        "minNormal": 4.0,
-        "maxNormal": 11.0,
+        "name": "Total Leucocytic Count (EDTA Blood)",
+        "unit": "Thousands / cmm",
+        "minNormal": 4.5,
+        "maxNormal": 11,
         "panicLow": 2.0,
         "panicHigh": 30.0,
         "method": "Flow Cytometry / Impedance",
-        "textReference": "4.0 - 11.0 x10^3/µL"
+        "textReference": "4.5 - 11"
       },
       {
         "name": "Neutrophils %",
         "unit": "%",
-        "minNormal": 40.0,
-        "maxNormal": 70.0,
-        "textReference": "40.0 - 70.0 %"
+        "minNormal": 40,
+        "maxNormal": 75,
+        "textReference": "40 - 75"
       },
       {
         "name": "Lymphocytes %",
         "unit": "%",
-        "minNormal": 20.0,
-        "maxNormal": 45.0,
-        "textReference": "20.0 - 45.0 %"
+        "minNormal": 20,
+        "maxNormal": 45,
+        "textReference": "20 - 45"
       },
       {
         "name": "Monocytes %",
         "unit": "%",
-        "minNormal": 2.0,
-        "maxNormal": 8.0,
-        "textReference": "2.0 - 8.0 %"
+        "minNormal": 2,
+        "maxNormal": 10,
+        "textReference": "2 - 10"
       },
       {
         "name": "Eosinophils %",
         "unit": "%",
-        "minNormal": 1.0,
-        "maxNormal": 6.0,
-        "textReference": "1.0 - 6.0 %"
+        "minNormal": 1,
+        "maxNormal": 6,
+        "textReference": "1 - 6"
       },
       {
         "name": "Basophils %",
         "unit": "%",
-        "minNormal": 0.0,
-        "maxNormal": 1.0,
-        "textReference": "0.0 - 1.0 %"
+        "minNormal": 0,
+        "maxNormal": 2,
+        "textReference": "0 - 2"
       },
       {
-        "name": "Absolute Neutrophils (ANC)",
-        "unit": "x10^3/µL",
+        "name": "Absolute Neutrophils",
+        "unit": "x10^9/L",
         "minNormal": 1.8,
-        "maxNormal": 7.5,
+        "maxNormal": 8,
         "panicLow": 0.5,
         "notes": "Auto-calculated: (WBC × Neut%) / 100",
-        "textReference": "1.8 - 7.5 x10^3/µL"
+        "textReference": "1.8 - 8"
       },
       {
-        "name": "Absolute Lymphocytes (ALC)",
-        "unit": "x10^3/µL",
-        "minNormal": 1.0,
-        "maxNormal": 4.5,
+        "name": "Absolute Lymphocytes",
+        "unit": "x10^9/L",
+        "minNormal": 1.2,
+        "maxNormal": 5.2,
         "notes": "Auto-calculated: (WBC × Lymph%) / 100",
-        "textReference": "1.0 - 4.5 x10^3/µL"
+        "textReference": "1.2 - 5.2"
       },
       {
-        "name": "Absolute Monocytes (AMC)",
-        "unit": "x10^3/µL",
-        "minNormal": 0.1,
-        "maxNormal": 0.8,
+        "name": "Absolute Monocytes",
+        "unit": "x10^9/L",
+        "minNormal": 0.2,
+        "maxNormal": 1,
         "notes": "Auto-calculated: (WBC × Mono%) / 100",
-        "textReference": "0.1 - 0.8 x10^3/µL"
+        "textReference": "0.2 - 1"
       },
       {
-        "name": "Absolute Eosinophils (AEC)",
-        "unit": "x10^3/µL",
-        "minNormal": 0.04,
+        "name": "Absolute Eosinophils",
+        "unit": "x10^9/L",
+        "minNormal": 0.1,
         "maxNormal": 0.45,
         "notes": "Auto-calculated: (WBC × Eos%) / 100",
-        "textReference": "0.04 - 0.45 x10^3/µL"
+        "textReference": "0.1 - 0.45"
       },
       {
-        "name": "Absolute Basophils (ABC)",
-        "unit": "x10^3/µL",
-        "minNormal": 0.01,
-        "maxNormal": 0.10,
+        "name": "Absolute Basophils",
+        "unit": "x10^9/L",
+        "minNormal": 0,
+        "maxNormal": 0.1,
         "notes": "Auto-calculated: (WBC × Baso%) / 100",
-        "textReference": "0.01 - 0.10 x10^3/µL"
+        "textReference": "0 - 0.1"
       },
       {
-        "name": "NLR (Neutrophil/Lymphocyte Ratio)",
-        "unit": "Ratio",
-        "minNormal": 1.0,
-        "maxNormal": 3.0,
-        "notes": "Auto-calculated: Neut% / Lymph%",
-        "textReference": "1.0 - 3.0 Ratio"
+        "name": "Other Cells",
+        "unit": "",
+        "textReference": "Nil"
       }
     ]
   },
@@ -1835,6 +1802,135 @@ export const LAB_CATALOG: CatalogProfileTemplate[] = [
         "name": "HAV IgM (Hepatitis A)",
         "unit": "Index (S/CO)",
         "textReference": "Negative"
+      }
+    ]
+  },
+  {
+    "code": "VITAMINS_MINERALS",
+    "titleEn": "Vitamins & Minerals Profile",
+    "titleAr": "بروفايل الفيتامينات والمعادن الشامل (Vitamins & Minerals)",
+    "category": "Vitamins & Minerals",
+    "sampleType": "Serum (Morning Fasting)",
+    "profilePrice": 850,
+    "defaultInterpretation": "Comprehensive evaluation of essential fat- and water-soluble vitamins alongside key serum minerals and trace elements.",
+    "parameters": [
+      {
+        "name": "25-Hydroxy Vitamin D Total (25-OH Vit D)",
+        "unit": "ng/mL",
+        "minNormal": 30,
+        "maxNormal": 100,
+        "method": "CLIA",
+        "textReference": "Deficiency: < 20 | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 ng/mL"
+      },
+      {
+        "name": "Vitamin B12 (Cyanocobalamin)",
+        "unit": "pg/mL",
+        "minNormal": 211,
+        "maxNormal": 911,
+        "method": "CLIA",
+        "textReference": "Normal: 211 - 911 pg/mL | Borderline: 150 - 210 | Deficient: < 150"
+      },
+      {
+        "name": "Serum Folic Acid (Vitamin B9 / Folate)",
+        "unit": "ng/mL",
+        "minNormal": 3.89,
+        "maxNormal": 26.8,
+        "method": "CLIA",
+        "textReference": "Normal: 3.89 - 26.8 ng/mL | Deficient: < 3.89"
+      },
+      {
+        "name": "Vitamin C (Ascorbic Acid)",
+        "unit": "mg/dL",
+        "minNormal": 0.4,
+        "maxNormal": 2.0,
+        "method": "HPLC / Colorimetric",
+        "textReference": "0.4 - 2.0 mg/dL"
+      },
+      {
+        "name": "Total Serum Calcium (Ca)",
+        "unit": "mg/dL",
+        "minNormal": 8.5,
+        "maxNormal": 10.5,
+        "panicLow": 6.5,
+        "panicHigh": 13.0,
+        "method": "Arsenazo III",
+        "textReference": "8.5 - 10.5 mg/dL"
+      },
+      {
+        "name": "Ionized Calcium (Ca++)",
+        "unit": "mmol/L",
+        "minNormal": 1.15,
+        "maxNormal": 1.33,
+        "method": "Direct ISE",
+        "textReference": "1.15 - 1.33 mmol/L"
+      },
+      {
+        "name": "Serum Inorganic Phosphorus (P)",
+        "unit": "mg/dL",
+        "minNormal": 2.5,
+        "maxNormal": 4.5,
+        "method": "Phosphomolybdate UV",
+        "textReference": "2.5 - 4.5 mg/dL"
+      },
+      {
+        "name": "Serum Magnesium (Mg)",
+        "unit": "mg/dL",
+        "minNormal": 1.7,
+        "maxNormal": 2.6,
+        "method": "Colorimetric",
+        "textReference": "1.7 - 2.6 mg/dL"
+      },
+      {
+        "name": "Serum Zinc (Zn)",
+        "unit": "ug/dL",
+        "minNormal": 70,
+        "maxNormal": 120,
+        "method": "Colorimetric / AAS",
+        "textReference": "70 - 120 ug/dL"
+      },
+      {
+        "name": "Serum Copper (Cu)",
+        "unit": "ug/dL",
+        "minNormal": 70,
+        "maxNormal": 140,
+        "method": "Colorimetric / AAS",
+        "textReference": "70 - 140 ug/dL"
+      },
+      {
+        "name": "Serum Iron (Fe)",
+        "unit": "ug/dL",
+        "minNormal": 60,
+        "maxNormal": 170,
+        "method": "Ferrozine Colorimetric",
+        "textReference": "M: 65 - 175 | F: 50 - 170 ug/dL"
+      },
+      {
+        "name": "Serum Ferritin",
+        "unit": "ng/mL",
+        "minNormal": 30,
+        "maxNormal": 300,
+        "method": "CLIA",
+        "textReference": "M: 30 - 400 | F: 15 - 150 ng/mL"
+      },
+      {
+        "name": "Serum Sodium (Na+)",
+        "unit": "mmol/L",
+        "minNormal": 135,
+        "maxNormal": 145,
+        "panicLow": 120,
+        "panicHigh": 160,
+        "method": "Direct ISE",
+        "textReference": "135 - 145 mmol/L"
+      },
+      {
+        "name": "Serum Potassium (K+)",
+        "unit": "mmol/L",
+        "minNormal": 3.5,
+        "maxNormal": 5.1,
+        "panicLow": 2.8,
+        "panicHigh": 6.5,
+        "method": "Direct ISE",
+        "textReference": "3.5 - 5.1 mmol/L"
       }
     ]
   }

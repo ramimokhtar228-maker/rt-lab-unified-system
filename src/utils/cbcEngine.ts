@@ -91,18 +91,19 @@ export function extractCBCData(parameters: TestParameter[]): CbcExtractedData {
     }
   }
 
-  const findVal = (keywords: string[]): number | null => {
+  const findVal = (keywords: string[], excludes: string[] = []): number | null => {
     for (const kw of keywords) {
       for (const [k, v] of map.entries()) {
+        if (excludes.some(ex => k.includes(ex.toLowerCase()))) continue;
         if (k.includes(kw.toLowerCase())) return v;
       }
     }
     return null;
   };
 
-  const hb = findVal(['hemoglobin', 'hgb', 'hb', 'هيموجلوبين']);
-  const rbc = findVal(['r.b.cs', 'rbc', 'erythrocyte', 'حمراء']);
-  let pcv = findVal(['hematocrit', 'pcv', 'hct']);
+  const hb = findVal(['haemoglobin', 'hemoglobin', 'hgb', 'hb', 'هيموجلوبين'], ['a1c', 'hba1c']);
+  const rbc = findVal(['rbcs count', 'r.b.cs', 'rbc', 'erythrocyte', 'حمراء']);
+  let pcv = findVal(['haematocrit', 'hematocrit', 'pcv', 'hct']);
   if (pcv === null && hb !== null) {
     pcv = Number((hb * 3).toFixed(1));
   }
@@ -112,7 +113,7 @@ export function extractCBCData(parameters: TestParameter[]): CbcExtractedData {
     mcv = Number(((pcv * 10) / rbc).toFixed(1));
   }
 
-  let mch = findVal(['m.c.h', 'mch']);
+  let mch = findVal(['m.c.h', 'mch'], ['mchc', 'm.c.h.c']);
   if (mch === null && hb !== null && rbc !== null && rbc > 0) {
     mch = Number(((hb * 10) / rbc).toFixed(1));
   }
@@ -125,17 +126,17 @@ export function extractCBCData(parameters: TestParameter[]): CbcExtractedData {
   const rdw = findVal(['rdw-cv', 'r.d.w-cv', 'rdw', 'r.d.w']);
   const rdwSd = findVal(['rdw-sd', 'r.d.w-sd']);
 
-  const plt = findVal(['platelets count', 'platelet', 'plt', 'الصفائح']);
+  const plt = findVal(['platelet count', 'platelets count', 'platelet', 'plt', 'الصفائح']);
   const mpv = findVal(['m.p.v', 'mpv', 'mean platelet']);
   const pdw = findVal(['pdw', 'p.d.w']);
   const pct = findVal(['pct', 'p.c.t', 'plateletcrit']);
 
   const wbc = findVal(['total leucocytic', 'wbc', 'leukocyte', 'tlc', 'البيضاء']);
-  const neutrophils = findVal(['total neutrophils', 'segmented', 'neutrophil', 'seg']);
-  const lymphocytes = findVal(['lymphocytes', 'lymphocyte', 'lymph']);
-  const monocytes = findVal(['monocytes', 'monocyte', 'mono']);
-  const eosinophils = findVal(['eosinophils', 'eosinophil', 'eos']);
-  const basophils = findVal(['basophils', 'basophil', 'baso']);
+  const neutrophils = findVal(['total neutrophils', 'segmented', 'neutrophil', 'seg'], ['absolute', 'anc']);
+  const lymphocytes = findVal(['lymphocytes', 'lymphocyte', 'lymph'], ['absolute', 'alc']);
+  const monocytes = findVal(['monocytes', 'monocyte', 'mono'], ['absolute', 'amc']);
+  const eosinophils = findVal(['eosinophils', 'eosinophil', 'eos'], ['absolute', 'aec']);
+  const basophils = findVal(['basophils', 'basophil', 'baso'], ['absolute', 'abc']);
 
   const anc = findVal(['anc', 'absolute neutrophil']);
   const alc = findVal(['alc', 'absolute lymph']);

@@ -440,6 +440,11 @@ export const ReportViewer: React.FC<ReportViewerProps> = ({
                           CRITICAL !
                         </span>
                       )}
+                      {(item.flag as string) === 'ABNORMAL' && (
+                        <span className="inline-block px-1.5 py-0.5 text-[10px] font-bold text-rose-900 bg-rose-100 rounded border border-rose-300">
+                          ABNORMAL
+                        </span>
+                      )}
                     </td>
 
                     {/* Unit */}

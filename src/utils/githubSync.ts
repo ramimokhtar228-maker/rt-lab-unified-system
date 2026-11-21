@@ -3,6 +3,7 @@ import { mergeCollection, getDeletedMap, importDeletedMap } from './cloudStore';
 import { IncomeRecord, GitHubSyncConfig, InvoiceTestItem } from '../types';
 import { unionReports, unionInvoices, normalizePatientName, namesCompatibleForIdentity } from './labNumbering';
 import { mergePackagesWithDefaults, mergeProfilesWithDefaults } from './upgradeSavedData';
+import { LAB_CATALOG } from '../data/labCatalog';
 import { safeSetLocalStorage, setPendingCloudPush } from './idbBackup';
 
 import { getDeletionTombstones, importDeletionTombstones, filterDeletedReports, filterDeletedInvoices } from './deletionRegistry';
@@ -767,18 +768,16 @@ function getStandardParametersForTest(code: string, nameAr: string, nameEn: stri
   }
 
   // 6. Complete Blood Count
-  if (code === 'CBC' || nameAr.includes('صورة دم') || nameEn.toLowerCase().includes('blood count')) {
-    return [
-      { id: `p-hb-${Date.now()}`, name: 'Hemoglobin (Hb)', result: '', unit: 'g/dL', minNormal: 12.0, maxNormal: 16.5, flag: '' },
-      { id: `p-rbc-${Date.now()}`, name: 'R.B.Cs Count', result: '', unit: 'x10^6/µL', minNormal: 4.2, maxNormal: 5.8, flag: '' },
-      { id: `p-hct-${Date.now()}`, name: 'Hematocrit (PCV)', result: '', unit: '%', minNormal: 36.0, maxNormal: 49.0, flag: '' },
-      { id: `p-mcv-${Date.now()}`, name: 'M.C.V', result: '', unit: 'fL', minNormal: 80.0, maxNormal: 96.0, flag: '' },
-      { id: `p-mch-${Date.now()}`, name: 'M.C.H', result: '', unit: 'pg', minNormal: 27.0, maxNormal: 32.0, flag: '' },
-      { id: `p-mchc-${Date.now()}`, name: 'M.C.H.C', result: '', unit: 'g/dL', minNormal: 31.5, maxNormal: 35.5, flag: '' },
-      { id: `p-rdw-${Date.now()}`, name: 'R.D.W-CV', result: '', unit: '%', minNormal: 11.5, maxNormal: 14.5, flag: '' },
-      { id: `p-wbc-${Date.now()}`, name: 'Total Leucocytic Count (WBC)', result: '', unit: 'x10^3/µL', minNormal: 4.0, maxNormal: 11.0, flag: '' },
-      { id: `p-plt-${Date.now()}`, name: 'Platelets Count', result: '', unit: 'x10^3/µL', minNormal: 150, maxNormal: 450, flag: '' }
-    ];
+  if (code === 'CBC' || nameAr.includes('صورة دم') || nameAr.includes('صورة الدم') || nameEn.toLowerCase().includes('blood count') || nameEn.toLowerCase().includes('blood picture')) {
+    const cbcTemplate = LAB_CATALOG.find(c => c.code === 'CBC');
+    if (cbcTemplate) {
+      return cbcTemplate.parameters.map((p, idx) => ({
+        ...p,
+        id: `p-cbc-${idx}-${Date.now()}`,
+        result: '',
+        flag: ''
+      }));
+    }
   }
 
   // 7. Liver Functions

@@ -1,11 +1,11 @@
 import { LabReport, TestProfile, TestParameter, CatalogProfileTemplate, ComprehensivePackage, InvoiceTestItem, IndividualTest } from '../types/lab';
 import { LAB_CATALOG, DEFAULT_STAFF, INITIAL_INDIVIDUAL_TESTS, INITIAL_LAB_INFO, INITIAL_PACKAGES } from '../data/labCatalog';
 import { DISEASE_ILLUSTRATIONS, suggestHematologicalIllustration } from '../data/diseaseIllustrations';
-import { runAutomaticCalculations } from './calculator';
+import { calculateFlag, runAutomaticCalculations } from './calculator';
 import { getDeletedMap, recordStamp } from './cloudStore';
 import { safeSetLocalStorage, freeRedundantLocalStorage } from './idbBackup';
 
-export const MIGRATION_VERSION_KEY = 'rt_lab_migration_v9_booking_sync_fix_2026';
+export const MIGRATION_VERSION_KEY = 'rt_lab_migration_v10_cbc_urine_vitmin_2026';
 
 export const CUSTOM_NORMALS_STORAGE_KEY = 'rt_lab_custom_normals_v1';
 
@@ -316,6 +316,21 @@ export function mergeProfilesWithDefaults(
   if (hasSaved) savedProfiles!.forEach(addCandidate);
   if (hasLocal) localProfiles!.forEach(addCandidate);
 
+  const isLegacyCbcTemplate = (params?: any[]): boolean => {
+    if (!Array.isArray(params) || params.length === 0) return true;
+    const names = params.map(p => (p?.name || '').toLowerCase().trim());
+    const hasObsolete = names.some(n =>
+      n.includes('rdw-sd') || n.includes('r.d.w-sd') ||
+      n === 'mpv' || n.includes('mean platelet') ||
+      n === 'pct' || n.includes('plateletcrit') ||
+      n.includes('pdw') || n.includes('p-lcr') ||
+      n.includes('nlr') || n.includes('neutrophil/lymphocyte') ||
+      n.includes('mentzer') || n.includes('green')
+    );
+    const hasHaemoglobinEdta = names.some(n => n.includes('haemoglobin (edta blood)'));
+    return hasObsolete || !hasHaemoglobinEdta;
+  };
+
   const merged: CatalogProfileTemplate[] = [];
   LAB_CATALOG.forEach(defProf => {
     if (isDeletedProf(defProf)) return;
@@ -323,19 +338,22 @@ export function mergeProfilesWithDefaults(
     const existing = savedMap.get(key);
     if (existing) {
       savedMap.delete(key);
-      const rawParams = Array.isArray(existing.parameters)
-        ? existing.parameters
-        : defProf.parameters;
+      const upgradeLegacyCbc = key === 'CBC' && isLegacyCbcTemplate(existing.parameters);
+      const rawParams = upgradeLegacyCbc
+        ? defProf.parameters
+        : (Array.isArray(existing.parameters) ? existing.parameters : defProf.parameters);
 
       merged.push({
         ...defProf,
         ...existing,
-        titleAr: existing.titleAr || defProf.titleAr,
-        titleEn: existing.titleEn || defProf.titleEn,
+        titleAr: upgradeLegacyCbc ? defProf.titleAr : (existing.titleAr || defProf.titleAr),
+        titleEn: upgradeLegacyCbc ? defProf.titleEn : (existing.titleEn || defProf.titleEn),
         category: existing.category || defProf.category,
         sampleType: existing.sampleType || defProf.sampleType,
-        defaultInterpretation: existing.defaultInterpretation !== undefined ? existing.defaultInterpretation : defProf.defaultInterpretation,
-        parameters: applyCustomNormalsToParams(rawParams, existing.updatedAt)
+        defaultInterpretation: upgradeLegacyCbc
+          ? defProf.defaultInterpretation
+          : (existing.defaultInterpretation !== undefined ? existing.defaultInterpretation : defProf.defaultInterpretation),
+        parameters: applyCustomNormalsToParams(rawParams, upgradeLegacyCbc ? undefined : existing.updatedAt)
       });
     } else {
       merged.push({
@@ -414,44 +432,90 @@ export function upgradeSingleReport(report: LabReport): LabReport {
   // 2. Check and upgrade profiles
   const cbcCatalog = LAB_CATALOG.find(p => p.code === 'CBC');
 
+  const findMatchingCbcParam = (existingParams: TestParameter[], targetName: string): TestParameter | undefined => {
+    const t = targetName.toLowerCase().trim();
+    const findBy = (includes: string[], excludes: string[] = []) =>
+      existingParams.find(p => {
+        const n = (p.name || '').toLowerCase().trim();
+        if (excludes.some(ex => n.includes(ex))) return false;
+        return includes.some(inc => n.includes(inc));
+      });
+
+    if (t.includes('haemoglobin')) return findBy(['haemoglobin', 'hemoglobin', 'hgb', 'hb'], ['a1c']);
+    if (t.includes('haematocrit')) return findBy(['haematocrit', 'hematocrit', 'pcv', 'hct']);
+    if (t.includes('rbcs count')) return findBy(['rbcs count', 'r.b.cs', 'rbc count', 'rbc'], ['nrbc']);
+    if (t === 'mcv') return findBy(['mcv', 'm.c.v']);
+    if (t === 'mch') return findBy(['mch', 'm.c.h'], ['mchc', 'm.c.h.c']);
+    if (t === 'mchc') return findBy(['mchc', 'm.c.h.c']);
+    if (t.includes('rdw-cv')) return findBy(['rdw-cv', 'r.d.w-cv', 'rdw'], ['rdw-sd', 'r.d.w-sd']);
+    if (t.includes('platelet count')) return findBy(['platelet count', 'platelets count', 'platelet', 'plt'], ['mpv', 'pdw', 'pct', 'p-lcr']);
+    if (t.includes('total leucocytic')) return findBy(['total leucocytic', 'tlc', 'wbc', 'leukocyte']);
+    if (t.includes('neutrophils %')) return findBy(['neutrophils %', 'neutrophil %', 'total neutrophils', 'neutrophils'], ['absolute', 'anc', 'nlr']);
+    if (t.includes('lymphocytes %')) return findBy(['lymphocytes %', 'lymphocyte %', 'lymphocytes'], ['absolute', 'alc', 'nlr']);
+    if (t.includes('monocytes %')) return findBy(['monocytes %', 'monocyte %', 'monocytes'], ['absolute', 'amc']);
+    if (t.includes('eosinophils %')) return findBy(['eosinophils %', 'eosinophil %', 'eosinophils'], ['absolute', 'aec']);
+    if (t.includes('basophils %')) return findBy(['basophils %', 'basophil %', 'basophils'], ['absolute', 'abc']);
+    if (t.includes('absolute neutrophils')) return findBy(['absolute neutrophil', 'anc']);
+    if (t.includes('absolute lymphocytes')) return findBy(['absolute lymph', 'alc']);
+    if (t.includes('absolute monocytes')) return findBy(['absolute mono', 'amc']);
+    if (t.includes('absolute eosinophils')) return findBy(['absolute eos', 'aec']);
+    if (t.includes('absolute basophils')) return findBy(['absolute baso', 'abc']);
+    if (t.includes('other cells')) return findBy(['other cells']);
+    return existingParams.find(p => (p.name || '').toLowerCase().trim() === t);
+  };
+
+  const isLegacyReportCbc = (params: TestParameter[]): boolean => {
+    if (!cbcCatalog || params.length !== cbcCatalog.parameters.length) return true;
+    const names = params.map(p => (p.name || '').toLowerCase().trim());
+    const hasObsolete = names.some(n =>
+      n.includes('rdw-sd') || n.includes('r.d.w-sd') ||
+      n === 'mpv' || n.includes('mean platelet') ||
+      n === 'pct' || n.includes('plateletcrit') ||
+      n.includes('pdw') || n.includes('p-lcr') ||
+      n.includes('nlr') || n.includes('neutrophil/lymphocyte')
+    );
+    const hasHaemoglobinEdta = names.some(n => n.includes('haemoglobin (edta blood)'));
+    return hasObsolete || !hasHaemoglobinEdta;
+  };
+
   updatedReport.profiles = (updatedReport.profiles || []).map(prof => {
     const isCBC = prof.profileCode === 'CBC' || 
                   (prof.titleEn || '').toLowerCase().includes('complete blood') || 
-                  (prof.titleAr || '').includes('صورة دم');
+                  (prof.titleAr || '').includes('صورة دم') ||
+                  (prof.titleAr || '').includes('صورة الدم');
 
     if (isCBC) {
-      // Merge CBC parameters with complete CBC catalog if needed
       let params = [...(prof.parameters || [])];
 
-      if (cbcCatalog && params.length < 25) {
-        // Old CBC lacking full parameters -> Merge
-        const existingMap = new Map<string, TestParameter>();
-        params.forEach(p => existingMap.set((p.name || '').toLowerCase().trim(), p));
-
+      if (cbcCatalog && isLegacyReportCbc(params)) {
         const customNormals = getStoredCustomNormals();
         const mergedParams: TestParameter[] = cbcCatalog.parameters.map((catParam, idx) => {
-          const match = Array.from(existingMap.entries()).find(([k]) => 
-            k.includes(catParam.name.toLowerCase().trim()) || catParam.name.toLowerCase().includes(k)
-          );
+          const match = findMatchingCbcParam(params, catParam.name);
           const catCode = (catParam as any).code || '';
           const pKey = normalizeTestKey(catCode) || normalizeTestKey(catParam.name);
           const custom = customNormals[pKey];
 
-          const base: any = match ? { ...catParam, ...match[1] } : { ...catParam };
-          const finalMin = custom?.minNormal !== undefined ? custom.minNormal : base.minNormal;
-          const finalMax = custom?.maxNormal !== undefined ? custom.maxNormal : base.maxNormal;
-          const finalTextRef = custom?.textReference !== undefined ? custom.textReference : base.textReference;
-          const finalUnit = custom?.unit || base.unit;
+          const finalMin = custom?.minNormal !== undefined ? custom.minNormal : catParam.minNormal;
+          const finalMax = custom?.maxNormal !== undefined ? custom.maxNormal : catParam.maxNormal;
+          const finalTextRef = custom?.textReference !== undefined ? custom.textReference : catParam.textReference;
+          const finalUnit = custom?.unit !== undefined ? custom.unit : catParam.unit;
+          const resultVal = match?.result || '';
 
           return {
-            ...base,
+            ...catParam,
             minNormal: finalMin,
             maxNormal: finalMax,
             textReference: finalTextRef,
             unit: finalUnit,
-            id: base.id || `p-mig-${idx}-${Date.now()}`,
-            result: match ? (match[1].result || '') : '',
-            flag: (match && match[1].flag) ? match[1].flag : 'NORMAL'
+            id: match?.id || `p-mig-${idx}-${Date.now()}`,
+            result: resultVal,
+            flag: resultVal
+              ? calculateFlag(resultVal, finalMin, finalMax, catParam.panicLow, catParam.panicHigh, {
+                  textReference: finalTextRef,
+                  name: catParam.name,
+                  profileCode: 'CBC'
+                })
+              : ''
           };
         });
         params = mergedParams;
@@ -460,13 +524,28 @@ export function upgradeSingleReport(report: LabReport): LabReport {
       // Run automatic calculations on CBC
       const { updatedParams } = runAutomaticCalculations(params, {
         age: report.patient.age,
-        gender: report.patient.gender
+        gender: report.patient.gender,
+        profileCode: 'CBC'
+      });
+
+      const normalizedParams = updatedParams.map(p => {
+        if (p.result && String(p.result).trim() !== '') {
+          return {
+            ...p,
+            flag: calculateFlag(p.result, p.minNormal, p.maxNormal, p.panicLow, p.panicHigh, {
+              textReference: p.textReference,
+              name: p.name,
+              profileCode: 'CBC'
+            })
+          };
+        }
+        return p;
       });
 
       // Suggest hematological illustration
       let attachedIll = prof.attachedIllustration;
       if (!attachedIll) {
-        attachedIll = suggestHematologicalIllustration(updatedParams);
+        attachedIll = suggestHematologicalIllustration(normalizedParams);
       }
 
       // Blood film findings
@@ -481,11 +560,11 @@ export function upgradeSingleReport(report: LabReport): LabReport {
       return {
         ...prof,
         profileCode: 'CBC',
-        titleEn: 'Complete Blood Count (CBC) with Full Automated Differential & Indices',
-        titleAr: 'صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية',
+        titleEn: cbcCatalog?.titleEn || 'Complete Blood Picture',
+        titleAr: cbcCatalog?.titleAr || 'صورة الدم الكاملة (Complete Blood Picture)',
         category: 'Hematology',
         sampleType: 'EDTA Whole Blood',
-        parameters: updatedParams,
+        parameters: normalizedParams,
         attachedIllustration: attachedIll,
         bloodFilmFindings: bloodFilm
       };
@@ -496,15 +575,36 @@ export function upgradeSingleReport(report: LabReport): LabReport {
         attachedIll = getInfogramForProfile(prof.profileCode, prof.titleEn) || undefined;
       }
 
+      const isUrine = (prof.profileCode || '').toUpperCase() === 'URINE' ||
+                      (prof.titleEn || '').toLowerCase().includes('urine') ||
+                      (prof.titleAr || '').includes('بول');
+
       // Run auto calculations if relevant (e.g. Lipid, LFT, KFT, HOMA-IR)
       const { updatedParams } = runAutomaticCalculations(prof.parameters || [], {
         age: report.patient.age,
-        gender: report.patient.gender
+        gender: report.patient.gender,
+        profileCode: isUrine ? 'URINE' : prof.profileCode
       });
+
+      const finalParams = isUrine
+        ? updatedParams.map(p => {
+            if (p.result && String(p.result).trim() !== '') {
+              return {
+                ...p,
+                flag: calculateFlag(p.result, p.minNormal, p.maxNormal, p.panicLow, p.panicHigh, {
+                  textReference: p.textReference,
+                  name: p.name,
+                  profileCode: 'URINE'
+                })
+              };
+            }
+            return p;
+          })
+        : updatedParams;
 
       return {
         ...prof,
-        parameters: updatedParams,
+        parameters: finalParams,
         attachedIllustration: attachedIll
       };
     }

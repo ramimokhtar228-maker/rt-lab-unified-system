@@ -3,49 +3,219 @@ import { ResultFlag, TestParameter, TestProfile } from '../types/lab';
 /**
  * Calculates flag based on numerical or qualitative results
  */
-export function calculateFlag(
-  resultStr: string,
+export interface CalculateFlagContext {
+  textReference?: string;
+  name?: string;
+  profileCode?: string;
+}
+
+function evaluateNumericBounds(
+  num: number,
   minNormal?: number,
   maxNormal?: number,
   panicLow?: number,
   panicHigh?: number
 ): ResultFlag {
+  if (panicLow !== undefined && num <= panicLow) return 'PANIC_LOW';
+  if (panicHigh !== undefined && num >= panicHigh) return 'PANIC_HIGH';
+  if (minNormal !== undefined && num < minNormal) return 'LOW';
+  if (maxNormal !== undefined && num > maxNormal) return 'HIGH';
+  return 'NORMAL';
+}
+
+/**
+ * Calculates flag based on numerical, range, or qualitative results.
+ * Any Urine or qualitative result outside normal reference values is marked ABNORMAL.
+ */
+export function calculateFlag(
+  resultStr: string,
+  minNormal?: number,
+  maxNormal?: number,
+  panicLow?: number,
+  panicHigh?: number,
+  context?: CalculateFlagContext
+): ResultFlag {
   if (!resultStr || resultStr.trim() === '') return '';
 
-  const num = parseFloat(resultStr);
-  if (isNaN(num)) {
-    const lower = resultStr.toLowerCase().trim();
-    if (
-      lower.includes('positive') ||
-      lower.includes('reactive') ||
-      lower.includes('detected') ||
-      lower.includes('abnormal') ||
-      lower.includes('high') ||
-      lower === '++' ||
-      lower === '+++' ||
-      lower === '++++' ||
-      lower.includes('heavy') ||
-      lower.includes('sheets')
-    ) {
+  const trimmed = resultStr.trim();
+  const lower = trimmed.toLowerCase();
+  const refLower = (context?.textReference || '').toLowerCase().trim();
+  const nameLower = (context?.name || '').toLowerCase().trim();
+  const isUrine = (context?.profileCode || '').toUpperCase() === 'URINE';
+
+  // 1. Pure single number (e.g. "11.8", "1.030", "8")
+  if (/^[+-]?\d+(?:\.\d+)?$/.test(trimmed)) {
+    const num = parseFloat(trimmed);
+    if (minNormal !== undefined || maxNormal !== undefined || panicLow !== undefined || panicHigh !== undefined) {
+      const boundFlag = evaluateNumericBounds(num, minNormal, maxNormal, panicLow, panicHigh);
+      if (isUrine && boundFlag !== 'NORMAL') {
+        return 'ABNORMAL';
+      }
+      return boundFlag;
+    }
+    // Qualitative/Nil-referenced parameter given a numeric > 0 (e.g. Protein = "1" or Urobilinogen > 1.0)
+    if (nameLower.includes('urobilinogen') || refLower.includes('0.2 - 1.0')) {
+      return num > 1.0 || num < 0.1 ? 'ABNORMAL' : 'NORMAL';
+    }
+    if (refLower.includes('nil') || refLower.includes('negative') || refLower.includes('absent')) {
+      return num > 0 ? 'ABNORMAL' : 'NORMAL';
+    }
+    if (refLower.includes('few / nil') || refLower.includes('nil to few')) {
+      return num > 5 ? 'ABNORMAL' : 'NORMAL';
+    }
+    return isUrine ? 'ABNORMAL' : 'NORMAL';
+  }
+
+  // 2. Numeric range string (e.g. "4 - 6 / HPF", "10 - 15 / HPF", "0-2 / HPF")
+  const rangeMatch = trimmed.match(/^(\d+(?:\.\d+)?)\s*[-–—]\s*(\d+(?:\.\d+)?)(?:\s|$|\/)/);
+  if (rangeMatch) {
+    const lowVal = parseFloat(rangeMatch[1]);
+    const highVal = parseFloat(rangeMatch[2]);
+    if (minNormal !== undefined || maxNormal !== undefined) {
+      if (panicHigh !== undefined && highVal >= panicHigh) return isUrine ? 'ABNORMAL' : 'PANIC_HIGH';
+      if (panicLow !== undefined && lowVal <= panicLow) return isUrine ? 'ABNORMAL' : 'PANIC_LOW';
+      if (maxNormal !== undefined && highVal > maxNormal) return isUrine ? 'ABNORMAL' : 'HIGH';
+      if (minNormal !== undefined && lowVal < minNormal) return isUrine ? 'ABNORMAL' : 'LOW';
+      return 'NORMAL';
+    }
+    if (refLower.includes('few / nil') || refLower.includes('nil to few')) {
+      return highVal > 5 ? 'ABNORMAL' : 'NORMAL';
+    }
+    if (refLower.includes('nil') || refLower.includes('negative')) {
+      return highVal > 0 ? 'ABNORMAL' : 'NORMAL';
+    }
+  }
+
+  // 3. Comparator numeric string (e.g. "> 50 / HPF", "< 1.005")
+  const compMatch = trimmed.match(/^(>=|>|<=|<)\s*(\d+(?:\.\d+)?)/);
+  if (compMatch) {
+    const op = compMatch[1];
+    const val = parseFloat(compMatch[2]);
+    if (minNormal !== undefined || maxNormal !== undefined) {
+      if ((op === '>' || op === '>=') && maxNormal !== undefined && val >= maxNormal) {
+        return isUrine ? 'ABNORMAL' : 'HIGH';
+      }
+      if ((op === '<' || op === '<=') && minNormal !== undefined && val <= minNormal) {
+        return isUrine ? 'ABNORMAL' : 'LOW';
+      }
+      return 'NORMAL';
+    }
+    if ((op === '>' || op === '>=') && (refLower.includes('nil') || refLower.includes('negative'))) {
       return 'ABNORMAL';
     }
+  }
+
+  // 4. Explicit normal / negative phrases (must be checked BEFORE substring abnormal checks)
+  const isExplicitlyNormalNegative =
+    lower === 'negative' ||
+    lower === 'neg' ||
+    lower === 'non-reactive' ||
+    lower === 'non reactive' ||
+    lower === 'not detected' ||
+    lower === 'not seen' ||
+    lower === 'nil' ||
+    lower === 'nil seen' ||
+    lower === 'nil (negative)' ||
+    lower === 'none' ||
+    lower === 'absent' ||
+    lower === '-' ||
+    lower === 'normal' ||
+    lower === 'clear' ||
+    lower === 'transparent' ||
+    lower === 'سلبي' ||
+    lower === 'طبيعي' ||
+    lower === 'لا يوجد' ||
+    /^no\s+[\w\s]+(?:seen|detected|growth)/i.test(lower);
+
+  // 5. Parameter/reference-specific Urine & qualitative rules
+  const isColorField = nameLower.includes('color') || nameLower.includes('لون') || refLower === 'amber yellow';
+  if (isColorField) {
+    const normalColors = ['amber yellow', 'pale yellow', 'yellow', 'light yellow', 'straw', 'straw yellow', 'amber', 'normal'];
+    return normalColors.includes(lower) ? 'NORMAL' : 'ABNORMAL';
+  }
+
+  const isAspectField =
+    nameLower.includes('aspect') ||
+    nameLower.includes('transparency') ||
+    nameLower.includes('appearance') ||
+    refLower === 'clear';
+  if (isAspectField) {
+    return lower === 'clear' || lower === 'transparent' || lower === 'normal' ? 'NORMAL' : 'ABNORMAL';
+  }
+
+  const isOdourField = nameLower.includes('odour') || nameLower.includes('odor') || refLower.includes('aromatic');
+  if (isOdourField) {
+    return lower === 'normal' || lower === 'aromatic' || lower === 'normal aromatic' || lower === 'characteristic'
+      ? 'NORMAL'
+      : 'ABNORMAL';
+  }
+
+  const isUrobilinogenField = nameLower.includes('urobilinogen') || refLower.includes('0.2 - 1.0');
+  if (isUrobilinogenField) {
+    if (lower === 'normal' || lower === 'normal (0.2 - 1.0 mg/dl)' || lower === 'nil' || lower === 'negative') {
+      return 'NORMAL';
+    }
+    return 'ABNORMAL';
+  }
+
+  const isFewNormalField = refLower.includes('few / nil') || refLower.includes('nil to few') || nameLower.includes('epithelial');
+  if (isFewNormalField) {
+    if (isExplicitlyNormalNegative || lower === 'rare' || lower === 'few' || lower === 'few / nil' || lower === 'nil to few' || lower === 'occasional') {
+      return 'NORMAL';
+    }
+    return 'ABNORMAL';
+  }
+
+  // If reference specifies Nil / Negative / Absent (e.g. Protein, Glucose, Ketones, Bilirubin, Nitrite, Leukocyte Esterase, Blood, Crystals, Casts, Amorphous, Bacteria, Yeast, Trichomonas, Mucus)
+  if (
+    refLower === 'nil' ||
+    refLower === 'nil seen' ||
+    refLower === 'nil (negative)' ||
+    refLower === 'negative' ||
+    refLower.startsWith('non-reactive') ||
+    refLower.startsWith('negative')
+  ) {
+    return isExplicitlyNormalNegative ? 'NORMAL' : 'ABNORMAL';
+  }
+
+  // For numeric-ranged Urine parameters (e.g. Pus Cells, RBCs, Sp. Gr., pH) entered as text like "Overcrowded / Sheets", "Dysmorphic RBCs Present", "Grossly Bloody"
+  if (isUrine && (minNormal !== undefined || maxNormal !== undefined)) {
+    return isExplicitlyNormalNegative ? 'NORMAL' : 'ABNORMAL';
+  }
+
+  if (isExplicitlyNormalNegative) {
     return 'NORMAL';
   }
 
-  // Panic / Critical checks
-  if (panicLow !== undefined && num <= panicLow) {
-    return 'PANIC_LOW';
-  }
-  if (panicHigh !== undefined && num >= panicHigh) {
-    return 'PANIC_HIGH';
+  // 6. General qualitative abnormal markers
+  if (
+    lower.includes('positive') ||
+    (/\breactive\b/.test(lower) && !lower.includes('non-reactive') && !lower.includes('non reactive')) ||
+    (lower.includes('detected') && !lower.includes('not detected')) ||
+    lower.includes('abnormal') ||
+    lower.includes('trace') ||
+    lower.includes('turbid') ||
+    lower.includes('hazy') ||
+    lower.includes('cloudy') ||
+    lower.includes('bloody') ||
+    lower.includes('dysmorphic') ||
+    lower.includes('overcrowded') ||
+    lower.includes('elevated') ||
+    lower.includes('increased') ||
+    lower.includes('high') ||
+    lower.includes('heavy') ||
+    lower.includes('sheets') ||
+    lower.includes('present') ||
+    lower.includes('+') ||
+    lower.includes('إيجابي') ||
+    lower.includes('غير طبيعي')
+  ) {
+    return 'ABNORMAL';
   }
 
-  // Normal checks
-  if (minNormal !== undefined && num < minNormal) {
-    return 'LOW';
-  }
-  if (maxNormal !== undefined && num > maxNormal) {
-    return 'HIGH';
+  // Any remaining unrecognized qualitative value inside a Urine profile is outside normal
+  if (isUrine) {
+    return 'ABNORMAL';
   }
 
   return 'NORMAL';
@@ -248,6 +418,18 @@ export function matchesParameter(paramName: string, matcher: string): boolean {
     if (cleanName.includes('absolute') || cleanName.includes('alc')) return false;
     return cleanName.includes('lymphocyte') || cleanName.includes('lymph');
   }
+  if (cleanMatcher === 'monocyte' || cleanMatcher === 'mono') {
+    if (cleanName.includes('absolute') || cleanName.includes('amc')) return false;
+    return cleanName.includes('monocyte') || cleanName.includes('mono');
+  }
+  if (cleanMatcher === 'eosinophil' || cleanMatcher === 'eos') {
+    if (cleanName.includes('absolute') || cleanName.includes('aec')) return false;
+    return cleanName.includes('eosinophil') || cleanName.includes('eos');
+  }
+  if (cleanMatcher === 'basophil' || cleanMatcher === 'baso') {
+    if (cleanName.includes('absolute') || cleanName.includes('abc')) return false;
+    return cleanName.includes('basophil') || cleanName.includes('baso');
+  }
   
   if (cleanName.includes(cleanMatcher)) return true;
   return paramName.toLowerCase().includes(matcher.toLowerCase());
@@ -280,7 +462,8 @@ function setVal(
   params: TestParameter[],
   matchers: string[],
   calculatedVal: number | string,
-  calcNote?: string
+  calcNote?: string,
+  profileCode?: string
 ): boolean {
   for (let i = 0; i < params.length; i++) {
     const p = params[i];
@@ -290,7 +473,11 @@ function setVal(
         params[i] = {
           ...p,
           result: resStr,
-          flag: calculateFlag(resStr, p.minNormal, p.maxNormal, p.panicLow, p.panicHigh),
+          flag: calculateFlag(resStr, p.minNormal, p.maxNormal, p.panicLow, p.panicHigh, {
+            textReference: p.textReference,
+            name: p.name,
+            profileCode
+          }),
           notes: calcNote || p.notes || 'Auto-calculated'
         };
         return true;
@@ -315,7 +502,7 @@ function setVal(
  */
 export function runAutomaticCalculations(
   parameters: TestParameter[],
-  patientContext?: { age?: number; gender?: any }
+  patientContext?: { age?: number; gender?: any; profileCode?: string }
 ): { updatedParams: TestParameter[]; calculationsApplied: string[] } {
   const paramsCopy: TestParameter[] = JSON.parse(JSON.stringify(parameters));
   const applied: string[] = [];
@@ -331,7 +518,7 @@ export function runAutomaticCalculations(
   // If HCT is missing but RBC and MCV exist, or if HCT is missing and HGB exists (Rule of three: HCT ~= HGB * 3)
   if (hct === null && hgb !== null) {
     const approxHct = Number((hgb * 3).toFixed(1));
-    if (setVal(paramsCopy, ['hematocrit', 'hct', 'pcv'], approxHct, 'Calculated (HGB × 3)')) {
+    if (setVal(paramsCopy, ['hematocrit', 'hct', 'pcv'], approxHct, 'Calculated (HGB × 3)', patientContext?.profileCode)) {
       hct = approxHct;
       applied.push(`HCT (~${approxHct}%)`);
     }
@@ -370,32 +557,32 @@ export function runAutomaticCalculations(
 
   if (wbc !== null && wbc > 0) {
     if (neutroPct !== null) {
-      const anc = Number(((wbc * neutroPct) / 100).toFixed(2));
+      const anc = ((wbc * neutroPct) / 100).toFixed(2);
       if (setVal(paramsCopy, ['anc', 'absolute neutrophil', 'neutrophils absolute'], anc, 'Calculated: (WBC × Neut%) / 100')) {
         applied.push(`ANC (${anc})`);
       }
     }
     if (lymphPct !== null) {
-      const alc = Number(((wbc * lymphPct) / 100).toFixed(2));
+      const alc = ((wbc * lymphPct) / 100).toFixed(2);
       if (setVal(paramsCopy, ['alc', 'absolute lymphocyte', 'lymphocytes absolute'], alc, 'Calculated: (WBC × Lymph%) / 100')) {
         applied.push(`ALC (${alc})`);
       }
     }
     if (monoPct !== null) {
-      const amc = Number(((wbc * monoPct) / 100).toFixed(2));
-      if (setVal(paramsCopy, ['amc', 'absolute monocyte', 'monocytes absolute'], amc)) {
+      const amc = ((wbc * monoPct) / 100).toFixed(2);
+      if (setVal(paramsCopy, ['amc', 'absolute monocyte', 'monocytes absolute'], amc, 'Calculated: (WBC × Mono%) / 100')) {
         applied.push(`AMC (${amc})`);
       }
     }
     if (eosPct !== null) {
-      const aec = Number(((wbc * eosPct) / 100).toFixed(2));
-      if (setVal(paramsCopy, ['aec', 'absolute eosinophil', 'eosinophils absolute'], aec)) {
+      const aec = ((wbc * eosPct) / 100).toFixed(2);
+      if (setVal(paramsCopy, ['aec', 'absolute eosinophil', 'eosinophils absolute'], aec, 'Calculated: (WBC × Eos%) / 100')) {
         applied.push(`AEC (${aec})`);
       }
     }
     if (basoPct !== null) {
-      const abc = Number(((wbc * basoPct) / 100).toFixed(2));
-      setVal(paramsCopy, ['abc', 'absolute basophil', 'basophils absolute'], abc);
+      const abc = ((wbc * basoPct) / 100).toFixed(2);
+      setVal(paramsCopy, ['abc', 'absolute basophil', 'basophils absolute'], abc, 'Calculated: (WBC × Baso%) / 100');
     }
   }
 

@@ -112,9 +112,11 @@ import {
   mergeCatalogWithDefaults,
   mergePackagesWithDefaults,
   mergeProfilesWithDefaults,
+  upgradeSingleReport,
   runGlobalDataUpgrade,
   MIGRATION_VERSION_KEY
 } from '../utils/upgradeSavedData';
+import { calculateFlag } from '../utils/calculator';
 import { CatalogProfileTemplate } from '../types/lab';
 
 // Storage Keys
@@ -639,15 +641,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [reports, setReports] = useStampedCollection<LabReport>(() => {
     try {
       const saved = localStorage.getItem(REPORTS_KEY) || localStorage.getItem('rt_lab_reports_v2');
+      const needsUpgrade = localStorage.getItem(MIGRATION_VERSION_KEY) !== 'true';
+      let loaded: LabReport[];
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          return unionReports(parsed, INITIAL_REPORTS);
+          loaded = unionReports(parsed, INITIAL_REPORTS);
+        } else {
+          loaded = INITIAL_REPORTS;
         }
+      } else {
+        loaded = INITIAL_REPORTS;
       }
-      return INITIAL_REPORTS;
+      return needsUpgrade ? loaded.map(upgradeSingleReport) : loaded;
     } catch {
-      return INITIAL_REPORTS;
+      return INITIAL_REPORTS.map(upgradeSingleReport);
     }
   });
 
@@ -1162,6 +1170,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (typeof window !== 'undefined') {
         if (localStorage.getItem(MIGRATION_VERSION_KEY) !== 'true') {
           runGlobalDataUpgrade();
+          setReports(prev => prev.map(upgradeSingleReport));
+          setDiagnosticProfiles(prev => mergeProfilesWithDefaults(prev));
         } else {
           freeRedundantLocalStorage();
         }
@@ -1178,8 +1188,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
         if (idbData) {
           if (Array.isArray(idbData.reports) && idbData.reports.length > 0) {
+            const upgradedIdbReports = idbData.reports.map(upgradeSingleReport);
             setReports(prev => {
-              const { merged, newlyAdded, changed } = mergeReportCollections(prev, filterDeletedReports(idbData.reports), mergeTwoReports);
+              const { merged, newlyAdded, changed } = mergeReportCollections(prev, filterDeletedReports(upgradedIdbReports), mergeTwoReports);
               if (newlyAdded.length > 0) recoveredCount += newlyAdded.length;
               return changed ? filterDeletedReports(merged) : prev;
             });
@@ -1194,7 +1205,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             setPackages(prev => mergeCollection('packages', prev, idbData.packages!));
           }
           if (Array.isArray(idbData.diagnosticProfiles) && idbData.diagnosticProfiles.length > 0) {
-            setDiagnosticProfiles(prev => mergeCollection('diagnosticProfiles', prev, idbData.diagnosticProfiles!));
+            setDiagnosticProfiles(prev => mergeProfilesWithDefaults(idbData.diagnosticProfiles, prev));
           }
           if (Array.isArray(idbData.testCatalog) && idbData.testCatalog.length > 0) {
             setTestCatalog(prev => mergeCollection('testCatalog', prev, idbData.testCatalog!));
@@ -1520,8 +1531,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     realtimeSyncManager.pullMasterSnapshot().then(res => {
       if (res.success && res.data) {
         if (Array.isArray(res.data.reports) && res.data.reports.length > 0) {
+          const upgradedRemote = res.data.reports.map(upgradeSingleReport);
           setReports(prev => {
-            const { merged, changed } = mergeReportCollections(prev, res.data.reports, mergeTwoReports);
+            const { merged, changed } = mergeReportCollections(prev, upgradedRemote, mergeTwoReports);
             return changed ? filterDeletedReports(merged) : prev;
           });
         }
@@ -1564,8 +1576,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           if (ghRes.success && ghRes.data) {
             importDeletionTombstones(ghRes.data.deletedReports, ghRes.data.deletedInvoices);
             if (Array.isArray(ghRes.data.reports) && ghRes.data.reports.length > 0) {
+              const upgradedGhReports = ghRes.data.reports.map(upgradeSingleReport);
               setReports(prev => {
-                const { merged, changed } = mergeReportCollections(prev, ghRes.data.reports, mergeTwoReports);
+                const { merged, changed } = mergeReportCollections(prev, upgradedGhReports, mergeTwoReports);
                 return changed ? filterDeletedReports(merged) : filterDeletedReports(prev);
               });
             }
@@ -3710,17 +3723,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
             if (matchingKey && tx.results[matchingKey] !== undefined) {
               const val = tx.results[matchingKey];
-              const numVal = typeof val === 'number' ? val : parseFloat(String(val));
-              let flag: TestParameter['flag'] = 'NORMAL';
+              const resultStr = String(val);
+              const flag = calculateFlag(
+                resultStr,
+                param.minNormal,
+                param.maxNormal,
+                param.panicLow,
+                param.panicHigh,
+                {
+                  textReference: param.textReference,
+                  name: param.name,
+                  profileCode: prof.profileCode
+                }
+              );
 
-              if (!isNaN(numVal)) {
-                if (param.panicLow !== undefined && numVal <= param.panicLow) flag = 'PANIC_LOW';
-                else if (param.panicHigh !== undefined && numVal >= param.panicHigh) flag = 'PANIC_HIGH';
-                else if (param.minNormal !== undefined && numVal < param.minNormal) flag = 'LOW';
-                else if (param.maxNormal !== undefined && numVal > param.maxNormal) flag = 'HIGH';
-              }
-
-              return { ...param, result: String(val), flag };
+              return { ...param, result: resultStr, flag };
             }
             return param;
           });

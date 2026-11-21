@@ -11,6 +11,7 @@ import {
   generateCbcPltSvgChart,
   generateCbcWbcSvgChart
 } from '../utils/cbcEngine';
+import { calculateFlag, runAutomaticCalculations } from '../utils/calculator';
 import {
   Microscope,
   Sparkles,
@@ -242,17 +243,61 @@ export const CBCEditorSection: React.FC<CBCEditorSectionProps> = ({
     const target = presets[type];
     if (!target) return;
 
-    // Map and update parameters
-    const updatedParams = profile.parameters.map(p => {
-      const name = (p.name || '').toLowerCase().trim();
+    // Map and update parameters with exact alias matching (supporting both British/American spellings and excluding absolute/mchc collisions)
+    const presetAliasMatch = (paramName: string, kw: string): boolean => {
+      const n = paramName.toLowerCase().trim();
+      switch (kw) {
+        case 'hemoglobin':
+          return n.includes('haemoglobin') || n.includes('hemoglobin') || n.includes('hgb');
+        case 'hematocrit':
+          return n.includes('haematocrit') || n.includes('hematocrit') || n.includes('pcv') || n.includes('hct');
+        case 'rbc':
+          return n.includes('rbcs count') || n.includes('r.b.cs') || n.includes('rbc');
+        case 'mcv':
+          return n.includes('mcv') || n.includes('m.c.v');
+        case 'mch':
+          return (n.includes('mch') || n.includes('m.c.h')) && !n.includes('mchc') && !n.includes('m.c.h.c');
+        case 'mchc':
+          return n.includes('mchc') || n.includes('m.c.h.c');
+        case 'rdw':
+          return n.includes('rdw') || n.includes('r.d.w');
+        case 'platelets':
+          return n.includes('platelet');
+        case 'wbc':
+          return n.includes('leucocytic') || n.includes('leukocyte') || n.includes('wbc') || n.includes('tlc');
+        case 'neutrophils':
+          return n.includes('neutrophil') && !n.includes('absolute') && !n.includes('anc');
+        case 'lymphocytes':
+          return n.includes('lymphocyte') && !n.includes('absolute') && !n.includes('alc');
+        case 'monocytes':
+          return n.includes('monocyte') && !n.includes('absolute') && !n.includes('amc');
+        case 'eosinophils':
+          return n.includes('eosinophil') && !n.includes('absolute') && !n.includes('aec');
+        case 'basophils':
+          return n.includes('basophil') && !n.includes('absolute') && !n.includes('abc');
+        default:
+          return n.includes(kw);
+      }
+    };
+
+    const mappedParams = profile.parameters.map(p => {
       for (const [kw, val] of Object.entries(target.values)) {
-        if (name.includes(kw)) {
-          return { ...p, result: val };
+        if (presetAliasMatch(p.name || '', kw)) {
+          return {
+            ...p,
+            result: val,
+            flag: calculateFlag(val, p.minNormal, p.maxNormal, p.panicLow, p.panicHigh, {
+              textReference: p.textReference,
+              name: p.name,
+              profileCode: profile.profileCode
+            })
+          };
         }
       }
       return p;
     });
 
+    const { updatedParams } = runAutomaticCalculations(mappedParams);
     onUpdateParameters(updatedParams);
 
     // Update blood film & interpretation

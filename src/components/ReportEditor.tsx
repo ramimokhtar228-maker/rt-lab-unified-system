@@ -601,8 +601,12 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
             affectedParamName = param.name;
             const merged = { ...param, ...updates };
             // Recalculate flag if result or ranges changed
-            if (updates.result !== undefined || updates.minNormal !== undefined || updates.maxNormal !== undefined) {
-              merged.flag = calculateFlag(merged.result, merged.minNormal, merged.maxNormal, merged.panicLow, merged.panicHigh);
+            if (updates.result !== undefined || updates.minNormal !== undefined || updates.maxNormal !== undefined || updates.textReference !== undefined) {
+              merged.flag = calculateFlag(merged.result, merged.minNormal, merged.maxNormal, merged.panicLow, merged.panicHigh, {
+                textReference: merged.textReference,
+                name: merged.name,
+                profileCode: prof.profileCode
+              });
             }
             return merged;
           }
@@ -1888,7 +1892,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
                                 value={param.result}
                                 onChange={(e) => handleUpdateParameter(currentProfile.id, param.id, { result: e.target.value })}
                                 className={`w-28 text-center font-black font-mono-numbers text-sm rounded-md px-2 py-1 border transition-all ${
-                                  param.flag === 'HIGH' || param.flag === 'PANIC_HIGH'
+                                  param.flag === 'HIGH' || param.flag === 'PANIC_HIGH' || param.flag === 'ABNORMAL'
                                     ? 'bg-rose-50 text-rose-900 border-rose-400 font-extrabold'
                                     : param.flag === 'LOW' || param.flag === 'PANIC_LOW'
                                     ? 'bg-amber-50 text-amber-900 border-amber-400 font-extrabold'
