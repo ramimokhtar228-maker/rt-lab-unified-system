@@ -7280,11 +7280,11 @@
     "tests": [
       {
         "id": "prof-rep-1795256762901-1",
-        "code": "TST-0",
-        "nameAr": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
-        "nameEn": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
-        "category": "Clinical",
-        "sampleType": "Serum",
+        "code": "CBC",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
+        "category": "Hematology",
+        "sampleType": "EDTA Whole Blood",
         "unit": "g/dL",
         "minNormal": 12.5,
         "maxNormal": 16.5,
