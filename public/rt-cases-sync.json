@@ -473,12 +473,14 @@
       {
         "id": "prof-RT-2026-061-0",
         "code": "CBC",
-        "nameAr": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
-        "nameEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
         "category": "Hematology",
         "sampleType": "EDTA Whole Blood",
-        "unit": "",
-        "textReference": "قيد الفحص المخبري"
+        "unit": "g/dL",
+        "minNormal": 12.5,
+        "maxNormal": 16.5,
+        "textReference": "12.5 - 16.5"
       },
       {
         "id": "prof-RT-2026-061-1",
@@ -557,14 +559,14 @@
       {
         "id": "prof-RT-2026-062-0",
         "code": "CBC",
-        "nameAr": "Complete Blood Count with Differential",
-        "nameEn": "Complete Blood Count with Differential",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
         "category": "Hematology",
         "sampleType": "EDTA Whole Blood",
-        "unit": "Multi-parameter",
-        "minNormal": 0,
-        "maxNormal": 0,
-        "textReference": "Hb: Male 13.0-17.5 g/dL, Female 12.0-15.5 | WBC: 4.0-11.0 10^3/uL | PLT: 150-450 10^3/uL"
+        "unit": "g/dL",
+        "minNormal": 12.5,
+        "maxNormal": 16.5,
+        "textReference": "12.5 - 16.5"
       }
     ],
     "netAmount": 200,
@@ -1167,12 +1169,14 @@
       {
         "id": "prof-RT-2026-067-0",
         "code": "CBC",
-        "nameAr": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
-        "nameEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
         "category": "Hematology",
         "sampleType": "EDTA Whole Blood",
-        "unit": "",
-        "textReference": "قيد الفحص المخبري"
+        "unit": "g/dL",
+        "minNormal": 12.5,
+        "maxNormal": 16.5,
+        "textReference": "12.5 - 16.5"
       },
       {
         "id": "prof-RT-2026-067-1",
@@ -1287,12 +1291,14 @@
       {
         "id": "prof-RT-2026-068-0",
         "code": "CBC",
-        "nameAr": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
-        "nameEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
         "category": "Hematology",
         "sampleType": "EDTA Whole Blood",
-        "unit": "",
-        "textReference": "قيد الفحص المخبري"
+        "unit": "g/dL",
+        "minNormal": 12.5,
+        "maxNormal": 16.5,
+        "textReference": "12.5 - 16.5"
       },
       {
         "id": "prof-RT-2026-068-1",
@@ -2059,14 +2065,14 @@
       {
         "id": "prof-extra-1791287976695",
         "code": "CBC",
-        "nameAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
-        "nameEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
         "category": "Hematology",
         "sampleType": "EDTA Whole Blood",
-        "unit": "g/L",
-        "minNormal": 36,
-        "maxNormal": 49,
-        "textReference": "Male : 13.5-17.5 /Female: 12.5-15.5"
+        "unit": "g/dL",
+        "minNormal": 12.5,
+        "maxNormal": 16.5,
+        "textReference": "12.5 - 16.5"
       },
       {
         "id": "prof-indiv-1791288169871",
@@ -2185,14 +2191,14 @@
       {
         "id": "prof-extra-1791287331553",
         "code": "CBC",
-        "nameAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
-        "nameEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
         "category": "Hematology",
         "sampleType": "EDTA Whole Blood",
-        "unit": "g/L",
-        "minNormal": 36,
-        "maxNormal": 49,
-        "textReference": "Male : 13.5-17.5 /Female: 12.5-15.5"
+        "unit": "g/dL",
+        "minNormal": 12.5,
+        "maxNormal": 16.5,
+        "textReference": "12.5 - 16.5"
       },
       {
         "id": "prof-indiv-1791287406439",
@@ -2311,14 +2317,14 @@
       {
         "id": "prof-extra-1791286741640",
         "code": "CBC",
-        "nameAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
-        "nameEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
         "category": "Hematology",
         "sampleType": "EDTA Whole Blood",
-        "unit": "g/L",
-        "minNormal": 36,
-        "maxNormal": 49,
-        "textReference": "Male : 13.5-17.5 /Female: 12.5-15.5"
+        "unit": "g/dL",
+        "minNormal": 12.5,
+        "maxNormal": 16.5,
+        "textReference": "12.5 - 16.5"
       }
     ],
     "netAmount": 599,
@@ -2425,14 +2431,14 @@
       {
         "id": "prof-extra-1791285435311",
         "code": "CBC",
-        "nameAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
-        "nameEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
         "category": "Hematology",
         "sampleType": "EDTA Whole Blood",
-        "unit": "g/L",
-        "minNormal": 36,
-        "maxNormal": 49,
-        "textReference": "Male : 13.5-17.5 /Female: 12.5-15.5"
+        "unit": "g/dL",
+        "minNormal": 12.5,
+        "maxNormal": 16.5,
+        "textReference": "12.5 - 16.5"
       }
     ],
     "netAmount": 599,
@@ -2639,14 +2645,14 @@
       {
         "id": "prof-inc-1791127003337-1",
         "code": "CBC",
-        "nameAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
-        "nameEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
         "category": "Hematology",
         "sampleType": "EDTA Whole Blood",
         "unit": "g/dL",
-        "minNormal": 12,
+        "minNormal": 12.5,
         "maxNormal": 16.5,
-        "textReference": "M: 13.0 - 17.5 | F: 12.0 - 15.5 g/dL"
+        "textReference": "12.5 - 16.5"
       }
     ],
     "netAmount": 230,
@@ -2681,14 +2687,14 @@
       {
         "id": "prof-inc-1791126867915-1",
         "code": "CBC",
-        "nameAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
-        "nameEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
         "category": "Hematology",
         "sampleType": "EDTA Whole Blood",
         "unit": "g/dL",
-        "minNormal": 12,
+        "minNormal": 12.5,
         "maxNormal": 16.5,
-        "textReference": "M: 13.0 - 17.5 | F: 12.0 - 15.5 g/dL"
+        "textReference": "12.5 - 16.5"
       },
       {
         "id": "prof-inc-1791126867915-3",
@@ -2745,14 +2751,14 @@
       {
         "id": "prof-inc-1791126326278-1",
         "code": "CBC",
-        "nameAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
-        "nameEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
         "category": "Hematology",
         "sampleType": "EDTA Whole Blood",
         "unit": "g/dL",
-        "minNormal": 12,
+        "minNormal": 12.5,
         "maxNormal": 16.5,
-        "textReference": "M: 13.0 - 17.5 | F: 12.0 - 15.5 g/dL"
+        "textReference": "12.5 - 16.5"
       },
       {
         "id": "prof-inc-1791126326278-2",
@@ -3007,14 +3013,14 @@
       {
         "id": "prof-inc-1791124918128-2",
         "code": "CBC",
-        "nameAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
-        "nameEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
         "category": "Hematology",
         "sampleType": "EDTA Whole Blood",
-        "unit": "%",
-        "minNormal": 4,
-        "maxNormal": 5.6,
-        "textReference": "Normal: < 5.7 % | Pre-diabetic: 5.7 - 6.4 % | Diabetic: >= 6.5 %"
+        "unit": "g/dL",
+        "minNormal": 12.5,
+        "maxNormal": 16.5,
+        "textReference": "12.5 - 16.5"
       }
     ],
     "netAmount": 198,
@@ -3101,14 +3107,14 @@
       {
         "id": "prof-inc-1791124532954-1",
         "code": "CBC",
-        "nameAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
-        "nameEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
         "category": "Hematology",
         "sampleType": "EDTA Whole Blood",
-        "unit": "%",
-        "minNormal": 4,
-        "maxNormal": 5.6,
-        "textReference": "Normal: < 5.7 % | Pre-diabetic: 5.7 - 6.4 % | Diabetic: >= 6.5 %"
+        "unit": "g/dL",
+        "minNormal": 12.5,
+        "maxNormal": 16.5,
+        "textReference": "12.5 - 16.5"
       },
       {
         "id": "prof-inc-1791124532954-2",
@@ -3163,14 +3169,14 @@
       {
         "id": "prof-inc-1791124084105-2",
         "code": "CBC",
-        "nameAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
-        "nameEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
         "category": "Hematology",
         "sampleType": "EDTA Whole Blood",
-        "unit": "%",
-        "minNormal": 4,
-        "maxNormal": 5.6,
-        "textReference": "Normal: < 5.7 % | Pre-diabetic: 5.7 - 6.4 % | Diabetic: >= 6.5 %"
+        "unit": "g/dL",
+        "minNormal": 12.5,
+        "maxNormal": 16.5,
+        "textReference": "12.5 - 16.5"
       }
     ],
     "netAmount": 198,
@@ -4721,14 +4727,14 @@
       {
         "id": "prof-cbc-1",
         "code": "CBC",
-        "nameAr": "صورة الدم الكاملة مع الفيلم التفريقي والمؤشرات الحسابية",
-        "nameEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
         "category": "Hematology",
         "sampleType": "EDTA Whole Blood",
         "unit": "g/dL",
-        "minNormal": 13,
-        "maxNormal": 17,
-        "textReference": ""
+        "minNormal": 12.5,
+        "maxNormal": 16.5,
+        "textReference": "12.5 - 16.5"
       }
     ],
     "netAmount": 280,
@@ -6237,14 +6243,14 @@
       {
         "id": "prof-1793137724953-20o7",
         "code": "CBC",
-        "nameAr": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
-        "nameEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
         "category": "Hematology",
         "sampleType": "EDTA Whole Blood",
         "unit": "g/dL",
-        "minNormal": 12,
-        "maxNormal": 17.5,
-        "textReference": "M: 13.0 - 17.5 | F: 12.0 - 15.5 g/dL"
+        "minNormal": 12.5,
+        "maxNormal": 16.5,
+        "textReference": "12.5 - 16.5"
       },
       {
         "id": "prof-1793137756956-rc97",
@@ -6291,14 +6297,14 @@
       {
         "id": "prof-CBC-1794685039788-0-u3s",
         "code": "CBC",
-        "nameAr": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
-        "nameEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
         "category": "Hematology",
         "sampleType": "EDTA Whole Blood",
         "unit": "g/dL",
-        "minNormal": 12,
-        "maxNormal": 17.5,
-        "textReference": "M: 13.0 - 17.5 | F: 12.0 - 15.5 g/dL"
+        "minNormal": 12.5,
+        "maxNormal": 16.5,
+        "textReference": "12.5 - 16.5"
       },
       {
         "id": "prof-GLYCEMIC-1794685039791-1-krb",
@@ -6437,14 +6443,14 @@
       {
         "id": "prof-CBC-1794685105313-0-z4w",
         "code": "CBC",
-        "nameAr": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
-        "nameEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
         "category": "Hematology",
         "sampleType": "EDTA Whole Blood",
         "unit": "g/dL",
-        "minNormal": 12,
-        "maxNormal": 17.5,
-        "textReference": "M: 13.0 - 17.5 | F: 12.0 - 15.5 g/dL"
+        "minNormal": 12.5,
+        "maxNormal": 16.5,
+        "textReference": "12.5 - 16.5"
       },
       {
         "id": "prof-GLYCEMIC-1794685105314-1-0yi",
@@ -6754,13 +6760,15 @@
     "tests": [
       {
         "id": "prof-rep-1794984622976-1",
-        "code": "TST-0",
-        "nameAr": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
-        "nameEn": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
-        "category": "Clinical",
-        "sampleType": "Serum",
-        "unit": "",
-        "textReference": "قيد الفحص المخبري"
+        "code": "CBC",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
+        "category": "Hematology",
+        "sampleType": "EDTA Whole Blood",
+        "unit": "g/dL",
+        "minNormal": 12.5,
+        "maxNormal": 16.5,
+        "textReference": "12.5 - 16.5"
       },
       {
         "id": "prof-rep-1794984622976-2",
@@ -6872,13 +6880,15 @@
       },
       {
         "id": "prof-rep-1794984798641-2",
-        "code": "TST-1",
-        "nameAr": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
-        "nameEn": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
-        "category": "Clinical",
-        "sampleType": "Serum",
-        "unit": "",
-        "textReference": "قيد الفحص المخبري"
+        "code": "CBC",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
+        "category": "Hematology",
+        "sampleType": "EDTA Whole Blood",
+        "unit": "g/dL",
+        "minNormal": 12.5,
+        "maxNormal": 16.5,
+        "textReference": "12.5 - 16.5"
       },
       {
         "id": "prof-rep-1794984798641-3",
@@ -7028,13 +7038,15 @@
       },
       {
         "id": "prof-rep-1794985677280-6",
-        "code": "TST-5",
-        "nameAr": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
-        "nameEn": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
-        "category": "Clinical",
-        "sampleType": "Serum",
-        "unit": "",
-        "textReference": "قيد الفحص المخبري"
+        "code": "CBC",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
+        "category": "Hematology",
+        "sampleType": "EDTA Whole Blood",
+        "unit": "g/dL",
+        "minNormal": 12.5,
+        "maxNormal": 16.5,
+        "textReference": "12.5 - 16.5"
       },
       {
         "id": "prof-rep-1794985677280-7",
@@ -7078,13 +7090,15 @@
     "tests": [
       {
         "id": "prof-rep-1795193067941-1",
-        "code": "TST-0",
-        "nameAr": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
-        "nameEn": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
-        "category": "Clinical",
-        "sampleType": "Serum",
-        "unit": "",
-        "textReference": "قيد الفحص المخبري"
+        "code": "CBC",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
+        "category": "Hematology",
+        "sampleType": "EDTA Whole Blood",
+        "unit": "g/dL",
+        "minNormal": 12.5,
+        "maxNormal": 16.5,
+        "textReference": "12.5 - 16.5"
       }
     ],
     "netAmount": 180,
@@ -7118,13 +7132,15 @@
     "tests": [
       {
         "id": "prof-rep-1795195094648-1",
-        "code": "TST-0",
-        "nameAr": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
-        "nameEn": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
-        "category": "Clinical",
-        "sampleType": "Serum",
-        "unit": "",
-        "textReference": "قيد الفحص المخبري"
+        "code": "CBC",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
+        "category": "Hematology",
+        "sampleType": "EDTA Whole Blood",
+        "unit": "g/dL",
+        "minNormal": 12.5,
+        "maxNormal": 16.5,
+        "textReference": "12.5 - 16.5"
       },
       {
         "id": "prof-rep-1795195094648-2",
@@ -7265,14 +7281,14 @@
       {
         "id": "prof-1795256762898-av24",
         "code": "CBC",
-        "nameAr": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
-        "nameEn": "Complete Blood Count (CBC) with Full Automated Differential & Indices",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
         "category": "Hematology",
         "sampleType": "EDTA Whole Blood",
         "unit": "g/dL",
-        "minNormal": 12,
-        "maxNormal": 17.5,
-        "textReference": "M: 13.0 - 17.5 | F: 12.0 - 15.5 g/dL"
+        "minNormal": 12.5,
+        "maxNormal": 16.5,
+        "textReference": "12.5 - 16.5"
       },
       {
         "id": "prof-1795256762899-e3bx",
