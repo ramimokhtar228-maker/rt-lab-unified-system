@@ -7268,7 +7268,7 @@
     "createdAt": "2026-11-21T10:00"
   },
   {
-    "id": "rep-1795256762901",
+    "id": "rep-rep-1795256762901",
     "reportNumber": "RT-2026-917",
     "invoiceNumber": "inv-1795256762936",
     "barcode": "RT-10947",
@@ -7279,44 +7279,42 @@
     "referringDoctor": "استاذ دكتور / احمد عاصم الملا",
     "tests": [
       {
-        "id": "prof-1795256762898-av24",
-        "code": "CBC",
-        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
-        "nameEn": "Complete Blood Picture",
-        "category": "Hematology",
-        "sampleType": "EDTA Whole Blood",
+        "id": "prof-rep-1795256762901-1",
+        "code": "TST-0",
+        "nameAr": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
+        "nameEn": "صورة الدم الكاملة مع الفحص التفريقي والمؤشرات المعتمدة",
+        "category": "Clinical",
+        "sampleType": "Serum",
         "unit": "g/dL",
         "minNormal": 12.5,
         "maxNormal": 16.5,
         "textReference": "12.5 - 16.5"
       },
       {
-        "id": "prof-1795256762899-e3bx",
-        "code": "THYROID",
+        "id": "prof-rep-1795256762901-2",
+        "code": "TST-1",
         "nameAr": "Thyroid Function Full Panel",
         "nameEn": "Thyroid Function Full Panel",
-        "category": "Endocrinology",
+        "category": "Clinical",
         "sampleType": "Serum",
-        "unit": "µIU/mL",
-        "minNormal": 0.27,
-        "maxNormal": 4.2,
-        "textReference": ""
+        "unit": "",
+        "textReference": "قيد الفحص المخبري"
       },
       {
-        "id": "prof-1795256762900-mz2x",
-        "code": "TEST_CD",
+        "id": "prof-rep-1795256762901-3",
+        "code": "TST-2",
         "nameAr": "CD16/CD56",
         "nameEn": "CD16/CD56",
-        "category": "Clinical Hematology ",
+        "category": "Clinical",
         "sampleType": "Serum",
-        "unit": "mg/dL",
-        "textReference": "Normal"
+        "unit": "",
+        "textReference": "قيد الفحص المخبري"
       }
     ],
     "netAmount": 1015,
     "paidAmount": 1015,
-    "paymentStatus": "paid",
-    "financialClearance": "CLEARED_FOR_RELEASE",
+    "paymentStatus": "pending",
+    "financialClearance": "PAYMENT_PENDING",
     "bookingType": "branch",
     "isHomeVisit": false,
     "visitFee": 0,
@@ -7324,11 +7322,11 @@
     "homeAddress": "",
     "deliveryNotes": "",
     "visitSpecialist": "",
-    "discount": 1015,
-    "testsSubtotal": 2030,
+    "discount": 0,
+    "testsSubtotal": 1015,
     "subtotal": 1015,
     "remainingAmount": 0,
     "paymentMethod": "cash",
-    "createdAt": "2026-11-21T10:26:02.905Z"
+    "createdAt": "2026-11-21T12:30:00.000Z"
   }
 ]
