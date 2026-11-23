@@ -8826,5 +8826,83 @@
     "remainingAmount": 0,
     "paymentMethod": "cash",
     "createdAt": "2026-11-16T08:05:59.838Z"
+  },
+  {
+    "id": "rep-1795464733623",
+    "reportNumber": "RT-2026-924",
+    "invoiceNumber": "inv-1795464733691",
+    "barcode": "RT-10954",
+    "patientName": "روان احمد حسنين",
+    "age": 22,
+    "gender": "female",
+    "phone": "01154289989",
+    "referringDoctor": "Herself",
+    "tests": [
+      {
+        "id": "prof-1795464733622-6tnd",
+        "code": "CBC",
+        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
+        "nameEn": "Complete Blood Picture",
+        "category": "Hematology",
+        "sampleType": "EDTA Whole Blood",
+        "unit": "g/dL",
+        "minNormal": 13,
+        "maxNormal": 17.5,
+        "textReference": "Male : 13.5-17.5  /  Female : 12.5-15.5"
+      },
+      {
+        "id": "prof-1795464733623-lg6u",
+        "code": "THYROID",
+        "nameAr": "Thyroid Function Full Panel",
+        "nameEn": "Thyroid Function Full Panel",
+        "category": "Endocrinology",
+        "sampleType": "Serum",
+        "unit": "µIU/mL",
+        "minNormal": 0.55,
+        "maxNormal": 4.78,
+        "textReference": "0.55 - 4.78 µIU/mL"
+      },
+      {
+        "id": "prof-1795464733623-veza",
+        "code": "IRON",
+        "nameAr": "Iron Kinetics & Storage Profile",
+        "nameEn": "Iron Kinetics & Storage Profile",
+        "category": "Clinical Chemistry",
+        "sampleType": "Serum (Morning Fasting)",
+        "unit": "µg/dL",
+        "minNormal": 60,
+        "maxNormal": 170,
+        "textReference": ""
+      },
+      {
+        "id": "prof-1795464733623-r658",
+        "code": "VITAMINS_MINERALS",
+        "nameAr": "بروفايل الفيتامينات والمعادن الشامل (Vitamins & Minerals)",
+        "nameEn": "Vitamins & Minerals Profile",
+        "category": "Vitamins & Minerals",
+        "sampleType": "Serum (Morning Fasting)",
+        "unit": "ng/mL",
+        "minNormal": 30,
+        "maxNormal": 100,
+        "textReference": "Deficiency: < 20 | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 ng/mL"
+      }
+    ],
+    "netAmount": 660,
+    "paidAmount": 660,
+    "paymentStatus": "paid",
+    "financialClearance": "CLEARED_FOR_RELEASE",
+    "bookingType": "home_visit",
+    "isHomeVisit": true,
+    "visitFee": 65,
+    "visitAddress": "١٨ منية السيرج مأمون الشناوي شبرا مصر",
+    "homeAddress": "١٨ منية السيرج مأمون الشناوي شبرا مصر",
+    "deliveryNotes": "",
+    "visitSpecialist": "ا/ ايه مصطفى",
+    "discount": 1155,
+    "testsSubtotal": 1750,
+    "subtotal": 660,
+    "remainingAmount": 0,
+    "paymentMethod": "cash",
+    "createdAt": "2026-11-23T20:12:13.625Z"
   }
 ]
