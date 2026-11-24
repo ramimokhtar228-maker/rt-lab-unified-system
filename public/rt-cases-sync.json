@@ -7825,7 +7825,7 @@
         "textReference": "Deficiency: < 20 | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 ng/mL"
       }
     ],
-    "netAmount": 474,
+    "netAmount": 999,
     "paidAmount": 474,
     "paymentStatus": "pending",
     "financialClearance": "PAYMENT_PENDING",
@@ -7837,9 +7837,9 @@
     "deliveryNotes": "",
     "visitSpecialist": "أ/ آية محمد",
     "discount": 0,
-    "testsSubtotal": 474,
-    "subtotal": 474,
-    "remainingAmount": 0,
+    "testsSubtotal": 999,
+    "subtotal": 999,
+    "remainingAmount": 990,
     "paymentMethod": "cash",
     "createdAt": "2026-11-19"
   },
