@@ -57,6 +57,9 @@ export interface InvoiceExportPayload {
   loyaltyConfig?: LoyaltyConfig;
   invoiceEarnedPoints?: number;
   isEarnedConfirmed?: boolean;
+  displayMode?: 'detailed' | 'grouped';
+  groupedTitleAr?: string;
+  groupedTitleEn?: string;
 }
 
 function escapeHtml(val: string | number | undefined): string {
@@ -128,9 +131,29 @@ export function buildInvoiceMarkup(payload: InvoiceExportPayload): string {
     `;
   }
 
-  const rowsHtml = payload.items
-    .map(
-      (it, idx) => `
+  const isGrouped = payload.displayMode === 'grouped';
+  const groupedTitle = payload.groupedTitleAr?.trim() || `مجموعة الفحوصات والتحاليل الطبية (${payload.items.length})`;
+  const groupedItemsSummary = payload.items
+    .map((it) => escapeHtml(it.titleAr))
+    .filter(Boolean)
+    .join(' • ');
+
+  const rowsHtml = isGrouped
+    ? `
+      <tr style="border-bottom: 1px solid #e2e8f0; background: #ffffff;">
+        <td style="padding: 10px; text-align: center; color: #64748b; font-family: monospace; font-size: 11px; vertical-align: top;">1</td>
+        <td style="padding: 10px; text-align: right;">
+          <div style="font-weight: 900; color: #0f172a; font-size: 12.5px;">${escapeHtml(groupedTitle)}</div>
+          ${payload.groupedTitleEn ? `<div style="font-size: 10px; color: #475569; margin-top: 2px;" dir="ltr">${escapeHtml(payload.groupedTitleEn)}</div>` : ''}
+          ${groupedItemsSummary ? `<div style="font-size: 10px; color: #64748b; margin-top: 4px; line-height: 1.55;">تشمل: ${groupedItemsSummary}</div>` : ''}
+        </td>
+        <td style="padding: 10px; text-align: center; color: #475569; font-size: 11px;">فحوصات مجمعة</td>
+        <td style="padding: 10px; text-align: center; color: #475569; font-family: monospace; font-size: 11px;">${payload.items.length} تحاليل</td>
+        <td style="padding: 10px; text-align: left; font-family: monospace; font-weight: 900; color: #7f1d1d; font-size: 12.5px;" dir="ltr">${Number(payload.testsSubtotal || 0).toFixed(2)} EGP</td>
+      </tr>`
+    : payload.items
+        .map(
+          (it, idx) => `
       <tr style="border-bottom: 1px solid #e2e8f0; background: ${idx % 2 === 1 ? '#f8fafc' : '#ffffff'};">
         <td style="padding: 8px 10px; text-align: center; color: #64748b; font-family: monospace; font-size: 11px;">${idx + 1}</td>
         <td style="padding: 8px 10px; text-align: right;">
@@ -141,8 +164,8 @@ export function buildInvoiceMarkup(payload: InvoiceExportPayload): string {
         <td style="padding: 8px 10px; text-align: center; color: #475569; font-family: monospace; font-size: 11px;">${it.parametersCount ? `${it.parametersCount} عنصر` : (it.code || 'LAB')}</td>
         <td style="padding: 8px 10px; text-align: left; font-family: monospace; font-weight: 800; color: #7f1d1d; font-size: 12px;" dir="ltr">${Number(it.price || 0).toFixed(2)} EGP</td>
       </tr>`
-    )
-    .join('');
+        )
+        .join('');
 
   return `
   <div dir="rtl" style="font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif; color: #0f172a; background: #ffffff; width: 790px; padding: 28px 32px; box-sizing: border-box;">

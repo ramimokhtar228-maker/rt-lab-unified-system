@@ -147,46 +147,60 @@ export function buildReportInvoicePayload(
       (p.barcode && prof.barcode === p.barcode)
   );
 
+  const hasCustomReportItems = Array.isArray(report.customInvoiceItems);
   const items: InvoiceExportItem[] =
-    linkedInvoice?.tests && linkedInvoice.tests.length > 0
-      ? linkedInvoice.tests.map((t) => ({
+    hasCustomReportItems
+      ? report.customInvoiceItems!.map((t) => ({
           titleAr: t.nameAr || t.nameEn || 'تحليل مخبري',
           titleEn: t.nameEn || t.code || 'Lab Test',
           code: t.code,
           category: t.category || 'تحاليل تشخيصية',
           sampleType: t.sampleType || 'Serum',
           parametersCount: 1,
-          price: Number(t.price) || 150
+          price: Number(t.price) || 0
         }))
-      : report.profiles.map((prof) => {
-          const catMatch = LAB_CATALOG.find(
-            (c) => c.code.toUpperCase() === (prof.profileCode || '').toUpperCase()
-          );
-          let price = catMatch?.profilePrice || 200;
-          if (!catMatch?.profilePrice) {
-            if (prof.parameters.length > 5) price = 220;
-            else price = Math.max(100, prof.parameters.length * 40);
-          }
-          return {
-            titleAr: prof.titleAr || prof.titleEn,
-            titleEn: prof.titleEn,
-            code: prof.profileCode,
-            category: prof.category || 'تحاليل تشخيصية',
-            sampleType: prof.sampleType || 'Serum',
-            parametersCount: prof.parameters.length,
-            price
-          };
-        });
+      : linkedInvoice?.tests && linkedInvoice.tests.length > 0
+        ? linkedInvoice.tests.map((t) => ({
+            titleAr: t.nameAr || t.nameEn || 'تحليل مخبري',
+            titleEn: t.nameEn || t.code || 'Lab Test',
+            code: t.code,
+            category: t.category || 'تحاليل تشخيصية',
+            sampleType: t.sampleType || 'Serum',
+            parametersCount: 1,
+            price: Number(t.price) || 0
+          }))
+        : report.profiles.map((prof) => {
+            const catMatch = LAB_CATALOG.find(
+              (c) => c.code.toUpperCase() === (prof.profileCode || '').toUpperCase()
+            );
+            let price = catMatch?.profilePrice || 200;
+            if (!catMatch?.profilePrice) {
+              if (prof.parameters.length > 5) price = 220;
+              else price = Math.max(100, prof.parameters.length * 40);
+            }
+            return {
+              titleAr: prof.titleAr || prof.titleEn,
+              titleEn: prof.titleEn,
+              code: prof.profileCode,
+              category: prof.category || 'تحاليل تشخيصية',
+              sampleType: prof.sampleType || 'Serum',
+              parametersCount: prof.parameters.length,
+              price
+            };
+          });
 
-  const visitFee = Number(pAny.visitFee || linkedInvoice?.visitFee || 0) || 0;
+  const visitFee = Number(pAny.visitFee ?? linkedInvoice?.visitFee ?? 0) || 0;
   const testsSubtotal =
     Number(
-      linkedInvoice?.testsSubtotal ||
-        report.packageApplied?.packagePrice ||
-        pAny.testsSubtotal ||
-        (p.totalCost
-          ? Math.max(0, p.totalCost + (p.discountApplied || 0) - visitFee)
-          : items.reduce((sum, item) => sum + item.price, 0))
+      linkedInvoice?.testsSubtotal !== undefined
+        ? linkedInvoice.testsSubtotal
+        : pAny.testsSubtotal !== undefined
+          ? pAny.testsSubtotal
+          : report.packageApplied?.packagePrice !== undefined
+            ? report.packageApplied.packagePrice
+            : p.totalCost !== undefined
+              ? Math.max(0, p.totalCost + (p.discountApplied || 0) - visitFee)
+              : items.reduce((sum, item) => sum + item.price, 0)
     ) || 0;
 
   const subtotal = testsSubtotal + visitFee;
@@ -250,6 +264,10 @@ export function buildReportInvoicePayload(
       : `${p.referringDoctorTitle || ''} ${p.referringDoctorName || ''}`.trim() ||
         'طلب فحص ذاتي (Self-Request)';
 
+  const displayMode = report.invoiceDisplayMode || linkedInvoice?.invoiceDisplayMode || 'detailed';
+  const groupedTitleAr = report.invoiceGroupedTitleAr || linkedInvoice?.invoiceGroupedTitleAr;
+  const groupedTitleEn = report.invoiceGroupedTitleEn || linkedInvoice?.invoiceGroupedTitleEn;
+
   return {
     invoiceNumber,
     labNumber: p.labNumber || report.reportNumber,
@@ -277,6 +295,9 @@ export function buildReportInvoicePayload(
     loyaltyProfile,
     loyaltyConfig,
     invoiceEarnedPoints,
-    isEarnedConfirmed: Boolean(confirmedTx)
+    isEarnedConfirmed: Boolean(confirmedTx),
+    displayMode,
+    groupedTitleAr,
+    groupedTitleEn
   };
 }

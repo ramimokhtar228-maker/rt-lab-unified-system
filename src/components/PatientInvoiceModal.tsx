@@ -18,8 +18,14 @@ import {
   FileText,
   Layers,
   Sparkles,
-  Gift
+  Gift,
+  Edit3,
+  Trash2,
+  Plus,
+  ListChecks,
+  PackageCheck
 } from 'lucide-react';
+import type { InvoiceTestItem } from '../types/lab';
 import {
   formatInvoiceWhatsAppMessage,
   openWhatsApp,
@@ -97,6 +103,45 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
     redeemLoyaltyPoints
   } = useApp();
 
+  const [isEditingItems, setIsEditingItems] = useState(false);
+  const [newItemName, setNewItemName] = useState('');
+  const [newItemPrice, setNewItemPrice] = useState<string>('');
+  const [activePercent, setActivePercent] = useState<number | null>(null);
+  const [customPercent, setCustomPercent] = useState<number>(15);
+  const [customFlatDiscount, setCustomFlatDiscount] = useState<number>(0);
+  const [discountAmount, setDiscountAmount] = useState<number>(0);
+
+  const pSafe = report?.patient;
+  const linkedInvoiceSafe = report && pSafe
+    ? incomeRecords.find(i =>
+        (report.invoiceId && (i.id === report.invoiceId || i.invoiceNumber === report.invoiceId)) ||
+        i.labNumber === pSafe.labNumber ||
+        (pSafe.barcode && i.barcode === pSafe.barcode)
+      )
+    : undefined;
+
+  const initialDisplayMode: 'detailed' | 'grouped' =
+    report?.invoiceDisplayMode || linkedInvoiceSafe?.invoiceDisplayMode || 'detailed';
+  const [displayMode, setDisplayMode] = useState<'detailed' | 'grouped'>(initialDisplayMode);
+  const [groupedTitleAr, setGroupedTitleAr] = useState<string>(
+    report?.invoiceGroupedTitleAr || linkedInvoiceSafe?.invoiceGroupedTitleAr || ''
+  );
+
+  React.useEffect(() => {
+    if (!report) return;
+    setDisplayMode(report.invoiceDisplayMode || linkedInvoiceSafe?.invoiceDisplayMode || 'detailed');
+    setGroupedTitleAr(report.invoiceGroupedTitleAr || linkedInvoiceSafe?.invoiceGroupedTitleAr || '');
+    setDiscountAmount(report.patient?.discountApplied ?? linkedInvoiceSafe?.discount ?? 0);
+  }, [
+    report?.id,
+    report?.invoiceDisplayMode,
+    report?.invoiceGroupedTitleAr,
+    report?.patient?.discountApplied,
+    linkedInvoiceSafe?.invoiceDisplayMode,
+    linkedInvoiceSafe?.invoiceGroupedTitleAr,
+    linkedInvoiceSafe?.discount
+  ]);
+
   if (!isOpen || !report) return null;
 
   const labInfo = {
@@ -117,13 +162,7 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
 
   const contactPhonesDisplay = [labInfo.hotline, labInfo.phone].filter(Boolean).join(' — ');
   const p = report.patient;
-
-  // Find real linked financial invoice
-  const linkedInvoice = incomeRecords.find(i =>
-    (report.invoiceId && (i.id === report.invoiceId || i.invoiceNumber === report.invoiceId)) ||
-    i.labNumber === p.labNumber ||
-    (p.barcode && i.barcode === p.barcode)
-  );
+  const linkedInvoice = linkedInvoiceSafe;
 
   const invoiceNumber = linkedInvoice?.invoiceNumber
     || p.clinicalHistory?.match(/فاتورة\s*(?:مالية)?\s*رقم\s*([\w\d-]+)/i)?.[1]
@@ -145,94 +184,178 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
     ? (loyaltyProfile.cardNumber || loyaltyProfile.barcode)
     : undefined;
 
-  // Calculate prices based on linked invoice or profiles
-  const items = (linkedInvoice?.tests && linkedInvoice.tests.length > 0)
-    ? linkedInvoice.tests.map((t, idx) => ({
-        id: t.id || `item-${idx}`,
-        titleAr: t.nameAr || t.nameEn || 'تحليل مخبري',
-        titleEn: t.nameEn || t.code || 'Lab Test',
-        code: t.code,
-        category: t.category || 'تحاليل تشخيصية',
-        sampleType: t.sampleType || 'Serum',
-        parametersCount: 1,
-        price: t.price || 150
-      }))
-    : report.profiles.map((prof, idx) => {
-        const catMatch = LAB_CATALOG.find(c => c.code.toUpperCase() === (prof.profileCode || '').toUpperCase());
-        let price = catMatch?.profilePrice || 200;
-        if (!catMatch?.profilePrice) {
-          if (prof.parameters.length > 5) price = 220;
-          else price = Math.max(100, prof.parameters.length * 40);
-        }
+  // Source items: customInvoiceItems on report -> linkedInvoice.tests -> report.profiles
+  const resolvedSourceItems: InvoiceTestItem[] = Array.isArray(report.customInvoiceItems)
+    ? report.customInvoiceItems
+    : (linkedInvoice?.tests && linkedInvoice.tests.length > 0)
+      ? linkedInvoice.tests
+      : report.profiles.map((prof, idx) => {
+          const catMatch = LAB_CATALOG.find(c => c.code.toUpperCase() === (prof.profileCode || '').toUpperCase());
+          let price = catMatch?.profilePrice || 200;
+          if (!catMatch?.profilePrice) {
+            if (prof.parameters.length > 5) price = 220;
+            else price = Math.max(100, prof.parameters.length * 40);
+          }
+          return {
+            id: prof.id || `item-${idx}`,
+            code: prof.profileCode || 'LAB',
+            nameAr: prof.titleAr || prof.titleEn,
+            nameEn: prof.titleEn || prof.profileCode || 'Lab Test',
+            category: prof.category || 'تحاليل تشخيصية',
+            sampleType: prof.sampleType || 'Serum',
+            price
+          };
+        });
 
-        return {
-          id: prof.id || `item-${idx}`,
-          titleAr: prof.titleAr || prof.titleEn,
-          titleEn: prof.titleEn,
-          code: prof.profileCode,
-          category: prof.category || 'تحاليل تشخيصية',
-          sampleType: prof.sampleType || 'Serum',
-          parametersCount: prof.parameters.length,
-          price: price
-        };
-      });
+  const items = resolvedSourceItems.map((t, idx) => {
+    const profMatch = report.profiles.find(
+      pr => (pr.profileCode || '').toUpperCase() === (t.code || '').toUpperCase() || pr.id === t.id
+    );
+    return {
+      id: t.id || `item-${idx}`,
+      titleAr: t.nameAr || t.nameEn || 'تحليل مخبري',
+      titleEn: t.nameEn || t.code || 'Lab Test',
+      code: t.code,
+      category: t.category || 'تحاليل تشخيصية',
+      sampleType: t.sampleType || 'Serum',
+      parametersCount: profMatch?.parameters?.length || 1,
+      price: Number(t.price) || 0
+    };
+  });
 
-  const visitFee = (p as any).visitFee || linkedInvoice?.visitFee || 0;
-  const testsSubtotal = linkedInvoice?.testsSubtotal
-    || report.packageApplied?.packagePrice
-    || (p as any).testsSubtotal
-    || (p.totalCost ? Math.max(0, p.totalCost + (p.discountApplied || 0) - visitFee) : items.reduce((sum, item) => sum + item.price, 0));
+  const visitFee = Number((p as any).visitFee ?? linkedInvoice?.visitFee ?? 0) || 0;
+  const testsSubtotal = Number(
+    linkedInvoice?.testsSubtotal !== undefined
+      ? linkedInvoice.testsSubtotal
+      : (p as any).testsSubtotal !== undefined
+        ? (p as any).testsSubtotal
+        : report.packageApplied?.packagePrice !== undefined
+          ? report.packageApplied.packagePrice
+          : p.totalCost !== undefined
+            ? Math.max(0, p.totalCost + (p.discountApplied || 0) - visitFee)
+            : items.reduce((sum, item) => sum + item.price, 0)
+  ) || 0;
   const subtotal = testsSubtotal + visitFee;
-
-  const [activePercent, setActivePercent] = useState<number | null>(
-    p.discountType === 'percentage' && p.discountApplied && testsSubtotal > 0
-      ? Math.round((p.discountApplied / testsSubtotal) * 100)
-      : null
-  );
-  const [customPercent, setCustomPercent] = useState<number>(activePercent || tierDiscountPct || 15);
-  const [customFlatDiscount, setCustomFlatDiscount] = useState<number>(0);
-  const [discountAmount, setDiscountAmount] = useState<number>(p.discountApplied ?? linkedInvoice?.discount ?? 0);
-
-  React.useEffect(() => {
-    setDiscountAmount(p.discountApplied ?? linkedInvoice?.discount ?? 0);
-  }, [p.discountApplied, linkedInvoice?.discount]);
 
   const discount = discountAmount;
   const netTotal = Math.max(0, subtotal - discount);
 
-  const persistDiscountChanges = (disc: number, discountType: 'percentage' | 'daily_fixed' | 'none') => {
-    const newNet = Math.max(0, subtotal - disc);
-    const currentPaid = linkedInvoice?.paidAmount ?? (p as any).paidAmount ?? newNet;
-    const adjustedPaid = Math.min(currentPaid, newNet);
-    const newRemaining = Math.max(0, newNet - adjustedPaid);
+  const persistInvoiceChanges = (params: {
+    nextItems?: InvoiceTestItem[];
+    nextTestsSubtotal?: number;
+    nextVisitFee?: number;
+    nextDiscount?: number;
+    nextDiscountType?: 'percentage' | 'daily_fixed' | 'none';
+    nextPaidAmount?: number;
+    nextDisplayMode?: 'detailed' | 'grouped';
+    nextGroupedTitleAr?: string;
+  }) => {
+    const nextTests = params.nextItems ?? resolvedSourceItems;
+    const nextTestsSub = params.nextTestsSubtotal !== undefined ? Math.max(0, params.nextTestsSubtotal) : testsSubtotal;
+    const nextFee = params.nextVisitFee !== undefined ? Math.max(0, params.nextVisitFee) : visitFee;
+    const nextDisc = params.nextDiscount !== undefined ? Math.max(0, params.nextDiscount) : discount;
+    const nextSub = nextTestsSub + nextFee;
+    const nextNet = Math.max(0, nextSub - nextDisc);
+    const basePaid = params.nextPaidAmount !== undefined
+      ? params.nextPaidAmount
+      : ((p as any).paidAmount ?? linkedInvoice?.paidAmount ?? nextNet);
+    const adjustedPaid = Math.max(0, Math.min(basePaid, nextNet));
+    const nextRem = Math.max(0, nextNet - adjustedPaid);
+    const nextMode = params.nextDisplayMode ?? displayMode;
+    const nextGTitle = params.nextGroupedTitleAr !== undefined ? params.nextGroupedTitleAr : groupedTitleAr;
 
-    const updatedPatient = {
+    const updatedPatient: any = {
       ...p,
-      discountType,
-      discountApplied: disc,
-      totalCost: newNet,
+      testsSubtotal: nextTestsSub,
+      visitFee: nextFee,
+      discountType: params.nextDiscountType ?? p.discountType,
+      discountApplied: nextDisc,
+      totalCost: nextNet,
       paidAmount: adjustedPaid,
-      remainingAmount: newRemaining,
+      remainingAmount: nextRem,
       loyaltyCardIssued: loyaltyProfile ? true : p.loyaltyCardIssued,
       loyaltyCardNumber: loyaltyCardCode || p.loyaltyCardNumber
     };
 
+    const reportUpdates: Partial<typeof report> = {
+      patient: updatedPatient,
+      customInvoiceItems: nextTests,
+      invoiceDisplayMode: nextMode,
+      invoiceGroupedTitleAr: nextGTitle
+    };
+
     if (onUpdateReport) {
-      onUpdateReport({ ...report, patient: updatedPatient });
+      onUpdateReport({ ...report, ...reportUpdates });
     } else {
-      updateReport(report.id, { patient: updatedPatient });
+      updateReport(report.id, reportUpdates);
     }
 
     if (linkedInvoice) {
       updateIncomeRecord(linkedInvoice.id, {
-        discount: disc,
-        discountApplied: disc,
-        netAmount: newNet,
+        tests: nextTests,
+        testsSubtotal: nextTestsSub,
+        subtotal: nextSub,
+        visitFee: nextFee,
+        discount: nextDisc,
+        discountApplied: nextDisc,
+        netAmount: nextNet,
         paidAmount: adjustedPaid,
-        remainingAmount: newRemaining,
-        paymentStatus: newRemaining === 0 ? 'paid' : adjustedPaid > 0 ? 'partial' : 'unpaid'
+        remainingAmount: nextRem,
+        paymentStatus: nextRem === 0 ? 'paid' : adjustedPaid > 0 ? 'partial' : 'unpaid',
+        invoiceDisplayMode: nextMode,
+        invoiceGroupedTitleAr: nextGTitle
       });
     }
+  };
+
+  const persistDiscountChanges = (disc: number, discountType: 'percentage' | 'daily_fixed' | 'none') => {
+    persistInvoiceChanges({ nextDiscount: disc, nextDiscountType: discountType });
+  };
+
+  const handleToggleDisplayMode = (nextMode: 'detailed' | 'grouped') => {
+    setDisplayMode(nextMode);
+    persistInvoiceChanges({ nextDisplayMode: nextMode });
+  };
+
+  const handleUpdateItemField = (index: number, patch: Partial<InvoiceTestItem>) => {
+    const nextItems = resolvedSourceItems.map((it, i) => (i === index ? { ...it, ...patch } : it));
+    const summed = nextItems.reduce((sum, it) => sum + (Number(it.price) || 0), 0);
+    persistInvoiceChanges({
+      nextItems,
+      nextTestsSubtotal: displayMode === 'detailed' ? summed : testsSubtotal
+    });
+  };
+
+  const handleDeleteItem = (index: number) => {
+    const nextItems = resolvedSourceItems.filter((_, i) => i !== index);
+    const summed = nextItems.reduce((sum, it) => sum + (Number(it.price) || 0), 0);
+    persistInvoiceChanges({
+      nextItems,
+      nextTestsSubtotal: displayMode === 'detailed' ? summed : testsSubtotal
+    });
+  };
+
+  const handleAddCustomItem = () => {
+    const label = newItemName.trim();
+    if (!label) return;
+    const priceNum = Math.max(0, Number(newItemPrice) || 0);
+    const newItem: InvoiceTestItem = {
+      id: `custom-${Date.now()}`,
+      code: 'CUSTOM',
+      nameAr: label,
+      nameEn: label,
+      category: 'فحص مضاف',
+      sampleType: 'Serum',
+      price: priceNum
+    };
+    const nextItems = [...resolvedSourceItems, newItem];
+    const summed = nextItems.reduce((sum, it) => sum + (Number(it.price) || 0), 0);
+    setNewItemName('');
+    setNewItemPrice('');
+    persistInvoiceChanges({
+      nextItems,
+      nextTestsSubtotal: displayMode === 'detailed' ? summed : testsSubtotal + priceNum
+    });
   };
 
   const handleApplyPercentage = (pct: number) => {
@@ -357,7 +480,9 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
     loyaltyProfile,
     loyaltyConfig,
     invoiceEarnedPoints,
-    isEarnedConfirmed: Boolean(confirmedTx)
+    isEarnedConfirmed: Boolean(confirmedTx),
+    displayMode,
+    groupedTitleAr
   });
 
   // 1. Direct Isolated Print Window
@@ -445,7 +570,9 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
         loyaltyProfile,
         loyaltyConfig,
         invoiceEarnedPoints,
-        labInfo: labInfo as any
+        labInfo: labInfo as any,
+        displayMode,
+        groupedTitleAr
       });
       openWhatsApp(p.phone, text);
       setPrintNotice(
@@ -650,6 +777,50 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
           </div>
         </div>
 
+        {/* Invoice Display Mode (Itemized vs Grouped) & Price/Row Edit Toolbar */}
+        <div className="bg-slate-900/90 border-b border-slate-700 px-4 sm:px-6 py-2 flex flex-wrap items-center justify-between gap-2 text-xs text-white">
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="font-bold text-slate-300 ml-1">عرض التحاليل بالفاتورة:</span>
+            <button
+              type="button"
+              onClick={() => handleToggleDisplayMode('detailed')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer border ${
+                displayMode === 'detailed'
+                  ? 'bg-rose-700 text-white border-rose-500 shadow-xs'
+                  : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+              }`}
+            >
+              <ListChecks className="w-3.5 h-3.5" />
+              <span>سرد مفصل (كل تحليل بسعره)</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleToggleDisplayMode('grouped')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer border ${
+                displayMode === 'grouped'
+                  ? 'bg-indigo-600 text-white border-indigo-400 shadow-xs'
+                  : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+              }`}
+            >
+              <PackageCheck className="w-3.5 h-3.5" />
+              <span>مجمعة بسعر إجمالي</span>
+            </button>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setIsEditingItems(prev => !prev)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer border ${
+              isEditingItems
+                ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-xs'
+                : 'bg-slate-800 text-amber-300 border-slate-700 hover:bg-slate-700'
+            }`}
+          >
+            <Edit3 className="w-3.5 h-3.5" />
+            <span>{isEditingItems ? 'إنهاء تعديل البنود والأسعار ✓' : 'تعديل الأسعار أو حذف خانات'}</span>
+          </button>
+        </div>
+
         {/* Scrollable Executive Invoice Preview Container */}
         <div className="p-4 sm:p-6 overflow-y-auto bg-slate-950 flex justify-center">
           <div
@@ -738,7 +909,7 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
                 </div>
               </div>
 
-              {/* Tests table */}
+              {/* Tests table (Detailed vs Grouped + Optional Inline Editor) */}
               <div className="border border-slate-200 rounded-xl overflow-hidden mb-4">
                 <table className="w-full text-xs text-right">
                   <thead>
@@ -748,25 +919,144 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
                       <th className="py-2.5 px-3 text-center">نوع العينة</th>
                       <th className="py-2.5 px-3 text-center">العناصر</th>
                       <th className="py-2.5 px-3 text-left">القيمة (EGP)</th>
+                      {isEditingItems && <th className="py-2.5 px-2 text-center w-12">حذف</th>}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
-                    {items.map((it, idx) => (
-                      <tr key={it.id} className="odd:bg-white even:bg-slate-50/60">
-                        <td className="py-2.5 px-3 text-center text-slate-400 font-mono">{idx + 1}</td>
-                        <td className="py-2.5 px-3">
-                          <div className="font-bold text-slate-900">{it.titleAr}</div>
-                          <div className="text-[10px] text-slate-500 font-mono" dir="ltr">{it.titleEn}</div>
+                    {displayMode === 'grouped' && !isEditingItems ? (
+                      <tr className="bg-white">
+                        <td className="py-3 px-3 text-center text-slate-400 font-mono align-top">1</td>
+                        <td className="py-3 px-3">
+                          <div className="font-black text-slate-900 text-[13px]">
+                            {groupedTitleAr.trim() || `مجموعة الفحوصات والتحاليل الطبية (${items.length})`}
+                          </div>
+                          {items.length > 0 && (
+                            <div className="text-[11px] text-slate-600 mt-1 leading-relaxed">
+                              تشمل: {items.map(it => it.titleAr).join(' • ')}
+                            </div>
+                          )}
                         </td>
-                        <td className="py-2.5 px-3 text-center text-slate-600">{it.sampleType}</td>
-                        <td className="py-2.5 px-3 text-center text-slate-500 font-mono">{it.parametersCount} عنصر</td>
-                        <td className="py-2.5 px-3 text-left font-mono font-bold text-rose-950" dir="ltr">
-                          {it.price.toFixed(2)}
+                        <td className="py-3 px-3 text-center text-slate-600">فحوصات مجمعة</td>
+                        <td className="py-3 px-3 text-center text-slate-500 font-mono">{items.length} تحاليل</td>
+                        <td className="py-3 px-3 text-left font-mono font-black text-rose-950 text-[13px]" dir="ltr">
+                          {testsSubtotal.toFixed(2)}
                         </td>
                       </tr>
-                    ))}
+                    ) : (
+                      items.map((it, idx) => (
+                        <tr key={it.id} className="odd:bg-white even:bg-slate-50/60">
+                          <td className="py-2.5 px-3 text-center text-slate-400 font-mono">{idx + 1}</td>
+                          <td className="py-2.5 px-3">
+                            {isEditingItems ? (
+                              <input
+                                type="text"
+                                value={it.titleAr}
+                                onChange={(e) => handleUpdateItemField(idx, { nameAr: e.target.value })}
+                                className="w-full px-2 py-1 text-xs font-bold border border-slate-300 rounded bg-white text-slate-900"
+                              />
+                            ) : (
+                              <>
+                                <div className="font-bold text-slate-900">{it.titleAr}</div>
+                                <div className="text-[10px] text-slate-500 font-mono" dir="ltr">{it.titleEn}</div>
+                              </>
+                            )}
+                          </td>
+                          <td className="py-2.5 px-3 text-center text-slate-600">{it.sampleType}</td>
+                          <td className="py-2.5 px-3 text-center text-slate-500 font-mono">{it.parametersCount} عنصر</td>
+                          <td className="py-2.5 px-3 text-left font-mono font-bold text-rose-950" dir="ltr">
+                            {isEditingItems ? (
+                              <input
+                                type="number"
+                                min="0"
+                                step="1"
+                                value={it.price}
+                                onChange={(e) => handleUpdateItemField(idx, { price: Math.max(0, Number(e.target.value) || 0) })}
+                                className="w-24 px-2 py-1 text-left font-mono font-bold border border-rose-300 rounded bg-rose-50/50 text-rose-950"
+                              />
+                            ) : (
+                              it.price.toFixed(2)
+                            )}
+                          </td>
+                          {isEditingItems && (
+                            <td className="py-2.5 px-2 text-center">
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteItem(idx)}
+                                className="p-1.5 text-red-600 hover:bg-red-50 rounded-md cursor-pointer transition-colors"
+                                title="حذف هذا البند من الفاتورة"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </td>
+                          )}
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
+
+                {/* Grouped Summary Editor + Add Custom Row Bar when Editing */}
+                {isEditingItems && (
+                  <div className="bg-amber-50/70 border-t border-amber-200 p-3 space-y-2.5">
+                    {displayMode === 'grouped' && (
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 items-center bg-white p-2.5 rounded-lg border border-indigo-200">
+                        <div className="sm:col-span-2">
+                          <label className="block text-[10px] font-bold text-indigo-900 mb-0.5">
+                            عنوان البند المجمع بالفاتورة:
+                          </label>
+                          <input
+                            type="text"
+                            value={groupedTitleAr}
+                            onChange={(e) => {
+                              setGroupedTitleAr(e.target.value);
+                              persistInvoiceChanges({ nextGroupedTitleAr: e.target.value });
+                            }}
+                            placeholder={`مجموعة الفحوصات والتحاليل الطبية (${items.length})`}
+                            className="w-full px-2.5 py-1.5 text-xs font-bold border border-indigo-300 rounded bg-white text-slate-900"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-bold text-indigo-900 mb-0.5">
+                            السعر الإجمالي المجمع (ج.م):
+                          </label>
+                          <input
+                            type="number"
+                            min="0"
+                            value={testsSubtotal}
+                            onChange={(e) => persistInvoiceChanges({ nextTestsSubtotal: Math.max(0, Number(e.target.value) || 0) })}
+                            className="w-full px-2.5 py-1.5 text-xs font-mono font-black border border-indigo-300 rounded bg-indigo-50/50 text-rose-950"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="flex flex-wrap items-center gap-2">
+                      <input
+                        type="text"
+                        value={newItemName}
+                        onChange={(e) => setNewItemName(e.target.value)}
+                        placeholder="إضافة بند أو تحليل جديد بالفاتورة..."
+                        className="flex-1 min-w-[180px] px-2.5 py-1.5 text-xs border border-slate-300 rounded-lg bg-white"
+                      />
+                      <input
+                        type="number"
+                        min="0"
+                        value={newItemPrice}
+                        onChange={(e) => setNewItemPrice(e.target.value)}
+                        placeholder="السعر (ج.م)"
+                        className="w-28 px-2.5 py-1.5 text-xs font-mono border border-slate-300 rounded-lg bg-white"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleAddCustomItem}
+                        className="flex items-center gap-1 px-3 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold rounded-lg cursor-pointer"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>إضافة للفاتورة</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Integrated Patient Loyalty Card & Points Panel Inside Invoice */}
@@ -844,29 +1134,98 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
                 </div>
 
                 <div className="w-full sm:w-72 bg-slate-50 border border-slate-300 rounded-xl p-4 text-xs space-y-2">
-                  <div className="flex justify-between text-slate-600">
+                  <div className="flex justify-between items-center text-slate-600 gap-2">
                     <span>إجمالي التحاليل:</span>
-                    <span className="font-mono font-bold text-slate-800">{testsSubtotal.toFixed(2)} ج.م</span>
+                    {isEditingItems ? (
+                      <input
+                        type="number"
+                        min="0"
+                        value={testsSubtotal}
+                        onChange={(e) => persistInvoiceChanges({ nextTestsSubtotal: Math.max(0, Number(e.target.value) || 0) })}
+                        className="w-24 px-2 py-0.5 text-left font-mono font-bold border border-slate-300 rounded bg-white text-slate-900"
+                      />
+                    ) : (
+                      <span className="font-mono font-bold text-slate-800">{testsSubtotal.toFixed(2)} ج.م</span>
+                    )}
                   </div>
-                  {visitFee > 0 && (
-                    <div className="flex justify-between text-indigo-700 font-semibold">
+                  {(visitFee > 0 || isEditingItems) && (
+                    <div className="flex justify-between items-center text-indigo-700 font-semibold gap-2">
                       <span>رسوم الزيارة المنزلية:</span>
-                      <span className="font-mono font-bold">+ {visitFee.toFixed(2)} ج.م</span>
+                      {isEditingItems ? (
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="number"
+                            min="0"
+                            value={visitFee}
+                            onChange={(e) => persistInvoiceChanges({ nextVisitFee: Math.max(0, Number(e.target.value) || 0) })}
+                            className="w-20 px-2 py-0.5 text-left font-mono font-bold border border-indigo-300 rounded bg-white text-indigo-900"
+                          />
+                          {visitFee > 0 && (
+                            <button
+                              type="button"
+                              onClick={() => persistInvoiceChanges({ nextVisitFee: 0 })}
+                              className="p-1 text-red-500 hover:bg-red-50 rounded cursor-pointer"
+                              title="حذف رسوم الزيارة"
+                            >
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="font-mono font-bold">+ {visitFee.toFixed(2)} ج.م</span>
+                      )}
                     </div>
                   )}
-                  {discount > 0 && (
-                    <div className="flex justify-between text-emerald-700 font-semibold">
+                  {(discount > 0 || isEditingItems) && (
+                    <div className="flex justify-between items-center text-emerald-700 font-semibold gap-2">
                       <span>الخصم المطبق:</span>
-                      <span className="font-mono font-bold">- {discount.toFixed(2)} ج.م</span>
+                      {isEditingItems ? (
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="number"
+                            min="0"
+                            value={discount}
+                            onChange={(e) => {
+                              const nextD = Math.max(0, Number(e.target.value) || 0);
+                              setDiscountAmount(nextD);
+                              persistInvoiceChanges({ nextDiscount: nextD, nextDiscountType: nextD > 0 ? 'daily_fixed' : 'none' });
+                            }}
+                            className="w-20 px-2 py-0.5 text-left font-mono font-bold border border-emerald-300 rounded bg-white text-emerald-900"
+                          />
+                          {discount > 0 && (
+                            <button
+                              type="button"
+                              onClick={handleResetDiscount}
+                              className="p-1 text-red-500 hover:bg-red-50 rounded cursor-pointer"
+                              title="حذف الخصم"
+                            >
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="font-mono font-bold">- {discount.toFixed(2)} ج.م</span>
+                      )}
                     </div>
                   )}
                   <div className="flex justify-between font-black text-rose-950 text-sm pt-2 border-t border-slate-200">
                     <span>الصافي المطلوب:</span>
                     <span className="font-mono">{netTotal.toFixed(2)} ج.م</span>
                   </div>
-                  <div className="flex justify-between text-slate-700">
+                  <div className="flex justify-between items-center text-slate-700 gap-2">
                     <span>المسدد ({paymentMethodLabel}):</span>
-                    <span className="font-mono font-bold text-emerald-700">{paidAmount.toFixed(2)} ج.م</span>
+                    {isEditingItems ? (
+                      <input
+                        type="number"
+                        min="0"
+                        max={netTotal}
+                        value={paidAmount}
+                        onChange={(e) => persistInvoiceChanges({ nextPaidAmount: Math.max(0, Number(e.target.value) || 0) })}
+                        className="w-24 px-2 py-0.5 text-left font-mono font-bold border border-emerald-300 rounded bg-white text-emerald-800"
+                      />
+                    ) : (
+                      <span className="font-mono font-bold text-emerald-700">{paidAmount.toFixed(2)} ج.م</span>
+                    )}
                   </div>
                   <div className="flex justify-between font-bold pt-2 border-t border-dashed border-slate-300">
                     <span className={remainingAmount > 0 ? 'text-rose-700' : 'text-emerald-700'}>

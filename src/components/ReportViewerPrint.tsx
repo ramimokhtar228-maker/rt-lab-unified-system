@@ -30,7 +30,9 @@ import {
   Sparkles,
   User,
   BarChart2,
-  ClipboardList
+  ClipboardList,
+  ListChecks,
+  PackageCheck
 } from 'lucide-react';
 
 interface ReportViewerPrintProps {
@@ -248,6 +250,45 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
             <Receipt className={`w-3.5 h-3.5 ${includeInvoice ? 'text-emerald-400' : 'text-slate-400'}`} />
             <span>{includeInvoice ? 'صفحة الفاتورة: مفعلة ✓' : 'صفحة الفاتورة: مخفية'}</span>
           </button>
+
+          {/* Quick Invoice Display Mode Switcher (Detailed vs Grouped) */}
+          {includeInvoice && (() => {
+            const linkedInv = incomeRecords.find(
+              i =>
+                (report.invoiceId && (i.id === report.invoiceId || i.invoiceNumber === report.invoiceId)) ||
+                i.labNumber === p.labNumber ||
+                (p.barcode && i.barcode === p.barcode)
+            );
+            const currentMode: 'detailed' | 'grouped' =
+              report.invoiceDisplayMode || linkedInv?.invoiceDisplayMode || 'detailed';
+            const nextMode: 'detailed' | 'grouped' = currentMode === 'grouped' ? 'detailed' : 'grouped';
+            return (
+              <button
+                type="button"
+                onClick={() => {
+                  try {
+                    updateReport(report.id, { invoiceDisplayMode: nextMode });
+                    if (linkedInv) {
+                      updateIncomeRecord(linkedInv.id, { invoiceDisplayMode: nextMode });
+                    }
+                  } catch {}
+                }}
+                className={`flex items-center gap-1.5 px-3 py-2 text-xs font-bold rounded-lg border transition-all cursor-pointer ${
+                  currentMode === 'grouped'
+                    ? 'bg-indigo-600/40 text-indigo-100 border-indigo-400/70 shadow-sm'
+                    : 'bg-slate-800 text-amber-200 border-slate-700 hover:bg-slate-700'
+                }`}
+                title="التبديل بين عرض التحاليل مفصلة بالأسعار أو مجمعة بسعر إجمالي في فاتورة التقرير"
+              >
+                {currentMode === 'grouped' ? (
+                  <PackageCheck className="w-3.5 h-3.5 text-indigo-300" />
+                ) : (
+                  <ListChecks className="w-3.5 h-3.5 text-amber-300" />
+                )}
+                <span>{currentMode === 'grouped' ? 'الفاتورة: مجمعة بسعر إجمالي' : 'الفاتورة: سرد مفصل'}</span>
+              </button>
+            );
+          })()}
 
           {/* Edit Client / Patient Data */}
           <button

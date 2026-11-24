@@ -406,6 +406,8 @@ export function formatInvoiceWhatsAppMessage(params: {
   loyaltyConfig?: LoyaltyConfig;
   invoiceEarnedPoints?: number;
   labInfo?: LabInfo;
+  displayMode?: 'detailed' | 'grouped';
+  groupedTitleAr?: string;
 }): string {
   const { labInfo, loyaltyProfile, loyaltyConfig } = params;
   const labName = labInfo?.labNameAr || LAB_NAME_AR;
@@ -429,6 +431,10 @@ export function formatInvoiceWhatsAppMessage(params: {
 • نظام الاستبدال: كل 100 نقطة = ${cash.egpPer100} ج.م خصم`;
   }
 
+  const testsTextBlock = params.displayMode === 'grouped'
+    ? `• *${params.groupedTitleAr?.trim() || `مجموعة الفحوصات الطبية (${params.items.length} تحاليل)`}* — *${params.testsSubtotal.toFixed(0)} ج.م*\n_(${params.items.map(it => it.titleAr).join(' · ')})_`
+    : params.items.map((it, idx) => `${idx + 1}. ${it.titleAr}${it.titleEn ? ` (${it.titleEn})` : ''} — *${Number(it.price).toFixed(0)} ج.م*`).join('\n');
+
   return `🧾 *${labName}*
 _${supervision}_
 ━━━━━━━━━━━━━━━━━━━━━━
@@ -439,7 +445,7 @@ _${supervision}_
 • تاريخ السحب: ${params.sampleDate}${params.reportingDate ? `\n• موعد الاستلام: ${params.reportingDate}` : ''}${params.branchName ? `\n• الفرع: ${params.branchName}` : ''}
 
 🔬 *تفاصيل الفحوصات (${params.items.length}):*
-${params.items.map((it, idx) => `${idx + 1}. ${it.titleAr}${it.titleEn ? ` (${it.titleEn})` : ''} — *${Number(it.price).toFixed(0)} ج.م*`).join('\n')}
+${testsTextBlock}
 
 💰 *البيان المالي:*
 • إجمالي التحاليل: *${params.testsSubtotal.toFixed(0)} ج.م*${params.visitFee && params.visitFee > 0 ? `\n• رسوم الزيارة: *+${params.visitFee.toFixed(0)} ج.م*` : ''}${params.discount > 0 ? `\n• الخصم المطبق: *-${params.discount.toFixed(0)} ج.م*` : ''}

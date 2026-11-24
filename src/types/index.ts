@@ -103,6 +103,9 @@ export interface IncomeRecord {
   discountApplied?: number;
   homeAddress?: string;
   deliveryNotes?: string;
+  invoiceDisplayMode?: 'detailed' | 'grouped';
+  invoiceGroupedTitleAr?: string;
+  invoiceGroupedTitleEn?: string;
 }
 
 export type ExpenseCategory =
@@ -573,6 +576,10 @@ export interface LabReport {
   patientSheetMeta?: PatientSheetMeta;
   attachInvoiceToReport?: boolean;
   showInvoiceDetails?: boolean;
+  invoiceDisplayMode?: 'detailed' | 'grouped';
+  invoiceGroupedTitleAr?: string;
+  invoiceGroupedTitleEn?: string;
+  customInvoiceItems?: InvoiceTestItem[];
 }
 
 export interface CatalogProfileTemplate {

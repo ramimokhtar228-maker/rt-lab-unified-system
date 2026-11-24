@@ -97,6 +97,9 @@ export interface IncomeRecord {
   syncStatus: 'synced' | 'pending' | 'local_only';
   syncDate?: string;
   externalReportId?: string;
+  invoiceDisplayMode?: 'detailed' | 'grouped';
+  invoiceGroupedTitleAr?: string;
+  invoiceGroupedTitleEn?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -566,6 +569,10 @@ export interface LabReport {
   patientSheetMeta?: PatientSheetMeta;
   attachInvoiceToReport?: boolean;
   showInvoiceDetails?: boolean;
+  invoiceDisplayMode?: 'detailed' | 'grouped';
+  invoiceGroupedTitleAr?: string;
+  invoiceGroupedTitleEn?: string;
+  customInvoiceItems?: InvoiceTestItem[];
 }
 
 export interface CatalogProfileTemplate {

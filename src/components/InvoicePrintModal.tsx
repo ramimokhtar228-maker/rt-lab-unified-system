@@ -1,7 +1,7 @@
 import { tafqeetEGP } from '../utils/tafqeet';
 import { RTLogo } from './RTLogo';
-import React, { useState } from 'react';
-import { IncomeRecord, Patient } from '../types';
+import React, { useEffect, useState } from 'react';
+import { IncomeRecord, InvoiceTestItem, Patient } from '../types';
 import { generateBarcodeSVG } from '../utils/barcode';
 import {
   X,
@@ -14,7 +14,12 @@ import {
   Layers,
   Loader2,
   Award,
-  CheckCircle2
+  CheckCircle2,
+  Edit3,
+  Trash2,
+  Plus,
+  ListChecks,
+  PackageCheck
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { ClientEditModal } from './ClientEditModal';
@@ -83,6 +88,17 @@ export const InvoicePrintModal: React.FC<InvoicePrintModalProps> = ({ invoice, o
   const [printLayout, setPrintLayout] = useState<'standard' | 'thermal' | 'tube_sticker'>('standard');
   const [isExporting, setIsExporting] = useState<'wa' | 'png' | 'pdf' | 'both' | null>(null);
   const [exportNotice, setExportNotice] = useState<string | null>(null);
+  const [isEditingItems, setIsEditingItems] = useState(false);
+  const [newItemName, setNewItemName] = useState('');
+  const [newItemPrice, setNewItemPrice] = useState<string>('');
+  const [displayMode, setDisplayMode] = useState<'detailed' | 'grouped'>(invoice?.invoiceDisplayMode || 'detailed');
+  const [groupedTitleAr, setGroupedTitleAr] = useState<string>(invoice?.invoiceGroupedTitleAr || '');
+
+  useEffect(() => {
+    if (!invoice) return;
+    setDisplayMode(invoice.invoiceDisplayMode || 'detailed');
+    setGroupedTitleAr(invoice.invoiceGroupedTitleAr || '');
+  }, [invoice?.id, invoice?.invoiceDisplayMode, invoice?.invoiceGroupedTitleAr]);
 
   if (!invoice) return null;
 
@@ -132,8 +148,10 @@ export const InvoicePrintModal: React.FC<InvoicePrintModalProps> = ({ invoice, o
         (t.reportNumber && normalizeInvoiceRef(t.reportNumber) === labNorm))
   );
 
-  const testsSubtotal = invoice.testsSubtotal || invoice.subtotal || 0;
-  const visitFee = invoice.visitFee || 0;
+  const visitFee = Number(invoice.visitFee) || 0;
+  const testsSubtotal = invoice.testsSubtotal !== undefined
+    ? (Number(invoice.testsSubtotal) || 0)
+    : Math.max(0, (Number(invoice.subtotal) || 0) - visitFee);
   const paidTestsOnly = calculateTestsOnlyPaidAmount(invoice, loyaltyConfig);
   const invoiceEarnedPoints = confirmedTx?.points ?? invoice.loyaltyPointsEarned ?? pointsForAmount(paidTestsOnly, loyaltyConfig);
   const paymentMethodLabel = PAYMENT_METHOD_AR[invoice.paymentMethod] || 'نقدي';
@@ -149,6 +167,106 @@ export const InvoicePrintModal: React.FC<InvoicePrintModalProps> = ({ invoice, o
   const repName = invoice.isHomeVisit || invoice.bookingType === 'home_visit'
     ? invoice.visitSpecialist
     : invoice.branchRepresentative;
+
+  const persistInvoiceEdits = (params: {
+    nextItems?: InvoiceTestItem[];
+    nextTestsSubtotal?: number;
+    nextVisitFee?: number;
+    nextDiscount?: number;
+    nextPaidAmount?: number;
+    nextDisplayMode?: 'detailed' | 'grouped';
+    nextGroupedTitleAr?: string;
+  }) => {
+    const nextTests = params.nextItems ?? (invoice.tests || []);
+    const nextTestsSub = params.nextTestsSubtotal !== undefined ? Math.max(0, params.nextTestsSubtotal) : testsSubtotal;
+    const nextFee = params.nextVisitFee !== undefined ? Math.max(0, params.nextVisitFee) : visitFee;
+    const nextDisc = params.nextDiscount !== undefined ? Math.max(0, params.nextDiscount) : (Number(invoice.discount) || 0);
+    const nextSub = nextTestsSub + nextFee;
+    const nextNet = Math.max(0, nextSub - nextDisc);
+    const basePaid = params.nextPaidAmount !== undefined ? params.nextPaidAmount : (Number(invoice.paidAmount) || 0);
+    const adjustedPaid = Math.max(0, Math.min(basePaid, nextNet));
+    const nextRem = Math.max(0, nextNet - adjustedPaid);
+    const nextMode = params.nextDisplayMode ?? displayMode;
+    const nextGTitle = params.nextGroupedTitleAr !== undefined ? params.nextGroupedTitleAr : groupedTitleAr;
+
+    updateIncomeRecord(invoice.id, {
+      tests: nextTests,
+      testsSubtotal: nextTestsSub,
+      subtotal: nextSub,
+      visitFee: nextFee,
+      discount: nextDisc,
+      discountApplied: nextDisc,
+      netAmount: nextNet,
+      paidAmount: adjustedPaid,
+      remainingAmount: nextRem,
+      paymentStatus: nextRem === 0 ? 'paid' : adjustedPaid > 0 ? 'partial' : 'unpaid',
+      invoiceDisplayMode: nextMode,
+      invoiceGroupedTitleAr: nextGTitle
+    });
+
+    if (matchingReport) {
+      updateReport(matchingReport.id, {
+        customInvoiceItems: nextTests,
+        invoiceDisplayMode: nextMode,
+        invoiceGroupedTitleAr: nextGTitle,
+        patient: {
+          ...matchingReport.patient,
+          testsSubtotal: nextTestsSub,
+          visitFee: nextFee,
+          discountApplied: nextDisc,
+          totalCost: nextNet,
+          paidAmount: adjustedPaid,
+          remainingAmount: nextRem
+        } as any
+      });
+    }
+  };
+
+  const handleToggleDisplayMode = (nextMode: 'detailed' | 'grouped') => {
+    setDisplayMode(nextMode);
+    persistInvoiceEdits({ nextDisplayMode: nextMode });
+  };
+
+  const handleUpdateItemField = (index: number, patch: Partial<InvoiceTestItem>) => {
+    const nextItems = (invoice.tests || []).map((t, i) => (i === index ? { ...t, ...patch } : t));
+    const summed = nextItems.reduce((sum, t) => sum + (Number(t.price) || 0), 0);
+    persistInvoiceEdits({
+      nextItems,
+      nextTestsSubtotal: displayMode === 'detailed' ? summed : testsSubtotal
+    });
+  };
+
+  const handleDeleteItem = (index: number) => {
+    const nextItems = (invoice.tests || []).filter((_, i) => i !== index);
+    const summed = nextItems.reduce((sum, t) => sum + (Number(t.price) || 0), 0);
+    persistInvoiceEdits({
+      nextItems,
+      nextTestsSubtotal: displayMode === 'detailed' ? summed : testsSubtotal
+    });
+  };
+
+  const handleAddCustomItem = () => {
+    const label = newItemName.trim();
+    if (!label) return;
+    const priceNum = Math.max(0, Number(newItemPrice) || 0);
+    const added: InvoiceTestItem = {
+      id: `custom-${Date.now()}`,
+      code: 'CUSTOM',
+      nameAr: label,
+      nameEn: label,
+      category: 'فحص مضاف',
+      sampleType: 'Serum',
+      price: priceNum
+    };
+    const nextItems = [...(invoice.tests || []), added];
+    const summed = nextItems.reduce((sum, t) => sum + (Number(t.price) || 0), 0);
+    setNewItemName('');
+    setNewItemPrice('');
+    persistInvoiceEdits({
+      nextItems,
+      nextTestsSubtotal: displayMode === 'detailed' ? summed : testsSubtotal + priceNum
+    });
+  };
 
   const buildExportPayload = (): InvoiceExportPayload => ({
     invoiceNumber: invoice.invoiceNumber,
@@ -186,7 +304,9 @@ export const InvoicePrintModal: React.FC<InvoicePrintModalProps> = ({ invoice, o
     loyaltyProfile,
     loyaltyConfig,
     invoiceEarnedPoints,
-    isEarnedConfirmed: Boolean(confirmedTx)
+    isEarnedConfirmed: Boolean(confirmedTx),
+    displayMode,
+    groupedTitleAr
   });
 
   const handlePrint = () => {
@@ -270,7 +390,9 @@ export const InvoicePrintModal: React.FC<InvoicePrintModalProps> = ({ invoice, o
         loyaltyProfile,
         loyaltyConfig,
         invoiceEarnedPoints,
-        labInfo: resolvedLabInfo
+        labInfo: resolvedLabInfo,
+        displayMode,
+        groupedTitleAr
       });
       openWhatsApp(invoice.patientPhone || '', text);
       setExportNotice(
@@ -437,6 +559,52 @@ export const InvoicePrintModal: React.FC<InvoicePrintModalProps> = ({ invoice, o
           </div>
         </div>
 
+        {/* Display Mode (Detailed vs Grouped) & Price/Row Edit Toolbar (Hidden during print) */}
+        <div className="bg-slate-800 border-b border-slate-700 px-4 sm:px-6 py-2 flex flex-wrap items-center justify-between gap-2 text-xs text-white print:hidden">
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="font-bold text-slate-300 ml-1">عرض التحاليل بالفاتورة:</span>
+            <button
+              type="button"
+              onClick={() => handleToggleDisplayMode('detailed')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer border ${
+                displayMode === 'detailed'
+                  ? 'bg-rose-700 text-white border-rose-500 shadow-xs'
+                  : 'bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-700'
+              }`}
+            >
+              <ListChecks className="w-3.5 h-3.5" />
+              <span>سرد مفصل (كل تحليل بسعره)</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleToggleDisplayMode('grouped')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer border ${
+                displayMode === 'grouped'
+                  ? 'bg-indigo-600 text-white border-indigo-400 shadow-xs'
+                  : 'bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-700'
+              }`}
+            >
+              <PackageCheck className="w-3.5 h-3.5" />
+              <span>مجمعة بسعر إجمالي</span>
+            </button>
+          </div>
+
+          {printLayout !== 'tube_sticker' && (
+            <button
+              type="button"
+              onClick={() => setIsEditingItems(prev => !prev)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer border ${
+                isEditingItems
+                  ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-xs'
+                  : 'bg-slate-900 text-amber-300 border-slate-700 hover:bg-slate-700'
+              }`}
+            >
+              <Edit3 className="w-3.5 h-3.5" />
+              <span>{isEditingItems ? 'إنهاء تعديل البنود والأسعار ✓' : 'تعديل الأسعار أو حذف خانات'}</span>
+            </button>
+          )}
+        </div>
+
         {exportNotice && (
           <div className="bg-emerald-50 border-b border-emerald-300 px-6 py-2 text-xs font-bold text-emerald-900 print:hidden">
             {exportNotice}
@@ -529,7 +697,7 @@ export const InvoicePrintModal: React.FC<InvoicePrintModalProps> = ({ invoice, o
                 </div>
               </div>
 
-              {/* Tests Table */}
+              {/* Tests Table (Detailed vs Grouped + Optional Inline Editor) */}
               <div className="border border-slate-200 rounded-xl overflow-hidden mb-4">
                 <table className="w-full text-xs border-collapse">
                   <thead>
@@ -539,23 +707,143 @@ export const InvoicePrintModal: React.FC<InvoicePrintModalProps> = ({ invoice, o
                       <th className="py-2.5 px-3 text-right">اسم الفحص الطبي المطلوب</th>
                       <th className="py-2.5 px-3 text-right">القسم التشخيصي</th>
                       <th className="py-2.5 px-3 text-left">السعر (ج.م)</th>
+                      {isEditingItems && <th className="py-2.5 px-2 text-center w-12 print:hidden">حذف</th>}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
-                    {invoice.tests.map((test, index) => (
-                      <tr key={test.id || index} className="odd:bg-white even:bg-slate-50/50">
-                        <td className="py-2.5 px-3 text-slate-500 font-mono">{index + 1}</td>
-                        <td className="py-2.5 px-3 font-mono font-semibold text-rose-900">{test.code}</td>
-                        <td className="py-2.5 px-3">
-                          <div className="font-bold text-slate-900">{test.nameAr}</div>
-                          {test.nameEn && <div className="text-[10px] text-slate-500 font-mono" dir="ltr">{test.nameEn}</div>}
+                    {displayMode === 'grouped' && !isEditingItems ? (
+                      <tr className="bg-white">
+                        <td className="py-3 px-3 text-slate-500 font-mono align-top">1</td>
+                        <td className="py-3 px-3 font-mono font-semibold text-rose-900 align-top">GROUPED</td>
+                        <td className="py-3 px-3">
+                          <div className="font-black text-slate-900 text-[13px]">
+                            {groupedTitleAr.trim() || `مجموعة الفحوصات والتحاليل الطبية (${(invoice.tests || []).length})`}
+                          </div>
+                          {(invoice.tests || []).length > 0 && (
+                            <div className="text-[11px] text-slate-600 mt-1 leading-relaxed">
+                              تشمل: {(invoice.tests || []).map(t => t.nameAr || t.nameEn).join(' • ')}
+                            </div>
+                          )}
                         </td>
-                        <td className="py-2.5 px-3 text-slate-600">{test.category}</td>
-                        <td className="py-2.5 px-3 text-left font-mono font-bold text-rose-950">{test.price.toFixed(2)}</td>
+                        <td className="py-3 px-3 text-slate-600 align-top">فحوصات مجمعة</td>
+                        <td className="py-3 px-3 text-left font-mono font-black text-rose-950 text-[13px] align-top">
+                          {testsSubtotal.toFixed(2)}
+                        </td>
                       </tr>
-                    ))}
+                    ) : (
+                      (invoice.tests || []).map((test, index) => (
+                        <tr key={test.id || index} className="odd:bg-white even:bg-slate-50/50">
+                          <td className="py-2.5 px-3 text-slate-500 font-mono">{index + 1}</td>
+                          <td className="py-2.5 px-3 font-mono font-semibold text-rose-900">{test.code}</td>
+                          <td className="py-2.5 px-3">
+                            {isEditingItems ? (
+                              <input
+                                type="text"
+                                value={test.nameAr || test.nameEn}
+                                onChange={(e) => handleUpdateItemField(index, { nameAr: e.target.value })}
+                                className="w-full px-2 py-1 text-xs font-bold border border-slate-300 rounded bg-white text-slate-900"
+                              />
+                            ) : (
+                              <>
+                                <div className="font-bold text-slate-900">{test.nameAr}</div>
+                                {test.nameEn && <div className="text-[10px] text-slate-500 font-mono" dir="ltr">{test.nameEn}</div>}
+                              </>
+                            )}
+                          </td>
+                          <td className="py-2.5 px-3 text-slate-600">{test.category}</td>
+                          <td className="py-2.5 px-3 text-left font-mono font-bold text-rose-950">
+                            {isEditingItems ? (
+                              <input
+                                type="number"
+                                min="0"
+                                step="1"
+                                value={test.price}
+                                onChange={(e) => handleUpdateItemField(index, { price: Math.max(0, Number(e.target.value) || 0) })}
+                                className="w-24 px-2 py-1 text-left font-mono font-bold border border-rose-300 rounded bg-rose-50/50 text-rose-950"
+                              />
+                            ) : (
+                              (Number(test.price) || 0).toFixed(2)
+                            )}
+                          </td>
+                          {isEditingItems && (
+                            <td className="py-2.5 px-2 text-center print:hidden">
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteItem(index)}
+                                className="p-1.5 text-red-600 hover:bg-red-50 rounded-md cursor-pointer transition-colors"
+                                title="حذف هذا البند من الفاتورة"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </td>
+                          )}
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
+
+                {isEditingItems && (
+                  <div className="bg-amber-50/70 border-t border-amber-200 p-3 space-y-2.5 print:hidden">
+                    {displayMode === 'grouped' && (
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 items-center bg-white p-2.5 rounded-lg border border-indigo-200">
+                        <div className="sm:col-span-2">
+                          <label className="block text-[10px] font-bold text-indigo-900 mb-0.5">
+                            عنوان البند المجمع بالفاتورة:
+                          </label>
+                          <input
+                            type="text"
+                            value={groupedTitleAr}
+                            onChange={(e) => {
+                              setGroupedTitleAr(e.target.value);
+                              persistInvoiceEdits({ nextGroupedTitleAr: e.target.value });
+                            }}
+                            placeholder={`مجموعة الفحوصات والتحاليل الطبية (${(invoice.tests || []).length})`}
+                            className="w-full px-2.5 py-1.5 text-xs font-bold border border-indigo-300 rounded bg-white text-slate-900"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-bold text-indigo-900 mb-0.5">
+                            السعر الإجمالي المجمع (ج.م):
+                          </label>
+                          <input
+                            type="number"
+                            min="0"
+                            value={testsSubtotal}
+                            onChange={(e) => persistInvoiceEdits({ nextTestsSubtotal: Math.max(0, Number(e.target.value) || 0) })}
+                            className="w-full px-2.5 py-1.5 text-xs font-mono font-black border border-indigo-300 rounded bg-indigo-50/50 text-rose-950"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="flex flex-wrap items-center gap-2">
+                      <input
+                        type="text"
+                        value={newItemName}
+                        onChange={(e) => setNewItemName(e.target.value)}
+                        placeholder="إضافة بند أو تحليل جديد بالفاتورة..."
+                        className="flex-1 min-w-[180px] px-2.5 py-1.5 text-xs border border-slate-300 rounded-lg bg-white"
+                      />
+                      <input
+                        type="number"
+                        min="0"
+                        value={newItemPrice}
+                        onChange={(e) => setNewItemPrice(e.target.value)}
+                        placeholder="السعر (ج.م)"
+                        className="w-28 px-2.5 py-1.5 text-xs font-mono border border-slate-300 rounded-lg bg-white"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleAddCustomItem}
+                        className="flex items-center gap-1 px-3 py-1.5 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold rounded-lg cursor-pointer"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>إضافة للفاتورة</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Integrated Patient Loyalty Card & Points Panel */}
@@ -633,35 +921,102 @@ export const InvoicePrintModal: React.FC<InvoicePrintModalProps> = ({ invoice, o
                 </div>
 
                 <div className="w-full sm:w-72 bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs space-y-1.5">
-                  <div className="flex justify-between text-slate-600">
+                  <div className="flex justify-between items-center text-slate-600 gap-2">
                     <span>إجمالي التحاليل:</span>
-                    <span className="font-mono font-semibold">{testsSubtotal.toFixed(2)} ج.م</span>
+                    {isEditingItems ? (
+                      <input
+                        type="number"
+                        min="0"
+                        value={testsSubtotal}
+                        onChange={(e) => persistInvoiceEdits({ nextTestsSubtotal: Math.max(0, Number(e.target.value) || 0) })}
+                        className="w-24 px-2 py-0.5 text-left font-mono font-semibold border border-slate-300 rounded bg-white text-slate-900"
+                      />
+                    ) : (
+                      <span className="font-mono font-semibold">{testsSubtotal.toFixed(2)} ج.م</span>
+                    )}
                   </div>
-                  {invoice.discount > 0 && (
-                    <div className="flex justify-between text-emerald-700 font-semibold">
+                  {(invoice.discount > 0 || isEditingItems) && (
+                    <div className="flex justify-between items-center text-emerald-700 font-semibold gap-2">
                       <span>الخصم (على التحاليل):</span>
-                      <span className="font-mono">-{invoice.discount.toFixed(2)} ج.م</span>
+                      {isEditingItems ? (
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="number"
+                            min="0"
+                            value={invoice.discount}
+                            onChange={(e) => persistInvoiceEdits({ nextDiscount: Math.max(0, Number(e.target.value) || 0) })}
+                            className="w-20 px-2 py-0.5 text-left font-mono font-bold border border-emerald-300 rounded bg-white text-emerald-900"
+                          />
+                          {invoice.discount > 0 && (
+                            <button
+                              type="button"
+                              onClick={() => persistInvoiceEdits({ nextDiscount: 0 })}
+                              className="p-1 text-red-500 hover:bg-red-50 rounded cursor-pointer print:hidden"
+                              title="حذف الخصم"
+                            >
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="font-mono">-{invoice.discount.toFixed(2)} ج.م</span>
+                      )}
                     </div>
                   )}
-                  {visitFee > 0 && (
+                  {(visitFee > 0 || isEditingItems) && (
                     <div className="pt-1 border-t border-dashed border-slate-200 space-y-0.5">
-                      <div className="flex justify-between text-indigo-800 font-bold">
+                      <div className="flex justify-between items-center text-indigo-800 font-bold gap-2">
                         <span>رسوم الزيارة المنزلية:</span>
-                        <span className="font-mono">+{visitFee.toFixed(2)} ج.م</span>
+                        {isEditingItems ? (
+                          <div className="flex items-center gap-1">
+                            <input
+                              type="number"
+                              min="0"
+                              value={visitFee}
+                              onChange={(e) => persistInvoiceEdits({ nextVisitFee: Math.max(0, Number(e.target.value) || 0) })}
+                              className="w-20 px-2 py-0.5 text-left font-mono font-bold border border-indigo-300 rounded bg-white text-indigo-900"
+                            />
+                            {visitFee > 0 && (
+                              <button
+                                type="button"
+                                onClick={() => persistInvoiceEdits({ nextVisitFee: 0 })}
+                                className="p-1 text-red-500 hover:bg-red-50 rounded cursor-pointer print:hidden"
+                                title="حذف رسوم الزيارة"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </button>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="font-mono">+{visitFee.toFixed(2)} ج.م</span>
+                        )}
                       </div>
-                      <div className="text-[10px] text-slate-500 flex justify-between">
-                        <span>(ثابتة غير خاضعة للخصم)</span>
-                        {invoice.visitSpecialist && <span className="truncate max-w-[140px] font-semibold">{invoice.visitSpecialist}</span>}
-                      </div>
+                      {visitFee > 0 && (
+                        <div className="text-[10px] text-slate-500 flex justify-between">
+                          <span>(ثابتة غير خاضعة للخصم)</span>
+                          {invoice.visitSpecialist && <span className="truncate max-w-[140px] font-semibold">{invoice.visitSpecialist}</span>}
+                        </div>
+                      )}
                     </div>
                   )}
                   <div className="flex justify-between text-sm font-bold text-slate-900 pt-1.5 border-t border-slate-300">
                     <span>الصافي المطلوب:</span>
                     <span className="font-mono text-rose-950 font-black">{invoice.netAmount.toFixed(2)} ج.م</span>
                   </div>
-                  <div className="flex justify-between text-emerald-700 font-bold">
+                  <div className="flex justify-between items-center text-emerald-700 font-bold gap-2">
                     <span>المدفوع ({paymentMethodLabel}):</span>
-                    <span className="font-mono">{invoice.paidAmount.toFixed(2)} ج.م</span>
+                    {isEditingItems ? (
+                      <input
+                        type="number"
+                        min="0"
+                        max={invoice.netAmount}
+                        value={invoice.paidAmount}
+                        onChange={(e) => persistInvoiceEdits({ nextPaidAmount: Math.max(0, Number(e.target.value) || 0) })}
+                        className="w-24 px-2 py-0.5 text-left font-mono font-bold border border-emerald-300 rounded bg-white text-emerald-800"
+                      />
+                    ) : (
+                      <span className="font-mono">{invoice.paidAmount.toFixed(2)} ج.م</span>
+                    )}
                   </div>
                   <div className="flex justify-between text-slate-900 font-bold pt-1 border-t border-slate-200">
                     <span>{invoice.remainingAmount > 0 ? 'المتبقي:' : 'حالة الحساب:'}</span>
@@ -732,12 +1087,26 @@ export const InvoicePrintModal: React.FC<InvoicePrintModalProps> = ({ invoice, o
 
               <div className="py-2 border-b border-dashed border-slate-400">
                 <div className="font-bold mb-1">التحاليل المطلوبة:</div>
-                {invoice.tests.map((t, idx) => (
-                  <div key={idx} className="flex justify-between py-0.5 text-[11px]">
-                    <span className="truncate max-w-[200px]">{t.nameAr}</span>
-                    <span>{t.price} ج</span>
+                {displayMode === 'grouped' ? (
+                  <div className="space-y-0.5 text-[11px]">
+                    <div className="flex justify-between font-bold">
+                      <span>{groupedTitleAr.trim() || `مجموعة الفحوصات (${(invoice.tests || []).length})`}</span>
+                      <span>{testsSubtotal} ج</span>
+                    </div>
+                    {(invoice.tests || []).length > 0 && (
+                      <div className="text-[10px] text-slate-700 leading-snug">
+                        ({(invoice.tests || []).map(t => t.nameAr || t.nameEn).join(' + ')})
+                      </div>
+                    )}
                   </div>
-                ))}
+                ) : (
+                  (invoice.tests || []).map((t, idx) => (
+                    <div key={idx} className="flex justify-between py-0.5 text-[11px]">
+                      <span className="truncate max-w-[200px]">{t.nameAr}</span>
+                      <span>{t.price} ج</span>
+                    </div>
+                  ))
+                )}
               </div>
 
               <div className="py-2 text-[11px] space-y-1 border-b border-dashed border-slate-400">
