@@ -7826,7 +7826,7 @@
       }
     ],
     "netAmount": 999,
-    "paidAmount": 474,
+    "paidAmount": 999,
     "paymentStatus": "pending",
     "financialClearance": "PAYMENT_PENDING",
     "bookingType": "branch",
@@ -7839,7 +7839,7 @@
     "discount": 0,
     "testsSubtotal": 999,
     "subtotal": 999,
-    "remainingAmount": 990,
+    "remainingAmount": 0,
     "paymentMethod": "cash",
     "createdAt": "2026-11-19"
   },
