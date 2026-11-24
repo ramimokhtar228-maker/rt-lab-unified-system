@@ -371,16 +371,20 @@ const AppContent: React.FC = () => {
       )}
 
       {/* 7. Patient Invoice Modal */}
-      {patientInvoiceModalReport && (
-        <PatientInvoiceModal
-          isOpen={!!patientInvoiceModalReport}
-          onClose={() => setPatientInvoiceModalReport(null)}
-          report={patientInvoiceModalReport}
-          onUpdateReport={(updatedReport: LabReport) => {
-            updateReport(updatedReport.id, updatedReport);
-          }}
-        />
-      )}
+      {patientInvoiceModalReport && (() => {
+        const liveInvoiceReport = reports.find(r => r.id === patientInvoiceModalReport.id) || patientInvoiceModalReport;
+        return (
+          <PatientInvoiceModal
+            isOpen={!!liveInvoiceReport}
+            onClose={() => setPatientInvoiceModalReport(null)}
+            report={liveInvoiceReport}
+            onUpdateReport={(updatedReport: LabReport) => {
+              setPatientInvoiceModalReport(updatedReport);
+              updateReport(updatedReport.id, updatedReport);
+            }}
+          />
+        );
+      })()}
 
       {/* 8. Test Catalog Modal */}
       {catalogModalOpen && (

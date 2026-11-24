@@ -81,7 +81,7 @@ const PAYMENT_METHOD_AR: Record<string, string> = {
 export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
   isOpen,
   onClose,
-  report,
+  report: propReport,
   onUpdateReport
 }) => {
   const [isExporting, setIsExporting] = useState<'pdf' | 'png' | 'both' | 'wa' | null>(null);
@@ -95,6 +95,7 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
     updateLabInfo,
     staffSignatures,
     updateStaffSignatures,
+    reports,
     updateReport,
     incomeRecords,
     updateIncomeRecord,
@@ -102,6 +103,8 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
     loyaltyConfig,
     redeemLoyaltyPoints
   } = useApp();
+
+  const report = propReport ? (reports.find(r => r.id === propReport.id) || propReport) : propReport;
 
   const [isEditingItems, setIsEditingItems] = useState(false);
   const [newItemName, setNewItemName] = useState('');
@@ -115,7 +118,8 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
   const linkedInvoiceSafe = report && pSafe
     ? incomeRecords.find(i =>
         (report.invoiceId && (i.id === report.invoiceId || i.invoiceNumber === report.invoiceId)) ||
-        i.labNumber === pSafe.labNumber ||
+        (pSafe.labNumber && i.labNumber === pSafe.labNumber) ||
+        (report.reportNumber && i.labNumber === report.reportNumber) ||
         (pSafe.barcode && i.barcode === pSafe.barcode)
       )
     : undefined;
@@ -918,7 +922,21 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
                       <th className="py-2.5 px-3 text-right">اسم التحليل / باقة الفحص</th>
                       <th className="py-2.5 px-3 text-center">نوع العينة</th>
                       <th className="py-2.5 px-3 text-center">العناصر</th>
-                      <th className="py-2.5 px-3 text-left">القيمة (EGP)</th>
+                      <th className="py-2.5 px-3 text-left">
+                        <div className="inline-flex items-center gap-1">
+                          <span>القيمة (EGP)</span>
+                          {!isEditingItems && (
+                            <button
+                              type="button"
+                              onClick={() => setIsEditingItems(true)}
+                              className="p-0.5 text-rose-700 hover:text-rose-900 rounded cursor-pointer"
+                              title="اضغط لتعديل الأسعار أو حذف خانات"
+                            >
+                              <Edit3 className="w-3 h-3" />
+                            </button>
+                          )}
+                        </div>
+                      </th>
                       {isEditingItems && <th className="py-2.5 px-2 text-center w-12">حذف</th>}
                     </tr>
                   </thead>
@@ -938,7 +956,12 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
                         </td>
                         <td className="py-3 px-3 text-center text-slate-600">فحوصات مجمعة</td>
                         <td className="py-3 px-3 text-center text-slate-500 font-mono">{items.length} تحاليل</td>
-                        <td className="py-3 px-3 text-left font-mono font-black text-rose-950 text-[13px]" dir="ltr">
+                        <td
+                          onClick={() => setIsEditingItems(true)}
+                          className="py-3 px-3 text-left font-mono font-black text-rose-950 text-[13px] cursor-pointer hover:bg-amber-50/70 transition-colors"
+                          dir="ltr"
+                          title="اضغط لتعديل السعر الإجمالي أو تفاصيل البنود"
+                        >
                           {testsSubtotal.toFixed(2)}
                         </td>
                       </tr>
@@ -963,13 +986,20 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
                           </td>
                           <td className="py-2.5 px-3 text-center text-slate-600">{it.sampleType}</td>
                           <td className="py-2.5 px-3 text-center text-slate-500 font-mono">{it.parametersCount} عنصر</td>
-                          <td className="py-2.5 px-3 text-left font-mono font-bold text-rose-950" dir="ltr">
+                          <td
+                            onClick={!isEditingItems ? () => setIsEditingItems(true) : undefined}
+                            className={`py-2.5 px-3 text-left font-mono font-bold text-rose-950 ${!isEditingItems ? 'cursor-pointer hover:bg-amber-50/70 transition-colors' : ''}`}
+                            dir="ltr"
+                            title={!isEditingItems ? 'اضغط لتعديل السعر' : undefined}
+                          >
                             {isEditingItems ? (
                               <input
                                 type="number"
                                 min="0"
-                                step="1"
-                                value={it.price}
+                                step="any"
+                                value={it.price === 0 ? '' : it.price}
+                                placeholder="0"
+                                onFocus={(e) => e.currentTarget.select()}
                                 onChange={(e) => handleUpdateItemField(idx, { price: Math.max(0, Number(e.target.value) || 0) })}
                                 className="w-24 px-2 py-1 text-left font-mono font-bold border border-rose-300 rounded bg-rose-50/50 text-rose-950"
                               />
@@ -1016,13 +1046,28 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
                           />
                         </div>
                         <div>
-                          <label className="block text-[10px] font-bold text-indigo-900 mb-0.5">
-                            السعر الإجمالي المجمع (ج.م):
-                          </label>
+                          <div className="flex items-center justify-between mb-0.5">
+                            <label className="block text-[10px] font-bold text-indigo-900">
+                              السعر الإجمالي المجمع (ج.م):
+                            </label>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const summed = resolvedSourceItems.reduce((s, it) => s + (Number(it.price) || 0), 0);
+                                persistInvoiceChanges({ nextTestsSubtotal: summed });
+                              }}
+                              className="text-[10px] font-bold text-indigo-700 hover:underline cursor-pointer"
+                            >
+                              حساب من البنود
+                            </button>
+                          </div>
                           <input
                             type="number"
                             min="0"
-                            value={testsSubtotal}
+                            step="any"
+                            value={testsSubtotal === 0 ? '' : testsSubtotal}
+                            placeholder="0"
+                            onFocus={(e) => e.currentTarget.select()}
                             onChange={(e) => persistInvoiceChanges({ nextTestsSubtotal: Math.max(0, Number(e.target.value) || 0) })}
                             className="w-full px-2.5 py-1.5 text-xs font-mono font-black border border-indigo-300 rounded bg-indigo-50/50 text-rose-950"
                           />
@@ -1140,7 +1185,10 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
                       <input
                         type="number"
                         min="0"
-                        value={testsSubtotal}
+                        step="any"
+                        value={testsSubtotal === 0 ? '' : testsSubtotal}
+                        placeholder="0"
+                        onFocus={(e) => e.currentTarget.select()}
                         onChange={(e) => persistInvoiceChanges({ nextTestsSubtotal: Math.max(0, Number(e.target.value) || 0) })}
                         className="w-24 px-2 py-0.5 text-left font-mono font-bold border border-slate-300 rounded bg-white text-slate-900"
                       />
@@ -1156,7 +1204,10 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
                           <input
                             type="number"
                             min="0"
-                            value={visitFee}
+                            step="any"
+                            value={visitFee === 0 ? '' : visitFee}
+                            placeholder="0"
+                            onFocus={(e) => e.currentTarget.select()}
                             onChange={(e) => persistInvoiceChanges({ nextVisitFee: Math.max(0, Number(e.target.value) || 0) })}
                             className="w-20 px-2 py-0.5 text-left font-mono font-bold border border-indigo-300 rounded bg-white text-indigo-900"
                           />
@@ -1184,7 +1235,10 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
                           <input
                             type="number"
                             min="0"
-                            value={discount}
+                            step="any"
+                            value={discount === 0 ? '' : discount}
+                            placeholder="0"
+                            onFocus={(e) => e.currentTarget.select()}
                             onChange={(e) => {
                               const nextD = Math.max(0, Number(e.target.value) || 0);
                               setDiscountAmount(nextD);
@@ -1218,8 +1272,11 @@ export const PatientInvoiceModal: React.FC<PatientInvoiceModalProps> = ({
                       <input
                         type="number"
                         min="0"
+                        step="any"
                         max={netTotal}
-                        value={paidAmount}
+                        value={paidAmount === 0 ? '' : paidAmount}
+                        placeholder="0"
+                        onFocus={(e) => e.currentTarget.select()}
                         onChange={(e) => persistInvoiceChanges({ nextPaidAmount: Math.max(0, Number(e.target.value) || 0) })}
                         className="w-24 px-2 py-0.5 text-left font-mono font-bold border border-emerald-300 rounded bg-white text-emerald-800"
                       />

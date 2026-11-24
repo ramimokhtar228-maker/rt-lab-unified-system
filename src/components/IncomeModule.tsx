@@ -391,7 +391,7 @@ export const IncomeModule: React.FC = () => {
       {/* Invoice Print Modal */}
       {selectedInvoiceForPrint && (
         <InvoicePrintModal
-          invoice={selectedInvoiceForPrint}
+          invoice={incomeRecords.find(i => i.id === selectedInvoiceForPrint.id) || selectedInvoiceForPrint}
           onClose={() => setSelectedInvoiceForPrint(null)}
         />
       )}
