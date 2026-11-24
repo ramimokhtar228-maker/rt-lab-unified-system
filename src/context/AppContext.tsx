@@ -1489,8 +1489,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         });
       } else if ((msg.action === 'FULL_SYNC' || msg.action === 'INIT_STATE') && msg.payload) {
         if (Array.isArray(msg.payload.reports)) {
+          const upgradedPayloadReports = msg.payload.reports.map(upgradeSingleReport);
           setReports(prev => {
-            const { merged, changed } = mergeReportCollections(prev, msg.payload.reports, mergeTwoReports);
+            const { merged, changed } = mergeReportCollections(prev, upgradedPayloadReports, mergeTwoReports);
             return changed ? filterDeletedReports(merged) : prev;
           });
         }
@@ -1743,8 +1744,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           importDeletionTombstones(data.deletedReports, data.deletedInvoices);
           applyCloudCollections(data);
           if (Array.isArray(data.reports) && data.reports.length > 0) {
+            const upgradedCloudReports = data.reports.map(upgradeSingleReport);
             setReports(prev => {
-              const { merged, newlyAdded, changed } = mergeReportCollections(prev, data.reports, mergeTwoReports);
+              const { merged, newlyAdded, changed } = mergeReportCollections(prev, upgradedCloudReports, mergeTwoReports);
 
               if (newlyAdded.length > 0) {
                 playSyncChime();
@@ -1792,8 +1794,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             applyCloudCollections(ghRes.data);
 
             if (Array.isArray(ghRes.data.reports) && ghRes.data.reports.length > 0) {
+              const upgradedVisibleReports = ghRes.data.reports.map(upgradeSingleReport);
               setReports(prev => {
-                const { merged, changed } = mergeReportCollections(prev, ghRes.data.reports, mergeTwoReports);
+                const { merged, changed } = mergeReportCollections(prev, upgradedVisibleReports, mergeTwoReports);
                 return changed ? filterDeletedReports(merged) : filterDeletedReports(prev);
               });
             }

@@ -69,7 +69,8 @@ export const INITIAL_REPORTS: LabReport[] = SEED_REPORTS.length > 0 ? SEED_REPOR
           { id: "p-7", name: "RDW-CV", result: "17.8", unit: "%", minNormal: 11.5, maxNormal: 15, textReference: "11.5 - 15", flag: "HIGH" },
           { id: "p-8", name: "Platelet Count", result: "410", unit: "Thousands / cmm", minNormal: 150, maxNormal: 450, textReference: "150 - 450", flag: "NORMAL", method: "Electrical Impedance" },
           { id: "p-9", name: "Total Leucocytic Count (EDTA Blood)", result: "6.8", unit: "Thousands / cmm", minNormal: 4.5, maxNormal: 11, textReference: "4.5 - 11", flag: "NORMAL", method: "Flow Cytometry / Impedance" },
-          { id: "p-10", name: "Neutrophils %", result: "62", unit: "%", minNormal: 40, maxNormal: 75, textReference: "40 - 75", flag: "NORMAL" },
+          { id: "p-10", name: "Neutrophils %", result: "61", unit: "%", minNormal: 40, maxNormal: 75, textReference: "40 - 75", flag: "NORMAL" },
+          { id: "p-10b", name: "Band Cells %", result: "1", unit: "%", minNormal: 0, maxNormal: 5, panicHigh: 15, textReference: "0 - 5", flag: "NORMAL" },
           { id: "p-11", name: "Lymphocytes %", result: "29", unit: "%", minNormal: 20, maxNormal: 45, textReference: "20 - 45", flag: "NORMAL" },
           { id: "p-12", name: "Monocytes %", result: "6", unit: "%", minNormal: 2, maxNormal: 10, textReference: "2 - 10", flag: "NORMAL" },
           { id: "p-13", name: "Eosinophils %", result: "2", unit: "%", minNormal: 1, maxNormal: 6, textReference: "1 - 6", flag: "NORMAL" },
@@ -93,6 +94,8 @@ export const INITIAL_REPORTS: LabReport[] = SEED_REPORTS.length > 0 ? SEED_REPOR
     },
     generalComment: "الحالة تتماشى مع فقر الدم بعوز الحديد. يرجى المتابعة بطلب مخزون الحديد (Serum Ferritin).",
     status: "verified",
+    attachInvoiceToReport: true,
+    showInvoiceDetails: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     invoiceId: "inv-001"
@@ -162,6 +165,8 @@ export const INITIAL_REPORTS: LabReport[] = SEED_REPORTS.length > 0 ? SEED_REPOR
     },
     generalComment: "يرجى مراجعة الطبيب المعالج لتعديل جرعات العلاج الغذائي والدوائي.",
     status: "verified",
+    attachInvoiceToReport: true,
+    showInvoiceDetails: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     invoiceId: "inv-002"

@@ -582,6 +582,8 @@ export function convertIncomeRecordToDiagnosticReport(rec: IncomeRecord): Record
       pathologist: 'أ.د. رامي مختار - استشاري الباثولوجيا الإكلينيكية والكيميائية - كلية طب قصر العيني'
     },
     generalComment: `طلب فحص مالي رقم ${rec.invoiceNumber} - تم التسميع آلياً من منظومة الفواتير`,
+    attachInvoiceToReport: true,
+    showInvoiceDetails: true,
     createdAt: nowIso,
     updatedAt: nowIso,
     profiles: profiles.length > 0 ? profiles : [

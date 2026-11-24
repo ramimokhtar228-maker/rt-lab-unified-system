@@ -410,8 +410,12 @@ export function matchesParameter(paramName: string, matcher: string): boolean {
   if (cleanMatcher === 'wbc' || cleanMatcher === 'tlc') {
     return cleanName.includes('wbc') || cleanName.includes('tlc') || cleanName.includes('leucocytic') || cleanName.includes('leukocyte') || cleanName.includes('whiteblood');
   }
+  if (cleanMatcher === 'band' || cleanMatcher === 'bandcell' || cleanMatcher === 'bandcells' || cleanMatcher === 'stab') {
+    if (cleanName.includes('absolute')) return false;
+    return cleanName.includes('band') || cleanName.includes('stab') || cleanName.includes('عصوية');
+  }
   if (cleanMatcher === 'neutrophil' || cleanMatcher === 'neut') {
-    if (cleanName.includes('absolute') || cleanName.includes('anc')) return false;
+    if (cleanName.includes('absolute') || cleanName.includes('anc') || cleanName.includes('band') || cleanName.includes('stab')) return false;
     return cleanName.includes('neutrophil') || cleanName.includes('segmented') || cleanName.includes('neut');
   }
   if (cleanMatcher === 'lymphocyte' || cleanMatcher === 'lymph') {
@@ -550,10 +554,14 @@ export function runAutomaticCalculations(
 
   // WBC Differentials (Absolute Counts & NLR)
   const neutroPct = getVal(paramsCopy, ['neutrophil', 'segmented', 'neut %']);
+  const bandPct = getVal(paramsCopy, ['band cells', 'band', 'stab']);
   const lymphPct = getVal(paramsCopy, ['lymphocyte', 'lymph %']);
   const monoPct = getVal(paramsCopy, ['monocyte', 'mono %']);
   const eosPct = getVal(paramsCopy, ['eosinophil', 'eos %']);
   const basoPct = getVal(paramsCopy, ['basophil', 'baso %']);
+  if (bandPct !== null && bandPct > 5) {
+    applied.push(`Left Shift: Band Cells ${bandPct}% (> 5%)`);
+  }
 
   if (wbc !== null && wbc > 0) {
     if (neutroPct !== null) {

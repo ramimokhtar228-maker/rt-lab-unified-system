@@ -564,6 +564,8 @@ export interface LabReport {
   attachedIllustrations?: DiseaseIllustration[];
   invoiceId?: string;
   patientSheetMeta?: PatientSheetMeta;
+  attachInvoiceToReport?: boolean;
+  showInvoiceDetails?: boolean;
 }
 
 export interface CatalogProfileTemplate {

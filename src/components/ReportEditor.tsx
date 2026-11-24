@@ -13,6 +13,7 @@ import { DiseaseIllustrationsModal } from './DiseaseIllustrationsModal';
 import { OGTTEditorSection } from './OGTTEditorSection';
 import { isOgttProfile } from '../utils/ogttEngine';
 import { CBCEditorSection } from './CBCEditorSection';
+import { MedicalLibraryPicker } from './MedicalLibraryPicker';
 import { isCBCProfile } from '../utils/cbcEngine';
 import { useApp } from '../context/AppContext';
 import { 
@@ -939,6 +940,21 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
             <span>Patient Sheet</span>
           </button>
 
+          {/* Toggle: Attach Invoice as Last Page */}
+          <button
+            type="button"
+            onClick={() => onUpdateReport({ ...report, attachInvoiceToReport: !(report.attachInvoiceToReport !== false), updatedAt: new Date().toISOString() })}
+            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold border transition-all cursor-pointer ${
+              report.attachInvoiceToReport !== false
+                ? 'bg-emerald-50 text-emerald-900 border-emerald-300'
+                : 'bg-slate-100 text-slate-600 border-slate-300'
+            }`}
+            title="إظهار أو إخفاء الفاتورة المالية كآخر صفحة داخل تقرير المريض"
+          >
+            <Receipt className="w-3.5 h-3.5" />
+            <span>{report.attachInvoiceToReport !== false ? 'الفاتورة بآخر التقرير ✓' : 'الفاتورة بالتقرير: معطلة'}</span>
+          </button>
+
           {/* Invoice & Receipt Button */}
           {onOpenInvoice && (
             <button
@@ -1739,6 +1755,7 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
             {isCBCProfile(currentProfile) && (
               <CBCEditorSection
                 profile={currentProfile}
+                patient={report.patient}
                 onUpdateProfile={(upd) => handleUpdateProfile(currentProfile.id, upd)}
                 onUpdateParameters={(params) => handleUpdateProfile(currentProfile.id, { parameters: params })}
               />
@@ -2042,6 +2059,13 @@ export const ReportEditor: React.FC<ReportEditorProps> = ({
 
               return (
                 <div className="space-y-4">
+                  {/* Medical Interpretation & Recommended Tests Library Picker (Activated for every profile) */}
+                  <MedicalLibraryPicker
+                    profile={currentProfile}
+                    patient={report.patient}
+                    onApply={(upd) => handleUpdateProfile(currentProfile.id, upd)}
+                  />
+
                   {/* Clinical Interpretations (Multiple) */}
                   <div className="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-3">
                     <div className="flex items-center justify-between">

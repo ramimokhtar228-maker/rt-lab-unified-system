@@ -53,6 +53,7 @@ export function generateSmartClinicalAnalysis(report: LabReport): SmartClinicalA
   const mch = getParamVal(allParams, ['mch']);
   const rdw = getParamVal(allParams, ['rdw']);
   const wbc = getParamVal(allParams, ['wbc', 'white blood', 'كرات الدم البيضاء']);
+  const bandCells = getParamVal(allParams, ['band cells', 'band forms', 'band', 'stab', 'العصوية']);
   const platelets = getParamVal(allParams, ['platelet', 'plt', 'صفائح']);
 
   const fbs = getParamVal(allParams, ['fasting blood sugar', 'fbs', 'سكر صائم', 'fasting glucose']);
@@ -144,6 +145,24 @@ export function generateSmartClinicalAnalysis(report: LabReport): SmartClinicalA
       });
       hematologicScore = Math.min(hematologicScore, 45);
       consultantRecommendations.push('إعادة فحص شريحة دم محيطية طازجة في أنبوبة سيترات الصوديوم لاستبعاد التراكم الكاذب (Pseudothrombocytopenia).');
+    }
+  }
+
+  if (bandCells !== null && bandCells > 5) {
+    differentialDiagnoses.push({
+      diseaseAr: 'انحراف لليسار / زيادة خلايا الباند غير الناضجة (Left Shift / Bandemia)',
+      diseaseEn: 'Neutrophilic Left Shift (Bandemia)',
+      likelihood: bandCells >= 10 ? 'high' : 'moderate',
+      rationaleAr: `نسبة خلايا الباند (${bandCells}% > 5%) تشير إلى استجابة التهابية أو عدوى بكتيرية نشطة.`
+    });
+    consultantRecommendations.push('تقييم سريري للعدوى البكتيرية أو البؤرة الالتهابية مع عمل مزرعة مناسبة ومؤشرات الالتهاب (CRP / Procalcitonin) ومراجعة الشريحة.');
+    if (bandCells >= 15) {
+      criticalAlerts.push({
+        titleAr: 'انحراف حاد لليسار (Severe Left Shift / Bandemia)',
+        titleEn: 'Severe Left Shift (Band Cells >= 15%)',
+        severity: 'high',
+        detail: `ارتفاع ملحوظ في خلايا الباند (${bandCells}%) يتطلب استبعاد العدوى البكتيرية الشديدة أو التفاعل النخاعي.`
+      });
     }
   }
 

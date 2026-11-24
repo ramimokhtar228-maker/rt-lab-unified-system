@@ -25,6 +25,7 @@ export interface CbcExtractedData {
   // Leukocyte / White Cell Lineage
   wbc: number | null; // 10^9/L
   neutrophils: number | null; // %
+  bandCells: number | null; // % (Immature neutrophils / Shift to Left)
   lymphocytes: number | null; // %
   monocytes: number | null; // %
   eosinophils: number | null; // %
@@ -132,7 +133,8 @@ export function extractCBCData(parameters: TestParameter[]): CbcExtractedData {
   const pct = findVal(['pct', 'p.c.t', 'plateletcrit']);
 
   const wbc = findVal(['total leucocytic', 'wbc', 'leukocyte', 'tlc', 'البيضاء']);
-  const neutrophils = findVal(['total neutrophils', 'segmented', 'neutrophil', 'seg'], ['absolute', 'anc']);
+  const neutrophils = findVal(['total neutrophils', 'segmented', 'neutrophil', 'seg'], ['absolute', 'anc', 'band', 'stab']);
+  const bandCells = findVal(['band cells', 'band forms', 'band', 'stab', 'العصوية'], ['absolute']);
   const lymphocytes = findVal(['lymphocytes', 'lymphocyte', 'lymph'], ['absolute', 'alc']);
   const monocytes = findVal(['monocytes', 'monocyte', 'mono'], ['absolute', 'amc']);
   const eosinophils = findVal(['eosinophils', 'eosinophil', 'eos'], ['absolute', 'aec']);
@@ -293,6 +295,7 @@ export function extractCBCData(parameters: TestParameter[]): CbcExtractedData {
     pct,
     wbc,
     neutrophils,
+    bandCells,
     lymphocytes,
     monocytes,
     eosinophils,
@@ -574,33 +577,40 @@ export function generateCbcWbcSvgChart(data: CbcExtractedData, width = 680, heig
   const barY = 28;
 
   const neut = data.neutrophils ?? 60;
+  const band = data.bandCells ?? 0;
   const lymph = data.lymphocytes ?? 30;
   const mono = data.monocytes ?? 6;
   const eos = data.eosinophils ?? 3;
   const baso = data.basophils ?? 1;
 
-  const total = neut + lymph + mono + eos + baso || 100;
+  const total = neut + band + lymph + mono + eos + baso || 100;
 
   const pNeut = (neut / total) * barWidth;
+  const pBand = (band / total) * barWidth;
   const pLymph = (lymph / total) * barWidth;
   const pMono = (mono / total) * barWidth;
   const pEos = (eos / total) * barWidth;
   const pBaso = (baso / total) * barWidth;
 
   const xNeut = padLeft;
-  const xLymph = xNeut + pNeut;
+  const xBand = xNeut + pNeut;
+  const xLymph = xBand + pBand;
   const xMono = xLymph + pLymph;
   const xEos = xMono + pMono;
   const xBaso = xEos + pEos;
 
+  const bandColor = band > 5 ? '#dc2626' : '#0ea5e9';
+  const leftShiftAlert = band > 5 ? ' • ⚠ LEFT SHIFT' : '';
+
   return `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: block;">
-      <text x="${padLeft}" y="16" fill="#0f172a" font-size="9.5" font-weight="800">WBC 5-PART DIFFERENTIAL DISTRIBUTION (توزيع كرات الدم البيضاء التفريقي)</text>
-      <text x="${padLeft + barWidth}" y="16" fill="#475569" font-size="8.5" font-weight="700" text-anchor="end">Total WBC: ${data.wbc ? `${data.wbc.toFixed(1)} ×10⁹/L` : '—'}</text>
+      <text x="${padLeft}" y="16" fill="#0f172a" font-size="9.5" font-weight="800">WBC DIFFERENTIAL SPECTRUM (توزيع كرات الدم البيضاء وخلايا الباند)</text>
+      <text x="${padLeft + barWidth}" y="16" fill="${band > 5 ? '#dc2626' : '#475569'}" font-size="8.5" font-weight="700" text-anchor="end">Total WBC: ${data.wbc ? `${data.wbc.toFixed(1)} ×10⁹/L` : '—'}${leftShiftAlert}</text>
 
       <!-- Stacked Differential Bar -->
       <g rx="6" overflow="hidden">
         <rect x="${xNeut}" y="${barY}" width="${pNeut}" height="${barHeight}" fill="#3b82f6" />
+        ${pBand > 0 ? `<rect x="${xBand}" y="${barY}" width="${pBand}" height="${barHeight}" fill="${bandColor}" />` : ''}
         <rect x="${xLymph}" y="${barY}" width="${pLymph}" height="${barHeight}" fill="#10b981" />
         <rect x="${xMono}" y="${barY}" width="${pMono}" height="${barHeight}" fill="#f59e0b" />
         <rect x="${xEos}" y="${barY}" width="${pEos}" height="${barHeight}" fill="#ec4899" />
@@ -612,20 +622,23 @@ export function generateCbcWbcSvgChart(data: CbcExtractedData, width = 680, heig
 
       <!-- Labels & Percentages below -->
       <g transform="translate(0, ${barY + barHeight + 14})">
-        <circle cx="${padLeft + 6}" cy="-4" r="3" fill="#3b82f6" />
-        <text x="${padLeft + 13}" y="0" fill="#1e293b" font-size="8" font-weight="700">NEUT <tspan font-weight="800">${neut.toFixed(1)}%</tspan> <tspan fill="#64748b" font-size="7">(40-75%)</tspan></text>
+        <circle cx="${padLeft + 5}" cy="-4" r="3" fill="#3b82f6" />
+        <text x="${padLeft + 11}" y="0" fill="#1e293b" font-size="7.5" font-weight="700">NEUT <tspan font-weight="800">${neut.toFixed(1)}%</tspan> <tspan fill="#64748b" font-size="6.5">(40-75)</tspan></text>
 
-        <circle cx="${padLeft + 150}" cy="-4" r="3" fill="#10b981" />
-        <text x="${padLeft + 157}" y="0" fill="#1e293b" font-size="8" font-weight="700">LYMPH <tspan font-weight="800">${lymph.toFixed(1)}%</tspan> <tspan fill="#64748b" font-size="7">(20-45%)</tspan></text>
+        <circle cx="${padLeft + 116}" cy="-4" r="3" fill="${bandColor}" />
+        <text x="${padLeft + 122}" y="0" fill="${band > 5 ? '#dc2626' : '#1e293b'}" font-size="7.5" font-weight="700">BAND <tspan font-weight="800">${data.bandCells !== null ? `${band.toFixed(1)}%` : '0%'}</tspan> <tspan fill="#64748b" font-size="6.5">(0-5)</tspan></text>
 
-        <circle cx="${padLeft + 295}" cy="-4" r="3" fill="#f59e0b" />
-        <text x="${padLeft + 302}" y="0" fill="#1e293b" font-size="8" font-weight="700">MONO <tspan font-weight="800">${mono.toFixed(1)}%</tspan> <tspan fill="#64748b" font-size="7">(2-10%)</tspan></text>
+        <circle cx="${padLeft + 225}" cy="-4" r="3" fill="#10b981" />
+        <text x="${padLeft + 231}" y="0" fill="#1e293b" font-size="7.5" font-weight="700">LYMPH <tspan font-weight="800">${lymph.toFixed(1)}%</tspan> <tspan fill="#64748b" font-size="6.5">(20-45)</tspan></text>
 
-        <circle cx="${padLeft + 430}" cy="-4" r="3" fill="#ec4899" />
-        <text x="${padLeft + 437}" y="0" fill="#1e293b" font-size="8" font-weight="700">EOS <tspan font-weight="800">${eos.toFixed(1)}%</tspan> <tspan fill="#64748b" font-size="7">(1-6%)</tspan></text>
+        <circle cx="${padLeft + 340}" cy="-4" r="3" fill="#f59e0b" />
+        <text x="${padLeft + 346}" y="0" fill="#1e293b" font-size="7.5" font-weight="700">MONO <tspan font-weight="800">${mono.toFixed(1)}%</tspan> <tspan fill="#64748b" font-size="6.5">(2-10)</tspan></text>
+
+        <circle cx="${padLeft + 448}" cy="-4" r="3" fill="#ec4899" />
+        <text x="${padLeft + 454}" y="0" fill="#1e293b" font-size="7.5" font-weight="700">EOS <tspan font-weight="800">${eos.toFixed(1)}%</tspan> <tspan fill="#64748b" font-size="6.5">(1-6)</tspan></text>
 
         <circle cx="${padLeft + 545}" cy="-4" r="3" fill="#8b5cf6" />
-        <text x="${padLeft + 552}" y="0" fill="#1e293b" font-size="8" font-weight="700">BASO <tspan font-weight="800">${baso.toFixed(1)}%</tspan> <tspan fill="#64748b" font-size="7">(0-2%)</tspan></text>
+        <text x="${padLeft + 551}" y="0" fill="#1e293b" font-size="7.5" font-weight="700">BASO <tspan font-weight="800">${baso.toFixed(1)}%</tspan> <tspan fill="#64748b" font-size="6.5">(0-2)</tspan></text>
       </g>
     </svg>
   `.trim();

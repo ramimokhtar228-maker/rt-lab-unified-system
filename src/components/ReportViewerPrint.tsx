@@ -58,17 +58,33 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
     updateReport,
     incomeRecords,
     updateIncomeRecord,
+    loyaltyProfiles,
+    loyaltyConfig,
     openPatientSheet
   } = useApp();
   const [isClientModalOpen, setIsClientModalOpen] = useState(false);
   const [isLabModalOpen, setIsLabModalOpen] = useState(false);
   const [showVisualChart, setShowVisualChart] = useState<boolean>(true);
+  const [includeInvoice, setIncludeInvoice] = useState<boolean>(report.attachInvoiceToReport !== false);
+
+  useEffect(() => {
+    setIncludeInvoice(report.attachInvoiceToReport !== false);
+  }, [report.id, report.attachInvoiceToReport]);
+
   const p = report.patient;
-  const totalPages = report.profiles.length;
+  const totalPages = report.profiles.length + (includeInvoice ? 1 : 0);
+  const renderOptions = useMemo(() => ({
+    includeInvoice,
+    incomeRecords,
+    loyaltyProfiles,
+    loyaltyConfig
+  }), [includeInvoice, incomeRecords, loyaltyProfiles, loyaltyConfig]);
+
   const safeReport = useMemo<LabReport>(() => {
     const nowIso = new Date().toISOString();
     return {
       ...report,
+      attachInvoiceToReport: includeInvoice,
       patient: {
         ...report.patient,
         sampleDate: report.patient?.sampleDate || report.createdAt || nowIso,
@@ -80,7 +96,7 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
         ...report.staff
       }
     };
-  }, [report, staffSignatures]);
+  }, [report, staffSignatures, includeInvoice]);
   const staff = safeReport.staff;
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
@@ -97,7 +113,7 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
       fontsReady.then(() => requestAnimationFrame(runFit)).catch(() => {});
     }
     return () => cancelAnimationFrame(raf);
-  }, [safeReport, labInfo, showVisualChart]);
+  }, [safeReport, labInfo, showVisualChart, includeInvoice, incomeRecords, loyaltyProfiles, loyaltyConfig]);
 
   const handleDownloadPDF = async () => {
     const nowIso = new Date().toISOString();
@@ -113,10 +129,10 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
     } catch {}
     try {
       setIsGeneratingPDF(true);
-      await downloadReportPDF(safeReport, labInfo, showVisualChart);
+      await downloadReportPDF(safeReport, labInfo, showVisualChart, renderOptions);
     } catch (err) {
       console.error('Failed to generate PDF:', err);
-      openPrintReportWindow(safeReport, labInfo, showVisualChart);
+      openPrintReportWindow(safeReport, labInfo, showVisualChart, renderOptions);
     } finally {
       setIsGeneratingPDF(false);
     }
@@ -135,7 +151,7 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
       });
     } catch {}
     try {
-      openPrintReportWindow(safeReport, labInfo, showVisualChart);
+      openPrintReportWindow(safeReport, labInfo, showVisualChart, renderOptions);
     } catch {
       window.print();
     }
@@ -172,11 +188,11 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
 
           <span className="text-slate-600">|</span>
           <span className="text-xs text-rose-300 font-semibold">
-            معاينة التقرير (A4): <strong className="text-white">{totalPages} صفحة</strong> (كل بروفايل في صفحة مستقلة)
+            معاينة التقرير (A4): <strong className="text-white">{totalPages} صفحة</strong> {includeInvoice ? '(كل بروفايل في صفحة + الفاتورة بآخر صفحة)' : '(كل بروفايل في صفحة مستقلة)'}
           </span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           {/* WhatsApp Direct Send */}
           <button
             onClick={handleWhatsApp}
@@ -210,6 +226,27 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
           >
             <BarChart2 className={`w-3.5 h-3.5 ${showVisualChart ? 'text-blue-400' : 'text-slate-400'}`} />
             <span>{showVisualChart ? 'الرسم البياني: مفعل ✓' : 'الرسم البياني: معطل'}</span>
+          </button>
+
+          {/* Last-Page Official Invoice Toggle */}
+          <button
+            type="button"
+            onClick={() => {
+              const next = !includeInvoice;
+              setIncludeInvoice(next);
+              try {
+                updateReport(report.id, { attachInvoiceToReport: next });
+              } catch {}
+            }}
+            className={`flex items-center gap-1.5 px-3 py-2 text-xs font-bold rounded-lg border transition-all ${
+              includeInvoice
+                ? 'bg-emerald-600/30 text-emerald-200 border-emerald-500/60 shadow-sm'
+                : 'bg-slate-800 text-slate-400 border-slate-700 hover:text-slate-200'
+            }`}
+            title="تفعيل أو إخفاء فاتورة المريض الرسمية في الصفحة الأخيرة من التقرير"
+          >
+            <Receipt className={`w-3.5 h-3.5 ${includeInvoice ? 'text-emerald-400' : 'text-slate-400'}`} />
+            <span>{includeInvoice ? 'صفحة الفاتورة: مفعلة ✓' : 'صفحة الفاتورة: مخفية'}</span>
           </button>
 
           {/* Edit Client / Patient Data */}
@@ -298,7 +335,7 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
         <div
           ref={previewRef}
           className="rt-root"
-          dangerouslySetInnerHTML={{ __html: buildReportPages(safeReport, labInfo, showVisualChart) }}
+          dangerouslySetInnerHTML={{ __html: buildReportPages(safeReport, labInfo, showVisualChart, renderOptions) }}
         />
       </div>
 

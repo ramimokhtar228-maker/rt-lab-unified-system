@@ -254,6 +254,15 @@ export const LAB_CATALOG: CatalogProfileTemplate[] = [
         "textReference": "40 - 75"
       },
       {
+        "name": "Band Cells %",
+        "unit": "%",
+        "minNormal": 0,
+        "maxNormal": 5,
+        "panicHigh": 15,
+        "notes": "Immature Neutrophils (Shift to Left indicator if > 5%)",
+        "textReference": "0 - 5"
+      },
+      {
         "name": "Lymphocytes %",
         "unit": "%",
         "minNormal": 20,

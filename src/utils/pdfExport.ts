@@ -5,7 +5,8 @@ import {
   fitReportPagesToSingleA4,
   getPersistedGlobalStaffSignatures,
   REPORT_CSS,
-  REPORT_FONT_LINK
+  REPORT_FONT_LINK,
+  type ReportRenderOptions
 } from './reportTemplate';
 import { DEFAULT_STAFF } from '../data/labCatalog';
 
@@ -15,7 +16,12 @@ export function reportFileName(report: LabReport, ext: string): string {
 }
 
 /** Renders the report off-screen from the shared template and returns a PDF Blob. */
-export async function buildReportPDFBlob(report: LabReport, labInfo?: LabInfo, showVisualChart: boolean = true): Promise<Blob> {
+export async function buildReportPDFBlob(
+  report: LabReport,
+  labInfo?: LabInfo,
+  showVisualChart: boolean = true,
+  renderOptions?: ReportRenderOptions
+): Promise<Blob> {
   const nowIso = new Date().toISOString();
   const safeReport: LabReport = {
     ...report,
@@ -36,7 +42,7 @@ export async function buildReportPDFBlob(report: LabReport, labInfo?: LabInfo, s
 
   const host = document.createElement('div');
   host.style.cssText = 'position:fixed;left:-10000px;top:0;width:210mm;background:#fff;z-index:-1;';
-  host.innerHTML = `<link href="${REPORT_FONT_LINK}" rel="stylesheet"><style>${REPORT_CSS}</style><div class="rt-root">${buildReportPages(safeReport, labInfo, showVisualChart)}</div>`;
+  host.innerHTML = `<link href="${REPORT_FONT_LINK}" rel="stylesheet"><style>${REPORT_CSS}</style><div class="rt-root">${buildReportPages(safeReport, labInfo, showVisualChart, renderOptions)}</div>`;
   document.body.appendChild(host);
 
   try {
@@ -53,7 +59,25 @@ export async function buildReportPDFBlob(report: LabReport, labInfo?: LabInfo, s
         backgroundColor: '#ffffff',
         logging: false,
         width: page.clientWidth || undefined,
-        height: page.clientHeight || undefined
+        height: page.clientHeight || undefined,
+        onclone: (clonedDoc) => {
+          clonedDoc.querySelectorAll('style').forEach((s) => {
+            const txt = s.textContent || '';
+            if (txt.includes('oklch') || txt.includes('oklab')) {
+              s.remove();
+            }
+          });
+          clonedDoc.querySelectorAll('link[rel="stylesheet"]').forEach((l) => {
+            const href = l.getAttribute('href') || '';
+            if (!href.includes('fonts.googleapis.com')) {
+              l.remove();
+            }
+          });
+          clonedDoc.documentElement.style.color = '#0f172a';
+          clonedDoc.documentElement.style.backgroundColor = '#ffffff';
+          clonedDoc.body.style.color = '#0f172a';
+          clonedDoc.body.style.backgroundColor = '#ffffff';
+        }
       });
       if (i > 0) pdf.addPage('a4', 'portrait');
       pdf.addImage(canvas.toDataURL('image/jpeg', 0.96), 'JPEG', 0, 0, 210, 297, undefined, 'FAST');
@@ -64,9 +88,14 @@ export async function buildReportPDFBlob(report: LabReport, labInfo?: LabInfo, s
   }
 }
 
-export async function downloadReportPDF(report: LabReport, labInfo?: LabInfo, showVisualChart: boolean = true): Promise<void> {
+export async function downloadReportPDF(
+  report: LabReport,
+  labInfo?: LabInfo,
+  showVisualChart: boolean = true,
+  renderOptions?: ReportRenderOptions
+): Promise<void> {
   try {
-    const blob = await buildReportPDFBlob(report, labInfo, showVisualChart);
+    const blob = await buildReportPDFBlob(report, labInfo, showVisualChart, renderOptions);
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -77,11 +106,16 @@ export async function downloadReportPDF(report: LabReport, labInfo?: LabInfo, sh
     setTimeout(() => URL.revokeObjectURL(url), 4000);
   } catch (err) {
     console.warn('PDF canvas export failed, falling back to print window:', err);
-    openPrintReportWindow(report, labInfo, showVisualChart);
+    openPrintReportWindow(report, labInfo, showVisualChart, renderOptions);
   }
 }
 
-export function triggerPrintDialog(report?: LabReport, labInfo?: LabInfo, showVisualChart: boolean = true): void {
-  if (report) return openPrintReportWindow(report, labInfo, showVisualChart);
+export function triggerPrintDialog(
+  report?: LabReport,
+  labInfo?: LabInfo,
+  showVisualChart: boolean = true,
+  renderOptions?: ReportRenderOptions
+): void {
+  if (report) return openPrintReportWindow(report, labInfo, showVisualChart, renderOptions);
   try { window.print(); } catch { /* noop */ }
 }

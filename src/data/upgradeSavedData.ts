@@ -3,7 +3,7 @@ import { LAB_CATALOG, DEFAULT_STAFF, INITIAL_INDIVIDUAL_TESTS, INITIAL_LAB_INFO,
 import { DISEASE_ILLUSTRATIONS, suggestHematologicalIllustration } from '../data/diseaseIllustrations';
 import { calculateFlag, runAutomaticCalculations } from '../utils/calculator';
 
-export const MIGRATION_VERSION_KEY = 'rt_lab_migration_v10_cbc_urine_vitmin_2026';
+export const MIGRATION_VERSION_KEY = 'rt_lab_migration_v11_band_library_invoice_2026';
 
 /**
  * Merges any existing test catalog with the full default catalog (142 tests)
@@ -165,7 +165,8 @@ export function mergeProfilesWithDefaults(savedProfiles?: CatalogProfileTemplate
       n.includes('mentzer') || n.includes('green')
     );
     const hasHaemoglobinEdta = names.some(n => n.includes('haemoglobin (edta blood)'));
-    return hasObsolete || !hasHaemoglobinEdta;
+    const hasBandCells = names.some(n => n.includes('band'));
+    return hasObsolete || !hasHaemoglobinEdta || !hasBandCells;
   };
 
   const merged: CatalogProfileTemplate[] = LAB_CATALOG.map(defProf => {
@@ -246,6 +247,9 @@ export function getInfogramForProfile(profileCode: string, titleEn: string): any
 export function upgradeSingleReport(report: LabReport): LabReport {
   const updatedReport: LabReport = { ...report };
 
+  updatedReport.attachInvoiceToReport = report.attachInvoiceToReport ?? true;
+  updatedReport.showInvoiceDetails = report.showInvoiceDetails ?? true;
+
   // 1. Upgrade staff signatures preserving existing titles and licenses
   updatedReport.staff = {
     ...DEFAULT_STAFF,
@@ -273,7 +277,8 @@ export function upgradeSingleReport(report: LabReport): LabReport {
     if (t.includes('rdw-cv')) return findBy(['rdw-cv', 'r.d.w-cv', 'rdw'], ['rdw-sd', 'r.d.w-sd']);
     if (t.includes('platelet count')) return findBy(['platelet count', 'platelets count', 'platelet', 'plt'], ['mpv', 'pdw', 'pct', 'p-lcr']);
     if (t.includes('total leucocytic')) return findBy(['total leucocytic', 'tlc', 'wbc', 'leukocyte']);
-    if (t.includes('neutrophils %')) return findBy(['neutrophils %', 'neutrophil %', 'total neutrophils', 'neutrophils'], ['absolute', 'anc', 'nlr']);
+    if (t.includes('band')) return findBy(['band cells', 'band forms', 'band', 'stab', 'العصوية'], ['absolute']);
+    if (t.includes('neutrophils %')) return findBy(['neutrophils %', 'neutrophil %', 'total neutrophils', 'neutrophils'], ['absolute', 'anc', 'nlr', 'band', 'stab']);
     if (t.includes('lymphocytes %')) return findBy(['lymphocytes %', 'lymphocyte %', 'lymphocytes'], ['absolute', 'alc', 'nlr']);
     if (t.includes('monocytes %')) return findBy(['monocytes %', 'monocyte %', 'monocytes'], ['absolute', 'amc']);
     if (t.includes('eosinophils %')) return findBy(['eosinophils %', 'eosinophil %', 'eosinophils'], ['absolute', 'aec']);
@@ -298,7 +303,8 @@ export function upgradeSingleReport(report: LabReport): LabReport {
       n.includes('nlr') || n.includes('neutrophil/lymphocyte')
     );
     const hasHaemoglobinEdta = names.some(n => n.includes('haemoglobin (edta blood)'));
-    return hasObsolete || !hasHaemoglobinEdta;
+    const hasBandCells = names.some(n => n.includes('band'));
+    return hasObsolete || !hasHaemoglobinEdta || !hasBandCells;
   };
 
   updatedReport.profiles = (updatedReport.profiles || []).map(prof => {
@@ -311,9 +317,17 @@ export function upgradeSingleReport(report: LabReport): LabReport {
       let params = [...(prof.parameters || [])];
 
       if (cbcCatalog && isLegacyReportCbc(params)) {
+        const hasCompletedDiff = params.some(ep =>
+          (ep.name || '').toLowerCase().includes('neutrophil') &&
+          ep.result !== undefined &&
+          String(ep.result).trim() !== ''
+        );
         const mergedParams: TestParameter[] = cbcCatalog.parameters.map((catParam, idx) => {
           const match = findMatchingCbcParam(params, catParam.name);
-          const resultVal = match?.result || '';
+          const isBandTarget = (catParam.name || '').toLowerCase().includes('band');
+          const resultVal = match?.result !== undefined && String(match.result).trim() !== ''
+            ? match.result
+            : (isBandTarget && hasCompletedDiff ? '0' : '');
           return {
             ...catParam,
             id: match?.id || `p-mig-${idx}-${Date.now()}`,

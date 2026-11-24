@@ -5,7 +5,7 @@ import { calculateFlag, runAutomaticCalculations } from './calculator';
 import { getDeletedMap, recordStamp } from './cloudStore';
 import { safeSetLocalStorage, freeRedundantLocalStorage } from './idbBackup';
 
-export const MIGRATION_VERSION_KEY = 'rt_lab_migration_v10_cbc_urine_vitmin_2026';
+export const MIGRATION_VERSION_KEY = 'rt_lab_migration_v11_band_library_invoice_2026';
 
 export const CUSTOM_NORMALS_STORAGE_KEY = 'rt_lab_custom_normals_v1';
 
@@ -328,7 +328,8 @@ export function mergeProfilesWithDefaults(
       n.includes('mentzer') || n.includes('green')
     );
     const hasHaemoglobinEdta = names.some(n => n.includes('haemoglobin (edta blood)'));
-    return hasObsolete || !hasHaemoglobinEdta;
+    const hasBandCells = names.some(n => n.includes('band'));
+    return hasObsolete || !hasHaemoglobinEdta || !hasBandCells;
   };
 
   const merged: CatalogProfileTemplate[] = [];
@@ -423,6 +424,9 @@ export function getInfogramForProfile(profileCode: string, titleEn: string): any
 export function upgradeSingleReport(report: LabReport): LabReport {
   const updatedReport: LabReport = { ...report };
 
+  updatedReport.attachInvoiceToReport = report.attachInvoiceToReport ?? true;
+  updatedReport.showInvoiceDetails = report.showInvoiceDetails ?? true;
+
   // 1. Upgrade staff signatures preserving existing titles and licenses
   updatedReport.staff = {
     ...DEFAULT_STAFF,
@@ -450,7 +454,8 @@ export function upgradeSingleReport(report: LabReport): LabReport {
     if (t.includes('rdw-cv')) return findBy(['rdw-cv', 'r.d.w-cv', 'rdw'], ['rdw-sd', 'r.d.w-sd']);
     if (t.includes('platelet count')) return findBy(['platelet count', 'platelets count', 'platelet', 'plt'], ['mpv', 'pdw', 'pct', 'p-lcr']);
     if (t.includes('total leucocytic')) return findBy(['total leucocytic', 'tlc', 'wbc', 'leukocyte']);
-    if (t.includes('neutrophils %')) return findBy(['neutrophils %', 'neutrophil %', 'total neutrophils', 'neutrophils'], ['absolute', 'anc', 'nlr']);
+    if (t.includes('band')) return findBy(['band cells', 'band forms', 'band', 'stab', 'العصوية'], ['absolute']);
+    if (t.includes('neutrophils %')) return findBy(['neutrophils %', 'neutrophil %', 'total neutrophils', 'neutrophils'], ['absolute', 'anc', 'nlr', 'band', 'stab']);
     if (t.includes('lymphocytes %')) return findBy(['lymphocytes %', 'lymphocyte %', 'lymphocytes'], ['absolute', 'alc', 'nlr']);
     if (t.includes('monocytes %')) return findBy(['monocytes %', 'monocyte %', 'monocytes'], ['absolute', 'amc']);
     if (t.includes('eosinophils %')) return findBy(['eosinophils %', 'eosinophil %', 'eosinophils'], ['absolute', 'aec']);
@@ -475,7 +480,8 @@ export function upgradeSingleReport(report: LabReport): LabReport {
       n.includes('nlr') || n.includes('neutrophil/lymphocyte')
     );
     const hasHaemoglobinEdta = names.some(n => n.includes('haemoglobin (edta blood)'));
-    return hasObsolete || !hasHaemoglobinEdta;
+    const hasBandCells = names.some(n => n.includes('band'));
+    return hasObsolete || !hasHaemoglobinEdta || !hasBandCells;
   };
 
   updatedReport.profiles = (updatedReport.profiles || []).map(prof => {
@@ -499,7 +505,15 @@ export function upgradeSingleReport(report: LabReport): LabReport {
           const finalMax = custom?.maxNormal !== undefined ? custom.maxNormal : catParam.maxNormal;
           const finalTextRef = custom?.textReference !== undefined ? custom.textReference : catParam.textReference;
           const finalUnit = custom?.unit !== undefined ? custom.unit : catParam.unit;
-          const resultVal = match?.result || '';
+          const hasCompletedDiff = params.some(ep =>
+            (ep.name || '').toLowerCase().includes('neutrophil') &&
+            ep.result !== undefined &&
+            String(ep.result).trim() !== ''
+          );
+          const isBandTarget = (catParam.name || '').toLowerCase().includes('band');
+          const resultVal = match?.result !== undefined && String(match.result).trim() !== ''
+            ? match.result
+            : (isBandTarget && hasCompletedDiff ? '0' : '');
 
           return {
             ...catParam,

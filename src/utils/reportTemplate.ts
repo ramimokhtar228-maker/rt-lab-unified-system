@@ -6,6 +6,10 @@ import { DISEASE_ILLUSTRATIONS } from '../data/diseaseIllustrations';
 import { isOgttProfile, extractOgttData, generateOgttSvgChart, generateOgttProtocolHtml } from './ogttEngine';
 import { isCBCProfile, extractCBCData, generateCbcRbcSvgChart, generateCbcPltSvgChart } from './cbcEngine';
 import { resolveHandwrittenSignatureSrc } from '../assets/signatureImages';
+import { buildInvoiceMarkup } from './invoiceExporter';
+import { buildReportInvoicePayload, type ReportRenderOptions } from './reportInvoiceBuilder';
+
+export type { ReportRenderOptions };
 
 /**
  * Single source of truth for the patient-facing report.
@@ -1191,6 +1195,29 @@ export const REPORT_CSS = `
     color: #475569;
     font-weight: 600;
   }
+
+  /* Last-Page Embedded Official RTL Patient Invoice */
+  .rt-page.rt-invoice-page {
+    padding: 8mm 10mm 8mm;
+  }
+  .rt-page.rt-invoice-page .rt-page-inner {
+    justify-content: space-between;
+  }
+  .rt-invoice-wrap {
+    direction: rtl;
+    width: 100%;
+    font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+  }
+  .rt-invoice-wrap * {
+    font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+    letter-spacing: 0 !important;
+  }
+  .rt-invoice-wrap > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 10px 14px !important;
+    box-sizing: border-box;
+  }
 `;
 
 export interface ActiveSignatureBlock {
@@ -1542,32 +1569,36 @@ export function renderCbcVisualsHtml(params: TestParameter[]): string {
   const wbc = cbcData.wbc;
 
   const neu = cbcData.neutrophils ?? 60;
+  const band = cbcData.bandCells ?? 0;
   const lym = cbcData.lymphocytes ?? 30;
   const mono = cbcData.monocytes ?? 5;
   const eos = cbcData.eosinophils ?? 3;
   const baso = cbcData.basophils ?? 1;
 
-  const diffTotal = (neu + lym + mono + eos + baso) || 100;
+  const diffTotal = (neu + band + lym + mono + eos + baso) || 100;
   const pNeu = ((neu / diffTotal) * 100).toFixed(1);
+  const pBand = ((band / diffTotal) * 100).toFixed(1);
   const pLym = ((lym / diffTotal) * 100).toFixed(1);
   const pMono = ((mono / diffTotal) * 100).toFixed(1);
   const pEos = ((eos / diffTotal) * 100).toFixed(1);
   const pBaso = ((baso / diffTotal) * 100).toFixed(1);
+  const hasLeftShift = cbcData.bandCells !== null && cbcData.bandCells > 5;
 
   return `
   <div class="rt-diag-panel">
     <h3>
       <span>📊 Complete Blood Count (CBC) Diagnostic Graphics & Differential Spectrum</span>
-      <span style="font-size: 8.5px; color: #2563eb; font-weight: 700;">Hematology Consensus</span>
+      <span style="font-size: 8.5px; color: ${hasLeftShift ? '#dc2626' : '#2563eb'}; font-weight: 800;">${hasLeftShift ? '⚠ LEFT SHIFT (Band Cells > 5%)' : 'Hematology Consensus'}</span>
     </h3>
 
-    <!-- 5-Part Differential Histogram Bar -->
+    <!-- Leukocyte Differential Histogram Bar (incl. Band Cells) -->
     <div style="font-size: 8.5px; font-weight: 800; color: #334155; margin-bottom: 1.5px; display: flex; justify-content: space-between;">
       <span>Automated Leukocyte Differential Spectrum ${wbc ? `(Total WBC: ${wbc} x10³/µL)` : ''}</span>
       <span>${cbcData.sizeClassification ? `RBC Morphology: <strong style="color: ${cbcData.sizeColor};">${cbcData.sizeClassification}</strong>` : ''}</span>
     </div>
     <div class="cbc-diff-bar">
       <div class="cbc-diff-seg" style="width: ${pNeu}%; background: #2563eb;" title="Neutrophils: ${neu}%">${neu >= 8 ? `Neu ${pNeu}%` : ''}</div>
+      ${band > 0 ? `<div class="cbc-diff-seg" style="width: ${pBand}%; background: ${hasLeftShift ? '#dc2626' : '#0ea5e9'};" title="Band Cells: ${band}%">${band >= 4 ? `Band ${pBand}%` : ''}</div>` : ''}
       <div class="cbc-diff-seg" style="width: ${pLym}%; background: #7c3aed;" title="Lymphocytes: ${lym}%">${lym >= 8 ? `Lym ${pLym}%` : ''}</div>
       <div class="cbc-diff-seg" style="width: ${pMono}%; background: #d97706;" title="Monocytes: ${mono}%">${mono >= 4 ? `Mon` : ''}</div>
       <div class="cbc-diff-seg" style="width: ${pEos}%; background: #059669;" title="Eosinophils: ${eos}%">${eos >= 3 ? `Eos` : ''}</div>
@@ -1575,6 +1606,7 @@ export function renderCbcVisualsHtml(params: TestParameter[]): string {
     </div>
     <div class="cbc-legend">
       <div class="cbc-legend-item"><span class="cbc-legend-dot" style="background:#2563eb;"></span> Neu: <strong>${neu}%</strong> (40-75%)</div>
+      <div class="cbc-legend-item"><span class="cbc-legend-dot" style="background:${hasLeftShift ? '#dc2626' : '#0ea5e9'};"></span> Band: <strong style="${hasLeftShift ? 'color:#dc2626;' : ''}">${cbcData.bandCells !== null ? band : 0}%</strong> (0-5%)</div>
       <div class="cbc-legend-item"><span class="cbc-legend-dot" style="background:#7c3aed;"></span> Lym: <strong>${lym}%</strong> (20-45%)</div>
       <div class="cbc-legend-item"><span class="cbc-legend-dot" style="background:#d97706;"></span> Mono: <strong>${mono}%</strong> (2-8%)</div>
       <div class="cbc-legend-item"><span class="cbc-legend-dot" style="background:#059669;"></span> Eos: <strong>${eos}%</strong> (1-5%)</div>
@@ -2491,17 +2523,56 @@ function fitRtPagesToA4(){
 }
 `;
 
+function invoicePageHtml(
+  report: LabReport,
+  idx: number,
+  total: number,
+  lab?: LabInfo,
+  options?: ReportRenderOptions
+): string {
+  const payload = buildReportInvoicePayload(report, lab, options);
+  const invoiceMarkup = buildInvoiceMarkup(payload);
+  const p = report.patient;
+  return `
+  <section class="rt-page report-page-container rt-invoice-page">
+    <div class="rt-topbar"></div>
+    <div class="rt-page-inner">
+      <div class="rt-invoice-wrap">${invoiceMarkup}</div>
+      <footer class="rt-foot">
+        <span>Lab ID: ${esc(report.reportNumber)} • Invoice: ${esc(payload.invoiceNumber)} • Sample Barcode: ${esc(p.barcode || p.labNumber)} • Page ${idx + 1} of ${total}</span>
+        <span class="end">— END OF REPORT &amp; OFFICIAL INVOICE —</span>
+      </footer>
+    </div>
+  </section>`;
+}
+
 /** The report pages only (for embedding in the in-app preview). Wrap in <div class="rt-root">. */
-export function buildReportPages(report: LabReport, lab?: LabInfo, showVisualChart: boolean = true): string {
-  const total = report.profiles.length;
-  return report.profiles.map((pr, i) => pageHtml(report, pr, i, total, lab, showVisualChart)).join('');
+export function buildReportPages(
+  report: LabReport,
+  lab?: LabInfo,
+  showVisualChart: boolean = true,
+  options?: ReportRenderOptions
+): string {
+  const shouldIncludeInvoice = options?.includeInvoice ?? (report.attachInvoiceToReport !== false);
+  const total = report.profiles.length + (shouldIncludeInvoice ? 1 : 0);
+  const profilePages = report.profiles
+    .map((pr, i) => pageHtml(report, pr, i, total, lab, showVisualChart))
+    .join('');
+  if (!shouldIncludeInvoice) return profilePages;
+  return profilePages + invoicePageHtml(report, report.profiles.length, total, lab, options);
 }
 
 export const REPORT_FONT_LINK =
   'https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap';
 
 /** Full standalone HTML document (print window, PDF render, email attachment). */
-export function buildReportDocument(report: LabReport, lab?: LabInfo, autoPrint = false, showVisualChart: boolean = true): string {
+export function buildReportDocument(
+  report: LabReport,
+  lab?: LabInfo,
+  autoPrint = false,
+  showVisualChart: boolean = true,
+  options?: ReportRenderOptions
+): string {
   const patientSafe = latin(report.patient.fullName, 'Patient');
   const title = `Lab Report - ${esc(patientSafe)} - ${esc(report.reportNumber)}`;
   return `<!DOCTYPE html>
@@ -2548,7 +2619,7 @@ export function buildReportDocument(report: LabReport, lab?: LabInfo, autoPrint 
   <button onclick="fitRtPagesToA4(); window.print()">Print / Save as PDF</button>
 </div>
 <div class="rt-root">
-  ${buildReportPages(report, lab, showVisualChart)}
+  ${buildReportPages(report, lab, showVisualChart, options)}
 </div>
 <script>
 ${INLINE_FIT_SCRIPT}

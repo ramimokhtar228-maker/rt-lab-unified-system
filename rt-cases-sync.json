@@ -210,7 +210,9 @@
     "subtotal": 369,
     "remainingAmount": 0,
     "paymentMethod": "cash",
-    "createdAt": "2026-10-27T11:27:50.865Z"
+    "createdAt": "2026-10-27T11:27:50.865Z",
+    "attachInvoiceToReport": true,
+    "showInvoiceDetails": true
   },
   {
     "id": "rep-inv-1793047068354",
@@ -334,7 +336,9 @@
     "subtotal": 2899,
     "remainingAmount": 0,
     "paymentMethod": "cash",
-    "createdAt": "2026-10-26T20:37:48.357Z"
+    "createdAt": "2026-10-26T20:37:48.357Z",
+    "attachInvoiceToReport": true,
+    "showInvoiceDetails": true
   },
   {
     "id": "rep-inv-1792873120495",
@@ -467,7 +471,9 @@
     "createdAt": "2026-10-24T20:18:40.495Z",
     "bookingType": "branch",
     "isHomeVisit": false,
-    "visitFee": 0
+    "visitFee": 0,
+    "attachInvoiceToReport": true,
+    "showInvoiceDetails": true
   },
   {
     "id": "rep-inv-1792872977386",
@@ -600,7 +606,9 @@
     "createdAt": "2026-10-24T20:16:17.386Z",
     "bookingType": "branch",
     "isHomeVisit": false,
-    "visitFee": 0
+    "visitFee": 0,
+    "attachInvoiceToReport": true,
+    "showInvoiceDetails": true
   },
   {
     "id": "rep-inv-1792872659277",
@@ -757,7 +765,9 @@
     "createdAt": "2026-10-24T20:10:59.277Z",
     "bookingType": "branch",
     "isHomeVisit": false,
-    "visitFee": 0
+    "visitFee": 0,
+    "attachInvoiceToReport": true,
+    "showInvoiceDetails": true
   },
   {
     "id": "rep-inv-1792859713342",
@@ -914,7 +924,9 @@
     "createdAt": "2026-10-24T16:35:13.342Z",
     "bookingType": "branch",
     "isHomeVisit": false,
-    "visitFee": 0
+    "visitFee": 0,
+    "attachInvoiceToReport": true,
+    "showInvoiceDetails": true
   },
   {
     "id": "rep-inv-1792853252178",
@@ -1075,7 +1087,9 @@
     "visitAddress": "حدائق القبه 42 ش الخليل المتفرع من ش المدينه المنوره خلف مسجد الشيخ الغراب الدور الاول القه 3",
     "homeAddress": "حدائق القبه 42 ش الخليل المتفرع من ش المدينه المنوره خلف مسجد الشيخ الغراب الدور الاول القه 3",
     "testsSubtotal": 571,
-    "totalCost": 641
+    "totalCost": 641,
+    "attachInvoiceToReport": true,
+    "showInvoiceDetails": true
   },
   {
     "id": "rep-inv-1792845681826",
@@ -1236,7 +1250,9 @@
     "visitAddress": "٥ش امتداد امون من ش الحنفيه الدور الرابع ",
     "homeAddress": "٥ش امتداد امون من ش الحنفيه الدور الرابع ",
     "testsSubtotal": 581,
-    "totalCost": 641
+    "totalCost": 641,
+    "attachInvoiceToReport": true,
+    "showInvoiceDetails": true
   },
   {
     "id": "rep-inv-1792776774493",
@@ -1273,7 +1289,9 @@
     "createdAt": "2026-10-23T17:32:54.494Z",
     "bookingType": "branch",
     "isHomeVisit": false,
-    "visitFee": 0
+    "visitFee": 0,
+    "attachInvoiceToReport": true,
+    "showInvoiceDetails": true
   },
   {
     "id": "rep-inv-1792699877460",
@@ -1358,7 +1376,9 @@
     "createdAt": "2026-10-22T20:11:17.460Z",
     "bookingType": "branch",
     "isHomeVisit": false,
-    "visitFee": 0
+    "visitFee": 0,
+    "attachInvoiceToReport": true,
+    "showInvoiceDetails": true
   },
   {
     "id": "rep-inv-1792699476123",
@@ -1519,7 +1539,9 @@
     "visitAddress": " ٢٨ ش الشباب حجر الأساس ٦٠ متر الشروق ٢",
     "homeAddress": " ٢٨ ش الشباب حجر الأساس ٦٠ متر الشروق ٢",
     "testsSubtotal": 671,
-    "totalCost": 821
+    "totalCost": 821,
+    "attachInvoiceToReport": true,
+    "showInvoiceDetails": true
   },
   {
     "id": "rep-inv-1792699192842",
@@ -1576,7 +1598,9 @@
     "visitAddress": "م. نصر",
     "homeAddress": "م. نصر",
     "testsSubtotal": 62,
-    "totalCost": 62
+    "totalCost": 62,
+    "attachInvoiceToReport": true,
+    "showInvoiceDetails": true
   },
   {
     "id": "rep-inv-1792521201957",
@@ -1733,7 +1757,9 @@
     "createdAt": "2026-10-20T18:33:21.957Z",
     "bookingType": "branch",
     "isHomeVisit": false,
-    "visitFee": 0
+    "visitFee": 0,
+    "attachInvoiceToReport": true,
+    "showInvoiceDetails": true
   },
   {
     "id": "rep-inv-1792520370358",
@@ -1890,7 +1916,9 @@
     "createdAt": "2026-10-20T18:19:30.358Z",
     "bookingType": "branch",
     "isHomeVisit": false,
-    "visitFee": 0
+    "visitFee": 0,
+    "attachInvoiceToReport": true,
+    "showInvoiceDetails": true
   },
   {
     "id": "rep-inv-1792515070911",
@@ -2051,7 +2079,9 @@
     "visitAddress": "حدائق القبه 42 ش الخليل المتفرع من ش المدينه المنوره خلف مسجد الشيخ الغراب الدور الاول القه 3",
     "homeAddress": "حدائق القبه 42 ش الخليل المتفرع من ش المدينه المنوره خلف مسجد الشيخ الغراب الدور الاول القه 3",
     "testsSubtotal": 591,
-    "totalCost": 661
+    "totalCost": 661,
+    "attachInvoiceToReport": true,
+    "showInvoiceDetails": true
   },
   {
     "id": "rep-inv-1792482321561",
@@ -2208,7 +2238,9 @@
     "createdAt": "2026-10-20T07:45:21.561Z",
     "bookingType": "branch",
     "isHomeVisit": false,
-    "visitFee": 0
+    "visitFee": 0,
+    "attachInvoiceToReport": true,
+    "showInvoiceDetails": true
   },
   {
     "id": "rep-inv-1792482240252",
@@ -2365,7 +2397,9 @@
     "createdAt": "2026-10-20T07:44:00.252Z",
     "bookingType": "branch",
     "isHomeVisit": false,
-    "visitFee": 0
+    "visitFee": 0,
+    "attachInvoiceToReport": true,
+    "showInvoiceDetails": true
   },
   {
     "id": "rep-inv-1792482113809",
@@ -2459,6 +2493,8 @@
     "createdAt": "2026-10-20T07:41:53.809Z",
     "bookingType": "branch",
     "isHomeVisit": false,
-    "visitFee": 0
+    "visitFee": 0,
+    "attachInvoiceToReport": true,
+    "showInvoiceDetails": true
   }
 ]

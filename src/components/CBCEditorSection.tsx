@@ -4,7 +4,7 @@
  */
 
 import React, { useMemo, useState } from 'react';
-import { TestProfile, TestParameter } from '../types/lab';
+import { TestProfile, TestParameter, Patient } from '../types/lab';
 import {
   extractCBCData,
   generateCbcRbcSvgChart,
@@ -12,6 +12,7 @@ import {
   generateCbcWbcSvgChart
 } from '../utils/cbcEngine';
 import { calculateFlag, runAutomaticCalculations } from '../utils/calculator';
+import { MedicalLibraryPicker } from './MedicalLibraryPicker';
 import {
   Microscope,
   Sparkles,
@@ -28,12 +29,14 @@ import {
 
 interface CBCEditorSectionProps {
   profile: TestProfile;
+  patient?: Partial<Patient>;
   onUpdateProfile: (updated: Partial<TestProfile>) => void;
   onUpdateParameters: (updatedParams: TestParameter[]) => void;
 }
 
 export const CBCEditorSection: React.FC<CBCEditorSectionProps> = ({
   profile,
+  patient,
   onUpdateProfile,
   onUpdateParameters
 }) => {
@@ -94,7 +97,8 @@ export const CBCEditorSection: React.FC<CBCEditorSectionProps> = ({
           platelets: '265',
           mpv: '8.8',
           wbc: '6.8',
-          neutrophils: '60',
+          neutrophils: '59',
+          band: '1',
           lymphocytes: '32',
           monocytes: '5',
           eosinophils: '2',
@@ -120,7 +124,8 @@ export const CBCEditorSection: React.FC<CBCEditorSectionProps> = ({
           platelets: '440',
           mpv: '8.4',
           wbc: '7.5',
-          neutrophils: '64',
+          neutrophils: '63',
+          band: '1',
           lymphocytes: '28',
           monocytes: '5',
           eosinophils: '2',
@@ -146,7 +151,8 @@ export const CBCEditorSection: React.FC<CBCEditorSectionProps> = ({
           platelets: '290',
           mpv: '8.6',
           wbc: '6.5',
-          neutrophils: '58',
+          neutrophils: '57',
+          band: '1',
           lymphocytes: '34',
           monocytes: '5',
           eosinophils: '2',
@@ -172,7 +178,8 @@ export const CBCEditorSection: React.FC<CBCEditorSectionProps> = ({
           platelets: '135',
           mpv: '10.2',
           wbc: '3.8',
-          neutrophils: '52',
+          neutrophils: '51',
+          band: '1',
           lymphocytes: '40',
           monocytes: '6',
           eosinophils: '2',
@@ -198,7 +205,8 @@ export const CBCEditorSection: React.FC<CBCEditorSectionProps> = ({
           platelets: '420',
           mpv: '9.0',
           wbc: '12.4',
-          neutrophils: '68',
+          neutrophils: '67',
+          band: '1',
           lymphocytes: '24',
           monocytes: '5',
           eosinophils: '2',
@@ -224,7 +232,8 @@ export const CBCEditorSection: React.FC<CBCEditorSectionProps> = ({
           platelets: '360',
           mpv: '8.9',
           wbc: '17.8',
-          neutrophils: '82',
+          neutrophils: '74',
+          band: '8',
           lymphocytes: '12',
           monocytes: '4',
           eosinophils: '1',
@@ -265,8 +274,10 @@ export const CBCEditorSection: React.FC<CBCEditorSectionProps> = ({
           return n.includes('platelet');
         case 'wbc':
           return n.includes('leucocytic') || n.includes('leukocyte') || n.includes('wbc') || n.includes('tlc');
+        case 'band':
+          return (n.includes('band') || n.includes('stab') || n.includes('عصوية')) && !n.includes('absolute');
         case 'neutrophils':
-          return n.includes('neutrophil') && !n.includes('absolute') && !n.includes('anc');
+          return n.includes('neutrophil') && !n.includes('absolute') && !n.includes('anc') && !n.includes('band') && !n.includes('stab');
         case 'lymphocytes':
           return n.includes('lymphocyte') && !n.includes('absolute') && !n.includes('alc');
         case 'monocytes':
@@ -395,8 +406,8 @@ export const CBCEditorSection: React.FC<CBCEditorSectionProps> = ({
 
       {isExpanded && (
         <div className="p-5 space-y-5">
-          {/* Diagnostic Evaluation & Mentzer / Bessman Summary */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+          {/* Diagnostic Evaluation & Mentzer / Bessman / Band Summary */}
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
             {/* 1. Size Card */}
             <div className="bg-slate-800/80 border border-slate-700/80 rounded-xl p-3">
               <div className="text-[11px] text-slate-400 font-bold mb-1">1. حجم كرات الدم (RBC Size)</div>
@@ -447,6 +458,25 @@ export const CBCEditorSection: React.FC<CBCEditorSectionProps> = ({
                   )
                 ) : (
                   <span className="text-slate-500">يتطلب وجود MCV و RBC</span>
+                )}
+              </div>
+            </div>
+
+            {/* 5. Band Cells & Left Shift Card */}
+            <div className="bg-slate-800/80 border border-slate-700/80 rounded-xl p-3">
+              <div className="text-[11px] text-slate-400 font-bold mb-1">5. خلايا الباند (Band Cells %)</div>
+              <div className={`text-sm font-black font-mono ${cbcData.bandCells !== null && cbcData.bandCells > 5 ? 'text-red-400' : 'text-emerald-400'}`}>
+                {cbcData.bandCells !== null ? `${cbcData.bandCells}%` : '—'}
+              </div>
+              <div className="text-[11px] text-slate-300 mt-1">
+                {cbcData.bandCells !== null ? (
+                  cbcData.bandCells > 5 ? (
+                    <span className="text-red-300 font-bold">⚠ Left Shift (&gt; 5%)</span>
+                  ) : (
+                    <span className="text-emerald-300 font-bold">✓ طبيعي (0 - 5%)</span>
+                  )
+                ) : (
+                  <span className="text-slate-500">المرجع: 0 - 5 %</span>
                 )}
               </div>
             </div>
@@ -571,6 +601,14 @@ export const CBCEditorSection: React.FC<CBCEditorSectionProps> = ({
               })}
             </div>
           </div>
+
+          {/* Embedded Smart CBC & Anemia Diagnostic Selector */}
+          <MedicalLibraryPicker
+            variant="dark"
+            profile={profile}
+            patient={patient}
+            onApply={onUpdateProfile}
+          />
         </div>
       )}
     </div>

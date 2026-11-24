@@ -192,6 +192,18 @@ export const CBC_20_CATALOG: CatalogTestItem[] = [
     category: 'CBC',
   },
   {
+    code: 'BAND_PCT',
+    nameEn: 'Band Cells %',
+    nameAr: 'خلايا الباند (المتعادلة غير الناضجة) %',
+    unit: '%',
+    minMale: 0.0,
+    maxMale: 5.0,
+    minFemale: 0.0,
+    maxFemale: 5.0,
+    precision: 1,
+    category: 'CBC',
+  },
+  {
     code: 'LYMPH_PCT',
     nameEn: 'Lymphocytes %',
     nameAr: 'الخلايا اللمفاوية %',
