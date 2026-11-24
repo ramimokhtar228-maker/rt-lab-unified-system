@@ -7040,48 +7040,6 @@
     "createdAt": "2026-11-19T09:00"
   },
   {
-    "id": "rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-1795193067941",
-    "reportNumber": "RT-2026-914",
-    "invoiceNumber": "rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-1795193067941",
-    "barcode": "RT-10944",
-    "patientName": "نيفين حليم راشد  / صموئيل سرور حبيب",
-    "age": 65,
-    "gender": "male",
-    "phone": "0 12 87300709",
-    "referringDoctor": "Himself",
-    "tests": [
-      {
-        "id": "prof-rep-1795193067941-1",
-        "code": "CBC",
-        "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
-        "nameEn": "Complete Blood Picture",
-        "category": "Hematology",
-        "sampleType": "EDTA Whole Blood",
-        "unit": "g/dL",
-        "minNormal": 12.5,
-        "maxNormal": 16.5,
-        "textReference": "12.5 - 16.5"
-      }
-    ],
-    "netAmount": 180,
-    "paidAmount": 180,
-    "paymentStatus": "pending",
-    "financialClearance": "PAYMENT_PENDING",
-    "bookingType": "branch",
-    "isHomeVisit": false,
-    "visitFee": 0,
-    "visitAddress": "",
-    "homeAddress": "",
-    "deliveryNotes": "",
-    "visitSpecialist": "",
-    "discount": 0,
-    "testsSubtotal": 180,
-    "subtotal": 180,
-    "remainingAmount": 0,
-    "paymentMethod": "cash",
-    "createdAt": "2026-11-21T07:00"
-  },
-  {
     "id": "rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-1795195094648",
     "reportNumber": "RT-2026-915",
     "invoiceNumber": "rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-1795195094648",
