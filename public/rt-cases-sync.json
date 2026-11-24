@@ -6816,7 +6816,7 @@
     "createdAt": "2026-11-19T10:30"
   },
   {
-    "id": "rep-rep-rep-rep-1794984798641",
+    "id": "rep-rep-rep-rep-rep-1794984798641",
     "reportNumber": "RT-2026-912",
     "invoiceNumber": "inv-1794984798676",
     "barcode": "RT-10942",
@@ -6925,9 +6925,9 @@
     "discount": 0,
     "testsSubtotal": 555,
     "subtotal": 555,
-    "remainingAmount": 550,
+    "remainingAmount": 0,
     "paymentMethod": "cash",
-    "createdAt": "2026-11-18T09:30"
+    "createdAt": "2026-11-18"
   },
   {
     "id": "rep-rep-rep-1794985677280",
