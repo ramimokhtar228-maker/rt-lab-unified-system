@@ -1592,7 +1592,7 @@
     "createdAt": "2026-10-08T09:33"
   },
   {
-    "id": "rep-rep-1791400927196",
+    "id": "rep-rep-rep-1791400927196",
     "reportNumber": "RT-2026-031",
     "invoiceNumber": "inv-1791400927197",
     "barcode": "RT-10061",
@@ -1631,7 +1631,7 @@
     "subtotal": 184,
     "remainingAmount": 184,
     "paymentMethod": "cash",
-    "createdAt": "2026-10-06T08:32:00.000Z"
+    "createdAt": "2026-10-06T08:32"
   },
   {
     "id": "rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-1791359724810",
@@ -1722,7 +1722,7 @@
     "createdAt": "2026-10-04T18:56"
   },
   {
-    "id": "rep-rep-1791359462609",
+    "id": "rep-rep-rep-1791359462609",
     "reportNumber": "RT-2026-013",
     "invoiceNumber": "inv-1791359462609",
     "barcode": "RT-10043",
@@ -1785,7 +1785,7 @@
     "subtotal": 1026,
     "remainingAmount": 1026,
     "paymentMethod": "cash",
-    "createdAt": "2026-10-04T05:17:00.000Z"
+    "createdAt": "2026-10-04T05:17"
   },
   {
     "id": "rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-1791358565025",
@@ -2460,7 +2460,7 @@
     "createdAt": "2026-09-30T11:20"
   },
   {
-    "id": "rep-rep-1791284141332",
+    "id": "rep-rep-rep-1791284141332",
     "reportNumber": "RT-2026-004",
     "invoiceNumber": "inv-1791284141332",
     "barcode": "RT-10034",
@@ -3696,7 +3696,7 @@
     "createdAt": "2026-10-12T13:40"
   },
   {
-    "id": "rep-rep-1791921893781",
+    "id": "rep-rep-rep-1791921893781",
     "reportNumber": "RT-2026-8988",
     "invoiceNumber": "inv-1791921893782",
     "barcode": "RT-9827361855",
@@ -3783,7 +3783,7 @@
     "subtotal": 200,
     "remainingAmount": 200,
     "paymentMethod": "cash",
-    "createdAt": "2026-10-11T14:05:00.000Z"
+    "createdAt": "2026-10-11T14:05"
   },
   {
     "id": "rep-rep-1791919687675",
@@ -4026,7 +4026,7 @@
     "createdAt": "2026-10-06"
   },
   {
-    "id": "rep-rep-rep-1791833372306",
+    "id": "rep-rep-rep-rep-1791833372306",
     "reportNumber": "RT-2026-8983",
     "invoiceNumber": "inv-1791833372306",
     "barcode": "RT-9827361850",
@@ -4892,7 +4892,7 @@
     "createdAt": "2026-11-13T09:00"
   },
   {
-    "id": "rep-rep-1794298620913",
+    "id": "rep-rep-rep-1794298620913",
     "reportNumber": "RT-2026-085",
     "invoiceNumber": "inv-1794298620926",
     "barcode": "RT-10115",
@@ -4967,10 +4967,10 @@
     "subtotal": 1073,
     "remainingAmount": 0,
     "paymentMethod": "cash",
-    "createdAt": "2026-11-06T07:00:00.000Z"
+    "createdAt": "2026-11-06T07:00"
   },
   {
-    "id": "rep-rep-1794297516393",
+    "id": "rep-rep-rep-1794297516393",
     "reportNumber": "RT-2026-084",
     "invoiceNumber": "inv-1794297516416",
     "barcode": "RT-10114",
@@ -5096,7 +5096,7 @@
     "createdAt": "2026-11-07"
   },
   {
-    "id": "rep-rep-1794296511519",
+    "id": "rep-rep-rep-1794296511519",
     "reportNumber": "RT-2026-083",
     "invoiceNumber": "inv-1794296511530",
     "barcode": "RT-10113",
@@ -5193,10 +5193,10 @@
     "subtotal": 547,
     "remainingAmount": 0,
     "paymentMethod": "cash",
-    "createdAt": "2026-11-05T07:00:00.000Z"
+    "createdAt": "2026-11-05T07:00"
   },
   {
-    "id": "rep-rep-rep-1794067469035",
+    "id": "rep-rep-rep-rep-1794067469035",
     "reportNumber": "RT-2026-082",
     "invoiceNumber": "inv-1794067469051",
     "barcode": "RT-10112",
@@ -5632,7 +5632,7 @@
     "createdAt": "2026-11-02"
   },
   {
-    "id": "rep-rep-1793605755935",
+    "id": "rep-rep-rep-1793605755935",
     "reportNumber": "RT-2026-076",
     "invoiceNumber": "inv-1793605755943",
     "barcode": "RT-10106",
@@ -5974,7 +5974,7 @@
     "createdAt": "2026-10-31"
   },
   {
-    "id": "rep-rep-1793139379936",
+    "id": "rep-rep-rep-1793139379936",
     "reportNumber": "RT-2026-9827351831",
     "invoiceNumber": "inv-1793139379937",
     "barcode": "RT-9827361861",
@@ -6100,7 +6100,7 @@
     "createdAt": "2026-10-29"
   },
   {
-    "id": "rep-rep-1793139080756",
+    "id": "rep-rep-rep-1793139080756",
     "reportNumber": "RT-2026-9827351830",
     "invoiceNumber": "inv-1793139080756",
     "barcode": "RT-9827361860",
@@ -6185,7 +6185,7 @@
     "subtotal": 1185,
     "remainingAmount": 0,
     "paymentMethod": "cash",
-    "createdAt": "2026-10-28T12:32:00.000Z"
+    "createdAt": "2026-10-28T12:32"
   },
   {
     "id": "rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-1793138246449",
@@ -6827,16 +6827,6 @@
     "referringDoctor": "Herself",
     "tests": [
       {
-        "id": "prof-rep-1794984798641-1",
-        "code": "TST-0",
-        "nameAr": "باقة: Comprehensive Annual Wellness Package",
-        "nameEn": "باقة: Comprehensive Annual Wellness Package",
-        "category": "Clinical",
-        "sampleType": "Serum",
-        "unit": "",
-        "textReference": "قيد الفحص المخبري"
-      },
-      {
         "id": "prof-rep-1794984798641-2",
         "code": "CBC",
         "nameAr": "صورة الدم الكاملة (Complete Blood Picture)",
@@ -6847,30 +6837,6 @@
         "minNormal": 12.5,
         "maxNormal": 16.5,
         "textReference": "12.5 - 16.5"
-      },
-      {
-        "id": "prof-rep-1794984798641-3",
-        "code": "TST-2",
-        "nameAr": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
-        "nameEn": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
-        "category": "Clinical",
-        "sampleType": "Serum",
-        "unit": "%",
-        "minNormal": 4,
-        "maxNormal": 5.6,
-        "textReference": "Normal: < 5.7 % | Pre-diabetic: 5.7 - 6.4 % | Diabetic: >= 6.5 %"
-      },
-      {
-        "id": "prof-rep-1794984798641-4",
-        "code": "TST-3",
-        "nameAr": "Lipid Profile",
-        "nameEn": "Lipid Profile",
-        "category": "Clinical",
-        "sampleType": "Serum",
-        "unit": "mg/dL",
-        "minNormal": 0,
-        "maxNormal": 200,
-        "textReference": ""
       },
       {
         "id": "prof-rep-1794984798641-5",
@@ -6897,14 +6863,52 @@
         "textReference": ""
       },
       {
-        "id": "prof-rep-1794984798641-7",
-        "code": "TST-6",
-        "nameAr": "فحوصات وفيتامينات إضافية (Comprehensive Annual Wellness Package)",
-        "nameEn": "فحوصات وفيتامينات إضافية (Comprehensive Annual Wellness Package)",
-        "category": "Clinical",
+        "id": "prof-TUMOR-1795506866462-0-9qf1",
+        "code": "TUMOR",
+        "nameAr": "Tumor Markers Panel",
+        "nameEn": "Tumor Markers Panel",
+        "category": "Oncology & Immunodiagnostics",
         "sampleType": "Serum",
-        "unit": "",
-        "textReference": "قيد الفحص المخبري"
+        "unit": "ng/mL",
+        "minNormal": 0,
+        "maxNormal": 3,
+        "textReference": "< 3.0 Non-smoker (< 5.0 Smoker)"
+      },
+      {
+        "id": "prof-AUTOIMMUNE-1795506869804-0-yrc4",
+        "code": "AUTOIMMUNE",
+        "nameAr": "Rheumatology & Autoimmune Markers",
+        "nameEn": "Rheumatology & Autoimmune Markers",
+        "category": "Immunology",
+        "sampleType": "Serum & Citrate Blood",
+        "unit": "mm/1st hr",
+        "minNormal": 0,
+        "maxNormal": 15,
+        "textReference": ""
+      },
+      {
+        "id": "prof-THYROID-1795506886955-0-4njy",
+        "code": "THYROID",
+        "nameAr": "Thyroid Function Full Panel",
+        "nameEn": "Thyroid Function Full Panel",
+        "category": "Endocrinology",
+        "sampleType": "Serum",
+        "unit": "µIU/mL",
+        "minNormal": 0.55,
+        "maxNormal": 4.78,
+        "textReference": "0.55 - 4.78 µIU/mL"
+      },
+      {
+        "id": "prof-VITAMINS_MINERALS-1795506891349-0-gups",
+        "code": "VITAMINS_MINERALS",
+        "nameAr": "بروفايل الفيتامينات والمعادن الشامل (Vitamins & Minerals)",
+        "nameEn": "Vitamins & Minerals Profile",
+        "category": "Vitamins & Minerals",
+        "sampleType": "Serum (Morning Fasting)",
+        "unit": "ng/mL",
+        "minNormal": 30,
+        "maxNormal": 100,
+        "textReference": "Deficiency: < 20 | Insufficiency: 20 - 29 | Sufficiency: 30 - 100 ng/mL"
       }
     ],
     "netAmount": 1149,
@@ -7153,7 +7157,7 @@
     "visitAddress": "",
     "homeAddress": "",
     "deliveryNotes": "",
-    "visitSpecialist": "",
+    "visitSpecialist": "أ/ آية محمد",
     "discount": 0,
     "testsSubtotal": 987,
     "subtotal": 987,
@@ -7398,7 +7402,7 @@
     "createdAt": "2026-11-23T09:30:00.000Z"
   },
   {
-    "id": "rep-diag-inv-1795454682741",
+    "id": "rep-rep-diag-inv-1795454682741",
     "reportNumber": "RT-2026-923",
     "invoiceNumber": "inv-1795454682741",
     "barcode": "RT-10953",
@@ -7481,7 +7485,7 @@
     ],
     "netAmount": 715,
     "paidAmount": 675,
-    "paymentStatus": "partial",
+    "paymentStatus": "pending",
     "financialClearance": "PAYMENT_PENDING",
     "bookingType": "branch",
     "isHomeVisit": false,
@@ -7495,7 +7499,7 @@
     "subtotal": 715,
     "remainingAmount": 40,
     "paymentMethod": "cash",
-    "createdAt": "2026-11-23T17:24:42.741Z"
+    "createdAt": "2026-11-23T17:24"
   },
   {
     "id": "rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-diag-inv-1795454421847",
@@ -7702,7 +7706,7 @@
     "createdAt": "2026-11-23T17:18"
   },
   {
-    "id": "rep-inv-1794985677327",
+    "id": "rep-rep-inv-1794985677327",
     "reportNumber": "RT-2026-913",
     "invoiceNumber": "rep-inv-1794985677327",
     "barcode": "RT-10943",
@@ -7840,7 +7844,7 @@
     "createdAt": "2026-11-19T09:00"
   },
   {
-    "id": "rep-1795282130784",
+    "id": "rep-rep-1795282130784",
     "reportNumber": "RT-2026-920",
     "invoiceNumber": "inv-1794985677327",
     "barcode": "RT-10950",
@@ -7939,10 +7943,10 @@
     "subtotal": 474,
     "remainingAmount": 0,
     "paymentMethod": "cash",
-    "createdAt": "2026-11-21T17:28:50.784Z"
+    "createdAt": "2026-11-19T09:00"
   },
   {
-    "id": "rep-1795282127995",
+    "id": "rep-rep-1795282127995",
     "reportNumber": "RT-2026-919",
     "invoiceNumber": "inv-1794985677327",
     "barcode": "RT-10949",
@@ -8041,7 +8045,7 @@
     "subtotal": 474,
     "remainingAmount": 0,
     "paymentMethod": "cash",
-    "createdAt": "2026-11-21T17:28:47.995Z"
+    "createdAt": "2026-11-19T09:00"
   },
   {
     "id": "rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-rep-1795281340557",
@@ -8134,7 +8138,7 @@
     "createdAt": "2026-11-21T07:00"
   },
   {
-    "id": "rep-1795081758040",
+    "id": "rep-rep-1795081758040",
     "reportNumber": "RT-2026-916",
     "invoiceNumber": "inv-1794817337399",
     "barcode": "RT-10946",
@@ -8171,10 +8175,10 @@
     ],
     "netAmount": 999,
     "paidAmount": 999,
-    "paymentStatus": "paid",
-    "financialClearance": "CLEARED_FOR_RELEASE",
-    "bookingType": "home_visit",
-    "isHomeVisit": true,
+    "paymentStatus": "pending",
+    "financialClearance": "PAYMENT_PENDING",
+    "bookingType": "branch",
+    "isHomeVisit": false,
     "visitFee": 0,
     "visitAddress": "مساكن شيراتون",
     "homeAddress": "مساكن شيراتون",
@@ -8185,7 +8189,7 @@
     "subtotal": 999,
     "remainingAmount": 0,
     "paymentMethod": "cash",
-    "createdAt": "2026-11-19T09:49:18.040Z"
+    "createdAt": "2026-11-14"
   },
   {
     "id": "rep-1795073902053",
@@ -8328,7 +8332,7 @@
     "createdAt": "2026-11-18T19:23:52.554Z"
   },
   {
-    "id": "rep-1794817485093",
+    "id": "rep-rep-1794817485093",
     "reportNumber": "RT-2026-098",
     "invoiceNumber": "inv-1794817485115",
     "barcode": "RT-10128",
@@ -8413,10 +8417,10 @@
     ],
     "netAmount": 999,
     "paidAmount": 999,
-    "paymentStatus": "paid",
-    "financialClearance": "CLEARED_FOR_RELEASE",
-    "bookingType": "home_visit",
-    "isHomeVisit": true,
+    "paymentStatus": "pending",
+    "financialClearance": "PAYMENT_PENDING",
+    "bookingType": "branch",
+    "isHomeVisit": false,
     "visitFee": 0,
     "visitAddress": "مكرم عبيد",
     "homeAddress": "مكرم عبيد",
@@ -8427,10 +8431,10 @@
     "subtotal": 999,
     "remainingAmount": 0,
     "paymentMethod": "cash",
-    "createdAt": "2026-11-16T08:24:45.093Z"
+    "createdAt": "2026-11-16T07:00:00.000Z"
   },
   {
-    "id": "rep-1794817337374",
+    "id": "rep-rep-1794817337374",
     "reportNumber": "RT-2026-097",
     "invoiceNumber": "inv-1794817337399",
     "barcode": "RT-10127",
@@ -8527,10 +8531,10 @@
     ],
     "netAmount": 999,
     "paidAmount": 999,
-    "paymentStatus": "paid",
-    "financialClearance": "CLEARED_FOR_RELEASE",
-    "bookingType": "home_visit",
-    "isHomeVisit": true,
+    "paymentStatus": "pending",
+    "financialClearance": "PAYMENT_PENDING",
+    "bookingType": "branch",
+    "isHomeVisit": false,
     "visitFee": 0,
     "visitAddress": "مساكن شيراتون",
     "homeAddress": "مساكن شيراتون",
@@ -8541,10 +8545,10 @@
     "subtotal": 999,
     "remainingAmount": 0,
     "paymentMethod": "cash",
-    "createdAt": "2026-11-16T08:22:17.374Z"
+    "createdAt": "2026-11-14"
   },
   {
-    "id": "rep-1794817240867",
+    "id": "rep-rep-1794817240867",
     "reportNumber": "RT-2026-096",
     "invoiceNumber": "inv-1794817240894",
     "barcode": "RT-10126",
@@ -8629,21 +8633,21 @@
     ],
     "netAmount": 1089,
     "paidAmount": 1089,
-    "paymentStatus": "paid",
-    "financialClearance": "CLEARED_FOR_RELEASE",
-    "bookingType": "home_visit",
-    "isHomeVisit": true,
-    "visitFee": 90,
+    "paymentStatus": "pending",
+    "financialClearance": "PAYMENT_PENDING",
+    "bookingType": "branch",
+    "isHomeVisit": false,
+    "visitFee": 0,
     "visitAddress": "مساكن شيراتون",
     "homeAddress": "مساكن شيراتون",
     "deliveryNotes": "",
     "visitSpecialist": "أستاذة / آية مصطفي",
     "discount": 0,
-    "testsSubtotal": 999,
+    "testsSubtotal": 1089,
     "subtotal": 1089,
     "remainingAmount": 0,
     "paymentMethod": "cash",
-    "createdAt": "2026-11-16T08:20:40.868Z"
+    "createdAt": "2026-11-14"
   },
   {
     "id": "rep-rep-rep-rep-1794817035196",
@@ -8756,7 +8760,7 @@
     "createdAt": "2026-11-17T09:00"
   },
   {
-    "id": "rep-1794816733467",
+    "id": "rep-rep-1794816733467",
     "reportNumber": "RT-2026-094",
     "invoiceNumber": "inv-1794816733477",
     "barcode": "RT-10124",
@@ -8781,24 +8785,24 @@
     ],
     "netAmount": 472,
     "paidAmount": 472,
-    "paymentStatus": "paid",
-    "financialClearance": "CLEARED_FOR_RELEASE",
-    "bookingType": "home_visit",
-    "isHomeVisit": true,
-    "visitFee": 80,
+    "paymentStatus": "pending",
+    "financialClearance": "PAYMENT_PENDING",
+    "bookingType": "branch",
+    "isHomeVisit": false,
+    "visitFee": 0,
     "visitAddress": "مكرم عبيد",
     "homeAddress": "مكرم عبيد",
     "deliveryNotes": "",
     "visitSpecialist": "أستاذة / آية مصطفي",
-    "discount": 728,
-    "testsSubtotal": 1120,
+    "discount": 0,
+    "testsSubtotal": 472,
     "subtotal": 472,
     "remainingAmount": 0,
     "paymentMethod": "cash",
-    "createdAt": "2026-11-16T08:12:13.467Z"
+    "createdAt": "2026-11-16"
   },
   {
-    "id": "rep-1794816359837",
+    "id": "rep-rep-1794816359837",
     "reportNumber": "RT-2026-093",
     "invoiceNumber": "inv-1794816359847",
     "barcode": "RT-10123",
@@ -8821,21 +8825,21 @@
     ],
     "netAmount": 251,
     "paidAmount": 251,
-    "paymentStatus": "paid",
-    "financialClearance": "CLEARED_FOR_RELEASE",
-    "bookingType": "home_visit",
-    "isHomeVisit": true,
-    "visitFee": 65,
+    "paymentStatus": "pending",
+    "financialClearance": "PAYMENT_PENDING",
+    "bookingType": "branch",
+    "isHomeVisit": false,
+    "visitFee": 0,
     "visitAddress": "شبرا الخيمة",
     "homeAddress": "شبرا الخيمة",
     "deliveryNotes": "",
     "visitSpecialist": "استاذة / ايه مصطفى",
-    "discount": 591,
-    "testsSubtotal": 777,
+    "discount": 0,
+    "testsSubtotal": 251,
     "subtotal": 251,
     "remainingAmount": 0,
     "paymentMethod": "cash",
-    "createdAt": "2026-11-16T08:05:59.838Z"
+    "createdAt": "2026-11-13T09:00:00.000Z"
   },
   {
     "id": "rep-rep-1795464733623",
