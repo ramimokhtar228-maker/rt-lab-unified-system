@@ -9022,5 +9022,59 @@
     "remainingAmount": 0,
     "paymentMethod": "cash",
     "createdAt": "2026-11-25T19:16:35.218Z"
+  },
+  {
+    "id": "rep-1795634490673",
+    "reportNumber": "RT-2026-927",
+    "invoiceNumber": "inv-1795634490727",
+    "barcode": "RT-10957",
+    "patientName": "فاطمه حسن",
+    "age": 30,
+    "gender": "female",
+    "phone": "0 11 05384743",
+    "referringDoctor": "Herself",
+    "tests": [
+      {
+        "id": "prof-1795634490672-4l3z",
+        "code": "GLYCEMIC",
+        "nameAr": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+        "nameEn": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+        "category": "Clinical Chemistry",
+        "sampleType": "Fluoride Plasma & EDTA Blood",
+        "unit": "mg/dL",
+        "minNormal": 70,
+        "maxNormal": 110,
+        "textReference": "70 - 110 mg/dL"
+      },
+      {
+        "id": "prof-1795634490672-sjmh",
+        "code": "THYROID",
+        "nameAr": "Thyroid Function Full Panel",
+        "nameEn": "Thyroid Function Full Panel",
+        "category": "Endocrinology",
+        "sampleType": "Serum",
+        "unit": "µIU/mL",
+        "minNormal": 0.55,
+        "maxNormal": 4.78,
+        "textReference": "0.55 - 4.78 µIU/mL"
+      }
+    ],
+    "netAmount": 302,
+    "paidAmount": 302,
+    "paymentStatus": "paid",
+    "financialClearance": "CLEARED_FOR_RELEASE",
+    "bookingType": "home_visit",
+    "isHomeVisit": true,
+    "visitFee": 0,
+    "visitAddress": "٣شارع حسني القفاص ـ ابراهيم عبد الواحد ـ  ارض عبد الكريم نصر ـبهتيم ـ شبرا الخيمه",
+    "homeAddress": "٣شارع حسني القفاص ـ ابراهيم عبد الواحد ـ  ارض عبد الكريم نصر ـبهتيم ـ شبرا الخيمه",
+    "deliveryNotes": "",
+    "visitSpecialist": "ا / ايه مصطفى",
+    "discount": 218,
+    "testsSubtotal": 520,
+    "subtotal": 302,
+    "remainingAmount": 0,
+    "paymentMethod": "cash",
+    "createdAt": "2026-11-25T19:21:30.674Z"
   }
 ]
