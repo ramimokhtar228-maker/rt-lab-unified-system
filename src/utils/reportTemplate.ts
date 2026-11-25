@@ -2565,6 +2565,23 @@ export function buildReportPages(
 export const REPORT_FONT_LINK =
   'https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap';
 
+/** Clean case name for PDF filename & print document title (supports Arabic and English). */
+export function reportCaseFileTitle(report: LabReport): string {
+  const raw = String(report.patient?.fullName || '')
+    .trim()
+    .replace(/[\\/:*?"<>|\u0000-\u001F]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/^\.+|\.+$/g, '');
+  const fallback = String(report.patient?.labNumber || report.reportNumber || 'Patient')
+    .trim()
+    .replace(/[\\/:*?"<>|\u0000-\u001F]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/^\.+|\.+$/g, '');
+  return raw || fallback || 'Patient';
+}
+
 /** Full standalone HTML document (print window, PDF render, email attachment). */
 export function buildReportDocument(
   report: LabReport,
@@ -2573,8 +2590,7 @@ export function buildReportDocument(
   showVisualChart: boolean = true,
   options?: ReportRenderOptions
 ): string {
-  const patientSafe = latin(report.patient.fullName, 'Patient');
-  const title = `Lab Report - ${esc(patientSafe)} - ${esc(report.reportNumber)}`;
+  const title = esc(reportCaseFileTitle(report));
   return `<!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>

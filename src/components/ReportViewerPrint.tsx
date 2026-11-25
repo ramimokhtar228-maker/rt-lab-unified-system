@@ -8,7 +8,7 @@ import { exportReportToPPTX } from '../utils/pptxExport';
 import { formatWhatsAppMessage, openWhatsApp } from '../utils/whatsapp';
 import { downloadReportPDF, triggerPrintDialog } from '../utils/pdfExport';
 import { openPrintReportWindow } from '../utils/printReportWindow';
-import { buildReportPages, REPORT_CSS, fitReportPagesToSingleA4 } from '../utils/reportTemplate';
+import { buildReportPages, REPORT_CSS, fitReportPagesToSingleA4, reportCaseFileTitle } from '../utils/reportTemplate';
 import { useApp } from '../context/AppContext';
 import { ClientEditModal } from './ClientEditModal';
 import { LabInfoEditModal } from './LabInfoEditModal';
@@ -104,6 +104,14 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
   const previewRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const prevTitle = document.title;
+    document.title = reportCaseFileTitle(safeReport);
+    return () => {
+      document.title = prevTitle;
+    };
+  }, [safeReport]);
+
+  useEffect(() => {
     const runFit = () => {
       if (previewRef.current) {
         fitReportPagesToSingleA4(previewRef.current);
@@ -155,7 +163,15 @@ export const ReportViewerPrint: React.FC<ReportViewerPrintProps> = ({
     try {
       openPrintReportWindow(safeReport, labInfo, showVisualChart, renderOptions);
     } catch {
-      window.print();
+      const prevTitle = document.title;
+      document.title = reportCaseFileTitle(safeReport);
+      try {
+        window.print();
+      } finally {
+        setTimeout(() => {
+          document.title = prevTitle;
+        }, 1000);
+      }
     }
   };
 

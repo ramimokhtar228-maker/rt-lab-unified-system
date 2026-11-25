@@ -1,5 +1,10 @@
 import { LabReport, LabInfo } from '../types';
-import { buildReportDocument, getPersistedGlobalStaffSignatures, type ReportRenderOptions } from './reportTemplate';
+import {
+  buildReportDocument,
+  getPersistedGlobalStaffSignatures,
+  reportCaseFileTitle,
+  type ReportRenderOptions
+} from './reportTemplate';
 import { DEFAULT_STAFF } from '../data/labCatalog';
 
 /** Opens the unified English-only report in a print-ready window (A4). */
@@ -24,6 +29,7 @@ export function openPrintReportWindow(
       ...report.staff
     }
   };
+  const caseTitle = reportCaseFileTitle(safeReport);
   const html = buildReportDocument(safeReport, labInfo, true, showVisualChart, renderOptions);
   const w = window.open('', '_blank', 'width=950,height=1000');
   if (!w) {
@@ -41,12 +47,25 @@ export function openPrintReportWindow(
     iframe.contentDocument?.close();
     iframe.contentWindow?.focus();
     setTimeout(() => {
+      const prevTitle = document.title;
+      document.title = caseTitle;
+      const restoreTitle = () => {
+        document.title = prevTitle;
+        window.removeEventListener('afterprint', restoreTitle);
+      };
+      window.addEventListener('afterprint', restoreTitle);
       iframe.contentWindow?.print();
-      setTimeout(() => iframe.remove(), 10000);
+      setTimeout(() => {
+        restoreTitle();
+        iframe.remove();
+      }, 10000);
     }, 500);
     return;
   }
   w.document.open();
   w.document.write(html);
   w.document.close();
+  try {
+    w.document.title = caseTitle;
+  } catch { /* noop */ }
 }

@@ -4,6 +4,7 @@ import {
   buildReportPages,
   fitReportPagesToSingleA4,
   getPersistedGlobalStaffSignatures,
+  reportCaseFileTitle,
   REPORT_CSS,
   REPORT_FONT_LINK,
   type ReportRenderOptions
@@ -11,8 +12,8 @@ import {
 import { DEFAULT_STAFF } from '../data/labCatalog';
 
 export function reportFileName(report: LabReport, ext: string): string {
-  const safe = report.patient.fullName.trim().replace(/\s+/g, '_').replace(/[^A-Za-z0-9_]/g, '') || 'Patient';
-  return `RT_Report_${safe}_${report.patient.labNumber}.${ext}`;
+  const caseName = reportCaseFileTitle(report);
+  return `${caseName}.${ext}`;
 }
 
 /** Renders the report off-screen from the shared template and returns a PDF Blob. */
@@ -37,6 +38,7 @@ export async function buildReportPDFBlob(
       ...report.staff
     }
   };
+
   const { default: html2canvas } = await import('html2canvas');
   const { default: jsPDF } = await import('jspdf');
 
@@ -50,7 +52,9 @@ export async function buildReportPDFBlob(
     fitReportPagesToSingleA4(host);
     const pages = Array.from(host.querySelectorAll<HTMLElement>('.rt-page'));
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: true });
-
+    try {
+      pdf.setProperties({ title: reportCaseFileTitle(safeReport) });
+    } catch { /* noop */ }
     for (let i = 0; i < pages.length; i++) {
       const page = pages[i];
       const canvas = await html2canvas(page, {
