@@ -8944,5 +8944,83 @@
     "remainingAmount": 0,
     "paymentMethod": "cash",
     "createdAt": "2026-11-24T20:39:06.022Z"
+  },
+  {
+    "id": "rep-1795634195217",
+    "reportNumber": "RT-2026-926",
+    "invoiceNumber": "inv-1795634195301",
+    "barcode": "RT-10956",
+    "patientName": "سيد سعد",
+    "age": 59,
+    "gender": "male",
+    "phone": "0 11 05384743",
+    "referringDoctor": "Himself",
+    "tests": [
+      {
+        "id": "prof-1795634195215-b9gt",
+        "code": "GLYCEMIC",
+        "nameAr": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+        "nameEn": "Diabetes & Glycemic Assessment (HbA1c & eAG)",
+        "category": "Clinical Chemistry",
+        "sampleType": "Fluoride Plasma & EDTA Blood",
+        "unit": "mg/dL",
+        "minNormal": 70,
+        "maxNormal": 110,
+        "textReference": "70 - 110 mg/dL"
+      },
+      {
+        "id": "prof-1795634195215-7xmy",
+        "code": "LIPID",
+        "nameAr": "Lipid Profile",
+        "nameEn": "Lipid Profile",
+        "category": "Clinical Chemistry",
+        "sampleType": "Serum (12h Fasting)",
+        "unit": "mg/dL",
+        "minNormal": 120,
+        "maxNormal": 200,
+        "textReference": ""
+      },
+      {
+        "id": "prof-1795634195216-yhbw",
+        "code": "LFT",
+        "nameAr": "Liver Function Tests (LFT)",
+        "nameEn": "Liver Function Tests (LFT)",
+        "category": "Clinical Chemistry",
+        "sampleType": "Serum",
+        "unit": "U/L",
+        "minNormal": 0,
+        "maxNormal": 45,
+        "textReference": ""
+      },
+      {
+        "id": "prof-1795634195216-16di",
+        "code": "KFT",
+        "nameAr": "Kidney Function Profile",
+        "nameEn": "Kidney Function Profile",
+        "category": "Clinical Chemistry",
+        "sampleType": "Serum",
+        "unit": "mg/dL",
+        "minNormal": 0.57,
+        "maxNormal": 1.4,
+        "textReference": "0.57 – 1.4"
+      }
+    ],
+    "netAmount": 571,
+    "paidAmount": 571,
+    "paymentStatus": "paid",
+    "financialClearance": "CLEARED_FOR_RELEASE",
+    "bookingType": "home_visit",
+    "isHomeVisit": true,
+    "visitFee": 55,
+    "visitAddress": "٣شارع حسني القفاص ـ ابراهيم عبد الواحد ـ  ارض عبد الكريم نصر ـبهتيم ـ شبرا الخيمه",
+    "homeAddress": "٣شارع حسني القفاص ـ ابراهيم عبد الواحد ـ  ارض عبد الكريم نصر ـبهتيم ـ شبرا الخيمه",
+    "deliveryNotes": "",
+    "visitSpecialist": "ا / ايه مصطفى",
+    "discount": 374,
+    "testsSubtotal": 890,
+    "subtotal": 571,
+    "remainingAmount": 0,
+    "paymentMethod": "cash",
+    "createdAt": "2026-11-25T19:16:35.218Z"
   }
 ]
